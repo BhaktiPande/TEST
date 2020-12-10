@@ -1,0 +1,49 @@
+﻿@model InsiderTrading.Models.PreclearanceRequestNonImplCompanyModel
+@{
+    ViewBag.Title = "_DMATwiseBalance";
+}
+@if (ViewBag.show_exercise_pool_quantity)
+{
+    <div class="col-lg-12 col-md-4 col-sm-6 col-xs-12" id="securityPool" style="display:none">
+        <div class="row">
+            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                @*@if (ViewBag.show_select_pool_quantity_checkbox)
+                {
+                    @Html.CheckBoxFor(m => m.OtherESOPExcerciseOptionQtyFlag, new { Styles = "display:none" })
+                }*@
+                @if (Model.DMATDetailsID > 0)
+                {
+                    @Html.Label(@InsiderTrading.Common.Common.getResource("dis_lbl_53026"))
+                }
+                else
+                {
+                    @Html.Label(@InsiderTrading.Common.Common.getResource("dis_lbl_53027"))
+                }
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 numericOnly" id="otherqty">
+                @ViewBag.actual_exercise_qty 
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                @*@if (ViewBag.show_select_pool_quantity_checkbox)
+                {
+                    @Html.CheckBoxFor(m => m.ESOPExcerciseOptionQtyFlag, new { Styles = "display:none" })
+                }*@
+                @if (Model.DMATDetailsID > 0)
+                {
+                    @Html.Label(@InsiderTrading.Common.Common.getResource("dis_lbl_53092"))
+                }
+                else
+                {
+                    @Html.Label(@InsiderTrading.Common.Common.getResource("dis_lbl_53093"))
+                }
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 numericOnly" id="esopqty">
+                @ViewBag.virtual_exercise_qty
+            </div>
+        </div>
+    </div>
+}
+
+

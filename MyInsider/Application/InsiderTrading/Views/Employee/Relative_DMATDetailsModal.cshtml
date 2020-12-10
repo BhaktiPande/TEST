@@ -1,0 +1,413 @@
+﻿@model InsiderTrading.Models.Relative_DMATDetailsModel
+
+@{
+    ViewBag.Title = InsiderTrading.Common.Common.getResource("usr_ttl_11379");
+
+    bool showSaveButton = false; //flag to show save button
+
+    if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DMAT_CREATE) ||
+        InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DMAT_EDIT))
+    {
+        showSaveButton = true;
+    }
+}
+
+<script type="text/javascript">
+    $(function () {
+        $(document).ready(function () {
+            $("#CDSL").prop("checked", true);
+
+            //Textbox hide for NSDL and Other
+            $("#DEMATAcNoNSDL").hide();
+            $("#DEMATAcNoOthers").hide();
+            $("#DPIDNSDL").hide();
+            $("#DPIDCDSL").attr("readonly", true);
+
+            var Dlenght = $("#DEMATAccountNumber").val().length;
+            var str = $('#DPIDNSDL').val();
+            str = str.substring(0, 2);
+
+            var ValNSDL = $("#DPIDNSDL").val();
+
+            if (ValNSDL != "" && str == "IN") {
+                $("#NSDL").prop("checked", true);
+                $("#DPIDCDSL").hide();
+                $("#DPIDNSDL").show();
+                var DEMATCDSL = $("#DEMATAccountNumber").val();
+                $("#DEMATAcNoNSDL").val(DEMATCDSL);
+                $("#DEMATAcNoNSDL").show();
+                $("#DEMATAccountNumber").hide();
+                //Textbox cleared for CDSL and NSDL
+                $("#DPIDCDSL").attr("readonly", false);
+                //Textbox and Validation message hide
+                $("#DEMATAcNoOthers").hide();
+                $("#DMATAccCDSLVal").hide();
+                $("#DPIDCDSLVal").hide();
+            }
+            else if (ValNSDL != "" && str != "IN" && Dlenght == "16") {
+                $("#CDSL").prop("checked", true);
+                $("#DPIDNSDL").hide();
+
+                var DPIDCDSL = $("#DPIDNSDL").val();
+                $("#DPIDCDSL").val(DPIDCDSL);
+                $("#DPIDCDSL").show();
+                $("#DEMATAcNoNSDL").hide();
+                $("#DEMATAccountNumber").show();
+                $("#DPIDCDSL").attr("readonly", true);
+
+                //Textbox and Validation message hide
+                $("#DEMATAcNoOthers").hide();
+                $("#DEMATAcNoNSDL").hide();
+                $("#DMATAccNSDLVal").hide();
+                $("#DPIDVal").hide();
+            }
+            else if (ValNSDL != "" && str != "IN" && Dlenght != "16") {
+                $("#Others").prop("checked", true);
+                $("#DPIDCDSL").attr("readonly", false);
+
+                var DEMATCDSL = $("#DEMATAccountNumber").val();
+                $("#DEMATAcNoOthers").val(DEMATCDSL);
+                $("#DEMATAcNoOthers").show();
+                $("#DEMATAccountNumber").hide();
+                $("#DEMATAcNoNSDL").hide();
+
+                var DPID = $("#DPIDNSDL").val();
+                $("#DPIDCDSL").val(DPID);
+
+                //Textbox and Validation message hide
+                $("#DPIDNSDL").hide("");
+                $("#DPIDCDSL").show("");
+
+                //Validation Message hide
+                $("#DMATAccCDSLVal").hide();
+                $("#DMATAccNSDLVal").hide();
+            }
+        });
+    });
+    $(function () {
+        $('#CDSL').click(function () {
+            var Val_CDSL = $("#CDSL").val();
+            if (Val_CDSL == "1" || Val_CDSL == "") {
+                //Textbox cleared for CDSL and NSDL
+                $("#DEMATAcNoOthers").val("");
+                $("#DEMATAccountNumber").val("");
+
+                //Textbox and Validation message hide
+                $("#DEMATAcNoOthers").hide();
+                $("#DEMATAccountNumber").show();
+                $("#DEMATAcNoNSDL").hide();
+                $("#DPIDNSDL").hide();
+                $("#DPIDVal").hide();
+                $("#DPIDCDSL").show();
+                $("#DPIDCDSL").val("");
+                $("#DPIDCDSL").attr("readonly", true);
+                var text = $("#DEMATAccountNumber").val();
+                $("#DMATAccNSDLVal").hide();
+                $("#DMATAccCDSLVal").hide();
+            }
+        });
+        $('#NSDL').click(function () {
+            var Val_NSDL = $("#NSDL").val();
+            if (Val_NSDL == "2") {
+                //Textbox cleared for CDSL and NSDL
+                $("#DPIDCDSL").attr("readonly", false);
+                $("#DEMATAcNoOthers").val("");
+                $("#DEMATAccountNumber").val("");
+                $("#DEMATAcNoNSDL").val("");
+                $("#DPIDNSDL").val("");
+
+                //Textbox and Validation message hide
+                $("#DEMATAcNoOthers").hide();
+                $("#DEMATAccountNumber").hide();
+                $("#DPIDNSDL").show();
+                $("#DPIDCDSL").hide();
+                $("#DPIDCDSLVal").hide();
+                var text = $("#DEMATAccountNumber").val();
+                $("#DEMATAcNoNSDL").show();
+
+                $("#DMATAccCDSLVal").hide();
+            }
+        });
+        $('#Others').click(function () {
+            $("#DPIDCDSL").attr("readonly", false);
+            //DEMAT Account no textbox shown
+            $("#DEMATAcNoOthers").show();
+
+            //Textbox cleared for CDSL and NSDL
+            $("#DEMATAccountNumber").val("");
+            $("#DEMATAcNoNSDL").val("");
+            $("#DPIDNSDL").val("");
+            $("#DPIDCDSL").val("");
+
+            //Textbox and Validation message hide
+            $("#DEMATAcNoNSDL").hide();
+            $("#DEMATAccountNumber").hide();
+            $("#DPIDNSDL").hide("");
+            $("#DPIDCDSL").show("");
+
+            //Validation Message hide
+            $("#DMATAccCDSLVal").hide();
+            $("#DMATAccNSDLVal").hide();
+            $("#DPIDVal").hide();
+            $("#DPIDCDSLVal").show();
+
+            $("#DEMATAcNoOthers").focusin();
+        });
+    });
+    //Fetch Demat account first 8 digit and keep in DP ID
+    $(function () {
+        $('#DEMATAccountNumber').focusout(function () {
+            var str = $('#DEMATAccountNumber').val();
+            str = str.substring(0, 8);
+            $('#DPIDCDSL').val(str);
+            $("#DPIDCDSL").attr("readonly", true);
+            $('#DPIDNSDL').val($('#DPIDCDSL').val());
+            var Dlenght = $("#DEMATAccountNumber").val().length;
+            if (Dlenght < 16 || Dlenght > 16) {
+                $("#DMATAccCDSLVal").show();
+                $("#DMATAccNSDLVal").hide();
+            }
+        });
+    });
+
+    $(function () {
+        $('#DEMATAcNoNSDL').focusout(function () {
+            var DPIDNSDLVal = $('#DPIDNSDL').val();
+            if (DPIDNSDLVal == "") {
+                str = "IN";
+                $('#DPIDNSDL').val(str);
+            }
+            $('#DEMATAccountNumber').val($('#DEMATAcNoNSDL').val());
+            var Dlenght = $("#DEMATAcNoNSDL").val().length;
+            if (Dlenght < 8 || Dlenght > 8) {
+                $("#DMATAccNSDLVal").show();
+                $("#DMATAccCDSLVal").hide();
+            }
+        });
+    });
+
+    $(function () {
+        $('#DEMATAcNoOthers').focusout(function () {
+            var DMATOther = $('#DEMATAcNoOthers').val();
+            $('#DPIDCDSL').val(DMATOther);
+            $('#DEMATAccountNumber').val($('#DEMATAcNoOthers').val());
+            $('#DPIDNSDL').val($('#DEMATAcNoOthers').val());
+        });
+    });
+
+    $(function () {
+        $('#DPIDNSDL').focusout(function () {
+            var Dlenght = $("#DPIDNSDL").val().length;
+            if (Dlenght < 6 || Dlenght > 6) {
+                $("#DPIDVal").show();
+                $("#DPIDCDSLVal").hide();
+            }
+        });
+    });
+</script>
+
+<!--  DMAT Details Modal -->
+<div class="modal fade" id="DMATModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="width:80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i></button>
+                <h4 class="modal-title custom_align" id="myModalLabel">@InsiderTrading.Common.Common.getResource("usr_ttl_11379")</h4>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("", "", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form", id = "frmDMATDetails", autocomplete = "off" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.DepositoryName)<br />
+                                    @Html.RadioButton("DepositoryName", "1", new { id = "CDSL" }) CDSL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    @Html.RadioButton("DepositoryName", "2", new { id = "NSDL" }) NSDL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    @Html.RadioButton("DepositoryName", "3", new { id = "Others" }) Others
+                                    @Html.ValidationMessageFor(m => m.DepositoryName)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.DEMATAccountNumber)
+                                    @Html.TextBoxFor(m => m.DEMATAccountNumber, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.DEMATAccountNumber).ToString(), Html.ActivityResourceKeyFor(m => m.DEMATAccountNumber).ToString(), new { @class = "form-control", id = "DEMATAccountNumber", maxlength = "16" }, InsiderTrading.Common.ConstEnum.IsRelative.Relative))
+                                    @Html.TextBoxFor(m => m.DEMATAccountNumberNSDL, new { @class = "form-control", id = "DEMATAcNoNSDL", maxlength = "8" })
+                                    @Html.TextBoxFor(m => m.DEMATAccountNumberOthers, new { @class = "form-control", id = "DEMATAcNoOthers" })
+                                    @Html.ValidationMessageFor(m => m.DEMATAccountNumber, "", new { id = "DMATAccCDSLVal" })
+                                    @Html.ValidationMessageFor(m => m.DEMATAccountNumberNSDL, "", new { id = "DMATAccNSDLVal" })
+                                    @Html.ValidationMessageFor(m => m.DEMATAccountNumberOthers)
+                                    @Html.HiddenFor(m => m.DEMATAccountNumber)
+                                    @Html.HiddenFor(m => m.DEMATAccountNumberNSDL)
+                                    @Html.HiddenFor(m => m.DEMATAccountNumberOthers)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.DPBank)
+                                    @Html.DropDownListFor(m => m.DPBank, new SelectList(ViewBag.DPBankDropdown, "Key", "Value", ""), new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.DPBank)
+                                    @Html.HiddenFor(m => m.DPBank)
+
+                                </div>
+                            </div>
+                        </div>
+                        @if (Model.DPBank == "Other")
+                        {
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="divDPBankName">
+                                <div role="form">
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.DPBankName)
+                                        @Html.TextBoxFor(m => m.DPBankName, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.DPBankName).ToString(), Html.ActivityResourceKeyFor(m => m.DPBankName).ToString(), new { @class = "form-control" }, InsiderTrading.Common.ConstEnum.IsRelative.Relative))
+                                        @Html.ValidationMessageFor(m => m.DPBankName)
+                                        @Html.HiddenFor(m => m.DPBankName)
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="display:none;" id="divDPBankName">
+                                <div role="form">
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.DPBankName)
+                                        @Html.TextBoxFor(m => m.DPBankName, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.DPBankName).ToString(), Html.ActivityResourceKeyFor(m => m.DPBankName).ToString(), new { @class = "form-control", style = "display:none;" }, InsiderTrading.Common.ConstEnum.IsRelative.Relative))
+                                        @Html.ValidationMessageFor(m => m.DPBankName)
+                                        @Html.HiddenFor(m => m.DPBankName)
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.DPID)
+                                    @Html.TextBoxFor(m => m.DPID, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.DPID).ToString(), Html.ActivityResourceKeyFor(m => m.DPID).ToString(), new { @class = "form-control", id = "DPIDNSDL", maxlength = "8" }, InsiderTrading.Common.ConstEnum.IsRelative.Relative))
+                                    @Html.TextBoxFor(m => m.DPIDCDSL, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.DPIDCDSL).ToString(), Html.ActivityResourceKeyFor(m => m.DPIDCDSL).ToString(), new { @class = "form-control", id = "DPIDCDSL" }))
+                                    @Html.ValidationMessageFor(m => m.DPID, "", new { id = "DPIDVal" })
+                                    @Html.ValidationMessageFor(m => m.DPIDCDSL, "", new { id = "DPIDCDSLVal" })
+                                    @Html.HiddenFor(m => m.DPID)
+                                    @Html.HiddenFor(m => m.DPIDCDSL)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.TMID)
+                                    @Html.TextBoxFor(m => m.TMID, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.TMID).ToString(), Html.ActivityResourceKeyFor(m => m.TMID).ToString(), new { @class = "form-control", id = "TMIDVal" }))
+                                    @Html.ValidationMessageFor(m => m.TMID, "", new { id = "TMIDVal" })
+                                    @Html.HiddenFor(m => m.TMID)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="display:none">
+                            <div role="form">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.Description)
+                                    @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })
+                                    @Html.HiddenFor(m => m.Description)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.DmatAccStatusCodeId)
+                                    @Html.DropDownListFor(m => m.DmatAccStatusCodeId, new SelectList(ViewBag.UserStatusDropDown, "Key", "Value", ""), new { @class = "form-control", id = "SelectedStatusId" })
+                                    @Html.ValidationMessageFor(m => m.DmatAccStatusCodeId)
+                                    @Html.HiddenFor(m => m.DmatAccStatusCodeId)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="display:none">
+                            <div role="form">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.AccountTypeCodeId)
+                                    @Html.DropDownListFor(m => m.AccountTypeCodeId, new SelectList(ViewBag.AccountTypeDropdown, "Key", "Value", ""), new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.AccountTypeCodeId)
+                                    @Html.HiddenFor(m => m.AccountTypeCodeId)
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" >
+                                <div role="form">
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.DmatAccStatusCodeId)
+                                        @Html.DropDownListFor(m => m.DmatAccStatusCodeId, new SelectList(ViewBag.UserStatusDropDown, "Key", "Value", ""), new { @class = "form-control", id = "SelectedStatusId" })
+                                        @Html.ValidationMessageFor(m => m.DmatAccStatusCodeId)
+                                    </div>
+                                </div>
+                            </div>*@
+                        @Html.HiddenFor(m => m.DMATDetailsID)
+                        @Html.HiddenFor(m => m.UserInfoID)
+                        @if (Model.DMATDetailsID != 0 && Model.DMATDetailsID != null)
+                        {
+                            @Html.Hidden("acid", InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DMAT_EDIT)
+                        }
+                        else
+                        {
+                            @Html.Hidden("acid", InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DMAT_CREATE)
+                        }
+                    </div>
+                    <div class="modal-footer">
+                        @if (showSaveButton)
+                        {
+                            <a class="btn btn-success updateButton" href='javascript:void(0)' role="button" id="btnSaveDMATDetails" gridtype="@InsiderTrading.Common.ConstEnum.GridType.DMATList" data-loading-text="Saving" autocomplete="off"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("com_btn_14017")</a>
+                        }
+
+                        <button type="button" class="btn btn-success" id="cancelButton" data-dismiss="modal">@InsiderTrading.Common.Common.getResource("com_btn_14010")</button>
+                    </div>
+                }
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <section class="content-header" style="padding-left:0px;padding-top: 0px">
+                        <ul style="list-style: none; padding-left: 0px; font-family: Roboto,sans-serif;font-weight:400;color:#333;">
+                            <li><h5>PLEASE NOTE:</h5></li>
+                            <li><h5>@InsiderTrading.Common.Common.getResource("usr_lbl_50058")</h5></li>
+                            <li><h5>@InsiderTrading.Common.Common.getResource("usr_lbl_50059")</h5></li>
+                            <li><h5>@InsiderTrading.Common.Common.getResource("usr_lbl_50060")</h5></li>
+                            <li><h5>@InsiderTrading.Common.Common.getResource("usr_lbl_50061")</h5></li>
+                        </ul>
+                    </section>
+                </div>
+                <div class="row" id="divDMATHolderList">
+                    @if (Model.AccountTypeCodeId == InsiderTrading.Common.ConstEnum.Code.Joint)
+                    {
+                        @Html.Partial("~/Views/Employee/Relative_DMATHolderList.cshtml", Model)
+                    }
+                </div>
+            </div>
+
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/jQueryFixes")
+
+@Html.Hidden("EditRelNDmat", Url.Action("EditRelativeDMATDetails", "Employee"), new { UserInfoID = ViewBag.UserInfoID, acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DMAT_EDIT })
+@Html.Hidden("GetDMATList", Url.Action("GETRelativeDMATList", "Employee"))
+@Html.Hidden("deleteRowURL", Url.Action("DeleteRelativeDMATHolderDetails", "Employee"), new { id = "DeleteDMATHolder", gridtype = InsiderTrading.Common.ConstEnum.GridType.DMATAccountHolderList })
+
+<script type="text/javascript">
+    if ('@ViewBag.DPBankCodeId' == '' && '@Model.DMATDetailsID' != '') {
+        $("#DPBank").val('1');
+    }
+</script>
+
+

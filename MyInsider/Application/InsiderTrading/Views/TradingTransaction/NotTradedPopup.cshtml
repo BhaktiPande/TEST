@@ -1,0 +1,107 @@
+﻿
+<script>
+    $(document).ready(function () {
+
+        function ConfirmBox(data, message, sURL) {
+            $.confirm({
+                title: "Confirmation",
+                text: message,
+                confirm: function (button) {
+                    $.ajax({
+                        url: sURL,
+                        method: 'POST',
+                        headers: getRVToken(),
+                        data: data,
+                        datatype: 'json',
+                        success: function (data) {
+                            if (data.status) {
+                                showMessage(data.Message['success'], true);
+
+                                if ('@ViewBag.CalledFrom' == "Insider") {
+                                    window.location.href = $('#Index').val() + "?acid=157";
+                                } else {
+                                    window.location.href = $('#Index').val() + "?acid=167";
+                                }
+                            }
+                            else {
+                                showMessage(data.Message['error'], false);
+                                //$('#divApplicabilityMessage').html(data.Message['error']);
+                                //$('#divApplicabilityMessage').addClass('alert-error').fadeIn('slow');;
+                                //setTimeout(function () {
+                                //    $('#divApplicabilityMessage').removeClass('alert-error').fadeOut('slow');
+                                //    $('#divApplicabilityMessage').html("");
+                                //}, 20000);
+                            }
+                        }
+                    });
+                },
+                cancel: function (button) {
+                },
+                confirmButton: "Yes I Confirm",
+                cancelButton: "No",
+                post: true,
+                confirmButtonClass: "btn btn-success",
+                cancelButtonClass: "btn-danger",
+                dialogClass: "modal-dialog modal-lg"
+            });
+        }
+
+        $("#btnNotTraded").click(function () {
+            if ($('#lstReasonsForNotTrading').val() != "0") {
+                $('#lstReasonsForNotTrading').parent().find("field-validation-error").html();
+                var data = { 'nPreclearenceId': $('#PreclearanceRequestId').val(), 'nReasonForNotTrading': $('#lstReasonsForNotTrading').val(), 'sReasonForNotTradingText': $("#txtReasonForNotTradingText").val() };
+                ConfirmBox(data, '@InsiderTrading.Common.Common.getResource("tra_msg_16106")', '@Url.Action("TransactionNotTraded", "TradingTransaction")');
+            }
+            else {
+                $('#lstReasonsForNotTrading').parent().append("<span class='field-validation-error'>@InsiderTrading.Common.Common.getResource("tra_msg_16148")</span>");
+            }
+        });
+
+    });
+</script>
+
+
+    <div class="modal fade" id="NotTradedModal" tabindex="-1" role="dialog" aria-labelledby="editNotTraded" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="width:60%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title custom_align" id="editNotTraded">Not Traded</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="PreclearanceRequestId" id="PreclearanceRequestId" value="@ViewBag.PreclearanceRequestId" />
+                    @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+                    <input type="hidden" name="CalledFrom" id="CalledFrom" value="@ViewBag.CalledFrom" />
+                                    <div class="row">
+                                            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+                                                <div role="form">
+                                                    <div class="form-group">
+                                                        <label>@InsiderTrading.Common.Common.getResource("tra_lbl_16101")</label>
+                                                        @Html.DropDownList("lstReasonsForNotTrading", new SelectList(ViewBag.lstReasonsForNotTrading, "Key", "Value", ""), new { @class = "form-control" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <div class="row">
+                                            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+                                                <div role="form">
+                                                    <div class="form-group">
+                                                        <textarea class="form-control" id="txtReasonForNotTradingText" name="textarea" rows="6"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                     <div class="modal-footer">
+                            <div class="pull-right">
+
+                                                <p>
+                                                    <button id="btnNotTraded" class="btn btn-success"><i class="fa fa-check"></i> @InsiderTrading.Common.Common.getResource("com_btn_14025")</button>
+                                                    <a href="" class="btn btn-success"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14010")</a>
+                                                </p>
+                                            </div>
+                                        </div>
+            
+                </div>
+            </div>
+        </div>
+    </div>

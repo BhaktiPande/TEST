@@ -1,0 +1,23 @@
+﻿@model InsiderTrading.Models.TradingPolicyModel
+@{
+    ViewBag.Title = "_PreSecuritywiseLimitList";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    @Html.AntiForgeryToken()
+</section>
+
+<div class="col-md-12 col-md-12 col-sm-8 col-xs-12 search" gridtype="114041">
+    <div class="form-group">
+        <input type="hidden" gridtype="114041" />
+
+        <input type="hidden" value="132004" id="2" gridtype="114041" />
+        <input type="hidden" value="@ViewBag.Param1" id="1" gridtype="@ViewBag.GridType" />
+
+        <input type="hidden" value="@ViewBag.Param3" id="3" gridtype="@ViewBag.GridType" />
+        <div class="div-spacer"></div>
+        @{Html.RenderAction("Index", "DatatableGrid", new { type = 114041, btnSearch = "btnSearch", sSortCol = "0", acid = @ViewBag.TradingPolicyUserAction });}
+        <div class="div-spacer"></div>
+    </div>
+</div>

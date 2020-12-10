@@ -1,0 +1,29 @@
+﻿<div class="modal fade" id="OverlapModal" tabindex="-1" role="dialog" aria-labelledby="editResource" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="width:80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title custom_align" id="editResource">@InsiderTrading.Common.Common.getResource("rul_ttl_15405")</h4>
+            </div>
+            <div class="modal-body">
+              
+                <section class="content search" gridtype="@ViewBag.GridType">
+                    <input type="hidden" gridtype="@ViewBag.GridType" />
+                    <input type="hidden" value="@ViewBag.Param1" id="1" gridtype="@ViewBag.GridType" />
+                    <div class="div-spacer"></div>
+
+                    @{Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "btnSearch", sSortCol = "0", acid = InsiderTrading.Common.ConstEnum.UserActions.CRUSER_COUSER_VIEW });}
+   
+                    <div class="modal-footer">
+                        <div class="pull-right">
+                            @if (ViewBag.ShowFrom != "Applicability") { 
+                            <button type="button" class="btn btn-success" role="button" id="btnOk"><i class="fa fa-save"></i> Ok</button>
+                            }
+                            <button type="button" name="Cancel" class="btn btn-success cancel" id="cancelButton" data-dismiss="modal"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14010")</button>
+                        </div>
+                    </div>
+                </section><!-- /.content -->  
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,83 @@
+﻿@{
+    ViewBag.Title = "List";
+    Layout = "";
+}
+@*This style is required for giving top vertical alignment for the grid headers*@
+<style>
+    .data-table th {
+        vertical-align: top !important;
+    }
+
+</style>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var type = @ViewBag.type;
+        var column = @Html.Raw(Json.Encode(@ViewBag.column));
+        var btnSearch = '@ViewBag.btnSearch';
+        var sortCol = '@ViewBag.sortCol';
+        var bIsPagination = '@ViewBag.bIsPagination';
+        var bIsServerSide = '@ViewBag.bIsServerSide';
+        var sDom = '@ViewBag.sDom';
+        var sTagName = '@ViewBag.sGridTagName';
+        var sNoRecordsfoundMessage = '@ViewBag.NoRecordsfoundMessage';
+        var sCallBackFunction = '@ViewBag.CallBackFunction';
+        var sDisplayLength = '@ViewBag.sDisplayLength';
+        var sPagingLengthMenu = '@ViewBag.sPagingLengthMenu';
+        var sShowProcessing = '@ViewBag.sShowProcessing';
+        try {
+            var objGrid = new DatatableGrid($('table[name='+sTagName+'][gridtype='+type+']'), type, column, sortCol, bIsPagination, bIsServerSide, sDom, sNoRecordsfoundMessage,sCallBackFunction,sDisplayLength, sPagingLengthMenu,sShowProcessing);
+            objGrid.renderGrid();
+            if (btnSearch!="")
+                objGrid.search(btnSearch);
+            objGrid.reset();
+            objGrid.deleteRow();
+        } catch (e) {
+            alert(e);
+        }
+        
+        // Handle click on "Select all" control
+        $('#select-all').on('click', function(){
+            // Check/uncheck checkboxes for all rows in the table
+            $('#divEmpInsiderGrd input[type="checkbox"]').prop('checked', this.checked);
+        });  
+        $('#select_all_EmpNonIns').on('click', function(){
+            // Check/uncheck checkboxes for all rows in the table
+            $('#divEmpNonInsiderGrd  input[type="checkbox"]').prop('checked', this.checked);
+        });
+        $('#select_all_CorpIns').on('click', function(){
+            // Check/uncheck checkboxes for all rows in the table
+            $('#divCorpInsGrd  input[type="checkbox"]').prop('checked', this.checked);
+        });
+        $('#select_all_NonEmpIns').on('click', function(){
+            // Check/uncheck checkboxes for all rows in the table
+            $('#divNonEmpInsGrd  input[type="checkbox"]').prop('checked', this.checked);
+        });
+        $('#select_all_Co').on('click', function(){
+            // Check/uncheck checkboxes for all rows in the table
+            $('#divCoGrd  input[type="checkbox"]').prop('checked', this.checked);
+        });
+    });
+
+</script>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="dataTable_wrapper">
+                    <table name="@ViewBag.sGridTagName" class="data-table table table-bordered table-striped" gridtype="@ViewBag.type">
+                        <thead>
+                            <tr></tr>
+                        </thead>
+
+                    </table>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Hidden("AjaxHandler", Url.Action("AjaxHandler", "DatatableGrid", new { gridtype = @ViewBag.type, inp_sParam = @ViewBag.inp_sParam, isInsider= @ViewData["IsInsider"], acid = @ViewBag.acid }), new { gridtype = @ViewBag.type })
+@Html.Hidden("DisplayDelete", InsiderTrading.Common.Common.getResource("com_btn_14009"))
+@Html.Hidden("DisplayEdit", InsiderTrading.Common.Common.getResource("com_btn_14007"))
+@Html.Hidden("DisplayView", InsiderTrading.Common.Common.getResource("com_btn_14008"))

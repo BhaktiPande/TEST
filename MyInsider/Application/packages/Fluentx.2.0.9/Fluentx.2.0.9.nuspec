@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Fluentx</id>
+    <version>2.0.9</version>
+    <title>Fluentx</title>
+    <authors>Samer Abu Rabie</authors>
+    <owners>Samer Abu Rabie</owners>
+    <projectUrl>https://fluentx.codeplex.com/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Fluentx is a library that holds utilities to help developers in their everyday coding, holds helper methods using fluent interfaces and method chaining.</description>
+    <summary>Adding  UISearch, PagedData, DateTime extension methods, and many many other useful methods and extensions.</summary>
+    <releaseNotes>Added new extension methods ReplaceLast and ReplaceFirst and CountOccurences</releaseNotes>
+    <copyright>SamerX 2014</copyright>
+    <language>en-US</language>
+    <tags>Fluentx Fluent Method Chaining Interfaces business rules specifications pattern Helper Utilities .NET ASP.NET</tags>
+  </metadata>
+</package>

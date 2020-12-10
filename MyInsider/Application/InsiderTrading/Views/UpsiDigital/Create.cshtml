@@ -1,0 +1,476 @@
+﻿@model InsiderTrading.Models.UpsiSharingData
+@{
+    ViewBag.Title = InsiderTrading.Common.Common.getResource("usr_ttl_55059");
+    List<InsiderTrading.Models.UpsiSharingData> List = null;
+    List<InsiderTrading.Models.UpsiSharingData> UpsiSharingData = (List<InsiderTrading.Models.UpsiSharingData>)TempData["ListUpsi"];
+    TempData.Keep();
+
+    List = UpsiSharingData;
+
+}
+<section class="content-header">
+    <h1>
+        @InsiderTrading.Common.Common.getResource("usr_ttl_55013")
+    </h1>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-accordion">
+                    <div id="collapseOne" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            @using (Html.BeginForm("Add", "UpsiDigital", new { ReturnUrl = ViewBag.ReturnUrl, formId = 69 }, FormMethod.Post, new { role = "form", autocomplete = "off" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(m => m.DocumentNumber)
+                                                    @Html.TextBoxFor(m => m.DocumentNumber, new { @class = "form-control", @readonly = "readonly" })
+                                                    @Html.ValidationMessageFor(m => m.DocumentNumber)
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(m => m.Category_Shared)
+                                                    @Html.DropDownListFor(m => m.Category_Shared, new SelectList(ViewBag.CategoryDropDown, "Key", "Value", ""), new { @class = "form-control", @id = "Category_Shared" })
+                                                    @Html.ValidationMessageFor(m => m.Category_Shared)
+                                                    @Html.HiddenFor(m => m.Category_Shared)
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(m => m.Reason_sharing)
+                                                    @Html.DropDownListFor(m => m.Reason_sharing, new SelectList(ViewBag.ReasonDropDown, "Key", "Value", ""), new { @class = "form-control", @id = "Reason_sharing" })
+                                                    @Html.ValidationMessageFor(m => m.Reason_sharing)
+                                                    @Html.HiddenFor(m => m.Reason_sharing)
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(m => m.Comments)
+                                                    @Html.TextBoxFor(m => m.Comments, new { @class = "form-control", @maxlength = "150", @id = "Comments" })
+                                                    @Html.ValidationMessageFor(m => m.Comments)
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+
+                                                    @Html.LabelFor(m => m.ModeOfSharing)
+                                                    @Html.DropDownListFor(m => m.ModeOfSharing, new SelectList(ViewBag.ModeOfSharing, "Key", "Value", ""), new { @class = "form-control", @id = "ModeOfSharing" })
+                                                    @Html.ValidationMessageFor(m => m.ModeOfSharing)
+                                                    @Html.HiddenFor(m => m.ModeOfSharing)
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div class="form-group" id="sandbox-container">
+                                                @Html.LabelFor(m => m.SharingDate)
+                                                @{
+                                string DOJ = "";
+                                if (Model.SharingDate != null)
+                                {
+                                    DOJ = InsiderTrading.Common.Common.ApplyFormatting(Model.SharingDate, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+
+                                }
+                                                }
+                                                <div class="input-group input-group-today date">
+                                                    @Html.TextBox("SharingDate", DOJ, Html.ActivityResourceKeyFor(m => m.SharingDate).ToString(), new { @class = "form-control", @id = "SharingDate" })
+                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                </div>
+                                                @Html.ValidationMessageFor(m => m.SharingDate)
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Time)
+                                                    <div class='input-group date' id='time'>
+                                                        @Html.TextBoxFor(model => model.Time, new { @class = "form-control" })
+                                                        <span class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </span>
+                                                    </div>
+                                                    @Html.ValidationMessageFor(m => m.Time)
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(m => m.CHKUserAndOther)<br />
+                                                    @Html.RadioButtonFor(m => m.CHKUserAndOther, "True", new { @id = "User", @checked = "checked" }) @InsiderTrading.Common.Common.getResource("usr_lbl_55074") &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    @Html.RadioButtonFor(m => m.CHKUserAndOther, "False", new { @id = "Other" })@InsiderTrading.Common.Common.getResource("usr_lbl_55075")
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" id="MultiUser">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(m => m.Listofmultipleuser)
+                                                    @Html.DropDownListFor(m => m.Listofmultipleuser, new SelectList(ViewBag.Listofmultipleuser, "Key", "Value", ""), new { @class = "form-control", @multiple = "multiple", @id = "MultipleSelect" })
+                                                    @Html.ValidationMessageFor(m => m.Listofmultipleuser)
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div role="form">
+                                                @if (ViewBag.UPSISetting)
+                                                {
+                                                    <div class=" editor-field">
+                                                        @Html.LabelFor(m => m.Sharedbyo)<br />
+                                                        @Html.RadioButtonFor(m => m.Sharedbyo, "True", new { @id = "Class_UserTypeo", @checked = "checked" })@InsiderTrading.Common.Common.getResource("usr_lbl_55056")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                        @Html.RadioButtonFor(m => m.Sharedbyo, "False", new { @id = "Class_Usero" })@InsiderTrading.Common.Common.getResource("usr_lbl_55057")
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" hidden id="othero">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(m => m.Sharedbynamea)
+                                                    @Html.TextBoxFor(m => m.Sharedbynamea, new { @class = "form-control Test", @maxlength = "150", @id = "Sharedbynamea" })
+                                                    @Html.ValidationMessageFor(m => m.Sharedbynamea)
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div id="UserInfo" hidden>
+                                        <div class="row">
+                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                <div role="form">
+                                                    <div class="form-group">
+                                                        @Html.LabelFor(m => m.Name)
+                                                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control Test", @maxlength = "150", @id = "Name" })
+                                                        @Html.ValidationMessageFor(m => m.Name)
+                                                        @Html.HiddenFor(m => m.Name)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                <div role="form">
+                                                    <div class="form-group">
+                                                        @Html.LabelFor(m => m.PAN)
+                                                        @Html.TextBoxFor(m => m.PAN, new { @class = "form-control Test", @maxlength = "150", @id = "PAN" })
+                                                        @Html.ValidationMessageFor(m => m.PAN)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                <div role="form">
+                                                    <div class="form-group">
+                                                        @Html.LabelFor(m => m.Company_Name)
+                                                        @Html.TextBoxFor(model => model.Company_Name, new { @class = "form-control Test", gridtype = @ViewBag.GridType, id = "txtCompany", data_url = Url.Action("GetList", "UpsiDigital"), @maxlength = "300" })
+                                                        @Html.HiddenFor(model => model.Company_Name)
+                                                        @Html.ValidationMessageFor(m => m.Company_Name)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                <div role="form">
+                                                    <div class="form-group">
+                                                        @Html.LabelFor(m => m.Company_Address)
+                                                        @Html.TextBoxFor(model => model.Company_Address, new { @class = "form-control Test", gridtype = @ViewBag.GridType, id = "txtAddress", data_url = Url.Action("GetAddress", "UpsiDigital"), @maxlength = "300" })
+                                                        @Html.ValidationMessageFor(m => m.Company_Address)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                <div role="form">
+                                                    <div class="form-group">
+                                                        @Html.LabelFor(m => m.Phone)
+                                                        @Html.TextBoxFor(m => m.Phone, new { @class = "form-control Test", @id = "Phone" })
+                                                        @Html.ValidationMessageFor(m => m.Phone)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                <div role="form">
+                                                    <div class="form-group">
+                                                        @Html.LabelFor(m => m.E_mail)
+                                                        @Html.TextBoxFor(m => m.E_mail, new { @class = "form-control Test", @id = "E_mail" })
+                                                        @Html.ValidationMessageFor(m => m.E_mail)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                <div role="form">
+                                                    @if (ViewBag.UPSISetting)
+                                                    {
+                                                        <div class=" editor-field">
+                                                            @Html.LabelFor(m => m.Sharedby)<br />
+                                                            @Html.RadioButtonFor(m => m.Sharedby, "True", new { @id = "Class_UserType", @checked = "checked" })@InsiderTrading.Common.Common.getResource("usr_lbl_55056")&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                                            @Html.RadioButtonFor(m => m.Sharedby, "False", new { @id = "Class_User" })@InsiderTrading.Common.Common.getResource("usr_lbl_55057")
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" hidden id="other">
+                                                <div role="form">
+                                                    <div class="form-group">
+                                                        @Html.LabelFor(m => m.Sharedbyname)
+                                                        @Html.TextBoxFor(m => m.Sharedbyname, new { @class = "form-control Test", @maxlength = "150", @id = "Sharedbyname" })
+                                                        @Html.ValidationMessageFor(m => m.Sharedbyname)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-success" onclick="Empty()" id="Add">@InsiderTrading.Common.Common.getResource("usr_btn_55058")</button>
+                                                    <a class="btn btn-success" href='@Url.Action("Index", "UpsiDigital")' role="button">@InsiderTrading.Common.Common.getResource("usr_btn_55066")</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section class="content">
+            @{
+                Html.RenderAction("Index", "DatatableGrid", new { type = InsiderTrading.Common.ConstEnum.GridType.UpsiSharing_dataTemp, btnSearch = "btnSearch", sSortCol = "1", acid = 0, bIsPagination = false, bIsServerSide = false, sDom = "lrt" });
+            }
+            <div class="row" id="SaveAllBtn">
+                <div class="col-xs-12" style="text-align: center;">
+                    @if (ViewBag.IsError == false)
+                    {
+                        using (Html.BeginForm("SaveAll", "UpsiDigital", new { ReturnUrl = ViewBag.ReturnUrl, formId = 69 }, FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <button type="submit" id="SaveAllBtn" class="btn btn-success">@InsiderTrading.Common.Common.getResource("cmp_btn_55060")</button>
+                        }
+                    }
+                </div>
+            </div>
+
+        </section>
+    </div>
+</section>
+
+
+<script type="text/javascript">
+    var preClrList1 = @Html.Raw(Json.Encode(List))
+
+    $(document).ready(function () {
+        var gridAllow = '@ViewBag.GridAllow'
+        if (gridAllow == 'True') {
+            for (var i = 0; i < preClrList1.length; i++) {
+                var datatable1 = $('table[name="DatatableGrid"][gridtype=@InsiderTrading.Common.ConstEnum.GridType.UpsiSharing_dataTemp]').dataTable();
+
+                datatable1.fnAddData({
+                    'SequenceNo': preClrList1[i]['SequenceNo'], 'dis_grd_55015': preClrList1[i]['Company_Name'], 'dis_grd_55016': preClrList1[i]['Company_Address'], 'dis_grd_55017': preClrList1[i]['Sharedby'], 'dis_grd_55018': preClrList1[i]['Reason_sharingdata'], 'dis_grd_55019': preClrList1[i]['Address'], 'dis_grd_55020': preClrList1[i]['PAN'], 'dis_grd_55021': preClrList1[i]['Name'], 'dis_grd_55022': preClrList1[i]['Phone'], 'dis_grd_55023': preClrList1[i]['E_mail'], 'dis_grd_55024': preClrList1[i]['SharingDate']
+                });
+            }
+        }
+        $("body").removeClass("loading");
+    });
+
+    $(function () {
+        $('#txtCompany').autocomplete({
+            minLength: 0,
+            source: function (request, response) {
+                var url = $(this.element).data('url');
+
+                $.getJSON(url, { term: request.term }, function (data) {
+                    response($.map(data, function (item) {
+                        return {
+                            label: item.CompanyName,
+                            value: item.CompanyName
+                        }
+                    }));
+                })
+            }
+
+        });
+    })
+    $(function () {
+        $('#txtAddress').autocomplete({
+            minLength: 0,
+            source: function (request, response) {
+                var url = $(this.element).data('url');
+
+                $.getJSON(url, { term: request.term }, function (data) {
+                    response($.map(data, function (item) {
+                        return {
+                            label: item.CompanyAddress,
+                            value: item.CompanyAddress
+                        }
+                    }));
+                })
+            }
+        });
+    })
+    $(function () {
+        $('#time').datetimepicker({
+            format: 'HH:mm'
+        });
+
+    });
+    $('.Test').val('');
+    $("#MultipleSelect").removeAttr("selected");
+</script>
+<script>
+    $(function () {
+        $("#Class_UserType").change(function () {
+            var value = $(this).val();
+            if (value == 'True') {
+                $('#other').hide();
+            }
+
+        });
+    });
+</script>
+<script>
+    $(function () {
+        $("#Class_User").change(function () {
+            var value = $(this).val();
+            if (value == 'False') {
+                $('#other').show();
+            }
+
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#MultipleSelect").find("option").removeAttr("selected").end().focus().blur();
+
+        $("#Add").click(function () {
+            $("body").addClass("loading");
+            var Category_Shared = $("#Category_Shared option:selected").val();
+            var Reason_sharing = $("#Reason_sharing option:selected").val();
+            var ModeOfSharing = $("#ModeOfSharing option:selected").val();
+            var MultipleSelect = $("#MultipleSelect option:selected").text();
+            var Sharedbynamea = $("#Sharedbynamea").val();
+            var Sharedbynameat = $("#Sharedbynamea").text();
+            var SharingDate = $("#SharingDate").val();
+            var Name = $("#Name").val();
+            var PAN = $("#PAN").val();
+            var txtCompany = $("#txtCompany").val();
+            var txtAddress = $("#txtAddress").val();
+            var Phone = $("#Phone").val();
+            var E_mail = $("#E_mail").val();
+            var Sharedbyname = $("#Sharedbyname").val();
+            var Sharedbynamet = $("#Sharedbyname").text();
+            var Comments = $("#Comments").val();
+
+            if (Category_Shared == "" || Reason_sharing == "" || ModeOfSharing == "" || SharingDate == "" || MultipleSelect == "" || Comments == "") {
+                $("body").removeClass("loading");
+            }
+            if ($('#Class_Usero').is(":checked")) {
+                if (Sharedbynamea == "") {
+                    $("body").removeClass("loading");
+                }
+            }
+
+            if ($('#Other').is(":checked")) {
+                $("body").addClass("loading");
+                if (Name == "" || PAN == "" || txtCompany == "" || txtAddress == "" || Phone == "" || E_mail == "") {
+                    $("body").removeClass("loading");
+                }
+            }
+            if ($('#Class_User').is(":checked")) {
+                $("body").addClass("loading");
+                if (Sharedbyname == "") {
+                    $("body").removeClass("loading");
+                }
+            }
+        });
+
+        if ($(".validation-summary-errors li:visible").length === 0) {
+        }
+        else {
+            $("body").removeClass("loading");
+
+        }
+
+    });
+</script>
+
+<script type="text/javascript">
+    var ModeofSharingIndex = @ViewBag.ModeofSharingIndex
+    $("#Other").click(function () {
+        $('#MultiUser').hide();
+        $("#MultipleSelect")[0].selectedIndex = -1;
+        $("#UserInfo").show();
+    });
+
+    $("#User").click(function () {
+        $('#MultiUser').show();
+        $("#UserInfo").hide();
+    });
+    document.getElementById("Other").checked = false;
+    document.getElementById("User").checked = true;
+    $("#ModeOfSharing")[0].selectedIndex = ModeofSharingIndex;
+
+    document.getElementById("Class_UserTypeo").checked = true;
+    document.getElementById("Class_Usero").checked = false;
+
+    $(function () {
+        $('.input-group-today').datepicker({
+            format: "dd/M/yyyy",
+            endDate: '+0d',
+            autoclose: true
+        });
+    });
+
+</script>
+
+
+<script>
+    $(function () {
+        $("#Class_UserTypeo").change(function () {
+            var value = $(this).val();
+            if (value == 'True') {
+                $('#othero').hide();
+            }
+
+        });
+    });
+
+
+</script>
+<script>
+    $(function () {
+        $("#Class_Usero").change(function () {
+            var value = $(this).val();
+            if (value == 'False') {
+                $('#othero').show();
+            }
+
+        });
+    });
+    document.getElementById("Class_User").checked = false;
+    document.getElementById("Class_UserType").checked = true;
+</script>

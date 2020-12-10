@@ -1,0 +1,10 @@
+﻿@model InsiderTrading.ResourceModel
+<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    <div class="form-group">
+        @Html.LabelFor(m => m.ScreenCodeId)
+        @Html.DropDownListFor(m => m.ScreenCodeId, new SelectList(ViewBag.ScreenList, "Key", "Value", ViewBag.SelectedChildId), new { @class = "form-control", gridtype = @ViewBag.GridType, id = "3" })
+     </div>
+</div>
+
+
+

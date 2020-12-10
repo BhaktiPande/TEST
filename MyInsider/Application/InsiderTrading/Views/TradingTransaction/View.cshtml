@@ -1,0 +1,1188 @@
+@model InsiderTrading.Models.TradingTransactionModel
+
+@{
+    ViewBag.Title = "";
+    var IsEmployeeOrInsider = 0;
+    if (ViewBag.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.EmployeeType || ViewBag.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.CorporateUserType
+        || ViewBag.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.NonEmployeeType || ViewBag.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.RelativeType)
+    {
+        IsEmployeeOrInsider = 1;
+    }
+}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    @Html.AntiForgeryToken()
+</section>
+
+<script>
+
+    var nFromSubmitPage = 0;
+    $(document).ready(function () {
+        function ConfirmBox(data, message, sURL) {
+            $('#btnSubmit').removeAttr("disabled", "disabled");
+            $.confirm({
+                title: "Confirmation",
+                text: message,
+                confirm: function (button) {
+                    $('#btnSubmitTransaction')[0].click();
+                    $('#btnSubmit').attr("disabled", "disabled");
+                    $('#btnInsiderSubmit').attr("disabled", "disabled");
+                    $.ajax({
+                        url: sURL,
+                        method: 'POST',
+                        headers: getRVToken(),
+                        data: data,
+                        datatype: 'json',
+                        success: function (data) {
+                            if (data.status) {
+                                showMessage(data.Message['success'], true);
+                                if (data.TranactionMasterStatus != undefined) {
+                                    $('#hidTranactionMasterStatus').val(data.TranactionMasterStatus);
+                                }
+                                if ($('#DisclosureTypePE').val() == 1) {
+                                    $('#lnkPERedir')[0].click();
+                                } else {
+
+                                    if (sURL == '') {
+                                        $('#btnSubmitTransaction')[0].click();
+                                    }
+                                    else {
+                                        $('#lnkCancel')[0].click();
+                                    }
+                                }
+                            }
+                            else {
+                                showMessage(data.Message['error'], false);
+                            }
+                        }
+                    });
+                },
+                cancel: function (button) {
+                },
+                confirmButton: "Yes I Confirm",
+                cancelButton: "No",
+                post: true,
+                confirmButtonClass: "btn btn-success",
+                cancelButtonClass: "btn-danger",
+                dialogClass: "modal-dialog modal-lg"
+            });
+        }
+
+        $("#hold-btn-1").on('click', function () {
+            $("#hold-div-1").fadeIn();
+            $("#hold-btn-1 .btn-notify").removeClass("btn-notify").addClass("btn-success");
+            $("#hold-btn-2 .btn-success").removeClass("btn-success").addClass("btn-notify");
+            $("#hold-btn-5 .btn-success").removeClass("btn-success").addClass("btn-notify");
+            $("#hold-div-2").fadeOut(0);
+            $("#hold-div-5").fadeOut(0);
+            $("#hold-div-6").fadeOut(0);
+        });
+
+        $("#hold-btn-2").on('click', function () {
+            $("#hold-div-2").fadeIn();
+            $("#hold-div-6").fadeIn();
+            $("#hold-btn-2 .btn-notify").removeClass("btn-notify").addClass("btn-success");
+            $("#hold-btn-1 .btn-success").removeClass("btn-success").addClass("btn-notify");
+            $("#hold-btn-5 .btn-success").removeClass("btn-success").addClass("btn-notify");
+            $("#hold-div-1").fadeOut(0);
+            $("#hold-div-5").fadeOut(0);
+        });
+
+        $(document).delegate("#hold-btn-5", 'click', function () {
+            $("#hold-div-5").fadeIn();
+            $("#hold-div-6").fadeIn();
+            $("#hold-btn-5 .btn-notify").removeClass("btn-notify").addClass("btn-success");
+            $("#hold-btn-1 .btn-success").removeClass("btn-success").addClass("btn-notify");
+            $("#hold-btn-2 .btn-success").removeClass("btn-success").addClass("btn-notify");
+            $("#hold-div-1").fadeOut(0);
+            $("#hold-div-2").fadeOut(0);
+            $('#btnInsiderSubmit').removeAttr('disabled');
+        });
+
+        $('#btnSubmit').click(function () {//btnSubmit
+
+            if ($('.dataTables_empty').length >= $('.dataTable[gridtype]').length) {
+                showMessage('@InsiderTrading.Common.Common.getResource("tra_msg_16179")', false);
+            }
+            else if ('@ViewBag.DeclarationToBeMandatoryFlag' == 'True') {
+                if ($('#Chk_DeclaFrmInsContDis').prop("checked") == false) {
+                    showMessage('@InsiderTrading.Common.Common.getResource("tra_msg_50074")', false);
+                }
+                else {
+                    $('#btnSubmit').attr("disabled", "disabled");
+                    var Chk_DeclaFrmInsContDis = $('#Chk_DeclaFrmInsContDis').prop("checked");
+                    var data = { 'nTradingTransactionMasterId': $('#TransactionMasterId').val(), 'nDisclosureTypecodeId': $('#DisclosureTypecodeId').val(), 'acid': '@ViewBag.acid', 'Chk_DeclaFrmInsContDis': Chk_DeclaFrmInsContDis, 'IsDeclarationToBeMandatory': '@ViewBag.DeclarationToBeMandatoryFlag' };
+                    //$('#btnSubmitTransaction')[0].click();
+                    ConfirmBox(data, '@InsiderTrading.Common.Common.getResource("tra_msg_16103")', '@Url.Action("Submit", "TradingTransaction")');
+                }
+            }
+            else {
+                $('#btnSubmit').attr("disabled", "disabled");
+                nFromSubmitPage = 1;
+                $("#popupAlert").modal('show');
+            }
+        });
+
+        $('#btnInsiderSubmit').click(function () {//btnSubmit
+            if ($('.dataTables_empty').length >= $('.dataTable[gridtype]').length) {
+                $("#btnSubmitInsider").trigger("click");
+            }
+            else if ('@ViewBag.DeclarationToBeMandatoryFlag' == 'True') {
+                if ($('#Chk_DeclaFrmInsContDis').prop("checked") == false) {
+                    showMessage('@InsiderTrading.Common.Common.getResource("tra_msg_50074")', false);
+                }
+                else {
+                    $('#btnInsiderSubmit').attr("disabled", "disabled");
+                    $("#btnSubmitInsider").trigger("click");
+                }
+            }
+            else {
+                $('#btnInsiderSubmit').attr("disabled", "disabled");
+                $("#btnSubmitInsider").trigger("click");
+            }
+        });
+
+        $("#popupAlert").click(function () {
+            $('#btnInsiderSubmit').removeAttr('disabled');
+            $('#btnSubmit').removeAttr('disabled');
+        });
+
+        $("#popupAlert").on('show.bs.modal', function (event) {
+
+            var IsTransactionEnter = 1;
+            var IsDuplicateRecordFound = 0;
+            if ($('.dataTables_empty').length >= $('.dataTable[gridtype]').length) {
+                IsTransactionEnter = 0;
+            }
+            if (nFromSubmitPage == 1) {
+                nFromSubmitPage = 1;
+            }
+            else {
+                nFromSubmitPage = 0;
+            }
+            var userId = '@ViewBag.nUserInfoId'
+
+            $.ajax({
+                url: "@Url.Action("PopupConfirmation", "TradingTransaction")",
+                data: { 'acid': '@ViewBag.acid', "nTradingTransactionMasterId": $('#TransactionMasterId').val(), "nDisclosureStatus": '@ViewBag.TranactionMasterStatus', "nDisclosureTypecodeId": $('#DisclosureTypecodeId').val(), "nConfigurationValueCodeId": $('#ConfigurationValueCodeId').val(), 'nIsTransactionEnter': IsTransactionEnter, 'nIsDuplicateRecordFound': IsDuplicateRecordFound, 'nFromSubmitPage': nFromSubmitPage, 'nUserId': userId },
+                method: "POST",
+                success: function (response) {
+                    $("#popupAlert .modal-body").html(response);
+                }
+            });
+
+        });
+
+        $('#btnSubmitTransaction').click(function () {
+
+            var form = $('#__AjaxAntiForgeryForm');
+            var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+            var DisclosurertypeCodeId = $('#DisclosureTypecodeId').val();
+            var DisclosurertypeformId=0;
+
+            if (DisclosurertypeCodeId == 147001) {
+                DisclosurertypeformId = 47;
+            }
+            else if (DisclosurertypeCodeId == 147002) {
+                DisclosurertypeformId = 48;
+            }
+            else {
+                DisclosurertypeformId = 49;
+            }
+
+                if ('@ViewBag.DeclarationToBeMandatoryFlag' == 'True') {
+                    var Chk_DeclaFrmInsContDis = $('#Chk_DeclaFrmInsContDis').prop("checked");
+                }
+                else {
+                    var Chk_DeclaFrmInsContDis = false;
+                }
+            var data = { 'nTradingTransactionMasterId': $('#TransactionMasterId').val(), 'nDisclosureTypecodeId': $('#DisclosureTypecodeId').val(), 'acid': '@ViewBag.acid', 'Chk_DeclaFrmInsContDis': Chk_DeclaFrmInsContDis, 'IsDeclarationToBeMandatory': '@ViewBag.DeclarationToBeMandatoryFlag', __RequestVerificationToken: token, formId: DisclosurertypeformId };
+
+                $.ajax({
+                    url: '@Url.Action("Submit", "TradingTransaction")',
+                    method: 'POST',
+                    headers: getRVToken(),
+                    data: data,
+                    datatype: 'json',
+                    success: function (data) {
+                        $('#btnInsiderSubmit').attr("disabled", "disabled");
+                        $('#btnSubmit').attr("disabled", "disabled");
+                        if (data.status) {
+                            showMessage(data.Message['success'], true);
+                            if ($('#DisclosureTypePE').val() == 1) {
+                                //$('#lnkPERedir')[0].click();
+                                sPESubRedirURL = '';
+                                window.location.href = data.redirectTo;
+                            } else {
+                                if (data.softCopReq == false && data.CDDuringPE == true) {
+                                    $('#lnkPERedirFromCD')[0].click();
+                                }
+                                else if (data.softCopReq == true && (data.UserTypeCodeId != 101001 && data.UserTypeCodeId != 101002)) {
+                                    sPESubRedirURL = '';
+                                    window.location.href = data.redirectTo;
+                                }
+                                else {
+                                    $('#lnkCancel')[0].click();
+                                }
+                            }
+                        }
+                        else {
+                            showMessage(data.Message['error'], false);
+                        }
+                    }
+                });
+
+            });
+            var noHolding = '@ViewBag.NoHolding';
+
+            if (noHolding != "True") {
+
+                if (parseInt('@ViewBag.TranactionMasterStatus') == parseInt(@InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed) || parseInt('@ViewBag.TranactionMasterStatus') == parseInt(@InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForDocumentUploaded)) {
+                    $("#hold-btn-3").click(function () {
+                        var data = { 'nTradingTransactionMasterId': $('#TransactionMasterId').val(), 'nDisclosureTypecodeId': $('#DisclosureTypecodeId').val(), 'bNoHolding': true, 'acid': '@ViewBag.acid' };
+                        ConfirmBox(data, '@InsiderTrading.Common.Common.getResource("tra_msg_16104")', '@Url.Action("Submit", "TradingTransaction")');
+                    });
+                    $("#hold-btn-4").click(function () {
+                        var data = { 'nTradingTransactionMasterId': $('#TransactionMasterId').val(), 'nDisclosureTypecodeId': $('#DisclosureTypecodeId').val(), 'bNoHolding': true, 'acid': '@ViewBag.acid' };
+                        ConfirmBox(data, '@InsiderTrading.Common.Common.getResource("tra_msg_16105")', '@Url.Action("Submit", "TradingTransaction")');
+                    });
+                }
+                else {
+                    $("#hold-btn-3").attr('disabled', 'disabled');
+                    $("#hold-btn-4").attr('disabled', 'disabled');
+                    $("#hold-btn-3").off('click');
+                    $("#hold-btn-4").off('click');
+                }
+                $("#hold-btn-2").trigger('click');
+            }
+            else {
+                $("#hold-btn-2").addClass('hide');
+                $("#hold-btn-3").attr('disabled', 'disabled');
+                $("#hold-btn-4").attr('disabled', 'disabled');
+                $("#hold-btn-3").off('click');
+                $("#hold-btn-4").off('click');
+            }
+
+            $("#btnDocumentSubmit").click(function () {
+                var form = $('#__AjaxAntiForgeryForm');
+                var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+                var DisclosurertypeDocSubmitformId = 54;
+
+                if ($(".clsFileUpload>div.clsDivDynamic>div").length > 0) {
+                    var data = { 'nTradingTransactionMasterId': $('#TransactionMasterId').val(), 'nDisclosureTypecodeId': $('#DisclosureTypecodeId').val(), 'bDocumentStatus': true, 'acid': '@ViewBag.acid', __RequestVerificationToken: token, formId: DisclosurertypeDocSubmitformId };
+                    ConfirmBox(data, '@InsiderTrading.Common.Common.getResource("tra_msg_16189")', '@Url.Action("Submit", "TradingTransaction")');
+                }
+                else {
+                    showMessage('@InsiderTrading.Common.Common.getResource("tra_msg_16188")', false);
+                }
+            });
+
+        $("#btnNotTraded").click(function () {
+            var form = $('#__AjaxAntiForgeryForm');
+            var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+           
+            var DisclosurertypeNottradedformId = 53;
+
+           
+                if ($('#lstReasonsForNotTrading').val() != "0") {
+                    debugger;
+                    $('#lstReasonsForNotTrading').parent().find("field-validation-error").html();
+                    var data = { 'nPreclearenceId': $('#PreclearenceId').val(), 'nReasonForNotTrading': $('#lstReasonsForNotTrading').val(), 'sReasonForNotTradingText': $("#txtReasonForNotTradingText").val(), 'acid': '@ViewBag.acid', __RequestVerificationToken: token, formId: DisclosurertypeNottradedformId };
+                    ConfirmBox(data, '@InsiderTrading.Common.Common.getResource("tra_msg_16106").Replace("$2", ViewBag.CompanyName + " and other than " + ViewBag.CompanyName)', '@Url.Action("TransactionNotTraded", "TradingTransaction")');
+                }
+                else {
+                    $('#lstReasonsForNotTrading').parent().append("<span class='field-validation-error'>@InsiderTrading.Common.Common.getResource("tra_msg_16148")</span>");
+                }
+            });
+
+            //$('#hold-div-1,#hold-div-2').addClass('hold-div');
+            if ('@ViewBag.nDisclosureTypeCodeId' == '@InsiderTrading.Common.ConstEnum.Code.DisclosureTypeContinuous' || '@ViewBag.nDisclosureTypeCodeId' == '@InsiderTrading.Common.ConstEnum.Code.DisclosureTypePeriodEnd') {
+                $("[name=btnDeleteMaster]").click(function () {
+                    if ($('.dataTables_empty').length == $('.dataTable[gridtype]').length) {
+                        $.ajax({
+                            "url": '@Url.Action("DeleteMaster", "TradingTransaction")',
+                            "type": 'post',
+                            headers: getRVToken(),
+                            "data": { 'TradingTransactionMasterId': '@ViewBag.TransactionMasterId', 'acid': '@ViewBag.acid' },
+                            "success": function (data) {
+                                if (data.status) {
+                                    $('#lnkCancel')[0].click();
+                                }
+                                else {
+                                    $('#lnkCancel')[0].click();
+                                }
+                            },
+                            "error": function (jqXHR, textStatus, errorThrown) {
+                                alert(errorThrown);
+                            }
+                        });
+                    }
+                    else {
+                        $('#lnkCancel')[0].click();
+                    }
+                });
+            }
+            if ('@ViewBag.ShowDocumentTab' == 1) {
+                $('#hold-btn-5').trigger("click");
+            }
+        });
+</script>
+
+<section class="content-header content_css">
+    @{
+        var sPESubRedirURL = "";
+        var sURL = "";
+        var sDisplayText = "";
+        var sPESubRedirURLFromCD = "";
+        ViewBag.NoRecordsfoundMessage = "";
+
+        if (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypePeriodEnd)  //DisclosureType.PeriodEnd)
+        {
+
+            sURL = @Url.Action("Summary", "PeriodEndDisclosure") + "?acid=" + ViewBag.acid + "&period=" + ViewBag.nPeriodCode + "&year=" + ViewBag.nYearCode + "&pdtype=" + ViewBag.nPeriodType + "&uid=" + ViewBag.nUserInfoId + "&tmid=" + ViewBag.TransactionMasterId;
+            sDisplayText = "Period End Disclosure";
+            ViewBag.NoRecordsfoundMessage = "Not Traded";
+            if (ViewBag.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.Admin || ViewBag.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.COUserType)
+                sPESubRedirURL = @Url.Action("UsersStatus", "PeriodEndDisclosure") + "?acid=" + InsiderTrading.Common.ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_PERIOD_END_DISCLOSURE + "&year=" + ViewBag.nYearCode + "&uid=" + ViewBag.nUserInfoId;
+            else
+                sPESubRedirURL = @Url.Action("PeriodStatus", "PeriodEndDisclosure") + "?acid=" + InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_PERIOD_END_DISCLOSURE + "&year=" + ViewBag.nYearCode + "&uid=" + ViewBag.nUserInfoId;
+        }
+        else if (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)//DisclosureType.Initial)
+        {
+            //if (ViewBag.LoginUserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.COUserType || ViewBag.LoginUserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.Admin)
+            //{
+            //sURL = @Url.Action("Index", "COInitialDisclosure") + "?acid=" + ViewBag.acid;
+            sURL = @Url.Action("Index", "InsiderInitialDisclosure") + "?acid=" + ViewBag.acid + "&UserInfoId=" + ViewBag.ParentId + "&ReqModuleId=" + InsiderTrading.Common.ConstEnum.Code.RequiredModuleOwnSecurity;
+            //}
+            //else
+            //{
+            //    sURL = @Url.Action("Index", "InsiderInitialDisclosure") + "?acid=155";
+            //}
+            sDisplayText = "Initial Disclosure";
+            ViewBag.NoRecordsfoundMessage = "No Holdings";
+        }
+        else
+        {
+            if (ViewBag.from != "" && ViewBag.from == "preclereq")
+            {
+                if (ViewBag.acid == InsiderTrading.Common.ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE)
+                {
+                    sURL = @Url.Action("ApproveRejectAction", "PreclearanceRequest") + "?PreclearanceRequestId=" + ViewBag.Back_preclearance_id;
+                }
+                else if (ViewBag.acid == InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE)
+                {
+                    sURL = @Url.Action("Create", "PreclearanceRequest") + "?acid=" + ViewBag.acid + "&CalledFrom=Edit&PreclearanceRequestId=" + ViewBag.Back_preclearance_id;
+                }
+
+                sDisplayText = "Pre Clearance Request";
+            }
+            else if (ViewBag.from != "" && ViewBag.from == "dashboard")
+            {
+                sDisplayText = "Dashboard";
+                sURL = @Url.Action("Index", "InsiderDashboard") + "?acid=191";
+            }
+            else
+            {
+                if (ViewBag.LoginUserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.COUserType || ViewBag.LoginUserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.Admin)
+                {
+                    sURL = "";
+                    sURL = @Url.Action("ListByCo", "PreclearanceRequest") + "?acid=" + ViewBag.acid;
+                    sPESubRedirURLFromCD = "";
+                    sPESubRedirURLFromCD = @Url.Action("PeriodStatus", "PeriodEndDisclosure") + "?acid=" + InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_PERIOD_END_DISCLOSURE + "&year=" + ViewBag.nYearCode + "&uid=" + ViewBag.nUserInfoId;
+                }
+                else
+                {
+                    sURL = "";
+                    sURL = @Url.Action("Index", "PreclearanceRequest") + "?acid=" + ViewBag.acid;
+                    sPESubRedirURLFromCD = "";
+                    sPESubRedirURLFromCD = @Url.Action("PeriodStatus", "PeriodEndDisclosure") + "?acid=" + InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_PERIOD_END_DISCLOSURE + "&year=" + ViewBag.nYearCode + "&uid=" + ViewBag.nUserInfoId;
+                }
+                sDisplayText = "Continuous Disclosure";
+            }
+
+            ViewBag.NoRecordsfoundMessage = "Not Traded";
+        }
+    }
+
+    @if (ViewBag.nDisclosureTypeCodeId == @InsiderTrading.Common.ConstEnum.Code.DisclosureTypeContinuous || ViewBag.nDisclosureTypeCodeId == @InsiderTrading.Common.ConstEnum.Code.DisclosureTypePeriodEnd)
+    {
+        <p><a href="javascript:void(0);" name="btnDeleteMaster"><i class="fa fa-chevron-left"></i> Back to @sDisplayText </a></p>
+    }
+    else
+    {
+        <p><a href="@sURL"><i class="fa fa-chevron-left"></i> Back to @sDisplayText </a></p>
+    }
+    @if (ViewBag.DisclosureType == @InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
+    {
+        <b>
+            <i>
+                Data as on 8th January 2016 has been updated where ever available.Please update your holdings as on today's date and change date of intimation to company to today's date.
+                If you and your dependents do not hold any securities in the company, please click on "No Holdings" and complete the process.
+            </i>
+        </b>
+    }
+</section>
+
+@if (ViewBag.TransactionMasterId != 0)
+{
+    <section class="content " gridtype="@ViewBag.GridType">
+        @if ((ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial && (ViewBag.TranactionMasterStatus < InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForConfirmed || ViewBag.NoHolding == true))
+        || (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeContinuous && (ViewBag.TranactionMasterStatus < InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForConfirmed))
+        || (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypePeriodEnd) && (ViewBag.TranactionMasterStatus < InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForConfirmed || ViewBag.NoHolding == true))
+        {
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <p>
+                                @if (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeContinuous && ViewBag.PreclearenceId != null)
+                                {
+                                    if (ViewBag.NoHolding == true)
+                                    {
+                                        <button type="submit" class="btn btn-notify disabled" disabled><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("tra_btn_16132")</button>
+                                    }
+                                    else if (ViewBag.TranactionMasterStatus <= InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForConfirmed)
+                                    {
+                                        <a href="#" id="hold-btn-1"><button type="submit" class="btn btn-notify"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("tra_btn_16132")</button></a>
+                                    }
+                                    else
+                                    {
+                                        <button type="submit" class="btn btn-notify disabled" disabled><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("tra_btn_16132")</button>
+                                    }
+                                }
+                                @*@if (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
+                                    {
+                                        if (ViewBag.NoHolding == true)
+                                        {
+                                            <button type="submit" class="btn btn-notify disabled" disabled><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("tra_btn_16133")</button>
+                                        }
+                                        else if (ViewBag.TranactionMasterStatus <= InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForConfirmed)
+                                        {
+                                            <a href="#" id="hold-btn-3"><button type="submit" class="btn btn-notify"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("tra_btn_16133")</button></a>
+                                        }
+                                        else
+                                        {
+                                            if (ViewBag.NoHolding == true)
+                                            {
+                                                <button type="submit" class="btn btn-notify disabled" disabled><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("tra_btn_16133")</button>
+                                            }
+                                        }
+                                    }*@
+
+                                @if (ViewBag.NoHolding == false && ViewBag.Showenterbutton == true)
+                                {
+                                    if (IsEmployeeOrInsider != 1 || ViewBag.nConfigurationValueCodeId != InsiderTrading.Common.ConstEnum.Code.EnterUploadSetting_UploadDetails)
+                                    {
+                                        <a href="#" id="hold-btn-2"><button type="reset" class="btn btn-notify"><i class="fa fa-plus"></i> @InsiderTrading.Common.Common.getResource("tra_btn_16135")</button></a>
+                                    }
+                                    if (IsEmployeeOrInsider != 1 || ViewBag.nConfigurationValueCodeId != InsiderTrading.Common.ConstEnum.Code.EnterUploadSetting_EnterDetails)
+                                    {
+                                        <a href="#" id="hold-btn-5"><button type="submit" class="btn btn-notify"><i class="fa fa-upload"></i> Upload details</button></a>
+                                    }
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else if (!ViewBag.NoHolding && ViewBag.Showenterbutton == true)
+        {
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <p>
+                                @if (IsEmployeeOrInsider != 1 || ViewBag.nConfigurationValueCodeId != InsiderTrading.Common.ConstEnum.Code.EnterUploadSetting_UploadDetails)
+                                {
+                                    <a href="#" id="hold-btn-2"><button type="reset" class="btn btn-notify"><i class="fa fa-plus"></i> @InsiderTrading.Common.Common.getResource("tra_btn_16135")</button></a>
+                                }
+                                @if (IsEmployeeOrInsider != 1 || ViewBag.nConfigurationValueCodeId != InsiderTrading.Common.ConstEnum.Code.EnterUploadSetting_EnterDetails)
+                                {
+                                    <a href="#" id="hold-btn-5"><button type="submit" class="btn btn-notify"><i class="fa fa-upload"></i> Upload details</button></a>
+                                }
+
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <input type="hidden" value="@ViewBag.PreclearenceId" id="PreclearenceId" />
+        <input type="hidden" value="@ViewBag.TranactionMasterStatus" id="hidTranactionMasterStatus" />
+        @if (ViewBag.PreclearenceId != null)
+        {
+            <div id="hold-div-1" class="row hold-div">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+                                    <div role="form">
+                                        <div class="form-group">
+                                            <label>@InsiderTrading.Common.Common.getResource("tra_lbl_16101")</label>
+                                            @Html.DropDownList("lstReasonsForNotTrading", new SelectList(ViewBag.lstReasonsForNotTrading, "Key", "Value", ""), new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+                                    <div role="form">
+                                        <div class="form-group">
+                                            <textarea class="form-control" id="txtReasonForNotTradingText" name="textarea" rows="6"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-3 col-sm-8 col-xs-12">
+                                    <p>
+                                        @if (ViewBag.TranactionMasterStatus <= InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed)
+                                        {
+                                            <button id="btnNotTraded" class="btn btn-success"><i class="fa fa-check"></i> @InsiderTrading.Common.Common.getResource("com_btn_14025")</button>
+                                        }
+                                        <a href="@sURL" class="btn btn-success"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14010")</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @{
+        var apply = "hold-div";
+        var applyDocument = "hold-div";
+        if ((ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial && ViewBag.NoHolding == false)
+            || (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeContinuous)
+            || (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypePeriodEnd))
+        {
+            apply = "";
+        }
+        var isInsiderEnterDetails = "";
+        var isInsiderUploadDetails = "";
+        if (IsEmployeeOrInsider == 1 && ViewBag.nConfigurationValueCodeId == InsiderTrading.Common.ConstEnum.Code.EnterUploadSetting_UploadDetails)
+        {
+            isInsiderEnterDetails = "style=display:none;";
+            applyDocument = "";
+        }
+        //  if (IsEmployeeOrInsider != 1 || ViewBag.nConfigurationValueCodeId != InsiderTrading.Common.ConstEnum.Code.EnterUploadSetting_EnterDetails)
+        if (IsEmployeeOrInsider == 1 && ViewBag.nConfigurationValueCodeId == InsiderTrading.Common.ConstEnum.Code.EnterUploadSetting_EnterDetails)
+        {
+            isInsiderUploadDetails = "style=display:none;";
+        }
+        }
+
+        @if (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
+        {
+            <div id="hold-div-2" class="row @apply " @isInsiderEnterDetails style="margin: 0px 0px 0px 0px;">
+                <div style="height: 48px;">
+                    <div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 abc" style=" margin: -8px 0px 0px 0px;">
+                                <table id="tbl1">
+                                    <tr id="some_id">
+                                        <td>
+                                        <td>
+                                            @{ foreach (var objSecurityType in ViewBag.SecurityType)
+                                             {
+                                            <td id="some_id1">
+                                                @if (Convert.ToString(@ViewBag.SecurityTypeCodeId) == @objSecurityType.Key)
+                                                {
+                                                    <a href="#" id="BtnInitialBreadCrumsID1" style="margin: 0px 18px 0px 0px;"><button type="reset" class="btn btn-shape btn-arrow btn-md btn-warning BtnInitialBreadCrumsID">@objSecurityType.Value</button></a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="#" id="BtnInitialBreadCrumsID1" style="margin: 0px 18px 0px 0px;"><button type="reset" class="btn btn-shape btn-arrow btn-md btn-success BtnInitialBreadCrumsID">@objSecurityType.Value</button></a>
+                                                }
+                                            </td>
+                                             }
+
+                                            }
+
+                                            </td>
+                                            <td>
+                                                @*cHANGES MADE BY SHUBHANGI*@
+                                                @*if ((ViewBag.TranactionMasterStatus == InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed) || (ViewBag.TranactionMasterStatus == InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForDocumentUploaded && Convert.ToInt32(ViewBag.ConfigurationValueCodeId) == InsiderTrading.Common.ConstEnum.Code.EnterUploadSetting_EnterAndUploadDetails))*@
+                                                @if ((ViewBag.TranactionMasterStatus == InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed) || (ViewBag.TranactionMasterStatus == InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForDocumentUploaded && (ViewBag.nUserTypeCodeId == 101001 || ViewBag.nUserTypeCodeId == 101002)) || (ViewBag.TranactionMasterStatus == InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForDocumentUploaded && (Convert.ToInt32(ViewBag.ConfigurationValueCodeId) == InsiderTrading.Common.ConstEnum.Code.EnterUploadSetting_EnterAndUploadDetails || Convert.ToInt32(ViewBag.ConfigurationValueCodeId) == InsiderTrading.Common.ConstEnum.Code.EnterUploadSetting_EnterAndOrDetails)))
+                                                {
+                                                    @*<button id="btnInsiderSubmit" class="btn btn-success"><i class="fa fa-check"></i> @InsiderTrading.Common.Common.getResource("com_btn_14025")</button>*@
+                                                    <button id="btnInsiderSubmit" class="btn btn-shape btn-round btn-md center-block btn-success disabled"> @InsiderTrading.Common.Common.getResource("com_btn_14025")</button>
+                                                    <button id="btnSubmitInsider" style="display:none;" data-toggle='modal' data-target='#popupAlert'></button>
+                                                }
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                    @*<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="float:right">
+                                            <h5 style="float:right">Date of Acquisition: @ViewBag.DateOfAcquisition</h5>
+                                        </div>*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" value="@ViewBag.TransactionMasterId" id="TransactionMasterId" />
+                    <input type="hidden" value="@ViewBag.nDisclosureTypecodeId" id="DisclosureTypecodeId" />
+                    <input type="hidden" value="@ViewBag.nConfigurationValueCodeId" id="ConfigurationValueCodeId" /> <!-- Enter /Upload Configuration •	Enter Details and/or Upload Details -->
+                    <input type="hidden" value="@InsiderTrading.Common.Common.getResource("tra_lbl_52125")" id="DematMsg" />
+                    <div class="panel panel-default" style="margin: -12px 0px 0px 0px;">
+                        <div class="panel-body">
+                            <div class="row" style="margin: 0px 0px 0px 0px;">
+                                @if ((bool)ViewBag.ShowOwnSecuritiesDeclaration && ViewBag.TranactionMasterStatus == InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed)
+                                {   <br /><br />
+                                    @Html.Partial("~/Views/TradingTransaction/SubmitOwnSecurities.cshtml")
+                                }
+                                else
+                                {
+                                    <div>
+                                        <div id="Grd_User_OwnSecurities" style="display:none">
+                                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                <h5 style="margin: -5px 0px 10px -13px; ">@InsiderTrading.Common.Common.getResource("tra_lbl_50778"): @InsiderTrading.Common.Common.getResource("tra_lbl_50779") : @ViewBag.panNumber </h5>
+                                            </div>
+                                            <div>
+                                                <h5 style="float: right; margin: -3px 4px 0px 0px;">@InsiderTrading.Common.Common.getResource("dis_lbl_52111"): @ViewBag.DateOfAcquisition</h5>
+                                            </div>
+                                            <div class="search" gridtype="@ViewBag.GridType">
+                                                <input type="hidden" value="@ViewBag.TransactionMasterId" id="1" name="" gridtype="@ViewBag.GridType" />
+                                                <input type="hidden" value="@ViewBag.IsfromView" id="4" name="" gridtype="@ViewBag.GridType" />
+                                                <input type="hidden" value="@ViewBag.UserinfoId" id="5" name="" gridtype="@ViewBag.GridType" />
+                                                <input type="hidden" value="@ViewBag.nUserTypeCodeId" id="6" name="" gridtype="@ViewBag.GridType" />
+                                                <input type="hidden" value="@ViewBag.SecurityTypeCodeId" id="2" name="" gridtype="@ViewBag.GridType" />
+
+
+                                                @{
+                                    var bFlag = false;
+                                    if (ViewBag.TranactionMasterStatus <= InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed)
+                                    {
+                                        bFlag = true;
+                                    }
+                                                }
+                                                @{Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "", sSortCol = "0", sGridTagName = "DatatableGrid_" + @ViewBag.SecurityTypeCodeId, bIsActionCol = @bFlag, sNoRecordsfoundMessage = @ViewBag.NoRecordsfoundMessage, OverrideGridType = @ViewBag.OverrideGridType });}
+
+                                            </div>
+                                        </div>
+                                        <div id="Grd_Relative_OwnSecurities" style="display:none">
+                                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                <h5 style=" margin: -6px 0px 8px -13px;">@InsiderTrading.Common.Common.getResource("tra_lbl_50778"): @InsiderTrading.Common.Common.getResource("tra_lbl_50780") </h5>
+                                            </div>
+                                            <div class="search" gridtype="@ViewBag.RGridType">
+                                                <input type="hidden" value="@ViewBag.TransactionMasterId" id="1" name="" gridtype="@ViewBag.RGridType" />
+                                                <input type="hidden" value="@ViewBag.IsfromView" id="4" name="" gridtype="@ViewBag.RGridType" />
+                                                <input type="hidden" value="@ViewBag.UserinfoId" id="5" name="" gridtype="@ViewBag.RGridType" />
+                                                <input type="hidden" value="@ViewBag.nUserTypeCodeId" id="6" name="" gridtype="@ViewBag.RGridType" />
+                                                <input type="hidden" value="@ViewBag.SecurityTypeCodeId" id="2" name="" gridtype="@ViewBag.RGridType" />
+                                                @{
+                                    if (ViewBag.TranactionMasterStatus <= InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed)
+                                    {
+                                        bFlag = true;
+                                    }
+                                                }
+                                                @{Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.RGridType, btnSearch = "", sSortCol = "0", sGridTagName = "DatatableGrid_" + @ViewBag.SecurityTypeCodeId, bIsActionCol = @bFlag, sNoRecordsfoundMessage = @ViewBag.NoRecordsfoundMessage, OverrideGridType = @ViewBag.OverrideGridRelativeType });}
+                                            </div>
+                                        </div>
+
+                                        @if (ViewBag.TranactionMasterStatus == InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed)
+                                        {
+                                            <button type="submit" id="btnSave" value="Save" class="btn btn-success" style="margin: 0px 0px 0px 0px;">Save</button>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        }
+        else
+        {
+            <div id="hold-div-2" class="row @apply " @isInsiderEnterDetails>
+                <div class="col-lg-12">
+                    @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+                    @*ViewBag.SecurityType :- Shares, Warrants, Convertible Debentures, Future Contracts, Option Contracts*@
+                    @{ foreach (var objSecurityType in ViewBag.SecurityType)
+                     {
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div id="div">
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                    <p>@InsiderTrading.Common.Common.getResource("tra_lbl_16102"): @objSecurityType.Value</p>
+                                                </div>
+                                                @if (ViewBag.PreclearenceId != null)
+                                                {
+                                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                        <div class="col-xs-6">
+                                                            @Html.Label(InsiderTrading.Common.Common.getResource("tra_lbl_16286"))
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            @ViewBag.ApprovedQuantity
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                    <p></p>
+                                                </div>
+                                                @if (ViewBag.PreclearenceId != null)
+                                                {
+                                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                        <div class="col-xs-6">
+                                                            @Html.Label(InsiderTrading.Common.Common.getResource("tra_lbl_16287"))
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            @ViewBag.TradedQuantity
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                    @if (ViewBag.TranactionMasterStatus <= InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed)
+                                                    {
+                                                        <a href='@Url.Action("Create", "TradingTransaction", new { TransactionDetailsId = 0, TransactionMasterId = @ViewBag.TransactionMasterId, SecurityTypeCodeId = objSecurityType.Key, acid = ViewBag.acid, period = ViewBag.nPeriodCode, year = ViewBag.nYearCode, periodType = ViewBag.nPeriodType })' class="btn btn-success"><i class="fa fa-plus"></i>Add @objSecurityType.Value</a>
+                                                    }
+                                                </div>
+                                                @if (ViewBag.PreclearenceId != null)
+                                                {
+                                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                        <div class="col-xs-6">
+                                                            @Html.Label(InsiderTrading.Common.Common.getResource("tra_lbl_16288"))
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            @ViewBag.PendingQuantity
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                            <br>
+
+                                            <div class="search" gridtype="@ViewBag.GridType">
+
+                                                <input type="hidden" value="@ViewBag.TransactionMasterId" id="1" name="" gridtype="@ViewBag.GridType" />
+                                                <input type="hidden" value="@objSecurityType.Key" id="2" name="" gridtype="@ViewBag.GridType" />
+                                                <input type="hidden" value="@ViewBag.IsfromView" id="4" name="" gridtype="@ViewBag.GridType" />
+                                                <input type="hidden" value="@ViewBag.UserinfoId" id="5" name="" gridtype="@ViewBag.GridType" />
+                                                <input type="hidden" value="@ViewBag.nUserTypeCodeId" id="6" name="" gridtype="@ViewBag.GridType" />
+                                                @{
+                                                var bFlag = false;
+                                                if (ViewBag.TranactionMasterStatus <= InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed)
+                                                {
+                                                    bFlag = true;
+                                                }
+                                                }
+                                                @{Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "", sSortCol = "0", sGridTagName = "DatatableGrid_" + objSecurityType.Key, bIsActionCol = @bFlag, sNoRecordsfoundMessage = @ViewBag.NoRecordsfoundMessage, OverrideGridType = @ViewBag.OverrideGridType });}
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                     }
+                    }
+
+                </div>
+            </div>
+        }
+
+        @Html.Hidden("HardCopyReq", (ViewBag.HardCopyReq == false && ViewBag.CDDuringPE == true) ? 1 : 0)
+        <a href="@sPESubRedirURLFromCD" id="lnkPERedirFromCD" class="btn btn-success hide"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14010")</a>
+
+        @if (ViewBag.NoHolding == false)
+        {
+            <div id="hold-div-5" class="row @applyDocument " @isInsiderUploadDetails>
+                @if (ViewBag.TranactionMasterStatus <= InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed)
+                {
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+                                        <div role="form">
+                                            <form method="post">
+                                                @Html.Partial("~/Views/Common/MultiDocumentUpload.cshtml", Model.TradingTransactionUpload, new ViewDataDictionary() { { "user_action", ViewBag.UserAction } })
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+                                        <button id="btnDocumentSubmit" class="btn btn-success"><i class="fa fa-check"></i> @InsiderTrading.Common.Common.getResource("com_btn_14017")</button>
+                                        <a href="@sURL" id="lnkCancel" class="btn btn-success"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14010")</a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="row">
+                                    @* Grid to display the documents uploaded by user for a transaction *@
+                                    <div class="search" gridtype="@ViewBag.GridTypeUploadedDocs">
+                                        <input type="hidden" value="@ViewBag.nDisclosureTransaction" id="1" name="1" gridtype="@ViewBag.GridTypeUploadedDocs" />
+                                        <input type="hidden" value="@ViewBag.nTransactionMasterID" id="2" name="2" gridtype="@ViewBag.GridTypeUploadedDocs" />
+                                        @Html.Hidden("View", Url.Action("DisplayPolicy", "InsiderInitialDisclosure", new { acid = ViewBag.acid, PolicyDocumentID = ViewBag.nTransactionMasterID, CalledFrom = "DisclosureDocuments" }), new { @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridTypeUploadedDocs + "_usr_grd_11073", param = "{'text':'','href':'" + Url.Action("DisplayPolicy", "InsiderInitialDisclosure", new { acid = ViewBag.acid, PolicyDocumentID = ViewBag.nTransactionMasterID, CalledFrom = "DisclosureDocuments", CalledFromHardCopy = true }) + "&DocumentID=<DocumentId>','class':'display-icon icon icon-eye'}" })
+                                        @{Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridTypeUploadedDocs, btnSearch = "", sSortCol = "", sGridTagName = "DatatableGrid_" + ViewBag.GridTypeUploadedDocs, bIsActionCol = true, OverrideGridType = @ViewBag.nDocUploadOverrideGridType });}
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
+                {
+                    if (ViewBag.TranactionMasterStatus >= InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForConfirmed && ViewBag.NoHolding == true)
+                    {
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <a href="@sURL" id="lnkCancel" class="btn btn-success"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14010")</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                @Html.Hidden("DisclosureTypePE", (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypePeriodEnd) ? 1 : 0)
+                <a href="@sPESubRedirURL" id="lnkPERedir" class="btn btn-success hide"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14010")</a>
+
+            </div>
+        }
+        @if (ViewBag.nDisclosureTypeCodeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
+        {
+            <div id="hold-div-6" class="row ">
+                <div class="col-lg-12">
+
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <input type="hidden" value="@ViewBag.TransactionMasterId" id="TransactionMasterId" />
+                                    <input type="hidden" value="@ViewBag.nDisclosureTypecodeId" id="DisclosureTypecodeId" />
+                                    <input type="hidden" value="@ViewBag.nConfigurationValueCodeId" id="ConfigurationValueCodeId" /> <!-- Enter /Upload Configuration •	Enter Details and/or Upload Details -->
+
+                                    <div class="col-xs-12" id="divButtons">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+
+                                                @if (ViewBag.TranactionMasterStatus == InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForSubmitted && ViewBag.IsTransactionSubmitedByInsider == 0)
+                                                {
+                                                    if (InsiderTrading.Common.Common.CanPerform(ViewBag.letter_acid))
+                                                    {
+                                                        if (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeContinuous)
+                                                        {
+                                                            @ViewBag.DeclarationFromInsiderAtTheTimeOfContinuousDisclosures
+                                                            <br /><br />
+                                                        }
+                                                        <a href='@Url.Action("CreateLetter", "TradingTransaction", new { nTransactionMasterId = ViewBag.TransactionMasterId, nDisclosureTypeCodeId = ViewBag.nDisclosureTypeCodeId, acid = ViewBag.letter_acid, nLetterForCodeId = InsiderTrading.Common.ConstEnum.Code.DisclosureLetterUserInsider, uid = ViewBag.nUserInfoId })' class="btn btn-success">@InsiderTrading.Common.Common.getResource("tra_btn_16131")</a>
+                                                    }
+                                                }
+                                                else if (ViewBag.TranactionMasterStatus <= InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed)
+                                                {
+                                                    if (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeContinuous)
+                                                    {
+                                                        if (ViewBag.SeekDeclarationFromEmpRegPossessionOfUPSIFlag == true)
+                                                        {
+                                                            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" style="width:3% !important">
+                                                                @Html.CheckBoxFor(m => m.Chk_DeclarationFromInsiderAtTheTimeOfContinuousDisclosures, new { id = "Chk_DeclaFrmInsContDis" })
+                                                            </div>
+                                                            <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11" style="padding-bottom:20px; width:97% !important">
+                                                                @ViewBag.DeclarationFromInsiderAtTheTimeOfContinuousDisclosures
+                                                            </div>
+                                                        }
+
+                                                    }
+                                                    if (IsEmployeeOrInsider == 1)
+                                                    {
+                                                        if (ViewBag.IsTransactionSubmited == 0)
+                                                        {
+                                                            <button id="btnInsiderSubmit" class="btn btn-success"><i class="fa fa-check"></i> @InsiderTrading.Common.Common.getResource("com_btn_14025")</button>
+                                                            <button id="btnSubmitInsider" style="display:none;" data-toggle='modal' data-target='#popupAlert'></button>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <button id="btnSubmit" class="btn btn-success"><i class="fa fa-check"></i> @InsiderTrading.Common.Common.getResource("com_btn_14025")</button>
+                                                    }
+                                                }
+
+                                                else if (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeContinuous)
+                                                {
+                                                    if (ViewBag.DisplayDeclarationPostSubmissionOfContinuouseDisclosureFlag == true)
+                                                    {
+                                                        @ViewBag.DeclarationFromInsiderAtTheTimeOfContinuousDisclosures
+                                                        <br /><br />
+                                                    }
+
+                                                    <button name="btnDeleteMaster" class="btn btn-success"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14010")</button>
+                                                    <a href="@sURL" id="lnkCancel" class="btn btn-success hide"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14010")</a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@sURL" id="lnkCancel" class="btn btn-success"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14010")</a>
+                                                }
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @if (ViewBag.CompanyName == "Vigilante_AxisBank")
+                                    {
+                                        if (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeContinuous &&
+                                        ViewBag.TranactionMasterStatus < InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForConfirmed)
+                                        {
+                                            <div class="col-xs-12">
+                                                <section class="content-header" style="padding-left:0px;">
+                                                    <h5>PLEASE NOTE:</h5>
+                                                    <h5 style="margin-left:-25px">
+                                                        <ol>
+                                                            <li>
+                                                                <h5>
+                                                                    Please update the data under "Enter Details" tab. Click on "Add Shares" to update your trade details.
+                                                                </h5>
+                                                            </li>
+                                                            <li>
+                                                                <h5>
+                                                                    Please do not upload data files through the "Upload details" button since the uploaded data shall not be considered as submitted unless data is entered under the "Enter Details" tab.
+                                                                </h5>
+                                                            </li>
+                                                        </ol>
+                                                    </h5>
+                                                </section>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </section>
+
+    if (ViewBag.TranactionMasterStatus < InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForConfirmed)
+    {
+        @Html.Hidden("deleteRowURL", Url.Action("Delete", "TradingTransaction", new { acid = ViewBag.UserAction }), new { name = "deleteRowURL", @class = "gridtypecontrol", gridtype = @ViewBag.GridType, ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'name': 'deleteRow','queryString': '[ {ID:\"TradingTransactionId\", key:\"<TransactionDetailsId> \"},{ ID: \"formId\", key: \"90\" } ]','text':'','href':'javascript:void(0);','class':'display-icon icon icon-delete'}" })
+
+        @Html.Hidden("Edit", Url.Action("Create", "TradingTransaction", new { acid = ViewBag.UserAction }), new { @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'text':'','href':'" + Url.Action("Create", "TradingTransaction", new { acid = ViewBag.acid }) + "&TransactionDetailsId=<TransactionDetailsId>&TransactionMasterId=" + @ViewBag.TransactionMasterId + "&period=" + ViewBag.nPeriodCode + "&year=" + ViewBag.nYearCode + "&periodType=" + ViewBag.nPeriodType + "','class':'display-icon icon icon-edit'}" })
+    }
+}
+else
+{
+    <div>
+        @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+    </div>
+}
+
+<div class="modal fade" id="popupAlert" tabindex="-1" role="dialog" aria-labelledby="popupAlertlabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:65%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <b id="PopupHeader"></b><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+<button type="button" id="btnSubmitTransaction" style="display:none;"> </button>
+
+<script type="text/javascript">
+
+    $('#btnSave').click(function () {
+        
+        
+        var SecuritytypeformId=0;
+        
+
+       if ('@ViewBag.SecurityTypeCodeId' == 139001)
+        {
+           SecuritytypeformId = 30;
+
+        }
+        else if ('@ViewBag.SecurityTypeCodeId' == 139002)
+        {
+            SecuritytypeformId = 43;
+        }
+        else if ('@ViewBag.SecurityTypeCodeId' == 139003)
+        {
+            SecuritytypeformId = 44;
+        }
+        else if ('@ViewBag.SecurityTypeCodeId' == 139004)
+        {
+            SecuritytypeformId = 45;
+        }
+        else
+        {
+            SecuritytypeformId = 46;
+        }
+
+        var form = $('#__AjaxAntiForgeryForm');
+        var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+        var tableCollection = [];
+        tableCollection.push($("table[name*='DatatableGrid']"));
+        var Items = tableCollection[0];
+
+        var DematitemCollection = [];
+        var RelativeitemCollection = [];
+        $("#DataTables_Table_0 tr:not(:first)").each(function () {
+            var tds = $(this).find("td");
+            var item = {
+                tra_grd_16190: $(tds[0]).text(),
+                tra_grd_16191: $(tds[1]).text(),
+                tra_grd_16192: $(tds[2]).text(),
+                tra_grd_16193: $(tds[3]).text(),
+                tra_grd_16194: $(tds[4]).text(),
+                tra_grd_16195: $(tds).find("#txttra_grd_16195").val(),
+                tra_grd_16196: $(tds).find("#txttra_grd_16196").val(),
+                tra_grd_16197: $(tds).find("#txttra_grd_16197").val(),
+                tra_grd_16199: $(tds).find("#txttra_grd_16199").val(),
+                tra_grd_16200: $(tds).find("#txttra_grd_16200").val(),
+                tra_grd_16198: $(tds).find("#txttra_grd_16198").val(),
+                dmatId: $(tds[0]).find("#DmatId").val(),
+                UserInfoId: $(tds[0]).find("#UserInfoId").val(),
+            }
+
+            DematitemCollection.push(item);
+
+        });
+        $("#DataTables_Table_1 tr:not(:first)").each(function () {
+            var tds = $(this).find("td");
+            var item = {
+                tra_grd_50741: $(tds[0]).text(),
+                tra_grd_50742: $(tds[1]).text(),
+                tra_grd_50743: $(tds[2]).text(),
+                tra_grd_50744: $(tds[3]).text(),
+                tra_grd_50745: $(tds[4]).text(),
+                tra_grd_50746: $(tds[5]).text(),
+                tra_grd_50747: $(tds[6]).text(),
+                tra_grd_50748: $(tds[7]).text(),
+                tra_grd_50749: $(tds).find("#txttra_grd_50749").val(),
+                tra_grd_50783: $(tds).find("#txttra_grd_50783").val(),
+                tra_grd_50784: $(tds).find("#txttra_grd_50784").val(),
+                tra_grd_50750: $(tds).find("#txttra_grd_50750").val(),
+                relDmatId: $(tds[0]).find("#relDmatId").val(),
+                RelUserInfoId: $(tds[0]).find("#RelUserInfoId").val(),
+            }
+            RelativeitemCollection.push(item);
+        });
+        $.ajax({
+            url: '@Url.Action("GetDataTableDataForInitialDisclosure", "TradingTransaction")', //
+            dataType: "json",
+            data: JSON.stringify({ DematitemCollection: DematitemCollection, RelativeitemCollection: RelativeitemCollection, TransactionDetailsId: 0, TransactionMasterId: '@ViewBag.TransactionMasterId', acid: '@ViewBag.acid', UserInfoId: '@ViewBag.nUserInfoId', DisclosureType: '@ViewBag.nDisclosureTypeCodeId', SecurityTypeCodeId: '@ViewBag.SecurityTypeCodeId', year: '@ViewBag.nYearCode', period: '@ViewBag.nPeriodCode', PreclearenceID: 0, periodType: '@ViewBag.nPeriodType', __RequestVerificationToken: token, formId: SecuritytypeformId }),
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                if (data.status) {
+                    showMessage(data.Message['Success'], true);
+                    var redirectview = 'redirectview';
+                    $.ajax({
+                        url: "../TradingTransaction/Index",
+                        method: 'GET',
+                        cache: false,
+                        headers: getRVToken(),
+                        data: { acid: '@ViewBag.acid', nDisclosureTypeCodeId: 147001, nUserInfoId: '@ViewBag.nUserInfoId', frm: redirectview, nUserTypeCodeId: '@ViewBag.nUserTypeCodeId', SecurityTypeCode: data.SecurityTypeID, SubmitFlag: data.SubmitFlag },
+                        datatype: 'json',
+                        success: function (data) {
+                            location.reload(data);
+                        }
+                    });
+                }
+                else
+                    showMessage(data.Message['error'], false);
+            },
+            error: function (xhr) {
+                showMessage(data.Message['error'], false);
+            }
+        });
+    });
+
+</script>
+
+
+<script language="javascript">
+    $("#some_id #some_id1").click(function () {
+        td_value = $(this).text();
+        td_trimvalue = $.trim(td_value);
+
+        var td_value1;
+        if (td_trimvalue == 'Shares') {
+            td_value1 = 139001;
+        }
+        else if (td_trimvalue == 'Warrants') {
+            td_value1 = 139002;
+        }
+        else if (td_trimvalue == 'Convertible Debentures' || td_trimvalue == 'Debentures') {
+            td_value1 = 139003;
+        }
+        else if (td_trimvalue == 'Future Contracts' || td_trimvalue == 'Index Based Derivatives') {
+            td_value1 = 139004;
+        }
+        else if (td_trimvalue == 'Option Contracts') {
+            td_value1 = 139005;
+        }
+        var redirectview = 'redirectview';
+        $.ajax({
+            url: "../TradingTransaction/Index",
+            method: 'GET',
+            cache: false,
+            headers: getRVToken(),
+            data: { acid: '@ViewBag.acid', TransactionMasterId: '@ViewBag.TransactionMasterId', nDisclosureTypeCodeId: 147001, nUserInfoId: '@ViewBag.nUserInfoId', frm: redirectview, nUserTypeCodeId: '@ViewBag.nUserTypeCodeId', SecurityTypeCode: td_value1 },
+            datatype: 'json',
+            success: function (data) {
+                location.reload(data);
+            }
+        });
+    });
+
+    if ('@ViewBag.ShowOwnSecuritiesDeclaration' == 'True') {
+        $("#btnInsiderSubmit").removeClass("btn-success").addClass("btn-warning");
+        if ($(".BtnInitialBreadCrumsID").hasClass("btn-warning")) {
+
+            $(".BtnInitialBreadCrumsID").removeClass("btn-warning").addClass("btn-success");
+        }
+    }
+</script>
+
+
+<script>
+    if ('@ViewBag.nDisclosureTypeCodeId' == '147001') {
+        $(".content_css").css("margin", "-20px 0px -10px 0px");
+    }
+
+    else if ('@ViewBag.nDisclosureTypeCodeId' == '147002') {
+        $(".content_css").css("margin", "-21px 0px -8px 0px");
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}

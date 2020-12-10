@@ -1,0 +1,33 @@
+﻿@{
+    bool showMsgPolicyDocNotApplicable = ViewData["PolicyDocument"] != null ? (bool)ViewData["PolicyDocument"] : false;
+    bool showMsgTradingPolicyNotApplicable = ViewData["TradingPolicy"] != null ? (bool)ViewData["TradingPolicy"] : false;
+    bool showMsgConfirmPersonalDetails= ViewData["ConfirmDetails"] != null ? (bool)ViewData["ConfirmDetails"] : false;
+
+    bool isShowMsg = (showMsgPolicyDocNotApplicable || showMsgTradingPolicyNotApplicable || showMsgConfirmPersonalDetails) ? true : false;
+
+    //check if show message or not
+    if (isShowMsg)
+    {
+        <div class="alert alert-success">
+            <ul>
+                @{
+                    if (showMsgPolicyDocNotApplicable)
+                    {
+                        <li>@InsiderTrading.Common.Common.getResource("usr_msg_11276")</li>
+                    }
+                    if (showMsgTradingPolicyNotApplicable)
+                    {
+                        <li>@InsiderTrading.Common.Common.getResource("usr_msg_11277")</li>
+                    }
+                    if (showMsgConfirmPersonalDetails)
+                    {
+                        <li>@InsiderTrading.Common.Common.getResource("usr_msg_11417")</li>
+                    }
+                }
+            </ul>
+        </div>
+    }
+}
+
+
+

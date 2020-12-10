@@ -1,0 +1,62 @@
+﻿@model InsiderTrading.Models.PEIndividualReportSearchViewModel
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                @Html.Hidden("1", "3", new { @id = "1", gridtype = @ViewBag.GridType })
+                @Html.Hidden("4", ((object)@ViewBag.EmployeeId).ToString(), new { @id = "4", gridtype = @ViewBag.GridType })
+                <label for="YearCodeId">@InsiderTrading.Common.Common.getResource("rpt_lbl_19167")</label>
+                @Html.DropDownList("YearCodeId", new SelectList(ViewBag.YearTypeCode, "Key", "Value", ViewBag.YearCode), new { @class = "form-control", disabled = "disabled", gridtype = @ViewBag.GridType, id = "2" })
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                <label for="PeriodCodeId">@InsiderTrading.Common.Common.getResource("rpt_lbl_19168")</label>
+                @Html.DropDownList("PeriodCodeId", new SelectList(ViewBag.FinancialPeriods, "Key", "Value", ViewBag.PeriodCode), new { @class = "form-control", disabled = "disabled", gridtype = @ViewBag.GridType, id = "3" })
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                <input type="hidden" name="HeaderSummary" value="@ViewBag.ReportHeaderKeyValueData1JSON" />
+                <input type="hidden" name="HeaderSummary" value="@ViewBag.ReportHeaderKeyValueData2JSON" />
+                <label for="DematDetailsId">@InsiderTrading.Common.Common.getResource("rpt_lbl_19170")</label>
+                @Html.DropDownList("DematDetailsId", new MultiSelectList(ViewBag.UserDmatDropDown, "Key", "Value", ""), new { @class = "form-control selectpicker", title = "Select", multiple = "multiple", gridtype = @ViewBag.GridType, id = "5" })
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                <label for="AccountHolder">@InsiderTrading.Common.Common.getResource("rpt_lbl_19110")</label>
+                @*<input name="AccountHolder" class="form-control" id="6" type="text" value="" gridtype="@ViewBag.GridType" data-val="false">*@
+                @Html.TextBoxFor(m => m.AccountHolder, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "6" })
+                @Html.ValidationMessageFor(m => m.AccountHolder)
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                <label for="RelationTypeCodeId">@InsiderTrading.Common.Common.getResource("rpt_lbl_19171")</label>
+                @Html.DropDownList("RelationTypeCodeId", new MultiSelectList(ViewBag.UserRelativesDropDown, "Key", "Value", ""), new { @class = "form-control selectpicker", title = "Select", multiple = "multiple", gridtype = @ViewBag.GridType, id = "7" })
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                <label for="SecurityTypeCodeId">@InsiderTrading.Common.Common.getResource("rpt_lbl_19172")</label>
+                @Html.DropDownList("SecurityTypeCodeId", new MultiSelectList(ViewBag.SecutiryTypeDropDown, "Key", "Value", ""), new { @class = "form-control selectpicker", title = "Select", multiple = "multiple", gridtype = @ViewBag.GridType, id = "8" })
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Hidden("View", Url.Action("PeriodEndDisclosureEmployeeIndividualDetails", "Reports", new { acid = @ViewBag.acid }), new { @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'text':'','href':'" + Url.Action("PeriodEndDisclosureEmployeeIndividualDetails", "Reports", new { acid = @ViewBag.acid }) + "&EmployeeId=<UserInfoID>&YearCode=<YearCodeId>&PeriodCode=<PeriodCodeId>&RelativeUserId=<UserInfoIdRelative>&SecurityTypeId=<SecurityTypeCodeId>&DmatId=<DMATDetailsID>','class':'display-icon icon icon-eye'}" })

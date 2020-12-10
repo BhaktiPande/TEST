@@ -1,0 +1,130 @@
+﻿@model InsiderTrading.Models.NotificationModel
+
+@{
+    ViewBag.Title = InsiderTrading.Common.Common.getResource("cmu_ttl_54205"); 
+}
+<script>
+
+
+</script>
+
+
+
+@using (Html.BeginForm("Cancel", "Notification", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "", @autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    <section class="content-header">
+        <h1>
+            @InsiderTrading.Common.Common.getResource("cmu_ttl_54205")
+        </h1>
+    </section>
+    <section class="content">
+        @Html.ValidationSummary(true)
+        <div class="alert" style="display: none;" id="PolicyDocumentErrorMsg">@ViewBag.applicablityNotDefineMsg</div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+
+                        <div class="row">
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                                <div class="form-group">
+                                    <label>@Html.LabelFor(model => model.ModeCodeId)</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                @Html.Raw(Model.ModeCodeName)
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                                <div class="form-group">
+                                    <label>@Html.LabelFor(model => model.CreatedOn)</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                @{
+                                    string CreatedOn_date = "";
+                                    if (Model.CreatedOn != null)
+                                    {
+                                        CreatedOn_date = InsiderTrading.Common.Common.ApplyFormatting(Model.CreatedOn, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+                                    }
+                                    var ATD_html_attr = new Dictionary<string, object> { };
+                                    ATD_html_attr.Add("class", "form-control");
+                                    ATD_html_attr.Add("readonly", "readonly");
+                                    @Html.Raw(CreatedOn_date)
+                                }
+                            </div>
+                        </div>
+
+                        @if (ViewBag.ModeCodeId == 156002 || ViewBag.ModeCodeId == 156001)
+                        {
+                            <div class="row">
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                                    <div class="form-group">
+                                        <label>@Html.LabelFor(model => model.Subject)</label>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+                                    @Html.Raw(Model.Subject)
+                                </div>
+                            </div>
+                        }
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label>@Html.LabelFor(model => model.Contents)</label>
+                                <br />
+                                @Html.Raw(Model.Contents)
+                            </div>
+                        </div>
+                        @if (ViewBag.ModeCodeId == @InsiderTrading.Common.ConstEnum.Code.CommunicationModeForEmail || ViewBag.ModeCodeId == @InsiderTrading.Common.ConstEnum.Code.CommunicationModeForLetter)
+                        {
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        <label>@Html.LabelFor(model => model.Signature)</label>
+                                        <br />
+                                        @Html.Raw(Model.Signature)
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                <button type="submit" class="btn btn-success cancel" id="Cancel" name="Cancel" data-dismiss="modal"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14011")</button>
+                            </div>
+                        </div>
+                        @Html.HiddenFor(model => model.NotificationQueueId)
+                    </div>
+                    <input type="hidden" value="@ViewBag.CommunicationModes" id="CommunicationModes" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+}
+
+@Scripts.Render("~/bundles/jqueryval")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

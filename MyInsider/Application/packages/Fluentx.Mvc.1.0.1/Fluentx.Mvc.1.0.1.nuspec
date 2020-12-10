@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Fluentx.Mvc</id>
+    <version>1.0.1</version>
+    <title>Fluentx Mvc</title>
+    <authors>Samer Abu Rabie</authors>
+    <owners>Samer Abu Rabie</owners>
+    <projectUrl>http://fluentx.codeplex.com</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This library holds some helper classes and extension methods used for asp.net mvc.
+
+This is an extension library for the well known library Fluentx.</description>
+    <summary />
+    <tags>ASP.NET MVC Fluentx Fluent Method Chaining JsonModelBinder Redirect And Post</tags>
+    <dependencies>
+      <dependency id="Fluentx" version="2.0.4" />
+    </dependencies>
+  </metadata>
+</package>

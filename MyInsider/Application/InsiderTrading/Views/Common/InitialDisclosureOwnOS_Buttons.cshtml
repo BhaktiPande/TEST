@@ -1,0 +1,114 @@
+﻿@{
+    InsiderTrading.Common.LoginUserDetails objLoginUserDetails = (InsiderTrading.Common.LoginUserDetails)InsiderTrading.Common.Common.GetSessionValue(InsiderTrading.Common.ConstEnum.SessionValue.UserDetails);
+    var acid = (objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.Admin || objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.CorporateUserType) ? InsiderTrading.Common.ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_INITIAL_DISCLOSURE : InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_INITIAL_DISCLOSURE;
+}
+<div style="margin:0px 0px 0px -12px;">
+
+    @{
+        if (ViewBag.RequiredModuleID==513001)
+        {
+            if (ViewBag.LoginUserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.COUserType || ViewBag.LoginUserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.Admin)
+            {
+                <table style="position:relative;z-index:10;">
+                    <tr>
+                        <td>
+                            @using (Html.BeginForm("SecuritiesIndex", "COInitialDisclosure", new { acid = acid, RequiredModuleID = ViewBag.RequiredModuleID }))
+                            {
+                                <button type="submit" class="btn btn-success" id="btn_OwnSecurities_Details" style="margin: 10px 7px; display: none;">Own Securities</button>
+                            }
+                        </td>                        
+                    </tr>
+                </table>
+            }
+            else
+            {
+                <table style="position:relative;z-index:10;">
+                        <tr>
+                            <td>
+                                @using (Html.BeginForm("SecuritiesIndex", "InsiderInitialDisclosure", new { acid = acid, RequiredModuleID = ViewBag.RequiredModuleID, requiredModuleIDOnbtnclick = ViewBag.RequiredModuleID, TradingPolicyID_OS = ViewBag.TradingPolicyID_OS }))
+                                {
+                                    <button type="submit" class="btn btn-success" id="btn_OwnSecurities_Details" style="margin: 10px 7px; display: none;">Own Securities</button>
+                                }
+                            </td>                            
+                        </tr>
+                    </table>            
+            }
+        }
+        else if (ViewBag.RequiredModuleID == 513002)
+        {
+            if (ViewBag.LoginUserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.COUserType || ViewBag.LoginUserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.Admin)
+            {
+                <table style="position:relative;z-index:10;">
+                    <tr>                        
+                        <td>
+                            @using (Html.BeginForm("SecuritiesIndex", "COInitialDisclosure", new { acid = acid, RequiredModuleID = ViewBag.RequiredModuleID }))
+                            {
+                                <button type="submit" class="btn btn-success" id="btn_OtherSecurities_Details" style="margin: 10px 25px 9px -5px; display: none;">Other Securities</button>
+                            }
+                        </td>
+                    </tr>
+                </table> 
+            }
+            else
+            {                
+                    <table style="position:relative;z-index:10;">
+                        <tr>
+                            <td>
+                                @using (Html.BeginForm("SecuritiesIndex", "InsiderInitialDisclosure", new { acid = acid, RequiredModuleID = ViewBag.RequiredModuleID, requiredModuleIDOnbtnclick = 513002, TradingPolicyID_OS = ViewBag.TradingPolicyID_OS }))
+                                {
+                                    <button type="submit" class="btn btn-success" id="btn_OtherSecurities_Details" style="margin: 10px 25px 9px -5px; display: none;">Other Securities</button>
+                                }
+                            </td>
+                        </tr>
+                    </table>                 
+            }             
+            
+        }
+        else
+        {
+            
+            if (ViewBag.LoginUserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.COUserType || ViewBag.LoginUserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.Admin)
+            {
+                <table style="position:relative;z-index:10;">
+                    <tr>
+                        <td>
+                            @using (Html.BeginForm("SecuritiesIndex", "COInitialDisclosure", new { acid = acid, RequiredModuleID = ViewBag.RequiredModuleID, requiredModuleIDOnbtnclick = ViewBag.RequiredModuleID }))
+                            {
+                                <button type="submit" class="btn btn-success" id="btn_OwnSecurities_Details" style="margin: 10px 7px;">Own Securities</button>
+                            }
+                        </td>
+                        <td>
+                            @using (Html.BeginForm("SecuritiesIndex", "COInitialDisclosure", new { acid = acid, RequiredModuleID = ViewBag.RequiredModuleID, requiredModuleIDOnbtnclick = 513002 }))
+                            {
+                                <button type="submit" class="btn btn-success" id="btn_OtherSecurities_Details" style="margin: 10px 25px 9px -5px;">Other Securities</button>
+                            }
+                        </td>
+                    </tr>
+                </table>
+            }
+            else
+            {
+                if (ViewBag.RequiredModuleID == 513003)
+                {
+                    <table style="position:relative;z-index:10;">
+                        <tr>
+                            <td>
+                                @using (Html.BeginForm("SecuritiesIndex", "InsiderInitialDisclosure", new { acid = acid, RequiredModuleID = ViewBag.RequiredModuleID, requiredModuleIDOnbtnclick = ViewBag.RequiredModuleID, TradingPolicyID_OS = ViewBag.TradingPolicyID_OS }))
+                                {
+                                    <button type="submit" class="btn btn-success" id="btn_OwnSecurities_Details" style="margin: 10px 7px;">Own Securities</button>
+                                }
+                            </td>
+                            <td>
+                                @using (Html.BeginForm("SecuritiesIndex", "InsiderInitialDisclosure", new { acid = acid, RequiredModuleID = ViewBag.RequiredModuleID, requiredModuleIDOnbtnclick = 513002, TradingPolicyID_OS = ViewBag.TradingPolicyID_OS }))
+                                {
+                                    <button type="submit" class="btn btn-success" id="btn_OtherSecurities_Details" style="margin: 10px 25px 9px -5px;">Other Securities</button>
+                                }
+                            </td>
+                        </tr>
+                    </table>
+                }
+            }
+        }
+    }
+
+</div>

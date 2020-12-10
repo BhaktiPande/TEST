@@ -1,0 +1,238 @@
+﻿@model InsiderTrading.Models.WeekForMonth
+@{
+    ViewBag.Title = "Trading Windows Event Calender ";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    @Html.AntiForgeryToken()
+</section>
+
+<div class="box-body" id="sandbox-container">
+    <div class="dash-calendar">
+        <div class="datepicker datepicker-inline">
+            <div style="display: block;" class="datepicker-days">
+                <table class=" table-condensed">
+                    <thead>
+                        <tr>
+                            <th style="visibility: visible;" class="prev" id="prev">«</th>
+                            <th colspan="5" class="datepicker-switch">@Model.Month</th>
+                            <th style="visibility: visible;" class="next" id="next">»</th>
+                        </tr>
+                        <tr>
+                            <th class="dow">Su</th>
+                            <th class="dow">Mo</th>
+                            <th class="dow">Tu</th>
+                            <th class="dow">We</th>
+                            <th class="dow">Th</th>
+                            <th class="dow">Fr</th>
+                            <th class="dow">Sa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="week1">
+                            @foreach (var item in Model.Week1)
+                            {
+                                if (item != null)
+                                {
+                                    if (item.IsBlocked == 0)
+                                    {
+                            <td class="day">@item.dtDay</td>
+                                    }
+                                    else
+                                    {
+                            <td class="day active" style="background-color: #333 !important;">@item.dtDay</td>
+                                    }
+                                }
+                                else
+                                {
+                            <td class="old day"></td>
+                                }
+                            }
+                        </tr>
+                        <tr id="week2">
+                            @foreach (var item in Model.Week2)
+                            {
+                                if (item != null)
+                                {
+                                    if (item.IsBlocked == 0)
+                                    {
+                            <td class="day">@item.dtDay</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="day active" style="background-color: #333 !important;">@item.dtDay</td>
+                                    }
+                                }
+                                else
+                                {
+                            <td class="old day"></td>
+                                }
+                            }
+                        </tr>
+                        <tr id="week3">
+                            @foreach (var item in Model.Week3)
+                            {
+                                if (item != null)
+                                {
+                                    if (item.IsBlocked == 0)
+                                    {
+                            <td class="day">@item.dtDay</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="day active" style="background-color: #333 !important;">@item.dtDay</td>
+                                    }
+                                }
+                                else
+                                {
+                            <td class="old day"></td>
+                                }
+                            }
+                        </tr>
+                        <tr id="week4">
+                            @foreach (var item in Model.Week4)
+                            {
+                                if (item != null)
+                                {
+                                    if (item.IsBlocked == 0)
+                                    {
+                            <td class="day">@item.dtDay</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="day active" style="background-color: #333 !important;">@item.dtDay</td>
+                                    }
+                                }
+                                else
+                                {
+                            <td class="old day"></td>
+                                }
+                            }
+                        </tr>
+                        <tr id="week5">
+                            @if (Model.Week5.Count == 0)
+                        {
+                            <td class="old day"></td>
+                            <td class="old day"></td>
+                            <td class="old day"></td>
+                            <td class="old day"></td>
+                            <td class="old day"></td>
+                            <td class="old day"></td>
+                            <td class="old day"></td>
+                        }
+                        else {
+                            var flagCount = 0;
+                            foreach (var item in Model.Week5)
+                            {
+                                flagCount++;
+                                if (item != null)
+                                {
+                                    if (item.IsBlocked == 0)
+                                    {
+                            <td class="day">@item.dtDay</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="day active" style="background-color: #333 !important;">@item.dtDay</td>
+                                    }
+                                }
+                                else
+                                {
+                            <td class="old day"></td>
+                                }
+                            }
+                            while(flagCount < 7)
+                            {
+                            <td class="old day"></td>
+                                flagCount++;
+                            }
+                        }
+                        </tr>
+                        <tr id="week6">
+                            @if (Model.Week6.Count == 0)
+                            {
+                            <td class="old day"></td>
+                            <td class="old day"></td>
+                            <td class="old day"></td>
+                            <td class="old day"></td>
+                            <td class="old day"></td>
+                            <td class="old day"></td>
+                            <td class="old day"></td>
+                            }
+                            else
+                            {
+                                var flagCount = 0;
+                                foreach (var item in Model.Week6)
+                                {
+                                    flagCount++;
+                                    if (item != null)
+                                    {
+                                        if (item.IsBlocked == 0)
+                                        {
+                            <td class="day">@item.dtDay</td>
+                                        }
+                                        else
+                                        {
+                                            <td class="day active" style="background-color: #333 !important;">@item.dtDay</td>
+                                        }
+                                    }
+                                    else
+                                    {
+                            <td class="old day"></td>
+                                    }
+                                }
+                                while(flagCount < 7)
+                                {
+                            <td class="old day"></td>
+                                    flagCount++;
+                                }
+                            }
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th style="display: none;" colspan="7" class="today">Today</th>
+                        </tr>
+                        <tr>
+                            <th style="display: none;" colspan="7" class="clear">Clear</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div style="display: none;" class="datepicker-months">
+                <table class="table-condensed">
+                    <thead>
+                        <tr>
+                            <th style="visibility: visible;" class="prev">«</th>
+                            <th colspan="5" class="datepicker-switch">2015</th>
+                            <th style="visibility: visible;" class="next">»</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="7">
+                                <span class="month">Jan</span><span class="month">Feb</span><span class="month">Mar</span><span class="month">Apr</span><span class="month">May</span><span class="month">Jun</span><span class="month">Jul</span><span class="month">Aug</span><span class="month">Sep</span><span class="month">Oct</span><span class="month">Nov</span><span class="month">Dec</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th style="display: none;" colspan="7" class="today">Today</th>
+                        </tr>
+                        <tr>
+                            <th style="display: none;" colspan="7" class="clear">Clear</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div><!-- /.box-body -->
+<div class="box-footer">
+    <h4 class="text-center dashboardCalender">@ViewBag.EventDate</h4>
+</div>
+
+@Html.Hidden("hidCurrentMonth", (object)ViewBag.CurrentMonth)
+@Html.Hidden("hidCurrentyear", (object)ViewBag.CurrentYear)

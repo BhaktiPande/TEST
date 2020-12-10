@@ -1,0 +1,56 @@
+﻿@model List<InsiderTrading.Models.DocumentDetailsModel>
+@{
+    ViewBag.Title = InsiderTrading.Common.Common.getResource("usr_ttl_11245");
+    int MapToCodeTypeId = Model[0].MapToTypeCodeId;
+}
+
+<!--  DMAT Details Modal -->
+<div class="modal fade" id="DocumentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i></button>
+                <h4 class="modal-title custom_align" id="myModalLabel">@InsiderTrading.Common.Common.getResource("usr_ttl_11245")</h4>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("", "", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form", id = "frmDocumentDetails", autocomplete = "off" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+                    <div class="alert" style="display: none;" name="ErrorMessageDocument"></div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m[0].DocumentName)
+                                    @Html.TextBoxFor(m=>m[0].DocumentName, new { @class = "form-control", @required = "required", id = "DocName" })
+                                    @Html.ValidationMessageFor(m=>m[0].DocumentName)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m[0].Description)
+                                    @Html.TextBoxFor(m => m[0].Description, Model[0].Description, new { @class = "form-control", id = "DocDescription" })
+                                    @Html.ValidationMessageFor(m => m[0].Description)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                            @Html.Partial("~/Views/Common/SingleDocumentUpload.cshtml", Model, new ViewDataDictionary() { { "user_action", ViewBag.UserAction } })
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <a class="btn btn-success updateButton" href='#' role="button" id="btnSaveDocumentDetails" gridtype="@InsiderTrading.Common.ConstEnum.GridType.DocumentList" data-loading-text="Saving" autocomplete="off"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("com_btn_14017")</a>
+                        <button type="button" class="btn btn-success" id="cancelButton" data-dismiss="modal"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14010")</button>
+                    </div>
+                }
+            </div>
+
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div> 
+@Scripts.Render("~/bundles/jqueryval")

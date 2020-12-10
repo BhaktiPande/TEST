@@ -1,0 +1,101 @@
+﻿
+@{
+    ViewBag.Title = "PeriodStatusOS";
+}
+@Styles.Render("~/content/SW360")
+<!-- Content Header -->
+<section class="content-header">
+    @Html.AntiForgeryToken()
+    <h1>@InsiderTrading.Common.Common.getResource("dis_ttl_53117")</h1>
+    @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+</section>
+<!-- Main content -->
+<section class="content search" gridtype="@ViewBag.GridType">
+    <!-- Search form content -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form role="form">
+                        @*@{
+                                //check user activity id - if CO activity then show employee / insider name and employee id
+                                if (ViewBag.activity_id == InsiderTrading.Common.ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_PERIOD_END_DISCLOSURE_OS)
+                                {
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                            @Html.Label(@InsiderTrading.Common.Common.getResource("dis_lbl_53119")) @ViewBag.EmployeeId
+                                        </div>
+                                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                                            @Html.Label(@InsiderTrading.Common.Common.getResource("dis_lbl_53120")) @ViewBag.InsiderName
+                                        </div>
+                                    </div>
+                                }
+                            }*@
+                        <div class="row">
+                            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-4">
+                                @Html.Label(@InsiderTrading.Common.Common.getResource("dis_lbl_53121"))
+                                @Html.DropDownList("financialyear", new SelectList(ViewBag.FinancialYearDropDown, "Key", "Value", ViewBag.LastPeriodEndYear), new { @class = "form-control", gridtype = @ViewBag.GridType, id = "2" })
+                            </div>
+                            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-4">
+                                <div style="margin:25px 20px"></div>
+                                <button type="button" class="btn btn-success" id="btnReset" dt_name="btnReset" dt_gridtype="@ViewBag.GridType"><i class="fa fa-undo"></i> @InsiderTrading.Common.Common.getResource("com_btn_14006")</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Search result content -->
+    @{
+        @Html.Hidden("uid", (Int32)@ViewBag.UserId, new { id = "1", gridtype = @ViewBag.GridType });
+        @Html.Hidden("period_search", 1);
+
+        <button type="button" class="btn btn-success hidden" id="btnSearch"><i class="fa fa-search"> @InsiderTrading.Common.Common.getResource("com_btn_14005")</i></button>
+
+        Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "btnSearch", sSortCol = "0", acid = ViewBag.activity_id, bIsPagination = true, });
+
+        @Html.Hidden("summarylink", Url.Action("SummaryOS", "PeriodEndDisclosure_OS", new { acid = ViewBag.activity_id, uid = ViewBag.UserId }))
+
+        @Html.Hidden("softcopylink", Url.Action("CreateLetter", "TradingTransaction_OS", new { acid = ViewBag.activity_id, nDisclosureTypeCodeId = InsiderTrading.Common.ConstEnum.Code.DisclosureTypePeriodEnd, nLetterForCodeId = InsiderTrading.Common.ConstEnum.Code.DisclosureLetterUserInsider, uid = ViewBag.UserId }))
+        @Html.Hidden("softcopyviewlink", Url.Action("DownloadFormGOS", "PeriodEndDisclosure_OS", new { acid = ViewBag.activity_id, MapToTypeCodeId = InsiderTrading.Common.ConstEnum.Code.DisclosureTransactionforOS }))
+
+        @Html.Hidden("hardcopylink", Url.Action("UploadHardDocument", "TradingTransaction_OS", new { acid = ViewBag.activity_id, nDisclosureTypeCodeId = InsiderTrading.Common.ConstEnum.Code.DisclosureTypePeriodEnd, nUserInfoId = ViewBag.uid }))
+        @Html.Hidden("hardcopyviewlink", Url.Action("ViewHardCopy", "TradingTransaction_OS", new { acid = ViewBag.activity_id, nDisclosureTypeCodeId = InsiderTrading.Common.ConstEnum.Code.DisclosureTypePeriodEnd, CalledFrom = "PeriodEndInsider_OS", nUserInfoId = ViewBag.uid }))
+
+        if (ViewBag.backToCOList)
+        {
+            @Html.Hidden("stockexchangecopylink", Url.Action("CreateLetter", "TradingTransaction_OS", new { acid = ViewBag.activity_id, nDisclosureTypeCodeId = InsiderTrading.Common.ConstEnum.Code.DisclosureTypePeriodEnd, nLetterForCodeId = InsiderTrading.Common.ConstEnum.Code.DisclosureLetterUserCO, IsStockExchange = true, uid = ViewBag.UserId }))
+            @Html.Hidden("stockexchangecopyviewlink", Url.Action("ViewLetter", "TradingTransaction_OS", new { acid = ViewBag.activity_id, nDisclosureTypeCodeId = InsiderTrading.Common.ConstEnum.Code.DisclosureTypePeriodEnd, nLetterForCodeId = InsiderTrading.Common.ConstEnum.Code.DisclosureLetterUserCO }))
+        }
+    }
+
+
+    @{
+        if (ViewBag.backToCOList)
+        {
+            <hr />
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <a class="btn btn-success" data-toggle="modal" href='@Url.Action("UserStatusOS", "PeriodEndDisclosure_OS", new { acid = ViewBag.activity_id })' role="button"> @InsiderTrading.Common.Common.getResource("com_btn_14011")</a>
+                </div>
+            </div>
+            <div class="div-spacer"></div>
+        }
+    }
+
+</section>
+<script>
+    $("#2").val('');
+
+    $(document).delegate('#2', 'change', function (event) {
+        if ($('#period_search').val() == 1) {
+            $('#btnSearch').click();
+        }
+    });
+</script>
+
+
+<script type="text/javascript">
+    setTimeout(function () { $('.validation-summary-errors').remove() }, 10000);
+</script>

@@ -1,0 +1,60 @@
+﻿@if (ViewBag.GridType == @InsiderTrading.Common.ConstEnum.GridType.Report_InitialDisclosureEmployeeWise)
+{ 
+   @Html.Partial("_InitialDisclosureEmployeeWise_Search")
+} 
+else if (ViewBag.GridType == @InsiderTrading.Common.ConstEnum.GridType.Report_InitialDisclosureEmployeeIndividual)
+{
+    @Html.Partial("_InitialDisclosureEmployeeIndividual_Search")
+}
+else if (ViewBag.GridType == InsiderTrading.Common.ConstEnum.GridType.Report_PeriodEndDisclosureEmployeeWise)
+{
+    @Html.Partial("_PeriodEndDisclosureEmployeeWise_Search")
+}
+else if (ViewBag.GridType == InsiderTrading.Common.ConstEnum.GridType.Report_PeriodEndDisclosureEmployeeIndividual)
+{
+    @Html.Partial("_PeriodEndDisclosureEmployeeIndividual_Search")
+}
+else if (ViewBag.GridType == InsiderTrading.Common.ConstEnum.GridType.Report_PeriodEndDisclosureEmployeeIndividualDetails)
+{
+    @Html.Partial("_PeriodEndDisclosureEmployeeIndividualDetails")
+}
+else if (ViewBag.GridType == InsiderTrading.Common.ConstEnum.GridType.Report_ContinuousReportEmployeeWise)
+{
+    @Html.Partial("_ContinuousDisclosureEmployeeWise_Search")
+}
+else if (ViewBag.GridType == InsiderTrading.Common.ConstEnum.GridType.Report_ContinuousReportEmployeeIndividual)
+{
+    @Html.Partial("_ContinuousDisclosureEmployeeIndividual_Search")
+}
+else if (ViewBag.GridType == InsiderTrading.Common.ConstEnum.GridType.Report_PreclearenceReportEmployeeWise)
+{
+    @Html.Partial("_PreclearenceEmployeeWise_Search")
+}
+else if (ViewBag.GridType == InsiderTrading.Common.ConstEnum.GridType.Report_PreclearenceReportEmployeeIndividual)
+{
+    @Html.Partial("_PreclearenceEmployeeIndividual_Search")
+}
+else if (ViewBag.GridType == InsiderTrading.Common.ConstEnum.GridType.Report_Defaulter)
+{
+    @Html.Partial("_DefaulterReport_Search")
+}
+else if (ViewBag.GridType == InsiderTrading.Common.ConstEnum.GridType.Report_RestrictedListSearch_CO && ViewBag.OverrideGridType == "")
+{
+    @Html.Partial("_RestrictedListSearchReport_Search")
+}
+else if (ViewBag.GridType == InsiderTrading.Common.ConstEnum.GridType.Report_RestrictedListSearch_CO && ViewBag.OverrideGridType == InsiderTrading.Common.ConstEnum.GridType.Report_RestrictedListSearch_Insider.ToString())
+{
+    @Html.Partial("_RestrictedListSearchReport_InsiderSearch")
+}
+else if (ViewBag.GridType == InsiderTrading.Common.ConstEnum.GridType.SecuritiesTransferReportCO && ViewBag.OverrideGridType == "")
+{
+    @Html.Partial("SecurityTransferReport")
+}
+else if (ViewBag.GridType == InsiderTrading.Common.ConstEnum.GridType.SecuritiesTransferReportCO && ViewBag.OverrideGridType == InsiderTrading.Common.ConstEnum.GridType.SecuritiesTransferReportEmployee.ToString())
+{
+    @Html.Partial("_SecurityTransferReportEmployee")
+}
+else if (ViewBag.GridType == InsiderTrading.Common.ConstEnum.GridType.Report_EULAAcceptanceReport)
+{
+    @Html.Partial("_EULAAcceptanceReport")
+}

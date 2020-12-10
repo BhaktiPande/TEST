@@ -1,0 +1,263 @@
+﻿@model InsiderTrading.Models.DelegateModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<style>
+    .hide {
+        display: none;
+    }
+
+    .module {
+        background-color: #eee;
+        margin: 1px 0 1px 0;
+        display: table;
+        width: 100%;
+    }
+
+    .moduletable td {
+        padding: 2px;
+    }
+
+    .screen {
+        background-color: #ccc;
+        margin: 1px 0 1px 0;
+        display: table;
+        width: 100%;
+    }
+
+    .screentable td {
+        padding: 2px;
+    }
+</style>
+
+<section class="content-header">
+    <h1>@InsiderTrading.Common.Common.getResource("usr_ttl_12051")</h1>
+</section><br />
+
+@{using (Html.BeginForm("Edit", "Delegate", new { acid = ViewBag.user_action, formId = InsiderTrading.Common.ConstEnum.Code.frmSaveDelegate }, FormMethod.Post, new { role = "form", id = "delegationDetails", @autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+    @Html.HiddenFor(m => m.DelegationId)
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div>
+                                <div class="form-group">
+                                    <label>From user</label>
+                                    @Html.DropDownListFor(m => m.UserInfoIdFrom, new SelectList(ViewBag.FromUserList, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
+                                    @Html.HiddenFor(m => m.UserInfoIdFrom)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div>
+                                <div class="form-group">
+                                    <label>To user</label>
+                                    @Html.DropDownListFor(m => m.UserInfoIdTo, new SelectList(ViewBag.ToUserList, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
+                                    @Html.HiddenFor(m => m.UserInfoIdTo)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div class="form-group" id="sandbox-container">
+                                <label>From Date</label>
+                                <div class="input-group date">
+                                @{
+                                    string FrmDate = "";
+                                    if (Model != null)
+                                    {
+                                        FrmDate = InsiderTrading.Common.Common.ApplyFormatting(Model.DelegationFrom, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+                                    }
+                                    @Html.TextBox("DelegationFrom", FrmDate, new { @class = "form-control" })
+
+                                    <span class="input-group-addon"><i class="icon icon-calender"></i></span>
+                                }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div class="form-group" id="sandbox-container">
+                                <label>To Date</label>
+                                <div class="input-group date">
+                                    @{
+                                        string ToDate = "";
+                                        if (Model != null)
+                                        {
+                                            ToDate = InsiderTrading.Common.Common.ApplyFormatting(Model.DelegationTo, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+                                        }
+                                        @Html.TextBoxFor(m => m.DelegationTo, ToDate, new { @class = "form-control" })
+                                        
+                                        <span class="input-group-addon"><i class="icon icon-calender"></i></span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <label>Role Activity Access Setup</label>
+                            <div class="panel-group" id="accordion">
+                            @if (ViewBag.RoleActivityDictionary.Count > 0)
+                            {
+                                int count = 0;
+                                foreach (var objRoleModuleActivityDictionary in ViewBag.RoleActivityDictionary)
+                                {
+                                    count++;
+                                    <div class="panel panel-accordion">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                                <div class="checkbox">
+                                                    <input type="checkbox" name="chkModule" id="chkModule_@count" class="chkModuleSelectAll">
+                                                    <label for="chkModule_@count"></label>
+                                                </div>
+                                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#delegationMaster_@count">
+                                                    <span class="fa fa-plus pull-right"></span>
+                                                    @objRoleModuleActivityDictionary.Key
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="delegationMaster_@count" class="panel-collapse collapse">
+                                            <div class="panel-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered table-striped">
+                                                        <tbody>
+                                                        @{ int screenCount = 0;}
+                                                        @foreach (var objRoleScreenActivityDictionary in objRoleModuleActivityDictionary.Value)
+                                                        {
+                                                            screenCount++;
+                                                            <tr>
+                                                                <td></td>
+                                                                <td>
+                                                                    <div class="checkbox">
+                                                                        <input id="@count _@screenCount" class="cr-check chkScreenSelectAll" type="checkbox" name="chkScreen">
+                                                                        <label for="@count _@screenCount" style="font-weight:bold !important;">@objRoleScreenActivityDictionary.Key</label>
+                                                                    </div>
+                                                                </td>
+
+                                                                @{int cnt = 0;
+                                                                foreach (var objRoleActivityList in objRoleScreenActivityDictionary.Value)
+                                                                {
+                                                                    cnt++;
+                                                                    <td>
+                                                                        <div class="checkbox">
+                                                                            @if (@objRoleActivityList.IsSelected == 1)
+                                                                            {
+                                                                                <input type="checkbox" id="@count _@screenCount _@cnt" name="chkActivity" class="cr-check" value="@objRoleActivityList.ActivityID" checked="checked" />
+                                                                            }
+                                                                            else if (@objRoleActivityList.IsSelected == 2)
+                                                                            {
+                                                                                <input type="checkbox" id="@count _@screenCount _@cnt" name="chkActivity2" class="cr-check" disabled="disabled" checked="checked" value="@objRoleActivityList.ActivityID" />
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <input type="checkbox" id="@count _@screenCount _@cnt" name="chkActivity" class="cr-check" value="@objRoleActivityList.ActivityID" />
+                                                                            }
+
+                                                                            <label for="@count _@screenCount _@cnt"> @objRoleActivityList.ActivityName</label>
+                                                                        </div>
+                                                                    </td>
+
+                                                                    if (cnt % 4 == 0)
+                                                                    {
+                                                                        @:</tr>
+                                                                        @:<tr>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                    }
+                                                                }
+                                                            }
+                                                            </tr>
+                                                        }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            
+                            <button type="submit" class="btn btn-success" name="Create"> <i class="fa fa-save"></i> Save</button>
+                            
+                            <a href="@Url.Action("index", "Delegate" , new { acid=InsiderTrading.Common.ConstEnum.UserActions.DELEGATION_MASTER_VIEW})" class="btn btn-success"><i class="fa fa-times"></i> Cancel</a>
+
+                            <input type="hidden" name="authorization" value="Save:@ViewBag.user_action" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+}
+
+
+<script>
+    $(document).ready(function () {
+        $('#DelegationFrom').val("@InsiderTrading.Common.Common.ApplyFormatting(Model.DelegationFrom, InsiderTrading.Common.ConstEnum.DataFormatType.Date)");
+        $('#DelegationTo').val("@InsiderTrading.Common.Common.ApplyFormatting(Model.DelegationTo, InsiderTrading.Common.ConstEnum.DataFormatType.Date)");
+
+        //$('#delegationDetails').valid();
+        function selection(objThis, selector) {
+            if ($(objThis).is(":checked")) {
+                selector.not("[disabled=disabled]").prop("checked", true);
+            }
+            else {
+                selector.not("[disabled = disabled]").prop("checked", false);
+            }
+        }
+
+        $(".chkModuleSelectAll").click(function () {
+            selection(this, $(this).parents('.panel .panel-accordion').find('input[type="checkbox"]'));
+        })
+
+        $(".chkScreenSelectAll").click(function () {
+            selection(this, $(this).parents('table').find('input[type="checkbox"][id^="' + $(this).attr('id') + '"]'));
+        });
+
+        $("input[type='checkbox'].cr-check").click(function () {
+            parentChkSelection(this)
+        });
+
+        $("input[type='checkbox'].cr-check:checked").each(function () {
+            parentChkSelection(this);
+        });
+    });
+
+    function parentChkSelection(obj) {
+        var arrID = $(obj).attr('id').split(' _');
+        var id = arrID[0] + ' _' + arrID[1];
+        if ($('[id^="' + id + '"][type=checkbox]:not([id="' + id + '"])').length == $('[id^="' + id + '"][type=checkbox]:not([id="' + id + '"]):checked').length)
+            $('[id="' + id + '"]:not([disabled=disabled])').prop("checked", true);
+        else
+            $('[id="' + id + '"]:not([disabled=disabled])').prop("checked", false);
+
+        if ($('[id="' + id + '"]').parents('table').find('.chkScreenSelectAll').length == $('[id="' + id + '"]').parents('table').find('.chkScreenSelectAll:checked').length)
+            $('[id="' + id + '"]').parents('.panel .panel-accordion').find('.chkModuleSelectAll').prop("checked", true);
+        else
+            $('[id="' + id + '"]').parents('.panel .panel-accordion').find('.chkModuleSelectAll').prop("checked", false);
+        //If all child activity are disabled then the screen/Module checkbox should be disabled
+        if ($('[id^="' + id + '"][type=checkbox]:not([id="' + id + '"])').length == $('[id^="' + id + '"][type=checkbox]:not([id="' + id + '"]):checked[disabled=disabled]').length) {
+            $('[id="' + id + '"]:not([disabled=disabled])').attr("disabled", "disabled");
+
+        }
+        if ($('[id="' + id + '"]').parents('table').find('.chkScreenSelectAll').length == $('[id="' + id + '"]').parents('table').find('.chkScreenSelectAll:checked[disabled=disabled]').length) {
+
+            $('[id="' + id + '"]').parents('.panel .panel-accordion').find('.chkModuleSelectAll').attr("disabled", "disabled");
+        }
+
+
+    }
+</script>

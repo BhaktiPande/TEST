@@ -1,0 +1,583 @@
+﻿
+<script>
+    $(document).ready(function () {
+        if ('@ViewBag.IsError' == 1) {
+            $("#PopupHeader").html("Alert");
+        }
+        else {
+            $("#PopupHeader").html("Confirmation");
+        }
+        $('#btnYesIConfirm').click(function () {
+            if ('@ViewBag.IsDuplicateRecordFound' == 1 && '@ViewBag.FromSubmitPage' == 0) {
+                var IsTransactionEnter = 1;
+                var IsDuplicateRecordFound = 1;
+                var nFromSubmitPage = 0;
+                $.ajax({
+                    url: "@Url.Action("PopupConfirmation", "TradingTransaction")",
+                    data: { 'acid': '@ViewBag.acid', "nTradingTransactionMasterId": $('#TransactionMasterId').val(), "nDisclosureStatus": '@ViewBag.nDisclosureStatus', "nDisclosureTypecodeId": '@ViewBag.DisclosureTypecodeId', "nConfigurationValueCodeId": '@ViewBag.ConfigurationValueCodeId', 'nIsTransactionEnter': IsTransactionEnter, 'nIsDuplicateRecordFound': IsDuplicateRecordFound, 'nFromSubmitPage': nFromSubmitPage },
+                    method: "POST",
+                    success: function (response) {
+                        $("#popupAlert .modal-body").html(response);
+                    }
+                });
+            }
+            else if ('@ViewBag.FromSubmitPage' == 1) {
+                var Chk_DeclaFrmInsContDis = false;
+                $('#popupAlert').modal('hide');
+                ConfirmBox('@InsiderTrading.Common.Common.getResource("tra_msg_16103")');
+            }
+            else {
+                if ($('input:radio[name=rdoEnterHolding]').length > 0 && !$('input:radio[name=rdoEnterHolding]').is(':checked')) {
+                    showMessage("Please select option button.", false);
+                }
+                else if ($('input:radio[name=rdoUploadHolding]').length > 0 && !$('input:radio[name=rdoUploadHolding]').is(':checked')) {
+                    showMessage("Please select option button.", false);
+                }
+                else if ($('input:checkbox[name=chkConfirm]').length > 0 && !$('input:checkbox[name=chkConfirm]').is(':checked')) {
+                    showMessage("Please select Checkbox.", false);
+                }
+                else {
+                    var nrdo_nEnterHoldingFor = 0;
+                    var nrdo_nUploadHoldingFor = 0;
+                    if ($('input:radio[name=rdoEnterHolding]').length > 0) {
+                        nrdo_nEnterHoldingFor = $('input:radio[name=rdoEnterHolding]').filter(":checked").val();
+                    }
+                    if ($('input:radio[name=rdoUploadHolding]').length > 0) {
+                        nrdo_nUploadHoldingFor = $('input:radio[name=rdoUploadHolding]').filter(":checked").val();
+                    }
+
+                    var data = { 'nTradingTransactionMasterId': $('#TransactionMasterId').val(), 'nConfigurationValueCodeId': '@ViewBag.ConfigurationValueCodeId', 'acid': '@ViewBag.acid', 'rdo_nEnterHoldingFor': nrdo_nEnterHoldingFor, 'rdo_nUploadHoldingFor': nrdo_nUploadHoldingFor };
+                    $.ajax({
+                        url: '@Url.Action("TransactionSubmitConfirmation", "TradingTransaction")',
+                        method: 'POST',
+                        headers: getRVToken(),
+                        data: data,
+                        datatype: 'json',
+                        success: function (data) {
+                            if (data.status) {
+                                $('#popupAlert').modal('hide');
+                                if ('@ViewBag.IsTransactionEnter' == 0) {
+                                    showMessage(data.Message['success'], true);
+                                    if ($('#DisclosureTypePE').val() == 1) {
+                                        $('#lnkPERedir')[0].click();
+                                    } else {
+                                        $('#lnkCancel')[0].click();
+                                    }
+                                }
+                                else {
+                                    $('#btnSubmitTransaction').trigger("click");
+                                }
+                            }
+                            else {
+                                showMessage(data.Message['error'], false);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        $('#btnUploadDetails').click(function () {
+            $('#popupAlert').modal('hide');
+            $('#hold-btn-5').trigger("click");
+        });
+        $('#btnEnterDetails').click(function () {
+            $('#popupAlert').modal('hide');
+            $('#hold-btn-2').trigger("click");
+        });
+
+        $('#Cancel').click(function () {
+            $('#btnInsiderSubmit').removeAttr('disabled');
+        });
+
+        function ConfirmBox(message) {
+            $.confirm({
+                title: "Confirmation",
+                text: message,
+                confirm: function (button) {
+                    $('#btnSubmitTransaction')[0].click();
+                },
+                cancel: function (button) {
+                },
+                confirmButton: "Yes I Confirm",
+                cancelButton: "No",
+                post: true,
+                confirmButtonClass: "btn btn-success",
+                cancelButtonClass: "btn-danger",
+                dialogClass: "modal-dialog modal-lg"
+            });
+        }
+
+        $('#btnCancel').click(function () {
+            if ('@ViewBag.UserType' == '101001' || '@ViewBag.UserType' == '101002') {
+                window.location = $('#CancelUrl').val();
+            }
+            else {
+                window.location = $('#CancelUrlUser').val();
+            }
+        });
+    });
+</script>
+
+
+
+<div id="divConfirmPopup">
+
+    @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+    @{
+        if (ViewBag.IsError == 1)
+        {
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    @Html.Raw(ViewBag.ErrorMessage)<!--Please Enter and/or upload KMBL and non KMBL holdings.-->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="pull-left">
+                    <p>
+                        <button type="button" class="btn btn-danger cancel" id="Cancel" name="Cancel" data-dismiss="modal"><i class="fa fa-times"></i> @ViewBag.ResourceArrey[6]</button>
+                    </p>
+                </div>
+            </div>
+        }
+        if (ViewBag.IsDuplicateRecordFound == 1 && ViewBag.IsDocumentUploaded == 0)
+        {
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <p>
+                        @Html.Raw(ViewBag.MainHeading)
+                    </p>
+                    @{
+            string savedMessage = string.Empty;
+            if ((ViewBag.SavedMessage).Count > 0)
+            {
+                <p>
+                    @Html.Raw(ViewBag.SavedHeading)
+                </p>
+                for (int temp = 0; temp < (ViewBag.SavedMessage).Count; temp++)
+                {
+                    savedMessage = savedMessage + "<p>" + (temp + 1) + ". " + (ViewBag.SavedMessage)[temp] + "</p>";
+                }
+                @Html.Raw(savedMessage);
+            }
+
+                    }
+                    <p>
+                        @Html.Raw(ViewBag.LastHeading)
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="pull-left">
+                    <p>
+                        <button id="btnYesIConfirm" class="btn btn-success"><i class="fa fa-check"></i>@InsiderTrading.Common.Common.getResource("tra_btn_16459")</button>
+                        <button type="button" class="btn btn-danger cancel" id="btnCancel" name="Cancel" data-dismiss="modal"><i class="fa fa-times"></i>@InsiderTrading.Common.Common.getResource("tra_btn_50629").Replace("$1", @InsiderTrading.Common.Common.getResource("tra_msg_50631")).Replace("$2", @InsiderTrading.Common.Common.getResource("tra_msg_50632"))</button>
+                    </p>
+                </div>
+            </div>
+        }
+        else
+        {
+            if (ViewBag.IsError == 0 && Convert.ToInt32(ViewBag.ConfigurationValueCodeId) == InsiderTrading.Common.ConstEnum.Code.EnterUploadSetting_EnterDetails && ViewBag.IsTransactionEnter == 1)
+            {
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        @Html.Raw(ViewBag.ResourceArrey[0].Replace("$1", "entered").Replace("$2", ViewBag.CompanyName))
+                        <!-- You have successfully entered the KMBL holdings. <br />
+                         Please confirm the below option button to submit details. You will not be able to update details after submission. -->
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div role="form">
+                            <div class="form-group">
+                                <b>
+                                    @Html.Raw(ViewBag.ResourceArrey[1].Replace("$1", "entered")) @*I hereby confirm that I have entered the KMBL holdings for :*@
+                                </b> <br />
+                                @foreach (var objElement in ViewBag.ConfirmationForCompanyDropDown)
+                                {
+                                    <input type="radio" name="rdoEnterHolding" value="@objElement.Key" /> @objElement.Value <br />
+                                }
+                                @*<input type="radio" name="rdoEnterHolding" value="189001" /> Only Self (Dependents do not hold any KMBL securities) <br />
+                                    <input type="radio" name="rdoEnterHolding" value="189002" /> Only Dependents (I do not hold any KMBL securities) <br />
+                                    <input type="radio" name="rdoEnterHolding" value="189003" /> Self and Dependents (Both me and my dependents hold KMBL securities) <br />*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="pull-left">
+                        <p>
+                            <button id="btnYesIConfirm" class="btn btn-success"><i class="fa fa-check"></i>@ViewBag.ResourceArrey[7] @*Yes I Confirm*@</button>
+                            <button type="button" class="btn btn-danger cancel" id="Cancel" name="Cancel" data-dismiss="modal"><i class="fa fa-times"></i> @ViewBag.ResourceArrey[8]@*No*@</button>
+                        </p>
+                    </div>
+                </div>
+            }
+
+            if (ViewBag.IsError == 0 && Convert.ToInt32(ViewBag.ConfigurationValueCodeId) == InsiderTrading.Common.ConstEnum.Code.EnterUploadSetting_UploadDetails && ViewBag.IsDocumentUploaded == 1)
+            {
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        @Html.Raw(ViewBag.ResourceArrey[0].Replace("$1", "uploaded").Replace("$2", "other than " + ViewBag.CompanyName))
+                        @*You have successfully Uploaded the non KMBL holdings. <br />
+                            Please confirm the below option button to submit details. You will not be able to update details after submission.*@
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div role="form">
+                            <div class="form-group">
+                                <b>@Html.Raw(ViewBag.ResourceArrey[2].Replace("$1", "uploaded"))@*I hereby confirm that I have uploaded the non KMBL holdings for :*@ </b><br />
+                                @foreach (var objElement in ViewBag.ConfirmationForNonCompanyDropDown)
+                                {
+                                    <input type="radio" name="rdoUploadHolding" value="@objElement.Key" /> @objElement.Value <br />
+                                }
+                                @*<input type="radio" name="rdoUploadHolding" value="190001" /> Only Self (Dependents do not hold any non KMBL securities) <br />
+                                    <input type="radio" name="rdoUploadHolding" value="190002" /> Only Dependents (I do not hold any non KMBL securities) <br />
+                                    <input type="radio" name="rdoUploadHolding" value="190003" /> Self and Dependents (Both me and my dependents hold non KMBL securities) <br />*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="pull-left">
+                        <p>
+                            <button id="btnYesIConfirm" class="btn btn-success"><i class="fa fa-check"></i> @ViewBag.ResourceArrey[7] @*Yes I Confirm*@</button>
+                            <button type="button" class="btn btn-danger cancel" id="Cancel" name="Cancel" data-dismiss="modal"><i class="fa fa-times"></i>@ViewBag.ResourceArrey[8]@*No*@</button>
+                        </p>
+                    </div>
+                </div>
+            }
+            if (ViewBag.IsError == 0 && Convert.ToInt32(ViewBag.ConfigurationValueCodeId) == InsiderTrading.Common.ConstEnum.Code.EnterUploadSetting_EnterOrDetails)
+            {
+                if (ViewBag.IsDocumentUploaded == 1 && ViewBag.IsTransactionEnter == 1)
+                {
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            @Html.Raw(ViewBag.ResourceArrey[0].Replace("$1", "entered and uploaded").Replace("$2", ViewBag.CompanyName + " and other than " + ViewBag.CompanyName))
+
+                            @*You have successfully entered and Uploaded the KMBL and non KMBL holdings. <br />
+                                Please confirm the below option button to submit details. You will not be able to update details after submission.*@
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    <b>@Html.Raw(ViewBag.ResourceArrey[1].Replace("$1", "entered"))@*I hereby confirm that I have entered the KMBL holdings for :*@ </b> <br />
+                                    @foreach (var objElement in ViewBag.ConfirmationForCompanyDropDown)
+                                    {
+                                        <input type="radio" name="rdoEnterHolding" value="@objElement.Key" /> @objElement.Value <br />
+                                    }
+                                    @*<input type="radio" name="rdoEnterHolding" value="189001" /> Only Self (Dependents do not hold any KMBL securities) <br />
+                                        <input type="radio" name="rdoEnterHolding" value="189002" /> Only Dependents (I do not hold any KMBL securities) <br />
+                                        <input type="radio" name="rdoEnterHolding" value="189003" /> Self and Dependents (Both me and my dependents hold KMBL securities) <br />*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    <b>@Html.Raw(ViewBag.ResourceArrey[2].Replace("$1", "uploaded"))@*I hereby confirm that I have uploaded the non KMBL holdings for :*@ </b><br />
+                                    @foreach (var objElement in ViewBag.ConfirmationForNonCompanyDropDown)
+                                    {
+                                        <input type="radio" name="rdoUploadHolding" value="@objElement.Key" /> @objElement.Value <br />
+                                    }
+                                    @*<input type="radio" name="rdoUploadHolding" value="190001" /> Only Self (Dependents do not hold any non KMBL securities) <br />
+                                        <input type="radio" name="rdoUploadHolding" value="190002" /> Only Dependents (I do not hold any non KMBL securities) <br />
+                                        <input type="radio" name="rdoUploadHolding" value="190003" /> Self and Dependents (Both me and my dependents hold non KMBL securities) <br />*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="pull-left">
+                            <p>
+                                <button id="btnYesIConfirm" class="btn btn-success"><i class="fa fa-check"></i> @ViewBag.ResourceArrey[7] @*Yes I Confirm*@</button>
+                                <button type="button" class="btn btn-danger cancel" id="Cancel" name="Cancel" data-dismiss="modal"><i class="fa fa-times"></i>@ViewBag.ResourceArrey[8]@*No*@</button>
+                            </p>
+                        </div>
+                    </div>
+                }
+                else if (ViewBag.IsDocumentUploaded == 0 && ViewBag.IsTransactionEnter == 1)
+                {
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            @Html.Raw(ViewBag.ResourceArrey[0].Replace("$1", "entered").Replace("$2", ViewBag.CompanyName))
+                            @*You have successfully entered the KMBL holdings. <br />
+                                Please confirm the below option button to submit details. You will not be able to update details after submission.*@
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    <b>@Html.Raw(ViewBag.ResourceArrey[1].Replace("$1", "entered"))@*I hereby confirm that I have entered the KMBL holdings for :*@ </b> <br />
+                                    @foreach (var objElement in ViewBag.ConfirmationForCompanyDropDown)
+                                    {
+                                        <input type="radio" name="rdoEnterHolding" value="@objElement.Key" /> @objElement.Value <br />
+                                    }
+                                    @*<input type="radio" name="rdoEnterHolding" value="189001" /> Only Self (Dependents do not hold any KMBL securities) <br />
+                                        <input type="radio" name="rdoEnterHolding" value="189002" /> Only Dependents (I do not hold any KMBL securities) <br />
+                                        <input type="radio" name="rdoEnterHolding" value="189003" /> Self and Dependents (Both me and my dependents hold KMBL securities) <br />*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            @(Html.Raw(ViewBag.ResourceArrey[3].Replace("$1", "uploaded").Replace("$2", "other than " + ViewBag.CompanyName).Replace("$3", "upload").Replace("$4", ViewBag.ResourceArrey[9])))
+                            @*You have not Uploaded the KMBL holdings. <br />
+                                Are you sure that you and your dependents donot have non KMBL holdings? if Yes then check on below checkbox and Confirm so that you can proceed to submit details.<br />
+                                If you want to upload non KMBL holdings then click on below 'Upload detail' button.*@
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    <input type="checkbox" name="chkConfirm" />@ViewBag.ResourceArrey[4].Replace("$2", "other than " + ViewBag.CompanyName)@*I confirm that myself and my dependent dont have non KMBL holdings*@ <br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="pull-left">
+                            <p>
+                                <button id="btnYesIConfirm" class="btn btn-success"><i class="fa fa-check"></i> @ViewBag.ResourceArrey[7] @*Yes I Confirm*@</button>
+                                <button type="button" class="btn btn-danger cancel" id="Cancel" name="Cancel" data-dismiss="modal"><i class="fa fa-times"></i>@ViewBag.ResourceArrey[8]@*No*@</button>
+                                <button id="btnUploadDetails" class="btn btn-success"><i class="fa fa-upload"></i>Upload Details</button>
+                            </p>
+                        </div>
+                    </div>
+
+                }
+                else if (ViewBag.IsDocumentUploaded == 1 && ViewBag.IsTransactionEnter == 0)
+                {
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            @Html.Raw(ViewBag.ResourceArrey[0].Replace("$1", "uploaded").Replace("$2", "other than " + ViewBag.CompanyName))
+                            @*You have successfully Uploaded the non KMBL holdings. <br />
+                                Please confirm the below option button to submit details. You will not be able to update details after submission.*@
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    <b>@Html.Raw(ViewBag.ResourceArrey[2].Replace("$1", "uploaded"))@*I hereby confirm that I have uploaded the non KMBL holdings for :*@ </b><br />
+                                    @foreach (var objElement in ViewBag.ConfirmationForNonCompanyDropDown)
+                                    {
+                                        <input type="radio" name="rdoUploadHolding" value="@objElement.Key" /> @objElement.Value <br />
+                                    }
+                                    @*<input type="radio" name="rdoUploadHolding" value="190001" /> Only Self (Dependents do not hold any non KMBL securities) <br />
+                                        <input type="radio" name="rdoUploadHolding" value="190002" /> Only Dependents (I do not hold any non KMBL securities) <br />
+                                        <input type="radio" name="rdoUploadHolding" value="190003" /> Self and Dependents (Both me and my dependents hold non KMBL securities) <br />*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            @(Html.Raw(ViewBag.ResourceArrey[3].Replace("$1", "entered").Replace("$2", ViewBag.CompanyName).Replace("$3", "enter").Replace("$4", InsiderTrading.Common.Common.getResource("tra_btn_16135"))))
+                            @*You have not entered the KMBL holdings. <br />
+                                Are you sure that you and your dependents donot have KMBL holdings? if Yes then check on below checkbox and Confirm so that you can proceed to submit details.<br />
+                                If you want to enter KMBL holdings then click on below 'Entrer detail' button.*@
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    <input type="checkbox" name="chkConfirm" />@ViewBag.ResourceArrey[4].Replace("$2", ViewBag.CompanyName)@*I confirm that myself and my dependent dont have KMBL holdings*@ <br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="pull-left">
+                            <p>
+                                <button id="btnYesIConfirm" class="btn btn-success"><i class="fa fa-check"></i> @ViewBag.ResourceArrey[7] @*Yes I Confirm*@</button>
+                                <button type="button" class="btn btn-danger cancel" id="Cancel" name="Cancel" data-dismiss="modal"><i class="fa fa-times"></i>@ViewBag.ResourceArrey[8]@*No*@</button>
+                                <button id="btnEnterDetails" class="btn btn-success"><i class="fa fa-plus"></i> @InsiderTrading.Common.Common.getResource("tra_btn_16135")</button>
+                            </p>
+                        </div>
+                    </div>
+                }
+            }
+            if (ViewBag.IsError == 0 && Convert.ToInt32(ViewBag.ConfigurationValueCodeId) == InsiderTrading.Common.ConstEnum.Code.EnterUploadSetting_EnterAndUploadDetails)
+            {
+                if (ViewBag.IsDocumentUploaded == 1 && ViewBag.IsTransactionEnter == 1)
+                {
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            @Html.Raw(ViewBag.ResourceArrey[0].Replace("$1", "entered and uploaded").Replace("$2", ViewBag.CompanyName + " and other than " + ViewBag.CompanyName))
+                            @*You have successfully entered and Uploaded the KMBL and non KMBL holdings. <br />
+                                Please confirm the below option button to submit details. You will not be able to update details after submission.*@
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    <b>@Html.Raw(ViewBag.ResourceArrey[1].Replace("$1", "entered"))@*I hereby confirm that I have entered the KMBL holdings for :*@ </b> <br />
+                                    @foreach (var objElement in ViewBag.ConfirmationForCompanyDropDown)
+                                    {
+                                        <input type="radio" name="rdoEnterHolding" value="@objElement.Key" /> @objElement.Value <br />
+                                    }
+                                    @*<input type="radio" name="rdoEnterHolding" value="189001" /> Only Self (Dependents do not hold any KMBL securities) <br />
+                                        <input type="radio" name="rdoEnterHolding" value="189002" /> Only Dependents (I do not hold any KMBL securities) <br />
+                                        <input type="radio" name="rdoEnterHolding" value="189003" /> Self and Dependents (Both me and my dependents hold KMBL securities) <br />*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    <b>@Html.Raw(ViewBag.ResourceArrey[2].Replace("$1", "uploaded"))@*I hereby confirm that I have uploaded the non KMBL holdings for :*@ </b><br />
+                                    @foreach (var objElement in ViewBag.ConfirmationForNonCompanyDropDown)
+                                    {
+                                        <input type="radio" name="rdoUploadHolding" value="@objElement.Key" /> @objElement.Value <br />
+                                    }
+                                    @*<input type="radio" name="rdoUploadHolding" value="190001" /> Only Self (Dependents do not hold any non KMBL securities) <br />
+                                        <input type="radio" name="rdoUploadHolding" value="190002" /> Only Dependents (I do not hold any non KMBL securities) <br />
+                                        <input type="radio" name="rdoUploadHolding" value="190003" /> Self and Dependents (Both me and my dependents hold non KMBL securities) <br />*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="pull-left">
+                            <p>
+                                <button id="btnYesIConfirm" class="btn btn-success"><i class="fa fa-check"></i> @ViewBag.ResourceArrey[7] @*Yes I Confirm*@</button>
+                                <button type="button" class="btn btn-danger cancel" id="Cancel" name="Cancel" data-dismiss="modal"><i class="fa fa-times"></i>@ViewBag.ResourceArrey[8]@*No*@</button>
+                            </p>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            @ViewBag.ResourceArrey[5]
+                            @*Please Enter and upload KMBL and non KMBL holdings.*@
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="pull-left">
+                            <p>
+                                <button id="btnEnterDetails" class="btn btn-success"><i class="fa fa-plus"></i> @InsiderTrading.Common.Common.getResource("tra_btn_16135")</button>
+                            </p>
+                        </div>
+                    </div>
+                }
+            }
+            if (ViewBag.IsError == 0 && Convert.ToInt32(ViewBag.ConfigurationValueCodeId) == InsiderTrading.Common.ConstEnum.Code.EnterUploadSetting_EnterAndOrDetails)
+            {
+                if (ViewBag.IsDocumentUploaded == 1 && ViewBag.IsTransactionEnter == 1)
+                {
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            @Html.Raw(ViewBag.ResourceArrey[0].Replace("$1", "entered and uploaded").Replace("$2", ViewBag.CompanyName + " and other than " + ViewBag.CompanyName))
+                            @*You have successfully entered and Uploaded the KMBL and non KMBL holdings. <br />
+                                Please confirm the below option button to submit details. You will not be able to update details after submission.*@
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    <b>@Html.Raw(ViewBag.ResourceArrey[1].Replace("$1", "entered"))@*I hereby confirm that I have entered the KMBL holdings for :*@ </b> <br />
+                                    @foreach (var objElement in ViewBag.ConfirmationForCompanyDropDown)
+                                    {
+                                        <input type="radio" name="rdoEnterHolding" value="@objElement.Key" /> @objElement.Value <br />
+                                    }
+                                    @*<input type="radio" name="rdoEnterHolding" value="189001" /> Only Self (Dependents do not hold any KMBL securities) <br />
+                                        <input type="radio" name="rdoEnterHolding" value="189002" /> Only Dependents (I do not hold any KMBL securities) <br />
+                                        <input type="radio" name="rdoEnterHolding" value="189003" /> Self and Dependents (Both me and my dependents hold KMBL securities) <br />*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    <b>@Html.Raw(ViewBag.ResourceArrey[2].Replace("$1", "uploaded"))@*I hereby confirm that I have uploaded the non KMBL holdings for :*@ </b><br />
+                                    @foreach (var objElement in ViewBag.ConfirmationForNonCompanyDropDown)
+                                    {
+                                        <input type="radio" name="rdoUploadHolding" value="@objElement.Key" /> @objElement.Value <br />
+                                    }
+                                    @*<input type="radio" name="rdoUploadHolding" value="190001" /> Only Self (Dependents do not hold any non KMBL securities) <br />
+                                        <input type="radio" name="rdoUploadHolding" value="190002" /> Only Dependents (I do not hold any non KMBL securities) <br />
+                                        <input type="radio" name="rdoUploadHolding" value="190003" /> Self and Dependents (Both me and my dependents hold non KMBL securities) <br />*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="pull-left">
+                            <p>
+                                <button id="btnYesIConfirm" class="btn btn-success"><i class="fa fa-check"></i> @ViewBag.ResourceArrey[7] @*Yes I Confirm*@</button>
+                                <button type="button" class="btn btn-danger cancel" id="Cancel" name="Cancel" data-dismiss="modal"><i class="fa fa-times"></i>@ViewBag.ResourceArrey[8]@*No*@</button>
+                            </p>
+                        </div>
+                    </div>
+                }
+                else if (ViewBag.IsDocumentUploaded == 0 && ViewBag.IsTransactionEnter == 1)
+                {
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            @Html.Raw(ViewBag.ResourceArrey[0].Replace("$1", "entered").Replace("$2", ViewBag.CompanyName))
+                            @*You have successfully entered the KMBL holdings. <br />
+                                Please confirm the below option button to submit details. You will not be able to update details after submission.*@
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    <b>@Html.Raw(ViewBag.ResourceArrey[1].Replace("$1", "entered"))@*I hereby confirm that I have entered the KMBL holdings for :*@ </b> <br />
+                                    @foreach (var objElement in ViewBag.ConfirmationForCompanyDropDown)
+                                    {
+                                        <input type="radio" name="rdoEnterHolding" value="@objElement.Key" /> @objElement.Value <br />
+                                    }
+                                    @*<input type="radio" name="rdoEnterHolding" value="189001" /> Only Self (Dependents do not hold any KMBL securities) <br />
+                                        <input type="radio" name="rdoEnterHolding" value="189002" /> Only Dependents (I do not hold any KMBL securities) <br />
+                                        <input type="radio" name="rdoEnterHolding" value="189003" /> Self and Dependents (Both me and my dependents hold KMBL securities) <br />*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="pull-left">
+                            <p>
+                                <button id="btnYesIConfirm" class="btn btn-success"><i class="fa fa-check"></i> @ViewBag.ResourceArrey[7] @*Yes I Confirm*@</button>
+                                <button type="button" class="btn btn-danger cancel" id="Cancel" name="Cancel" data-dismiss="modal"><i class="fa fa-times"></i>@ViewBag.ResourceArrey[8]@*No*@</button>
+                                <button id="btnEnterDetails" class="btn btn-success"><i class="fa fa-plus"></i> @InsiderTrading.Common.Common.getResource("tra_btn_16135")</button>
+                            </p>
+                        </div>
+                    </div>
+                }
+
+            }
+        }
+    }
+    @*<div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+                <div role="form">
+                    <div class="form-group">
+                        <textarea class="form-control" id="txtReasonForNotTradingText" name="textarea" rows="6"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+
+</div>
+@Html.Hidden("CancelUrl", Url.Action("ListByCO", "PreclearanceRequest", new { acid = InsiderTrading.Common.ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE, TransactionMasterId = ViewBag.TransactionMasterID, UserId = ViewBag.UserID }))
+@Html.Hidden("CancelUrlUser", Url.Action("Index", "PreclearanceRequest", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE, TransactionMasterId = ViewBag.TransactionMasterID }))

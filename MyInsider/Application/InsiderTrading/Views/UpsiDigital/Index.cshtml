@@ -1,0 +1,188 @@
+﻿@model InsiderTrading.Models.UpsiSharingData
+@{
+    ViewBag.Title = InsiderTrading.Common.Common.getResource("usr_ttl_55059");
+    InsiderTrading.Common.LoginUserDetails objLoginUserDetails = (InsiderTrading.Common.LoginUserDetails)InsiderTrading.Common.Common.GetSessionValue(InsiderTrading.Common.ConstEnum.SessionValue.UserDetails);
+}
+
+<section class="content-header">
+    <h1>
+        @InsiderTrading.Common.Common.getResource("usr_ttl_55059")       
+    </h1>   
+        @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger error" }, { "id", "divValidationSummaryModall" } })   
+</section>
+
+<section class="content  search" gridtype="@ViewBag.GridType">
+   
+    <section class="content">
+        <button type="button" data-toggle="collapse" class="btn btn-success" id="SerchData" data-target="#filter-panel">
+            <i class="fa fa-search"></i> @InsiderTrading.Common.Common.getResource("com_btn_14005")
+        </button>
+    </section>
+@using (Html.BeginForm("ExportUpsiReport", "UpsiDigital", FormMethod.Post, new { role = "form", autocomplete = "off" }))
+{  
+    <div id="filter-panel" class="collapse filter-panel">
+        <br />
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.PANT)
+                                    @Html.TextBoxFor(m => m.PANT, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "7" })  
+                                                                                               
+                               </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.NameT)
+                                    @Html.TextBoxFor(m => m.NameT, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "8" })
+                                   
+                               </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.Category_SharedT)
+                                    @Html.DropDownListFor(m => m.Category_SharedT, new SelectList(ViewBag.CategoryDropDown1, "Key", "Value", ""), new { @class = "form-control", gridtype = @ViewBag.GridType, id = "4" })
+                                    
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.Reason_sharingT)
+                                    @Html.DropDownListFor(m => m.Reason_sharingT, new SelectList(ViewBag.ReasonDropDown, "Key", "Value", ""), new { @class = "form-control", gridtype = @ViewBag.GridType, id = "5" })
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    <div class="form-group" id="sandbox-container">
+                                        @Html.LabelFor(m => m.SharingDateT)
+                                        <div class="input-group date">
+                                            @Html.TextBoxFor(m => m.SharingDateT, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "11" })
+                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        </div>
+                                       
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                       
+                        <input type="hidden" value="@Model.UserInfoId" id="1" name="" gridtype="@InsiderTrading.Common.ConstEnum.GridType.UpsiSharing_data" />
+                       
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <button type="button" class="btn btn-success" id="btnSearch"><i class="fa fa-search"></i> @InsiderTrading.Common.Common.getResource("com_btn_14005")</button>
+                            <button type="button" class="btn btn-success" id="btnReset" dt_name="btnReset" dt_gridtype="@ViewBag.GridType"><i class="fa fa-undo"></i> @InsiderTrading.Common.Common.getResource("com_btn_14006")</button>
+
+                        </div>
+                    </div>
+                    <!-- /.row (nested) -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+   
+    <section class="content">
+        <div class="row">
+
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <p>
+                            <a class="btn btn-success" href='@Url.Action("Create", "UpsiDigital")'><i class="fa fa-plus-square"></i> @InsiderTrading.Common.Common.getResource("cmp_btn_55012")</a>
+                        </p>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </section>
+    <div>
+        @if (@ViewBag.GridType == @InsiderTrading.Common.ConstEnum.GridType.UpsiSharing_data)
+        {
+            Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "btnSearch", sSortCol = "0", ID = "example" });
+        }
+        
+    </div>
+    
+    
+        <div>
+            
+            @if (objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.Admin || objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.COUserType)
+               {
+
+                <button type="submit" class="btn btn-success" id="Add">
+                    <i class="fa fa-download"></i> @InsiderTrading.Common.Common.getResource("rl_btn_55078")
+                </button>
+               }
+
+      </div>
+               
+}
+
+</section>
+
+
+<div id="divUpsiDetailsModal" style="display:none;"></div>
+<div id="UpsiModalDate" style="display:none;"></div>
+<script type="text/javascript">
+    function UpdateUpsi(UserInfoId, UPSIDocumentId) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("publishdate", "UpsiDigital")",
+            data: JSON.stringify({ UserInfoID: UserInfoId, UPSIDocumentId: UPSIDocumentId }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (data) {
+                $("#divUpsiDetailsModal").html(data);
+                $("#divUpsiDetailsModal").show();
+                $('#UpsiModalDate').modal('show');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {            
+              
+            }
+        });
+    }
+   
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {        
+        $("#SerchData").click(function () {
+            $("#divValidationSummaryModall").hide();
+            $("#divValidationSummaryModall").removeClass("alert alert-danger error");
+        });
+    });
+    </script>
+
+
+
+
+
+
+
+
