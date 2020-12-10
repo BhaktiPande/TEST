@@ -1,0 +1,618 @@
+﻿@model InsiderTrading.Models.CommunicationRuleMasterModel
+
+@{
+    ViewBag.Title = InsiderTrading.Common.Common.getResource("cmu_ttl_18031");
+    ViewBag.InvalidTriggerEvents = InsiderTrading.Common.Common.getResource("cmu_msg_18067");
+    ViewBag.ErrorMsg1 = InsiderTrading.Common.Common.getResource("cmu_msg_18069");
+    ViewBag.ErrorMsg2 = InsiderTrading.Common.Common.getResource("cmu_msg_18070");
+    ViewBag.ErrorMsg3 = InsiderTrading.Common.Common.getResource("cmu_msg_18071");
+}
+<script>
+    $(document).ready(function () {
+
+
+        $("#RuleSave").click(function () {
+            var optionattribute = 0;
+            $('#SelectTriggerEventCodeId option:selected').each(function (index, item) {
+                if (optionattribute == 0) {
+                    optionattribute = $(item).attr('optionattribute');
+                }
+                else if (optionattribute != $(item).attr('optionattribute')) {
+                    optionattribute = -1;
+                }
+            });
+            if (optionattribute > 0 && optionattribute == 163002) {
+                $("#EventsApplyToCodeId_bool").val("Yes");
+            }
+            else if (optionattribute > 0 && optionattribute == 163001) {
+                $("#EventsApplyToCodeId_bool").val("No");
+            }
+            else if (optionattribute == -1) {
+                var arrError = [];
+                var arrchildError = [];
+                arrchildError.push("@ViewBag.InvalidTriggerEvents");
+                arrError.push(arrchildError);
+                CRDisplayErrors(arrError);
+            }
+
+            var form = $("#frmCommunicationRule")
+              .removeData("validator")
+              .removeData("unobtrusiveValidation");
+            $.validator.unobtrusive.parse(form);
+
+            if (!form.valid()) {
+                return false;
+            }
+
+            var values = $("#frmCommunicationRule").serializeArray();
+            values.push({                
+                name: "formId",
+                value: 33
+            });
+
+            if (optionattribute >= 0) {
+                $.ajax({
+                    url: $("#SaveCommunicationRule").val(),
+                    type: 'post',
+                    headers: getRVToken(),
+                    cache: false,
+                    data: values,
+                    success: function (data) {
+                        if (data.status) {
+                            showMessage(data.msg, true);
+
+                            setTimeout(function () {
+                                if (data.IsApplicabilityDefined) {//If Applicablity is defined then after save redirect to List page as per requirement.
+                                    window.location.href = $('#CommunicationRuleMasterList').val();//+ "&RuleId=" + data.RuleId;
+                                }
+                                else {
+                                    //After save refresh the page to display Applicablity button
+                                    window.location.href = $('#CommunicationRuleMasterCreate').val() + "&RuleId=" + data.RuleId;
+                                }
+                            }, 1000);
+
+                        } else {
+                            CRDisplayErrors(data.error);
+                        }
+                    },
+                    error: function (data) {
+                        CRDisplayErrors(data.error);
+                    }
+                });
+            }
+        });
+
+        $("#addtemplate").on('show.bs.modal', function (event) {
+            $.ajax({
+                url: "@Url.Action("Create", "TemplateMaster", new { acid = InsiderTrading.Common.ConstEnum.UserActions.TEMPLATE_ADD_RIGHT })",//"../TemplateMaster/Create?TemplateMasterId=0",
+                data: { "calledFrom": "CommunicationRule", "TemplateMasterId": "0" },
+                method: "GET",
+                success: function (response) {
+                    $("#myModal .modal-body").html('');
+                    $("#addtemplate .modal-body").html(response);
+                }
+            });
+        });
+
+
+        $('#myModal').on('show.bs.modal', function (event) {
+            var TemplateId = $(event.relatedTarget).closest("tr").find("[name$='.TemplateId']").val();//$(event.relatedTarget).attr("templateid");
+
+            if (TemplateId !== "undefined" && TemplateId != 0) {
+                $.ajax({
+                    url: "@Url.Action("Create", "TemplateMaster", new { acid = InsiderTrading.Common.ConstEnum.UserActions.TEMPLATE_EDIT_RIGHT })",//"../TemplateMaster/Create?TemplateMasterId=0",
+                    data: { "calledFrom": "Communication", "TemplateMasterId": TemplateId },
+                    method: "GET",
+                    success: function (response) {
+                        $("#addtemplate .modal-body").html('');
+                        $("#myModal .modal-body").html(response);
+                    }
+                });
+            }
+
+        });
+
+        $(document).delegate("#DataTables_Table_0 select[name$='TemplateId']", "click", function () {
+            if ($(this).val() == 0) {
+                $(this).closest("tr").find("#EditTemplate").removeAttr("data-target");
+                $(this).closest("tr").find("#EditTemplate").removeAttr("data-toggle");
+            }
+            else {
+                $(this).closest("tr").find("#EditTemplate").attr("data-target", "#myModal");
+                $(this).closest("tr").find("#EditTemplate").attr("data-toggle", "modal");
+            }
+
+        });
+        $(document).delegate("#DataTables_Table_0 select[name$='ModeCodeId']", "click", function () {
+            //cmu_grd_18008
+
+            $(this).closest("tr").find("select[name$='TemplateId']").html($("#cmu_grd_18008").html());
+            $(this).closest("tr").find("select[name$='TemplateId'] option[optionattribute][optionattribute!='" + $(this).val() + "']").remove();
+        });
+        $('#AddRow button').on('click', function () {
+            var RowCount = $("#DataTables_Table_0 tbody tr").length;
+            //$("#DataTables_Table_0 tr").attr("style='display:none;'");
+            if ($("#DataTables_Table_0 tr:last ").find("[name$='.TemplateId']").val() != 0
+                && $("#DataTables_Table_0 tr:last ").find("[name$='.ModeCodeId']").val() != 0
+                && $("#DataTables_Table_0 tr:last ").find("[name$='.ExecFrequencyCodeId']").val() != 0
+                && $("#DataTables_Table_0 tr:last ").find("[name$='.WaitDaysAfterTriggerEvent']").val() != ""
+                && $("#DataTables_Table_0 tr:last ").find("[name$='.NotificationLimit']").val() != ""
+                ) {
+                ($("#DataTables_Table_0 tr:last")).after($("#DataTables_Table_0 tr:last").clone());
+
+                $("#DataTables_Table_0 tr:last .form-control").each(function () {
+                    var ControlName = $(this).attr("name");
+                    ControlName = ControlName.replace(/\[(.*)\]/g, "[" + RowCount + "]");
+                    $(this).attr("name", ControlName);
+                });
+
+                $("#DataTables_Table_0 tr:last ").find("input").val("");
+
+                $("#DataTables_Table_0 tr:last").find("select").val("0");
+                $("#DataTables_Table_0 tr:last").find("select[name$='.TemplateId']").find("option:not([value='0'])").remove();
+                $("#DataTables_Table_0 tr:last .form-control:visible:first").focus();
+                $("#DataTables_Table_0 tr:last").find("#EditTemplate").removeAttr("data-target");
+            }
+            return false;
+        });
+
+        $(document).delegate('#RuleCategoryCodeId', 'change', function (event) {
+            var valCommunicationModeCodeId = $('#RuleCategoryCodeId').val();
+            if (valCommunicationModeCodeId == 157001) {
+                $('#divPartialCreateViewCommunication').html('');
+                $('#divPartialCreateViewCommunication2').html('');
+                $.ajax({
+                    url: $('#PartialCreateViewCommunicationURL').val(),
+                    type: 'POST',
+                    headers: getRVToken(),
+                    cache: false,
+                    data: { 'CommunicationMode_id': valCommunicationModeCodeId },
+                    success: function (response) {
+                        $('#divPartialCreateViewCommunication').html(response);
+
+                        $("form").removeData("validator");
+                        $("form").removeData("unobtrusiveValidation");
+                        $.validator.unobtrusive.parse("form");
+                    },
+                    error: function (response) { }
+                });
+                $.ajax({
+                    url: $('#PartialCreateViewCommunicationURL2').val(),
+                    type: 'POST',
+                    headers: getRVToken(),
+                    cache: false,
+                    data: { 'CommunicationMode_id': valCommunicationModeCodeId },
+                    success: function (response) {
+                        $('#divPartialCreateViewCommunication2').html(response);
+
+                        $("form").removeData("validator");
+                        $("form").removeData("unobtrusiveValidation");
+                        $.validator.unobtrusive.parse("form");
+                    },
+                    error: function (response) { }
+                });
+            } else {
+                $('#divPartialCreateViewCommunication').empty();
+                $('#divPartialCreateViewCommunication2').empty();
+            }
+        });
+
+
+        $("#Overlay_1").click(function () {
+            $("#TemplatePopup").hide();
+            $("#Overlay_1").hide();
+            $("body").removeClass("noscroll");
+        });
+
+
+    });
+    function fnClickAddRow() {
+        if ($("#hidIsAllEdit").val() == 0) {
+            $("#DataTables_Table_0").find('a[name="AddPersonalizeRow"]').each(function () {
+                $(this).click();
+            });
+            $("#DataTables_Table_0").find("input[name$='.UserId']").each(function () {
+                if ($(this).val() == "null") {
+                    $(this).closest("tr").attr("style", "display:none;");
+                }
+            });
+        }
+        $("#DataTables_Table_0").closest(".clsDisplayNone").removeClass("clsDisplayNone");
+    }
+    function fnAddPersonalizeRow(obj) {
+
+        var RowCount = $("#DataTables_Table_0 tbody tr").length;
+        $(obj).attr("style", "display:none;");
+        ($("#DataTables_Table_0 tr:last")).after(($(obj).closest("tr")).clone());
+
+        $("#DataTables_Table_0 tr:last .form-control").each(function () {
+            var ControlName = $(this).attr("name");
+            ControlName = ControlName.replace(/\[(.*)\]/g, "[" + RowCount + "]");
+            $(this).attr("name", ControlName);
+        });
+        $("#DataTables_Table_0 tr:last").find("input[name$='.ExecFrequencyCodeId']").remove();
+        $("#DataTables_Table_0 tr:last").find("select[name$='.ExecFrequencyCodeId']").removeAttr("disabled");
+
+        $("#DataTables_Table_0 tr:last").find("input[name$='.RuleModeId']").val(0);
+        $("#DataTables_Table_0 tr:last").find("input[name$='.UserId']").val($("#2").val());
+        $("#DataTables_Table_0 tr:last .form-control:visible:first").focus();
+        $(obj).closest("tr").attr("style", "display:none;");
+    }
+
+    function CRDisplayErrors(errors) {
+        $('input').removeClass('input-validation-error');
+        $('select').removeClass('input-validation-error');
+
+        $('#frmCommunicationRule #messageSection div').not('#frmCommunicationRule #divValidationSummaryModal,#frmCommunicationRule #mainMessageSection').remove();
+        $("#frmCommunicationRule #divValidationSummaryModal ul").html("");
+        for (index in errors) {
+            var obj = errors[index];
+            for (i = 0; i < obj.length; i++) {
+                var li = $("<li>");
+                $(li).text(obj[i]);
+                $("#frmCommunicationRule #divValidationSummaryModal ul").append($(li));
+            }
+        }
+        $('#frmCommunicationRule #divValidationSummaryModal').slideDown(500);
+        $('#frmCommunicationRule #messageSection div').not('#frmCommunicationRule #divValidationSummaryModal').remove();
+        $("#frmCommunicationRule #divValidationSummaryModal").removeClass("validation-summary-valid");
+        $("#frmCommunicationRule #divValidationSummaryModal").addClass("validation-summary-errors");
+
+        setTimeout(function () {
+            $("#frmCommunicationRule #divValidationSummaryModal").removeClass("validation-summary-errors");
+            $('#frmCommunicationRule #divValidationSummaryModal').removeClass('alert-danger').fadeOut('slow');
+            $("#frmCommunicationRule #divValidationSummaryModal").addClass("alert-danger");
+            $("#frmCommunicationRule #divValidationSummaryModal").addClass("validation-summary-valid");
+
+        }, 10000);
+    }
+
+    function DeleteCommunicationMode(objThisButton) {
+        if (($("#DataTables_Table_0 tbody tr").length) > 1) {
+
+            sTitle = "Confirmation";
+            sMessage = "@ViewBag.ErrorMsg1";
+            $.confirm({
+                title: sTitle,
+                text: sMessage,
+                confirm: function () {
+                    $(objThisButton).closest('tr').remove();
+                    var ResetRowCount = 0;
+                    $("#DataTables_Table_0 tbody tr").each(function () {
+                        $(this).find(".form-control").each(function () {
+                            var ControlName = $(this).attr("name");
+                            ControlName = ControlName.replace(/\[(.*)\]/g, "[" + ResetRowCount + "]");
+                            $(this).attr("name", ControlName);
+                        });
+                        ResetRowCount = ResetRowCount + 1;
+                    });
+                },
+                cancel: function () {
+                },
+                confirmButton: "Yes I Confirm",
+                cancelButton: "No",
+                post: true,
+                confirmButtonClass: "btn btn-success",
+                cancelButtonClass: "btn-danger",
+                dialogClass: "modal-dialog modal-md"
+            });
+        }
+        else {
+            var arrError1 = [];
+            var arrchildError1 = [];
+            var ErrMsg = "@ViewBag.ErrorMsg2";
+            arrchildError1.push(ErrMsg);
+            arrError1.push(arrchildError1);
+            CRDisplayErrors(arrError1);
+        }
+        return false;
+    }
+    function EditTemplateWindow(objThis)
+    {
+        var TemplateId = $(objThis).closest("tr").find("[name$='.TemplateId']").val();
+        if (TemplateId !== "undefined" && TemplateId != 0) {
+            return true;
+        }
+        else {
+            var arrError = [];
+            var arrchildError = [];
+            var ErrMsg = "@ViewBag.ErrorMsg3";
+            arrchildError.push(ErrMsg);
+            arrError.push(arrchildError);
+            CRDisplayErrors(arrError);
+            return false;
+        }
+    }
+</script>
+<style>
+    .clsDisplayNone {
+        display: none;
+    }
+</style>
+@using (Html.BeginForm("Create", "CommunicationRuleMaster", new { ReturnUrl = ViewBag.ReturnUrl, formId = InsiderTrading.Common.ConstEnum.Code.frmSaveCommunicationRule }, FormMethod.Post, new { @autocomplete = "off", id = "frmCommunicationRule" }))
+{
+    @Html.AntiForgeryToken()
+    <section class="content-header">
+        <h1>
+            @InsiderTrading.Common.Common.getResource("cmu_ttl_18031")
+        </h1>
+    </section>
+    <section class="content">
+        @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+        <div class="alert" style="display: none;" id="PolicyDocumentErrorMsg">@ViewBag.applicablityNotDefineMsg</div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+                                <div class="form-group">
+                                    <label>@Html.LabelFor(model => model.RuleName)</label>
+                                    @if (!ViewBag.isAllEdit)
+                                    {
+                                        @Html.TextBoxFor(model => model.RuleName, new { @class = "form-control", @disabled = "disabled" })
+                                        @Html.HiddenFor(model => model.RuleName)
+                                        <input type="hidden" value="0" id="hidIsAllEdit" />
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(model => model.RuleName, new { @class = "form-control" })
+                                        <input type="hidden" value="1" id="hidIsAllEdit" />
+                                    }
+                                    @Html.ValidationMessageFor(model => model.RuleName)
+                                </div>
+
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+                                <div class="form-group">
+                                    <label>@Html.LabelFor(model => model.RuleCategoryCodeId)</label>
+                                    @if (ViewBag.RuleId == 0)
+                                    {
+                                        @Html.DropDownListFor(model => model.RuleCategoryCodeId, new SelectList(ViewBag.RuleCategoryCodeList, "Key", "Value", ""), new { @class = "form-control" })
+                                    }
+                                    else
+                                    {
+                                        @Html.DropDownListFor(model => model.RuleCategoryCodeId, new SelectList(ViewBag.RuleCategoryCodeList, "Key", "Value", ""), new { @class = "form-control", @disabled = "disabled" })
+                                        @Html.HiddenFor(model => model.RuleCategoryCodeId)
+                                    }
+                                    @Html.ValidationMessageFor(model => model.RuleCategoryCodeId)
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+                                <div class="form-group">
+                                    <label>@Html.LabelFor(model => model.RuleDescription)</label>
+                                    @if (!ViewBag.isAllEdit)
+                                    {
+                                        @Html.TextAreaFor(model => model.RuleDescription, new { @class = "form-control", @disabled = "disabled" })
+                                        @Html.HiddenFor(model => model.RuleDescription)
+                                    }
+                                    else
+                                    {
+                                        @Html.TextAreaFor(model => model.RuleDescription, new { @class = "form-control" })
+                                    }
+                                    @Html.ValidationMessageFor(model => model.RuleDescription)
+                                </div>
+
+                            </div>
+                        </div>
+                        <div id="divPartialCreateViewCommunication">
+                            @{
+                                Html.RenderPartial("PartialCreate1", Model);
+                            }
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+                                <div class="form-group">
+
+                                    @{
+                                        var RFC_html_attr = new Dictionary<string, object> { };
+
+                                        RFC_html_attr.Add("class", "");
+
+                                        if (!ViewBag.isAllEdit)
+                                        {
+                                            RFC_html_attr.Add("disabled", "disabled");
+                                            @Html.HiddenFor(m => m.RuleForCodeId_bool);
+                                        }
+                                    }
+                                    <label>@Html.LabelFor(model => model.RuleForCodeId)</label>
+
+                                    @Html.RadioButtonFor(m => m.RuleForCodeId_bool, @InsiderTrading.Models.YesNo.Yes, RFC_html_attr) @InsiderTrading.Common.Common.getResource("cmu_lbl_18058")
+                                    @Html.RadioButtonFor(m => m.RuleForCodeId_bool, @InsiderTrading.Models.YesNo.No, RFC_html_attr) @InsiderTrading.Common.Common.getResource("cmu_lbl_18057")
+                                    @Html.ValidationMessageFor(m => m.RuleForCodeId_bool)
+
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 search clsDisplayNone" gridtype="@ViewBag.GridType">
+                                <div class="row">
+                                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                        @{if (ViewBag.isAllEdit && (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.TEMPLATE_ADD_RIGHT)))
+                                        {
+                                            <a href="javascript:void(0);">
+                                                <button id="AT" type="button" data-toggle='modal' data-target='#addtemplate' class="btn btn-success">
+                                                    <i class="fa fa-plus-square"></i>Add Template
+                                                </button>
+                                            </a>
+                                        }
+                                        }
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">&nbsp;</div>
+                                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                        @if (ViewBag.isAllEdit)
+                                        {
+                                            <p>
+                                                <a href='#' id="AddRow" gridtype="@ViewBag.GridType"><button type="button" gridtype="@ViewBag.GridType" class="btn btn-success"><i class="fa fa-plus-square"></i> @InsiderTrading.Common.Common.getResource("cmu_btn_18033")</button></a>
+                                            </p>
+                                        }
+                                    </div>
+                                </div>
+
+                                <input type="hidden" value="@ViewBag.RuleId" id="1" />
+                                <input type="hidden" value="@ViewBag.UserId" id="2" />
+                                <input type="hidden" value="0" id="hidRowCounter" />
+                                @{
+                                    Html.RenderAction("index", "DatatableGrid", new { acid = ViewBag.acid, type = @ViewBag.GridType, btnSearch = "btnsearch", sSortCol = "0", bIsPagination = false, sCallBackFunction = "fnClickAddRow" });
+                                }
+                                @{
+                                    if (!ViewBag.isAllEdit && InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.COMMUNICATION_RULES_PERSONALIZE_RIGHT))
+                                    {
+                                        // This code is commented to fix bug id 8134
+                                        @Html.Hidden("AddRowURL", "#", new { name = "AddRowURL", gridtype = @ViewBag.GridType, @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'name': 'AddPersonalizeRow','ID':'AddPersonalizeRow','key':'<RuleModeId>','RuleModeId':'<RuleModeId>','text':'','href':'javascript:void(0);','onclick':'fnAddPersonalizeRow(this)','class':'display-icon  fa fa-plus-square '}" })
+
+                                    }
+                                    if (ViewBag.isAllEdit)
+                                    {
+                                        if(InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.TEMPLATE_EDIT_RIGHT))
+                                        {
+                                            if (Model.RuleId != 0)
+                                            {
+                                                @Html.Hidden("Edit", "#", new { name = "EditTemplateURL", @class = "gridtypecontrol", ctrtype = "link", gridtype = @ViewBag.GridType, gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'text':'','data-toggle':'modal','data-target':'#myModal','class':'display-icon icon icon-edit','name': 'EditTemplate','ID':'EditTemplate','TemplateId':'<TemplateId>','onclick':'javascript:EditTemplateWindow(this);','href':'javascript:void(0);'}" })
+                                            }
+                                            else
+                                            {
+                                                @Html.Hidden("Edit", "#", new { name = "EditTemplateURL", @class = "gridtypecontrol", ctrtype = "link", gridtype = @ViewBag.GridType, gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'text':'','data-toggle':'modal','class':'display-icon icon icon-edit','name': 'EditTemplate','ID':'EditTemplate','TemplateId':'<TemplateId>','onclick':'javascript:EditTemplateWindow(this);','href':'javascript:void(0);'}" })
+                                            }
+                                        }
+                                        if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.COMMUNICATION_RULES_DELETE_RIGHT))
+                                        {
+                                            @Html.Hidden("deleteRowURL", "#", new { name = "deleteRowURL", gridtype = @ViewBag.GridType, @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'name': 'deleteCommunicationRuleModeRow','ID':'RoleModeId','key':'','text':'','href':'javascript:void(0);','onclick':'javascript:DeleteCommunicationMode(this);','class':'display-icon icon icon-delete '}" })
+
+                                        }
+
+                                    }
+                                    @*@Html.Hidden("EditTemplateURL", "#", new { name = "EditTemplateURL", gridtype = @ViewBag.GridType, @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'name': 'EditTemplate','ID':'EditTemplate','key':'<TemplateId>','TemplateId':'<cmu_grd_18008>','text':'','href':'javascript:void(0);','onclick':'fnEditTemplate(this)','class':'display-icon  icon icon-edit '}" })*@
+
+                                }
+                            </div>
+                        </div>
+
+                        <div id="divPartialCreateViewCommunication2">
+                            @{
+                                Html.RenderPartial("PartialCreate2", Model);
+                            }
+                        </div>
+
+
+
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+                                <div class="form-group">
+                                    @{
+                                        var RSC_html_attr = new Dictionary<string, object> { };
+                                        RSC_html_attr.Add("class", "");
+
+                                        if (!ViewBag.allowChangeStatus || !ViewBag.isAllEdit)
+                                        {
+                                            RSC_html_attr.Add("disabled", "disabled");
+                                            @Html.HiddenFor(m => m.RuleStatus);
+                                        }
+                                    }
+                                    @Html.LabelFor(m => m.RuleStatus)
+                                    @Html.RadioButtonFor(m => m.RuleStatus, @InsiderTrading.Models.CommunicationRuleMasterModel.RuleStatusCode.Active, RSC_html_attr) @InsiderTrading.Common.Common.getResource("rul_lbl_15118")
+                                    @Html.RadioButtonFor(m => m.RuleStatus, @InsiderTrading.Models.CommunicationRuleMasterModel.RuleStatusCode.Inactive, RSC_html_attr) @InsiderTrading.Common.Common.getResource("rul_lbl_15119")
+                                    @Html.ValidationMessageFor(m => m.RuleStatus)
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                @if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.COMMUNICATION_RULES_EDIT_RIGHT) || InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.COMMUNICATION_RULES_ADD_RIGHT) || InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.COMMUNICATION_RULES_PERSONALIZE_RIGHT))
+                                {
+                                    <button type="button" class="btn btn-success" name="Save" id="RuleSave" data-loading-text="Saving" autocomplete="off"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("com_btn_14017")</button>
+                                }
+                                @if (ViewBag.showApplicabilityButton && (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.COMMUNICATION_RULES_EDIT_RIGHT) || InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.COMMUNICATION_RULES_ADD_RIGHT)))
+                                {
+                                    string sCommunicationRuleForUserTypeCO = Convert.ToString(InsiderTrading.Common.ConstEnum.Code.CommunicationRuleForUserTypeCO);
+                                    int nEventsApplyToCodeId = (Model.EventsApplyToCodeId == 0 ? (Model.RuleForCodeId == sCommunicationRuleForUserTypeCO ? @InsiderTrading.Common.ConstEnum.Code.CommunicationRuleEventsToApplyUserTypeCO : @InsiderTrading.Common.ConstEnum.Code.CommunicationRuleEventsToApplyUserTypeInsider) : Model.EventsApplyToCodeId);
+                                    string applicablityCalledFrom = "Edit";// (ViewBag.applicablityCalledFrom == "") ? " " : ViewBag.applicablityCalledFrom;
+                                    <a class="btn btn-success" data-toggle="modal" href='@Url.Action("Index", "Applicability", new { acid = ViewBag.acid, nApplicabilityType = InsiderTrading.Common.ConstEnum.Code.CommunicationRule, nMasterID = Model.RuleId, CalledFrom = applicablityCalledFrom, CodeTypeId = Model.RuleForCodeId, CodeTypeToId = nEventsApplyToCodeId })' role="button"> @InsiderTrading.Common.Common.getResource("rul_btn_15251")</a>
+                                }
+                                @*<button type="submit" class="btn btn-success" name="Applicablity" id="" data-loading-text="Saving" autocomplete="off"><i class="fa fa-chain"></i> @InsiderTrading.Common.Common.getResource("com_btn_14017")</button>*@
+                                <button type="submit" class="btn btn-success cancel" id="Cancel" name="Cancel" data-dismiss="modal"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14011")</button>
+                            </div>
+                        </div>
+                        @Html.HiddenFor(model => model.RuleId)
+                        @Html.HiddenFor(model => model.IsApplicabilityDefined)
+                        @Html.HiddenFor(model => model.RuleStatusCodeId)
+                        @Html.HiddenFor(model => model.TriggerEventCodeId)
+                        @Html.HiddenFor(model => model.OffsetEventCodeId)
+                    </div>
+                    <input type="hidden" value="@ViewBag.acid" id="acid" name="acid"/>
+                    <input type="hidden" value="@ViewBag.CommunicationModes" id="CommunicationModes" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+}
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addtemplate" tabindex="-1" role="dialog" aria-labelledby="AddTemplatelabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (!ViewBag.isAllEdit)
+{
+    @Html.Hidden("View", Url.Action("Create", "CommunicationRuleMaster", new { acid = InsiderTrading.Common.ConstEnum.UserActions.CRUSER_COUSER_VIEW, CalledFrom = "View" }), new { @class = "gridtypecontrol", ctrtype = "dropdown", gridcolumntype = @ViewBag.GridType + "_cmu_grd_18007", param = "{'value':'<cmu_grd_18007>','id':'cmu_grd_18007','class':'form-control','disabled':'disabled','name':'CommunicationRuleModeMasterModelList[<RowCounter>].ModeCodeId' }" })
+    @Html.Hidden("View", Url.Action("Create", "CommunicationRuleMaster", new { acid = InsiderTrading.Common.ConstEnum.UserActions.CRUSER_COUSER_VIEW, CalledFrom = "View" }), new { @class = "gridtypecontrol", ctrtype = "dropdown", gridcolumntype = @ViewBag.GridType + "_cmu_grd_18008", param = "{'value':'<cmu_grd_18008>','CModeValue':'<CModeCodeId>','id':'cmu_grd_18008','width':'300px', 'class':'form-control','disabled':'disabled','name':'CommunicationRuleModeMasterModelList[<RowCounter>].TemplateId' }" })
+    @Html.Hidden("View", Url.Action("Create", "CommunicationRuleMaster", new { acid = InsiderTrading.Common.ConstEnum.UserActions.CRUSER_COUSER_VIEW, CalledFrom = "View" }), new { @class = "gridtypecontrol", ctrtype = "dropdown", gridcolumntype = @ViewBag.GridType + "_cmu_grd_18010", param = "{'value':'<cmu_grd_18010>','id':'cmu_grd_18010','class':'form-control','disabled':'disabled','name':'CommunicationRuleModeMasterModelList[<RowCounter>].ExecFrequencyCodeId' }" })
+}
+else
+{
+    @Html.Hidden("View", Url.Action("Create", "CommunicationRuleMaster", new { acid = InsiderTrading.Common.ConstEnum.UserActions.CRUSER_COUSER_VIEW, CalledFrom = "View" }), new { @class = "gridtypecontrol", ctrtype = "dropdown", gridcolumntype = @ViewBag.GridType + "_cmu_grd_18007", param = "{'value':'<cmu_grd_18007>','id':'cmu_grd_18007','class':'form-control','name':'CommunicationRuleModeMasterModelList[<RowCounter>].ModeCodeId' }" })
+    @Html.Hidden("View", Url.Action("Create", "CommunicationRuleMaster", new { acid = InsiderTrading.Common.ConstEnum.UserActions.CRUSER_COUSER_VIEW, CalledFrom = "View" }), new { @class = "gridtypecontrol", ctrtype = "dropdown", gridcolumntype = @ViewBag.GridType + "_cmu_grd_18008", param = "{'value':'<cmu_grd_18008>','CModeValue':'<CModeCodeId>','id':'cmu_grd_18008','width':'300px','class':'form-control','name':'CommunicationRuleModeMasterModelList[<RowCounter>].TemplateId' }" })
+    @Html.Hidden("View", Url.Action("Create", "CommunicationRuleMaster", new { acid = InsiderTrading.Common.ConstEnum.UserActions.CRUSER_COUSER_VIEW, CalledFrom = "View" }), new { @class = "gridtypecontrol", ctrtype = "dropdown", gridcolumntype = @ViewBag.GridType + "_cmu_grd_18010", param = "{'value':'<cmu_grd_18010>','id':'cmu_grd_18010','class':'form-control','name':'CommunicationRuleModeMasterModelList[<RowCounter>].ExecFrequencyCodeId' }" })
+}
+<div>@Html.DropDownList("cmu_grd_18007", new SelectList(ViewBag.CommunicationModes, "Key", "Value", ""), new { @class = "form-control hide" })</div>
+<div>
+    @*@Html.DropDownList("cmu_grd_18008", new SelectList(ViewBag.TemplateList, "Key", "Value", ""), new { @class = "form-control hide classTemplate" })*@
+    <select class="form-control hide classTemplate" id="cmu_grd_18008" name="cmu_grd_18008">
+        @foreach (var Item in ViewBag.TemplateList)
+        {
+            <option value="@Item.Key" optionattribute="@Item.OptionAttribute">@Item.Value</option>
+        }
+    </select>
+</div>
+<div>@Html.DropDownList("cmu_grd_18010", new SelectList(ViewBag.CommunicationExecutionFrequency, "Key", "Value", ""), new { @class = "form-control hide" })</div>
+
+@Html.Hidden("CreateTemplate", Url.Action("Create", "TemplateMaster", new { acid = InsiderTrading.Common.ConstEnum.UserActions.TEMPLATE_ADD_RIGHT, TemplateMasterId = 0, calledFrom = "CommunicationRule" }))
+@Html.Hidden("PartialCreateViewCommunicationURL", Url.Action("PartialCreateView", "CommunicationRuleMaster"))
+@Html.Hidden("PartialCreateViewCommunicationURL2", Url.Action("PartialCreateView2", "CommunicationRuleMaster"))
+@Html.Hidden("SaveCommunicationRule", Url.Action("SaveCommunicationRule", "CommunicationRuleMaster", new { acid = @ViewBag.acid }))
+@Html.Hidden("CommunicationRuleMasterList", Url.Action("Index", "CommunicationRuleMaster", new { acid = InsiderTrading.Common.ConstEnum.UserActions.COMMUNICATION_RULES_LIST_RIGHT }))
+@Html.Hidden("CommunicationRuleMasterCreate", Url.Action("Create", "CommunicationRuleMaster", new { acid = InsiderTrading.Common.ConstEnum.UserActions.COMMUNICATION_RULES_EDIT_RIGHT }))
+@Scripts.Render("~/bundles/jqueryval")

@@ -1,0 +1,938 @@
+﻿@model InsiderTrading.Models.InsiderInitialDisclosureModel
+@{
+    ViewBag.Titel = @InsiderTrading.Common.Common.getResource("dis_lbl_17001");
+    InsiderTrading.Common.LoginUserDetails objLoginUserDetails = (InsiderTrading.Common.LoginUserDetails)InsiderTrading.Common.Common.GetSessionValue(InsiderTrading.Common.ConstEnum.SessionValue.UserDetails);
+    var acid = (objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.Admin || objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.CorporateUserType) ? InsiderTrading.Common.ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_INITIAL_DISCLOSURE : InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_INITIAL_DISCLOSURE;
+    var acid_letterSubmission = (objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.Admin || objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.CorporateUserType) ? InsiderTrading.Common.ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_INITIAL_DISCLOSURE_LETTER_SUBMISSION : InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_INITIAL_DISCLOSURE_LETTER_SUBMISSION;
+}
+
+@Styles.Render("~/content/SW360")
+
+<section class="content-header">
+    @Html.AntiForgeryToken()
+    <h1> @InsiderTrading.Common.Common.getResource("dis_lbl_17001") </h1>
+    @if (ViewBag.show_cancel_btn == false && (ViewBag.UsrTypeCodeId == 101003))
+    {
+        @Html.Partial("~/Views/Common/InitialDisclosureOwnOS_Buttons.cshtml")
+    }
+</section>
+
+<script>
+    $(document).ready(function () {
+        if ('@ViewBag.ShowOwnEmp' == 'True') {
+            $('#Employee-initial-disclosure-edit').show();
+        }
+        if ('@ViewBag.ShowOwnInsider' == 'True') {
+            $('#insiders-initial-disclosure-edit').show();
+        }
+    });
+
+
+</script>
+
+<section class="content">
+
+    @{
+        if (ViewBag.Incomplete)
+        {
+            <div class="alert alert-success">
+                <ul>
+                    @InsiderTrading.Common.Common.getResource("dis_msg_17396")
+                </ul>
+            </div>
+        }
+    }
+
+    <div class="row">
+        <div class="col-lg-12">
+            @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+        </div>
+    </div>
+
+    <div class="row">
+        &nbsp;
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default panel_css" style="overflow: auto;">
+                <div class="panel-body">
+                    <div class="dataTable_wrapper">
+                        <div id="Employee-initial-disclosure-edit" style="display:none">
+                            <h5>@InsiderTrading.Common.Common.getResource("dis_lbl_52074")</h5>
+                            <table id="Employee-initial-disclosure-edit-table" class="data-table table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        @{
+                                            string headerEmployee = "";
+                                            headerEmployee = "Self and Relative";
+                                            <th class="text-center">@headerEmployee</th>
+                                            foreach (InsiderTrading.Models.InsiderInitialDisclosureModelEmployee objInitiaDisModel in Model.InsiderInitialDisclosureModelEmployee1)
+                                            {
+                                                if (@ViewBag.UserInfoId == objInitiaDisModel.UserInfoID)
+                                                {
+                                                    headerEmployee = (objInitiaDisModel.EventType == 0) ? objInitiaDisModel.EventName : InsiderTrading.Common.Common.getResource(objInitiaDisModel.EventName);
+                                                    <th class="text-center">@headerEmployee</th>
+                                                }
+                                            }
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        var UserGrouopEmployee = Model.InsiderInitialDisclosureModelEmployee1.GroupBy(x => x.UserInfoID).ToList();
+                                        for (int i = 0; i < UserGrouopEmployee.Count; i++)
+                                        {
+                                            var userid = UserGrouopEmployee[i].Key;
+                                            <tr>
+                                                @{
+                                            string display_text = "";
+                                            string display_text1 = "";
+                                            int policy_document_id = 0;
+                                            int document_file_id = 0;
+                                            int transcation_master_id = 0;
+
+                                            string btn_icon = "";
+                                            string info_msg_txt = "";
+                                            string view_name = "";
+                                            string controller_name = "#";
+                                            string html_attributes = "";
+
+                                            bool show_link = true; //this flag is used to show link to display text
+                                            bool show_text = true; //this flag is used to show display text
+                                            bool IsNotRequiredLink = false; //this flag is used to not show the link to display test (Not Reuired)
+                                            InsiderTrading.Models.InsiderInitialDisclosureModelEmployee objLastInitiaDisModel = null;
+                                            if (Model != null && Model.InsiderInitialDisclosureModelEmployee1.Count > 0)
+                                            {
+                                                objLastInitiaDisModel = Model.InsiderInitialDisclosureModelEmployee1.Last();
+                                            }
+                                            int nLastDisplyedElement = 0;
+                                            foreach (InsiderTrading.Models.InsiderInitialDisclosureModelEmployee objInitiaDisModel in Model.InsiderInitialDisclosureModelEmployee1)
+                                            {
+                                                if (userid == objInitiaDisModel.UserInfoID)
+                                                {
+                                                    if (objInitiaDisModel.StatusFlag != InsiderTrading.Common.ConstEnum.Code.EventStatusDoNotShow)
+                                                    {
+                                                        nLastDisplyedElement++;
+                                                    }
+                                                    if (objInitiaDisModel.UserTypeCodeID == 101003 || objInitiaDisModel.UserTypeCodeID == 101006)
+                                                    {
+                                                        display_text1 = "Self and relative";
+                                                    }
+                                                    else if (objInitiaDisModel.UserTypeCodeID == 101004)
+                                                    {
+                                                        display_text1 = "Self";
+                                                    }
+                                                    else
+                                                    {
+                                                        display_text1 = "Relative";
+                                                    }
+                                                }
+                                            }
+                                            int nCount = 0;
+                                            <td>
+                                                @display_text1
+                                            </td>
+                                            foreach (InsiderTrading.Models.InsiderInitialDisclosureModelEmployee objInitiaDisModel in Model.InsiderInitialDisclosureModelEmployee1)
+                                            {
+                                                if (userid == objInitiaDisModel.UserInfoID)
+                                                {
+                                                    nCount++;
+                                                    IsNotRequiredLink = false;
+                                                    RouteValueDictionary controller_paramter = new RouteValueDictionary();
+                                                    var html_attr = new Dictionary<string, object> { };
+
+                                                    display_text = (objInitiaDisModel.ResourceKey != null) ? InsiderTrading.Common.Common.getResource(objInitiaDisModel.ResourceKey) : "";
+
+                                                    show_link = (objInitiaDisModel.StatusFlag != InsiderTrading.Common.ConstEnum.Code.EventStatusDoNotShow) ? true : false;
+
+                                                    show_text = true; //set flag true for display text
+
+                                                    //check event type to know if its policy document or event
+                                                    //0 means policy document to view/agree and 1 means event like initial disclousure, softcopy, hardcopy submission
+                                                    if (objInitiaDisModel.EventType == 0)
+                                                    {
+                                                        policy_document_id = objInitiaDisModel.PolicyDocumentId;
+                                                        document_file_id = objInitiaDisModel.DocumentId;
+
+                                                        if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusCompleted)
+                                                        {
+                                                            view_name = "DisplayPolicy";
+                                                            controller_name = "InsiderInitialDisclosure";
+                                                            /*Show date*/
+                                                            display_text = (objInitiaDisModel.EventDate == null ? display_text : InsiderTrading.Common.Common.ApplyFormatting(objInitiaDisModel.EventDate, InsiderTrading.Common.ConstEnum.DataFormatType.Date));
+                                                            if (objInitiaDisModel.Equals(objLastInitiaDisModel) || nLastDisplyedElement == nCount)
+                                                            {
+                                                                html_attributes = "<p class=\"text-center status-green Last-Element\"><button type=\"button\" class=\"btn btn-success btn-shape btn-round btn-md\" ><i class=\"fa fa-check-circle\"></i> ><span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                            }
+                                                            else
+                                                            {
+                                                                html_attributes = "<p class=\"text-center status-green\"><button type=\"button\" class=\"btn btn-success btn-shape btn-arrow btn-md\" ><i class=\"fa fa-check-circle\"></i> <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                            }
+                                                            controller_paramter.Add("acid", acid);
+                                                            controller_paramter.Add("PolicyDocumentID", objInitiaDisModel.PolicyDocumentId);
+                                                            controller_paramter.Add("DocumentID", objInitiaDisModel.DocumentId);
+                                                            controller_paramter.Add("CalledFrom", "View");
+                                                            controller_paramter.Add("nUserInfoId", objInitiaDisModel.ParentUserInfoID);
+                                                            controller_paramter.Add("RequiredModuleID", InsiderTrading.Common.ConstEnum.Code.RequiredModuleOwnSecurity);
+
+                                                            btn_icon = "<i class=\"fa fa-check-circle\"></i> ";
+                                                        }
+                                                        else if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusPending)
+                                                        {
+                                                            view_name = "DisplayPolicy";
+                                                            controller_name = "InsiderInitialDisclosure";
+                                                            if (objInitiaDisModel.Equals(objLastInitiaDisModel) || nLastDisplyedElement == nCount)
+                                                            {
+                                                                html_attributes = "<p class=\"text-center status-orange Last-Element\"><button type=\"button\" class=\"btn btn-warning btn-shape btn-round btn-md center-block\" data-html=\"true\" data-toggle= \"popover\" data-placement=\"bottom\" data-content=\"" + InsiderTrading.Common.Common.getResource("dis_msg_17323") + "\"><i class=\"fa fa-exclamation-circle\"></i><span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                            }
+                                                            else
+                                                            {
+                                                                html_attributes = "<p class=\"text-center status-orange\"><button type=\"button\" class=\"btn btn-warning btn-shape btn-round btn-md center-block\" data-html=\"true\" data-toggle= \"popover\" data-placement=\"bottom\" data-content=\"" + InsiderTrading.Common.Common.getResource("dis_msg_17323") + "\"><i class=\"fa fa-exclamation-circle\"></i> <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                            }
+                                                            controller_paramter.Add("acid", acid);
+                                                            controller_paramter.Add("PolicyDocumentID", objInitiaDisModel.PolicyDocumentId);
+                                                            controller_paramter.Add("DocumentID", objInitiaDisModel.DocumentId);
+                                                            controller_paramter.Add("CalledFrom", "ViewAgree");
+                                                            controller_paramter.Add("nUserInfoId", objInitiaDisModel.ParentUserInfoID);
+                                                            controller_paramter.Add("RequiredModuleID", InsiderTrading.Common.ConstEnum.Code.RequiredModuleOwnSecurity);
+                                                        }
+                                                        else if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusDoNotShow)
+                                                        {
+                                                            //no Action
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        //check event type
+                                                        //1 = disclosure, 2 = soft copy, 3 = hard copy, 4 = stock exchange
+                                                        switch (objInitiaDisModel.EventType)
+                                                        {
+                                                            case 1: //Initial disclosure
+                                                                view_name = "Index";
+                                                                controller_name = "TradingTransaction";
+
+                                                                controller_paramter.Add("acid", acid);
+                                                                controller_paramter.Add("nDisclosureTypeCodeId", InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial);
+                                                                controller_paramter.Add("nUserInfoId", userid);
+                                                                controller_paramter.Add("ParentId", ViewBag.UserInfoId);
+                                                                controller_paramter.Add("nUserTypeCodeId", objInitiaDisModel.UserTypeCodeID);
+                                                                controller_paramter.Add("TransactionMasterId", objInitiaDisModel.TransactionMasterId);
+                                                                controller_paramter.Add("frm", "Employee");
+
+                                                                info_msg_txt = InsiderTrading.Common.Common.getResource("dis_msg_17320");
+                                                                break;
+                                                            case 2: //soft copy submission
+                                                                info_msg_txt = "";
+
+                                                                if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusCompleted)
+                                                                {
+
+                                                                    view_name = "ViewLetter";
+                                                                    controller_name = "TradingTransaction";
+
+                                                                    controller_paramter.Add("acid", acid_letterSubmission);
+                                                                    controller_paramter.Add("uid", objInitiaDisModel.ParentUserInfoID);
+                                                                    controller_paramter.Add("nTransactionLetterId", 0);
+                                                                    controller_paramter.Add("nTransactionMasterId", objInitiaDisModel.TransactionMasterId);
+                                                                    controller_paramter.Add("nDisclosureTypeCodeId", InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial);
+                                                                    controller_paramter.Add("nLetterForCodeId", InsiderTrading.Common.ConstEnum.Code.DisclosureLetterUserInsider);
+                                                                }
+                                                                else if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusPending)
+                                                                {
+                                                                    view_name = "CreateLetter";
+                                                                    controller_name = "TradingTransaction";
+
+                                                                    controller_paramter.Add("acid", acid_letterSubmission);
+                                                                    controller_paramter.Add("uid", objInitiaDisModel.ParentUserInfoID);
+                                                                    controller_paramter.Add("nTransactionLetterId", 0);
+                                                                    controller_paramter.Add("nTransactionMasterId", objInitiaDisModel.TransactionMasterId);
+                                                                    controller_paramter.Add("nDisclosureTypeCodeId", InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial);
+                                                                    controller_paramter.Add("nLetterForCodeId", InsiderTrading.Common.ConstEnum.Code.DisclosureLetterUserInsider);
+
+                                                                    info_msg_txt = InsiderTrading.Common.Common.getResource("dis_msg_17321");
+                                                                }
+                                                                else if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusNotRequired)
+                                                                {
+                                                                    view_name = "";
+                                                                    controller_name = "#";
+                                                                    IsNotRequiredLink = true;
+                                                                    if (objInitiaDisModel.Equals(objLastInitiaDisModel) || nLastDisplyedElement == nCount)
+                                                                    {
+                                                                        html_attributes = "<p class=\"text-center status-green Last-Element\"><button type=\"button\" style=\"cursor:default;\" class=\"btn btn-success btn-shape btn-round btn-md\" ><i class=\"fa fa-check-circle\"></i>  <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        html_attributes = "<p class=\"text-center status-green\"><button type=\"button\" style=\"cursor:default;\" class=\"btn btn-success btn-shape btn-arrow btn-md\" ><i class=\"fa fa-check-circle\"></i>  <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                    }
+                                                                }
+
+
+                                                                break;
+                                                            case 3: //hard copy submission
+                                                                info_msg_txt = "";
+
+                                                                if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusCompleted)
+                                                                {
+                                                                    view_name = "ViewHardCopy";
+                                                                    controller_name = "TradingTransaction";
+
+                                                                    controller_paramter.Add("acid", acid_letterSubmission);
+                                                                    controller_paramter.Add("nUserInfoId", objInitiaDisModel.ParentUserInfoID);
+                                                                    controller_paramter.Add("nDisclosureTypeCodeId", InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial);
+                                                                    controller_paramter.Add("nTransactionMasterId", objInitiaDisModel.TransactionMasterId);
+                                                                    controller_paramter.Add("CalledFrom", "ViewHardCopy");
+                                                                }
+                                                                else if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusPending)
+                                                                {
+                                                                    view_name = "UploadHardDocument";
+                                                                    controller_name = "TradingTransaction";
+
+                                                                    controller_paramter.Add("acid", acid_letterSubmission);
+                                                                    controller_paramter.Add("nDisclosureTypeCodeId", InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial);
+                                                                    controller_paramter.Add("nTransactionMasterId", objInitiaDisModel.TransactionMasterId);
+                                                                    controller_paramter.Add("nUserInfoId", objInitiaDisModel.ParentUserInfoID);
+
+                                                                    info_msg_txt = InsiderTrading.Common.Common.getResource("dis_msg_17322");
+                                                                }
+                                                                else if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusNotRequired)
+                                                                {
+                                                                    view_name = "";
+                                                                    controller_name = "#";
+
+                                                                    IsNotRequiredLink = true;
+                                                                    if (objInitiaDisModel.Equals(objLastInitiaDisModel) || nLastDisplyedElement == nCount)
+                                                                    {
+                                                                        html_attributes = "<p class=\"text-center status-green Last-Element\"><button style=\"cursor:default;\" type=\"button\" class=\"btn btn-success btn-shape btn-round btn-md\" ><i class=\"fa fa-check-circle\"></i> <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        html_attributes = "<p class=\"text-center status-green\"><button style=\"cursor:default;\" type=\"button\" class=\"btn btn-success btn-shape btn-arrow btn-md\" ><i class=\"fa fa-check-circle\"></i> <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                    }
+                                                                }
+
+                                                                break;
+                                                            case 4: //stock exchange submission
+                                                                if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusCompleted)
+                                                                {
+
+                                                                    view_name = "";
+                                                                    controller_name = "#";
+
+                                                                    IsNotRequiredLink = true;
+                                                                }
+                                                                else if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusPending)
+                                                                {
+                                                                    view_name = "";
+                                                                    controller_name = "#";
+                                                                    IsNotRequiredLink = true;
+                                                                }
+                                                                else if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusNotRequired)
+                                                                {
+                                                                    view_name = "";
+                                                                    controller_name = "#";
+                                                                    IsNotRequiredLink = true;
+                                                                }
+
+                                                                info_msg_txt = "";
+                                                                break;
+                                                        }
+
+                                                        if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusCompleted)
+                                                        {
+                                                            //btn_icon = "<i class=\"fa fa-check-circle\"></i> ";
+                                                            display_text = InsiderTrading.Common.Common.ApplyFormatting(objInitiaDisModel.EventDate, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+                                                            if (objInitiaDisModel.Equals(objLastInitiaDisModel) || nLastDisplyedElement == nCount)
+                                                            {
+                                                                if (objInitiaDisModel.EventType == 4)
+                                                                {
+                                                                    html_attributes = "<p class=\"text-center status-green Last-Element\"><button type=\"button\" style=\"cursor:default;\" class=\"btn btn-success btn-shape btn-round btn-md\" ><i class=\"fa fa-check-circle\"></i>  <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                }
+                                                                else
+                                                                {
+                                                                    if (objInitiaDisModel.EventType == 1)
+                                                                    {
+                                                                        if (objInitiaDisModel.IsEnterAndUploadEvent != 1)
+                                                                        {
+                                                                            html_attributes = "<p class=\"text-center status-green Last-Element\"><button type=\"button\" class=\"btn btn-success btn-shape btn-round btn-md\" ><i class=\"fa fa-check-circle\"></i>  <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            html_attributes = "<p class=\"text-center status-green Last-Element\"><button type=\"button\" class=\"btn btn-success btn-shape btn-round btn-md\" ><i class=\"fa fa-check-circle\"></i>  <span class=\"text-transform\"> " + @display_text + "</span>&nbsp;&nbsp;<i class=\"ico ico-document\"></i></button></p>";
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        html_attributes = "<p class=\"text-center status-green Last-Element\"><button type=\"button\" class=\"btn btn-success btn-shape btn-round btn-md\" ><i class=\"fa fa-check-circle\"></i>  <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                    }
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                if (objInitiaDisModel.EventType == 4)
+                                                                {
+                                                                    html_attributes = "<p class=\"text-center status-green\"><button type=\"button\" style=\"cursor:default;\" class=\"btn btn-success btn-shape btn-arrow btn-md\" ><i class=\"fa fa-check-circle\"></i>  <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                }
+                                                                else
+                                                                {
+                                                                    if (objInitiaDisModel.IsEnterAndUploadEvent == 1)
+                                                                    {
+                                                                        if (objInitiaDisModel.IsEnterAndUploadEvent != 1)
+                                                                        {
+                                                                            html_attributes = "<p class=\"text-center status-green\"><button type=\"button\" class=\"btn btn-success btn-shape btn-arrow btn-md\" ><i class=\"fa fa-check-circle\"></i>  <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            html_attributes = "<p class=\"text-center status-green\"><button type=\"button\" class=\"btn btn-success btn-shape btn-arrow btn-md\" ><i class=\"fa fa-check-circle\"></i>  <span class=\"text-transform\"> " + @display_text + "</span>&nbsp;&nbsp;<i class=\"ico ico-document\"></i></button></p>";
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        html_attributes = "<p class=\"text-center status-green\"><button type=\"button\" class=\"btn btn-success btn-shape btn-arrow btn-md\" ><i class=\"fa fa-check-circle\"></i>  <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                    }
+                                                                }
+                                                            }
+                                                            // html_attr.Add("class", "btn btn-success btn-shape btn-arrow btn-md");
+                                                            /*Show date*/
+                                                        }
+                                                        else if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusPending)
+                                                        {
+                                                            //btn_icon = "<i class=\"fa fa-exclamation-circle\"></i> ";
+                                                            //html_attr.Add("class", "btn btn-warning btn-shape btn-round btn-md center-block");
+                                                            if (objInitiaDisModel.Equals(objLastInitiaDisModel) || nLastDisplyedElement == nCount)
+                                                            {
+                                                                if (objInitiaDisModel.EventType == 4)
+                                                                {
+                                                                    html_attributes = "<p class=\"text-center status-orange Last-Element\"><button style=\"cursor:default;\" type=\"button\" class=\"btn btn-warning btn-shape btn-round btn-md center-block\" data-html=\"true\" data-toggle= \"popover\" data-placement=\"bottom\" data-content=\"" + info_msg_txt + "\"><i class=\"fa fa-exclamation-circle\"></i> <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                }
+                                                                else
+                                                                {
+                                                                    html_attributes = "<p class=\"text-center status-orange Last-Element\"><button type=\"button\" class=\"btn btn-warning btn-shape btn-round btn-md initialcenter-block\" data-html=\"true\" data-toggle= \"popover\" data-placement=\"bottom\" data-content=\"" + info_msg_txt + "\"><i class=\"fa fa-exclamation-circle\"></i><span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                if (objInitiaDisModel.EventType == 4)
+                                                                {
+                                                                    html_attributes = "<p class=\"text-center status-orange\"><button style=\"cursor:default;\" type=\"button\" class=\"btn btn-warning btn-shape btn-round btn-md center-block\" data-html=\"true\" data-toggle= \"popover\" data-placement=\"bottom\" data-content=\"" + info_msg_txt + "\"><i class=\"fa fa-exclamation-circle\"></i><span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                }
+                                                                else
+                                                                {
+                                                                    html_attributes = "<p class=\"text-center status-orange\"><button type=\"button\" class=\"btn btn-warning btn-shape btn-round btn-md initialcenter-block\" data-html=\"true\" data-toggle= \"popover\" data-placement=\"bottom\" data-content=\"" + info_msg_txt + "\"><i class=\"fa fa-exclamation-circle\"></i><span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                }
+                                                            }
+                                                            //html_attr.Add("data-html", "true");
+                                                            //html_attr.Add("data-toggle", "popover");
+                                                            //html_attr.Add("data-placement", "bottom");
+                                                            //html_attr.Add("data-content", info_msg_txt);
+                                                        }
+                                                        else if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusDoNotShow)
+                                                        {
+                                                            //no Action
+                                                            //display_text = "Not required";
+                                                            //html_attributes = "<p class=\"text-center status-green\"><button type=\"button\" class=\"btn btn-success btn-shape btn-arrow btn-md\" ><i class=\"fa fa-check-circle\"></i>  " + @display_text + "</button></p>";
+                                                        }
+                                                    }
+
+
+                                                    <td>
+                                                        @if (show_link)
+                                                        {
+                                                            if (IsNotRequiredLink)
+                                                            {
+                                                                <a href="#" onclick=" return false;">
+                                                                    @Html.Raw(html_attributes)
+                                                                </a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a href="@Url.Action(view_name, controller_name, controller_paramter)">
+                                                                    @Html.Raw(html_attributes)
+                                                                </a>
+                                                            }
+
+                                                        }
+                                                        else
+                                                        {
+                                                            @display_text
+                                                        }
+                                                    </td>
+                                                }
+                                            }
+
+                                                }
+                                            </tr>
+
+                                        }
+                                    }
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="insiders-initial-disclosure-edit" style="display:none">
+                            <h5 style="margin: -5px 0px 0px 0px;">@InsiderTrading.Common.Common.getResource("dis_lbl_52075")</h5>
+                            <table id="insiders-initial-disclosure-edit-table" class="data-table table table-bordered table-striped " style="margin: 10px 0px 0px 0px;">
+                                <thead>
+                                    <tr>
+                                        @{
+                                            string headerInsider = "";
+                                            headerEmployee = "Self and Relative";
+                                            <th class="text-center">@headerEmployee</th>
+                                            foreach (InsiderTrading.Models.InsiderInitialDisclosureModelInsider objInitiaDisModel in Model.InsiderInitialDisclosureModelInsider1)
+                                            {
+                                                if (@ViewBag.UserInfoId == objInitiaDisModel.UserInfoID)
+                                                {
+                                                    headerInsider = (objInitiaDisModel.EventType == 0) ? objInitiaDisModel.EventName : InsiderTrading.Common.Common.getResource(objInitiaDisModel.EventName);
+                                                    <th class="text-center">@headerInsider</th>
+                                                }
+                                            }
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        var UserGrouopInsider = Model.InsiderInitialDisclosureModelInsider1.GroupBy(x => x.UserInfoID).ToList();
+                                        for (int i = 0; i < UserGrouopInsider.Count; i++)
+                                        {
+                                            var userid = UserGrouopInsider[i].Key;
+                                            <tr>
+                                                @{
+                                            string display_text = "";
+                                            string display_text1 = "";
+                                            int policy_document_id = 0;
+                                            int document_file_id = 0;
+                                            int transcation_master_id = 0;
+
+                                            string btn_icon = "";
+                                            string info_msg_txt = "";
+                                            string view_name = "";
+                                            string controller_name = "#";
+                                            string html_attributes = "";
+
+                                            bool show_link = true; //this flag is used to show link to display text
+                                            bool show_text = true; //this flag is used to show display text
+                                            bool IsNotRequiredLink = false; //this flag is used to not show the link to display test (Not Reuired)
+                                            InsiderTrading.Models.InsiderInitialDisclosureModelInsider objLastInitiaDisModel = null;
+                                            if (Model != null && Model.InsiderInitialDisclosureModelEmployee1.Count > 0)
+                                            {
+                                                objLastInitiaDisModel = Model.InsiderInitialDisclosureModelInsider1.Last();
+                                            }
+                                            int nLastDisplyedElement = 0;
+                                            foreach (InsiderTrading.Models.InsiderInitialDisclosureModelInsider objInitiaDisModel in Model.InsiderInitialDisclosureModelInsider1)
+                                            {
+                                                if (userid == objInitiaDisModel.UserInfoID)
+                                                {
+                                                    if (objInitiaDisModel.StatusFlag != InsiderTrading.Common.ConstEnum.Code.EventStatusDoNotShow)
+                                                    {
+                                                        nLastDisplyedElement++;
+                                                    }
+                                                    if (objInitiaDisModel.UserTypeCodeID == 101003 || objInitiaDisModel.UserTypeCodeID == 101006)
+                                                    {
+                                                        display_text1 = "Self and relative";
+                                                    }
+                                                    else if (objInitiaDisModel.UserTypeCodeID == 101004)
+                                                    {
+                                                        display_text1 = "Self";
+                                                    }
+                                                    else
+                                                    {
+                                                        display_text1 = "Relative";
+                                                    }
+                                                }
+                                            }
+                                            int nCount = 0;
+                                            <td>
+                                                @display_text1
+                                            </td>
+                                            foreach (InsiderTrading.Models.InsiderInitialDisclosureModelInsider objInitiaDisModel in Model.InsiderInitialDisclosureModelInsider1)
+                                            {
+                                                if (userid == objInitiaDisModel.UserInfoID)
+                                                {
+                                                    nCount++;
+                                                    IsNotRequiredLink = false;
+                                                    RouteValueDictionary controller_paramter = new RouteValueDictionary();
+                                                    var html_attr = new Dictionary<string, object> { };
+
+                                                    display_text = (objInitiaDisModel.ResourceKey != null) ? InsiderTrading.Common.Common.getResource(objInitiaDisModel.ResourceKey) : "";
+
+                                                    show_link = (objInitiaDisModel.StatusFlag != InsiderTrading.Common.ConstEnum.Code.EventStatusDoNotShow) ? true : false;
+
+                                                    show_text = true; //set flag true for display text
+
+                                                    //check event type to know if its policy document or event
+                                                    //0 means policy document to view/agree and 1 means event like initial disclousure, softcopy, hardcopy submission
+                                                    if (objInitiaDisModel.EventType == 0)
+                                                    {
+                                                        policy_document_id = objInitiaDisModel.PolicyDocumentId;
+                                                        document_file_id = objInitiaDisModel.DocumentId;
+
+                                                        if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusCompleted)
+                                                        {
+                                                            view_name = "DisplayPolicy";
+                                                            controller_name = "InsiderInitialDisclosure";
+                                                            /*Show date*/
+                                                            display_text = (objInitiaDisModel.EventDate == null ? display_text : InsiderTrading.Common.Common.ApplyFormatting(objInitiaDisModel.EventDate, InsiderTrading.Common.ConstEnum.DataFormatType.Date));
+                                                            if (objInitiaDisModel.Equals(objLastInitiaDisModel) || nLastDisplyedElement == nCount)
+                                                            {
+                                                                html_attributes = "<p class=\"text-center status-green Last-Element\"><button type=\"button\" class=\"btn btn-success btn-shape btn-round btn-md\" ><i class=\"fa fa-check-circle\"></i> ><span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                            }
+                                                            else
+                                                            {
+                                                                html_attributes = "<p class=\"text-center status-green\"><button type=\"button\" class=\"btn btn-success btn-shape btn-arrow btn-md\" ><i class=\"fa fa-check-circle\"></i> <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                            }
+                                                            controller_paramter.Add("acid", acid);
+                                                            controller_paramter.Add("PolicyDocumentID", objInitiaDisModel.PolicyDocumentId);
+                                                            controller_paramter.Add("DocumentID", objInitiaDisModel.DocumentId);
+                                                            controller_paramter.Add("CalledFrom", "View");
+                                                            controller_paramter.Add("nUserInfoId", objInitiaDisModel.ParentUserInfoID);
+                                                            controller_paramter.Add("RequiredModuleID", InsiderTrading.Common.ConstEnum.Code.RequiredModuleOwnSecurity);
+
+                                                            btn_icon = "<i class=\"fa fa-check-circle\"></i> ";
+                                                        }
+                                                        else if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusPending)
+                                                        {
+                                                            view_name = "DisplayPolicy";
+                                                            controller_name = "InsiderInitialDisclosure";
+                                                            if (objInitiaDisModel.Equals(objLastInitiaDisModel) || nLastDisplyedElement == nCount)
+                                                            {
+                                                                html_attributes = "<p class=\"text-center status-orange Last-Element\"><button type=\"button\" class=\"btn btn-warning btn-shape btn-round btn-md center-block\" data-html=\"true\" data-toggle= \"popover\" data-placement=\"bottom\" data-content=\"" + InsiderTrading.Common.Common.getResource("dis_msg_17323") + "\"><i class=\"fa fa-exclamation-circle\"></i><span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                            }
+                                                            else
+                                                            {
+                                                                html_attributes = "<p class=\"text-center status-orange\"><button type=\"button\" class=\"btn btn-warning btn-shape btn-round btn-md center-block\" data-html=\"true\" data-toggle= \"popover\" data-placement=\"bottom\" data-content=\"" + InsiderTrading.Common.Common.getResource("dis_msg_17323") + "\"><i class=\"fa fa-exclamation-circle\"></i> <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                            }
+                                                            controller_paramter.Add("acid", acid);
+                                                            controller_paramter.Add("PolicyDocumentID", objInitiaDisModel.PolicyDocumentId);
+                                                            controller_paramter.Add("DocumentID", objInitiaDisModel.DocumentId);
+                                                            controller_paramter.Add("CalledFrom", "ViewAgree");
+                                                            controller_paramter.Add("nUserInfoId", objInitiaDisModel.ParentUserInfoID);
+                                                            controller_paramter.Add("RequiredModuleID", InsiderTrading.Common.ConstEnum.Code.RequiredModuleOwnSecurity);
+                                                        }
+                                                        else if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusDoNotShow)
+                                                        {
+                                                            //no Action
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        //check event type
+                                                        //1 = disclosure, 2 = soft copy, 3 = hard copy, 4 = stock exchange
+                                                        switch (objInitiaDisModel.EventType)
+                                                        {
+                                                            case 1: //Initial disclosure
+                                                                view_name = "Index";
+                                                                controller_name = "TradingTransaction";
+
+                                                                controller_paramter.Add("acid", acid);
+                                                                controller_paramter.Add("nDisclosureTypeCodeId", InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial);
+                                                                controller_paramter.Add("nUserInfoId", userid);
+                                                                controller_paramter.Add("ParentId", ViewBag.UserInfoId);
+                                                                controller_paramter.Add("nUserTypeCodeId", objInitiaDisModel.UserTypeCodeID);
+                                                                controller_paramter.Add("TransactionMasterId", objInitiaDisModel.TransactionMasterId);
+                                                                controller_paramter.Add("frm", "Insider");
+
+                                                                info_msg_txt = InsiderTrading.Common.Common.getResource("dis_msg_17320");
+                                                                break;
+                                                            case 2: //soft copy submission
+                                                                info_msg_txt = "";
+
+                                                                if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusCompleted)
+                                                                {
+
+                                                                    view_name = "ViewLetter";
+                                                                    controller_name = "TradingTransaction";
+
+                                                                    controller_paramter.Add("acid", acid_letterSubmission);
+                                                                    controller_paramter.Add("uid", objInitiaDisModel.ParentUserInfoID);
+                                                                    controller_paramter.Add("nTransactionLetterId", 0);
+                                                                    controller_paramter.Add("nTransactionMasterId", objInitiaDisModel.TransactionMasterId);
+                                                                    controller_paramter.Add("nDisclosureTypeCodeId", InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial);
+                                                                    controller_paramter.Add("nLetterForCodeId", InsiderTrading.Common.ConstEnum.Code.DisclosureLetterUserInsider);
+                                                                }
+                                                                else if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusPending)
+                                                                {
+                                                                    view_name = "CreateLetter";
+                                                                    controller_name = "TradingTransaction";
+
+                                                                    controller_paramter.Add("acid", acid_letterSubmission);
+                                                                    controller_paramter.Add("uid", objInitiaDisModel.ParentUserInfoID);
+                                                                    controller_paramter.Add("nTransactionLetterId", 0);
+                                                                    controller_paramter.Add("nTransactionMasterId", objInitiaDisModel.TransactionMasterId);
+                                                                    controller_paramter.Add("nDisclosureTypeCodeId", InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial);
+                                                                    controller_paramter.Add("nLetterForCodeId", InsiderTrading.Common.ConstEnum.Code.DisclosureLetterUserInsider);
+
+                                                                    info_msg_txt = InsiderTrading.Common.Common.getResource("dis_msg_17321");
+                                                                }
+                                                                else if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusNotRequired)
+                                                                {
+                                                                    view_name = "";
+                                                                    controller_name = "#";
+                                                                    IsNotRequiredLink = true;
+                                                                    if (objInitiaDisModel.Equals(objLastInitiaDisModel) || nLastDisplyedElement == nCount)
+                                                                    {
+                                                                        html_attributes = "<p class=\"text-center status-green Last-Element\"><button type=\"button\" style=\"cursor:default;\" class=\"btn btn-success btn-shape btn-round btn-md\" ><i class=\"fa fa-check-circle\"></i>  <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        html_attributes = "<p class=\"text-center status-green\"><button type=\"button\" style=\"cursor:default;\" class=\"btn btn-success btn-shape btn-arrow btn-md\" ><i class=\"fa fa-check-circle\"></i>  <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                    }
+                                                                }
+
+
+                                                                break;
+                                                            case 3: //hard copy submission
+                                                                info_msg_txt = "";
+
+                                                                if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusCompleted)
+                                                                {
+                                                                    view_name = "ViewHardCopy";
+                                                                    controller_name = "TradingTransaction";
+
+                                                                    controller_paramter.Add("acid", acid_letterSubmission);
+                                                                    controller_paramter.Add("nUserInfoId", objInitiaDisModel.ParentUserInfoID);
+                                                                    controller_paramter.Add("nDisclosureTypeCodeId", InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial);
+                                                                    controller_paramter.Add("nTransactionMasterId", objInitiaDisModel.TransactionMasterId);
+                                                                    controller_paramter.Add("CalledFrom", "ViewHardCopy");
+                                                                }
+                                                                else if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusPending)
+                                                                {
+                                                                    view_name = "UploadHardDocument";
+                                                                    controller_name = "TradingTransaction";
+
+                                                                    controller_paramter.Add("acid", acid_letterSubmission);
+                                                                    controller_paramter.Add("nDisclosureTypeCodeId", InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial);
+                                                                    controller_paramter.Add("nTransactionMasterId", objInitiaDisModel.TransactionMasterId);
+                                                                    controller_paramter.Add("nUserInfoId", objInitiaDisModel.ParentUserInfoID);
+
+                                                                    info_msg_txt = InsiderTrading.Common.Common.getResource("dis_msg_17322");
+                                                                }
+                                                                else if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusNotRequired)
+                                                                {
+                                                                    view_name = "";
+                                                                    controller_name = "#";
+
+                                                                    IsNotRequiredLink = true;
+                                                                    if (objInitiaDisModel.Equals(objLastInitiaDisModel) || nLastDisplyedElement == nCount)
+                                                                    {
+                                                                        html_attributes = "<p class=\"text-center status-green Last-Element\"><button style=\"cursor:default;\" type=\"button\" class=\"btn btn-success btn-shape btn-round btn-md\" ><i class=\"fa fa-check-circle\"></i> <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        html_attributes = "<p class=\"text-center status-green\"><button style=\"cursor:default;\" type=\"button\" class=\"btn btn-success btn-shape btn-arrow btn-md\" ><i class=\"fa fa-check-circle\"></i> <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                    }
+                                                                }
+
+                                                                break;
+                                                            case 4: //stock exchange submission
+                                                                if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusCompleted)
+                                                                {
+
+                                                                    view_name = "";
+                                                                    controller_name = "#";
+
+                                                                    IsNotRequiredLink = true;
+                                                                }
+                                                                else if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusPending)
+                                                                {
+                                                                    view_name = "";
+                                                                    controller_name = "#";
+                                                                    IsNotRequiredLink = true;
+                                                                }
+                                                                else if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusNotRequired)
+                                                                {
+                                                                    view_name = "";
+                                                                    controller_name = "#";
+                                                                    IsNotRequiredLink = true;
+                                                                }
+
+                                                                info_msg_txt = "";
+                                                                break;
+                                                        }
+
+                                                        if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusCompleted)
+                                                        {
+                                                            //btn_icon = "<i class=\"fa fa-check-circle\"></i> ";
+                                                            display_text = InsiderTrading.Common.Common.ApplyFormatting(objInitiaDisModel.EventDate, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+                                                            if (objInitiaDisModel.Equals(objLastInitiaDisModel) || nLastDisplyedElement == nCount)
+                                                            {
+                                                                if (objInitiaDisModel.EventType == 4)
+                                                                {
+                                                                    html_attributes = "<p class=\"text-center status-green Last-Element\"><button type=\"button\" style=\"cursor:default;\" class=\"btn btn-success btn-shape btn-round btn-md\" ><i class=\"fa fa-check-circle\"></i>  <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                }
+                                                                else
+                                                                {
+                                                                    if (objInitiaDisModel.EventType == 1)
+                                                                    {
+                                                                        if (objInitiaDisModel.IsEnterAndUploadEvent != 1)
+                                                                        {
+                                                                            html_attributes = "<p class=\"text-center status-green Last-Element\"><button type=\"button\" class=\"btn btn-success btn-shape btn-round btn-md\" ><i class=\"fa fa-check-circle\"></i>  <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            html_attributes = "<p class=\"text-center status-green Last-Element\"><button type=\"button\" class=\"btn btn-success btn-shape btn-round btn-md\" ><i class=\"fa fa-check-circle\"></i>  <span class=\"text-transform\"> " + @display_text + "</span>&nbsp;&nbsp;<i class=\"ico ico-document\"></i></button></p>";
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        html_attributes = "<p class=\"text-center status-green Last-Element\"><button type=\"button\" class=\"btn btn-success btn-shape btn-round btn-md\" ><i class=\"fa fa-check-circle\"></i>  <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                    }
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                if (objInitiaDisModel.EventType == 4)
+                                                                {
+                                                                    html_attributes = "<p class=\"text-center status-green\"><button type=\"button\" style=\"cursor:default;\" class=\"btn btn-success btn-shape btn-arrow btn-md\" ><i class=\"fa fa-check-circle\"></i>  <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                }
+                                                                else
+                                                                {
+                                                                    if (objInitiaDisModel.IsEnterAndUploadEvent == 1)
+                                                                    {
+                                                                        if (objInitiaDisModel.IsEnterAndUploadEvent != 1)
+                                                                        {
+                                                                            html_attributes = "<p class=\"text-center status-green\"><button type=\"button\" class=\"btn btn-success btn-shape btn-arrow btn-md\" ><i class=\"fa fa-check-circle\"></i>  <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            html_attributes = "<p class=\"text-center status-green\"><button type=\"button\" class=\"btn btn-success btn-shape btn-arrow btn-md\" ><i class=\"fa fa-check-circle\"></i>  <span class=\"text-transform\"> " + @display_text + "</span>&nbsp;&nbsp;<i class=\"ico ico-document\"></i></button></p>";
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        html_attributes = "<p class=\"text-center status-green\"><button type=\"button\" class=\"btn btn-success btn-shape btn-arrow btn-md\" ><i class=\"fa fa-check-circle\"></i>  <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                    }
+                                                                }
+                                                            }
+                                                            // html_attr.Add("class", "btn btn-success btn-shape btn-arrow btn-md");
+                                                            /*Show date*/
+                                                        }
+                                                        else if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusPending)
+                                                        {
+                                                            //btn_icon = "<i class=\"fa fa-exclamation-circle\"></i> ";
+                                                            //html_attr.Add("class", "btn btn-warning btn-shape btn-round btn-md center-block");
+                                                            if (objInitiaDisModel.Equals(objLastInitiaDisModel) || nLastDisplyedElement == nCount)
+                                                            {
+                                                                if (objInitiaDisModel.EventType == 4)
+                                                                {
+                                                                    html_attributes = "<p class=\"text-center status-orange Last-Element\"><button style=\"cursor:default;\" type=\"button\" class=\"btn btn-warning btn-shape btn-round btn-md center-block\" data-html=\"true\" data-toggle= \"popover\" data-placement=\"bottom\" data-content=\"" + info_msg_txt + "\"><i class=\"fa fa-exclamation-circle\"></i> <span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                }
+                                                                else
+                                                                {
+                                                                    html_attributes = "<p class=\"text-center status-orange Last-Element\"><button type=\"button\" class=\"btn btn-warning btn-shape btn-round btn-md initialcenter-block\" data-html=\"true\" data-toggle= \"popover\" data-placement=\"bottom\" data-content=\"" + info_msg_txt + "\"><i class=\"fa fa-exclamation-circle\"></i><span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                if (objInitiaDisModel.EventType == 4)
+                                                                {
+                                                                    html_attributes = "<p class=\"text-center status-orange\"><button style=\"cursor:default;\" type=\"button\" class=\"btn btn-warning btn-shape btn-round btn-md center-block\" data-html=\"true\" data-toggle= \"popover\" data-placement=\"bottom\" data-content=\"" + info_msg_txt + "\"><i class=\"fa fa-exclamation-circle\"></i><span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                }
+                                                                else
+                                                                {
+                                                                    html_attributes = "<p class=\"text-center status-orange\"><button type=\"button\" class=\"btn btn-warning btn-shape btn-round btn-md initialcenter-block\" data-html=\"true\" data-toggle= \"popover\" data-placement=\"bottom\" data-content=\"" + info_msg_txt + "\"><i class=\"fa fa-exclamation-circle\"></i><span class=\"text-transform\"> " + @display_text + "</span></button></p>";
+                                                                }
+                                                            }
+                                                            //html_attr.Add("data-html", "true");
+                                                            //html_attr.Add("data-toggle", "popover");
+                                                            //html_attr.Add("data-placement", "bottom");
+                                                            //html_attr.Add("data-content", info_msg_txt);
+                                                        }
+                                                        else if (objInitiaDisModel.StatusFlag == InsiderTrading.Common.ConstEnum.Code.EventStatusDoNotShow)
+                                                        {
+                                                            //no Action
+                                                            //display_text = "Not required";
+                                                            //html_attributes = "<p class=\"text-center status-green\"><button type=\"button\" class=\"btn btn-success btn-shape btn-arrow btn-md\" ><i class=\"fa fa-check-circle\"></i>  " + @display_text + "</button></p>";
+                                                        }
+                                                    }
+
+
+                                                    <td>
+                                                        @if (show_link)
+                                                        {
+                                                            if (IsNotRequiredLink)
+                                                            {
+                                                                <a href="#" onclick=" return false;">
+                                                                    @Html.Raw(html_attributes)
+                                                                </a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a href="@Url.Action(view_name, controller_name, controller_paramter)">
+                                                                    @Html.Raw(html_attributes)
+                                                                </a>
+                                                            }
+
+                                                        }
+                                                        else
+                                                        {
+                                                            @display_text
+                                                        }
+                                                    </td>
+                                                }
+                                            }
+
+                                                }
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" value=@ViewBag.IsFirstLogin id="IsFirstLogin" />
+    @if (ViewBag.show_cancel_btn == true)
+    {
+        <a class="btn btn-success" href='@Url.Action("Index", "COInitialDisclosure", new { acid = InsiderTrading.Common.ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_INITIAL_DISCLOSURE , ReqModuleId = InsiderTrading.Common.ConstEnum.Code.RequiredModuleOwnSecurity})' role="button"> @InsiderTrading.Common.Common.getResource("com_btn_14010")</a>
+    }
+</section>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        //$('[data-toggle="popover"]:first').popover('show');
+        //$('.popover-title').append('<button id="popovercloseid" type="button" class="close">&times;</button>');
+        //$(this).popover();
+
+        $(document).delegate('#popovercloseid', 'click', function (event) {
+            $('[data-toggle="popover"]').popover('hide');
+        });
+
+        $(document).delegate(".btn-warning:first", 'mouseenter', function (event) {
+            $('[data-toggle="popover"]:first').popover('show');
+            $('.popover-title').append('<button id="popovercloseid" type="button" class="close">&times;</button>');
+            $(this).popover();
+        });
+
+    });
+</script>
+
+<script type="text/javascript">
+    if ('@ViewBag.Change_Btn_Color' == 'True') {
+        $("#btn_OwnSecurities_Details").removeClass("btn-success").addClass("btn-warning");
+    }
+
+    if ('@ViewBag.UsrTypeCodeId' == '@InsiderTrading.Common.ConstEnum.Code.EmployeeType' && '@ViewBag.RequiredModuleID' == '513003' && '@ViewBag.TradingPolicyID_OS' != '0') {
+        $(".panel_css").css("border-top-color", "orange");
+        $(".panel_css").css("border-top-width", "initial");
+        $(".panel_css").css("margin", "-41px 0px 0px 0px");
+        $("#btn_OwnSecurities_Details").css("border-radius", "0");
+        $("#btn_OwnSecurities_Details").css("border", "none");
+        $("#btn_OtherSecurities_Details").css("border-radius", "0");
+        $("#btn_OtherSecurities_Details").css("border", "none");
+    }
+    else if ('@ViewBag.UsrTypeCodeId' == '@InsiderTrading.Common.ConstEnum.Code.EmployeeType' && '@ViewBag.RequiredModuleID' == '513003' && '@ViewBag.TradingPolicyID_OS' == '0') {
+        $(".panel_css").css("border-top-color", "");
+        $(".panel_css").css("border-top-width", "");
+        $(".panel_css").css("margin", "");
+        $("#btn_OwnSecurities_Details").hide();
+        $("#btn_OtherSecurities_Details").hide();
+    }
+</script>
+
+

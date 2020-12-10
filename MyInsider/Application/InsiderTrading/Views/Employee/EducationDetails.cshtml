@@ -1,0 +1,654 @@
+﻿@model InsiderTrading.Models.EmployeeModel
+@{
+    ViewBag.Title = InsiderTrading.Common.Common.getResource("usr_ttl_11238");
+    InsiderTrading.Common.LoginUserDetails objLoginUserDetails = (InsiderTrading.Common.LoginUserDetails)InsiderTrading.Common.Common.GetSessionValue(InsiderTrading.Common.ConstEnum.SessionValue.UserDetails);
+    var acid = (objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.Admin || objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.CorporateUserType) ? InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_CREATE : InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_EDIT;
+}
+
+
+@Styles.Render("~/content/SW360")@Scripts.Render("~/bundles/employee")
+
+@Html.Partial("~/Views/Common/PersonalDetailsBreadcrumbs.cshtml")
+
+<section class="content">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="row">
+            <div id="EmpInfo">
+                <div class="panel-group" id="accordion">
+                    <div class="panel panel-accordion">
+                        <div class="panel-heading active">
+                            <h4 class="panel-title">
+                                @InsiderTrading.Common.Common.getResource("usr_lbl_54002")
+                            </h4>
+                        </div>
+                        @using (Html.BeginForm("EducationDetails", "Employee", new { ReturnUrl = ViewBag.ReturnUrl, acid = ViewBag.acid, nUserInfoID = Model.userEducationModel.UserInfoID, nUserDematSaved = ViewBag.UserDematSaved, nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"], formId = InsiderTrading.Common.ConstEnum.Code.frmAddEducationDetails }, FormMethod.Post, new { @id = "EditEducaionForm", role = "form", autocomplete = "off" }))
+                        {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+                        @Html.Hidden("acid", (int)@ViewBag.acid)
+                        <div style="display:none">
+                            @Html.TextBoxFor(m => m.userEducationModel.UEW_id, new { @class = "form-control", id = "txtUEW_ID" })
+                        </div>
+                        <div class="panel-body">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                        <div role="form">
+                                            <div class="form-group">
+                                                @Html.LabelFor(m => m.userEducationModel.InstituteName)
+                                                @Html.TextBoxFor(m => m.userEducationModel.InstituteName, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userEducationModel.InstituteName).ToString(), Html.ActivityResourceKeyFor(m => m.userEducationModel.InstituteName).ToString(), new { @class = "form-control", id = "txtInstituteName" }))
+                                                @Html.HiddenFor(model => model.userEducationModel.InstituteName)
+                                                @Html.ValidationMessageFor(m => m.userEducationModel.InstituteName)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                        <div role="form">
+                                            <div class="form-group">
+                                                @Html.LabelFor(m => m.userEducationModel.CourseName)
+                                                @Html.TextBoxFor(m => m.userEducationModel.CourseName, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userEducationModel.CourseName).ToString(), Html.ActivityResourceKeyFor(m => m.userEducationModel.CourseName).ToString(), new { @class = "form-control", id = "txtCourseName" }))
+                                                @Html.HiddenFor(model => model.userEducationModel.CourseName)
+                                                @Html.ValidationMessageFor(m => m.userEducationModel.CourseName)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                        <div role="form">
+                                            <div class="form-group">
+                                                @Html.LabelFor(m => m.userEducationModel.PassingMonth)
+                                                @Html.DropDownListFor(m => m.userEducationModel.PassingMonth, (IEnumerable<SelectListItem>)Model.userEducationModel.MonthList, "Select Month", InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userEducationModel.PassingMonth).ToString(), Html.ActivityResourceKeyFor(m => m.userEducationModel.PassingMonth).ToString(), new { @class = "form-control", id = "ddlMonth" }))
+                                                @Html.HiddenFor(model => model.userEducationModel.PassingMonth)
+                                                @Html.ValidationMessageFor(m => m.userEducationModel.PassingMonth)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                        <div class="row">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(m => m.userEducationModel.PassingYear)
+                                                    @Html.DropDownListFor(model => model.userEducationModel.PassingYear, Enumerable.Range(DateTime.Now.AddYears(-69).Year, 70).Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString() }).OrderByDescending(s => s.Value), "Select Year", InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userEducationModel.PassingYear).ToString(), Html.ActivityResourceKeyFor(m => m.userEducationModel.PassingYear).ToString(), new { @class = "form-control", id = "ddlPassingYear" }))
+                                                    @Html.HiddenFor(model => model.userEducationModel.PassingYear)
+                                                    @Html.ValidationMessageFor(m => m.userEducationModel.PassingYear)
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 left">
+                                <div role="form">
+                                    <button type="submit" class="btn btn-success" id="emp_detail_save"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("usr_btn_54013")</button>
+                                    <a class="btn btn-success" href='@Url.Action("EducationDetails", "Employee", new { acid = acid, nUserInfoID = Model.userEducationModel.UserInfoID, UEW_id = 0, Falg = "DEFAULT", nUserDematSaved = true, nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] })' role="button"> @InsiderTrading.Common.Common.getResource("usr_btn_54014") </a>
+                                </div>
+                            </div>
+                        </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+            <div id="EmpWork">
+                <div class="panel-group" id="accordion">
+                    <div class="panel panel-accordion">
+                        <div class="panel-heading active">
+                            <h4 class="panel-title">
+                                @InsiderTrading.Common.Common.getResource("usr_lbl_54007")
+                            </h4>
+                        </div>
+                        @using (Html.BeginForm("WorkDetails", "Employee", new { ReturnUrl = ViewBag.ReturnUrl, acid = ViewBag.acid, nUserInfoID = Model.userEducationModel.UserInfoID, nUserDematSaved = ViewBag.UserDematSaved, nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] }, FormMethod.Post, new { @id = "EditWorkForm", role = "form", autocomplete = "off" }))
+                        {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+                        <div class="panel-body">
+
+                            @Html.Hidden("acid", (int)@ViewBag.acid)
+                            <div style="display:none">
+                                @Html.TextBoxFor(m => m.userEducationModel.UEW_id, new { @class = "form-control", id = "txtUEW_ID" })
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(m => m.userEducationModel.Employer)
+                                                    @Html.TextBoxFor(m => m.userEducationModel.Employer, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userEducationModel.Employer).ToString(), Html.ActivityResourceKeyFor(m => m.userEducationModel.Employer).ToString(), new { @class = "form-control", id = "txtEmployer" }))
+                                                    @Html.HiddenFor(model => model.userEducationModel.Employer)
+                                                    @Html.ValidationMessageFor(m => m.userEducationModel.Employer)
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(m => m.userEducationModel.Designation)
+                                                    @Html.TextBoxFor(m => m.userEducationModel.Designation, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userEducationModel.Designation).ToString(), Html.ActivityResourceKeyFor(m => m.userEducationModel.Designation).ToString(), new { @class = "form-control", id = "txtDesignation" }))
+                                                    @Html.HiddenFor(model => model.userEducationModel.Designation)
+                                                    @Html.ValidationMessageFor(m => m.userEducationModel.Designation)
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(m => m.userEducationModel.From_Month)
+                                                    @Html.DropDownListFor(m => m.userEducationModel.From_Month, (IEnumerable<SelectListItem>)Model.userEducationModel.MonthList, "Select Month", InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userEducationModel.From_Month).ToString(), Html.ActivityResourceKeyFor(m => m.userEducationModel.From_Month).ToString(), new { @class = "form-control", id = "ddlFrom_Month" }))
+                                                    @Html.HiddenFor(model => model.userEducationModel.From_Month)
+                                                    @Html.ValidationMessageFor(m => m.userEducationModel.From_Month)
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(m => m.userEducationModel.From_Year)
+                                                    @Html.DropDownListFor(model => model.userEducationModel.From_Year, Enumerable.Range(DateTime.Now.AddYears(-69).Year, 70).Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString() }).OrderByDescending(s => s.Value), "Select Year", InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userEducationModel.From_Year).ToString(), Html.ActivityResourceKeyFor(m => m.userEducationModel.From_Year).ToString(), new { @class = "form-control", id = "ddlFrom_Year" }))
+                                                    @Html.HiddenFor(model => model.userEducationModel.From_Year)
+                                                    @Html.ValidationMessageFor(m => m.userEducationModel.From_Year)
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(m => m.userEducationModel.To_Month)
+                                                    @Html.DropDownListFor(m => m.userEducationModel.To_Month, (IEnumerable<SelectListItem>)Model.userEducationModel.MonthList, "Select Month", InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userEducationModel.To_Month).ToString(), Html.ActivityResourceKeyFor(m => m.userEducationModel.To_Month).ToString(), new { @class = "form-control", id = "ddlTo_Month" }))
+                                                    @Html.HiddenFor(model => model.userEducationModel.To_Month)
+                                                    @Html.ValidationMessageFor(m => m.userEducationModel.To_Month)
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(m => m.userEducationModel.To_Year)
+                                                    @Html.DropDownListFor(model => model.userEducationModel.To_Year, Enumerable.Range(DateTime.Now.AddYears(-69).Year, 70).Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString() }).OrderByDescending(s => s.Value), "Select Year", InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userEducationModel.To_Year).ToString(), Html.ActivityResourceKeyFor(m => m.userEducationModel.To_Year).ToString(), new { @class = "form-control", id = "ddlTo_Year" }))
+                                                    @Html.HiddenFor(model => model.userEducationModel.To_Year)
+                                                    @Html.ValidationMessageFor(m => m.userEducationModel.To_Year)
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 left">
+                                    <div role="form">
+                                        <button type="submit" class="btn btn-success" id="emp_Workdetail_save"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("usr_btn_54008")</button>
+                                        <a class="btn btn-success" href='@Url.Action("EducationDetails", "Employee", new { acid = acid, nUserInfoID = Model.userEducationModel.UserInfoID, UEW_id = 0, Falg = "DEFAULT", nUserDematSaved = true, nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] })' role="button"> @InsiderTrading.Common.Common.getResource("usr_btn_54009") </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="RelGrid">
+            <div class="panel panel-accordion">
+                <div class="panel-heading active">
+                    <h4 class="panel-title">
+                        @InsiderTrading.Common.Common.getResource("usr_lbl_54029")
+                    </h4>
+                </div>
+                <div class="panel-body">
+                    @if (Model != null)
+                    {
+                        @Html.Partial("~/Views/Common/CreateUserEducationDetails.cshtml", Model);
+
+                    }
+                        <div class="row" id="confirmbtn">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                <a class="btn btn-success" style="display:none" id="ConfirmEductionDetails" href='@Url.Action("CreateRelative", "Employee", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_EDIT, nParentID = Session["UserInfoId"], nUserEducationSaved = true, nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] })' role="button"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("usr_btn_50769")</a>
+
+                            </div>
+                        </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+    </div>
+</section>
+
+<div class="container">
+    <!-- Modal -->
+    <div class="modal fade" id="myModalEdu" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    @InsiderTrading.Common.Common.getResource("usr_msg_54055")
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-success " href='@Url.Action("CreateRelative", "Employee", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_EDIT, nParentID = Session["UserInfoId"], nUserEducationSaved = false, nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] })' id="btnUserDontDetailsConfirm" style="float: left; margin: 0px 15px 10px 0; role :button;">Yes</a>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#EmpWork').hide();
+        $('#EmpInfo').hide();
+
+
+        //$(document).delegate("#emp_detail_save", "click", function () {
+
+        //    $("body").addClass("loading");
+
+        //});
+        //$(document).delegate("#emp_Workdetail_save", "click", function () {
+
+        //    $("body").addClass("loading");
+
+        //});
+        $(document).delegate("#AddEducationDetails", "click", function () {
+
+            $('#RelCreateGrid').show();
+            $('#EmpInfo').show();
+            $("#ConfirmDetails").hide();
+            $('#RelGrid').hide();
+            $('#ConfirmEductionDetails').hide();
+
+            if (!$("#EmpInfo").is(':hidden')) {
+                $('#confirmbtn').hide();
+
+            }
+
+        });
+        $(document).delegate("#AddWorkDetails", "click", function () {
+            $("#Id").val(0);
+            $('#RelCreateGrid').show();
+            $('#EmpWork').show();
+            $('#EmpInfo').hide();
+            $("#ConfirmDetails").hide();
+            $('#RelGrid').hide();
+            $('#ConfirmEductionDetails').hide();
+
+            if (!$("#EmpWork").is(':hidden')) {
+                $('#confirmbtn').hide();
+
+            }
+
+        });
+
+
+        $(document).delegate("#emp_detail_cancel", "click", function () {
+            $('#RelCreateGrid').hide();
+            $('#EmpInfo').hide();
+            $("#ConfirmDetails").show();
+            $('#RelGrid').show();
+
+
+        });
+        $(document).delegate("#emp_Workdetail_cancel", "click", function () {
+            $('#RelCreateGrid').hide();
+            $('#EmpInfo').hide();
+            $('#EmpWork').hide();
+            $("#ConfirmDetails").show();
+            $('#RelGrid').show();
+
+        });
+        if ('@ViewBag.acid' == 7 && '@ViewBag.ISEducation' == '1') {
+            $('#EmpInfo').show();
+            $('#EmpWork').hide();
+            $('#RelGrid').hide();
+            $('#ConfirmEductionDetails').hide();
+        }
+        else if ('@ViewBag.acid' == 7 && '@ViewBag.ISEducation' == '2') {
+            $('#EmpInfo').hide();
+            $('#EmpWork').show();
+            $('#RelGrid').hide();
+            $('#ConfirmEductionDetails').hide();
+        }
+
+        //passing month and year check
+        $(document).delegate("#ddlMonth", 'change', function () {
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+
+            const currentMonth = new Date().getMonth();
+
+            if (monthNames.indexOf($('#ddlMonth').val()) > currentMonth && (new Date().getFullYear()) == $('#ddlPassingYear').val()) {
+                $('#ddlMonth').val('Select Month');
+                DisplayErrorMessageEdu('@InsiderTrading.Common.Common.getResource("usr_msg_54049")');
+            }
+
+        });
+        $(document).delegate("#ddlPassingYear", 'change', function () {
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+
+            const currentMonth = new Date().getMonth();
+
+            if (monthNames.indexOf($('#ddlMonth').val()) > currentMonth && (new Date().getFullYear()) == $('#ddlPassingYear').val()) {
+                $('#ddlMonth').val('Select Month');
+                DisplayErrorMessageEdu('@InsiderTrading.Common.Common.getResource("usr_msg_54049")');
+
+            }
+
+        });
+
+
+        //From month and year check
+
+
+        $(document).delegate("#ddlFrom_Month", 'change', function () {
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+
+            const currentMonth = new Date().getMonth();
+            const currentYear = new Date().getFullYear();
+
+
+            if (monthNames.indexOf($('#ddlTo_Month').val()) > currentMonth && currentYear == $('#ddlTo_Year').val()) {
+                $('#ddlTo_Month').val('Select Month');
+                DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54049")');
+            }
+            else if ((monthNames.indexOf($('#ddlTo_Month').val()) < currentMonth && $('#ddlFrom_Year').val() == $('#ddlTo_Year').val()) && (monthNames.indexOf($('#ddlFrom_Month').val()) > monthNames.indexOf($('#ddlTo_Month').val())) && $('#ddlTo_Month').val() != '') {
+                if ($('#ddlFrom_Year').val() > $('#ddlTo_Year').val()) {
+                    DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54056")');
+                    $('#ddlTo_Month').val('Select Month');
+                }
+                else if (($('#ddlFrom_Year').val() == $('#ddlTo_Year').val()) && (monthNames.indexOf($('#ddlFrom_Month').val()) > monthNames.indexOf($('#ddlTo_Month').val())) && $('#ddlTo_Month').val() != '') {
+
+                    DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54056")');
+                    $('#ddlTo_Month').val('Select Month');
+                }
+
+
+            }
+
+            if (($('#ddlFrom_Year').val() > $('#ddlTo_Year').val() && $('#ddlTo_Year').val() != "")) {
+                DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54052")');
+                $('#ddlTo_Year').val('Select Year');
+
+            }
+            if (($('#ddlFrom_Year').val() == currentYear && (monthNames.indexOf($('#ddlFrom_Month').val()) > currentMonth))) {
+                DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54049")');
+                $('#ddlFrom_Month').val('Select Month');
+
+            }
+            if (($('#ddlFrom_Year').val() == $('#ddlTo_Year').val() && monthNames.indexOf($('#ddlFrom_Month').val()) > monthNames.indexOf($('#ddlTo_Month').val()) && $('#ddlTo_Year').val() != "")) {
+                DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54056")');
+                $('#ddlTo_Month').val('Select Month');
+            }
+
+        });
+        $(document).delegate("#ddlFrom_Year", 'change', function () {
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+
+            const currentMonth = new Date().getMonth();
+            const currentYear = new Date().getFullYear();
+
+            if (($('#ddlFrom_Year').val() == currentYear && (monthNames.indexOf($('#ddlFrom_Month').val()) > currentMonth))) {
+                DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54049")');
+                $('#ddlFrom_Month').val('Select Month');
+
+            }
+
+            if (monthNames.indexOf($('#ddlTo_Month').val()) > currentMonth && currentYear == $('#ddlTo_Year').val()) {
+                $('#ddlTo_Month').val('Select Month');
+                DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54049")');
+            }
+            else if ((monthNames.indexOf($('#ddlTo_Month').val()) < currentMonth && $('#ddlFrom_Year').val() == $('#ddlTo_Year').val()) && (monthNames.indexOf($('#ddlFrom_Month').val()) > monthNames.indexOf($('#ddlTo_Month').val())) && $('#ddlTo_Month').val() != '') {
+                if ($('#ddlFrom_Year').val() > $('#ddlTo_Year').val()) {
+                    DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54056")');
+                    $('#ddlTo_Month').val('Select Month');
+                }
+                else if (($('#ddlFrom_Year').val() == $('#ddlTo_Year').val()) && (monthNames.indexOf($('#ddlFrom_Month').val()) > monthNames.indexOf($('#ddlTo_Month').val())) && $('#ddlTo_Month').val() != '') {
+
+                    DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54056")');
+                    $('#ddlTo_Month').val('Select Month');
+                }
+            }
+
+            if (($('#ddlFrom_Year').val() > $('#ddlTo_Year').val() && $('#ddlTo_Year').val() != "")) {
+                DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54052")');
+                $('#ddlTo_Year').val('Select Year');
+
+            }
+
+            if (($('#ddlFrom_Year').val() == $('#ddlTo_Year').val() && monthNames.indexOf($('#ddlFrom_Month').val()) > monthNames.indexOf($('#ddlTo_Month').val()) && $('#ddlTo_Year').val() != "")) {
+                DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54056")');
+                $('#ddlTo_Month').val('Select Month');
+            }
+
+        });
+
+
+        //To month and year check
+
+        $(document).delegate("#ddlTo_Month", 'change', function () {
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+
+            const currentMonth = new Date().getMonth();
+            const currentYear = new Date().getFullYear();
+
+            if (monthNames.indexOf($('#ddlTo_Month').val()) > currentMonth && currentYear == $('#ddlTo_Year').val()) {
+                $('#ddlTo_Month').val('Select Month');
+                DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54049")');
+            }
+            else if ((monthNames.indexOf($('#ddlTo_Month').val()) < currentMonth && $('#ddlFrom_Year').val() == $('#ddlTo_Year').val()) && (monthNames.indexOf($('#ddlFrom_Month').val()) > monthNames.indexOf($('#ddlTo_Month').val())) && $('#ddlTo_Month').val() != '') {
+                if ($('#ddlFrom_Year').val() > $('#ddlTo_Year').val()) {
+                    DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54056")');
+                    $('#ddlTo_Month').val('Select Month');
+                }
+                else if (($('#ddlFrom_Year').val() == $('#ddlTo_Year').val()) && (monthNames.indexOf($('#ddlFrom_Month').val()) > monthNames.indexOf($('#ddlTo_Month').val())) && $('#ddlTo_Month').val() != '') {
+
+                    DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54056")');
+                    $('#ddlTo_Month').val('Select Month');
+                }
+
+
+            }
+            if (($('#ddlFrom_Year').val() == $('#ddlTo_Year').val() && monthNames.indexOf($('#ddlFrom_Month').val()) > monthNames.indexOf($('#ddlTo_Month').val()) && $('#ddlTo_Year').val() != "")) {
+                DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54056")');
+                $('#ddlTo_Month').val('Select Month');
+            }
+            if (($('#ddlFrom_Year').val() > $('#ddlTo_Year').val() && $('#ddlTo_Year').val() != "")) {
+                DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54052")');
+                $('#ddlTo_Year').val('Select Year');
+
+            }
+            if (($('#ddlFrom_Year').val() = currentYear) && (monthNames.indexOf($('#ddlFrom_Month').val()) > currentMonth)) {
+
+                DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54049")');
+                $('#ddlFrom_Month').val('Select Month');
+
+            }
+            if (($('#ddlTo_Year').val() = currentYear) && (monthNames.indexOf($('#ddlTo_Month').val()) > currentMonth)) {
+
+                DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54049")');
+                $('#ddlTo_Month').val('Select Month');
+
+            }
+
+        });
+        $(document).delegate("#ddlTo_Year", 'change', function () {
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+
+            const currentMonth = new Date().getMonth();
+            const currentYear = new Date().getFullYear();
+
+            if (monthNames.indexOf($('#ddlTo_Month').val()) > currentMonth && currentYear == $('#ddlTo_Year').val()) {
+                $('#ddlTo_Month').val('Select Month');
+                DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54049")');
+            }
+            else if ((monthNames.indexOf($('#ddlTo_Month').val()) < currentMonth && $('#ddlFrom_Year').val() == $('#ddlTo_Year').val()) && (monthNames.indexOf($('#ddlFrom_Month').val()) > monthNames.indexOf($('#ddlTo_Month').val())) && $('#ddlTo_Month').val() != '') {
+                if ($('#ddlFrom_Year').val() > $('#ddlTo_Year').val()) {
+                    DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54056")');
+                    $('#ddlTo_Month').val('Select Month');
+                }
+                else if (($('#ddlFrom_Year').val() == $('#ddlTo_Year').val()) && (monthNames.indexOf($('#ddlFrom_Month').val()) > monthNames.indexOf($('#ddlTo_Month').val())) && $('#ddlTo_Month').val() != '') {
+
+                    DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54056")');
+                    $('#ddlTo_Month').val('Select Month');
+                }
+
+
+            }
+            if (($('#ddlFrom_Year').val() == $('#ddlTo_Year').val() && monthNames.indexOf($('#ddlFrom_Month').val()) > monthNames.indexOf($('#ddlTo_Month').val()) && $('#ddlTo_Year').val() != "")) {
+                DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54056")');
+                $('#ddlTo_Month').val('Select Month');
+            }
+
+            if (($('#ddlFrom_Year').val() > $('#ddlTo_Year').val() && $('#ddlTo_Year').val() != "")) {
+                DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54052")');
+                $('#ddlTo_Year').val('Select Year');
+
+            }
+            if (($('#ddlFrom_Year').val() = currentYear) && (monthNames.indexOf($('#ddlFrom_Month').val()) > currentMonth)) {
+
+                DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54049")');
+                $('#ddlFrom_Month').val('Select Month');
+
+            }
+            if (($('#ddlTo_Year').val() = currentYear) && (monthNames.indexOf($('#ddlTo_Month').val()) > currentMonth)) {
+
+                DisplayErrorMessage('@InsiderTrading.Common.Common.getResource("usr_msg_54049")');
+                $('#ddlTo_Month').val('Select Month');
+
+            }
+
+        });
+
+        if ('@ViewBag.Confirm_PersonalDetails_Required' != 'True') {
+            $("#btn_GetUserDetails").removeClass("btn-warning").addClass("btn-success");
+            $("#btn_GetUserDematDetails").removeClass("btn-danger").addClass("btn-success");
+            $("#btn_GetUserEducationDetails").removeClass("btn-danger").addClass("btn-success");
+            $("#btn_GetUserRelativeDetails").removeClass("btn-danger").addClass("btn-success");
+            $("#btn_ConfirmDetails").removeClass("btn-danger").addClass("btn-success");
+        }
+        else if ('@ViewBag.Confirm_PersonalDetails_Required' == 'True' && '@ViewBag.UserDematSaved' != 'True') {
+            $("#btn_GetUserDetails").removeClass("btn-warning").addClass("btn-success");
+            $("#btn_GetUserDematDetails").removeClass("btn-danger").addClass("btn-success");
+            $("#btn_GetUserEducationDetails").removeClass("btn-danger").addClass("btn-warning");
+            $("#btn_GetUserRelativeDetails").removeClass("btn-danger").addClass("btn-danger");
+            $("#btn_ConfirmDetails").removeClass("btn-danger").addClass("btn-danger");
+        }
+        else if ('@ViewBag.Confirm_PersonalDetails_Required' == 'True' && '@ViewBag.UserDematSaved' == 'True') {
+            $("#btn_GetUserDetails").removeClass("btn-warning").addClass("btn-success");
+            $("#btn_GetUserDematDetails").removeClass("btn-danger").addClass("btn-success");
+            $("#btn_GetUserEducationDetails").removeClass("btn-danger").addClass("btn-warning");
+            $("#btn_GetUserRelativeDetails").removeClass("btn-danger").addClass("btn-danger");
+            $("#btn_ConfirmDetails").removeClass("btn-danger").addClass("btn-danger");
+
+        }
+
+        if ($("#btn_GetUserEducationDetails").hasClass("btn-warning")) {
+            $('#btn_GetUserRelativeDetails').attr("disabled", "disabled");
+            $('#btn_ConfirmDetails').attr("disabled", "disabled");
+
+        }
+        else {
+            $('#btn_GetUserRelativeDetails').removeAttr("disabled", "disabled");
+            $('#btn_ConfirmDetails').removeAttr("disabled", "disabled");
+        }
+        if ('@ViewBag.FromEducationPost' == 'True') {
+
+            $('#RelCreateGrid').show();
+            $('#EmpWork').hide();
+            $('#EmpInfo').show();
+            $('#RelGrid').hide();
+            $('#confirmbtn').hide();
+
+        }
+        else if ('@ViewBag.FromWorkPost' == 'True') {
+            $('#RelCreateGrid').hide();
+            $('#EmpInfo').hide();
+            $('#EmpWork').show();
+            $('#RelGrid').hide();
+            $('#confirmbtn').hide();
+        }
+    });
+
+
+    //if ($(".validation-summary-errors:visible").length === 0) {
+
+    //    $("body").removeClass("loading");
+    //}
+
+
+
+
+    function DisplayErrorMessage(ErrorMessage) {
+        $('input').removeClass('input-validation-error');
+        $('select').removeClass('input-validation-error');
+
+        $('#messageSection div').not('#frmDMATDetails #divValidationSummaryModal,#mainMessageSection').remove();
+        $("#EditWorkForm #divValidationSummaryModal ul").html("");
+
+        $("#EditWorkForm  #divValidationSummaryModal ul").append(("<li>" + ErrorMessage + "</li>"));
+
+        $('#EditWorkForm  #divValidationSummaryModal').slideDown(500);
+        $('#messageSection div').not('#frmDMATDetails  #divValidationSummaryModal').remove();
+        $("#EditWorkForm  #divValidationSummaryModal").removeClass("validation-summary-valid");
+        $("#EditWorkForm  #divValidationSummaryModal").addClass("validation-summary-errors");
+
+        setTimeout(function () {
+            $("#EditWorkForm #divValidationSummaryModal").removeClass("validation-summary-errors");
+            $('#EditWorkForm #divValidationSummaryModal').removeClass('alert-danger').fadeOut('slow');
+            $("#EditWorkForm #divValidationSummaryModal").addClass("alert-danger");
+            $("#EditWorkForm #divValidationSummaryModal").addClass("validation-summary-valid");
+
+        }, 10000);
+    }
+
+
+
+    function DisplayErrorMessageEdu(ErrorMessage) {
+        $('input').removeClass('input-validation-error');
+        $('select').removeClass('input-validation-error');
+
+        $('#messageSection div').not('#frmDMATDetails #divValidationSummaryModal,#mainMessageSection').remove();
+        $("#EditEducaionForm #divValidationSummaryModal ul").html("");
+
+        $("#EditEducaionForm  #divValidationSummaryModal ul").append(("<li>" + ErrorMessage + "</li>"));
+
+        $('#EditEducaionForm  #divValidationSummaryModal').slideDown(500);
+        $('#messageSection div').not('#frmDMATDetails  #divValidationSummaryModal').remove();
+        $("#EditEducaionForm  #divValidationSummaryModal").removeClass("validation-summary-valid");
+        $("#EditEducaionForm  #divValidationSummaryModal").addClass("validation-summary-errors");
+
+        setTimeout(function () {
+            $("#EditEducaionForm #divValidationSummaryModal").removeClass("validation-summary-errors");
+            $('#EditEducaionForm #divValidationSummaryModal').removeClass('alert-danger').fadeOut('slow');
+            $("#EditEducaionForm #divValidationSummaryModal").addClass("alert-danger");
+            $("#EditEducaionForm #divValidationSummaryModal").addClass("validation-summary-valid");
+
+        }, 10000);
+    }
+
+
+</script>

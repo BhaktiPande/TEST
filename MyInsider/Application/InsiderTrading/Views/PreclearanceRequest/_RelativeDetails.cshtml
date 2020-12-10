@@ -1,0 +1,12 @@
+﻿@model InsiderTrading.Models.PreclearanceRequestModel
+@{
+    ViewBag.Title = "_RelativeDetails";
+}
+
+
+<div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
+    <div class="form-group">
+        @Html.Label(@InsiderTrading.Common.Common.getResource("dis_lbl_17079"))
+        @Html.DropDownListFor(m => m.UserInfoIdRelative, new SelectList(ViewBag.UserInfoRelativeList, "Key", "Value", ""), new { @class = "form-control" })
+    </div>
+</div>

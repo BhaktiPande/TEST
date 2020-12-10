@@ -1,0 +1,156 @@
+﻿@{
+    ViewBag.Title = "ConfirmDetails";
+}
+
+@Html.Partial("~/Views/Common/PersonalDetailsBreadcrumbs.cshtml")
+
+<section class="content">
+
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-accordion">
+                    <div class="panel-heading active">
+                        <h4 class="panel-title">
+                            @InsiderTrading.Common.Common.getResource("usr_btn_50775")
+                        </h4>
+                    </div>
+
+                    <div class="row" style="padding-left:5px">
+                        <br />
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" style="width:3% !important">
+                            @*@Html.CheckBoxFor(m => m.Chk_DeclarationFromInsiderAtTheTimeOfContinuousDisclosures, new { id = "Chk_DeclaFrmInsContDis" })*@
+                            @Html.CheckBox("Chk_DeclaFrmPersonalDetails", new { @Name = "IsChecked", @value = "true" })
+                        </div>
+                        <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11" style="padding-bottom:20px; width:97% !important">
+                            <p>
+                                @InsiderTrading.Common.Common.getResource("usr_msg_50781")
+                            </p>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            @*//check if to show confirm personal details button or not*@
+
+                            @if ((bool)ViewBag.show_confirm_personal_details_btn)
+                        {
+                            @*if ((bool)Session["EmployeeType"])
+                                {
+                                    @Html.Hidden("confirm_msg", @InsiderTrading.Common.Common.getResource("usr_lbl_11493"))
+                                    <a class="btn btn-success" id="ConfirmDetails" style="display:none;" href='@Url.Action("ConfirmDetails", "Employee", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_EDIT })' role="button"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("usr_btn_11418")</a>
+                                }*@
+                            if ((bool)Session["EmployeeType"])
+                            {
+                            @Html.Hidden("confirm_msg", @InsiderTrading.Common.Common.getResource("usr_lbl_11493"))
+                            @*<a class="btn btn-success" id="ConfirmDetails" style="display:none;" href='@Url.Action("ConfirmDetails", "Employee", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_EDIT })' role="button"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("usr_btn_11418")</a>*@
+                            <button type="button" class="btn btn-success" id="ConfirmDetails" data-toggle="modal"> @InsiderTrading.Common.Common.getResource("usr_btn_11418")</button>
+                            }
+                            else if ((bool)Session["NonEmployeeType"])
+                            {
+                            @Html.Hidden("confirm_msg", @InsiderTrading.Common.Common.getResource("usr_lbl_11493"))
+                            <button type="button" class="btn btn-success" id="ConfirmDetails" data-toggle="modal"> @InsiderTrading.Common.Common.getResource("usr_btn_11418")</button>
+                            }
+                        }
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        <!-- Modal -->
+                        <div class="modal fade" id="ConfirmModal" role="dialog">
+                            <div class="modal-dialog">
+
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">Confirmation</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        @InsiderTrading.Common.Common.getResource("usr_lbl_11493")
+                                    </div>
+                                    @if ((bool)Session["NonEmployeeType"])
+                                {
+                                    <div class="modal-footer">
+
+                                        <input type="hidden" name="SPName" id="SPName" />
+
+                                        <a class="btn btn-success" id="btnYesConfirm" href='@Url.Action("ConfirmDetails", "NonEmployeeInsider", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_EDIT })' role="button"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("com_lbl_14021")</a>
+
+                                        @*<button type="button" id="btnYes" class="btn btn-success">Yes</button>*@
+
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">@InsiderTrading.Common.Common.getResource("com_lbl_14022")</button>
+
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="modal-footer">
+
+                                        <input type="hidden" name="SPName" id="SPName" />
+
+                                        <a class="btn btn-success" id="btnYesConfirm" href='@Url.Action("ConfirmDetails", "Employee", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_EDIT, nParentID = Session["UserInfoId"], nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] })' role="button"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("com_lbl_14021")</a>
+
+                                        @*<button type="button" id="btnYes" class="btn btn-success">Yes</button>*@
+
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">@InsiderTrading.Common.Common.getResource("com_lbl_14022")</button>
+
+                                    </div>
+                                }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+    $(document).ready(function () {
+        if ('@ViewBag.Confirm_PersonalDetails_Required' != 'True') {
+            $("#btn_GetUserDetails").removeClass("btn-warning").addClass("btn-success");
+            $("#btn_GetUserDematDetails").removeClass("btn-danger").addClass("btn-success");
+            $("#btn_GetUserEducationDetails").removeClass("btn-danger").addClass("btn-success");
+            $("#btn_GetUserRelativeDetails").removeClass("btn-danger").addClass("btn-success");
+            $("#btn_ConfirmDetails").removeClass("btn-danger").addClass("btn-success");
+            $("#Chk_DeclaFrmPersonalDetails").attr("disabled", "disabled")
+            $('#Chk_DeclaFrmPersonalDetails').attr('checked', true);
+        }
+        else if ('@ViewBag.Confirm_PersonalDetails_Required' == 'True' && '@ViewBag.RelativeDetailsSaved' != 'True') {
+            $("#btn_GetUserDetails").removeClass("btn-warning").addClass("btn-success");
+            $("#btn_GetUserDematDetails").removeClass("btn-danger").addClass("btn-success");
+            $("#btn_GetUserEducationDetails").removeClass("btn-danger").addClass("btn-success");
+            $("#btn_GetUserRelativeDetails").removeClass("btn-danger").addClass("btn-success");
+            $("#btn_ConfirmDetails").removeClass("btn-danger").addClass("btn-warning");
+        }
+        else if ('@ViewBag.Confirm_PersonalDetails_Required' == 'True' && '@ViewBag.RelativeDetailsSaved' == 'True') {
+            $("#btn_GetUserDetails").removeClass("btn-warning").addClass("btn-success");
+            $("#btn_GetUserDematDetails").removeClass("btn-danger").addClass("btn-success");
+            $("#btn_GetUserEducationDetails").removeClass("btn-danger").addClass("btn-success");
+            $("#btn_GetUserRelativeDetails").removeClass("btn-danger").addClass("btn-success");
+            $("#btn_ConfirmDetails").removeClass("btn-danger").addClass("btn-warning");
+
+        }
+
+        //if ($("#btn_GetUserRelativeDetails").hasClass("btn-warning")) {
+        //    $('#btn_ConfirmDetails').attr("disabled", "disabled");
+        //}
+        //else {
+        //    $('#btn_ConfirmDetails').removeAttr("disabled", "disabled");
+        //}
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).delegate("#ConfirmDetails", "click", function () {
+        if ($('#Chk_DeclaFrmPersonalDetails').prop("checked") == false) {
+            showMessage('@InsiderTrading.Common.Common.getResource("usr_msg_50776")', false);
+            $('#ConfirmModal').modal('hide');
+        }
+        else {
+            $("#ConfirmModal").show();
+            $('#ConfirmModal').modal('show');
+            //$('#DMATModal').modal('show');
+        }
+    })
+</script>
+
+

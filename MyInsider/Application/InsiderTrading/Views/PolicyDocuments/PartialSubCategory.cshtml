@@ -1,0 +1,23 @@
+﻿@model InsiderTrading.Models.PolicyDocumentModel
+@{
+    
+}
+
+<div class="form-group">
+    @{
+        var DSCCI_html_attr = new Dictionary<string, object> { };
+        DSCCI_html_attr.Add("class", "form-control");
+        DSCCI_html_attr.Add("id", "5");
+        DSCCI_html_attr.Add("gridtype", @ViewBag.GridType);
+
+        if (!ViewBag.isAllEdit)
+        {
+            DSCCI_html_attr.Add("disabled", "disabled");
+            @Html.HiddenFor(m => m.DocumentSubCategoryCodeId);
+        }
+    }
+    @Html.LabelFor(m => m.DocumentSubCategoryCodeId)
+    @Html.DropDownListFor(m => m.DocumentSubCategoryCodeId, new SelectList(ViewBag.DocumentSubCategoryDropDown, "Key", "Value", ""), DSCCI_html_attr)
+    @Html.ValidationMessageFor(m => m.DocumentSubCategoryCodeId)
+
+</div>

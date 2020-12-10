@@ -1,0 +1,82 @@
+﻿@{
+    InsiderTrading.Common.LoginUserDetails objLoginUserDetails = (InsiderTrading.Common.LoginUserDetails)InsiderTrading.Common.Common.GetSessionValue(InsiderTrading.Common.ConstEnum.SessionValue.UserDetails);
+    var acid = (objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.Admin || objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.CorporateUserType) ? InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_CREATE : InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_EDIT;
+}
+<div>
+    <table style="position:relative;z-index:10;">
+        <tr>
+            <td>
+                @if ((bool)Session["EmployeeType"])
+                {
+                    using (Html.BeginForm("Create", "Employee", new { acid = acid, nUserInfoID = Session["UserInfoId"], isPPD_Details_Saved = false }))
+                    {
+                        <button type="submit" class="btn btn-warning btn-shape btn-arrow btn-md center-block" id="btn_GetUserDetails" style="margin:10px 10px">@InsiderTrading.Common.Common.getResource("usr_btn_50766")</button>
+                    }
+                }
+                else if ((bool)Session["NonEmployeeType"])
+                {
+                    using (Html.BeginForm("Create", "NonEmployeeInsider", new { acid = acid, nUserInfoID = Session["UserInfoId"], isPPD_Details_Saved = false }))
+                    {
+                        <button type="submit" class="btn btn-warning btn-shape btn-arrow btn-md center-block" id="btn_GetUserDetails" style="margin:10px 10px">@InsiderTrading.Common.Common.getResource("usr_btn_50766")</button>
+                    }
+                }
+            </td>
+
+            <td>
+                @if ((bool)Session["EmployeeType"])
+                {
+                    using (Html.BeginForm("Create", "Employee", new { acid = acid, nUserInfoID = Session["UserInfoId"], isPPD_Details_Saved = true }))
+                    {
+                        <button type="submit" class="btn btn-danger btn-shape btn-arrow btn-md center-block" id="btn_GetUserDematDetails" style="margin:10px 10px">@InsiderTrading.Common.Common.getResource("usr_btn_50767")</button>
+                    }
+                }
+                else if ((bool)Session["NonEmployeeType"])
+                {
+                    using (Html.BeginForm("Create", "NonEmployeeInsider", new { acid = acid, nUserInfoID = Session["UserInfoId"], isPPD_Details_Saved = true }))
+                    {
+                        <button type="submit" class="btn btn-danger btn-shape btn-arrow btn-md center-block" id="btn_GetUserDematDetails" style="margin:10px 10px">@InsiderTrading.Common.Common.getResource("usr_btn_50767")</button>
+                    }
+                }
+            </td>
+            <td>
+                <a class="btn btn-danger btn-shape btn-arrow btn-md center-block" id="btn_GetUserEducationDetails" style="margin:10px 10px" href='@Url.Action("EducationDetails", "Employee", new { acid = acid, nUserInfoID = Session["UserInfoId"],nUserDematSaved=true, nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] })' role="button">@InsiderTrading.Common.Common.getResource("usr_btn_54001")</a>
+            </td>
+            <td>
+                <a class="btn btn-danger btn-shape btn-arrow btn-md center-block" id="btn_GetUserRelativeDetails" style="margin:10px 10px" href='@Url.Action("CreateRelative", "Employee", new { acid = acid, nParentID = Session["UserInfoId"], nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] })' role="button">@InsiderTrading.Common.Common.getResource("usr_btn_50768")</a>
+            </td>
+
+
+            <td>
+                <a class="btn btn-danger btn-shape btn-round btn-md center-block" id="btn_ConfirmDetails" style="margin:10px 10px" href='@Url.Action("ConfirmPersonalDetails", "Employee", new { acid = acid, nParentID = Session["UserInfoId"], nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] })' role="button">Confirm Details</a>
+            </td>
+
+        </tr>
+    </table>
+</div>
+
+
+@*@model InsiderTrading.Models.EmployeeModel
+    <div align="center">
+        <table>
+            <tr>
+                <td>
+                    @using (Html.BeginForm("Create", "Employee", new { acid = 7, nUserInfoID = Model.userInfoModel.UserInfoId, isPPD_Details_Saved = false }))
+                    {
+                        <button type="submit" class="btn btn-warning btn-shape btn-arrow btn-md center-block" id="btn_GetUserDetails" style="margin:10px 15px">Personal & Professional Details</button>
+                    }
+                </td>
+
+                <td>
+                    @using (Html.BeginForm("Create", "Employee", new { acid = 7, nUserInfoID = Model.userInfoModel.UserInfoId, isPPD_Details_Saved = true }))
+                    {
+                        <button type="submit" class="btn btn-danger btn-shape btn-arrow btn-md center-block" id="btn_GetUserDematDetails" style="margin:10px 15px">Demat Details</button>
+                    }
+                </td>
+
+                <td>
+                    <a class="btn btn-danger btn-shape btn-round btn-md center-block" id="btn_GetUserRelativeDetails" style="margin:10px 15px" href='@Url.Action("CreateRelative", "Employee", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_RELATIVEUSER_CREATE, nParentID = Model.userInfoModel.UserInfoId })' role="button">Relative Details</a>
+                </td>
+            </tr>
+        </table>
+    </div>*@
+

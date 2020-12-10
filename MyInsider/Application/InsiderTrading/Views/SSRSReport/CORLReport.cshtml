@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "RestrictedListSearchReport";
+}
+
+<h1>Restricted List Search Report</h1>
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    @Html.AntiForgeryToken()
+</section>
+
+<script type="text/javascript">
+    function openWindow(param) {
+        var newWin = window.open('../CommonSSRSReport/SSRSReportViewer.aspx?ReportID=' + param, 'SSRSReport',
+                        'toolbar=0,location=0,menubar=0,status=0,scrollbars=yes,copyhistory=0,height=600,width=800,modal=yes,alwaysRaised=yes,resizable=1');
+        if (newWin != null) {
+            newWin.focus();
+            void (0);
+
+        }
+    }
+</script>
+
+<table class="table table-hover">
+    <tr>
+        <td style="text-align: center;">
+            @if (@ViewBag.Rights)
+            {
+                <input type="button" value="Generate Report" onclick="openWindow('b4czFb/7oAQ=');" />
+            }
+        </td>
+    </tr>
+</table>

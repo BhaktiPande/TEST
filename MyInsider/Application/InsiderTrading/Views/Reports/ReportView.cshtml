@@ -1,0 +1,295 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    TempData.Keep("SearchArray");
+}
+<section class="content-header">
+	@Html.AntiForgeryToken()
+    <h1>
+        @ViewBag.Title
+    </h1>
+</section>      
+<script type="text/javascript">
+    function openWindow(param) {
+        var newWin = window.open('../CommonSSRSReport/SSRSReportViewer.aspx?ReportID=' + param, 'SSRSReport',
+                        'toolbar=0,location=0,menubar=0,status=0,scrollbars=yes,copyhistory=0,height=600,width=800,modal=yes,alwaysRaised=yes,resizable=1');
+        if (newWin != null) {
+            newWin.focus();
+            void (0);
+        }
+    }
+</script>
+<section class="content search" gridtype="@ViewBag.GridType">
+    @Html.Partial("_ReportHeaderPart")
+    @if (ViewBag.ShowFilterSection)
+{
+    <button id="searchBtn" type="button" data-toggle="collapse" class="btn btn-success" data-target="#filter-panel">
+        <i class="fa fa-search"></i> @InsiderTrading.Common.Common.getResource("com_btn_14005")
+    </button>
+}
+    @*Call SSRS Reports*@
+    @if (ViewBag.SSRSRptId == "zJIWkTIKWAc=")
+    {
+        //Initial Disclosures Report
+        if (ViewBag.Rights)
+        {
+            String onclick = String.Format("openWindow('{0}')", Html.Encode(@ViewBag.SSRSRptId));
+            <button type="button" class="btn btn-success" onclick="@onclick">
+                <i class="fa fa-book"></i>@InsiderTrading.Common.Common.getResource("rl_btn_50020")
+            </button>
+        }
+    }
+    else if (ViewBag.SSRSRptId == "M/2BHyNrAc4=")
+    {
+        //Continuous Disclosures Report
+        if (ViewBag.Rights)
+        {
+            String onclick = String.Format("openWindow('{0}')", Html.Encode(@ViewBag.SSRSRptId));
+            <button type="button" class="btn btn-success" onclick="@onclick">
+                <i class="fa fa-book"></i>@InsiderTrading.Common.Common.getResource("rl_btn_50020")
+            </button>
+        }
+    }
+    else if (ViewBag.SSRSRptId == "h/jfF5gBzZQ=")
+    {
+        //Period End Disclosures Report
+        if (ViewBag.Rights)
+        {
+            String onclick = String.Format("openWindow('{0}')", Html.Encode(@ViewBag.SSRSRptId));
+            <button type="button" class="btn btn-success" onclick="@onclick">
+                <i class="fa fa-book"></i>@InsiderTrading.Common.Common.getResource("rl_btn_50020")
+            </button>
+        }
+    }
+    else if (ViewBag.SSRSRptId == "0lVrlV/e0rU=")
+    {
+        //Pre Clearance Report
+        if (ViewBag.Rights)
+        {
+            String onclick = String.Format("openWindow('{0}')", Html.Encode(@ViewBag.SSRSRptId));
+            <button type="button" class="btn btn-success" onclick="@onclick">
+                <i class="fa fa-book"></i>@InsiderTrading.Common.Common.getResource("rl_btn_50020")
+            </button>
+        }
+    }
+    else if (ViewBag.SSRSRptId == "P5Mkjyvo+j4=")
+    {
+        //Defaulter Report
+        if (ViewBag.Rights)
+        {
+            String onclick = String.Format("openWindow('{0}')", Html.Encode(@ViewBag.SSRSRptId));
+            <button type="button" class="btn btn-success" onclick="@onclick">
+                <i class="fa fa-book"></i>@InsiderTrading.Common.Common.getResource("rl_btn_50020")
+            </button>
+        }
+    }
+    else if (ViewBag.SSRSRptId == "b4czFb/7oAQ=")
+    {
+        //Restricted List Search Report - For CO
+        if (ViewBag.Rights)
+        {
+            String onclick = String.Format("openWindow('{0}')", Html.Encode(@ViewBag.SSRSRptId));
+            <button type="button" class="btn btn-success" onclick="@onclick">
+                <i class="fa fa-book"></i>@InsiderTrading.Common.Common.getResource("rl_btn_50020")
+            </button>
+        }
+    }
+    else if (ViewBag.SSRSRptId == "EJLIsEY9uZo=")
+    {
+        //Restricted List Search Report - For Insider
+        if (ViewBag.Rights)
+        {
+            String onclick = String.Format("openWindow('{0}')", Html.Encode(@ViewBag.SSRSRptId));
+            <button type="button" class="btn btn-success" onclick="@onclick">
+                <i class="fa fa-book"></i>@InsiderTrading.Common.Common.getResource("rl_btn_50020")
+            </button>
+        }
+    }
+    
+    <form action="ExportReport" method="post">
+        
+        <div id="filter-panel" class="collapse filter-panel">
+            <div class="div-spacer"></div><br />
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-body ">
+                        @if (ViewBag.GridType == InsiderTrading.Common.ConstEnum.GridType.Report_PeriodEndDisclosureEmployeeWise)
+                        {
+                            @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+                        }
+
+                        @Html.Partial("_ReportFilterControls")
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div role="form">
+                                    <button type="button" class="btn btn-success" id="btnReportSearch"><i class="fa fa-search"></i> @InsiderTrading.Common.Common.getResource("com_btn_14005")</button>
+                                    <button type="reset" class="btn btn-success" dt_name="btnReset" dt_gridtype="@ViewBag.GridType"><i class="fa fa-undo"></i> @InsiderTrading.Common.Common.getResource("com_btn_14006")</button>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="GridType" name="GridType" value="@ViewBag.GridType" />
+                        <input type="hidden" id="acid" name="acid" value="@ViewBag.acid" />
+                        <input type="hidden" id="Search" name="Search" />
+                        <input type="hidden" id="SearchCriteria" name="SearchCriteria" />
+                        @Html.Hidden("OverrideGridType", (string)ViewBag.OverrideGridType)
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <div class="div-spacer"></div><br />
+       @if (ViewData["inp_sParam"] == null)
+       {
+           Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "btnReportSearch", sSortCol = "0", acid = @ViewBag.acid, sShowProcessing = false, OverrideGridType = @ViewBag.OverrideGridType });
+       }
+       else
+       {
+           Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "btnReportSearch", inp_sParam = @ViewData["inp_sParam"], sSortCol = "0", acid = @ViewBag.acid, sShowProcessing = false });   
+       }
+
+        @if (ViewBag.ShowBackButton == true)
+{
+    <a href="@ViewBag.BackButtonUrl" class="btn btn-success" id="btnBackToList">Back</a>
+}
+        @*<input type="submit" class="btn btn-success"  value="Download" />*@
+        <button type="button" class="btn btn-success" id="btnExportSubmit">
+            <i class="fa fa-download"></i> Download
+        </button>
+        <input type="button" style="display: none;" id="btnDownloadSubmit"/>
+    </form>
+</section>
+<div id="divOverrideModal" style="display:none;"></div>
+
+<script>
+    $(document).ready(function () {
+
+        $("#btnReportSearch").click(function(){
+            var nGridType = $("#GridType").val();
+            var PERIODEND_LISTGRIDTYPE = 114053;
+            var bValidationResponce = true;
+            if (nGridType == PERIODEND_LISTGRIDTYPE) {
+                bValidationResponce = validateSearchSelection();
+            }
+            if (bValidationResponce) {
+                ExportToExcel();
+            }
+            return false;
+        });
+
+        $("#btnExportSubmit").click(function (e) {
+            var nGridType = $("#GridType").val();
+            var PERIODEND_LISTGRIDTYPE = 114053;
+            var bValidationResponce = true;
+            $("#btnDownloadSubmit").attr("type", "button");
+            if (nGridType == PERIODEND_LISTGRIDTYPE) {
+                bValidationResponce = validateSearchSelection();
+            }
+            if (bValidationResponce) {
+                $("#btnReportSearch").click();
+                $("#btnDownloadSubmit").attr("type", "submit");
+                $("#btnDownloadSubmit").click();
+                $("#btnDownloadSubmit").attr("type", "button");
+            } else {
+                $("#btnDownloadSubmit").attr("type", "button");
+                try {//Consume the exception if the method is not supported.
+                    scrollTo(0, 0);
+                } catch (e) { }
+            }
+            return false;
+        });
+
+        $('.selectpicker').selectpicker({
+            title:"Select"
+        });
+
+        $('button').click(function () {
+            $('.btn-group.bootstrap-select').removeClass('open');
+        });
+
+
+        // $(document).delegate(".btnEditResource", "click", function () {
+        $("[name=DatatableGrid][gridtype=114078]").delegate(".btnEditOveride", "click", function (e) {
+            //    alert($(this).attr("ResourceKey"));
+            $.ajax({
+                url: $("#Edit").val(),
+                type: 'post',
+                headers: getRVToken(),
+                data: { "DefaulterReportID": $(this).attr("DefaulterReportID") },
+                success: function (data) {
+                    $("#divOverrideModal").html(data);
+                    $("#divOverrideModal").show();
+                    $('#OverrideModal').modal('show');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(errorThrown);
+                }
+            });
+        });
+    });
+
+    function ExportToExcel() {
+        
+            var searchParms = fetchSearch($(".dataTable_wrapper"), "@ViewBag.GridType").join('|_|');
+            var searchCriteria = '[';
+            $("#filter-panel .form-group").each(function () {
+                var label = $(this).find("label").not("[id]").text();
+                if (label != undefined && label != "") {
+                    var value = "";
+                    if ($(this).find("[name='" + $(this).find("label").attr("for") + "'][gridtype]").is("select")) {
+                        if ($(this).find("[name='" + $(this).find("label").attr("for") + "'][gridtype]").is(".selectpicker")) {
+                            if ($(this).find("[name='" + $(this).find("label").attr("for") + "'][gridtype] option:selected").val() != "") {
+                                var selectId = $(this).find("[name='" + $(this).find("label").attr("for") + "'][gridtype]").attr("id");
+                                value = $(this).find("[data-id='" + selectId + "']").attr("title");
+                                if (value == "Select")
+                                    value = "";
+                            }
+                        } else {
+                            value = $(this).find("[name='" + $(this).find("label").attr("for") + "'][gridtype] option:selected").text();
+                        }
+                    } else {
+                        value = $(this).find("[name='" + $(this).find("label").attr("for") + "'][gridtype]").val();
+                    }
+                    if (searchCriteria != '[')
+                        searchCriteria += ',';
+                    if (value == undefined) {
+                        value = "";
+                    }
+                    searchCriteria += '{"label":"' + label + '","value":"' + value + '"}';
+                }
+            });
+            searchCriteria += ']';
+            $("#SearchCriteria").val(searchCriteria);
+            $("#Search").val(searchParms);
+        return false;
+    }
+
+    function validateSearchSelection() {
+        var rtn_val = true;
+        var yr = $('#1').val()
+        var pe = $('#2').val()
+        var cls = "alert alert-danger validation-summary-errors"
+        var dcls = "validation-summary-valid alert alert-danger"
+
+        if (yr == "" && pe != "") {
+            rtn_val = false;
+            $('#divValidationSummaryModal').removeClass(dcls).addClass(cls);
+            $('#divValidationSummaryModal li').attr("style", "display:block")
+            $('#divValidationSummaryModal li').html($('#selyear').val());
+        }
+        else if (yr != "" && pe == "") {
+            rtn_val = false;
+            $('#divValidationSummaryModal').removeClass(dcls).addClass(cls);
+            $('#divValidationSummaryModal li').attr("style", "display:block")
+            $('#divValidationSummaryModal li').html($('#selperiod').val());
+        } else {
+            $('#divValidationSummaryModal').removeClass(cls).addClass(dcls);
+            $('#divValidationSummaryModal li').attr("style", "display:none")
+            $('#divValidationSummaryModal li').html("");
+            rtn_val = true;
+        }
+
+        return rtn_val;
+    }
+
+</script>

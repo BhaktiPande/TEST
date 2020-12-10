@@ -1,0 +1,509 @@
+﻿@model InsiderTrading.Models.CompanyConfigurationModel
+
+@{
+    ViewBag.Title = "Configuration";
+
+    var html_attr = new Dictionary<string, object> { };
+    var html_attr_radio = new Dictionary<string, object> { };
+    html_attr.Add("class", "");
+    html_attr_radio.Add("class", "EULARadioBtn");
+    if (ViewBag.CalledFrom == "View")
+    {
+        html_attr.Add("disabled", "disabled");
+        html_attr_radio.Add("disabled", "disabled");
+    }
+}
+@using (Html.BeginForm("", "", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "", @autocomplete = "off", id = "frmCompanyConfiguration" }))
+{
+    <div class="panel-body">
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h4>@InsiderTrading.Common.Common.getResource("cmp_lbl_13124")</h4>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                @Html.LabelFor(m => m.InitialDisclosure)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                @Html.RadioButtonFor(m => m.InitialDisclosure, @InsiderTrading.Models.EnterUploadSettingCode.EnterDetails, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_13128") &nbsp;
+                @Html.RadioButtonFor(m => m.InitialDisclosure, @InsiderTrading.Models.EnterUploadSettingCode.UploadDetails, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_13129") &nbsp;
+                @Html.RadioButtonFor(m => m.InitialDisclosure, @InsiderTrading.Models.EnterUploadSettingCode.EnterAndUploadDetails, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_13130") &nbsp;
+                @Html.RadioButtonFor(m => m.InitialDisclosure, @InsiderTrading.Models.EnterUploadSettingCode.EnterOrUploadDetails, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_13131") &nbsp;
+                @Html.RadioButtonFor(m => m.InitialDisclosure, @InsiderTrading.Models.EnterUploadSettingCode.EnterAndOrUploadDetails, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_13132") &nbsp;
+            </div>
+        </div>
+        <br />
+
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                @Html.LabelFor(m => m.ContinuousDisclosure)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                @Html.RadioButtonFor(m => m.ContinuousDisclosure, @InsiderTrading.Models.EnterUploadSettingCode.EnterDetails, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_13133") &nbsp;
+                @Html.RadioButtonFor(m => m.ContinuousDisclosure, @InsiderTrading.Models.EnterUploadSettingCode.UploadDetails, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_13134") &nbsp;
+                @Html.RadioButtonFor(m => m.ContinuousDisclosure, @InsiderTrading.Models.EnterUploadSettingCode.EnterAndUploadDetails, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_13135") &nbsp;
+                @Html.RadioButtonFor(m => m.ContinuousDisclosure, @InsiderTrading.Models.EnterUploadSettingCode.EnterOrUploadDetails, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_13136") &nbsp;
+                @Html.RadioButtonFor(m => m.ContinuousDisclosure, @InsiderTrading.Models.EnterUploadSettingCode.EnterAndOrUploadDetails, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_13137")
+            </div>
+        </div>
+        <br />
+
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                @Html.LabelFor(m => m.PeriodEndDisclosure)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                @Html.RadioButtonFor(m => m.PeriodEndDisclosure, @InsiderTrading.Models.EnterUploadSettingCode.EnterDetails, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_13138") &nbsp;
+                @Html.RadioButtonFor(m => m.PeriodEndDisclosure, @InsiderTrading.Models.EnterUploadSettingCode.UploadDetails, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_13139") &nbsp;
+                @Html.RadioButtonFor(m => m.PeriodEndDisclosure, @InsiderTrading.Models.EnterUploadSettingCode.EnterAndUploadDetails, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_13140") &nbsp;
+                @Html.RadioButtonFor(m => m.PeriodEndDisclosure, @InsiderTrading.Models.EnterUploadSettingCode.EnterOrUploadDetails, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_13141") &nbsp;
+                @Html.RadioButtonFor(m => m.PeriodEndDisclosure, @InsiderTrading.Models.EnterUploadSettingCode.EnterAndOrUploadDetails, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_13142")
+            </div>
+        </div>
+        <br />
+
+        <br />
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h4>@InsiderTrading.Common.Common.getResource("cmp_lbl_13143")</h4>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                @Html.LabelFor(m => m.PreClearanceImplementingCompany)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                @Html.RadioButtonFor(m => m.PreClearanceImplementingCompany, @InsiderTrading.Models.DematAccountSettingCode.AllDemat, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_13145") &nbsp;
+                @Html.RadioButtonFor(m => m.PreClearanceImplementingCompany, @InsiderTrading.Models.DematAccountSettingCode.SelectedDemat, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_13146")
+            </div>
+        </div>
+        <div class="row">
+            <div id="tra_pclImp_DPBank" class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="display: none;">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="dataTable_wrapper">
+                            <div id="DataTables_Table_tra_pclImp_DPBank_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                                <div class="row" style="overflow-x: auto; overflow-y:auto; height:200px">
+                                    <table id="DataTables_Table_tra_pclImp_DPBank" class="data-table table table-bordered table-striped dataTable" name="DatatableGrid" aria-describedby="DataTables_Table_tra_pclImp_DPBank_info" style="width: 99%; height: 50%">
+                                        <thead>
+                                            <tr role="row">
+                                                <th class="text-left" role="columnheader" aria-controls="DataTables_Table_tra_pclImp_DPBank" rowspan="1" colspan="1" style="width:10%" aria-label="">
+                                                    @Html.CheckBox("tra_pclImp_DPBank_All", false, html_attr)
+                                                </th>
+                                                <th class="text-left" role="columnheader" aria-controls="DataTables_Table_tra_pclImp_DPBank" rowspan="1" colspan="1" style="width:90%" aria-label="@InsiderTrading.Common.Common.getResource("cmp_lbl_13147")">
+                                                    @InsiderTrading.Common.Common.getResource("cmp_lbl_13147")
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        @if (Model.AllDematAccountList_PreClearanceImplementingCompany.Count() > 0)
+                                        {
+                                            <tbody role="alert" aria-live="polite" aria-relevant="all">
+                                                @for (int i = 0; i < Model.AllDematAccountList_PreClearanceImplementingCompany.Count(); i++)
+                                                {
+                                                    <tr class="@(i%2 == 0 ? "odd":"even")">
+                                                        <td>
+                                                            @Html.HiddenFor(m => m.AllDematAccountList_PreClearanceImplementingCompany[i].id)
+                                                            @Html.CheckBoxFor(m => m.AllDematAccountList_PreClearanceImplementingCompany[i].selected, html_attr)
+                                                        </td>
+                                                        <td>
+                                                            @Html.Label(Model.AllDematAccountList_PreClearanceImplementingCompany[i].checkboxText)
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        }
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                @Html.LabelFor(m => m.PreClearanceNonImplementingCompany)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                @Html.RadioButtonFor(m => m.PreClearanceNonImplementingCompany, @InsiderTrading.Models.DematAccountSettingCode.AllDemat, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_13149") &nbsp;
+                @Html.RadioButtonFor(m => m.PreClearanceNonImplementingCompany, @InsiderTrading.Models.DematAccountSettingCode.SelectedDemat, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_13150")
+            </div>
+        </div>
+        <div class="row">
+            <div id="tra_pclNImp_DPBank" class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="display: none;">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="dataTable_wrapper">
+                            <div id="DataTables_Table_tra_pclNImp_DPBank_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                                <div class="row" style="overflow-x: auto; overflow-y:auto; height:200px">
+                                    <table id="DataTables_Table_tra_pclNImp_DPBank" class="data-table table table-bordered table-striped dataTable" name="DatatableGrid" aria-describedby="DataTables_Table_tra_pclNImp_DPBank_info" style="width: 99%; height: 50%">
+                                        <thead>
+                                            <tr role="row">
+                                                <th class="text-left" role="columnheader" aria-controls="DataTables_Table_tra_pclNImp_DPBank" rowspan="1" colspan="1" style="width:10%" aria-label="">
+                                                    @Html.CheckBox("tra_pclNImp_DPBank_All", false, html_attr)
+                                                </th>
+                                                <th class="text-left" role="columnheader" aria-controls="DataTables_Table_tra_pclNImp_DPBank" rowspan="1" colspan="1" style="width:90%" aria-label="@InsiderTrading.Common.Common.getResource("cmp_lbl_13151")">
+                                                    @InsiderTrading.Common.Common.getResource("cmp_lbl_13151")
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        @if (Model.AllDematAccountList_PreClearanceNonImplementingCompany.Count() > 0)
+                                        {
+                                            <tbody role="alert" aria-live="polite" aria-relevant="all">
+                                                @for (int i = 0; i < Model.AllDematAccountList_PreClearanceNonImplementingCompany.Count(); i++)
+                                                {
+                                                    <tr class="@(i%2 == 0 ? "odd":"even")">
+                                                        <td>
+                                                            @Html.HiddenFor(m => m.AllDematAccountList_PreClearanceNonImplementingCompany[i].id)
+                                                            @Html.CheckBoxFor(m => m.AllDematAccountList_PreClearanceNonImplementingCompany[i].selected, html_attr)
+                                                        </td>
+                                                        <td>
+                                                            @Html.Label(Model.AllDematAccountList_PreClearanceNonImplementingCompany[i].checkboxText)
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        }
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                @Html.LabelFor(m => m.InitialDisclosureTransaction)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                @Html.RadioButtonFor(m => m.InitialDisclosureTransaction, @InsiderTrading.Models.DematAccountSettingCode.AllDemat, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_13153") &nbsp;
+                @Html.RadioButtonFor(m => m.InitialDisclosureTransaction, @InsiderTrading.Models.DematAccountSettingCode.SelectedDemat, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_13154")
+            </div>
+        </div>
+        <div class="row">
+            <div id="tra_ID_DPBank" class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="display: none;">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="dataTable_wrapper">
+                            <div id="DataTables_Table_tra_ID_DPBank_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                                <div class="row" style="overflow-x: auto; overflow-y:auto; height:200px">
+                                    <table id="DataTables_Table_tra_ID_DPBank" class="data-table table table-bordered table-striped dataTable" name="DatatableGrid" aria-describedby="DataTables_Table_tra_ID_DPBank_info" style="width: 99%; height: 50%">
+                                        <thead>
+                                            <tr role="row">
+                                                <th class="text-left" role="columnheader" aria-controls="DataTables_Table_tra_ID_DPBank" rowspan="1" colspan="1" style="width:10%" aria-label="">
+                                                    @Html.CheckBox("tra_ID_DPBank_All", false, html_attr)
+                                                </th>
+                                                <th class="text-left" role="columnheader" aria-controls="DataTables_Table_tra_ID_DPBank" rowspan="1" colspan="1" style="width:90%" aria-label="@InsiderTrading.Common.Common.getResource("cmp_lbl_13155")">
+                                                    @InsiderTrading.Common.Common.getResource("cmp_lbl_13155")
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        @if (Model.AllDematAccountList_InitialDisclosureTransaction.Count() > 0)
+                                        {
+                                            <tbody role="alert" aria-live="polite" aria-relevant="all">
+                                                @for (int i = 0; i < Model.AllDematAccountList_InitialDisclosureTransaction.Count(); i++)
+                                                {
+                                                    <tr class="@(i%2 == 0 ? "odd":"even")">
+                                                        <td>
+                                                            @Html.HiddenFor(m => m.AllDematAccountList_InitialDisclosureTransaction[i].id)
+                                                            @Html.CheckBoxFor(m => m.AllDematAccountList_InitialDisclosureTransaction[i].selected, html_attr)
+                                                        </td>
+                                                        <td>
+                                                            @Html.Label(Model.AllDematAccountList_InitialDisclosureTransaction[i].checkboxText)
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        }
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                @Html.LabelFor(m => m.ContinuousDisclosureTransaction)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                @Html.RadioButtonFor(m => m.ContinuousDisclosureTransaction, @InsiderTrading.Models.DematAccountSettingCode.AllDemat, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_13157") &nbsp;
+                @Html.RadioButtonFor(m => m.ContinuousDisclosureTransaction, @InsiderTrading.Models.DematAccountSettingCode.SelectedDemat, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_13158")
+            </div>
+        </div>
+        <div class="row">
+            <div id="tra_CD_DPBank" class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="display: none;">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="dataTable_wrapper">
+                            <div id="DataTables_Table_tra_CD_DPBank_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                                <div class="row" style="overflow-x: auto; overflow-y:auto; height:200px">
+                                    <table id="DataTables_Table_tra_CD_DPBank" class="data-table table table-bordered table-striped dataTable" name="DatatableGrid" aria-describedby="DataTables_Table_tra_CD_DPBank_info" style="width: 99%; height: 50%">
+                                        <thead>
+                                            <tr role="row">
+                                                <th class="text-left" role="columnheader" aria-controls="DataTables_Table_tra_CD_DPBank" rowspan="1" colspan="1" style="width:10%" aria-label="">
+                                                    @Html.CheckBox("tra_CD_DPBank_All", false, html_attr)
+                                                </th>
+                                                <th class="text-left" role="columnheader" aria-controls="DataTables_Table_tra_CD_DPBank" rowspan="1" colspan="1" style="width:90%" aria-label="@InsiderTrading.Common.Common.getResource("cmp_lbl_13159")">
+                                                    @InsiderTrading.Common.Common.getResource("cmp_lbl_13159")
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        @if (Model.AllDematAccountList_ContinuousDisclosureTransaction.Count() > 0)
+                                        {
+                                            <tbody role="alert" aria-live="polite" aria-relevant="all">
+                                                @for (int i = 0; i < Model.AllDematAccountList_ContinuousDisclosureTransaction.Count(); i++)
+                                                {
+                                                    <tr class="@(i%2 == 0 ? "odd":"even")">
+                                                        <td>
+                                                            @Html.HiddenFor(m => m.AllDematAccountList_ContinuousDisclosureTransaction[i].id)
+                                                            @Html.CheckBoxFor(m => m.AllDematAccountList_ContinuousDisclosureTransaction[i].selected, html_attr)
+                                                        </td>
+                                                        <td>
+                                                            @Html.Label(Model.AllDematAccountList_ContinuousDisclosureTransaction[i].checkboxText)
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        }
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                @Html.LabelFor(m => m.PeriodEndDisclosureTransaction)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                @Html.RadioButtonFor(m => m.PeriodEndDisclosureTransaction, @InsiderTrading.Models.DematAccountSettingCode.AllDemat, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_13161") &nbsp;
+                @Html.RadioButtonFor(m => m.PeriodEndDisclosureTransaction, @InsiderTrading.Models.DematAccountSettingCode.SelectedDemat, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_13162")
+            </div>
+        </div>
+        <div class="row">
+            <div id="tra_PED_DPBank" class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="display: none;">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="dataTable_wrapper">
+                            <div id="DataTables_Table_tra_PED_DPBank_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                                <div class="row" style="overflow-x: auto; overflow-y:auto; height:200px">
+                                    <table id="DataTables_Table_tra_PED_DPBank" class="data-table table table-bordered table-striped dataTable" name="DatatableGrid" aria-describedby="DataTables_Table_tra_PED_DPBank_info" style="width: 99%; height: 50%">
+                                        <thead>
+                                            <tr role="row">
+                                                <th class="text-left" role="columnheader" aria-controls="DataTables_Table_tra_PED_DPBank" rowspan="1" colspan="1" style="width:10%" aria-label="">
+                                                    @Html.CheckBox("tra_PED_DPBank_All", false, html_attr)
+                                                </th>
+                                                <th class="text-left" role="columnheader" aria-controls="DataTables_Table_tra_PED_DPBank" rowspan="1" colspan="1" style="width:90%" aria-label="@InsiderTrading.Common.Common.getResource(" cmp_lbl_13163")">
+                                                    @InsiderTrading.Common.Common.getResource("cmp_lbl_13163")
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        @if (Model.AllDematAccountList_PeriodEndDisclosureTransaction.Count() > 0)
+                                        {
+                                            <tbody role="alert" aria-live="polite" aria-relevant="all">
+                                                @for (int i = 0; i < Model.AllDematAccountList_PeriodEndDisclosureTransaction.Count(); i++)
+                                                {
+                                                    <tr class="@(i%2 == 0 ? " odd":"even")">
+                                                        <td>
+                                                            @Html.HiddenFor(m => m.AllDematAccountList_PeriodEndDisclosureTransaction[i].id)
+                                                            @Html.CheckBoxFor(m => m.AllDematAccountList_PeriodEndDisclosureTransaction[i].selected, html_attr)
+                                                        </td>
+                                                        <td>
+                                                            @Html.Label(Model.AllDematAccountList_PeriodEndDisclosureTransaction[i].checkboxText)
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        }
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h4>@InsiderTrading.Common.Common.getResource("cmp_lbl_55081")</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                @Html.LabelFor(m => m.InformationSharedby)
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                @Html.RadioButtonFor(m => m.UPSISetting, @InsiderTrading.Models.UPSISettingCode.YesSetting) @InsiderTrading.Common.Common.getResource("cmp_lbl_55082") &nbsp;
+                @Html.RadioButtonFor(m => m.UPSISetting, @InsiderTrading.Models.UPSISettingCode.NoSetting) @InsiderTrading.Common.Common.getResource("cmp_lbl_55083")
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h4>@InsiderTrading.Common.Common.getResource("cmp_lbl_54177")</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                @Html.LabelFor(m => m.TriggerEmailsUPSIUpdated)
+
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                @Html.RadioButtonFor(m => m.TriggerEmailsUPSIUpdated, @InsiderTrading.Models.UPSIEmailUpdateSettingCode.YesSetting) @InsiderTrading.Common.Common.getResource("cmp_lbl_55082") &nbsp;
+                @Html.RadioButtonFor(m => m.TriggerEmailsUPSIUpdated, @InsiderTrading.Models.UPSIEmailUpdateSettingCode.NoSetting) @InsiderTrading.Common.Common.getResource("cmp_lbl_55083")
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                @Html.LabelFor(m => m.TriggerEmailsUPSIpublished)
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                @Html.RadioButtonFor(m => m.TriggerEmailsUPSIpublished, @InsiderTrading.Models.UPSIEmailPublishedSettingCode.YesSetting) @InsiderTrading.Common.Common.getResource("cmp_lbl_55082") &nbsp;
+                @Html.RadioButtonFor(m => m.TriggerEmailsUPSIpublished, @InsiderTrading.Models.UPSIEmailPublishedSettingCode.NoSetting) @InsiderTrading.Common.Common.getResource("cmp_lbl_55083")
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12">
+                @Html.LabelFor(m => m.MailTO)
+            </div>
+            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                @Html.ListBoxFor(x=>x.DefaultMailTo, new MultiSelectList(Model.DefaultSetting, "Key", "Value", Model.AssignedSetting.Select(m => m.Key)), new { multiple = "multiple", @class = "form-control multiselect DefaultMailTo" })
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12">
+                @Html.LabelFor(m => m.MailCC)
+            </div>
+            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12" style="text-align: left;">
+                @Html.ListBoxFor(x=>x.DefaultMailCC, new MultiSelectList(Model.DefaultSettingCC, "Key", "Value", Model.AssignedSettingCC.Select(m => m.Key)), new { multiple = "multiple", @class = "form-control multiselect DefaultMailCC" })
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h4>@InsiderTrading.Common.Common.getResource("cmp_lbl_53102")</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                @Html.LabelFor(m => m.EULAAcceptanceSettings)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                @Html.RadioButtonFor(m => m.EULAAcceptanceSettings, @InsiderTrading.Models.EULAAcceptanceSettingCode.YesSetting, html_attr_radio) @InsiderTrading.Common.Common.getResource("cmp_lbl_53100") &nbsp;
+                @Html.RadioButtonFor(m => m.EULAAcceptanceSettings, @InsiderTrading.Models.EULAAcceptanceSettingCode.NoSetting, html_attr_radio) @InsiderTrading.Common.Common.getResource("cmp_lbl_53101")
+            </div>
+        </div>
+        <div id="DivDocumentUpload">
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+                @{
+                    var model = (List<InsiderTrading.Models.DocumentDetailsModel>)ViewData["DocumentDetailsModel"];
+                }
+                @Html.Partial("~/Views/Common/SingleDocumentUpload.cshtml", model, new ViewDataDictionary() { { "user_action", ViewBag.UserAction } })
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    @Html.LabelFor(m => m.ReqiuredEULAReconfirmation)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    @Html.RadioButtonFor(m => m.ReqiuredEULAReconfirmation, @InsiderTrading.Models.EULARecomfirmationSettingCode.All, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_53105") &nbsp;
+                    @Html.RadioButtonFor(m => m.ReqiuredEULAReconfirmation, @InsiderTrading.Models.EULARecomfirmationSettingCode.NotAccepted, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_53106")
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                @{
+                    if (ViewBag.CalledFrom == "Edit")
+                    {
+                        <button type="button" class="btn btn-success" data-loading-text="Saving" id="SaveCompanyConfiguration" name="SaveCompanyConfiguration" autocomplete="off">
+                            <i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("com_btn_14019")
+                        </button>
+                    }
+                }
+                <a class="btn btn-success cancel" href='@Url.Action("Index", "Company", new {acid = @InsiderTrading.Common.ConstEnum.UserActions.COMPANY_VIEW})' role="button">
+                    @InsiderTrading.Common.Common.getResource("com_btn_14011")
+                </a>
+            </div>
+        </div>
+    </div>
+}
+@Html.Hidden("SaveConfiguration", Url.Action("SaveCompanyConfiguration", "Company"))
+@Scripts.Render("~/bundles/Company")
+
+<script>
+    if ($('.EULARadioBtn:checked').val() == "YesSetting") {
+        $('#DivDocumentUpload').show();
+    }
+    else if ($('.EULARadioBtn:checked').val() == "NoSetting") {
+        $('#DivDocumentUpload').hide();
+    }
+
+    $('.EULARadioBtn').click(function () {
+        if ($('.EULARadioBtn:checked').val() == "YesSetting") {
+            $('#DivDocumentUpload').show();
+        }
+        else if ($('.EULARadioBtn:checked').val() == "NoSetting") {
+            $('#DivDocumentUpload').hide();
+        }
+    });
+
+    //$(document).delegate("#DefaultMailTo", 'change', function () {
+    //    var defaultMailTo = [];
+    //    var defaultMailCC = [];
+    //    $('.DefaultMailTo :selected').each(function (i, selected) {
+    //       // defaultMailTo[i] = $(selected).text();
+
+    //        $('.DefaultMailCC :selected').each(function (j, selected) {
+    //            // defaultMailCC[i] = $(selected).text();
+    //            alert(i.valueOf())
+    //            //if ($(i.valueOf()).text() == $(j.valueOf()).text());
+    //        });
+
+
+    //    });
+        
+
+       
+
+    //    //alert(defaultMailTo);
+    //    //alert(defaultMailCC);
+    //});
+</script>

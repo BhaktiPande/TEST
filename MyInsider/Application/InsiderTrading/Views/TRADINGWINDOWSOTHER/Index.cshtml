@@ -1,0 +1,129 @@
+﻿@model InsiderTrading.Models.TradingWindowEventSearchViewModel
+
+@{
+    ViewBag.Title = InsiderTrading.Common.Common.getResource("rul_ttl_15349");
+}
+
+
+<section class="content-header">
+    @Html.AntiForgeryToken()
+    <h1>
+        @ViewBag.Title
+    </h1>
+</section>
+<section class="content search" gridtype="@ViewBag.GridType">
+    <button type="button" data-toggle="collapse" class="btn btn-success" data-target="#filter-panel">
+        <i class="fa fa-search"></i> @InsiderTrading.Common.Common.getResource("com_btn_14005")
+    </button>
+    <form method="post">
+    <div id="filter-panel" class="collapse filter-panel">
+        <br />
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div class="form-group">
+                                @Html.LabelFor(model => Model.TradingWindowEvent, new { @class = "control-label " })
+                                @Html.DropDownListFor(model => model.EventTypeCodeId, new SelectList(ViewBag.TradingWindowsOtherEvent, "Key", "Value", ""), new { id = "1", gridtype = ViewBag.GridType, @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div class="form-group">
+                                @Html.LabelFor(model => Model.TradingWindowId, new { @class = "control-label" })
+                                @Html.TextBoxFor(model => model.TradingWindowEventId, new { id = "2", gridtype = @ViewBag.GridType, @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.TradingWindowEventId)
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div class="form-group" id="sandbox-container">
+                                @Html.Label(InsiderTrading.Common.Common.getResource("rul_grd_15012"), new { @class = "control-label" })
+                                <div class="input-group date">
+                                    @{
+                                        string WCD = "";
+                                        if (Model.WindowOpenDate != null)
+                                        {
+                                            WCD = InsiderTrading.Common.Common.ApplyFormatting(Model.WindowCloseDate, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+                                        }
+                                    }
+                                    <div class="input-group date" data-date-format="dd/mm/yyyy">
+                                        @Html.TextBox("WindowCloseDate", WCD, null, new { @class = "form-control", id = "3", gridtype = @ViewBag.GridType })
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div class="form-group" id="sandbox-container">
+                                @Html.Label(InsiderTrading.Common.Common.getResource("rul_grd_15013"), new { @class = "control-label" })
+                                <div class="input-group date">
+                                    @{
+                                        string WOD = "";
+                                        if (Model.WindowOpenDate != null)
+                                        {
+                                            WOD = InsiderTrading.Common.Common.ApplyFormatting(Model.WindowOpenDate, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+                                        }
+                                    }
+                                    <div class="input-group date" data-date-format="dd/mm/yyyy">
+                                        @Html.TextBox("WindowOpenDate", WOD, null, new { @class = "form-control", id = "4", gridtype = @ViewBag.GridType })
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <form role="form">
+                                <button type="button" class="btn btn-success" id="btnTradingWindowOtherSearch"><i class="fa fa-search"></i> @InsiderTrading.Common.Common.getResource("com_btn_14005")</button>
+                                <button type="reset" class="btn btn-success" dt_name="btnReset" dt_gridtype="@ViewBag.GridType"><i class="fa fa-undo"></i> @InsiderTrading.Common.Common.getResource("com_btn_14006")</button>
+                            </form>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>        
+    </form>
+    <div class="div-spacer"></div><br />
+    
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <p>
+                @{
+                    if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.TRADING_WINDOW_OTHER_CREATE)) {
+                    <a class="btn btn-success" data-toggle="modal" href='@Url.Action("Create", "TradingWindowsOther", new { acid = InsiderTrading.Common.ConstEnum.UserActions.TRADING_WINDOW_OTHER_CREATE })' role="button">
+                        <i class="icon icon-calender"></i> Add new Event
+                    </a>
+                    }
+
+                    if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.TRADING_WINDOW_OTHER_VIEW)) {
+                        <a href='@Url.Action("Calender", "TradingWindowsOther", new { acid = InsiderTrading.Common.ConstEnum.UserActions.TRADING_WINDOW_OTHER_VIEW, CalledFrom = "OtherEvent" })' class="inline-block"><button class="btn btn-success"><i class="icon icon-calender"></i> @InsiderTrading.Common.Common.getResource("rul_btn_15351")</button></a>
+                    }
+                }
+            </p>
+        </div>
+
+    </div>
+    <div class="alert" style="display: none;" name="ErrorMessage" gridtype="@ViewBag.GridType"></div>
+    @{Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "btnTradingWindowOtherSearch", sSortCol = "0", acid = InsiderTrading.Common.ConstEnum.UserActions.TRADING_WINDOW_OTHER_VIEW });}
+    @{
+        if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.TRADING_WINDOW_OTHER_EDIT))
+        {
+            @Html.Hidden("Edit", Url.Action("Edit", "TradingWindowsOther", new { acid = InsiderTrading.Common.ConstEnum.UserActions.TRADING_WINDOW_OTHER_EDIT, CalledFrom = "Edit" }), new { @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'text':'','href':'" + Url.Action("Edit", "TradingWindowsOther", new { acid = InsiderTrading.Common.ConstEnum.UserActions.TRADING_WINDOW_OTHER_EDIT, CalledFrom = "Edit" }) + "&TradingWindowEventId=<TradingWindowEventId>','class':'display-icon icon icon-edit'}" })
+        }
+
+        if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.TRADING_WINDOW_OTHER_DELETE))
+        {
+            @*@Html.Hidden("DeleteFromGrid", Url.Action("DeleteFromGrid", "TradingWindowsOther", new { acid = InsiderTrading.Common.ConstEnum.UserActions.TRADING_WINDOW_OTHER_DELETE, CalledFrom = "Delete" }), new { @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'TradingWindowEventId':'<TradingWindowEventId>','text':'','href':'javascript:void(0);','class':'btnDeleteTradingWindowUser display-icon icon icon-delete'}" })*@
+            @Html.Hidden("deleteRowURL", Url.Action("DeleteFromGrid", "TradingWindowsOther", new { acid = InsiderTrading.Common.ConstEnum.UserActions.TRADING_WINDOW_OTHER_DELETE, CalledFrom = "Delete" }), new { name = "deleteRowURL", gridtype = @ViewBag.GridType, @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'name': 'deleteRow','ID':'TradingWindowEventId','key':'<TradingWindowEventId>','TradingWindowEventId':'<TradingWindowEventId>','CalledFrom':'Delete' ,'text':'','href':'javascript:void(0);','class':'display-icon icon icon-delete btnDeleteTradingWindowUser'}" })
+        }
+    }
+</section><!-- /.content -->
+@Scripts.Render("~/bundles/TradingWindowsEventOther")
+@Html.Hidden("deleteRowURL", Url.Action("DeleteFromGrid", "TradingWindowsOther"))
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "frmTradingWindowEvent" }))
+{
+    @Html.AntiForgeryToken()
+}

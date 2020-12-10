@@ -1,0 +1,70 @@
+﻿@model InsiderTrading.Models.PreclearanceRequestNonImplCompanyModel
+@{
+    ViewBag.Title = "_DEMATList";
+    var html_attr = new Dictionary <string, object> { };
+    html_attr.Add("class", "form-control");
+    html_attr.Add("id", "DMATDllId");
+    if (Model !=null && Model.PreclearanceStatusCodeId != null)
+    {
+        html_attr.Add("disabled", "disabled");
+    }
+}
+
+<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+    <div class="form-group">
+        @Html.LabelFor(m => m.DMATDetailsID)
+        @Html.DropDownListFor(m => m.DMATDetailsID, new SelectList(ViewBag.DematAccountNumberList, "Key", "Value", ""), html_attr)
+        @Html.ValidationMessageFor(m => m.DMATDetailsID)
+    </div>
+</div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="display:none;" id="tmidDiv">
+    <div class="form-group">
+        @Html.Label(InsiderTrading.Common.Common.getResource("usr_grd_11478"))
+        @Html.TextBox("TMID", "", new { @class = "form-control two-digits", id = "tmidTxt", rows = "5", @readonly = "readonly" })
+    </div>
+</div>
+@{
+    if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DMAT_CREATE))
+    {
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <div class="form-group">
+                <label>&nbsp;</label>
+                <p><a id="AddDAMT" name="AddDAMT" class="btn btn-success block btnAddDMAT" href="javascript:void(0)" data-toggle="modal" role="button"><i class="fa fa-plus"></i>   New Demat Account - ADD</a></p>
+            </div>
+        </div>
+    }
+    @Html.Hidden("DMATComboOnChange", Url.Action("DMATCombo_OnChange", "PreclearanceRequestNonImplCompany"))
+}
+
+<script type="text/javascript">
+
+    var model = @Html.Raw(Json.Encode(Model));
+    if (model != null && model.PreclearanceStatusCodeId != null)
+    {
+        $('#AddDAMT').attr('disabled', 'disabled');
+    }
+    $('#DMATDllId').change(function (event) {
+        var nDMATDetailsID = $('#DMATDllId').val();
+        if (nDMATDetailsID != 0) {
+            $.ajax({
+                url: $("#DMATComboOnChange").val(),
+                type: 'post',
+                cache: false,
+                data: { 'nDMATDetailsID': nDMATDetailsID },
+                datatype: JSON,
+                success: function (result) {
+                    $("#tmidTxt").val(result);
+                    $("#tmidDiv").removeAttr('style');
+                },
+                error: function (result) {
+
+                }
+            });
+        }
+        else {
+            $("#tmidDiv").attr('style', 'display:none');
+        }
+    });
+</script>
+
+

@@ -1,0 +1,120 @@
+﻿@model InsiderTrading.Models.PreIndividualReportSearchViewModel
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                @Html.Hidden("1", "2", new { @id = "1", gridtype = @ViewBag.GridType })
+                @Html.Hidden("2", ((object)@ViewBag.EmployeeId).ToString(), new { @id = "2", gridtype = @ViewBag.GridType })
+                <input type="hidden" name="HeaderSummary" value="@ViewBag.ReportHeaderKeyValueData1JSON" />
+                <input type="hidden" name="HeaderSummary" value="@ViewBag.ReportHeaderKeyValueData2JSON" />
+
+                <label for="PreclearenceId">@InsiderTrading.Common.Common.getResource("rpt_lbl_19181")</label>
+                @*<input name="PreclearenceId" class="form-control" id="3" type="text" value="" gridtype="@ViewBag.GridType" data-val="false">*@
+                @Html.TextBoxFor(m => m.PreclearenceId, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "3" })
+                @Html.ValidationMessageFor(m => m.PreclearenceId)
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                <label for="TransactionType">@InsiderTrading.Common.Common.getResource("rpt_lbl_19183")</label>
+                @Html.DropDownList("TypeOfInsider", new MultiSelectList(ViewBag.TransactionType, "Key", "Value", ""), new { @class = "form-control selectpicker", title = "Select", multiple = "multiple", gridtype = @ViewBag.GridType, id = "6" })
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                <label for="RequestFormDate">@InsiderTrading.Common.Common.getResource("rpt_lbl_19182") From</label>
+                <div class="form-group" id="sandbox-container">
+                    <div class="input-group date">
+                        <input name="RequestFormDate" class="form-control" id="4" type="text" value="" gridtype="@ViewBag.GridType" data-val="false">
+                        <span class="input-group-addon"><i class="icon icon-calender"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                <label for="RequestToDate">@InsiderTrading.Common.Common.getResource("rpt_lbl_19182") To</label>
+                <div class="form-group" id="sandbox-container">
+                    <div class="input-group date">
+                        <input name="RequestToDate" class="form-control" id="5" type="text" value="" gridtype="@ViewBag.GridType" data-val="false">
+                        <span class="input-group-addon"><i class="icon icon-calender"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                <label for="SecurityType">@InsiderTrading.Common.Common.getResource("rpt_lbl_19184")</label>
+                @Html.DropDownList("SecurityType", new MultiSelectList(ViewBag.SecutiryTypeDropDown, "Key", "Value", ""), new { @class = "form-control selectpicker", title = "Select", multiple = "multiple", gridtype = @ViewBag.GridType, id = "7" })
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                <label for="PreclearenceStatus">@InsiderTrading.Common.Common.getResource("rpt_lbl_19185")</label>
+                @Html.DropDownList("PreclearenceStatus", new MultiSelectList(ViewBag.PreclearenceStatusDropDown, "Key", "Value", ""), new { @class = "form-control selectpicker", title = "Select", multiple = "multiple", gridtype = @ViewBag.GridType, id = "8" })
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                <label for="DateOfTransactionFrom">@InsiderTrading.Common.Common.getResource("rpt_lbl_19187") From</label>
+                <div class="form-group" id="sandbox-container">
+                    <div class="input-group date">
+                        <input name="DateOfTransactionFrom" class="form-control" id="10" type="text" value="" gridtype="@ViewBag.GridType" data-val="false">
+                        <span class="input-group-addon"><i class="icon icon-calender"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                <label for="DateOfTransactionTo">@InsiderTrading.Common.Common.getResource("rpt_lbl_19187") To</label>
+                <div class="form-group" id="sandbox-container">
+                    <div class="input-group date">
+                        <input name="DateOfTransactionTo" class="form-control" id="11" type="text" value="" gridtype="@ViewBag.GridType" data-val="false">
+                        <span class="input-group-addon"><i class="icon icon-calender"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                <label for="ApplicableTill">@InsiderTrading.Common.Common.getResource("rpt_lbl_19186")</label>
+                <div class="form-group" id="sandbox-container">
+                    <div class="input-group date">
+                        <input name="ApplicableTill" class="form-control" id="9" type="text" value="" gridtype="@ViewBag.GridType" data-val="false">
+                        <span class="input-group-addon"><i class="icon icon-calender"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                <label for="Comments">@InsiderTrading.Common.Common.getResource("rpt_lbl_19188")</label>
+                @Html.DropDownList("Comments", new MultiSelectList(ViewBag.CommentsDropDown, "Key", "Value", ""), new { @class = "form-control selectpicker", multiple = "multiple", title = "Select", gridtype = @ViewBag.GridType, id = "12" })
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,168 @@
+﻿@model InsiderTrading.Models.ComCodeModel
+
+@{
+    ViewBag.Title = InsiderTrading.Common.Common.getResource("mst_ttl_10043");
+}
+
+@using (Html.BeginForm("Create", "ComCode", new { ReturnUrl = ViewBag.ReturnUrl,formId = InsiderTrading.Common.ConstEnum.Code.frmMasterCode }, FormMethod.Post, new { @id = "ComCodeForm", @class = "", role = "form", @autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    <section class="content-header">
+        <h1>
+            @InsiderTrading.Common.Common.getResource("mst_ttl_10044")
+        </h1>
+    </section>
+    @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+    <section class="content">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.CodeGroupId, new { @class = "control-label " })
+                                        @Html.TextBox("CGID", (object)ViewBag.CodeName, new { @class = "form-control", id = "CodeGroupId", @disabled = "disabled" })
+                                        @Html.ValidationMessageFor(model => model.CodeGroupId)
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        @{if (ViewBag.ParentCodeName != null)
+                                        {
+                                            @Html.Partial("PartialCreate");
+                                        }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.CodeName, new { @class = "control-label" })
+                                        @Html.TextBoxFor(model => model.CodeName, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.CodeName)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Description, new { @class = "control-label" })
+                                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Description)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.DisplayCode, new { @class = "control-label " })
+                                        @Html.TextBoxFor(model => model.DisplayCode, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.DisplayCode)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.IsVisible, new { @class = "control-label " })
+                                        @Html.CheckBoxFor(model => model.IsVisible, new { @class = "cr-check" })
+                                        @Html.ValidationMessageFor(model => model.IsVisible)
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.IsActive, new { @class = "control-label" })
+                                        @Html.CheckBoxFor(model => model.IsActive, new { @class = "cr-check" })
+                                        @Html.ValidationMessageFor(model => model.IsActive)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            @{
+                            @*if (Model != null && Model.CodeID > 0)
+                            {
+                                if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.OTHERMASTER_COMCODE_DELETE))
+                                {
+                                    <button type="button" id="DeleteComCode" name="DeleteComCode" class="btn btn-success" data-loading-text="Deleting" autocomplete="off">@InsiderTrading.Common.Common.getResource("com_btn_14009")</button>
+                                    <button type="submit" class="btn btn-success" id="DeleteCode" name="DeleteCode" style="display:none;"><i class="fa fa-save"></i>@InsiderTrading.Common.Common.getResource("com_btn_14009")</button>
+                                }
+                            }*@
+
+                            if (ViewBag.backToPolicyDocument != null && (bool)ViewBag.backToPolicyDocument)
+                            {
+                                string view_name = "";
+                                string contorller_name = "PolicyDocuments";
+                                RouteValueDictionary controller_paramter = new RouteValueDictionary();
+
+                                if ((int)ViewBag.PolicyDocument_id == 0)
+                                {
+                                    view_name = "Create";
+
+                                    controller_paramter.Add("acid", InsiderTrading.Common.ConstEnum.UserActions.POLICY_DOCUMENT_CREATE);
+                                }
+                                else if ((int)ViewBag.PolicyDocument_id > 0)
+                                {
+                                    view_name = "Edit";
+
+                                    controller_paramter.Add("acid", InsiderTrading.Common.ConstEnum.UserActions.POLICY_DOCUMENT_EDIT);
+                                    controller_paramter.Add("pdid", (int)ViewBag.PolicyDocument_id);
+                                    controller_paramter.Add("view", (string)ViewBag.PolicyDocument_view);
+                                }
+                                else
+                                {
+                                    view_name = "index";
+
+                                    controller_paramter.Add("acid", InsiderTrading.Common.ConstEnum.UserActions.RULES_POLICY_DOCUMENT_LIST);
+                                }
+                                @*<a class="btn btn-success" href='@Url.Action(view_name, contorller_name, controller_paramter)' role="button">
+                                    <i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14010")
+                                </a>*@
+                                <button type="button" id="btnSave" class="btn btn-success" name="Create"><i class=" fa fa-save"></i> @InsiderTrading.Common.Common.getResource("com_btn_14017")</button>
+                                <button type="button" class="btn btn-success cancel" id="Cancel" name="Cancel" data-dismiss="modal"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14011")</button>
+                                @Html.Hidden("backpd", (bool)ViewBag.backToPolicyDocument)
+                                @Html.Hidden("pdid", (int)ViewBag.PolicyDocument_id)
+                                @Html.Hidden("view", (string)ViewBag.PolicyDocument_view)
+                                @Html.Hidden("frm", (string)ViewBag.frm)
+                                @Html.Hidden("Create", "")
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-success" name="Create"><i class=" fa fa-save"></i> @InsiderTrading.Common.Common.getResource("com_btn_14017")</button>
+
+                                <a class="btn btn-success" href='@Url.Action("Index", "ComCode", new { acid = InsiderTrading.Common.ConstEnum.UserActions.OTHERMASTER_COMCODE_VIEW, CodeGroupId = Model.CodeGroupId, ParentCodeId = Model.ParentCodeId})' role="button">
+                                    <i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14010")
+                                </a>
+                            }
+                        }
+                            </div>
+                        </div>
+                        <!-- /.row (nested) -->
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        @Html.HiddenFor(m => m.CodeID)
+        @Html.HiddenFor(m => m.CodeGroupId)
+        @Html.HiddenFor(m => m.ParentCodeId)
+        @Html.Hidden("acid", (int)ViewBag.UserAction)
+        <input type="hidden" name="authorization" value="Create:@ViewBag.UserAction,DeleteCode:@InsiderTrading.Common.ConstEnum.UserActions.OTHERMASTER_COMCODE_DELETE" />
+    </section><!-- /.content -->
+}
+
+@Scripts.Render("~/bundles/ComCode")
+@Html.Hidden("PopulateComboOnChange", Url.Action("PopulateCombo_OnChange", "ComCode"))
+@Html.Hidden("SaveAction", Url.Action("Create", "ComCode"))

@@ -1,0 +1,59 @@
+﻿@model InsiderTrading.Models.PreclearanceRequestNonImplCompanyModel
+@{
+    var html_attr = (Dictionary<string, object>)null;
+    var DematDropDown = (List<InsiderTradingDAL.PopulateComboDTO>)null;
+
+    if (ViewBag.IsFetch != null && ViewBag.IsFetch == true)
+    {
+        html_attr = html_attr = new Dictionary<string, object> { };
+        html_attr.Add("class", "form-control");
+
+        DematDropDown = ViewBag.DematDropDown;
+    }
+    else
+    {
+        html_attr = (Dictionary<string, object>)ViewData["html_attr"];
+        DematDropDown = (List<InsiderTradingDAL.PopulateComboDTO>)ViewData["DematDropDown"];
+    }
+}
+<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+    <div class="form-group">
+        @Html.LabelFor(m => m.DMATDetailsID)
+        @Html.DropDownListFor(m => m.DMATDetailsID, new SelectList(DematDropDown, "Key", "Value", ""), html_attr)
+        @Html.ValidationMessageFor(m => m.DMATDetailsID)
+    </div>
+</div>
+<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" style="display:none" id="tmidDiv">
+    <div class="form-group">
+        @Html.Label(InsiderTrading.Common.Common.getResource("usr_grd_11478"))
+        @Html.TextBox("TMID", "", new { @class = "form-control two-digits", id = "tmidTxt", rows = "5", @readonly = "readonly" })
+    </div>
+</div>
+
+@Html.Hidden("DMATComboOnChange", Url.Action("DMATCombo_OnChange", "PreclearanceRequestNonImplCompany"))
+
+<script type="text/javascript">
+    $('#DMATDetailsID').change(function (event) {
+        debugger
+        var nDMATDetailsID = $('#DMATDetailsID').val();
+        if (nDMATDetailsID != 0) {
+            $.ajax({
+                url: $("#DMATComboOnChange").val(),
+                type: 'post',
+                cache: false,
+                data: { 'nDMATDetailsID': nDMATDetailsID },
+                datatype: JSON,
+                success: function (result) {
+                    $("#tmidTxt").val(result);
+                    $("#tmidDiv").removeAttr('style');
+                },
+                error: function (result) {
+                }
+            });
+        }
+        else {
+            $("#tmidDiv").attr('style', 'display:none');
+        }
+    });
+</script>
+

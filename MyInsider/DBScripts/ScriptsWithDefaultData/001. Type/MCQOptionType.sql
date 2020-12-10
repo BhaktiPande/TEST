@@ -1,0 +1,18 @@
+
+IF EXISTS(SELECT NAME FROM SYS.PROCEDURES WHERE NAME = 'st_MCQ_QuestionDetails')
+BEGIN
+DROP PROCEDURE st_MCQ_QuestionDetails
+END
+IF EXISTS (SELECT NAME FROM SYS.types WHERE NAME = 'MCQQuestionType')
+BEGIN
+	DROP TYPE MCQQuestionType
+END
+GO
+IF NOT EXISTS (SELECT 1 FROM SYS.TYPES ST JOIN SYS.SCHEMAS SS ON ST.schema_id = SS.schema_id WHERE (ST.name = N'MCQQuestionType') AND (SS.name = N'dbo'))
+CREATE TYPE [MCQQuestionType] AS TABLE
+(
+	QuestionBankDetailsID INT DEFAULT 0,
+	OptionNo			VARCHAR(2)DEFAULT null,
+	QuestionsAnswer		VARCHAR(MAX) DEFAULT NULL,
+	CorrectAnswer		bit DEFAULT 0
+)

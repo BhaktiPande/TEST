@@ -1,0 +1,148 @@
+﻿@model InsiderTrading.Models.RestrictedListModel
+@{
+    ViewBag.Title = "Index";
+    HtmlHelper.ClientValidationEnabled = false;
+    var searchResult = Html.Raw(Json.Encode(TempData["SearchArray"]));
+}
+
+@*@Styles.Render("~/content/SW360")*@
+@Scripts.Render("~/bundles/RestrictedList")
+<style>
+    .hideEditBtn {
+        display: none !important;
+    }
+</style>
+<script src="~/Scripts/RestrictedSearch.js"></script>
+<script type="text/javascript">
+    function openWindow(param) {
+        var newWin = window.open('../CommonSSRSReport/SSRSReportViewer.aspx?ReportID=' + param, 'SSRSReport',
+                        'toolbar=0,location=0,menubar=0,status=0,scrollbars=yes,copyhistory=0,height=600,width=800,modal=yes,alwaysRaised=yes,resizable=1');
+        if (newWin != null) {
+            newWin.focus();
+            void (0);
+
+        }
+    }
+</script>
+
+<section class="content-header">
+    <h1>
+        @Html.AntiForgeryToken()
+        @InsiderTrading.Common.Common.getResource("rl_ttl_50002")
+    </h1>
+</section>
+
+<!-- Main content -->
+<section class="content search" gridtype="@ViewBag.GridType">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                @Html.LabelFor(Model => Model.CompanyName)
+                                @Html.DropDownListFor(Model => Model.CompanyName, new SelectList(ViewBag.CompanyNameDropDown, "Key", "Value", " "), new { @class = "form-control", gridtype = @ViewBag.GridType, id = "1" })
+                                @Html.ValidationMessageFor(Model => Model.CompanyName)
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                @Html.LabelFor(Model => Model.ISINCode)
+                                @Html.TextBoxFor(Model => Model.ISINCode, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "2" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                @Html.LabelFor(Model => Model.BSECode)
+                                @Html.TextBoxFor(Model => Model.BSECode, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "3" })
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                @Html.LabelFor(Model => Model.NSECode)
+                                @Html.TextBoxFor(Model => Model.NSECode, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "4" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group" id="sandbox-container">
+                                @Html.LabelFor(Model => Model.ApplicableFrom)
+                                <div class="input-group date" id="applicablefromdate" data-date-format="dd/mm/yyyy">
+                                    @Html.TextBox("ApplicableFrom", "", new { @class = "form-control", gridtype = @ViewBag.GridType, id = "5" })
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group" id="sandbox-container">
+                                @Html.LabelFor(Model => Model.ApplicableTo)
+                                <div class="input-group date" id="applicabletodate" data-date-format="dd/mm/yyyy">
+                                    @Html.TextBox("ApplicableTo", "", new { @class = "form-control", gridtype = @ViewBag.GridType, id = "6" })
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group" id="sandbox-container">
+                                @Html.LabelFor(Model => Model.CreatedBy)
+                                @Html.DropDownListFor(model => model.CreatedBy, new SelectList(ViewBag.CreatedByDropDown, "Key", "Value", " "), new { @class = "form-control", gridtype = @ViewBag.GridType, id = "7" })
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group" id="sandbox-container">
+                                @Html.LabelFor(Model => Model.RestrictedListStatus)
+                                @Html.DropDownListFor(model => model.RestrictedListStatus, new SelectList(ViewBag.RestrictedListStatus, "Key", "Value"), new { @class = "form-control", gridtype = @ViewBag.GridType, id = "8" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <button type="button" class="btn btn-success" id="searchBtn"><i class="fa fa-search"> @InsiderTrading.Common.Common.getResource("com_btn_14005")</i></button>
+                            <button type="button" class="btn btn-success" id="btnReset" dt_name="btnReset" dt_gridtype="@ViewBag.GridType"><i class="fa fa-undo"></i> @InsiderTrading.Common.Common.getResource("com_btn_14006")</button>
+                            @if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_CREATE))
+                            {
+                                <a class="btn btn-success" data-toggle="modal" href='@Url.Action("Create", "RestrictedList", new { acid = InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_CREATE, nApplicableID = 0, CalledFrom = "Edit" })' role="button"><i class="icon icon-calender"></i>   @InsiderTrading.Common.Common.getResource("rl_btn_50018")</a>
+
+                                @*String onclick = String.Format("openWindow('{0}')", Html.Encode(@ViewBag.RID));
+                                    <button type="button" class="btn btn-success" onclick="@onclick"> <i class="fa fa-book"></i>@InsiderTrading.Common.Common.getResource("rl_btn_50013")</button>*@
+                            }
+                            <a class="btn btn-success" id="EmpDetails" data-toggle="modal" href='@Url.Action("DownloadExcel", "Employee", new { ReportType = 3 })' role="button"> @InsiderTrading.Common.Common.getResource("usr_btn_50630") </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="div-spacer"></div><br />
+    <input type="hidden" id="9" value="MainPage"/>
+    @{Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "searchBtn", sSortCol = "3", acid = InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_VIEW });}
+    <div class="div-spacer"></div><br />
+</section>
+
+@*@Scripts.Render("~/bundles/RestrictedSearch")*@
+@{
+    if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_VIEW))
+    {
+        @Html.Hidden("View", Url.Action("Create", "RestrictedList", new { acid = InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_VIEW, CalledFrom = "View" }), new { @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'text':'','href':'" + Url.Action("Create", "RestrictedList", new { acid = InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_VIEW, CalledFrom = "View" }) + "&nMasterID=<RlMasterId>','class':'display-icon icon icon-eye'}" })
+    }
+    if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_EDIT))
+    {
+        @Html.Hidden("Edit", Url.Action("Create", "RestrictedList", new { acid = InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_EDIT, CalledFrom = "Edit" }), new { @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'text':'','href':'" + Url.Action("Create", "RestrictedList", new { acid = InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_EDIT, CalledFrom = "Edit" }) + "&nMasterID=<RlMasterId>','class':'display-icon icon icon-edit btnEditTradingPolicy'}" })
+    }
+    if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_HISTORY))
+    {
+        @Html.Hidden("History", Url.Action("History", "RestrictedList", new { acid = InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_HISTORY }), new { gridtype = @ViewBag.GridType, @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'text':'','href':'" + Url.Action("History", "RestrictedList", new { acid = InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_HISTORY }) + "&nMasterID=<RlMasterId>', 'class':'glyphicon glyphicon-header','style':'font-size:20px;'}" })
+    }
+}
+@Html.Hidden("SearchResult", searchResult)
+@Scripts.Render("~/bundles/SearchResult")

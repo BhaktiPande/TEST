@@ -1,0 +1,298 @@
+﻿@model InsiderTrading.Models.RoleMasterModel
+
+@{
+    ViewBag.Title = InsiderTrading.Common.Common.getResource("usr_ttl_12036");
+}
+<script>
+    $(document).ready(function () {
+
+        $(document).undelegate('#btnSave', 'click');
+
+        $(document).delegate('#btnSave', 'click', function (event) {
+            $('#RoleMasterForm').removeData('validator');
+            $('#RoleMasterForm').removeData('unobtrusiveValidation');
+            $("#RoleMasterForm").each(function () { $.data($(this)[0], 'validator', false); });
+            $.validator.unobtrusive.parse("#RoleMasterForm");
+            if ($("#RoleMasterForm").valid()) {
+                $.ajax({
+                    url: $("#SaveAction").val(),
+                    method: 'post',
+                    headers: getRVToken(),
+                    data: $("#RoleMasterForm").serialize(),
+                    success: function (response) {
+                        if (response.IsActive) {
+                            if (response.CalledFrom == "emp") {
+                                $("#userInfoModel_SubmittedRole option:last").after("<option value=" + "\"" + response.RoleId + "\"" + ">" + response.RoleName + "</option>");
+                            }
+                            else {
+                                $("#SubmittedRole option:last").after("<option value=" + "\"" + response.RoleId + "\"" + ">" + response.RoleName + "</option>");
+                            }
+                        }
+                        if (response.status) {
+                            $.ajax({
+                                url: response.url,
+                                method: 'GET',
+                                success: function (InnerResponse) {
+                                    $(".modal-dialog").css({ width: '90%' });
+                                    $("#addRoleMaster .modal-body").html(InnerResponse);
+                                },
+                                error: function (response) { }
+                            });
+                            //if (response.IsActive && response.IsVisible) {
+                            //    $("#4 option:last").after("<option value=" + "\"" + response.CodeID + "\"" + ">" + response.DisplayCode + "</option>");
+                            //}
+
+                            //showMessage(response.Message, true);
+                            //setTimeout(function () {
+                            //    $("#addRoleMaster").hide();
+                            //}, 1000);
+                        }
+                        else {
+
+                            DisplayErrors(response.error);
+                        }
+                    },
+                    error: function (response) { }
+                });
+            }
+        });
+
+        $(document).delegate('.btnSave', 'click', function (event) {
+            if ($("input:checked").length == 1) {
+                if (confirmDialog("Are you sure want to add this Role as default role for this User type.?")) {
+                    var RoleId = $(event.currentTarget).attr('RoleId');
+                    window.location.href = "RoleMaster/create?RoleId=" + RoleId;
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+        });
+
+        $("#UserTypeCodeId").change(function () {
+            var chkIsDefault = document.getElementById("IsDefault");
+            chkIsDefault.removeAttribute('checked');
+        });
+    });
+
+    function DisplayErrors(errors) {
+        $('input').removeClass('input-validation-error');
+        $('select').removeClass('input-validation-error');
+
+        $('#messageSection div').not('#RoleMasterForm #divValidationSummaryModal,#mainMessageSection').remove();
+        $("#RoleMasterForm #divValidationSummaryModal ul").html("");
+        for (index in errors) {
+            var obj = errors[index];
+            for (i = 0; i < obj.length; i++) {
+                var li = $("<li>");
+                $(li).text(obj[i]);
+                $("#RoleMasterForm  #divValidationSummaryModal ul").append($(li));
+            }
+        }
+
+        $('#RoleMasterForm  #divValidationSummaryModal').slideDown(500);
+        $('#messageSection div').not('#RoleMasterForm  #divValidationSummaryModal').remove();
+        $("#RoleMasterForm  #divValidationSummaryModal").removeClass("validation-summary-valid");
+        $("#RoleMasterForm  #divValidationSummaryModal").addClass("validation-summary-errors");
+
+        setTimeout(function () {
+            $("#RoleMasterForm #divValidationSummaryModal").removeClass("validation-summary-errors");
+            $('#RoleMasterForm #divValidationSummaryModal').removeClass('alert-danger').fadeOut('slow');
+            $("#RoleMasterForm #divValidationSummaryModal").addClass("alert-danger");
+            $("#RoleMasterForm #divValidationSummaryModal").addClass("validation-summary-valid");
+
+        }, 10000);
+    }
+</script>
+
+@using (Html.BeginForm("Create", "RoleMaster", new { ReturnUrl = ViewBag.ReturnUrl,acid=20,formId = InsiderTrading.Common.ConstEnum.Code.frmAddRole }, FormMethod.Post, new { @id = "RoleMasterForm", @autocomplete = "off" }))
+{
+    <section class="content-header">
+        <h1>
+            @InsiderTrading.Common.Common.getResource("usr_ttl_12036")
+        </h1>
+    </section>
+    <section class="content">
+        @Html.AntiForgeryToken();
+        @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            @if (ViewBag.link_from != "")
+                            {
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <label>@Html.LabelFor(model => model.RoleName)</label>
+                                        @Html.TextBoxFor(model => model.RoleName, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.RoleName)
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        <label>@Html.LabelFor(model => model.RoleName)</label>
+                                        @Html.TextBoxFor(model => model.RoleName, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.RoleName)
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="row">
+                            @if (ViewBag.link_from != "")
+                            {
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <label>@Html.LabelFor(model => model.Description)</label>
+                                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = "5" })
+                                        @Html.ValidationMessageFor(model => model.Description)
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        <label>@Html.LabelFor(model => model.Description)</label>
+                                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = "5" })
+                                        @Html.ValidationMessageFor(model => model.Description)
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="row">
+                            @if (ViewBag.link_from != "")
+                            {
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        <label>@Html.LabelFor(model => model.StatusCodeId)</label>
+                                        @Html.DropDownListFor(model => model.StatusCodeId, new SelectList(ViewBag.RoleStatus, "Key", "Value", ""), new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.StatusCodeId)
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        <label>@Html.LabelFor(model => model.UserTypeCodeId)</label>
+                                        @if ((ViewBag.IsActivityAssigned == null || ViewBag.IsActivityAssigned == 0) && ViewBag.vwbUserTypeCodeId == 0)
+                                        {
+                                            @Html.DropDownListFor(model => model.UserTypeCodeId, new SelectList(ViewBag.UserType, "Key", "Value", ""), new { @class = "form-control" })
+                                        }
+                                        else
+                                        {
+                                            //if (ViewBag.vwbUserTypeCodeId != 0 && (Model.UserTypeCodeId == null || Model.UserTypeCodeId == 0))
+                                            //{
+                                            //    Model.UserTypeCodeId = ViewBag.vwbUserTypeCodeId;
+                                            //}
+                                            @Html.DropDownListFor(model => model.UserTypeCodeId, new SelectList(ViewBag.UserType, "Key", "Value", ""), new { @class = "form-control", @disabled = "disabled" })
+                                            if (ViewBag.vwbUserTypeCodeId == 0)
+                                            {
+                                                @Html.HiddenFor(model => model.UserTypeCodeId)
+                                            }
+                                            else
+                                            {
+                                                @Html.Hidden("UserTypeCodeId", (int)ViewBag.vwbUserTypeCodeId);
+                                            }
+                                        }
+
+                                        @Html.ValidationMessageFor(model => model.UserTypeCodeId)
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        <label>@Html.LabelFor(model => model.StatusCodeId)</label>
+                                        @Html.DropDownListFor(model => model.StatusCodeId, new SelectList(ViewBag.RoleStatus, "Key", "Value", ""), new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.StatusCodeId)
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        <label>@Html.LabelFor(model => model.UserTypeCodeId)</label>
+                                        @if ((ViewBag.IsActivityAssigned == null || ViewBag.IsActivityAssigned == 0) && ViewBag.vwbUserTypeCodeId == 0)
+                                        {
+                                            @Html.DropDownListFor(model => model.UserTypeCodeId, new SelectList(ViewBag.UserType, "Key", "Value", ""), new { @class = "form-control" })
+                                        }
+                                        else
+                                        {
+                                            //if (ViewBag.vwbUserTypeCodeId != 0 && (Model.UserTypeCodeId == null || Model.UserTypeCodeId == 0))
+                                            //{
+                                            //    Model.UserTypeCodeId = ViewBag.vwbUserTypeCodeId;
+                                            //}
+                                            @Html.DropDownListFor(model => model.UserTypeCodeId, new SelectList(ViewBag.UserType, "Key", "Value", ""), new { @class = "form-control", @disabled = "disabled" })
+                                            if (ViewBag.vwbUserTypeCodeId == 0)
+                                            {
+                                                @Html.HiddenFor(model => model.UserTypeCodeId)
+                                            }
+                                            else
+                                            {
+                                                @Html.Hidden("UserTypeCodeId", (int)ViewBag.vwbUserTypeCodeId);
+                                            }
+                                        }
+
+                                        @Html.ValidationMessageFor(model => model.UserTypeCodeId)
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        @*<div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        <label>@Html.LabelFor(model => model.IsDefault)</label>
+                                        @if (@ViewBag.IsDefault)
+                                        {
+                                            @Html.CheckBox("chkIsDefault_disabled", true, new { @disabled = "disabled", @class = "cr-check" })
+                                            @Html.HiddenFor(model => model.IsDefault)
+                                        }
+                                        else
+                                        {
+                                            @Html.CheckBoxFor(model => model.IsDefault, new { @class = "cr-check" })
+                                        }
+                                    </div>
+                                </div>
+                            </div>*@
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                @if (ViewBag.link_from != "")
+                                {
+                                    <button type="button" class="btn btn-success" name="Save" id="btnSave" data-loading-text="Saving" autocomplete="off">@InsiderTrading.Common.Common.getResource("com_btn_14017")</button>
+
+                                    <button type="button" class="btn btn-success cancel" id="Cancel" name="Cancel" data-dismiss="modal"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14011")</button>
+                                    
+                                    @Html.Hidden("acid", (int)ViewBag.user_action)
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn btn-success" name="Save" id="" data-loading-text="Saving" autocomplete="off"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("com_btn_14017")</button>
+
+                                    <a class="btn btn-success" href='@Url.Action("Cancel", "RoleMaster", new { frm = ViewBag.link_from, uid = ViewBag.user_id })' role="button"><i class="fa fa-times"> </i> @InsiderTrading.Common.Common.getResource("com_btn_14011")</a>
+
+                                    <input type="hidden" name="authorization" value="Save:@ViewBag.user_action" />
+                                }
+                            </div>
+                        </div>
+                        
+                        @Html.HiddenFor(model => model.RoleId)
+                        @Html.Hidden("frm", (string)ViewBag.link_from)
+                        @Html.Hidden("uid", (int)ViewBag.user_id)
+                        @Html.Hidden("Create", "")
+                        @Html.Hidden("Save", "")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+}
+@Html.Hidden("SaveAction", Url.Action("Create", "RoleMaster"))
+@*<div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>*@
+@Scripts.Render("~/bundles/jqueryval")

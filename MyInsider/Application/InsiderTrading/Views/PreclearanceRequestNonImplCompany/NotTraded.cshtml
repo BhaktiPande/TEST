@@ -1,0 +1,53 @@
+﻿@model InsiderTrading.Models.PreclearanceRequestNonImplCompanyModel
+@{
+    ViewBag.Title = "NotTradedView";
+}
+
+<section class="content-header">
+    @Html.AntiForgeryToken()
+    <h1>PRECLEARANCE REQUEST</h1>
+</section>
+<section class="content">
+    @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                @Html.HiddenFor(m => m.PreclearanceRequestId)
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-6 form-group row">
+                            <div class="col-xs-6">
+                                @Html.LabelFor(m => m.ReasonForNotTradingCodeText)
+                            </div>
+                            <div class="col-xs-6">
+                                @Html.DisplayFor(m => m.ReasonForNotTradingCodeText)
+                            </div>
+                        </div>
+                        <div class="col-xs-6 form-group row">
+                            <div class="col-xs-6">
+                                @Html.LabelFor(m => m.ReasonForNotTradingText)
+                            </div>
+                            <div class="col-xs-6">
+                                @Html.DisplayFor(m => m.ReasonForNotTradingText)
+                            </div>
+                        </div>
+
+
+                        <div class="col-xs-12 form-group row">
+
+                            <div class="col-xs-3">
+
+                                <a class="btn btn-success" data-toggle="modal" href='@Url.Action("backButtonAction", "PreclearanceRequestNonImplCompany", new { CalledFrom = ViewBag.CalledFrom })' role="button"><i class="fa fa-chevron-left"></i>   Back</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <input type="hidden" name="CalledFrom" id="CalledFrom" value="@ViewBag.CalledFrom" />
+</section><!-- /.content -->
+
+

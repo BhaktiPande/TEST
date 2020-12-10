@@ -1,0 +1,100 @@
+﻿@model InsiderTrading.Models.CompanyListingDetailsModel
+@{
+    ViewBag.Title = "ListingDetails";
+}
+<div class="panel-body search" gridtype="@ViewBag.GridType">
+    <input type="hidden" value="@ViewBag.Param1" id="1" gridtype="@ViewBag.GridType" />
+    <input type="hidden" value="@ViewBag.IsError" id="IsError" />
+    <input type="hidden" name="CompanyId" value="@ViewBag.CompanyId" />
+@using (Html.BeginForm("", "", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "form", @autocomplete = "off", id = "frmListingDetails" }))
+{    
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+   
+      <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.StockExchangeID)
+                    @Html.DropDownListFor(m => m.StockExchangeID, new SelectList(ViewBag.StockExchangeList, "Key", "Value", ""), new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.StockExchangeID)
+                </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="form-group" id="sandbox-container">
+                @Html.LabelFor(m => m.DateOfListingFrom)
+                @{
+    string DateOfListingFrom = "";
+    if (Model != null)
+    {
+        DateOfListingFrom = InsiderTrading.Common.Common.ApplyFormatting(Model.DateOfListingFrom, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+
+    }
+                }
+                <div class="input-group date">
+                    @Html.TextBox("DateOfListingFrom", DateOfListingFrom, null, new { @class = "form-control" })
+
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+                @Html.ValidationMessageFor(m => m.DateOfListingFrom)
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="form-group" id="sandbox-container">
+                @Html.LabelFor(m => m.DateOfListingTo)
+                @{
+    string DateOfListingTo = "";
+    if (Model != null)
+    {
+        DateOfListingTo = InsiderTrading.Common.Common.ApplyFormatting(Model.DateOfListingTo, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+
+    }
+                }
+                <div class="input-group date">
+                    @Html.TextBox("DateOfListingTo", DateOfListingTo, null, new { @class = "form-control" })
+
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+                @Html.ValidationMessageFor(m => m.DateOfListingTo)
+            </div>
+        </div>
+    </div>
+    @Html.HiddenFor(m => m.CompanyID)
+    @Html.HiddenFor(m => m.CompanyListingDetailsID)
+       <input type="hidden" id="Current" value="@InsiderTrading.Common.Common.ApplyFormatting(InsiderTrading.Common.Common.GetCurrentDate(null), InsiderTrading.Common.ConstEnum.DataFormatType.Date)" />
+    <input type="hidden" id="Current1" value="@InsiderTrading.Common.Common.ApplyFormatting(InsiderTrading.Common.Common.GetCurrentDate(null), InsiderTrading.Common.ConstEnum.DataFormatType.Date)" />
+    <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+@{
+    if (ViewBag.CalledFrom == "Edit")
+    {
+                <button type="button" class="btn btn-success" name="SaveListingDetails" id="btnSaveListingDetails"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("com_btn_14019")</button>
+    }
+}
+            <a class="btn btn-success cancel" href='@Url.Action("Index", "Company", new { acid = InsiderTrading.Common.ConstEnum.UserActions.COMPANY_VIEW})' role="button"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14011")</a>
+        </div>
+    </div>
+    <div class="div-spacer"></div>
+    <br />
+            Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "", sSortCol = "0", acid = InsiderTrading.Common.ConstEnum.UserActions.COMPANY_VIEW });
+}
+</div>
+<script src="~/Scripts/dist/js/custom.js"></script>
+    @Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/CompareDateAnnotation")
+    @Scripts.Render("~/bundles/Company")
+
+    @Html.Hidden("SaveListingDetails", Url.Action("SaveListingDetails", "Company"))
+
+@if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.COMPANY_EDIT) && ViewBag.CalledFrom == "Edit")
+{
+  //  @Html.Hidden("EditListingDetails", Url.Action("EditListingDetails", "Company"))
+    
+      @Html.Hidden("EditListingDetails", Url.Action("EditListingDetails", "Company", new { acid = InsiderTrading.Common.ConstEnum.UserActions.COMPANY_EDIT }), new { @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{ 'CompanyListingDetailsID':'<CompanyListingDetailsID>','text':'','href':'javascript:void(0);','class':'display-icon icon icon-edit btnEditListingDetails'}" })
+}
+@if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.COMPANY_EDIT) && ViewBag.CalledFrom == "Edit")
+{
+  //  @Html.Hidden("DeleteListingDetails", Url.Action("DeleteListingDetails", "Company"))
+    
+    @*@Html.Hidden("deleteRowURL", Url.Action("DeleteListingDetails", "Company", new { acid = InsiderTrading.Common.ConstEnum.UserActions.COMPANY_EDIT, CompanyId = @ViewBag.CompanyID }), new { name = "deleteRowURL", gridtype = @ViewBag.GridType, @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{ 'name': 'deleteRow','ID':'CompanyListingDetailsID','key':'<CompanyListingDetailsID>','CompanyListingDetailsID':'<CompanyListingDetailsID>','text':'','href':'javascript:void(0);','class':'display-icon icon icon-delete btnDeleteListingDetails'}" })*@
+    @Html.Hidden("deleteRowURL", Url.Action("DeleteListingDetails", "Company", new { acid = InsiderTrading.Common.ConstEnum.UserActions.COMPANY_EDIT, CompanyId = @ViewBag.CompanyID }), new { @class = "gridtypecontrol", ctrtype = "link", gridtype = @ViewBag.GridType, gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'text':'', 'href':'javascript:void(0);', 'name':'deleteRow', 'queryString':'[ {ID:\"CompanyListingDetailsID\", key:\"<CompanyListingDetailsID>\"},{ID:\"formId\", key:\"102\"} ]', 'class':'display-icon icon icon-delete btnDeleteListingDetails'}" })
+}

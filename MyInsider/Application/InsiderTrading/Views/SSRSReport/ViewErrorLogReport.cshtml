@@ -1,0 +1,37 @@
+﻿@{
+    ViewBag.Title = "ViewErrorLogReport";
+}
+<section class="content-header">
+    @Html.AntiForgeryToken()
+    <h1>@InsiderTrading.Common.Common.getResource("VwEL_lbl_50022")</h1>
+</section>
+<script type="text/javascript">
+    function openWindow(param) {
+        var newWin = window.open('../CommonSSRSReport/SSRSReportViewer.aspx?ReportID=' + param, 'SSRSReport',
+                        'toolbar=0,location=0,menubar=0,status=0,scrollbars=yes,copyhistory=0,height=600,width=800,modal=yes,alwaysRaised=yes,resizable=1');
+        if (newWin != null) {
+            newWin.focus();
+            void (0);
+
+        }
+    }
+</script>
+<section class="content">
+    <div class="panel panel-default" style="height: 50px; ">
+        <table class="table table-hover">
+            <tr>
+                <td style="text-align: left;">
+                    @if (@ViewBag.Rights)
+                    {
+                        String onclick = String.Format("openWindow('{0}')", Html.Encode(@ViewBag.RID));
+                        <button type="button" class="btn btn-success" onclick="@onclick">
+                            <i class="fa fa-book"></i>@InsiderTrading.Common.Common.getResource("rl_btn_50020")
+                        </button>
+                    }
+                </td>
+            </tr>
+        </table>
+    </div>
+</section>
+
+
