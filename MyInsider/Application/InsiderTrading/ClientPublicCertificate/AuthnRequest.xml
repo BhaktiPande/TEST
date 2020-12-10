@@ -1,0 +1,10 @@
+﻿<AuthnRequests>
+	<TGBL>
+		<IDPUrl>https://fs.tataglobalbeverages.com/adfs/ls/</IDPUrl>
+		<Destination>https://fs.tataglobalbeverages.com/adfs/ls/</Destination>
+		<AssertionConsumerServiceURL>https://www.insider-trade.com/Vigilante/SSO/AssertionConsumer</AssertionConsumerServiceURL>
+		<Issuer>https://www.insider-trade.com/Vigilante/SSO/TGBL</Issuer>
+		<RelayState>https://www.insider-trade.com/Vigilante/SSO/TGBL</RelayState>
+		<Atribute1ForEmail>EMAILADDRESS</Atribute1ForEmail>
+	</TGBL>
+</AuthnRequests>

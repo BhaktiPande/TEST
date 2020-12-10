@@ -1,0 +1,93 @@
+﻿@model InsiderTrading.Models.UpsiSharingData
+@{
+    
+    
+}
+    
+<div class="modal fade" id="UpsiModalDate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="width:35%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i></button>
+                <h4 class="modal-title custom_align" id="myModalLabel">@InsiderTrading.Common.Common.getResource("usr_ttl_55061")</h4>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("UpdateUpsidate", "UpsiDigital", new { ReturnUrl = ViewBag.ReturnUrl, formId = 70 }, FormMethod.Post, new { id = "frmUpdateUPSIPublishDate" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" } })
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            
+                            <div class="form-group">
+                                <div class="form-group" id="sandbox-container">
+                                    @Html.LabelFor(m => m.PublishDate)
+                                    <div class="input-group date">
+                                        @*<input type="text" name="firstname" id="PublishDate" class="form-control">*@
+                                        @Html.TextBoxFor(m => m.PublishDate, new { @class = "form-control", @ID = "PublishDate", @readonly = "readonly" })                                    
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>                                        
+                                    </div>
+                                    <h5 id="txtPublishDate_MSG" style="display:none;color:red">@InsiderTrading.Common.Common.getResource("usr_msg_55073")</h5>
+                                    @Html.ValidationMessageFor(m => m.PublishDate)
+                                </div>
+                            </div>
+                        </div>
+                        @Html.HiddenFor(m => m.UserInfoId, new { @id = "UserInfoId" })
+                        @Html.HiddenFor(m => m.UPSIDocumentId, new { @id = "UPSIDocumentId" })
+                       
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" onclick="UpdateUpsiDatePopUp();" id="Add">@InsiderTrading.Common.Common.getResource("cmp_btn_55062")</button>
+                        <button type="button" class="btn btn-success" id="cancelButton" data-dismiss="modal">@InsiderTrading.Common.Common.getResource("usr_btn_54044")</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function UpdateUpsiDatePopUp(UserInfoId, UPSIDocumentId) {
+       
+        var UserInfoId = $("#UserInfoId").val();
+        var UPSIDocumentId = $("#UPSIDocumentId").val();
+        var Publishdate = $("#PublishDate").val();
+        if ($("#PublishDate").val() == null || $("#PublishDate").val() == 0 || $("#PublishDate").val() == "" || $("#PublishDate").val() == '' || $("#PublishDate").val() == "0") {
+
+            $("#txtPublishDate_MSG").show();
+            return false;
+        }
+        else {
+
+            var form = $('#frmUpdateUPSIPublishDate');
+            var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+            $("#txtPublishDate_MSG").hide();
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UpdateUpsidate", "UpsiDigital")",
+                data: JSON.stringify({ UserInfoId: UserInfoId, UPSIDocumentId: UPSIDocumentId, Publishdate: Publishdate, __RequestVerificationToken: token, formId:70}),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {                                    
+                    if (data.status) {
+                        showMessage(data.Message['success'], true);
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    }
+                    else {
+                        showMessage(data.Message['error'], false);
+                    }                  
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+
+                }
+            });
+
+        }
+
+    }
+</script>
+
+
+

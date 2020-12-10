@@ -1,0 +1,148 @@
+﻿@model InsiderTrading.Models.RestrictedListSettingsModel
+@{
+    ViewBag.Title = InsiderTrading.Common.Common.getResource("rl_ttl_50368");
+
+    var html_attr = new Dictionary<string, object> { };
+
+    html_attr.Add("class", "");
+}
+
+@Styles.Render("~/content/SW360")
+
+<!-- Content Header -->
+<section class="content-header">
+    <h1>@InsiderTrading.Common.Common.getResource("rl_ttl_50368")</h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <!-- form content -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @using (Html.BeginForm("SaveRestrictedListSettings", "RestrictedList", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "", @autocomplete = "off", id = "frmRestrictedListSetting" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+
+                        <!-- form field row 1 -->
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.Preclearance_Required) &nbsp;&nbsp; &nbsp;&nbsp;
+
+                                    @Html.RadioButtonFor(m => m.Preclearance_Required, @InsiderTrading.Models.Configuration_YesNo.Config_Yes, html_attr) @InsiderTrading.Common.Common.getResource("rl_lbl_50376") &nbsp;
+                                    @Html.RadioButtonFor(m => m.Preclearance_Required, @InsiderTrading.Models.Configuration_YesNo.Config_No, html_attr) @InsiderTrading.Common.Common.getResource("rl_lbl_50377") &nbsp;
+                                    @Html.ValidationMessageFor(m => m.Preclearance_Required)
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+
+                        <div id="pcl_required" style="display:none">
+                            <!-- form field row 2 -->
+                            <div class="row" id="pcl_approve">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.Preclearance_Approval) &nbsp;&nbsp; &nbsp;&nbsp;
+
+                                        @Html.RadioButtonFor(m => m.Preclearance_Approval, @InsiderTrading.Models.PreClearance_Approval.Auto, html_attr) @InsiderTrading.Common.Common.getResource("rl_lbl_50374") &nbsp;
+                                        @Html.RadioButtonFor(m => m.Preclearance_Approval, @InsiderTrading.Models.PreClearance_Approval.Manual, html_attr)@InsiderTrading.Common.Common.getResource("rl_lbl_50375") &nbsp;
+                                        @Html.ValidationMessageFor(m => m.Preclearance_Approval)
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+
+                            <!-- form field row 3 -->
+                            <div class="row" id="pcl_allowzero">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.Preclearance_AllowZeroBalance) &nbsp;&nbsp; &nbsp;&nbsp;
+
+                                        @Html.RadioButtonFor(m => m.Preclearance_AllowZeroBalance, @InsiderTrading.Models.Configuration_YesNo.Config_Yes, html_attr) @InsiderTrading.Common.Common.getResource("rl_lbl_50376") &nbsp;
+                                        @Html.RadioButtonFor(m => m.Preclearance_AllowZeroBalance, @InsiderTrading.Models.Configuration_YesNo.Config_No, html_attr) @InsiderTrading.Common.Common.getResource("rl_lbl_50377") &nbsp;
+                                        @Html.ValidationMessageFor(m => m.Preclearance_AllowZeroBalance)
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+
+                            <!-- form field row 4 -->
+                            <div class="row" id="pcl_req_restrict">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.Preclearance_FORM_Required_Restricted_company) &nbsp;&nbsp; &nbsp;&nbsp;
+
+                                        @Html.RadioButtonFor(m => m.Preclearance_FORM_Required_Restricted_company, @InsiderTrading.Models.Configuration_YesNo.Config_Yes, html_attr) @InsiderTrading.Common.Common.getResource("rl_lbl_50376") &nbsp;
+                                        @Html.RadioButtonFor(m => m.Preclearance_FORM_Required_Restricted_company, @InsiderTrading.Models.Configuration_YesNo.Config_No, html_attr) @InsiderTrading.Common.Common.getResource("rl_lbl_50377") &nbsp;
+                                        @Html.ValidationMessageFor(m => m.Preclearance_FORM_Required_Restricted_company)
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+
+                            <!-- form field row 5 -->
+                            <div class="row" id="form_f_upload">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        @Html.Label(@InsiderTrading.Common.Common.getResource("rl_lbl_50373")) &nbsp;&nbsp; &nbsp;&nbsp;
+                                        @Html.Partial("~/Views/Common/MultiDocumentUpload.cshtml", Model.Preclearance_Form_F_NewFile, new ViewDataDictionary() { { "user_action", ViewBag.UserAction } })
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+
+                            <!-- form field row 5 -->
+                            <div class="row" id="form_f_exist">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        @if (ViewBag.ShowUploadedFile)
+                                        {
+                                            @Html.Label("Current Form F File")
+                                            @Html.Partial("~/Views/Common/ViewMultiUploadedDocument.cshtml", Model.Preclearance_Form_F_Existing, new ViewDataDictionary() { { "user_action", ViewBag.UserAction } })
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.Allow_Restricted_List_Search) &nbsp;&nbsp; &nbsp;&nbsp;
+
+                                    @Html.RadioButtonFor(m => m.Allow_Restricted_List_Search, @InsiderTrading.Models.RestrictedListSearch_Allow.Perpetual, html_attr) @InsiderTrading.Common.Common.getResource("rl_lbl_50381") &nbsp;
+                                    @Html.RadioButtonFor(m => m.Allow_Restricted_List_Search, @InsiderTrading.Models.RestrictedListSearch_Allow.Limited, html_attr) @InsiderTrading.Common.Common.getResource("rl_lbl_50382") &nbsp;
+                                    @Html.ValidationMessageFor(m => m.Allow_Restricted_List_Search)
+                                    <span id="noOfHits" style="display:none">
+                                        @Html.TextBoxFor(m => m.RLSearchLimit, new { placeholder = "Enter number of hits/day", maxlength = "2" })
+                                        <br/>
+                                        @Html.ValidationMessageFor(m => m.RLSearchLimit)
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <button type="submit" name="Save" class="btn btn-success" id="btnSave">
+                                    <i class="fa fa-save"> @InsiderTrading.Common.Common.getResource("com_btn_14017")</i>
+                                </button>
+                            </div>
+                        </div>
+
+                        @Html.HiddenFor(m => m.FormFDocId)
+                        @Html.Hidden("acid", (int)ViewBag.UserAction)
+                        @Html.Hidden("del_action", "1")
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@Scripts.Render("~/bundles/RestrictedListSetting")
+

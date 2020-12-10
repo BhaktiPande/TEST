@@ -1,0 +1,70 @@
+﻿@{
+    ViewBag.Title = "Add";
+}
+<section class="content">    
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="row">
+                <a class="employee" href='@Url.Action("create", "Employee", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_CREATE })'>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <div class="panel panel-category">
+                            <div class="panel-heading">
+                                <p class="text-center">
+                                    <i class="icon icon-employees"></i>
+                                </p>
+                            </div>
+                            <div class="panel-body">
+                                <h4 class="title">@InsiderTrading.Common.Common.getResource("usr_lbl_11327")</h4>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a class="corporate" href='@Url.Action("Index", "CorporateUser", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_CREATE })'>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <div class="panel panel-category">
+                            <div class="panel-heading">
+                                <p class="text-center">
+                                    <i class="icon icon-corporate"></i>
+                                </p>
+                            </div>
+                            <div class="panel-body">
+                                <h4 class="title">@InsiderTrading.Common.Common.getResource("usr_lbl_11328")</h4>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a class="non-employee" href='@Url.Action("create", "NonEmployeeInsider", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_CREATE })'>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <div class="panel panel-category">
+                            <div class="panel-heading">
+                                <p class="text-center">
+                                    <i class="icon icon-non-employee"></i>
+                                </p>
+                            </div>
+                            <div class="panel-body">
+                                <h4 class="title">@InsiderTrading.Common.Common.getResource("usr_lbl_11329")</h4>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <a class="btn btn-success" href='@Url.Action("Index", "Employee", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_VIEW })' role="button">@InsiderTrading.Common.Common.getResource("com_btn_14011")</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin:50px 0px">
+            <h5>PLEASE NOTE</h5>
+            <h5>1.@InsiderTrading.Common.Common.getResource("usr_lbl_11327") - @InsiderTrading.Common.Common.getResource("usr_lbl_50621")</h5>
+            <h5>2.@InsiderTrading.Common.Common.getResource("usr_lbl_11328") - @InsiderTrading.Common.Common.getResource("usr_lbl_50622")</h5>
+            <h5>3.@InsiderTrading.Common.Common.getResource("usr_lbl_11329") - @InsiderTrading.Common.Common.getResource("usr_lbl_50623")</h5>
+        </div>
+    </div>
+
+</section>
+@Scripts.Render("~/bundles/employee")

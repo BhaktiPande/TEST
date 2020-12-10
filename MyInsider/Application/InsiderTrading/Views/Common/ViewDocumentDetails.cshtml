@@ -1,0 +1,16 @@
+﻿@model InsiderTrading.Models.DocumentDetailsModel
+
+<div class="alert" style="display: none;" name="ErrorMessage" gridtype="@InsiderTrading.Common.ConstEnum.GridType.DocumentList"></div>
+
+<div class="search" gridtype="@InsiderTrading.Common.ConstEnum.GridType.DocumentList">
+    @Html.Hidden("8", Model.MapToTypeCodeId, new { id = "8", gridtype = InsiderTrading.Common.ConstEnum.GridType.DocumentList })
+    @Html.Hidden("9", Model.MapToId, new { id = "9", gridtype = InsiderTrading.Common.ConstEnum.GridType.DocumentList })
+    @Html.Hidden("10", Model.PurposeCodeId, new { id = "10", gridtype = InsiderTrading.Common.ConstEnum.GridType.DocumentList })
+
+    @{
+        Html.RenderAction("Index", "DatatableGrid", new { type = InsiderTrading.Common.ConstEnum.GridType.DocumentList, btnSearch = "", sSortCol = "0", acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DOCUMENT_VIEW, bIsActionCol = false });
+    }
+</div>
+
+@Html.Hidden("DownloadDocument", Url.Action("Download", "Document", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DOCUMENT_VIEW }))
+

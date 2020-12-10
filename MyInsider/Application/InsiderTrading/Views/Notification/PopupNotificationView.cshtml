@@ -1,0 +1,42 @@
+﻿@if (!ViewBag.NoRecord)
+{
+    <div class="modal" id="myModalNotificationPopup" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>
+                        @InsiderTrading.Common.Common.getResource("cmu_lbl_18063")
+                        <button type="button" class="close" data-dismiss="modal" aria-label="@InsiderTrading.Common.Common.getResource("cmu_btn_18064")"><span aria-hidden="true">&times;</span></button>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <ul class="menu">
+
+                        @foreach (var objNotificationList in ViewBag.NotificationDictionary)
+                        {
+                            <li>
+                                <a href="@Url.Action("view", "Notification", new { acid = InsiderTrading.Common.ConstEnum.UserActions.NOTIFICATION_VIEW_RIGHT, NotificationId = objNotificationList.NotificationQueueId })" title="@objNotificationList.Contents">
+                                    @*<img src="images/icon-message.png">*@
+                                    @objNotificationList.Contents
+                                </a>
+                            </li>
+                        }
+                        @*}
+                            else
+                            {
+                                <li>
+                                    @InsiderTrading.Common.Common.getResource("cmu_lbl_18056")
+                                </li>
+                            }*@
+                    </ul>
+
+                </div>
+                <div class="modal-footer">
+
+                    <a href="@Url.Action("Index", "Notification", new { acid = InsiderTrading.Common.ConstEnum.UserActions.NOTIFICATION_LIST_RIGHT })" class=""><button class="confirm btn btn btn-success" type="button">@InsiderTrading.Common.Common.getResource("cmu_btn_18048")</button></a>
+                    <button type="button" class="cancel btn btn-danger" data-dismiss="modal" aria-label="@InsiderTrading.Common.Common.getResource("cmu_btn_18064")">@InsiderTrading.Common.Common.getResource("cmu_btn_18064")</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

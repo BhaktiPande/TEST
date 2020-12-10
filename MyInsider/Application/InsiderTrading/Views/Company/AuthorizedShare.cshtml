@@ -1,0 +1,82 @@
+﻿@model InsiderTrading.Models.CompanyAuthorizedShareCapitalModel
+@{
+    ViewBag.Title = "AuthorizedShare";
+}
+
+<div class="panel-body search" gridtype="@ViewBag.GridType">
+    <input type="hidden" value="@ViewBag.Param1" id="1" gridtype="@ViewBag.GridType" />
+    <input type="hidden" name="CompanyId" value="@ViewBag.CompanyId" />
+@using (Html.BeginForm("", "", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "form", id = "frmAuthorisedShares", autocomplete = "off" }))
+{    
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+    <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="form-group" id="sandbox-container">
+                @Html.LabelFor(m => m.AuthorizedShareCapitalDate)
+                @{
+    string AuthorizedShareCapitalDate = "";
+    if (Model != null)
+    {
+        AuthorizedShareCapitalDate = InsiderTrading.Common.Common.ApplyFormatting(Model.AuthorizedShareCapitalDate, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+
+    }
+                 }
+                <div class="input-group date">
+                    @Html.TextBox("AuthorizedShareCapitalDate", AuthorizedShareCapitalDate, null, new { @class = "form-control" })
+
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+                @Html.ValidationMessageFor(m => m.AuthorizedShareCapitalDate)
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.AuthorizedShares)
+                    @Html.TextBoxFor(m => m.AuthorizedShares, "{0:N0}", new { @class = "form-control numericOnly" })
+                    @Html.ValidationMessageFor(m => m.AuthorizedShares)
+                  
+                </div>
+        </div>
+        @Html.HiddenFor(m => m.CompanyAuthorizedShareCapitalID)
+        @Html.HiddenFor(m => m.CompanyID)
+        <input type="hidden" id="Current" value="@InsiderTrading.Common.Common.ApplyFormatting(InsiderTrading.Common.Common.GetCurrentDate(null), InsiderTrading.Common.ConstEnum.DataFormatType.Date)" />
+    </div>
+    <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            @{
+                if (ViewBag.CalledFrom == "Edit")
+                {
+                            <button type="button" class="btn btn-success" name="SaveAuthorisedShares" id="SaveAuthorisedShares"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("com_btn_14019")</button>
+                }
+            }
+            <a class="btn btn-success cancel" href='@Url.Action("Index", "Company", new { acid = InsiderTrading.Common.ConstEnum.UserActions.COMPANY_VIEW})' role="button"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14011")</a>
+        </div>
+    </div>
+    <hr>
+    <div class="div-spacer"></div>
+        Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "", sSortCol = "0", acid = InsiderTrading.Common.ConstEnum.UserActions.COMPANY_VIEW });
+  
+}
+</div>
+
+    @Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/jQueryFixes")
+    @Scripts.Render("~/bundles/Company")
+@Scripts.Render("~/bundles/CompareDateAnnotation")
+@Scripts.Render("~/bundles/accounting")
+<script src="~/Scripts/dist/js/custom.js"></script>
+    @Html.Hidden("SaveAuthorizedShareCapital", Url.Action("SaveAuthorizedShareCapital", "Company"))
+@if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.COMPANY_EDIT) && ViewBag.CalledFrom == "Edit")
+{
+   // @Html.Hidden("EditAuthorizedShareCapital", Url.Action("EditAuthorisedSharesDetails", "Company"))
+    
+    @Html.Hidden("EditAuthorizedShareCapital", Url.Action("EditAuthorisedSharesDetails", "Company", new { acid = InsiderTrading.Common.ConstEnum.UserActions.COMPANY_EDIT }), new { @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{ 'CompanyAuthorizedShareCapitalID':'<CompanyAuthorizedShareCapitalID>','text':'','href':'javascript:void(0);','class':'display-icon icon icon-edit btnEditAuthorisedShares'}" })
+    
+}
+@if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.COMPANY_DELETE) && ViewBag.CalledFrom == "Edit")
+{
+  //  @Html.Hidden("DeleteFromGrid", Url.Action("DeleteCompanyAuthorisedSharesDetails", "Company"))
+     @*@Html.Hidden("deleteRowURL", Url.Action("DeleteCompanyAuthorisedSharesDetails", "Company", new { acid = InsiderTrading.Common.ConstEnum.UserActions.COMPANY_EDIT, CompanyId = @ViewBag.CompanyID }), new { name = "deleteRowURL", gridtype = @ViewBag.GridType, @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{ 'name': 'deleteRow','ID':'CompanyAuthorizedShareCapitalID','key':'<CompanyAuthorizedShareCapitalID>','CompanyAuthorizedShareCapitalID':'<CompanyAuthorizedShareCapitalID>','text':'','href':'javascript:void(0);','class':'display-icon icon icon-delete btnDeleteAuthorisedShares'}" })*@
+    @Html.Hidden("deleteRowURL", Url.Action("DeleteCompanyAuthorisedSharesDetails", "Company", new { acid = InsiderTrading.Common.ConstEnum.UserActions.COMPANY_EDIT, CompanyId = @ViewBag.CompanyID }), new { @class = "gridtypecontrol", ctrtype = "link", gridtype = @ViewBag.GridType, gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'text':'', 'href':'javascript:void(0);', 'name':'deleteRow', 'queryString':'[ {ID:\"CompanyAuthorizedShareCapitalID\", key:\"<CompanyAuthorizedShareCapitalID>\"},{ID:\"formId\", key:\"100\"} ]', 'class':'display-icon icon icon-delete btnDeleteAuthorisedShares'}" })
+}

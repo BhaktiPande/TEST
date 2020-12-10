@@ -1,0 +1,432 @@
+﻿@model InsiderTrading.Models.TemplateMasterModel
+
+@Scripts.Render("~/bundles/TemplateMasterCKEditor")
+
+@{
+    //ViewBag.placeholderarr = "[['USR_FIRSTNAME'], ['USR_MIDDLENAME'], ['USR_LASTNAME'], ['USR_EMAILID'],['UREL_FIRSTNAME'], ['UREL_MIDDLENAME'], ['UREL_LASTNAME'], ['USR_BECOMEINSIDER_DATE'], ['PCL_PREVAPPROVNUMBERANDDATE'], ['USR_DEPT'], ['|~|LOGIN_ID|~|'],['|~|FIRST_NAME|~|'],['|~|MIDDLE_NAME|~|'],['|~|LAST_NAME|~|'],['|~|USER_ID|~|'],['|~|COMPANY_NAME|~|']]";
+    if (ViewBag.placeholderarr == null)
+    {
+        ViewBag.placeholderarr = "[[]]";
+    }
+}
+
+@{
+    if (ViewBag.CommunicationMode_id == InsiderTrading.Common.ConstEnum.Code.CommunicationModeForFormE)
+    {
+        <script>
+
+            var globalPlaceholderArrayForCKEditor = @Html.Raw(ViewBag.placeholderarr); //['First Element','[|~|USR_FIRSTNAME|~|]', '[USR_MIDDLENAME]', '[USR_LASTNAME]', '[USR_EMAILID]', '[USR_DEPT]', '[USR_BECOMEINSIDER_DATE]', '[PCL_PREVAPPROVNUMBERANDDATE]'];
+    
+            CKEDITOR.editorConfig = function( config ) {
+
+                config.toolbar = [
+                { name: 'document', items: [ 'Preview', 'Print' ] },
+                { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', '-', 'Undo', 'Redo' ] },
+
+                { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat' ] },
+                { name: 'formatandalign', items : ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+                '/',
+                { name: 'find' , items: [ 'Find', 'Replace', 'SelectAll' ] },
+                { name: 'fontformatting', items : ['Font', 'FontSize', 'TextColor', 'BGColor'] },
+                { name: 'textcaseswitcher', items : ['TransformTextSwitcher', 'TransformTextToLowercase', 'TransformTextToUppercase', 'TransformTextCapitalize']},
+                { name: 'insertion', items : ['CreatePlaceholder', 'Table', 'HorizontalRule', 'SpecialChar', 'PageBreak', 'placeholder_select'] }
+
+
+                ];
+
+                //Define the placeholder tokens here; just use the stringnames of placeholders, do not use the placefolder separator.
+                //use jQuery or something here to dynamically populate the list for "placeholders" array by fetching the list form database table
+                config.placeholder_select = {
+                    placeholders : globalPlaceholderArrayForCKEditor,
+                    format : '[[%placeholder%]]'
+                }
+
+                //add the placeholder_select as extra plugins
+                config.extraPlugins = 'richcombo,placeholder_select';
+
+            };
+
+
+            CKEDITOR.dialog.add("placeholder", function (a) {
+                var b = a.lang.placeholder;
+                a = a.lang.common.generalTab;
+
+                return {
+                    title: b.title,
+                    minWidth: 300,
+                    minHeight: 80,
+                    contents: [{
+                        id: "info",
+                        label: a,
+                        title: a,
+                        elements: [{
+                            id: "name",
+                            type: "select",
+                            style: "width: 100%;",
+                            label: b.name,
+                            items: globalPlaceholderArrayForCKEditor,
+                            "default": '',
+                            required: !0,
+                            validate: CKEDITOR.dialog.validate.regex(/^[^\[\]<>]+$/, b.invalidName),
+                            setup: function (a) {
+                                this.setValue(a.data.name)
+                            },
+                            commit: function (a) {
+                                a.setData("name", this.getValue())
+                            }
+                        }]
+                    }]
+                }
+            });
+        </script>
+    }
+}
+
+@{
+    if (ViewBag.CommunicationMode_id == InsiderTrading.Common.ConstEnum.Code.CommunicationModeForLetter)
+    {
+        #region  CommunicationModeForLetter
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TemplateName)
+                    @Html.TextBoxFor(model => model.TemplateName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TemplateName)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group ">
+                    @Html.LabelFor(model => model.IsActive)
+                    &nbsp;
+                    @if (ViewBag.calledFrom == "Communication")
+                    {
+                        @Html.CheckBoxFor(model => model.IsActive, new { @class = "cr-check", type = "checkbox", @disabled = "disabled" })
+                    }
+                    else
+                    {
+                        @Html.CheckBoxFor(model => model.IsActive, new { @class = "cr-check", type = "checkbox" })
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DisclosureTypeCodeId)
+                    @Html.DropDownListFor(model => model.DisclosureTypeCodeId, new SelectList(ViewBag.DisclosureType, "Key", "Value", ""), new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.DisclosureTypeCodeId)
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.LetterForCodeId)
+                    @Html.DropDownListFor(model => model.LetterForCodeId, new SelectList(ViewBag.LetterFor, "Key", "Value", ""), new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.LetterForCodeId)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ToAddress1)
+                    @Html.TextAreaFor(model => model.ToAddress1, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ToAddress1)
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    @{
+                    var Add2_html_attr = new Dictionary<string, object> { };
+                    Add2_html_attr.Add("class", "form-control");
+
+                    if (Model != null && !Model.IsCommunicationTemplate)
+                    {
+                        Add2_html_attr.Add("readonly", "readonly");
+                    }
+                    }
+                    @Html.LabelFor(model => model.ToAddress2) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    @InsiderTrading.Common.Common.getResource("tra_lbl_16291")  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    @Html.CheckBoxFor(model => model.IsCommunicationTemplate, new { @class = "cr-check", type = "checkbox" })@InsiderTrading.Common.Common.getResource("tra_lbl_16290")
+                    @Html.TextAreaFor(model => model.ToAddress2, Add2_html_attr)
+                    @Html.ValidationMessageFor(model => model.ToAddress2)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Subject)
+                    @Html.TextBoxFor(model => model.Subject, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Subject)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Contents)
+                    @Html.TextAreaFor(model => model.Contents, new { @class = "form-control", @rows = "15" })
+                    @Html.ValidationMessageFor(model => model.Contents)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Signature)
+                    @Html.TextAreaFor(model => model.Signature, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Signature)
+                </div>
+            </div>
+        </div>
+        #endregion  CommunicationModeForLetter
+    }
+    else if (ViewBag.CommunicationMode_id == InsiderTrading.Common.ConstEnum.Code.CommunicationModeForEmail)
+    {
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TemplateName)
+                    @Html.TextBoxFor(model => model.TemplateName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TemplateName)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group ">
+                    @Html.LabelFor(model => model.IsActive)
+                    &nbsp;
+                    @if (ViewBag.calledFrom == "Communication")
+                    {
+                        @Html.CheckBoxFor(model => model.IsActive, new { @class = "cr-check", type = "checkbox", @disabled = "disabled" })
+                    }
+                    else
+                    {
+                        @Html.CheckBoxFor(model => model.IsActive, new { @class = "cr-check", type = "checkbox" })
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Subject)
+                    @Html.TextBoxFor(model => model.Subject, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Subject)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Contents)
+                    @Html.Raw(HttpUtility.HtmlDecode(Html.TextAreaFor(model => model.Contents, new { @class = "form-control", @rows = "10" }).ToHtmlString()))
+                    
+                    @Html.ValidationMessageFor(model => model.Contents)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Signature)
+                    @Html.TextAreaFor(model => model.Signature, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Signature)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CommunicationFromEmail)
+                    @Html.TextBoxFor(model => model.CommunicationFromEmail, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CommunicationFromEmail)
+                    @Html.HiddenFor(model => model.CommunicationFrom)
+                </div>
+            </div>
+        </div>
+    }
+    else if (ViewBag.CommunicationMode_id == InsiderTrading.Common.ConstEnum.Code.CommunicationModeForSMS)
+    {
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TemplateName)
+                    @Html.TextBoxFor(model => model.TemplateName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TemplateName)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group ">
+                    @Html.LabelFor(model => model.IsActive)
+                    &nbsp;
+                    @if (ViewBag.calledFrom == "Communication")
+                    {
+                        @Html.CheckBoxFor(model => model.IsActive, new { @class = "cr-check", type = "checkbox", @disabled = "disabled" })
+                    }
+                    else
+                    {
+                        @Html.CheckBoxFor(model => model.IsActive, new { @class = "cr-check", type = "checkbox" })
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Contents)
+                    @Html.TextAreaFor(model => model.Contents, new { @class = "form-control", @rows = "5" })
+                    @Html.ValidationMessageFor(model => model.Contents)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CommunicationFrom)
+                    @Html.TextBoxFor(model => model.CommunicationFrom, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CommunicationFrom)
+                </div>
+            </div>
+        </div>
+    }
+    else if (ViewBag.CommunicationMode_id == InsiderTrading.Common.ConstEnum.Code.CommunicationModeForFAQ)
+    {
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group ">
+                    @Html.LabelFor(model => model.IsActive)
+                    &nbsp;
+                    @if (ViewBag.calledFrom == "Communication")
+                    {
+                        @Html.CheckBoxFor(model => model.IsActive, new { @class = "cr-check", type = "checkbox", @disabled = "disabled" })
+                    }
+                    else
+                    {
+                        @Html.CheckBoxFor(model => model.IsActive, new { @class = "cr-check", type = "checkbox" })
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.LetterForCodeId, InsiderTrading.Common.Common.getResource("tra_lbl_16289"))
+                    @Html.DropDownListFor(model => model.LetterForCodeId, new SelectList(ViewBag.FAQFor, "Key", "Value", ""), new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.LetterForCodeId)
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TemplateName, InsiderTrading.Common.Common.getResource("tra_lbl_16169"))
+                    @Html.TextBoxFor(model => model.TemplateName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TemplateName)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Contents, InsiderTrading.Common.Common.getResource("tra_lbl_16170"))
+                    @Html.TextAreaFor(model => model.Contents, new { @class = "form-control", @rows = "8" })
+                    @Html.ValidationMessageFor(model => model.Contents)@*, InsiderTrading.Common.Common.getResource("tra_msg_16173")*@
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.SequenceNo)
+                    @Html.TextBoxFor(model => model.SequenceNo, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.SequenceNo)
+                </div>
+            </div>
+        </div>
+    }
+    else if (ViewBag.CommunicationMode_id == InsiderTrading.Common.ConstEnum.Code.CommunicationModeForFormE)
+    {
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TemplateName)
+                    @Html.TextBoxFor(model => model.TemplateName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TemplateName)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group ">
+                    @Html.LabelFor(model => model.IsActive)
+                    &nbsp;
+                    @if (ViewBag.calledFrom == "Communication")
+                    {
+                        @Html.CheckBoxFor(model => model.IsActive, new { @class = "cr-check", type = "checkbox", @disabled = "disabled" })
+                    }
+                    else
+                    {
+                        @Html.CheckBoxFor(model => model.IsActive, new { @class = "cr-check", type = "checkbox" })
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Contents)
+                    @*Html.TextAreaFor(model => model.Contents, new { @class = "form-control", @rows = "8" })*@
+                    @Html.Raw(HttpUtility.HtmlDecode(Html.TextAreaFor(model => model.Contents, new { @class = "ckeditor", @rows = "10" }).ToHtmlString()))
+                    @Html.ValidationMessageFor(model => model.Contents)
+                </div>
+            </div>
+        </div>
+    }
+    else if (ViewBag.CommunicationMode_id > 0 && ViewBag.CommunicationMode_id != InsiderTrading.Common.ConstEnum.Code.CommunicationModeForFormE)
+    {
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TemplateName)
+                    @Html.TextBoxFor(model => model.TemplateName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TemplateName)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group ">
+                    @Html.LabelFor(model => model.IsActive)
+                    &nbsp;
+                    @if (ViewBag.calledFrom == "Communication")
+                    {
+                        @Html.CheckBoxFor(model => model.IsActive, new { @class = "cr-check", type = "checkbox", @disabled = "disabled" })
+                    }
+                    else
+                    {
+                        @Html.CheckBoxFor(model => model.IsActive, new { @class = "cr-check", type = "checkbox" })
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Contents)
+                    @Html.TextAreaFor(model => model.Contents, new { @class = "form-control", @rows = "8" })
+                    
+                    @Html.ValidationMessageFor(model => model.Contents)
+                </div>
+            </div>
+        </div>
+    }
+}

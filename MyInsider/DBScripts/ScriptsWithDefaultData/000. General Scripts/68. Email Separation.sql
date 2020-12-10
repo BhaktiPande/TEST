@@ -1,0 +1,37 @@
+
+IF NOT EXISTS(SELECT CodeID FROM com_Code WHERE CodeID = 153048)
+BEGIN
+    INSERT INTO com_Code(CodeID,CodeName,CodeGroupId,[Description],IsVisible,IsActive,DisplayOrder,DisplayCode,ParentCodeId,ModifiedBy,ModifiedOn)
+    VALUES(153048,'Separation Date',153,'163001,163002',1,1,51,NULL,NULL,1,GETDATE())
+END
+
+
+IF NOT EXISTS(SELECT CodeID FROM com_Code WHERE CodeID = 153049)
+BEGIN
+    INSERT INTO com_Code(CodeID,CodeName,CodeGroupId,[Description],IsVisible,IsActive,DisplayOrder,DisplayCode,ParentCodeId,ModifiedBy,ModifiedOn)
+    VALUES(153049,'Last Working Day',153,'163001,163002',1,1,50,NULL,NULL,1,GETDATE())
+END
+
+
+IF NOT EXISTS(SELECT SYSTAB.NAME FROM SYS.TABLES SYSTAB INNER JOIN SYS.COLUMNS SYSCOL ON SYSTAB.OBJECT_ID = SYSCOL.OBJECT_ID 
+WHERE SYSTAB.NAME = 'tra_TransactionTypeSettings' AND SYSCOL.NAME = 'EXEMPT_PRE_FOR_MODE_OF_ACQUISITION')
+BEGIN
+	ALTER TABLE tra_TransactionTypeSettings ADD EXEMPT_PRE_FOR_MODE_OF_ACQUISITION INT NOT NULL DEFAULT(1)
+END
+
+
+
+-- Query execute for cashless All Transaction(143004)
+
+update tra_TransactionTypeSettings set EXEMPT_PRE_FOR_MODE_OF_ACQUISITION = 0 
+where SECURITY_TYPE_CODE_ID in (139001) and MODE_OF_ACQUIS_CODE_ID in (149001,149002 ,149003 ,149004 ,149005 ,149006 ,149007 ,149008 ,149011 ) and TRANS_TYPE_CODE_ID = 143004
+
+
+-- Query execute for cashless Partial Transaction(143005)
+
+update tra_TransactionTypeSettings set EXEMPT_PRE_FOR_MODE_OF_ACQUISITION = 0 
+where SECURITY_TYPE_CODE_ID in (139001) and MODE_OF_ACQUIS_CODE_ID in (149001,149002 ,149003 ,149004 ,149005 ,149006 ,149007 ,149008 ,149011 ) and TRANS_TYPE_CODE_ID = 143005
+
+
+
+

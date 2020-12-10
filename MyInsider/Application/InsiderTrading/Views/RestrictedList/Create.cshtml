@@ -1,0 +1,337 @@
+﻿@model InsiderTrading.Models.RestrictedListModel
+@{
+    ViewBag.Title = @InsiderTrading.Common.Common.getResource("rl_ttl_50002");
+}
+@Styles.Render("~/content/SW360")
+<!-- Content Header -->
+<section class="content-header">
+    <h1>@InsiderTrading.Common.Common.getResource("rl_ttl_50003")</h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <!-- Restricted List -->
+    <div class="row">
+        <div class="col-lg-12">
+            @if (@ViewBag.ValidationError != null && @ViewBag.ValidationError != "")
+            {
+                <div class="alert alert-danger">@ViewBag.ValidationError</div>
+            }
+            @using (Html.BeginForm("Create", "RestrictedList", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "form", @autocomplete = "off", id = "frmBasicInfo" }))
+            {
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+                        <!-- form field row 1 -->
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    @{
+                var PDN_html_attr = new Dictionary<string, object> { };
+                PDN_html_attr.Add("class", "form-control");
+                PDN_html_attr.Add("id", "ddlCompanyName");
+
+                if (!ViewBag.isAllEdit)
+                {
+                    PDN_html_attr.Add("disabled", "disabled");
+                }
+                                    }
+                                    @Html.LabelFor(m => m.CompanyName)
+                                    @Html.DropDownListFor(m => m.CompanyId, new SelectList(ViewBag.CompanyNameDropDown, "Key", "Value", ""), PDN_html_attr)
+                                    @Html.ValidationMessageFor(m => m.CompanyName)
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    @{
+                var ISIN_html_attr = new Dictionary<string, object> { };
+                ISIN_html_attr.Add("class", "form-control");
+                ISIN_html_attr.Add("id", "ddlISINCode");
+
+                if (!ViewBag.isAllEdit)
+                {
+                    ISIN_html_attr.Add("disabled", "disabled");
+                    @Html.HiddenFor(m => m.ISINCode);
+                }
+                                    }
+                                    @Html.LabelFor(m => m.ISINCode)
+                                    @Html.TextBoxFor(m => m.ISINCode, ISIN_html_attr)
+                                    @*@Html.DropDownListFor(m=> m.ISINCode, new SelectList(ViewBag.ISINCodeDropDown, "Key", "Value", ""), ISIN_html_attr)*@
+                                    @Html.ValidationMessageFor(m => m.ISINCode)
+                                </div>
+                            </div>
+
+                        </div>
+                        <!--Second Row-->
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    @{
+                var NSE_html_attr = new Dictionary<string, object> { };
+                NSE_html_attr.Add("class", "form-control");
+                NSE_html_attr.Add("id", "ddlNSECode");
+
+                if (!ViewBag.isAllEdit)
+                {
+                    NSE_html_attr.Add("disabled", "disabled");
+                    @Html.HiddenFor(m => m.NSECode);
+                }
+                                    }
+                                    @Html.LabelFor(m => m.NSECode)
+                                    @Html.TextBoxFor(m => m.NSECode, NSE_html_attr)
+                                    @*@Html.DropDownListFor(m=> m.NSECode, new SelectList(ViewBag.NSECodeDropDown, "Key", "Value", ""), NSE_html_attr)*@
+                                    @Html.ValidationMessageFor(m => m.NSECode)
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    @{
+                var DCCI_html_attr = new Dictionary<string, object> { };
+                DCCI_html_attr.Add("class", "form-control");
+                DCCI_html_attr.Add("id", "ddlBSECode");
+
+                if (!ViewBag.isAllEdit)
+                {
+                    DCCI_html_attr.Add("disabled", "disabled");
+                    @Html.HiddenFor(m => m.BSECode);
+                }
+                                    }
+                                    @Html.LabelFor(m => m.BSECode)
+                                    @Html.TextBoxFor(m => m.BSECode, DCCI_html_attr)
+                                    @*@Html.DropDownListFor(m=> m.BSECode, new SelectList(ViewBag.BSECodeDropDown, "Key", "Value", ""), DCCI_html_attr)*@
+                                    @Html.ValidationMessageFor(m => m.BSECode)
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Third Row-->
+                        <div class="row">
+                            @{
+                string applicable_from_date = "";
+                if (Model.ApplicableFrom != null)
+                {
+                    applicable_from_date = InsiderTrading.Common.Common.ApplyFormatting(Model.ApplicableFrom, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+                }
+
+                string applicable_to_date = "";
+                if (Model.ApplicableTo != null)
+                {
+                    applicable_to_date = InsiderTrading.Common.Common.ApplyFormatting(Model.ApplicableTo, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+                }
+
+                string current_date = "";
+                if (Model.DBCurrentDate != null)
+                {
+                    current_date = InsiderTrading.Common.Common.ApplyFormatting(Model.DBCurrentDate, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+                }
+                            }
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                                <div class="form-group" id="sandbox-container">
+                                    @{
+                var AFD_html_attr = new Dictionary<string, object> { };
+                AFD_html_attr.Add("class", "form-control");
+                string AFD_cal_date_class = "date";
+
+                if (!ViewBag.isAllEdit)
+                {
+                    if (Model.ApplicableFrom <= ViewBag.CurrentDate)
+                    {
+                        AFD_html_attr.Add("readonly", "readonly");
+                        AFD_cal_date_class = "";
+                    }
+
+                }
+                                    }
+                                    @Html.LabelFor(m => m.ApplicableFrom)
+                                    <div class="input-group @AFD_cal_date_class" id="applicablefromdate">
+                                        @Html.TextBox("ApplicableFrom", applicable_from_date, AFD_html_attr)
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                    @Html.ValidationMessageFor(m => m.ApplicableFrom)
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                                <div class="form-group" id="sandbox-container">
+                                    @{
+                var ATD_html_attr = new Dictionary<string, object> { };
+                ATD_html_attr.Add("class", "form-control");
+                string ATD_cal_date_class = "date";
+
+                if (!ViewBag.isAllEdit && !ViewBag.isAllView)
+                {
+                    ATD_html_attr.Add("readonly", "readonly");
+                    ATD_cal_date_class = "";
+                }
+                                    }
+                                    @Html.LabelFor(m => m.ApplicableTo)
+                                    <div class="input-group @ATD_cal_date_class" id="applicabletodate">
+                                        @Html.TextBox("ApplicableTo", applicable_to_date, ATD_html_attr)
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                    @Html.ValidationMessageFor(m => m.ApplicableTo)
+                                    @{
+                if (!ViewBag.isAllEdit && ViewBag.isPartialEdit)
+                {
+                    @Html.TextBox("DBCurrentDate", current_date, new { style = "visibility:hidden;height:0" })
+                                        @Html.ValidationMessageFor(m => m.DBCurrentDate)
+                }
+                                    }
+
+                                    @Html.HiddenFor(m => m.RlMasterId)
+                                    @Html.HiddenFor(m => m.CompanyId)
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Fourth Row : Buttons-->
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                @{
+                if (@ViewBag.showSaveButton)
+                {
+                    <button type="submit" name="Save" class="btn btn-success" id="btnSave"><i class="fa fa-save"> @InsiderTrading.Common.Common.getResource("com_btn_14017")</i></button>
+                                    @Html.Hidden("hdnCalledFrom", (object)@ViewBag.CalledFrom);
+                }
+
+                if (@ViewBag.showApplicabilityButton && (@ViewBag.CalledFrom == "E" || @ViewBag.CalledFrom == "Edit"))
+                {
+                    <a class="btn btn-success" data-toggle="modal" href='@Url.Action("Index", "Applicability", new { acid = ViewBag.UserAction, nApplicabilityType = InsiderTrading.Common.ConstEnum.Code.RestrictedList, nMasterID = ViewBag.nMasterID, CalledFrom = ViewBag.CalledFrom })' role="button"><i class="icon icon-calender"></i> @InsiderTrading.Common.Common.getResource("rul_btn_15251")</a>
+                }
+                else if (!@ViewBag.showApplicabilityButton && (@ViewBag.CalledFrom == "V" || @ViewBag.CalledFrom == "View"))
+                {
+                    <a class="btn btn-success" data-toggle="modal" href='@Url.Action("Index", "Applicability", new { acid = ViewBag.UserAction, nApplicabilityType = InsiderTrading.Common.ConstEnum.Code.RestrictedList, nMasterID = ViewBag.nMasterID, CalledFrom = ViewBag.CalledFrom })' role="button"><i class="icon icon-calender"></i> @InsiderTrading.Common.Common.getResource("rul_btn_15394")</a>
+                }
+                else if (!@ViewBag.showApplicabilityButton && (@ViewBag.CalledFrom == "H" || @ViewBag.CalledFrom == "History"))
+                {
+                    <a class="btn btn-success" data-toggle="modal" href='@Url.Action("Index", "Applicability", new { acid = ViewBag.UserAction, nApplicabilityType = InsiderTrading.Common.ConstEnum.Code.RestrictedList, nMasterID = ViewBag.nMasterID, nApplicabilityID = ViewBag.nApplicabilityID, CalledFrom = ViewBag.CalledFrom })' role="button"><i class="icon icon-calender"></i> @InsiderTrading.Common.Common.getResource("rul_btn_15394")</a>
+                }
+                if (@ViewBag.CalledFrom != "History")
+                {
+                    <a class="btn btn-success" data-toggle="modal" href='@Url.Action("Index", "RestrictedList", new { acid = InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_VIEW})' role="button"> @InsiderTrading.Common.Common.getResource("com_btn_14011")</a>
+                }
+                else
+                {
+                    <a class="btn btn-success" data-toggle="modal" href='@Url.Action("History", "RestrictedList", new { acid = InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_HISTORY, nMasterID = @ViewBag.nMasterID,  nApplicableID = @ViewBag.nApplicabilityID })' role="button"> @InsiderTrading.Common.Common.getResource("com_btn_14011")</a>
+                }
+
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @*<button type="submit" name="Cancel" class="btn btn-success cancel" id="btnCancel" data-dismiss="modal"> @InsiderTrading.Common.Common.getResource("com_btn_14011")</button>*@
+            <input type="hidden" name="RestrictedID" id="RestrictedID" value="@ViewBag.CompanyId" />
+            <input type="hidden" name="RestrictedMasterID" id="RestrictedMasterID" value="@ViewBag.RlMasterId" />
+            <input type="hidden" id="dCompanyName" value="@ViewBag.CompanyName" />
+            <input type="hidden" id="BSECode" value="@ViewBag.BSECode" />
+            <input type="hidden" id="NSECode" value="@ViewBag.NSECode" />
+            <input type="hidden" id="ISINCode" value="@ViewBag.ISINCode" />
+            <input type="hidden" id="dApplicableFrom" value="@ViewBag.ApplicableFrom" />
+            <input type="hidden" id="dApplicableTo" value="@ViewBag.ApplicableTo" />
+            <!--Panel Body End-->
+        </div>
+    </div>
+
+</section>
+@Scripts.Render("~/bundles/CompareDateAnnotation")
+<script type="text/javascript">
+    $(function () {
+        $(window).load(function () {
+            var CmpId = $('#RestrictedID').val();
+            var ddlCmpName = $('#dCompanyName').val();
+            var ddlBSECode = $('#BSECode').val();
+            var ddlNSECode = $('#NSECode').val();
+            var ddlISINCode = $('#ISINCode').val();
+            var txtApplicableFrm = $('#dApplicableFrom').val();
+            var txtApplicableTo = $('#dApplicableTo').val();
+            if (CmpId != 0) {
+                //Assign value to Dropdown and Textbox's
+                $("#ddlCompanyName option:selected").text(ddlCmpName);
+                $('#ddlBSECode').prop('readonly', true);
+                $('#ddlBSECode').val(ddlBSECode)
+                $('#ddlNSECode').prop('readonly', true);
+                $('#ddlNSECode').val(ddlNSECode)
+                $('#ddlISINCode').prop('readonly', true);
+                $('#ddlISINCode').val(ddlISINCode)
+                $('#ApplicableFrom').val(txtApplicableFrm);
+                $('#ApplicableTo').val(txtApplicableTo);
+                $(this).find(".field-validation-error").empty();
+                //$(".field-validation-error").empty();//Validation message remove
+                //alert("Company ID :- " + CmpId + " " + "Company Name :- " + ddlCmpName + " " + "BSE Code :- " + ddlBSECode + " " + "NSE Code :- " + ddlNSECode + " " + "ISIN Code :- " + ddlISINCode);
+            }
+            else {
+                $('#ddlBSECode').prop('readonly', false);
+                $('#ddlNSECode').prop('readonly', false);
+                $('#ddlISINCode').prop('readonly', false);
+            }
+        })
+    });
+
+    $(document).ready(function () {
+        var RestrictedMasterID = $('#RestrictedMasterID').val();
+        if (RestrictedMasterID != "") {
+            $('#btnSave').prop('disabled', true)
+        }
+        $("#ddlCompanyName").change(function () {
+            var companyid = $("#ddlCompanyName").val();
+            if (companyid != "") {
+                $.ajax({
+                    url: '@Url.Content("~/RestrictedList/GetCompanyDetails/")',
+                    type: "GET",
+                    data: { companyid: companyid },
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+                        if (data.RLCompanyId != null) {
+                            $('#ddlBSECode').prop('readonly', true);
+                            $('#ddlBSECode').val(data.BSECode)
+                            $('#ddlNSECode').prop('readonly', true);
+                            $('#ddlNSECode').val(data.NSECode)
+                            $('#ddlISINCode').prop('readonly', true);
+                            $('#ddlISINCode').val(data.ISINCode)
+                        }
+                    }
+                });
+            }
+            else {
+                $('#ddlBSECode').prop('readonly', false);
+                $("#ddlBSECode").text("");
+                $("#ddlBSECode").val("");
+                $('#ddlNSECode').prop('readonly', false);
+                $("#ddlNSECode").text("");
+                $("#ddlNSECode").val("");
+                $('#ddlISINCode').prop('readonly', false);
+                $("#ddlISINCode").text("");
+                $("#ddlISINCode").val("");
+            }
+        });
+
+        $("#applicabletodate").change(function () {
+            var oldApplicableToDate = $('#dApplicableTo').val();
+            var NewApplicableToDate = $("#ApplicableTo").val();
+            var d_oldApplicableToDate = new Date(oldApplicableToDate);
+            var d_NewApplicableToDate = new Date(NewApplicableToDate);
+            if (d_oldApplicableToDate == d_NewApplicableToDate) {
+                $('#btnSave').prop('disabled', true)
+            }
+            else {
+                $('#btnSave').prop('disabled', false)
+            }
+        });
+        $("#applicablefromdate").change(function () {
+            var oldApplicableFromDate = $('#dApplicableFrom').val();
+            var NewApplicableFromDate = $("#ApplicableFrom").val();
+            var d_oldApplicableFromDate = new Date(oldApplicableFromDate);
+            var d_NewApplicableFromDate = new Date(NewApplicableFromDate);
+            if (d_oldApplicableFromDate == d_NewApplicableFromDate) {
+                $('#btnSave').prop('disabled', true)
+            }
+            else {
+                $('#btnSave').prop('disabled', false)
+            }
+        });
+    });
+</script>

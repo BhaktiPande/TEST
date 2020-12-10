@@ -1,0 +1,127 @@
+﻿@model InsiderTrading.Models.CommunicationRuleMasterModel
+@*<script>
+    // add "selectpicker" class in select element and also add hight width for that for new UI
+    $(document).ready(function () {
+        $('.selectpicker').selectpicker({
+            title: "Select"
+        });
+    });
+        </script>*@
+@{
+if (ViewBag.CommunicationMode_id == 157001)
+{
+<div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+                <div class="form-group">
+                    <label>@Html.LabelFor(model => model.TriggerEventCodeId)</label>
+        @if (!ViewBag.isAllEdit)
+            {
+                @*@Html.DropDownList("SelectTriggerEventCodeId", new MultiSelectList(ViewBag.TriggerEventCodeList, "Key", "Value", Model.AssignedTriggerEventCodeId.Select(m => m.Key)), new
+                                        {
+                                            multiple = "multiple",
+                                            @class = "form-control multiselect",
+                                            @disabled = "disabled"
+                                        })*@
+                <select class="form-control multiselect valid " id="SelectTriggerEventCodeId" multiple="multiple" name="SelectTriggerEventCodeId" disabled="disabled">
+                    @foreach (var item in @ViewBag.TriggerEventCodeWithUserTypeList)
+                    {
+                        //if (Model.AssignedTriggerEventCodeId.Contains(item))
+                        var obj = Model.AssignedTriggerEventCodeId.Find(lstItem => (lstItem.Key == item.Key && lstItem.OptionAttribute == item.OptionAttribute));
+                        if (obj != null)
+                        {
+                            <option value="@item.Key" optionattribute="@item.OptionAttribute" selected="selected">@item.Value</option>
+                        }
+                        else
+                        {
+
+                            <option value="@item.Key" optionattribute="@item.OptionAttribute">@item.Value</option>
+                        }
+
+                    }
+                </select>
+            }
+            else
+            {
+                @*@Html.DropDownList("SelectTriggerEventCodeId", new MultiSelectList(ViewBag.TriggerEventCodeList, "Key", "Value", Model.AssignedTriggerEventCodeId.Select(m => m.Key)), new
+                                        {
+                                            multiple = "multiple",
+                                            @class = "form-control multiselect"
+                                        })*@
+                 <select class="form-control multiselect valid " id="SelectTriggerEventCodeId" multiple="multiple" name="SelectTriggerEventCodeId" >
+                    @foreach (var item in @ViewBag.TriggerEventCodeWithUserTypeList)
+                    {
+                        //if (Model.AssignedTriggerEventCodeId.Contains(item))
+                        var obj = Model.AssignedTriggerEventCodeId.Find(lstItem => (lstItem.Key == item.Key && lstItem.OptionAttribute == item.OptionAttribute));
+                        if (obj != null)
+                        {
+                            <option value="@item.Key" optionattribute="@item.OptionAttribute" selected="selected">@item.Value</option>
+                        }
+                        else
+                        {
+
+                            <option value="@item.Key" optionattribute="@item.OptionAttribute">@item.Value</option>
+                        }
+
+                    }
+                    </select>
+            }
+
+                   
+        @*@Html.ListBoxFor(model => model.TriggerEventCodeId, new MultiSelectList(ViewBag.TriggerEventCodeId, "Key", "Value", ""), new { @class = "form-control" })*@
+
+        @Html.ValidationMessageFor(model => model.TriggerEventCodeId)
+        </div>
+
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+                <div class="form-group">
+                    <label>@Html.LabelFor(model => model.OffsetEventCodeId)</label>
+        @if (!ViewBag.isAllEdit)
+            {
+                @Html.DropDownList("SelectOffsetEventCodeId", new MultiSelectList(ViewBag.OffsetEventCodeList, "Key", "Value", Model.AssignedOffsetEventCodeId.Select(m => m.Key)), new
+                                        {
+                                            multiple = "multiple",
+                                            @class = "form-control multiselect",
+                                            @disabled = "disabled"
+                                        })
+            }else{
+                @Html.DropDownList("SelectOffsetEventCodeId", new MultiSelectList(ViewBag.OffsetEventCodeList, "Key", "Value", Model.AssignedOffsetEventCodeId.Select(m => m.Key)), new
+                                        {
+                                            multiple = "multiple",
+                                            @class = "form-control multiselect"
+                                        })
+            }
+        @Html.ValidationMessageFor(model => model.OffsetEventCodeId)
+                </div>
+            </div>
+        </div>
+
+<div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+                <div class="form-group">
+        @{
+                var SEU_html_attr = new Dictionary<string, object> { };
+
+                SEU_html_attr.Add("class", "");
+
+                if (!ViewBag.isAllEdit)
+                {
+                    SEU_html_attr.Add("disabled", "disabled");
+                    @*@Html.HiddenFor(m => m.EventsApplyToCodeId_bool);*@
+                }
+                @Html.HiddenFor(m => m.EventsApplyToCodeId_bool);
+            }
+        @*<label>@Html.LabelFor(model => model.EventsApplyToCodeId)</label>
+
+            @Html.RadioButtonFor(m => m.EventsApplyToCodeId_bool, @InsiderTrading.Models.YesNo.Yes, SEU_html_attr) @InsiderTrading.Common.Common.getResource("cmu_lbl_18058")
+            @Html.RadioButtonFor(m => m.EventsApplyToCodeId_bool, @InsiderTrading.Models.YesNo.No, SEU_html_attr) @InsiderTrading.Common.Common.getResource("cmu_lbl_18057")
+            @Html.ValidationMessageFor(m => m.EventsApplyToCodeId_bool)*@
+                </div>
+
+            </div>
+        </div>
+}
+}

@@ -1,0 +1,116 @@
+﻿@model InsiderTrading.Models.InsiderInitialDisclosureCountModel
+
+@{
+    ViewBag.Titel = ViewBag.Company;
+}
+<!DOCTYPE html>
+
+<form>
+    <section class="content-header">
+        <h1>
+            @InsiderTrading.Common.Common.getResource("dis_lbl_17001")
+        </h1>
+    </section>
+    @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+    <section class="content">
+
+        <div class=" row">
+            <div class="panel-body">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="panel panel-default pane">
+                                <div class="panel-body">
+                                    <div class="data">
+                                        <table id="insiders-initial-disclosure" class="data-table table table-bordered table-striped col-lg-12">
+                                            <thead>
+                                                <tr>                                                    
+                                                    <th rowspan="2" style="text-align: center; vertical-align: middle;">
+                                                        <label>@InsiderTrading.Common.Common.getResource("dis_lbl_17311")</label>
+                                                    </th>
+                                                    <th colspan="2" style="text-align: center; vertical-align: middle;">
+                                                        <label>@InsiderTrading.Common.Common.getResource("dis_lbl_17312")</label>
+                                                    </th> 
+                                                    <th colspan="2" style="text-align: center; vertical-align: middle;">
+                                                        <label>@InsiderTrading.Common.Common.getResource("dis_lbl_17315")</label>
+                                                    </th>                                                    
+                                                    <th rowspan="2"></th>
+                                                </tr>
+                                                <tr>
+                                                    <th style="text-align: center; vertical-align: middle;">
+                                                        <label>@InsiderTrading.Common.Common.getResource("dis_lbl_17316")</label>
+                                                    </th>
+                                                    <th style="text-align: center; vertical-align: middle;">
+                                                        <label>@InsiderTrading.Common.Common.getResource("dis_lbl_17317")</label>
+                                                    </th>
+                                                    <th style="text-align: center; vertical-align: middle;">
+                                                        <label>@InsiderTrading.Common.Common.getResource("dis_lbl_17313")</label>
+                                                    </th>
+                                                    <th style="text-align: center; vertical-align: middle;">
+                                                        <label>@InsiderTrading.Common.Common.getResource("dis_lbl_17314")</label>
+                                                    </th>                                                    
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <a type="text/html" class="btn btn-success btn-sm center-block" href='@Url.Action("Index", "COInitialDisclosure", new { acid = InsiderTrading.Common.ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_INITIAL_DISCLOSURE })'>@Model.InsiderCount</a>
+                                                    </td>                                                       
+                                                    <td>
+                                                        <a type="text/html" class="btn btn-success btn-sm center-block" href='@Url.Action("Index", "COInitialDisclosure", new { acid = InsiderTrading.Common.ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_INITIAL_DISCLOSURE, SoftCopySubmitted = InsiderTrading.Common.ConstEnum.Code.EventStatusCompleted })'>@Model.SoftCopySubmittedCount</a>
+                                                    </td>
+                                                    <td>
+                                                        <a type="text/html" class="btn btn-success btn-sm center-block" href='@Url.Action("Index", "COInitialDisclosure", new { acid = InsiderTrading.Common.ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_INITIAL_DISCLOSURE, HardCopySubmitted = InsiderTrading.Common.ConstEnum.Code.EventStatusCompleted })'>@Model.HardCopySubmittedCount</a>
+                                                    </td> 
+                                                    <td>
+                                                        <a type="text/html" class="btn btn-success btn-sm center-block" href='@Url.Action("Index", "COInitialDisclosure", new { acid = InsiderTrading.Common.ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_INITIAL_DISCLOSURE, SoftCopySubmitted = InsiderTrading.Common.ConstEnum.Code.EventStatusPending })'>@Model.SoftCopyPendingCount</a>
+                                                    </td>
+                                                    <td>
+                                                        <a type="text/html" class="btn btn-success btn-sm center-block" href='@Url.Action("Index", "COInitialDisclosure", new { acid = InsiderTrading.Common.ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_INITIAL_DISCLOSURE, HardCopySubmitted = InsiderTrading.Common.ConstEnum.Code.EventStatusPending })'>@Model.HardCopyPendingCount</a>
+                                                    </td> 
+                                                    <td>
+                                                        <a type="text/html" class="btn btn-success btn-sm center-block" href='@Url.Action("Index", "COInitialDisclosure", new { acid = InsiderTrading.Common.ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_INITIAL_DISCLOSURE })'>@InsiderTrading.Common.Common.getResource("dis_lbl_17318")</a>
+                                                    </td>                                                  
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                   
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="panel-body">
+                <div class="panel-body">
+                    <div class="row">                      
+                            <div class="panel-body">
+                                <div class="data">
+                                    @{
+                                        if (ViewBag.BackButton)
+                                        {
+                                            <a href="@ViewBag.BackURL">
+                                                <button type="button" class="btn btn-success cancel showSelectedMenus" parentmenuid="43-MENU" childmenuid="43-MENU-43-MENU" id="Cancel" name="Cancel">
+                                                    <i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14011")
+                                                </button>
+                                            </a>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+      
+
+
+
+</section>
+    <input type="hidden" value=@ViewBag.IsFirstLogin id="IsFirstLogin" />
+
+
+</form>

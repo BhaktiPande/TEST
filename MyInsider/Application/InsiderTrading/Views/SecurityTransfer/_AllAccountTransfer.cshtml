@@ -1,0 +1,29 @@
+﻿@model InsiderTrading.Models.SecurityTransferLogModel
+
+<div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @Html.Label("Security Type")
+            @Html.DropDownListFor(m => m.SecurityTypeCodeID, new SelectList(ViewBag.SecurityTypeList, "Key", "Value", ""), new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.SecurityTypeCodeID)
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @Html.Label("To which Demat Account Number")
+            @Html.DropDownListFor(m => m.ToDEMATAcountID, new SelectList(ViewBag.ToDEMATAcountList, "Key", "Value", ""), new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.ToDEMATAcountID)
+        </div>
+    </div>
+</div>
+<hr style="border-top: 1px solid #8c8b8b;">
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="display:none;" id="divbalanceAll">
+        @*<div class="form-group">
+            @Html.Label("Total Available Quantity for transfer of all demat accounts : 100000")
+            @Html.Label("(Excluding the demat account to which the quantity is to be transferred)")
+        </div>*@
+    </div>
+</div>

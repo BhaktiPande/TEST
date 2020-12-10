@@ -1,0 +1,20 @@
+﻿@model InsiderTrading.Models.EULAAcceptanceModel
+@{
+    int user_action = (int)ViewData["user_action"];
+}
+
+<style type="text/css">
+    #docbox, #pdf, #pdfbox {
+        width: 100%;
+        height: 100%;
+        border: 1px solid #ccc;
+    }
+</style>
+
+<iframe id='docbox' style="cursor: default; position: absolute; top: 0; left: 0;" src="@Url.Action("Generate", "UserDetails", new { objEULAAcceptanceModel = Model, acid = user_action, nDocumentId = Model.DocumentID })"></iframe>
+
+<script>
+    $(window).load(function () {
+        $("#docbox").contents().find('a').attr("target", "_blank");
+    });
+</script>

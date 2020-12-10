@@ -1,0 +1,16 @@
+﻿@model InsiderTrading.Models.UsersPolicyDocumentModel
+@{
+    int user_action = (int)ViewData["user_action"];
+}
+
+<style type="text/css">
+   #docbox, #pdf,#pdfbox {
+        min-width: 1000px;
+        min-height: 550px;
+        border: 1px solid #ccc;
+    }
+</style>
+
+<iframe id='docbox' src="@Url.Action("Generate", "InsiderInitialDisclosure", new { objUsersPolicyDocumentModel = Model,  acid = user_action,nDocumentId = Model.DocumentId })"></iframe>
+
+

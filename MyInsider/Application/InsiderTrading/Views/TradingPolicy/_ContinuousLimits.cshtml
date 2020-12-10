@@ -1,0 +1,170 @@
+﻿@model InsiderTrading.Models.TradingPolicyModel
+@{
+    ViewBag.Title = "_ContinuousLimits";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    @Html.AntiForgeryToken()
+</section>
+
+<div class="row">
+    <div class="col-lg-5 col-md-5 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @Html.RadioButtonFor(model => model.StExSingMultiTransTradeFlagCodeId, InsiderTrading.Common.ConstEnum.Code.SingleTransactionTrade, Model.StExSingMultiTransTradeFlagCodeId == InsiderTrading.Common.ConstEnum.Code.SingleTransactionTrade ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) <label id="lblSingleTransactionTrade">@InsiderTrading.Common.Common.getResource("rul_lbl_15188")</label>
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @Html.RadioButtonFor(model => model.StExSingMultiTransTradeFlagCodeId, InsiderTrading.Common.ConstEnum.Code.MultipleTransactionTrade, Model.StExSingMultiTransTradeFlagCodeId == InsiderTrading.Common.ConstEnum.Code.MultipleTransactionTrade ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) <label>@InsiderTrading.Common.Common.getResource("rul_lbl_15189")</label>
+            @Html.ValidationMessageFor(model => model.StExSingMultiTransTradeFlagCodeId)
+            @Html.HiddenFor(model => model.StExSingMultiTransTradeFlagCodeId)
+        </div>
+    </div>
+</div>
+<div class="form-group" id="SingleTransactionDiv">
+    @{
+        @*if (Model.StExSingMultiTransTradeFlagCodeId == InsiderTrading.Common.ConstEnum.Code.SingleTransactionTrade)
+            {
+                @Html.Partial("~/Views/TradingPolicy/_SingleTransactionTrade.cshtml")
+            }*@
+        if (Model.StExSingMultiTransTradeFlagCodeId == InsiderTrading.Common.ConstEnum.Code.MultipleTransactionTrade)
+        {
+            @Html.Partial("~/Views/TradingPolicy/_MultipleTransactionTrade.cshtml")
+        }
+    }
+</div>
+<div class="row">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
+        <div class="form-group">
+            @Html.Label(InsiderTrading.Common.Common.getResource("rul_lbl_15156"))
+        </div>
+    </div>
+    <div class="col-md-9 col-md-8 col-sm-8 col-xs-8">
+        <div class="form-group">
+            <label class="radio-inline" for="radios-0">
+                @Html.RadioButtonFor(model => model.StExForAllSecuritiesFlag, "true",
+              Model.StExForAllSecuritiesFlag == true ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) <label class="normalLable"> @InsiderTrading.Common.Common.getResource("rul_lbl_15366")</label>
+            </label>
+            <label class="radio-inline" for="radios-1">
+                @Html.RadioButtonFor(model => model.StExForAllSecuritiesFlag, "false", Model.StExForAllSecuritiesFlag == false ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) <label class="normalLable"> @InsiderTrading.Common.Common.getResource("rul_lbl_15367")</label>
+            </label>
+        </div>
+    </div>
+</div>
+@{
+    if (Model.StExForAllSecuritiesFlag != null)
+    {
+        <div class="row" id="ContinousSecuritywiseLimitList">
+
+
+        </div>
+    }
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+                       
+        $(':radio[name="StExSingMultiTransTradeFlagCodeId"]').change(function () {
+            var values = $("#frmTradingPolicy").serializeArray();
+            values.push({
+                name: "acid",
+                value: $("#TradingPolicyUserAction").val()
+            });
+            var a = $(this).filter(':checked').val();
+            if (a == 136002) {
+                $('#SingleTransactionDiv').html("");
+                $.ajax({
+                    url: $("#RadioButtonChangeTransaction").val(),
+                    type: 'post',
+                    headers: getRVToken(),
+                    cache: false,
+                    data: values,
+                    success: function (result) {
+                        $('#SingleTransactionDiv').html(result);
+                    },
+                    error: function (result) {
+                    }
+                });
+            }
+            else {
+                $('#SingleTransactionDiv').empty();
+            }
+        });
+
+        $(':radio[name="StExForAllSecuritiesFlag"]').change(function () {
+
+            var values = $("#frmTradingPolicy").serializeArray();
+            values.push({
+                name: "acid",
+                value: $("#TradingPolicyUserAction").val()
+            });
+            $('#ContinousSecuritywiseLimitList').html("");
+            $.ajax({
+                url: $("#ContinousSecurityFlagChange").val(),
+                type: 'post',
+                headers: getRVToken(),
+                cache: false,
+                data: values,
+                success: function (result) {
+                    $('#ContinousSecuritywiseLimitList').html(result);
+                },
+                error: function (result) {
+                }
+            });
+        });
+
+
+        $(function () {
+
+            if ($('input:radio[name=StExSubmitTradeDiscloAllTradeFlag]').filter(":checked").val() == 'False'
+              && $('input:radio[name=TradingPolicyForCodeId]').filter(":checked").val() == 135001) {
+                if ($("#AutoSubmitTransaction").val() == 178001) {
+                    $(':radio[name="StExSingMultiTransTradeFlagCodeId"]').prop("disabled", false);
+                } else {
+                    $(':radio[name="StExSingMultiTransTradeFlagCodeId"]').prop("disabled", true);
+                }
+                $(':radio[name="StExForAllSecuritiesFlag"]').attr("disabled", false);
+                $('#lblSingleTransactionTrade').removeClass("TextGray");
+            }
+            else if ($('input:radio[name=StExSubmitTradeDiscloAllTradeFlag]').filter(":checked").val() == 'False'
+                && $('input:radio[name=TradingPolicyForCodeId]').filter(":checked").val() == 135002) {
+                $(':radio[name="StExSingMultiTransTradeFlagCodeId"]').prop("checked", $('#MultipleTransactionTrade').val());
+                $(':radio[name="StExSingMultiTransTradeFlagCodeId"]').attr("disabled", true);
+                $('#lblSingleTransactionTrade').addClass("TextGray");
+            }
+            else {
+
+                $(':radio[name="StExSingMultiTransTradeFlagCodeId"]').attr("disabled", true);
+                $(':radio[name="StExSingMultiTransTradeFlagCodeId"]').prop("checked", null);
+            }
+            securityRadioButtonChange();
+        });
+    });
+
+   
+    function securityRadioButtonChange() {
+        var value = $('input:radio[name=StExForAllSecuritiesFlag]').filter(":checked").val();//  $('input:radio[name=]:checked').val();
+        var values = $("#frmTradingPolicy").serializeArray();
+        values.push({
+            name: "acid",
+            value: $("#TradingPolicyUserAction").val()
+        });
+        if (value != 'null') {
+            $('#ContinousSecuritywiseLimitList').html("");
+            $.ajax({
+                url: $("#ContinousSecurityFlagChange").val(),
+                type: 'post',
+                headers: getRVToken(),
+                cache: false,
+                data: values,
+                success: function (result) {
+                    $('#ContinousSecuritywiseLimitList').html(result);
+                },
+                error: function (result) {
+                }
+            });
+        }
+    }
+</script>

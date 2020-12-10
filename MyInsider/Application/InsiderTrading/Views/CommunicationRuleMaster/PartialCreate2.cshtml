@@ -1,0 +1,31 @@
+﻿@model InsiderTrading.Models.CommunicationRuleMasterModel
+
+@{
+if (ViewBag.CommunicationMode_id == 157001)
+{
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+        <div class="form-group" style="display:none;">
+            @{
+                var IP_html_attr = new Dictionary<string, object> { };
+
+                IP_html_attr.Add("class", "");
+
+                if (!ViewBag.isAllEdit)
+                {
+                    IP_html_attr.Add("disabled", "disabled");
+                    @Html.HiddenFor(m => m.InsiderPersonalizeFlag);
+                }
+            }
+            <label>@Html.LabelFor(model => model.InsiderPersonalize)</label>
+
+            @Html.RadioButtonFor(m => m.InsiderPersonalize, @InsiderTrading.Models.YesNo.Yes, IP_html_attr) @InsiderTrading.Common.Common.getResource("com_lbl_14021")
+            @Html.RadioButtonFor(m => m.InsiderPersonalize, @InsiderTrading.Models.YesNo.No, new { Checked = "checked" }) @InsiderTrading.Common.Common.getResource("com_lbl_14022")
+            @Html.ValidationMessageFor(m => m.InsiderPersonalize)
+        </div>
+
+    </div>
+</div>
+}
+}

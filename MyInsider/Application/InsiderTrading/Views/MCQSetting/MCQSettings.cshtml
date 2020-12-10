@@ -1,0 +1,493 @@
+﻿@model InsiderTrading.Models.MCQModel
+@{
+    ViewBag.Title = "MCQSettings";
+}
+
+@Styles.Render("~/content/SW360")
+
+<section class="content">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="row">
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-accordion">
+                    <div class="panel-heading active">
+                        <h4 class="panel-title">
+                            @InsiderTrading.Common.Common.getResource("usr_lbl_54071")
+                        </h4>
+                    </div>
+                    @using (Html.BeginForm("MCQSettings", "MCQSetting", new { ReturnUrl = ViewBag.ReturnUrl, formId = InsiderTrading.Common.ConstEnum.Code.frmSaveMCQSetting }, FormMethod.Post, new { @id = "MCQSettingsForm", role = "form", autocomplete = "off" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+                        @Html.Hidden("MCQS_ID", (int)@ViewBag.MCQ_ID)
+                        <div class="panel-body" style="margin: 0px 0px 0px -16px;">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align:left">
+                                        <div role="form">
+                                            <div class="form-group">
+                                                
+                                                    <a class="btn btn-success" href='@Url.Action("MCQQuestions", "MCQSetting", new { acid =  InsiderTrading.Common.ConstEnum.UserActions.MCQ_VIEW })' role="button">@InsiderTrading.Common.Common.getResource("usr_btn_54090")</a><br /><br />
+                                              
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div id="divMainContent" style="margin: 0px 0px 0px 2px;">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(m => m.FirstTimeLogin) <b>:</b>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.RadioButtonFor(m => m.FirstTimeLogin, true, new { id = "RBFirstTimeLoginYes" }) @InsiderTrading.Common.Common.getResource("com_lbl_54086") &nbsp;&nbsp;&nbsp;
+                                                    @Html.RadioButtonFor(m => m.FirstTimeLogin, false, new { id = "RBFirstTimeLoginNo" }) @InsiderTrading.Common.Common.getResource("com_lbl_54087")
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.ValidationMessageFor(m => m.FirstTimeLogin)
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(m => m.FrequencyOfMCQ)<b>:</b>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" style="text-align:right;">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.CheckBoxFor(m => m.IsSpecificPeriodWise) @InsiderTrading.Common.Common.getResource("usr_btn_54075")
+
+                                                    &nbsp;
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.DropDownListFor(m => m.FrequencyOfMCQ, new SelectList(ViewBag.FrequencyofMCQDropDown, "Key", "Value", ""), null, new { @class = "form-control" })
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" style="text-align:right;">
+                                            <div class="form-group">
+                                                @Html.CheckBoxFor(m => m.IsDatewise) @InsiderTrading.Common.Common.getResource("usr_btn_54076")
+                                                @Html.ValidationMessageFor(m => m.IsDatewise)
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            @*id="divFrequencyDate" style="display:none">*@
+                                            <div class="form-group" id="sandbox-container">
+                                                @{
+                                                string FrequencyDate = "";
+                                                if (Model.FrequencyDate != null)
+                                                {
+                                                    FrequencyDate = InsiderTrading.Common.Common.ApplyFormatting(Model.FrequencyDate, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+
+                                                }
+                                                }
+                                                <div class="input-group date">
+                                                    @Html.TextBox("FrequencyDate", FrequencyDate, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.FrequencyDate).ToString(), Html.ActivityResourceKeyFor(m => m.FrequencyDate).ToString(), new { @class = "form-control" }))
+                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                </div>
+                                                @Html.ValidationMessageFor(m => m.FrequencyDate)
+
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12" style="text-align:right">
+                                            <div role="form">
+
+                                                <div class="form-group">
+                                                    <b> @InsiderTrading.Common.Common.getResource("usr_lbl_54077") :</b>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12">
+                                            <div role="form">
+
+                                                <div class="form-group">
+                                                    @Html.TextBoxFor(m => m.FrequencyDuration, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.FrequencyDuration).ToString(), Html.ActivityResourceKeyFor(m => m.FrequencyDuration).ToString(), new { @class = "form-control", @id = "FrequencyDuration", @maxlength = "2", @min = "1" }))
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div role="form">
+
+                                                <div class="form-group">
+                                                    @InsiderTrading.Common.Common.getResource("usr_lbl_54078")<br />
+                                                    @Html.ValidationMessageFor(m => m.FrequencyDuration)
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(m => m.BlockUserAfterDuration) <b>:</b>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                                    @Html.RadioButtonFor(m => m.BlockUserAfterDuration, true, new { id = "RBBlockUserAfterDurationYes" }) @InsiderTrading.Common.Common.getResource("com_lbl_54086") &nbsp;&nbsp;&nbsp;
+                                                    @Html.RadioButtonFor(m => m.BlockUserAfterDuration, false, new { id = "RBBlockUserAfterDurationNo" }) @InsiderTrading.Common.Common.getResource("com_lbl_54087")
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.ValidationMessageFor(m => m.BlockUserAfterDuration)
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(m => m.NoOfQuestionForDisplay) <b>:</b>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.DropDownListFor(m => m.NoOfQuestionForDisplay, new SelectList(ViewBag.MCQQuestionDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.NoOfQuestionForDisplay).ToString(), Html.ActivityResourceKeyFor(m => m.NoOfQuestionForDisplay).ToString(), new { @class = "form-control", @id = "NoOfQuestionForDisplay" }))
+
+                                                    @Html.ValidationMessageFor(m => m.NoOfQuestionForDisplay)
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                                            <div class="row">
+                                                <div role="form">
+                                                    <div class="form-group">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(m => m.AccessTOApplicationForWriteAnswer) <b>:</b>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+
+                                                    @Html.DropDownListFor(m => m.AccessTOApplicationForWriteAnswer, new SelectList(ViewBag.MCQAllowCorrectAnswerDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.AccessTOApplicationForWriteAnswer).ToString(), Html.ActivityResourceKeyFor(m => m.AccessTOApplicationForWriteAnswer).ToString(), new { @class = "form-control" }))
+
+                                                    @Html.Hidden("hdnAccessTOApplicationForWriteAnswer", Model.AccessTOApplicationForWriteAnswer)
+
+                                                    @Html.ValidationMessageFor(m => m.AccessTOApplicationForWriteAnswer)
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @InsiderTrading.Common.Common.getResource("usr_lbl_54082")
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                                            <div class="row">
+                                                <div role="form">
+                                                    <div class="form-group">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(m => m.NoOfAttempts) <b>:</b>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+
+                                                    @Html.DropDownListFor(m => m.NoOfAttempts, new SelectList(ViewBag.NoOfAttemptsDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.NoOfAttempts).ToString(), Html.ActivityResourceKeyFor(m => m.NoOfAttempts).ToString(), new { @class = "form-control", @id = "NoOfAttempts" }))
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.ValidationMessageFor(m => m.NoOfAttempts)
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                                            <div class="row">
+                                                <div role="form">
+                                                    <div class="form-group">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(m => m.BlockuserAfterExceedAtempts) <b>:</b>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.RadioButtonFor(m => m.BlockuserAfterExceedAtempts, true, new { id = "RBBlockuserAfterExceedAtemptsYes" }) @InsiderTrading.Common.Common.getResource("com_lbl_54086") &nbsp;&nbsp;&nbsp;
+                                                    @Html.RadioButtonFor(m => m.BlockuserAfterExceedAtempts, false, new { id = "RBBlockuserAfterExceedAtemptsNO" }) @InsiderTrading.Common.Common.getResource("com_lbl_54087")
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.ValidationMessageFor(m => m.BlockuserAfterExceedAtempts)
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(m => m.UnblockForNextFrequency) <b>:</b>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.RadioButtonFor(m => m.UnblockForNextFrequency, true, new { id = "RBUnblockForNextFrequencyYes" }) @InsiderTrading.Common.Common.getResource("com_lbl_54086") &nbsp;&nbsp;&nbsp;
+                                                    @Html.RadioButtonFor(m => m.UnblockForNextFrequency, false, new { id = "RBUnblockForNextFrequencyNo" }) @InsiderTrading.Common.Common.getResource("com_lbl_54087")
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                            <div role="form">
+                                                <div class="form-group">
+                                                    @Html.ValidationMessageFor(m => m.UnblockForNextFrequency)
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+                                    <div role="form">
+                                        <div style="text-align:center">
+                                            @if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.MCQ_EDIT))
+                                            {
+                                                <button type="submit" class="btn btn-success" id="brnMCQ_save"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("usr_btn_54088")</button>
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</section>
+
+
+<script>
+    $("#FrequencyOfMCQ").removeAttr("disabled");
+    $("#txtDuration").removeAttr("disabled");
+    $("#FrequencyDate").removeAttr("disabled");
+    $("#FrequencyDuration").removeAttr("disabled");
+    $("#NoOfQuestionForDisplay").removeAttr("disabled");
+    $("#AccessTOApplicationForWriteAnswer").removeAttr("disabled");
+    $("#NoOfAttempts").removeAttr("disabled");
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(document).delegate("#NoOfQuestionForDisplay", 'change', function () {
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AllowCorrectAnswer", "MCQSetting")",
+
+                data: JSON.stringify({ NoOfQuestionForDisplay: $('#NoOfQuestionForDisplay').val() }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    var AccessTOApplicationForWriteAnswer = "<select id='AccessTOApplicationForWriteAnswer'>";
+                    for (var i = 0; i < data.length; i++) {
+                        AccessTOApplicationForWriteAnswer = AccessTOApplicationForWriteAnswer + '<option value=' + data[i].ID + '>' + data[i].Value + '</option>';
+
+                    }
+                    AccessTOApplicationForWriteAnswer = AccessTOApplicationForWriteAnswer + '</select>';
+                    $('#AccessTOApplicationForWriteAnswer').html(AccessTOApplicationForWriteAnswer);
+                }
+            });
+        });
+
+        $(document).delegate("#AccessTOApplicationForWriteAnswer", 'change', function () {
+
+            var selObj = document.getElementById("AccessTOApplicationForWriteAnswer");
+            var selValue = selObj.options[selObj.selectedIndex].text;
+
+            $("#hdnAccessTOApplicationForWriteAnswer").val(selValue);
+
+        });
+
+
+        $(':radio[name="UnblockForNextFrequency"]').change(function () {
+
+            var BlockUserAfterDuration = $(':radio[name="BlockUserAfterDuration"]').filter(':checked').val();
+            var BlockuserAfterExceedAtempts = $(':radio[name="BlockuserAfterExceedAtempts"]').filter(':checked').val();
+            var UnblockForNextFrequency = $(this).filter(':checked').val();
+
+            if (BlockuserAfterExceedAtempts == "True" && BlockUserAfterDuration == "True" && UnblockForNextFrequency == "True") {
+                $("#RBUnblockForNextFrequencyYes").prop('checked', "checked");
+
+            }
+            else {
+                $("#RBUnblockForNextFrequencyNo").prop("checked", "checked");
+            }
+        });
+        $(':radio[name="BlockuserAfterExceedAtempts"]').change(function () {
+
+
+
+            var BlockUserAfterDuration = $(':radio[name="BlockUserAfterDuration"]').filter(':checked').val();
+            var BlockuserAfterExceedAtempts = $(this).filter(':checked').val();
+            var UnblockForNextFrequency = $(':radio[name="UnblockForNextFrequency"]').filter(':checked').val();
+
+            if (BlockuserAfterExceedAtempts == "True" && BlockUserAfterDuration == "True" && UnblockForNextFrequency == "True") {
+                $("#RBUnblockForNextFrequencyYes").prop('checked', "checked");
+
+            }
+            else {
+                $("#RBUnblockForNextFrequencyNo").prop("checked", "checked");
+            }
+        });
+        $(':radio[name="BlockUserAfterDuration"]').change(function () {
+
+            var BlockUserAfterDuration = $(this).filter(':checked').val();
+            var BlockuserAfterExceedAtempts = $(':radio[name="BlockuserAfterExceedAtempts"]').filter(':checked').val();
+            var UnblockForNextFrequency = $(':radio[name="UnblockForNextFrequency"]').filter(':checked').val();
+
+            if (BlockuserAfterExceedAtempts == "True" && BlockUserAfterDuration == "True" && UnblockForNextFrequency == "True") {
+                $("#RBUnblockForNextFrequencyYes").prop('checked', "checked");
+
+            }
+            else {
+                $("#RBUnblockForNextFrequencyNo").prop("checked", "checked");
+            }
+        });
+
+
+    });
+
+
+</script>

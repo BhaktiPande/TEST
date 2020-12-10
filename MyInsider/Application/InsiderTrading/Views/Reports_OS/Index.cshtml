@@ -1,0 +1,359 @@
+﻿@model InsiderTrading.Models.TradingTransactionReportModel_OS
+<section class="content-header">
+    @Html.AntiForgeryToken()
+    <div class="form-group" style="margin:5px 15px">
+        <h1>   @InsiderTrading.Common.Common.getResource("usr_lbl_51011") </h1>
+        </br>
+        @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger error" }, { "id", "divValidationSummaryModall" } })
+
+    </div>
+</section>
+<section class="content  search" @*gridtype="@ViewBag.GridType"*@>
+    @*@using (Html.BeginForm("ExportReport", "Reports_OS", FormMethod.Post, new { acid = InsiderTrading.Common.ConstEnum.UserActions.OS_Report }))*@
+    @using (Html.BeginForm("ExportReport", "Reports_OS", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form", autocomplete = "off" }))
+    {
+        <div id="filter-panel">
+            <div class="div-spacer"></div><br />
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-body ">
+                        <div class="row">
+                            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    @*@Html.RadioButton("ReportType", "1")*@
+                                    <input type="radio" name="ReportType" value="1" id="ID" checked>
+                                    @Html.Label(@InsiderTrading.Common.Common.getResource("usr_lbl_51004"))
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    @*@Html.RadioButton("ReportType", "2")*@
+                                    <input type="radio" name="ReportType" value="2" id="PC">
+                                    @Html.Label(@InsiderTrading.Common.Common.getResource("usr_lbl_51005"))
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    @*@Html.RadioButton("ReportType", "3")*@
+                                    <input type="radio" name="ReportType" value="3" id="CD">
+                                    @Html.Label(@InsiderTrading.Common.Common.getResource("usr_lbl_51006"))
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <input type="radio" name="ReportType" value="4" id="PED">
+                                    @Html.Label(@InsiderTrading.Common.Common.getResource("usr_lbl_51007"))
+                                </div>
+                            </div>
+                            @*<div class="col-lg-2 col-md-2 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        <input type="radio" name="ReportType" value="5" id="DE">
+                                        @Html.Label(@InsiderTrading.Common.Common.getResource("usr_lbl_51008"))
+                                    </div>
+                                </div>*@
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    @Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_50686"))
+                                    @Html.TextBox("EmpID", null, new { @class = "form-control", @*gridtype = @ViewBag.GridType,*@ id = "6"})
+                                    @Html.ValidationMessageFor(m => m.EmpID)
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    @Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_50685"))
+                                    @Html.TextBox("InsiderName", null, new {@class = "form-control", @*gridtype = @ViewBag.GridType,*@ id = "7"})
+                                    @Html.ValidationMessageFor(m => m.InsiderName)
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    @Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_50687"))
+                                    @Html.TextBox("PAN", null, new {@class = "form-control", @*gridtype = @ViewBag.GridType,*@ id = "8"})
+                                    @Html.ValidationMessageFor(m => m.PAN)
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div role="form">
+                                    <div class="form-group">
+                                        <label for="CompanyName">@InsiderTrading.Common.Common.getResource("rpt_lbl_19117")</label>
+                                        @*@Html.TextBox("CompanyName", null, new {@class = "form-control", gridtype = @ViewBag.GridType, id = "txtCompany",data_url = Url.Action("GetList", "RestrictedList")})*@
+                                        @Html.TextBoxFor(m => m.CompanyName, new { @class = "form-control", id = "txtCompany", data_url = Url.Action("GetList", "RestrictedList") })
+                                        @*@Html.ValidationMessageFor(m => m.CompanyName)*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="form-group" id="divTFrom">
+                                    <label for="FromDate">@InsiderTrading.Common.Common.getResource("usr_lbl_51009")</label>
+                                    <div class="form-group" id="sandbox-container">
+                                        <div class="input-group date">
+                                            <input name="TransactionFromDate" class="form-control" id="12" type="text" value="" @*gridtype="@ViewBag.GridType" data-val-required="The Employee Id field is required."*@ data-val="false">
+                                            <span class="input-group-addon"><i class="icon icon-calender"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="form-group" id="divTTo">
+                                    <label for="ToDate">@InsiderTrading.Common.Common.getResource("usr_lbl_51010")</label>
+                                    <div class="form-group" id="sandbox-container">
+                                        <div class="input-group date">
+                                            <input name="TransactionToDate" class="form-control" id="13" type="text" value="" @*gridtype="@ViewBag.GridType" data-val-required="The Employee Id field is required."*@ data-val="false">
+                                            <span class="input-group-addon"><i class="icon icon-calender"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div role="form" id="divYearType">
+                                    <div class="form-group">
+                                        <label for="YearCodeId">@InsiderTrading.Common.Common.getResource("rpt_lbl_19167")</label>
+                                        @Html.DropDownList("YearCodeId", new SelectList(ViewBag.YearTypeCode, "Key", "Value", ""), new { @class = "form-control",  id = "YearType" })
+                                        @*<label id="YearError" >Pls select Year</label>
+                                            <span id="YearError">Pls select Period</span>*@
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div role="form" id="divFinancialPeriods">
+                                    <div class="form-group">
+                                        <label for="PeriodCodeId">@InsiderTrading.Common.Common.getResource("rpt_lbl_19168")</label>
+                                        @Html.DropDownList("PeriodCodeId", new SelectList(ViewBag.FinancialPeriods, "Key", "Value", ""), new { @class = "form-control",  id = "FinancialPeriods" })
+                                        @*<label id="periodError"></label>*@
+                                        @*<span id="perioderror" >Pls select Period</span>*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        @*<input type="submit" value="Next" />*@
+        <div class="row">
+            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12">
+                <div class="form-group" style="margin:5px 15px">
+                    <button type="submit" class="btn btn-success" id="btnExportOSReport">
+                        <i class="fa fa-download"></i> @InsiderTrading.Common.Common.getResource("rl_btn_50013")
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    }
+</section>
+
+@Html.Hidden("selyear", @InsiderTrading.Common.Common.getResource("rpt_msg_19327"))
+@Html.Hidden("selperiod", @InsiderTrading.Common.Common.getResource("rpt_msg_19326"))
+
+<script>
+    $(document).ready(function () {
+        var radioValue = "";
+        radioValue = $("input[name='ReportType']:checked").val();
+        if (radioValue == 1) {
+            $("#divTFrom").hide();
+            $("#divTTo").hide();
+            $("#divYearType").hide();
+            $("#divFinancialPeriods").hide();
+        }
+        $("#ID").click(function () {
+            radioValue = $("input[name='ReportType']:checked").val();
+            if (radioValue == 1) {
+                $("#divTFrom").hide();
+                $("#divTTo").hide();
+                $("#divYearType").hide();
+                $("#divFinancialPeriods").hide();
+            }
+        });
+        $("#PC").click(function () {
+            radioValue = $("input[name='ReportType']:checked").val();
+            if (radioValue == 2) {
+                $("#divTFrom").show();
+                $("#divTTo").show();
+                $("#divYearType").hide();
+                $("#divFinancialPeriods").hide();
+            }
+        });
+        $("#CD").click(function () {
+            radioValue = $("input[name='ReportType']:checked").val();
+            if (radioValue == 3) {
+                $("#divTFrom").show();
+                $("#divTTo").show();
+                $("#divYearType").hide();
+                $("#divFinancialPeriods").hide();
+            }
+        });
+        $("#PED").click(function () {
+            radioValue = $("input[name='ReportType']:checked").val();
+            if (radioValue == 4) {
+                $("#divTFrom").hide();
+                $("#divTTo").hide();
+                $("#divYearType").show();
+                $("#divFinancialPeriods").show();
+            }
+        });
+        $("#DE").click(function () {
+            radioValue = $("input[name='ReportType']:checked").val();
+            if (radioValue == 5) {
+                $("#divTFrom").show();
+                $("#divTTo").show();
+                $("#divYearType").hide();
+                $("#divFinancialPeriods").hide();
+            }
+        });
+
+        $("#btnExportOSReport").click(function () {
+            var rtn_val = true;
+            if (radioValue == 4) {
+                var yr = $('#YearType').val()
+                var pe = $('#FinancialPeriods').val()
+                var cls = "alert alert-danger validation-summary-errors"
+                var dcls = "validation-summary-valid alert alert-danger"
+
+                if (yr == "" && pe != "") {
+                    rtn_val = false;
+                    $('#divValidationSummaryModall').removeClass(dcls).addClass(cls);
+                    $('#divValidationSummaryModall li').attr("style", "display:block")
+                    $('#divValidationSummaryModall li').html($('#selyear').val());
+                }
+                else if (yr != "" && pe == "") {
+                    rtn_val = false;
+                    $('#divValidationSummaryModall').removeClass(dcls).addClass(cls);
+                    $('#divValidationSummaryModall li').attr("style", "display:block")
+                    $('#divValidationSummaryModall li').html($('#selperiod').val());
+                }
+                else if (yr == "" && pe == "") {
+                    rtn_val = false;
+                    $('#divValidationSummaryModall').removeClass(dcls).addClass(cls);
+                    $('#divValidationSummaryModall li').attr("style", "display:block")
+                    $('#divValidationSummaryModall li').html($('#selyear').val());
+                }
+                else {
+                    $('#divValidationSummaryModall').removeClass(cls).addClass(dcls);
+                    $('#divValidationSummaryModall li').attr("style", "display:none")
+                    $('#divValidationSummaryModall li').html("");
+                    rtn_val = true;
+                }
+            }
+
+            return rtn_val;
+        });
+    });
+</script>
+<script type="text/javascript">
+    function SearchCompany(cmpname) {
+        $(function () {
+            var CompanyName = cmpname;
+            $.ajax({
+                url: '@Url.Content("~/RestrictedList/GetExistNSEBSEDetailsJSON/")',
+                type: "GET",
+                data: { CompanyName: CompanyName },
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.agent != 0) {
+                        $("#txtCompany").val(data[0].CompanyName);
+                        $("#txtISINCode").val(data[0].ISINCode);
+                        $("#txtNSECode").val(data[0].NSECode);
+                        $("#txtBSECode").val(data[0].BSECode);
+                        $("#CompanyId").val(data[0].RLCompanyId);
+                        //alert($("#RLCompanyId").val(data[0].RLCompany));
+                    }
+                }
+            });
+        });
+    }
+
+    $(function () {
+        $('#txtCompany').autocomplete({
+
+            minLength: 0,
+            source: function (request, response) {
+                var url = $(this.element).data('url');
+
+                $.getJSON(url, { term: request.term }, function (data) {
+                    response($.map(data, function (item) {
+                        return {
+                            label: item.CompanyName,
+                            value: item.CompanyName
+                        }
+                    }));
+                })
+            },
+            select: function (event, ui) {
+                $(event.target).val('')  //.next('input[type=hidden]').val('');
+                var cmpname = ui.item.label;
+                SearchCompany(cmpname)
+            },
+            change: function (event, ui) {
+                if (!ui.item) {
+                    $(event.target).val('')  //.next('input[type=hidden]').val('');
+                    $('#CompanyId').val('0');
+                }
+            }
+        });
+    })
+
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        if ($('#divValidationSummaryModall').hasClass('validation-summary-errors')) {
+            setTimeout(function () { $('#divValidationSummaryModall').removeClass('validation-summary-errors alert alert-danger error').addClass('validation-summary-valid') }, 5000);
+        }
+    });
+</script>
+
+@*<script>
+        $(document).ready(function () {
+            debugger;
+            var radioValue = $("input[name='ReportType']:checked").val();
+            $("#btnExportOSReport").click(function () {
+                var rtn_val = true;
+                var yr = $('#YearType').val()
+                var pe = $('#FinancialPeriods').val()
+                var cls = "alert alert-danger validation-summary-errors"
+                var dcls = "validation-summary-valid alert alert-danger"
+
+                if (yr == "" && pe != "") {
+                    rtn_val = false;
+                    $('#divValidationSummaryModall').removeClass(dcls).addClass(cls);
+                    $('#divValidationSummaryModall li').attr("style", "display:block")
+                    $('#divValidationSummaryModall li').html($('#selyear').val());
+                }
+                else if (yr != "" && pe == "") {
+                    rtn_val = false;
+                    $('#divValidationSummaryModall').removeClass(dcls).addClass(cls);
+                    $('#divValidationSummaryModall li').attr("style", "display:block")
+                    $('#divValidationSummaryModall li').html($('#selperiod').val());
+                }
+                else if(yr == "" && pe == "" )
+                {
+                    rtn_val = false;
+                    $('#divValidationSummaryModall').removeClass(dcls).addClass(cls);
+                    $('#divValidationSummaryModall li').attr("style", "display:block")
+                    $('#divValidationSummaryModall li').html($('#selyear').val());
+                }
+                else {
+                    $('#divValidationSummaryModall').removeClass(cls).addClass(dcls);
+                    $('#divValidationSummaryModall li').attr("style", "display:none")
+                    $('#divValidationSummaryModall li').html("");
+                    rtn_val = true;
+                }
+
+                return rtn_val;
+            });
+        });
+    </script>*@

@@ -1,0 +1,45 @@
+﻿@model InsiderTrading.Models.DocumentDetailsModel
+
+@if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DOCUMENT_CREATE))
+{
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <p>
+                <a class="btn btn-success" href="javascript:void(0);" id="btnAddDocumentDetails" data-acid="@InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DOCUMENT_CREATE" data-maptotypecodeid="@Model.MapToTypeCodeId" data-maptoid="@Model.MapToId" data-purposecodeid="@Model.PurposeCodeId" url='@Url.Action("EditDocument", "Document")'><i class="icon"></i> @InsiderTrading.Common.Common.getResource("usr_btn_11244")</a>
+            </p>
+        </div>
+    </div>
+}
+
+<div class="alert" style="display: none;" name="ErrorMessage" gridtype="@InsiderTrading.Common.ConstEnum.GridType.DocumentList"></div>
+
+@if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DOCUMENT_VIEW))
+{
+    <div class="search" gridtype="@InsiderTrading.Common.ConstEnum.GridType.DocumentList">
+        @Html.Hidden("8", Model.MapToTypeCodeId, new { id = "8", gridtype = InsiderTrading.Common.ConstEnum.GridType.DocumentList })
+        @Html.Hidden("9", Model.MapToId, new { id = "9", gridtype = InsiderTrading.Common.ConstEnum.GridType.DocumentList })
+        @Html.Hidden("10", Model.PurposeCodeId, new { id = "10", gridtype = InsiderTrading.Common.ConstEnum.GridType.DocumentList })
+        
+        @{
+            Html.RenderAction("Index", "DatatableGrid", new { sGridTagName = "DatatableGrid_userdoc", type = InsiderTrading.Common.ConstEnum.GridType.DocumentList, btnSearch = "", sSortCol = "0", acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DOCUMENT_VIEW });
+        }
+    </div>
+}
+
+@Html.Hidden("EditDocumentACID", InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DOCUMENT_EDIT)
+
+
+@if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DOCUMENT_CREATE))
+{
+    @Html.Hidden("SaveDocument", Url.Action("SaveDocumentDetails", "Document"))
+}
+@Html.Hidden("DownloadDocument_View", Url.Action("Download", "Document", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DOCUMENT_VIEW }))
+@Html.Hidden("UploadDocument", Url.Action("UploadDocument", "Document"))
+
+@Html.Hidden("canEdit_doc", InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DOCUMENT_EDIT))
+@Html.Hidden("EditDocument", Url.Action("EditDocument", "Document", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DOCUMENT_EDIT }))
+
+@Html.Hidden("canDel_doc", InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DOCUMENT_DELETE))
+@Html.Hidden("deleteRowURL", Url.Action("DeleteDocumentDetails", "Document", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DOCUMENT_DELETE }), new { id = "DeleteDocument", gridtype = InsiderTrading.Common.ConstEnum.GridType.DocumentList, acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DOCUMENT_DELETE })
+
+

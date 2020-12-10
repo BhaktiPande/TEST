@@ -1,0 +1,180 @@
+﻿@model InsiderTrading.Models.PasswordConfigModel
+
+<section class="content-header">
+    <h1>@InsiderTrading.Common.Common.getResource("pc_ttl_50555")</h1>
+</section>
+@using (Html.BeginForm("SavePasswordConfiguration", "PasswordConfiguration", new { ReturnUrl = ViewBag.ReturnUrl, formId = InsiderTrading.Common.ConstEnum.Code.frmPwdConfiguration, acid = ViewBag.Acid }, FormMethod.Post, new { @autocomplete = "off", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <section class="content">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-xs-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.MinLength, new { @class = "login-label" })
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-xs-6">
+                                <div class="form-group">
+                                    @Html.TextBoxFor(model => model.MinLength, new { @class = "form-control two-digits" })@*, @Value="8"*@
+                                    @Html.ValidationMessageFor(model => model.MinLength)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-xs-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.MaxLength, new { @class = "login-label" })
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-xs-6">
+                                <div class="form-group">
+                                    @Html.TextBoxFor(model => model.MaxLength, new { @class = "form-control two-digits" })@*, @Value="20"*@
+                                    @Html.ValidationMessageFor(model => model.MaxLength)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-xs-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.MinAlphabets, new { @class = "login-label" })
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-xs-6">
+                                <div class="form-group">
+                                    @Html.TextBoxFor(model => model.MinAlphabets, new { @class = "form-control two-digits" })@*, @Value="1"*@
+                                    @Html.ValidationMessageFor(model => model.MinAlphabets)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-xs-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.MinNumbers, new { @class = "login-label" })
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-xs-6">
+                                <div class="form-group">
+                                    @Html.TextBoxFor(model => model.MinNumbers, new { @class = "form-control two-digits"})@*, @Value="1"*@
+                                    @Html.ValidationMessageFor(model => model.MinNumbers)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-xs-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.MinSplChar, new { @class = "login-label" })
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-xs-6">
+                                <div class="form-group">
+                                    @Html.TextBoxFor(model => model.MinSplChar, new { @class = "form-control two-digits"})@*, @Value="1"*@
+                                    @Html.ValidationMessageFor(model => model.MinSplChar)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-xs-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.MinUppercaseChar, new { @class = "login-label" })
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-xs-6">
+                                <div class="form-group">
+                                    @Html.TextBoxFor(model => model.MinUppercaseChar, new { @class = "form-control two-digits"})@*, @Value="1"*@
+                                    @Html.ValidationMessageFor(model => model.MinUppercaseChar)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-xs-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.CountOfPassHistory, new { @class = "login-label" })
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-xs-6">
+                                <div class="form-group">
+                                    @Html.TextBoxFor(model => model.CountOfPassHistory, new { @class = "form-control two-digits"})@*, @Value="5"*@
+                                    @Html.ValidationMessageFor(model => model.CountOfPassHistory)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-xs-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.PassValidity, new { @class = "login-label" })
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-xs-6">
+                                <div class="form-group">
+                                    @Html.TextBoxFor(model => model.PassValidity, new { @class = "form-control two-digits"})@*, @Value="45"*@
+                                    @Html.ValidationMessageFor(model => model.PassValidity)
+                                </div>
+                            </div>
+                            @Html.Label("days")
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-xs-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.ExpiryReminder, new { @class = "login-label" })
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-xs-6">
+                                <div class="form-group">
+                                    @Html.TextBoxFor(model => model.ExpiryReminder, new { @class = "form-control two-digits"})@*, @Value="5"*@
+                                    @Html.ValidationMessageFor(model => model.ExpiryReminder)
+                                </div>
+                            </div>
+                            @Html.Label("days")
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-xs-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.LoginAttempts, new { @class = "login-label" })
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-xs-6">
+                                <div class="form-group">
+                                    @Html.TextBoxFor(model => model.LoginAttempts, new { @class = "form-control two-digits"})@*, @Value="3"*@
+                                    @Html.ValidationMessageFor(model => model.LoginAttempts)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label>@InsiderTrading.Common.Common.getResource("pc_msg_50565")</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                @Html.HiddenFor(model => model.PasswordConfigID)
+                                <button type="submit" class="btn btn-success" id="btnSavePasswordConfig" name="SavePasswordConfiguration"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("pc_btn_50566")</button>
+                                <button type="submit" class="btn btn-success" name="ResetPasswordConfiguration"><i class="fa fa-undo"></i> @InsiderTrading.Common.Common.getResource("pc_btn_50567")</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+
+        $('input,textarea', 'form').blur(function () {
+            $(this).valid();
+
+            $("#divValidationSummaryModal").removeClass("validation-summary-errors");
+            $("#divValidationSummaryModal").addClass("validation-summary-valid");
+        });
+    });
+
+</script>

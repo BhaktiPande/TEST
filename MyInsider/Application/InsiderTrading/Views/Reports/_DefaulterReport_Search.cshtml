@@ -1,0 +1,392 @@
+﻿@model InsiderTrading.Models.DefaulterReportSearchViewModel
+@{
+    ViewBag.Title = "DefaulterReport";
+}
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @*@Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_19242"))*@
+            <label for="EmployeeID">@InsiderTrading.Common.Common.getResource("rpt_lbl_19242")</label>
+            @*@Html.TextBox("EmployeeID", null, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "2" })*@
+            @Html.TextBoxFor(m => m.EmployeeId, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "2" })
+            @Html.ValidationMessageFor(m => m.EmployeeId)
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @*@Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_19243"))*@
+            <label for="EmployeeName">@InsiderTrading.Common.Common.getResource("rpt_lbl_19243")</label>
+            @*@Html.TextBox("EmployeeName", null, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "3" })*@
+            @Html.TextBoxFor(m => m.InsiderName, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "3" })
+            @Html.ValidationMessageFor(m => m.InsiderName)
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @*@Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_19244"))*@
+            <label for="Designation">@InsiderTrading.Common.Common.getResource("rpt_lbl_19244")</label>
+            @*@Html.TextBox("Designation", null, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "4" })*@
+            @Html.TextBoxFor(m => m.Designation, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "4" })
+            @Html.ValidationMessageFor(m => m.Designation)
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @*@Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_19245"))*@
+            <label for="Grade">@InsiderTrading.Common.Common.getResource("rpt_lbl_19245")</label>
+            @Html.DropDownList("Grade", new MultiSelectList(ViewBag.GradeList, "Key", "Value", ""), new { @class = "form-control selectpicker", title = "Select", multiple = "multiple", gridtype = @ViewBag.GridType, id = "5" })
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @*@Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_19246"))*@
+            <label for="Location">@InsiderTrading.Common.Common.getResource("rpt_lbl_19246")</label>
+            @*@Html.TextBox("Location", null, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "6" })*@
+            @Html.TextBoxFor(m => m.Location, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "6" })
+            @Html.ValidationMessageFor(m => m.Location)
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @*@Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_19247"))*@
+            <label for="Department">@InsiderTrading.Common.Common.getResource("rpt_lbl_19247")</label>
+            @Html.DropDownList("Department", new MultiSelectList(ViewBag.DepartmentList, "Key", "Value", ""), new { @class = "form-control selectpicker", title = "Select", multiple = "multiple", gridtype = @ViewBag.GridType, id = "7" })
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @*@Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_19248"))*@
+            <label for="Company">@InsiderTrading.Common.Common.getResource("rpt_lbl_19248")</label>
+            @Html.DropDownList("Company", new MultiSelectList(ViewBag.CompanyList, "Key", "Value", ""), new { @class = "form-control selectpicker", title = "Select", multiple = "multiple", gridtype = @ViewBag.GridType, id = "8" })
+            @*@Html.DropDownList("Company", new SelectList(ViewBag.CompanyList, "Key", "Value", ""), new { @class = "form-control", gridtype = @ViewBag.GridType, id = "8" })*@
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @*@Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_19249"))*@
+            <label for="UserType">@InsiderTrading.Common.Common.getResource("rpt_lbl_19249")</label>
+            @Html.DropDownList("UserType", new MultiSelectList(ViewBag.UserTypeList, "Key", "Value", ""), new { @class = "form-control selectpicker", title = "Select", multiple = "multiple", gridtype = @ViewBag.GridType, id = "9" })
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @*@Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_19250"))*@
+            <label for="DematAccountNumber">@InsiderTrading.Common.Common.getResource("rpt_lbl_19250")</label>
+            @*@Html.TextBox("DematAccountNumber", null, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "10" })*@
+            @Html.TextBoxFor(m => m.DematAccountNumber, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "10" })
+            @Html.ValidationMessageFor(m => m.DematAccountNumber)
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @*@Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_19251"))*@
+            <label for="AccountHolder">@InsiderTrading.Common.Common.getResource("rpt_lbl_19251")</label>
+            @*@Html.TextBox("AccountHolder", null, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "11" })*@
+            @Html.TextBoxFor(m => m.AccountHolder, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "11" })
+            @Html.ValidationMessageFor(m => m.AccountHolder)
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @*@Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_19252"))*@
+            <label for="PreClearanceID">@InsiderTrading.Common.Common.getResource("rpt_lbl_19252")</label>
+            @*@Html.TextBox("PreClearanceID", null, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "12" })*@
+            @Html.TextBoxFor(m => m.PreClearanceID, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "12" })
+            @Html.ValidationMessageFor(m => m.PreClearanceID)
+        </div>
+
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @*@Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_19253"))*@
+            <label for="RequestStatus">@InsiderTrading.Common.Common.getResource("rpt_lbl_19253")</label>
+            @Html.DropDownList("RequestStatus", new MultiSelectList(ViewBag.RequestStatusList, "Key", "Value", ""), new { @class = "form-control selectpicker", title = "Select", multiple = "multiple", gridtype = @ViewBag.GridType, id = "13" })
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group" id="sandbox-container">
+            @*@Html.Label("Status from Date")*@
+            <label for="PreStatusFromDate">@InsiderTrading.Common.Common.getResource("rpt_lbl_19318")</label>
+            @{
+                string PreStatusFromDate = "";
+                PreStatusFromDate = InsiderTrading.Common.Common.ApplyFormatting("", InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+            }
+            <div class="input-group date">
+                @Html.TextBox("PreStatusFromDate", PreStatusFromDate, null, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "28" })
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group" id="sandbox-container">
+            @*@Html.Label("Status To Date")*@
+            <label for="PreStatusToDate">@InsiderTrading.Common.Common.getResource("rpt_lbl_19319")</label>
+            @{
+                string PreStatusToDate = "";
+                PreStatusToDate = InsiderTrading.Common.Common.ApplyFormatting("", InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+            }
+            <div class="input-group date">
+                @Html.TextBox("PreStatusToDate", PreStatusToDate, null, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "29" })
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @*@Html.Label("Requested Qty From")*@
+            <label for="PreclearanceFromQty">@InsiderTrading.Common.Common.getResource("rpt_lbl_19320")</label>
+            @*@Html.TextBox("PreclearanceFromQty", null, new { @class = "form-control numericOnly", gridtype = @ViewBag.GridType, id = "30" })*@
+            @Html.TextBoxFor(m => m.RequestedQtyFrom, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "30" })
+            @Html.ValidationMessageFor(m => m.RequestedQtyFrom)
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @*@Html.Label("Requested Qty To")*@
+            <label for="PreclearanceToQty">@InsiderTrading.Common.Common.getResource("rpt_lbl_19321")</label>
+            @*@Html.TextBox("PreclearanceToQty", null, new { @class = "form-control numericOnly", gridtype = @ViewBag.GridType, id = "31" })*@
+            @Html.TextBoxFor(m => m.RequestedQtyTo, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "31" })
+            @Html.ValidationMessageFor(m => m.RequestedQtyTo)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group" id="sandbox-container">
+            @*@Html.Label("Transaction Date From")*@
+            <label for="TransactionFromDate">@InsiderTrading.Common.Common.getResource("rpt_lbl_19322")</label>
+            @{
+                string TransactionFromDate = "";
+                TransactionFromDate = InsiderTrading.Common.Common.ApplyFormatting("", InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+            }
+            <div class="input-group date">
+                @Html.TextBox("TransactionFromDate", TransactionFromDate, null, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "38" })
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group" id="sandbox-container">
+            @*@Html.Label("Transaction Date To")*@
+            <label for="TransactionToDate">@InsiderTrading.Common.Common.getResource("rpt_lbl_19323")</label>
+            @{
+                string TransactionToDate = "";
+                TransactionToDate = InsiderTrading.Common.Common.ApplyFormatting("", InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+            }
+            <div class="input-group date">
+                @Html.TextBox("TransactionToDate", TransactionToDate, null, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "39" })
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @*@Html.Label("Trade Qty From")*@
+            <label for="TradeFromQty">@InsiderTrading.Common.Common.getResource("rpt_lbl_19324")</label>
+            @*@Html.TextBox("TradeFromQty", null, new { @class = "form-control numericOnly", gridtype = @ViewBag.GridType, id = "32" })*@
+            @Html.TextBoxFor(m => m.TradeQtyFrom, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "32" })
+            @Html.ValidationMessageFor(m => m.TradeQtyFrom)
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @*@Html.Label("Trade Qty To")*@
+            <label for="TradeToQty">@InsiderTrading.Common.Common.getResource("rpt_lbl_19325")</label>
+            @*@Html.TextBox("TradeToQty", null, new { @class = "form-control numericOnly", gridtype = @ViewBag.GridType, id = "33" })*@
+            @Html.TextBoxFor(m => m.TradeQtyTo, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "33" })
+            @Html.ValidationMessageFor(m => m.TradeQtyTo)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @*@Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_19254"))*@
+            <label for="TransactionType">@InsiderTrading.Common.Common.getResource("rpt_lbl_19254")</label>
+            @Html.DropDownList("TransactionType", new MultiSelectList(ViewBag.TransactionTypeList, "Key", "Value", ""), new { @class = "form-control selectpicker", title = "Select", multiple = "multiple", gridtype = @ViewBag.GridType, id = "14" })
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @*@Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_19255"))*@
+            <label for="Security">@InsiderTrading.Common.Common.getResource("rpt_lbl_19255")</label>
+            @Html.DropDownList("Security", new MultiSelectList(ViewBag.SecurityTypeList, "Key", "Value", ""), new { @class = "form-control selectpicker", title = "Select", multiple = "multiple", gridtype = @ViewBag.GridType, id = "15" })
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group" id="sandbox-container">
+            @*@Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_19256"))*@
+            <label for="SubmissionDate">@InsiderTrading.Common.Common.getResource("rpt_lbl_19256")</label>
+            @{
+                string SubmissionDate = "";
+                SubmissionDate = InsiderTrading.Common.Common.ApplyFormatting("", InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+            }
+            <div class="input-group date">
+                @Html.TextBox("SubmissionDate", SubmissionDate, null, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "16" })
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group" id="sandbox-container">
+            @*@Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_19257"))*@
+            <label for="SubmissionDateTo">@InsiderTrading.Common.Common.getResource("rpt_lbl_19257")</label>
+            @{
+                string SubmissionDateTo = "";
+                SubmissionDateTo = InsiderTrading.Common.Common.ApplyFormatting("", InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+            }
+            <div class="input-group date">
+                @Html.TextBox("SubmissionDateTo", SubmissionDateTo, null, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "17" })
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group" id="sandbox-container">
+            @*@Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_19259"))*@
+            <label for="SoftcopySubmissionFromDate">@InsiderTrading.Common.Common.getResource("rpt_lbl_19259")</label>
+            @{
+                string SoftcopySubmissionFromDate = "";
+                SoftcopySubmissionFromDate = InsiderTrading.Common.Common.ApplyFormatting("", InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+            }
+            <div class="input-group date">
+                @Html.TextBox("SoftcopySubmissionFromDate", SoftcopySubmissionFromDate, null, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "18" })
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group" id="sandbox-container">
+            @*@Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_19260"))*@
+            <label for="SoftcopySubmissionDateTo">@InsiderTrading.Common.Common.getResource("rpt_lbl_19260")</label>
+            @{
+                string SoftcopySubmissionDateTo = "";
+                SoftcopySubmissionDateTo = InsiderTrading.Common.Common.ApplyFormatting("", InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+            }
+            <div class="input-group date">
+                @Html.TextBox("SoftcopySubmissionDateTo", SoftcopySubmissionDateTo, null, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "19" })
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group" id="sandbox-container">
+            @*@Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_19261"))*@
+            <label for="hardcopySubmissionFromDate">@InsiderTrading.Common.Common.getResource("rpt_lbl_19261")</label>
+            @{
+                string hardcopySubmissionFromDate = "";
+                hardcopySubmissionFromDate = InsiderTrading.Common.Common.ApplyFormatting("", InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+            }
+            <div class="input-group date">
+                @Html.TextBox("hardcopySubmissionFromDate", hardcopySubmissionFromDate, null, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "20" })
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group" id="sandbox-container">
+            @*@Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_19262"))*@
+            <label for="HardcopySubmissionDateTo">@InsiderTrading.Common.Common.getResource("rpt_lbl_19262")</label>
+            @{
+                string HardcopySubmissionDateTo = "";
+                HardcopySubmissionDateTo = InsiderTrading.Common.Common.ApplyFormatting("", InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+            }
+            <div class="input-group date">
+                @Html.TextBox("HardcopySubmissionDateTo", HardcopySubmissionDateTo, null, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "21" })
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group" id="sandbox-container">
+            @*@Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_19263"))*@
+            <label for="StockExchangesubmissionFromDate">@InsiderTrading.Common.Common.getResource("rpt_lbl_19263")</label>
+            @{
+                string StockExchangesubmissionFromDate = "";
+                StockExchangesubmissionFromDate = InsiderTrading.Common.Common.ApplyFormatting("", InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+            }
+            <div class="input-group date">
+                @Html.TextBox("StockExchangesubmissionFromDate", StockExchangesubmissionFromDate, null, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "24" })
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group" id="sandbox-container">
+            @*@Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_19264"))*@
+            <label for="StockExchangesubmissionToDate">@InsiderTrading.Common.Common.getResource("rpt_lbl_19264")</label>
+            @{
+                string StockExchangesubmissionToDate = "";
+                StockExchangesubmissionToDate = InsiderTrading.Common.Common.ApplyFormatting("", InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+            }
+            <div class="input-group date">
+                @Html.TextBox("StockExchangesubmissionToDate", StockExchangesubmissionToDate, null, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "25" })
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @*@Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_19265"))*@
+            <label for="NonComplainceType">@InsiderTrading.Common.Common.getResource("rpt_lbl_19265")</label>
+            @Html.DropDownList("NonComplainceType", new MultiSelectList(ViewBag.NonComplainceTypeList, "Key", "Value", ""), new { @class = "form-control selectpicker", title = "Select", multiple = "multiple", gridtype = @ViewBag.GridType, id = "26" })
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                <label>Insider Status</label>
+                @Html.DropDownList("InsiderStatus", new MultiSelectList(ViewBag.InsiderStatusDropDown, "Key", "Value", ""), new { @class = "form-control selectpicker", title = "Select", multiple = "multiple", gridtype = @ViewBag.GridType, id = "43" })
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @*@Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_19266"))*@
+            <label for="Comments">@InsiderTrading.Common.Common.getResource("rpt_lbl_19266")</label>
+            @Html.DropDownList("Comments", new MultiSelectList(ViewBag.DefaulterReportCommentsList, "Key", "Value", ""), new { @class = "form-control selectpicker", title = "Select", multiple = "multiple", gridtype = @ViewBag.GridType, id = "27" })
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="form-group">
+            <label>&nbsp;</label>
+            @Html.CheckBox("IsMarkOveerid", new { @class = "Checkbox cr-check", gridtype = @ViewBag.GridType, id = "42" })
+            &nbsp;&nbsp; @Html.Label("Is Mark Override")
+        </div>
+    </div>
+</div>
+
+<div id="divNotTradedModal" style="display:none;"></div>
+@Html.Hidden("Edit", Url.Action("MarkOverride", "Reports", new { acid = InsiderTrading.Common.ConstEnum.UserActions.DEFAULTERREPORT_LIST }))
+@Html.Hidden("Edit", "#", new { @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_rpt_grd_19312", param = "{'DefaulterReportID':'<DefaulterReportID>','text':'','href':'javascript:void(0);','class':'display-icon icon icon-edit btnEditOveride'}" })
+<script>
+    $(document).ready(function () {
+
+    });
+
+
+</script>

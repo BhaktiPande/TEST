@@ -1,0 +1,296 @@
+﻿@model InsiderTrading.Models.UserInfoSearchViewModel
+@{
+    ViewBag.Title = InsiderTrading.Common.Common.getResource("usr_ttl_11235");
+    var searchResult = Html.Raw(Json.Encode(TempData["SearchArray"]));
+}
+<section class="content-header">
+    @Html.AntiForgeryToken()
+    <h1>
+        @InsiderTrading.Common.Common.getResource("usr_ttl_11235")
+    </h1>
+</section>
+
+<section class="content search" gridtype="@ViewBag.GridType">
+    <button id="searchBtn" type="button" data-toggle="collapse" class="btn btn-success" data-target="#filter-panel">
+        <i class="fa fa-search"></i> @InsiderTrading.Common.Common.getResource("com_btn_14005")
+    </button>
+    <form method="post"> 
+    <div id="filter-panel" class="collapse filter-panel">
+        <br />
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body ">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    <input type="hidden" value="@ViewBag.Param1" id="1" gridtype="@ViewBag.GridType" />
+                                    <label>@Html.LabelFor(m => m.EmployeeId)</label>
+                                    @Html.TextBoxFor(m => m.EmployeeId, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "6"})
+                                    @Html.ValidationMessageFor(m => m.EmployeeId)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    <label>@Html.LabelFor(m => m.PAN)</label>
+                                    @Html.TextBoxFor(m => m.PAN, new { @class = "form-control", id = "9" })  
+                                    @Html.ValidationMessageFor(m => m.PAN)
+                                  
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    <label>@Html.LabelFor(m => m.UserTypeCodeId)</label>
+                                    @Html.DropDownListFor(m => m.UserTypeCodeId, new SelectList(ViewBag.UserTypeDropDown, "Key", "Value", ""), new { @class = "form-control", gridtype = @ViewBag.GridType, id = "20" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    <label>@Html.Label(InsiderTrading.Common.Common.getResource("usr_lbl_11436"))</label>
+                                    @Html.DropDownList("InsiderStatus", new SelectList(ViewBag.InsiderStatusDropDown, "Key", "Value", ""), new { @class = "form-control", gridtype = @ViewBag.GridType, id = "25" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    <label>@Html.LabelFor(m => m.Category)</label>
+                                    @Html.DropDownListFor(m => m.Category, new SelectList(ViewBag.CategoryDropDown, "Key", "Value", ""), new { @class = "form-control", gridtype = @ViewBag.GridType, id = "10" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    <label>@Html.LabelFor(m => m.DesignationId)</label>
+                                    @Html.DropDownListFor(m => m.DesignationId, new SelectList(ViewBag.DesignationDropDown, "Key", "Value", ""), new { @class = "form-control", gridtype = @ViewBag.GridType, id = "12" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    <label>@Html.LabelFor(m => m.DepartmentId)</label>
+                                    @Html.DropDownListFor(m => m.DepartmentId, new SelectList(ViewBag.DepartmentDropDown, "Key", "Value", ""), new { @class = "form-control", gridtype = @ViewBag.GridType, id = "14" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    <label>@Html.LabelFor(m => m.GradeId)</label>
+                                    @Html.DropDownListFor(m => m.GradeId, new SelectList(ViewBag.GradeDropDown, "Key", "Value", ""), new { @class = "form-control", gridtype = @ViewBag.GridType, id = "11" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    <label>@Html.LabelFor(m => m.Location)</label>
+                                    @Html.TextBoxFor(m => m.Location, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "13" })
+                                    @Html.ValidationMessageFor(m => m.Location)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    <label>@Html.Label(InsiderTrading.Common.Common.getResource("usr_lbl_11281"))</label>
+                                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "3" })
+                                    @Html.ValidationMessageFor(m => m.FirstName)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    <label>@Html.LabelFor(m => m.EmailId)</label>
+                                    @Html.TextBoxFor(m => m.EmailId, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "2" })
+                                    @Html.ValidationMessageFor(m => m.EmailId)
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.col-lg-3  -->
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div role="form">
+                                <div class="form-group">
+                                    <label>@Html.LabelFor(m => m.MobileNumber)</label>
+                                    @Html.TextBoxFor(m => m.MobileNumber, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "7" })
+                                    @Html.ValidationMessageFor(m => m.MobileNumber)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div role="form">
+                                <button type="button" class="btn btn-success" id="btnEmployeeSearch"><i class="fa fa-search"></i> @InsiderTrading.Common.Common.getResource("com_btn_14005")</button>
+                                <button type="reset" class="btn btn-success" dt_name="btnReset" dt_gridtype="@ViewBag.GridType"><i class="fa fa-undo"></i> @InsiderTrading.Common.Common.getResource("com_btn_14006")</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    </form>
+    <div class="div-spacer"></div><br />
+
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <p>
+                @{
+                    if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_CREATE))
+                    {
+                        <a class="btn btn-success icon icon-add-user" data-toggle="modal" href='@Url.Action("Add", "Employee", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_CREATE })' role="button"> @InsiderTrading.Common.Common.getResource("usr_btn_11236")</a>
+                    }
+
+                    if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_USERSEPARATION_VIEW))
+                    {
+                        <a class="btn btn-success icon" data-toggle="modal" href='@Url.Action("UploadSeparation", "Employee", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_USERSEPARATION_VIEW })' role="button"> @InsiderTrading.Common.Common.getResource("usr_btn_11237")</a>
+                    }
+
+                    if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_USERSEPARATION_VIEW))
+                    {
+                        <a class="btn btn-success icon" id="EmpDetails" data-toggle="modal" href='@Url.Action("DownloadExcel", "Employee", new { ReportType = 1 })' role="button"> @InsiderTrading.Common.Common.getResource("usr_btn_50624") </a>
+                    }
+
+                    if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_USERSEPARATION_VIEW))
+                    {
+                        <a class="btn btn-success icon" id="EmpDetails" data-toggle="modal" href='@Url.Action("DownloadExcel", "Employee", new { ReportType = 2 })' role="button"> @InsiderTrading.Common.Common.getResource("usr_btn_50625") </a>
+                    }
+
+                    if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_USERSEPARATION_VIEW))
+                    {  
+                        <a class="btn btn-success icon" id="EmpDetails" data-toggle="modal" href='@Url.Action("DownloadExcel", "Employee", new { ReportType = 4 })' role="button"> @InsiderTrading.Common.Common.getResource("usr_btn_55080") </a>                 
+                    }
+                }
+            </p>
+        </div>
+    </div>
+    <div class="alert" style="display: none;" name="ErrorMessage" gridtype="@ViewBag.GridType"></div>
+    @{
+        Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "btnEmployeeSearch", sSortCol = "0", acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_VIEW });
+
+        if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_EDIT))
+        {
+            @Html.Hidden("UnBlockUser", Url.Action("UnblockUser", "Employee"), new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_EDIT })
+            @Html.Hidden("EmployeeEdit", Url.Action("Create", "Employee"), new { id = "EmployeeEdit", datatype = InsiderTrading.Common.ConstEnum.Code.EmployeeType, acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_EDIT })
+            @Html.Hidden("EmployeeInsiderEdit", Url.Action("Create", "EmployeeInsider"), new { id = "EmployeeInsiderEdit", datatype = InsiderTrading.Common.ConstEnum.Code.EmployeeType, acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_EDIT })
+            @Html.Hidden("CorporateInsiderEdit", Url.Action("Edit", "CorporateUser"), new { id = "CorporateInsiderEdit", datatype = InsiderTrading.Common.ConstEnum.Code.CorporateUserType, acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_EDIT })
+            @Html.Hidden("NonEmployeeInsiderEdit", Url.Action("Create", "NonEmployeeInsider"), new { id = "NonEmployeeInsiderEdit", datatype = InsiderTrading.Common.ConstEnum.Code.NonEmployeeType, acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_EDIT })
+        }
+        if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_DELETE))
+        {
+            @Html.Hidden("deleteRowURL", Url.Action("DeleteUser", "Employee", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_DELETE }), new { id = "EmployeeDelete", gridtype = ViewBag.GridType, acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_DELETE })
+            if (@ViewBag.ISMCQRquired==521001)
+            {
+                @Html.Hidden("ISMCQRequired","true")
+            }
+            else
+            {
+                @Html.Hidden("ISMCQRequired","false")
+            }
+        }
+    }
+</section>
+
+
+
+
+<div class="modal fade" id="OverrideModal" tabindex="-1" role="dialog" aria-labelledby="editResource" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="width:40%;">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#86C457;color:white">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title custom_align" id="editNotTraded">@InsiderTrading.Common.Common.getResource("usr_lbl_54108")</h4>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("UnblockUser", "Employee", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_EDIT }, FormMethod.Post, new { role = "form", id = "frmUnbolckUser", autocomplete = "off" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                @Html.Hidden("UserInfoID", 0)
+                                @Html.LabelFor(m => m.objUnblockUser.IsBlocked)
+                                @Html.RadioButtonFor(m => m.objUnblockUser.IsBlocked, true, new { id = "RBIsBlockedYes" })  @InsiderTrading.Common.Common.getResource("usr_lbl_54113") &nbsp;&nbsp;&nbsp;
+                                @Html.RadioButtonFor(m => m.objUnblockUser.IsBlocked, false, new { id = "RBIsBlockedNo" }) @InsiderTrading.Common.Common.getResource("usr_lbl_54114")
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.objUnblockUser.Block_Unblock_Reasion)
+                                @Html.TextAreaFor(m => m.objUnblockUser.Block_Unblock_Reasion, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.objUnblockUser.Block_Unblock_Reasion).ToString(), Html.ActivityResourceKeyFor(m => m.objUnblockUser.Block_Unblock_Reasion).ToString(), new { @class = "form-control", @id = "Block_Unblock_Reasion" }))
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <div class="pull-right">
+                            <p>
+                                <button id="btnSaveUserData" type="submit" class="btn btn-success"><i class="fa fa-check"></i>@InsiderTrading.Common.Common.getResource("usr_btn_54111") </button>
+                                <button type="button" id="btnCancel" class="btn btn-success"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("usr_btn_54112")</button>
+                            </p>
+                        </div>
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="divOverrideModal" style="display:none;"></div>
+@Html.Hidden("SearchResult", searchResult)
+@Scripts.Render("~/bundles/SearchResult")
+
+
+<script>
+    $("#Block_Unblock_Reasion").removeAttr("disabled");
+    $(document).ready(function () {
+        $(document).delegate("#btnCancel", "click", function () {
+
+            $("#divOverrideModal").hide();
+            $('#OverrideModal').modal('hide');
+        });
+
+    });
+    function ShowUnlockWindow(UserInfoID, IsBlocked) {
+        if (IsBlocked) { $("#RBIsBlockedYes").prop('checked', "checked");}
+        else { $("#RBIsBlockedNo").prop('checked', "checked"); }
+
+        $("#UserInfoID").val(UserInfoID);
+      
+       // $("#Block_Unblock_Reasion").val(Blocked_UnBlock_Reason);
+        $("#divOverrideModal").show();
+        $('#OverrideModal').modal('show');
+
+    }
+
+    
+   
+</script>
