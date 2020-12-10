@@ -1,0 +1,39 @@
+﻿@model InsiderTrading.Models.EmployeeModel
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+<div class="row">
+    <section id="loginForm">
+        @using (Html.BeginForm("Create", "EmployeeInsider", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", autocomplete = "off" }))
+        {
+            @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+            @Html.Partial("~/Views/Common/CreateInsider.cshtml",Model.userInfoModel)
+        }
+        @if (Model.userInfoModel.UserInfoId != 0)
+        {
+            <div class="spacer">
+                <div class="row">
+                    <div class="col-xs-6">
+                        @Html.Partial("~/Views/Common/CreateDMATDetails.cshtml", Model.dmatDetailsModel)
+                    </div>
+                    <div class="col-xs-6">
+                        @Html.Partial("~/Views/Common/CreateDocumentDetails.cshtml", Model.documentDetailsModel)
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <div class="form-group">
+                    <div class="pull-right">
+                        <a class="btn btn-default" href='@Url.Action("ViewDetails", "Employee", new { nUserInfoID = Model.userInfoModel.UserInfoId})' role="button">Continue</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </section>
+</div>
+<div id="divDMATDetailsModal" style="display:none;"></div>
+<div id="divDocumentDetailsModal" style="display:none;"></div>
+@Scripts.Render("~/bundles/employeeInsider")

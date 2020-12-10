@@ -1,0 +1,179 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+
+<section class="content-header">
+
+    @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+    <h1>@InsiderTrading.Common.Common.getResource("dis_ttl_17497")</h1>
+
+</section>
+<!-- Main content -->
+<section class="content  search" gridtype="@ViewBag.GridType">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <p>
+                <button type="button" data-toggle="collapse" class="btn btn-success" data-target="#filter-panel">
+                    <i class="fa fa-search"> @InsiderTrading.Common.Common.getResource("com_btn_14005")</i>
+                </button>
+            </p>
+        </div>
+    </div>
+
+    <input type="hidden" gridtype="@ViewBag.GridType" />
+    <input type="hidden" value="@ViewBag.Param1" id="1" gridtype="@ViewBag.GridType" />
+    <div id="filter-panel" class="collapse filter-panel">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    @Html.Label(@InsiderTrading.Common.Common.getResource("dis_lbl_17063"))
+                                    @Html.TextBox("PreClearanceID", null, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "2", @Value = @ViewBag.PreClearanceRequestID })
+                                </div>
+
+                            </div>
+                            @*<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @Html.Label(@InsiderTrading.Common.Common.getResource("dis_lbl_17499"))
+            @Html.DropDownList("RequestStatus", new SelectList(ViewBag.RequestStatusList, "Key", "Value", ViewBag.PreClearanceRequestStatus), new { @class = "form-control", gridtype = @ViewBag.GridType, id = "3" })
+        </div>
+    </div>*@
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    @Html.Label(@InsiderTrading.Common.Common.getResource("dis_lbl_17500"))
+                                    @Html.DropDownList("TransactionType", new SelectList(ViewBag.TransactionTypeList, "Key", "Value", ""), new { @class = "form-control", gridtype = @ViewBag.GridType, id = "4" })
+                                </div>
+                            </div>
+                           @* <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @Html.Label(@InsiderTrading.Common.Common.getResource("dis_lbl_17066"))
+            @Html.DropDownList("TradeDetails", new SelectList(ViewBag.TradeDetailsList, "Key", "Value", ViewBag.TradeDetailsID), new { @class = "form-control", gridtype = @ViewBag.GridType, id = "7" })
+        </div>
+    </div>*@
+                        </div>
+                        @*<div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="form-group" id="sandbox-container">
+                                    @Html.Label(@InsiderTrading.Common.Common.getResource("dis_lbl_17067"))
+                                    @{
+                                        string SubmissionDate = "";
+                                        SubmissionDate = InsiderTrading.Common.Common.ApplyFormatting("", InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+                                    }
+                                    <div class="input-group date">
+                                        @Html.TextBox("SubmissionDate", SubmissionDate, null, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "5" })
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="form-group" id="sandbox-container">
+                                    @Html.Label(@InsiderTrading.Common.Common.getResource("dis_lbl_17068"))
+                                    @{
+                                        string SubmissionDateTo = "";
+                                        SubmissionDateTo = InsiderTrading.Common.Common.ApplyFormatting("", InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+                                    }
+                                    <div class="input-group date">
+                                        @Html.TextBox("SubmissionDateTo", SubmissionDateTo, null, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "6" })
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    @Html.Label(@InsiderTrading.Common.Common.getResource("dis_lbl_17069"))
+                                    @Html.DropDownList("DisclosureDetailsSoftcopy", new SelectList(ViewBag.DisclosureDetailsList, "Key", "Value", ""), new { @class = "form-control", gridtype = @ViewBag.GridType, id = "8" })
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    @Html.Label(@InsiderTrading.Common.Common.getResource("dis_lbl_17070"))
+                                    @Html.DropDownList("DisclosureDetailsHardcopy", new SelectList(ViewBag.DisclosureDetailsList, "Key", "Value", ""), new { @class = "form-control", gridtype = @ViewBag.GridType, id = "9" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label>&nbsp;</label>
+                                    @Html.CheckBox("ContinuousDisclosureRequired", new { @class = "Checkbox cr-check", gridtype = @ViewBag.GridType, id = "10" })
+                                    &nbsp;&nbsp; @Html.Label("Continuous Disclosure Required")
+                                </div>
+                            </div>
+                        </div>*@
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <form role="form">
+                                    <button type="button" class="btn btn-success" id="btnSearch"><i class="fa fa-search"></i> @InsiderTrading.Common.Common.getResource("com_btn_14005")</button>
+                                    <button type="button" class="btn btn-success" id="btnReset" dt_name="btnReset" dt_gridtype="@ViewBag.GridType"><i class="fa fa-undo"></i> @InsiderTrading.Common.Common.getResource("com_btn_14006")</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+
+    </div>
+
+
+    <div class="div-spacer"></div>
+
+    @{Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "btnSearch", sSortCol = "" });}
+    @*<section class="content-header">
+        <h5>PLEASE NOTE:</h5>
+        <h5 style="margin-left:-25px">
+            <ol>
+                <li>
+                    <h5>
+                        The pending days indicates the days within which this pre clearance request is required to be closed.
+                    </h5>
+                </li>
+                <li>
+                    <h5>
+                        Trade details are required to be submitted within 2 days from the date of your transaction.
+                    </h5>
+                </li>
+                <li>
+                    <h5>
+                        Click on "Create Pre-Clearance Request" button to Create a New Pre Clearance Request. To submit trade details after Pre Clearance is approved, click on "Pending" for the specified pre Clearance ID in the grid below.
+                    </h5>
+                </li>
+                <li>
+                    <h5>
+                        If you are not required to take a Pre Clearance , click on "Pre-Clearance not required? Submit your Disclosures" button to submit your trade details.
+                        However if you have already taken a Pre Clearance, click on the "Pending" button  for the specific Pre Clearance ID in the grid below to submit your trade details.
+                    </h5>
+                </li>
+            </ol>
+        </h5>
+    </section>*@
+
+    <section class="content-header">
+        <h5>PLEASE NOTE:</h5>
+        <h5>
+            You are required to file within 2 trading days of the execution of the trade, the details of such trade with the Compliance Officer in the Form F. In case the transaction is not undertaken, a report to that effect shall be filed in Form F within 2 trading days of the expiry of the validity of pre-clearance.
+        </h5>
+    </section>    
+    <br />
+    <input type="hidden" name="InsiderTypeUser" id="InsiderTypeUser" value="@ViewBag.InsiderTypeUser" />
+   
+    <div class="col-xs-12 form-group row">
+
+        <div class="col-xs-3">
+
+            @*<a class="btn btn-success" data-toggle="modal" href='@Url.Action("Index", "PreclearanceRequest", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE })' role="button"><i class="fa fa-chevron-left"></i>   @InsiderTrading.Common.Common.getResource("dis_btn_17501")</a>*@
+            <a class="btn btn-success" data-toggle="modal" href='@Url.Action("RestrictedListSearch", "RestrictedList", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_RESTRICTED_LIST_SEARCH })' role="button"><i class="fa fa-chevron-left"></i>   @InsiderTrading.Common.Common.getResource("dis_btn_17501")</a>
+        </div>
+    </div>
+</section><!-- /.content -->
+@Html.Hidden("View", Url.Action("View", "PreclearanceRequestNonImplCompany", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_PRECLEARANCE_REQUEST_NONIMPLEMENTATION }))
+
+@Html.Hidden("DownloadFormE", Url.Action("DownloadFormE", "PreclearanceRequestNonImplCompany", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_PRECLEARANCE_REQUEST_NONIMPLEMENTATION }))
+

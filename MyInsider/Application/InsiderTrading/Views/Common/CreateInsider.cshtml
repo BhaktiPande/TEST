@@ -1,0 +1,264 @@
+﻿@model InsiderTrading.Models.UserInfoModel
+@{
+    ViewBag.Title = "CreateInsider";
+}
+
+<div class="bs-example">
+    <div class="col-xs-12">
+        <div class="row">
+            @Html.HiddenFor(m => m.UserInfoId)
+            <div class="col-xs-8">
+                <h2>Personal Details:</h2>
+                <div class="form-group row">
+                    <div class="col-xs-6">
+                        <div class="col-xs-6 row">
+                            @Html.LabelFor(m => m.EmployeeId)
+                        </div>
+                        <div class="col-xs-6 row">
+                            @Html.TextBoxFor(m => m.EmployeeId, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.EmployeeId)
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="col-xs-6 row">
+                            @Html.LabelFor(m => m.CompanyId)
+                        </div>
+                        <div class="col-xs-6 row">
+                            @Html.DropDownListFor(m => m.CompanyId, new SelectList(ViewBag.CompanyDropDown, "Key", "Value", ""), new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.CompanyId)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xs-6">
+                        <div class="col-xs-6 row">
+                            @Html.LabelFor(m => m.LoginID)
+                        </div>
+                        <div class="col-xs-6 row">
+                            @Html.TextBoxFor(m => m.LoginID, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.LoginID)
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="col-xs-6 row">
+                            @Html.LabelFor(m => m.Password)
+                        </div>
+                        <div class="col-xs-6 row">
+                            @Html.TextBoxFor(m => m.Password, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Password)
+                            @Html.Hidden("OldPassword", Model.Password)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xs-4">
+                        <div class="col-xs-6 row">
+                            @Html.LabelFor(m => m.FirstName)
+                        </div>
+                        <div class="col-xs-6 row">
+                            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.FirstName)
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="col-xs-6 row">
+                            @Html.LabelFor(m => m.MiddleName)
+                        </div>
+                        <div class="col-xs-6 row">
+                            @Html.TextBoxFor(m => m.MiddleName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.MiddleName)
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="col-xs-6 row">
+                            @Html.LabelFor(m => m.LastName)
+                        </div>
+                        <div class="col-xs-6 row">
+                            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.LastName)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xs-6">
+                        <div class="col-xs-6 row">
+                            @Html.LabelFor(m => m.AddressLine1)
+                        </div>
+                        <div class="col-xs-6 row">
+                            @Html.TextAreaFor(m => m.AddressLine1, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.AddressLine1)
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="col-xs-6 row">
+                            @Html.LabelFor(m => m.PinCode)
+                        </div>
+                        <div class="col-xs-6 row">
+                            @Html.TextBoxFor(m => m.PinCode, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.PinCode)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xs-6">
+                        <div class="col-xs-6 row">
+                            @Html.LabelFor(m => m.CountryId)
+                        </div>
+                        <div class="col-xs-6 row">
+                            @Html.DropDownListFor(m => m.CountryId, new SelectList(ViewBag.CountryDropDown, "Key", "Value", ""), new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.CountryId)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xs-6">
+                        <div class="col-xs-6 row">
+                            @Html.LabelFor(m => m.MobileNumber)
+                        </div>
+                        <div class="col-xs-6 row">
+                            @Html.TextBoxFor(m => m.MobileNumber, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.MobileNumber)
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="col-xs-4 row">
+                            @Html.LabelFor(m => m.EmailId)
+                        </div>
+                        <div class="col-xs-8 row">
+                            @Html.TextBoxFor(m => m.EmailId, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.EmailId)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xs-6">
+                        <div class="col-xs-6 row">
+                            @Html.LabelFor(m => m.PAN)
+                        </div>
+                        <div class="col-xs-6 row">
+                            @Html.TextBoxFor(m => m.PAN, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.PAN)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <h2>Professional Details:</h2>
+                <div class="form-group row">
+                    <div class="col-xs-6">
+                        @Html.LabelFor(m => m.DateOfJoining)
+                    </div>
+                    <div class="col-xs-6">
+                        @{
+                            string DOJ = "";
+                            if (Model.DateOfJoining != null)
+                            {
+                                DOJ = InsiderTrading.Common.Common.ApplyFormatting(Model.DateOfJoining, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+
+                            }
+                        }
+                        <div class="input-append date" id="dateofjoining" data-date-format="dd/mm/yyyy">
+                            <input type="text" value="@DOJ" name="DateOfJoining" id="DateOfJoining" class="input-date-picker input-sm valid" />
+                            <span class="add-on glyphicon glyphicon-calendar"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xs-6">
+                        @Html.LabelFor(m => m.DateOfBecomingInsider)
+                    </div>
+                    <div class="col-xs-6">
+                        @{
+                            string DOBI = "";
+                            if (Model.DateOfBecomingInsider != null)
+                            {
+                                DOBI = InsiderTrading.Common.Common.ApplyFormatting(Model.DateOfBecomingInsider, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+
+                            }
+                        }
+                        <div class="input-append date" id="dateOfbecominginsider" data-date-format="dd/mm/yyyy">
+                            <input type="text" value="@DOBI" name="DateOfBecomingInsider" id="DateOfBecomingInsider" class="input-date-picker input-sm valid" />
+                            <span class="add-on glyphicon glyphicon-calendar"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xs-6">
+                        @Html.LabelFor(m => m.Category)
+                    </div>
+                    <div class="col-xs-6">
+                        @Html.DropDownListFor(m => m.Category, new SelectList(ViewBag.CategoryDropDown, "Key", "Value", ""), new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Category)
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xs-6">
+                        @Html.LabelFor(m => m.SubCategory)
+                    </div>
+                    <div class="col-xs-6">
+                        @Html.DropDownListFor(m => m.SubCategory, new SelectList(ViewBag.SubCategoryDropDown, "Key", "Value", ""), new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.SubCategory)
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xs-6">
+                        @Html.LabelFor(m => m.GradeId)
+                    </div>
+                    <div class="col-xs-6">
+                        @Html.DropDownListFor(m => m.GradeId, new SelectList(ViewBag.GradeDropDown, "Key", "Value", ""), new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.GradeId)
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xs-6">
+                        @Html.LabelFor(m => m.DesignationId)
+                    </div>
+                    <div class="col-xs-6">
+                        @Html.DropDownListFor(m => m.DesignationId, new SelectList(ViewBag.DesignationDropDown, "Key", "Value", ""), new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.DesignationId)
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xs-6">
+                        @Html.LabelFor(m => m.Location)
+                    </div>
+                    <div class="col-xs-6">
+                        @Html.TextBoxFor(m => m.Location, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Location)
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xs-6">
+                        @Html.LabelFor(m => m.DepartmentId)
+                    </div>
+                    <div class="col-xs-6">
+                        @Html.DropDownListFor(m => m.DepartmentId, new SelectList(ViewBag.DepartmentDropDown, "Key", "Value", ""), new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.DepartmentId)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 row">
+        <div class="form-group">
+            <div class="pull-right">
+                <input type="submit" value="Save" class="btn btn-default" />
+                <a class="btn btn-default" href='@Url.Action("Index", "Employee")' role="button">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+

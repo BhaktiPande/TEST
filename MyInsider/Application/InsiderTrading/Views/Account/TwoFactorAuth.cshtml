@@ -1,0 +1,146 @@
+﻿
+@model InsiderTrading.Models.TwoFactorAuthModel
+
+@{
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+    string LogoImagePath = Server.MapPath("~") + "/images/Logos/" + InsiderTrading.Common.ConstEnum.CLIENT_DB_NAME + "/" + InsiderTrading.Common.ConstEnum.CLIENT_DB_NAME + "_320X105.jpg";
+    string sLogoImageUrl = @Url.Content("~/images/Logos/" + InsiderTrading.Common.ConstEnum.CLIENT_DB_NAME) + "/" + @InsiderTrading.Common.ConstEnum.CLIENT_DB_NAME + "_320X105.jpg";
+}
+
+@{
+    ViewBag.Title = "TwoFactorAuth";
+}
+<script type="text/javascript">
+        $(window).load(function () {
+            var Seconds = $("#hdnSessionOTP").val();
+            SetOTPDownTimer(Seconds);
+        })
+        function SetOTPDownTimer(Seconds) {
+    
+            $("#timer").countdowntimer({
+                seconds: Seconds,
+                size: "xs",
+                timeUp: OTPTimeExpired
+            });
+        }
+        function OTPTimeExpired() {
+            //console.log("Otp expired");
+            //document.location = '@Url.Action("Login", "Account")';
+
+}
+</script>
+<style type="text/css">
+
+    .resendOTPbtn {
+        font-size: 18px !important;
+        font-weight: 400 !important;
+    }
+
+    .OTPTimer {
+        color: #191b18 !important;
+    }
+
+    .backButton a{
+        padding: 10px 16px;
+        font-size: 18px !important;
+        font-weight: 400 !important;
+        line-height: 1.3333333;
+        border-radius: 6px;
+    }
+    .notes {
+        color:#333;
+    }
+    .notes1 {
+        color:#333;
+    }
+</style>
+
+@if (File.Exists(LogoImagePath))
+{
+    <div class="container login-logo" style="vertical-align: middle;">
+        <img src="@Url.Content("~/images/Viligante_Normal_Logo.png")" style="float: left;vertical-align:middle;">
+        <img src="@sLogoImageUrl" style="float: right;vertical-align:middle;min-width: 320px;max-width: 320px;">
+
+    </div>
+}
+else
+{
+    <div class="container login-logo">
+        <img src=@Url.Content("~/images/Viligante_Normal_Logo.png") class="img img-responsive center-block">
+    </div>
+}
+
+<div class="striped login">
+    <div class="container">
+        @{
+            if (@ViewBag.LoginError != null && @ViewBag.LoginError != "")
+            {
+                <div id="divError" class="alert alert-error">@ViewBag.LoginError</div>
+            }
+
+            if (@ViewBag.SuccessMessage != null && @ViewBag.SuccessMessage != "")
+            {
+                <div id="divSuccess" class="alert alert-success">@ViewBag.SuccessMessage</div>
+            }
+        }
+        <div class="row">
+            <div class="center-block login-block">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title text-center">@InsiderTrading.Common.Common.getResource("tfa_msg_61002")</h3>
+                        <input type="hidden" id="hdnSessionOTP" value="@Request.RequestContext.HttpContext.Session["OTPDownTime"]" />
+                    </div>
+                    <div class="panel-body">
+                        @using (Html.BeginForm("OTPAuthentication", "TwoFactorAuth", new { }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true)
+                            <fieldset>
+                                <div class="form-group">
+                                    @*@Html.LabelFor(m => m.OTPCode, new { @class = "login-label", @for = "textimput", @value = @InsiderTrading.Common.Common.getResource("tfa_lbl_61000") })*@
+                                    @Html.Label("OTPCode", @InsiderTrading.Common.Common.getResource("tfa_lbl_61000"))
+                                    @Html.PasswordFor(m => m.OTPCode, new { @class = "form-control", autofocus = "autofocus", @autocomplete = "off", tabindex = "1" })
+                                    @Html.ValidationMessageFor(m => m.OTPCode)
+
+                                </div>
+                                <div class="form-group">
+                                    @Html.Label("OTPTime", "Seconds Left:")
+                                    <b><label id="timer" class="OTPTimer"></label></b>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Submit" class="btn btn-lg btn-success" name="Create" />
+                                    &nbsp;
+                                    @Html.ActionLink("Resend OTP", "ResendOTP", "TwoFactorAuth", new { @class = "btn btn-lg btn-success resendOTPbtn" })
+
+                                    &nbsp;
+                                    <span class="backButton btn btn-lg btn-success">
+                                        @Html.ActionLink("Back To Login", "Login", "Account")
+                                    </span>
+
+                                </div>
+                            </fieldset>
+                            <label id="Note" class="notes">Note:</label><br />
+                            <label id="Note1" class="notes1">@InsiderTrading.Common.Common.getResource("tfa_msg_61007")</label>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@Styles.Render("~/Content/css")
+<script src="~/LoginScript/Loginjs/Login-bl.js"></script>
+<script src="~/LoginScript/TimerForOTP/jquery.countdownTimer.js"></script>
+<script src="~/LoginScript/jquery.validate-vsdoc-bl.js"></script>
+<script src="~/LoginScript/jquery.validate-bl.min.js"></script>
+<script src="~/LoginScript/jquery.validate.unobtrusive-bl.min.js"></script>
+
+
+
+
+
+
+

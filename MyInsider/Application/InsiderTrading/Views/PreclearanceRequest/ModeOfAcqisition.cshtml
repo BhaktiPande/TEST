@@ -1,0 +1,22 @@
+﻿@model InsiderTrading.Models.PreclearanceRequestModel
+
+@{
+    ViewBag.Title = "ModeOfAcqisition";
+}
+<!-- Content Header (Page header) -->
+<section>
+    @Html.AntiForgeryToken()
+</section>
+
+<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+    <div class="form-group">
+
+        @Html.LabelFor(m=>m.ModeOfAcquisitionCodeId)
+        @Html.DropDownListFor(m => m.ModeOfAcquisitionCodeId, new SelectList(ViewBag.ModeOfAcquisition, "Key", "Value", ""), new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.ModeOfAcquisitionCodeId)
+        @Html.HiddenFor(m => m.ModeOfAcquisitionCodeId)
+
+    </div>
+</div>
+
+

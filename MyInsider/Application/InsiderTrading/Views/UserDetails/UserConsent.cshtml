@@ -1,0 +1,54 @@
+﻿@model InsiderTrading.Models.EULAAcceptanceModel
+
+@{
+    ViewBag.Title = "User Consent";
+    //set page header 
+    Layout = "~/Views/Shared/_MCQLayout.cshtml";
+    string page_header = InsiderTrading.Common.Common.getResource("cmp_lbl_53104");
+}
+
+@Styles.Render("~/content/SW360")
+
+<section class="content-header">
+    <h1 style="margin:-12px 0px 0px 0px"> @page_header </h1>
+</section>
+
+<section class="content">
+    @using (Ajax.BeginForm("PartialViewDocument", "UserDetails", new AjaxOptions { UpdateTargetId = "pdf" }))
+    {
+        @Html.AntiForgeryToken()
+    <div id="pdf" class="container" style=" padding-bottom: 41.25%; position: relative; display: block; width: 100%; margin: -7px 0px 0px 0px;">
+        @{
+        Html.RenderPartial("~/Views/UserDetails/_GenerateDocument.cshtml", Model, new ViewDataDictionary() { { "user_action", ViewBag.UserAction } });
+        }
+    </div>
+        <div> &nbsp;</div>
+        <div class="col-lg-12">
+            @Html.CheckBox("chkkcondition", false, new { id = "chkAccept" })
+            @Html.Label("chkAccept", @InsiderTrading.Common.Common.getResource("cmp_msg_53107"))
+        </div>
+        <div class="col-lg-12">
+            <button type="submit" class="btn btn-success" name="Accept" id="btnAccept" disabled="disabled">@InsiderTrading.Common.Common.getResource("cmp_btn_53108")</button>
+            <button type="submit" class="btn btn-danger" name="Next" id="btnDisagree">@InsiderTrading.Common.Common.getResource("cmp_btn_53109")</button>
+        </div>
+        @Html.Hidden("acid", (int)ViewBag.UserAction)
+        <input type="hidden" name="authorization" value="Accept:@ViewBag.UserAction,Next:@ViewBag.UserAction" />
+        
+        @Html.HiddenFor(model => model.DocumentID)
+    }
+</section>
+<script>
+    $(document).ready(function () {
+
+        $('#chkAccept').click(function (event) {
+            if ($('#chkAccept').is(':checked')) {
+                $('#btnAccept').removeAttr("disabled", "disabled");
+            }
+            else {
+                $('#btnAccept').attr("disabled", "disabled");
+            }
+        })
+
+
+    });
+</script>

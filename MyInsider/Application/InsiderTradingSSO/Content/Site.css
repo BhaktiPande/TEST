@@ -1,0 +1,7 @@
+﻿body {color: #333; font-size: .85em; font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif; margin: 0; padding: 0;}
+h3{color: #000; margin-bottom: 0; padding-bottom: 0;}
+h3 {font-size: 1.2em;}
+.footerMsg {background-color: #9ea0a4; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; color: #ffffff; font: 75% Verdana,Arial,Tahoma; text-align: center; padding: 20px 0px 20px 0px; width: 100%; margin: 20px 0px 10px 0px; float: left; bottom: 0px;}
+.footerMsg span {padding: 0px 10px 12px 0px;}
+.header {background-color: #9ea0a4;color: #000000; width: 100%; margin: 0px; float: left; border-bottom: 1px solid #ddd;}
+.Applogo {width: 177px; float: left; padding: 0px; margin: 20px 0px 0px 20px;}

@@ -1,0 +1,26 @@
+﻿@model InsiderTrading.Models.TradingPolicyModel
+@{
+    ViewBag.Title = "_Preclrpartialtradenotdoneflag";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    @Html.AntiForgeryToken()
+</section>
+
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <div class="form-group">
+            @Html.CheckBoxFor(m => m.PreClrCompleteTradeNotDoneFlag, @InsiderTrading.Common.Common.IsTradingPolicyEdit("CheckBox", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId))
+            &nbsp;&nbsp;@Html.LabelFor(m => m.PreClrCompleteTradeNotDoneFlag, new { @class = "normalLable" })
+            @Html.ValidationMessageFor(m => m.PreClrCompleteTradeNotDoneFlag)
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <div class="form-group">
+            @Html.CheckBoxFor(m => m.PreClrPartialTradeNotDoneFlag, @InsiderTrading.Common.Common.IsTradingPolicyEdit("CheckBox", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId))
+            &nbsp;&nbsp;@Html.LabelFor(m => m.PreClrPartialTradeNotDoneFlag, new { @class = "normalLable" })
+            @Html.ValidationMessageFor(m => m.PreClrPartialTradeNotDoneFlag)
+        </div>
+    </div>
+</div>

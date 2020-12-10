@@ -1,0 +1,181 @@
+﻿@model InsiderTrading.Models.UserDetailsModel
+
+@{
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+    var objComCodeSL = new InsiderTrading.SL.ComCodeSL();
+    string LogoImagePath = Server.MapPath("~") + "/images/Logos/" + InsiderTrading.Common.ConstEnum.CLIENT_DB_NAME + "/" + InsiderTrading.Common.ConstEnum.CLIENT_DB_NAME + "_320X105.jpg";
+    string sLogoImageUrl = @Url.Content("~/images/Logos/" + InsiderTrading.Common.ConstEnum.CLIENT_DB_NAME) + "/" + @InsiderTrading.Common.ConstEnum.CLIENT_DB_NAME + "_320X105.jpg";
+}
+
+@{
+    ViewBag.Title = "Log in";
+}
+@*<script src="~/Scripts/jquery-1.10.2.min.js"></script>*@
+<script type="text/javascript">
+    $(window).load(function () {
+        //var pageURL = $(location).attr("href");
+        //var RemoveProtocol = pageURL.substr(8, 50);
+        //var ClientName = RemoveProtocol.split('.')[0];
+        //$("#CompanyName").val(ClientName);      
+       
+        var length = $('#ddlCompanyName').children('option').length;
+        if (length == 2) {
+            $("#ddlCompanyName").prop("selectedIndex", 1);
+            $('#UserName').next('input').focus();
+        }
+        else {
+            $("#ddlCompanyName").prop("selectedIndex", 0);
+        }
+    }) 
+</script>
+@if (File.Exists(LogoImagePath))
+{
+    <div class="container login-logo" style="vertical-align: middle;">
+        <img src="@Url.Content("~/images/Viligante_Normal_Logo.png")" style="float: left;vertical-align:middle;">
+        <img src="@sLogoImageUrl" style="float: right;vertical-align:middle;min-width: 320px;max-width: 320px;">
+
+    </div>
+}
+else
+{
+    <div class="container login-logo">
+        <img src=@Url.Content("~/images/Viligante_Normal_Logo.png") class="img img-responsive center-block">
+    </div>
+}
+
+<div class="striped login" >
+    <div class="container">
+        @{
+            if (@ViewBag.LoginError != null && @ViewBag.LoginError != "")
+            {
+                <div id="divError" class="alert alert-error">@ViewBag.LoginError</div>
+            }
+
+            if (@ViewBag.SuccessMessage != null && @ViewBag.SuccessMessage != "")
+            {
+                <div id="divSuccess" class="alert alert-success">@ViewBag.SuccessMessage</div>
+            }
+        }
+        <div class="row">
+            <div class="center-block login-block">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title text-center">Login</h3>
+                          <input type="hidden" id="hdnSession" value="@Request.RequestContext.HttpContext.Session["RandomNumber"]" />
+                    </div>
+                    <div class="panel-body">
+                        @using (Html.BeginForm("Login", "Account", new { }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true)
+                        <fieldset>
+                            @if (System.Configuration.ConfigurationManager.AppSettings["CompanyType"] == "Dropdownlist")
+                            {
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.sCompanyName, new { @class = "login-label", @for = "textimput" })
+                                    @Html.DropDownListFor(m => m.sCompanyName, new SelectList(ViewBag.CompaniesDropDown, "Key", "Value", ""), new { id = "ddlCompanyName", @class = "form-control", autofocus = "autofocus", tabindex = "1" })
+                                    @Html.ValidationMessageFor(m => m.sCompanyName)
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.sUserName, new { id = "UserName", @class = "login-label", @for = "textinput" })
+                                    @Html.TextBoxFor(m => m.sUserName, new { @class = "form-control", tabindex = "2", @autocomplete = "off", placeholder = @ViewData["WaterMarkLoginId"] })
+                                    @Html.ValidationMessageFor(m => m.sUserName)
+
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.sPassword, new { @class = "login-label", @for = "textinput" })
+                                    @Html.PasswordFor(m => m.sPassword, new { @class = "form-control", tabindex = "3", @autocomplete = "off", placeholder = @ViewData["WaterMarkPassword"] })
+                                    @Html.ValidationMessageFor(m => m.sPassword)
+                                </div>
+                            }
+                            else
+                            {
+                                if (@ViewBag.URLCompanyName == "IgnoreCompanyName")
+                                {
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.stxtCompanyName, new { @class = "login-label", @for = "textinput" })
+                                        @Html.TextBoxFor(m => m.sCompanyName, new { @class = "form-control", @autocomplete = "off", tabindex = "1", placeholder = @ViewData["WaterMarkCompanyName"] })
+                                        @Html.ValidationMessageFor(m => m.sCompanyName)
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.stxtCompanyName, new { @class = "login-label", @for = "textinput" })
+                                        @Html.TextBoxFor(m => m.sCompanyName, new { @class = "form-control", @autocomplete = "off", Value = @ViewBag.URLCompanyName, @ReadOnly = "readonly" })
+                                        @Html.ValidationMessageFor(m => m.sCompanyName)
+                                    </div>
+                                }
+
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.sUserName, new { id = "UserName", @class = "login-label", @for = "textinput" })
+                                    @Html.TextBoxFor(m => m.sUserName, new { @class = "form-control", autofocus = "autofocus", tabindex = "2", @autocomplete = "off", placeholder = @ViewData["WaterMarkLoginId"] })
+                                    @Html.ValidationMessageFor(m => m.sUserName)
+
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.sPassword, new { @class = "login-label", @for = "textinput" })
+                                    @Html.PasswordFor(m => m.sPassword, new { @class = "form-control", tabindex = "3", @autocomplete = "off", placeholder = @ViewData["WaterMarkPassword"] })
+                                    @Html.ValidationMessageFor(m => m.sPassword)
+                                </div>
+                            }
+
+                            @if (Convert.ToBoolean(TempData["ShowCaptcha"]) || Convert.ToBoolean(Session["DisplayCaptcha"]))
+                            {
+                                <div class="clsCaptcha form-group">
+                                    <h4 id="Captcha_Text">Please type the text you seen in the picture below.</h4>
+                                    <img src="@Session["CaptchaPath"]" style="width: 35%; margin: 0px 0px 0px 150px" />
+                                    <br /><br />
+                                    @Html.TextBoxFor(m => m.sCaptchaText, null, new { @class = "form-control CaptchaTxt" })
+                                    <br />
+                                    @if (TempData["ErrorMessage"] != null)
+                                    {
+                                        @Html.Label(TempData["ErrorMessage"].ToString(), new { @id = "ErrorMsg", @class = "field-validation-error", style = "font-size: 11pt;font-weight: 300;font-family:sans-serif;" })
+                                    }
+                                    @Html.ValidationMessageFor(m => m.sCaptchaText)
+                                </div>
+                            }
+                            <div class="form-group">
+                                @Html.ActionLink("Forgot Password?", "ForgetPassword", "Account")
+                            </div>
+                            <!-- Change this to a button or input when using this as a form -->
+                        </fieldset>
+                            <button type="submit" id="btnLogin" class="btn btn-lg btn-success btn-block" tabindex="4">Login</button>
+                            <input type="hidden" name="hdCaptText" id="hdCaptText" />
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {       
+        $("#btnLogin").click(function () {
+            var CapUserText = $("#Captcha").val();
+            if (CapUserText != "") {
+                $("#ErrorMsg")[0].innerText = null;
+            }
+        });
+    });
+</script>
+
+
+@Styles.Render("~/Content/css")
+<script src="~/LoginScript/Loginjs/Login-bl.js"></script>
+@*<script src="~/LoginScript/Loginjs/Login-bl.js"></script>*@
+<script src="~/LoginScript/jquery.validate-vsdoc-bl.js"></script>
+<script src="~/LoginScript/jquery.validate-bl.min.js"></script>
+<script src="~/LoginScript/jquery.validate.unobtrusive-bl.min.js"></script>
+<script src="~/LoginScript/crypto/core-bl.min.js"></script>
+<script src="~/LoginScript/crypto/aes-bl.js"></script>
+<script src="~/LoginScript/crypto/enc-base64-bl.min.js"></script>
+<script src="~/LoginScript/crypto/enc-utf16-bl.min.js"></script>
+
+
+
+
+

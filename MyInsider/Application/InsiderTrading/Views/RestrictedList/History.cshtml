@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content-header">
+    <h1>
+        @Html.AntiForgeryToken()
+        @InsiderTrading.Common.Common.getResource("rl_ttl_50616")
+    </h1>
+</section>
+
+<section class="content search" gridtype="@ViewBag.GridType">
+    <div class="div-spacer"></div><br />
+    <input type="hidden" id="1" value="@ViewBag.RlMasterId" />
+    <input type="hidden" id="9" value="History" />
+    @{Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "btnSearch", sSortCol = "3", acid = InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_VIEW });}
+    <div class="div-spacer"></div><br />
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <a class="btn btn-success" data-toggle="modal" href='@Url.Action("Index", "RestrictedList", new { acid = InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_VIEW})' role="button"> @InsiderTrading.Common.Common.getResource("com_btn_14011")</a>
+        </div>
+    </div>
+</section>
+
+@{
+    if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_VIEW))
+    {
+        @Html.Hidden("View", Url.Action("Create", "RestrictedList", new { acid = InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_VIEW, CalledFrom = "History" }), new { @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'text':'','href':'" + Url.Action("Create", "RestrictedList", new { acid = InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_VIEW, CalledFrom = "History" }) + "&nMasterID=<RlMasterId>&nApplicabilityId=<ApplicabilityId>','class':'display-icon icon icon-eye'}" })
+    }
+}

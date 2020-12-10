@@ -1,0 +1,1368 @@
+﻿@model InsiderTrading.Models.TradingTransactionModel_OS
+@{
+    ViewBag.Title = "Trading Transaction Details";// InsiderTrading.Common.Common.getResource("usr_ttl_12036");
+    ViewBag.LoginUserObject = InsiderTrading.Common.Common.GetSessionValue(InsiderTrading.Common.ConstEnum.SessionValue.UserDetails);
+    //ViewBag.IsNegative = true;
+    if (ViewBag.DisclosureType == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial
+                                && !ViewBag.IsNegative)
+    {
+        ViewBag.TwodigtClass = "form-control two-digits-negative";
+    }
+    else
+    {
+        ViewBag.TwodigtClass = "form-control two-digits numericOnly";
+    }
+
+}
+@{
+    if (ViewBag.ShowPopup == true)
+    {
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+        <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    }
+}
+
+<script type="text/javascript">
+    var SecurityType_ModeOfAcquisitionMapping = {
+        "143001": ["149005", "149006", "149004", "149007", "149003", "149002", "149001", "149008", "149011", "143009","149019","149020","149021","149022","149023"],
+        "143002": ["149005", "149006", "149004", "149007", "149002", "149003", "149010", "149008","149016","149017","149018"],
+        "143003": ["149009"],
+        "143004": ["149009", "149005", "149006", "149004", "149007", "149003", "149002", "149001", "149008", "149011"],
+        "143005": ["149009", "149005", "149006", "149004", "149007", "149003", "149002", "149001", "149008", "149011"],
+        "143006": ["149012"],
+        "143007": ["149013"],
+        "143008": ["149014"],
+    };
+    var ModeOfAcquisitionOptions = '';
+    var CashLessAll = "@InsiderTrading.Common.ConstEnum.Code.TransactionTypeCashlessAll";
+    var CashLessPartial = "@InsiderTrading.Common.ConstEnum.Code.TransactionTypeCashlessPartial";
+    var Sell = "@InsiderTrading.Common.ConstEnum.Code.TransactionTypeSell";
+    var Buy = "@InsiderTrading.Common.ConstEnum.Code.TransactionTypeBuy";
+    var CashExcise = "@InsiderTrading.Common.ConstEnum.Code.TransactionTypeCashExercise";
+    var Pledge = "@InsiderTrading.Common.ConstEnum.Code.TransactionTypePledge";
+    var PledgeRevoke = "@InsiderTrading.Common.ConstEnum.Code.TransactionTypePledgeRevoke";
+    var PledgeInvoke = "@InsiderTrading.Common.ConstEnum.Code.TransactionTypePledgeInvoke";
+
+    $(document).ready(function () {
+        var flag = '@ViewBag.TransactionTypeCodeFlag';
+        var nMultiplier = 100;
+
+        ModeOfAcquisitionOptions = $("#ModeOfAcquisitionCodeId").html();
+
+        if ($("#ModeOfAcquisitionCodeId").val() == "0" && $("#ModeOfAcquisitionCodeId").is(":visible")) {
+            $("#ModeOfAcquisitionCodeId").attr("disabled", "disabled");
+        }
+
+        if ($('#hidGenSecuritiesPriortoAcquisitionManualInputorAutoCalculate').val() == '0' && $('#DisclosureType').val() != 147001) {
+            $('#SecuritiesPriorToAcquisition').attr("readonly", "readonly");
+            $('#PerOfSharesPreTransaction').attr("readonly", "readonly");
+            $('#PerOfSharesPostTransaction').attr("readonly", "readonly");
+        }
+        else if ($('#hidGenSecuritiesPriortoAcquisitionManualInputorAutoCalculate').val() == '0' && $('#DisclosureType').val() == 147001) {
+            $('#PerOfSharesPreTransaction').attr("readonly", "readonly");
+        }
+
+        $('#ForUserInfoId').change(function (event) {
+            $('#UserDetails').empty();
+            if ($(this).val() != 0) {
+                var URL = $('#PopulateComboOnChange').val();
+                var arrData = $('#frmTradingTransactionDetails').serialize();
+                arrData = arrData + '&TransactionTypeCodeFlag=' + flag;
+                arrData = arrData + '&DisclosureType=' + $('#DisclosureType').val();
+                $.ajax({
+                    url: $("#PopulateComboOnChange").val(),
+                    type: 'post',
+                    headers: getRVToken(),
+                    cache: false,
+                    data: arrData,
+
+                    success: function (result) {
+                        $('#UserDetails').append(result);
+                        $('#UserDetails').fadeIn('slow');
+                        $('#DMATDetailsID').trigger('change');
+                    },
+                    error: function (result) {
+                    }
+                });
+
+                if ($('#TransactionDetailsId').val() == 0 && $('#DisclosureType').val() != 147001) {
+
+                    $.ajax({
+                        url: $("#GetClosingBalance").val(),
+                        type: 'post',
+                        headers: getRVToken(),
+                        cache: false,
+                        data: { 'nUserInfoId': $('#UserInfoId').val(), 'nUserInfoIdRelative': $(this).val(), 'nSecurityTypeCodeId': $('#SecurityTypeCodeId').val() },
+                        success: function (data) {
+                            if (data.status) {
+                                //alert(data.Subscribedcapital);
+                                if (($('#hidGenSecuritiesPriortoAcquisitionManualInputorAutoCalculate').val() == '1' && ($('#SecuritiesPriorToAcquisition').val() == 0 || $('#SecuritiesPriorToAcquisition').val() == '')) || $('#hidGenSecuritiesPriortoAcquisitionManualInputorAutoCalculate').val() == '0') {
+                                    $('#SecuritiesPriorToAcquisition').val(formatIndianNumber(data.ClosingBalance));
+                                }
+                                /* if ($('#hidGenSecuritiesPriortoAcquisitionManualInputorAutoCalculate').val() == '0')
+                                 {
+                                     $('#SecuritiesPriorToAcquisition').val(formatIndianNumber(data.ClosingBalance));
+                                 }*/
+
+                                CalculateValueForSecuritiesPostAcquisiton();
+                            } else {
+                                $('#SecuritiesPriorToAcquisition').val(0);
+                                DisplayErrors(data.error);
+                            }
+                        },
+                        error: function (data) {
+                            $('#SecuritiesPriorToAcquisition').val(0);
+                            DisplayErrors(data.error);
+                        }
+                    });
+                }
+            }
+            else {
+                $('#UserDetails').empty();
+            }
+            return false;
+
+        }).change();
+
+        $(document).delegate("#DMATDetailsID", "change", function () {
+            $('#divTMID input[type=text]').css('display', 'none');
+            if ($(this).val() != "0") {
+                $('#divTMID').fadeIn('slow');
+                $('#divTMID').find("input[key=" + $(this).val() + "]").fadeIn('fast');
+            }
+            else {
+                $('#divTMID').css('display', 'none');
+            }
+        });
+
+        $("#Value").focusout(function () {
+            if ($('#TransactionTypeCodeId option:selected').val() == CashLessAll) {
+                $("#Value2").val($(this).val());
+            }
+        });
+
+        $('#TransactionTypeCodeId').change(function () {
+            //cursor: not-allowed;
+            //
+            //if ($(this).val() != "0" && $("#ModeOfAcquisitionCodeId").is(":visible")) {
+            if ($(this).val() != "0") {
+                var AllowedModeOfacquisition = SecurityType_ModeOfAcquisitionMapping[$(this).val()];
+                $("#ModeOfAcquisitionCodeId").removeAttr("disabled");
+                $("#ModeOfAcquisitionCodeId").html(ModeOfAcquisitionOptions);
+                var toRemove = [];
+
+                $("#ModeOfAcquisitionCodeId option").each(function () {
+                    if ($(this).val() != "0" && $.inArray($(this).val(), AllowedModeOfacquisition) == -1) {
+                        toRemove.push($(this).val());
+                    }
+                });
+                $(toRemove).each(function () {
+                    $("#ModeOfAcquisitionCodeId option[value='" + this + "']").remove();
+                });
+            } else {
+                $("#ModeOfAcquisitionCodeId option").each(function () {
+                    if ($(this).val() != "0") {
+                        $("#ModeOfAcquisitionCodeId option[value='" + $(this).val() + "']").remove();
+                    }
+                });
+                $("#ModeOfAcquisitionCodeId").attr("disabled", "disabled");
+            }
+            //$("#Quantity2").attr('readonly', false);
+            //$("#Quantity2").val("");
+            //$("#Value2").attr('readonly', false);
+            //$("#Value2").val("");
+            if ($(this).val() == CashLessAll || $(this).val() == CashLessPartial) {
+                $("div[name=CashLess]").fadeIn('slow');
+                $("label[name=cash]").fadeOut('fast');
+                $("label[name=cashless]").fadeIn('slow');
+                if ($(this).val() == CashLessAll) {
+                    $("#Quantity2").attr('readonly', true);
+                    $("#Value2").attr('readonly', true);
+                    $("#Quantity").trigger('focusout');
+                    $("#Value").trigger('focusout');
+                }
+                if ($(this).val() == CashLessPartial) {
+                    $("div[name=contratrade]").fadeIn('slow');
+                    $(':checkbox[name="ESOPExcerseOptionQtyFlag"]').attr("disabled", true);
+                    $(':checkbox[name="OtherESOPExcerseOptionFlag"]').attr("disabled", true);
+                } else {
+                    $("div[name=contratrade]").fadeOut('fast');
+                }
+            }
+            else if ($(this).val() == Sell || $(this).val() == Buy || $(this).val() == CashExcise || $(this).val() == PledgeInvoke) {
+
+                $("div[name=contratrade]").fadeIn('slow');
+                $("div[name=CashLess]").fadeOut('fast');
+                $("label[name=cashless]").fadeOut('fast');
+                $("label[name=cash]").fadeIn('fast');
+                if (($(this).val() != Sell && $(this).val() != PledgeInvoke) && '@ViewBag.GenCashAndCashlessPartialExciseOptionForContraTrade' == 172003) {
+                    $(':checkbox[name="ESOPExcerseOptionQtyFlag"]').prop("checked", false);
+                    $(':checkbox[name="OtherESOPExcerseOptionFlag"]').prop("checked", false);
+                    $(':checkbox[name="ESOPExcerseOptionQtyFlag"]').attr("disabled", true);
+                    $(':checkbox[name="OtherESOPExcerseOptionFlag"]').attr("disabled", true);
+                } else if (($(this).val() == Sell || $(this).val() == PledgeInvoke) && '@ViewBag.GenCashAndCashlessPartialExciseOptionForContraTrade' == 172003) {
+                    if ('@ViewBag.ESOPExcerseOptionQtyFlagValue' == 'True') {
+                        $(':checkbox[name="ESOPExcerseOptionQtyFlag"]').prop("checked", true);
+                    } else {
+                        $(':checkbox[name="ESOPExcerseOptionQtyFlag"]').prop("checked", false);
+                    }
+                    if ('@ViewBag.OtherESOPExcerseOptionFlagValue' == 'True') {
+                        $(':checkbox[name="OtherESOPExcerseOptionFlag"]').prop("checked", true);
+                    } else {
+                        $(':checkbox[name="OtherESOPExcerseOptionFlag"]').prop("checked", false);
+                    }
+                    $(':checkbox[name="ESOPExcerseOptionQtyFlag"]').attr("disabled", false);
+                    $(':checkbox[name="OtherESOPExcerseOptionFlag"]').attr("disabled", false);
+                }
+            }
+            else {
+                $("div[name=CashLess]").fadeOut('fast');
+                $("label[name=cash]").fadeIn('fast');
+                $("label[name=cashless]").fadeOut('fast');
+                $("div[name=contratrade]").fadeOut('fast');
+                $(':checkbox[name="ESOPExcerseOptionQtyFlag"]').attr("disabled", true);
+                $(':checkbox[name="OtherESOPExcerseOptionFlag"]').attr("disabled", true);
+            }
+
+            ValueForSecuritiesHeldPriorAcquisiton();
+            CalculateValueForSecuritiesPostAcquisiton();
+        }).change();
+
+        $('#ModeOfAcquisitionCodeId').change(function () {
+            ValueForSecuritiesHeldPriorAcquisiton();
+            CalculateValueForSecuritiesPostAcquisiton();
+        }).change();
+
+        $(document).delegate('#SegregateESOPAndOtherExcerciseOptionQtyFalg', 'click', function (event) {
+            if ($(this).is(":checked")) {
+                $(':input[name="ESOPExcerciseOptionQtyModel"]').attr("readonly", false);
+                $(':input[name="OtherExcerciseOptionQtyModel"]').attr("readonly", false);
+            } else {
+                $("#ESOPExcerciseOptionQtyModel").val(0);
+                $("#OtherExcerciseOptionQtyModel").val($("#Quantity").val());
+                $(':input[name="ESOPExcerciseOptionQtyModel"]').attr("readonly", true);
+                $(':input[name="OtherExcerciseOptionQtyModel"]').attr("readonly", true);
+            }
+        });
+
+        $('#ESOPExcerciseOptionQtyModel').focusout(function (event) {
+            var calcValue = $("#Quantity").val().replace(/,/g, "") - $('#ESOPExcerciseOptionQtyModel').val().replace(/,/g, "");
+
+            //  if (!isNaN(calcValue)) {
+            //   alert(calcValue);
+            $("#OtherExcerciseOptionQtyModel").val("");
+            $("#OtherExcerciseOptionQtyModel").val(calcValue);
+            // }
+        });
+
+        $('#OtherExcerciseOptionQty').focusout(function (event) {
+            var calcValue = $("#Quantity").val().replace(/,/g, "") - $('#OtherExcerciseOptionQtyModel').val().replace(/,/g, "");
+            //if (!isNaN(calcValue))
+            $("#ESOPExcerciseOptionQtyModel").val("");
+            $("#ESOPExcerciseOptionQtyModel").val(calcValue);
+        });
+
+        $("#Quantity").focusout(function () {
+            if ($('#TransactionTypeCodeId option:selected').val() == CashLessAll) {
+                $("#Quantity2").val($(this).val());
+            }
+            if ($('#DisclosureType').val() == 147001 && $('#SecurityTypeCodeId').val() == 139001) {
+                if (!$("#SegregateESOPAndOtherExcerciseOptionQtyFalg").prop("checked")) {
+                    $("#ESOPExcerciseOptionQtyModel").val("");
+                    $("#OtherExcerciseOptionQtyModel").val("");
+                    $("#ESOPExcerciseOptionQtyModel").val(0);
+                    $("#OtherExcerciseOptionQtyModel").val($("#Quantity").val());
+                    $(':input[name="ESOPExcerciseOptionQtyModel"]').attr("readonly", true);
+                    $(':input[name="OtherExcerciseOptionQtyModel"]').attr("readonly", true);
+                }
+
+
+                if (typeof ($('#ESOPExcerciseOptionQtyModel').val()) === "undefined" && typeof ($('#OtherExcerciseOptionQtyModel').val()) === "undefined") {
+                    var calcValue = $("#Quantity").val().replace(/,/g, "") - $('#ESOPExcerciseOptionQtyModel').val().replace(/,/g, "");
+                    var calcValue1 = $("#Quantity").val().replace(/,/g, "") - $('#OtherExcerciseOptionQtyModel').val().replace(/,/g, "");
+                    // if (!isNaN(calcValue))
+                    $("#ESOPExcerciseOptionQtyModel").val(calcValue1);
+                    // if (!isNaN(calcValue1))
+                    $("#OtherExcerciseOptionQtyModel").val(calcValue)
+                }
+
+
+            }
+        });
+
+        $('#SecuritiesPriorToAcquisition').change(function () {
+
+            CalculatePercentageOfSharesPreTransaction(nMultiplier);
+            CalculatePercentageOfSharesPostTransaction(nMultiplier);
+        });
+        $('#Quantity').change(function () {
+
+            CalculatePercentageOfSharesPreTransaction(nMultiplier);
+            CalculatePercentageOfSharesPostTransaction(nMultiplier);
+        });
+        $('#Quantity2').change(function () {
+            CalculateValueForSecuritiesPostAcquisiton();
+        });
+
+        $('#LotSize').change(function () {
+            CalculateValueForSecuritiesPostAcquisiton();
+        });
+
+        $('#DateOfAcquisition').change(function () {
+            if ($(this).val() != "" && $('#hidGenSecuritiesPriortoAcquisitionManualInputorAutoCalculate').val() == '0' && $('#DisclosureType').val() != 147001) {
+                $.ajax({
+                    url: $("#GetSubscribedcapital").val(),
+                    type: 'post',
+                    headers: getRVToken(),
+                    cache: false,
+                    data: { 'DateOfAcquisition': $(this).val() },
+                    success: function (data) {
+                        if (data.status) {
+                            //alert(data.Subscribedcapital);
+                            $('#hidSubscribedCapital').val(data.Subscribedcapital);
+                            CalculatePercentageOfSharesPreTransaction(nMultiplier);
+                            CalculatePercentageOfSharesPostTransaction(nMultiplier);
+
+                        } else {
+                            $('#DateOfAcquisition').val("");
+
+                            DisplayErrors(data.error);
+                        }
+                    },
+                    error: function (data) {
+                        $('#DateOfAcquisition').val("");
+                        DisplayErrors(data.error);
+                    }
+                });
+            }
+
+        });
+
+        $(function () {
+            if (!$("#SegregateESOPAndOtherExcerciseOptionQtyFalg").prop("checked")) {
+                $("#ESOPExcerciseOptionQtyModel").val(0);
+                $("#OtherExcerciseOptionQtyModel").val($("#Quantity").val());
+                $(':input[name="ESOPExcerciseOptionQtyModel"]').attr("readonly", true);
+                $(':input[name="OtherExcerciseOptionQtyModel"]').attr("readonly", true);
+            }
+
+            if ('@ViewBag.PreclearenceID' > 0) {
+                $(':checkbox[name="ESOPExcerseOptionQtyFlag"]').attr("disabled", true);
+                $(':checkbox[name="OtherESOPExcerseOptionFlag"]').attr("disabled", true);
+            }
+
+            if ('@ViewBag.UseExerciseSecurityPool' && $('#DisclosureType').val() != 147001 && $('#SecurityTypeCodeId').val() == 139001) {
+                $("div[name=contratrade]").fadeIn('slow');
+            }
+
+            if ('@ViewBag.PreclearenceID' > 0) {
+                $("#ModeOfAcquisitionCodeId").attr("disabled", "disabled");
+            }
+            else {
+                $("#ModeOfAcquisitionCodeId").attr("disabled", false);
+            }
+
+        });
+
+        CalculateValueForSecuritiesPostAcquisiton();
+
+        $("#frmTradingTransactionDetails").submit(function (event) {
+            //$("#SaveDetails").attr("disabled", "disabled");
+            var SecurityPostAcquisition = $("#SecuritiesPostToAcquisition").val();
+            var SecurityPerOfSharesPostTransaction = $("#PerOfSharesPostTransaction").val();
+            var arrError = [];
+
+            //if (SecuritiesPostToAcquisition != "") {
+            //    SecurityPostAcquisition = removeCommafromNumber(SecurityPostAcquisition);
+            //    SecurityPostAcquisition = parseFloat(SecurityPostAcquisition);
+            //    if (SecurityPostAcquisition < 0 && $("#hidIsNegative").val() == 1) {
+            //      //  var arrError = [];
+            //        var arrchildError = [];
+            //        arrchildError.push($('#hidPostAcqNeMsg').val());
+            //        arrError.push(arrchildError);
+            //        //alert(JSON.stringify(arrError));
+
+            //        DisplayErrors(arrError);
+
+            //        return false;
+            //    }
+            //}
+            //if (SecurityPerOfSharesPostTransaction != "") {
+            //    SecurityPerOfSharesPostTransaction = removeCommafromNumber(SecurityPerOfSharesPostTransaction);
+            //    SecurityPerOfSharesPostTransaction = parseFloat(SecurityPerOfSharesPostTransaction);
+            //    if (SecurityPerOfSharesPostTransaction > 100 || SecurityPerOfSharesPostTransaction < 0) {
+            //        var arrchildError1 = [];
+            //        arrchildError.push("Enter valid percentage of shares post transaction");
+            //        arrError.push(arrchildError1);
+            //        DisplayErrors(arrError);
+            //        return false;
+            //    }
+            //}
+        });
+    });
+
+    function CalculatePercentageOfSharesPreTransaction(nMultiplier) // nMultiplier is 1 now to find the % value it should be 100 but according to document formule its not given so we assume its 1 so in future one value can change all % calculation
+    {
+        if ($('#SecurityTypeCodeId').val() == 139001) {
+            /*
+            GenSecuritiesPriortoAcquisitionManualInputorAutoCalculate
+            0-AutoCalculate   1-ManualInput
+            */
+            if ($('#hidGenSecuritiesPriortoAcquisitionManualInputorAutoCalculate').val() == '0' && $('#DisclosureType').val() != 147001) {
+                var SecuritiesPriorToAcquisition = $('#SecuritiesPriorToAcquisition').val();
+                if (SecuritiesPriorToAcquisition != "") {
+                    SecuritiesPriorToAcquisition = removeCommafromNumber(SecuritiesPriorToAcquisition);
+                }
+                var SubscribedCapital = 1;
+                SubscribedCapital = removeCommafromNumber($('#hidSubscribedCapital').val());
+                if ($('#hidSubscribedCapital').val() != '' && $('#hidSubscribedCapital').val() != 0) {
+                    $('#PerOfSharesPreTransaction').val(formatIndianFloat(((SecuritiesPriorToAcquisition * nMultiplier) / SubscribedCapital)));
+                }
+                else {
+                    $('#PerOfSharesPreTransaction').val("");
+                    if ($('#DateOfAcquisition').val() != "") {
+                        var arrError = [];
+                        var arrchildError = [];
+                        arrchildError.push("Invalid Subscribed Capital");
+                        arrError.push(arrchildError);
+                        DisplayErrors(arrError);
+                    }
+                }
+            }
+            if ($('#hidGenSecuritiesPriortoAcquisitionManualInputorAutoCalculate').val() == '0' && $('#DisclosureType').val() == 147001) {
+                var Quantity = $('#Quantity').val();
+                if (Quantity != "") {
+                    Quantity = removeCommafromNumber(Quantity);
+                }
+                else {
+                    Quantity = 0;
+                }
+                var SubscribedCapital = 1;
+                SubscribedCapital = removeCommafromNumber($('#hidSubscribedCapital').val());
+                if ($('#hidSubscribedCapital').val() != '' && $('#hidSubscribedCapital').val() != 0) {
+                    $('#PerOfSharesPreTransaction').val(formatIndianFloat(((Quantity * nMultiplier) / SubscribedCapital)));
+                }
+                else {
+                    var arrError = [];
+                    var arrchildError = [];
+                    arrchildError.push("Invalid Subscribed Capital");
+                    arrError.push(arrchildError);
+                    $('#PerOfSharesPreTransaction').val("");
+                    DisplayErrors(arrError);
+
+                }
+            }
+        } else {
+            $('#PerOfSharesPreTransaction').val(0);
+        }
+    }
+
+    function CalculatePercentageOfSharesPostTransaction(nMultiplier) // nMultiplier is 1 now to find the % value it should be 100 but according to document formule its not given so we assume its 1 so in future one value can change all % calculation
+    {
+        CalculateValueForSecuritiesPostAcquisiton();
+        if ($('#SecurityTypeCodeId').val() == 139001) {
+
+
+            /*
+            GenSecuritiesPriortoAcquisitionManualInputorAutoCalculate
+            0-AutoCalculate   1-ManualInput
+            */
+            if ($('#hidGenSecuritiesPriortoAcquisitionManualInputorAutoCalculate').val() == '0' && $('#DisclosureType').val() != 147001) {
+                var SecuritiesPriorToAcquisition = $('#SecuritiesPriorToAcquisition').val();
+                if (SecuritiesPriorToAcquisition != "") {
+                    SecuritiesPriorToAcquisition = removeCommafromNumber(SecuritiesPriorToAcquisition);
+                    SecuritiesPriorToAcquisition = parseFloat(SecuritiesPriorToAcquisition);
+                }
+                var PerOfSharesPostTransaction = 0;
+                if ($('#hidSubscribedCapital').val() != '' && $('#hidSubscribedCapital').val() != 0) {
+                    var Quantity = 0;
+                    var Quantity2 = 0;
+                    var SubscribedCapital = 1;
+                    SubscribedCapital = removeCommafromNumber($('#hidSubscribedCapital').val());
+
+                    var SelectedSecurityTypeCodeId = $('#SecurityTypeCodeId').val();
+                    var LotSize = 1;
+                    if (SelectedSecurityTypeCodeId == 139004 || SelectedSecurityTypeCodeId == 139005) {
+                        LotSize = $('#LotSize').val();
+                        if (LotSize == "")
+                            LotSize = 1;
+                        else {
+                            LotSize = removeCommafromNumber(LotSize);
+                            LotSize = parseFloat(LotSize);
+                        }
+                    }
+
+                    if ($('#Quantity').val() != "") {
+                        Quantity = removeCommafromNumber($('#Quantity').val());
+                        Quantity = parseFloat(Quantity);
+                        Quantity = Quantity * LotSize;
+                    }
+                    if ($('#Quantity2').val() != "") {
+                        Quantity2 = removeCommafromNumber($('#Quantity2').val());
+                        Quantity2 = parseFloat(Quantity2);
+                        Quantity2 = Quantity2 * LotSize;
+                    }
+
+                    if ($('#TransactionTypeCodeId').val() == 143001 || $('#TransactionTypeCodeId').val() == 143003) // Buy (143001) OR Cash Exercise(143003)
+                    {
+                        PerOfSharesPostTransaction = ((((SecuritiesPriorToAcquisition + Quantity) * nMultiplier)) / SubscribedCapital)
+                        $('#PerOfSharesPostTransaction').val(formatIndianFloat(PerOfSharesPostTransaction));
+                    }
+                    else if ($('#TransactionTypeCodeId').val() == 143002) // Sell
+                    {
+                        PerOfSharesPostTransaction = (((SecuritiesPriorToAcquisition - Quantity) * nMultiplier) / SubscribedCapital)
+                        $('#PerOfSharesPostTransaction').val(formatIndianFloat(PerOfSharesPostTransaction));
+                    }
+
+                    else if ($('#TransactionTypeCodeId').val() == 143004) // Cashless All
+                    {
+                        PerOfSharesPostTransaction = (((SecuritiesPriorToAcquisition) * nMultiplier) / SubscribedCapital)
+                        $('#PerOfSharesPostTransaction').val(formatIndianFloat(PerOfSharesPostTransaction));
+                    }
+                    else if ($('#TransactionTypeCodeId').val() == 143005) // Cashless Partial
+                    {
+                        PerOfSharesPostTransaction = (((SecuritiesPriorToAcquisition + Quantity - Quantity2) * nMultiplier) / SubscribedCapital)
+                        $('#PerOfSharesPostTransaction').val(formatIndianFloat(PerOfSharesPostTransaction));
+                    }
+                    else if ($('#TransactionTypeCodeId').val() == 143006 || $('#TransactionTypeCodeId').val() == 143007) // Pledge (143006) OR Pledge Revoke(143007)
+                    {
+                        PerOfSharesPostTransaction = ((((SecuritiesPriorToAcquisition) * nMultiplier)) / SubscribedCapital)
+                        $('#PerOfSharesPostTransaction').val(formatIndianFloat(PerOfSharesPostTransaction));
+                    }
+                    else if ($('#TransactionTypeCodeId').val() == 143008) // Pledge Invoke(143008)
+                    {
+                        PerOfSharesPostTransaction = (((SecuritiesPriorToAcquisition - Quantity) * nMultiplier) / SubscribedCapital)
+                        $('#PerOfSharesPostTransaction').val(formatIndianFloat(PerOfSharesPostTransaction));
+                    }
+                }
+                else {
+                    $('#PerOfSharesPostTransaction').val("");
+                    if ($('#DateOfAcquisition').val() != "") {
+                        var arrError = [];
+                        var arrchildError = [];
+                        arrchildError.push("Invalid Subscribed Capital");
+                        arrError.push(arrchildError);
+                        DisplayErrors(arrError);
+                    }
+                }
+            }
+        } else {
+            $('#PerOfSharesPostTransaction').val(0);
+        }
+    }
+
+    function DisplayErrors(errors) {
+        $('input').removeClass('input-validation-error');
+        $('select').removeClass('input-validation-error');
+
+        $('#messageSection div').not('#divValidationSummaryModal,#mainMessageSection').remove();
+        $("#divValidationSummaryModal ul").html("");
+        for (index in errors) {
+            var obj = errors[index];
+            for (i = 0; i < obj.length; i++) {
+                var li = $("<li>");
+                $(li).text(obj[i]);
+                $("#divValidationSummaryModal ul").append($(li));
+            }
+        }
+
+        $('#divValidationSummaryModal').slideDown(500);
+        $('#messageSection div').not('#divValidationSummaryModal').remove();
+        $("#divValidationSummaryModal").removeClass("validation-summary-valid");
+        $("#divValidationSummaryModal").addClass("validation-summary-errors");
+
+        setTimeout(function () {
+            $("#divValidationSummaryModal").removeClass("validation-summary-errors");
+            $('#divValidationSummaryModal').removeClass('alert-danger').fadeOut('slow');
+            $("#divValidationSummaryModal").addClass("alert-danger");
+            $("#divValidationSummaryModal").addClass("validation-summary-valid");
+
+        }, 10000);
+    }
+
+    function CalculateValueForSecuritiesPostAcquisiton() {
+        var SecurityPriorAcquisition = $("#SecuritiesPriorToAcquisition").val();
+        var CurrentQuantityAdded = $("#Quantity").val();
+
+        var SelectedTransactionTypeCodeId = $('#TransactionTypeCodeId').val();
+        var SelectedModeOfAcquisitionCodeId = $('#ModeOfAcquisitionCodeId').val();
+        var SelectedSecurityTypeCodeId = $('#SecurityTypeCodeId').val();
+
+        var LotSize = 1;
+        if (SelectedSecurityTypeCodeId == 139004 || SelectedSecurityTypeCodeId == 139005) {
+            LotSize = $('#LotSize').val();
+            if (LotSize == "")
+                LotSize = 1;
+            else {
+                LotSize = removeCommafromNumber(LotSize);
+                LotSize = parseFloat(LotSize);
+            }
+        }
+
+        if (SecurityPriorAcquisition == "") {
+            SecurityPriorAcquisition = 0;
+        } else {
+            SecurityPriorAcquisition = removeCommafromNumber(SecurityPriorAcquisition);
+            SecurityPriorAcquisition = parseFloat(SecurityPriorAcquisition);
+        }
+        if (CurrentQuantityAdded == "") {
+            CurrentQuantityAdded = 0;
+        } else {
+            CurrentQuantityAdded = removeCommafromNumber(CurrentQuantityAdded);
+            CurrentQuantityAdded = parseFloat(CurrentQuantityAdded);
+            CurrentQuantityAdded = CurrentQuantityAdded * LotSize;
+        }
+
+        var ImpactOnPostQuantity;
+        if (SelectedTransactionTypeCodeId > 0 && SelectedModeOfAcquisitionCodeId > 0) {
+            $.ajax({
+                url: $("#GetImpactOnPostQuantity").val(),
+                type: 'post',
+                headers: getRVToken(),
+                cache: false,
+                async: false,
+                data: { 'nTransTypeCodeId': SelectedTransactionTypeCodeId, 'nModeOfAcquisCodeId': SelectedModeOfAcquisitionCodeId, 'nSecurityTypeCodeId': SelectedSecurityTypeCodeId },
+                success: function (data) {
+                    if (data.status) {
+                        ImpactOnPostQuantity = data.ImpactOnPostQuantity
+                    } else {
+
+                        ImpactOnPostQuantity = 505004;
+                        DisplayErrors(data.error);
+                    }
+                },
+                error: function (data) {
+                    ImpactOnPostQuantity = 0;
+                    DisplayErrors(data.error);
+                }
+            });
+        }
+        else {
+            ImpactOnPostQuantity = 0;
+        }
+
+        if (SelectedTransactionTypeCodeId == CashLessPartial) {
+            var Quantity2ForCashLess = $("#Quantity2").val();
+            if (Quantity2ForCashLess == undefined || Quantity2ForCashLess == "") {
+                Quantity2ForCashLess = 0;
+            } else {
+                Quantity2ForCashLess = removeCommafromNumber(Quantity2ForCashLess);
+                Quantity2ForCashLess = parseFloat(Quantity2ForCashLess);
+            }
+            CurrentQuantityAdded = CurrentQuantityAdded - Quantity2ForCashLess;
+        }
+        else if (SelectedTransactionTypeCodeId == CashLessAll) {
+            CurrentQuantityAdded = 0;
+        }
+        else if (ImpactOnPostQuantity == 505002)         // Impact on Post Share Quantity - Less
+        {
+            CurrentQuantityAdded = -1 * CurrentQuantityAdded;
+        }
+        else if ((ImpactOnPostQuantity == 505003) || (ImpactOnPostQuantity == 505004))      // Impact on Post Share Quantity - Both(505003) , No(505004)
+        {
+            CurrentQuantityAdded = 0;
+        }
+
+        var post_acquisition_val = "";
+
+        if ($('#TransactionTypeCodeId').val() != 0 && $("#SecuritiesPriorToAcquisition").val() != "") {
+            post_acquisition_val = formatIndianNumber(SecurityPriorAcquisition + CurrentQuantityAdded);
+        }
+
+        if (ImpactOnPostQuantity != 0)
+            $("#SecuritiesPostToAcquisition").val(post_acquisition_val);
+        else
+            $("#SecuritiesPostToAcquisition").val('');
+    }
+
+    function ValueForSecuritiesHeldPriorAcquisiton() {
+
+        if ($("#TransactionTypeCodeId").val() != 0 && $('#ForUserInfoId').val() != 0) {
+
+            if ($('#TransactionDetailsId').val() == 0 && $('#DisclosureType').val() != 147001) {
+
+                $.ajax({
+                    url: $("#GetClosingBalance").val(),
+                    type: 'post',
+                    headers: getRVToken(),
+                    cache: false,
+                    data: { 'nUserInfoId': $('#UserInfoId').val(), 'nUserInfoIdRelative': $('#ForUserInfoId').val(), 'nSecurityTypeCodeId': $('#SecurityTypeCodeId').val() },
+                    success: function (data) {
+                        if (data.status) {
+                            $('#SecuritiesPriorToAcquisition').val(formatIndianNumber(data.ClosingBalance));
+
+                            CalculateValueForSecuritiesPostAcquisiton();
+                        } else {
+                            $('#SecuritiesPriorToAcquisition').val(0);
+                            DisplayErrors(data.error);
+                        }
+                    },
+                    error: function (data) {
+                        $('#SecuritiesPriorToAcquisition').val(0);
+                        DisplayErrors(data.error);
+                    }
+                });
+            }
+        }
+    }
+
+    $(document).delegate('#DMATDetailsID', 'change', function (event) {
+        $('#divDMAtwisebalance').html("");
+
+        if ($('#DisclosureType').val() != 147001 && '@ViewBag.PreclearenceID' == 0 )
+        {
+        var values = $("#frmTradingTransactionDetails").serializeArray();
+        //  setTimeout(function () {
+        $.ajax({
+            url: $("#LoadBalanceDMATwise").val(),
+            type: 'post',
+            headers: getRVToken(),
+            cache: false,
+            data: values,
+            success: function (result) {
+                $('#divDMAtwisebalance').html(result);
+                $("div[name=contratrade]").fadeIn('slow');
+            },
+            error: function (result) {
+                DisplayErrors(result);
+            }
+        });
+      }
+        // }, 20000);
+
+    });
+
+    //Tush
+    $(document).delegate('#SecurityTypeCodeId', 'change', function (event) {
+        $('#divDMAtwisebalance').html("");
+        if ($('#DisclosureType').val() != 147001 && '@ViewBag.PreclearenceID' == 0) {
+
+            var values = $("#frmTradingTransactionDetails").serializeArray();
+            //  setTimeout(function () {
+            $.ajax({
+                url: $("#LoadBalanceDMATwise").val(),
+                type: 'post',
+                headers: getRVToken(),
+                cache: false,
+                data: values,
+                success: function (result) {
+                    $('#divDMAtwisebalance').html(result);
+                    $("div[name=contratrade]").fadeIn('slow');
+                },
+                error: function (result) {
+                    DisplayErrors(result);
+                }
+            });
+        }
+        // }, 20000);
+
+    });
+
+    /////
+    $(document).delegate('#txtCompany', 'change', function (event) {
+        $('#divDMAtwisebalance').html("");
+        if ($('#DisclosureType').val() != 147001 && '@ViewBag.PreclearenceID' == 0) {
+            var values = $("#frmTradingTransactionDetails").serializeArray();
+            //  setTimeout(function () {
+            $.ajax({
+                url: $("#LoadBalanceDMATwise").val(),
+                type: 'post',
+                headers: getRVToken(),
+                cache: false,
+                data: values,
+                success: function (result) {
+                    $('#divDMAtwisebalance').html(result);
+                    $("div[name=contratrade]").fadeIn('slow');
+                },
+                error: function (result) {
+                    DisplayErrors(result);
+                }
+            });
+        }
+        // }, 20000);
+
+    });
+
+    /////
+
+    $("#myModalforAlert").click(function () {
+        $('#btnInsiderSubmit').removeAttr('disabled');
+    });
+
+</script>
+
+<div id="tradingTransactionDetailsResultDiv">
+    @{
+        string view = null;
+        string controller = null;
+        int DisclosurertypeformId = 0;
+    }
+
+    @if (ViewBag.DisclosureType == 147001)
+    {
+        DisclosurertypeformId = 12;
+
+    }
+    else if (ViewBag.DisclosureType == 147002)
+    {
+        DisclosurertypeformId = 41;
+    }
+    else
+    {
+        DisclosurertypeformId = 42;
+    }
+
+    @using (Ajax.BeginForm("Create", "TradingTransaction_OS", new { TransactionDetailsId = 0, TransactionMasterId = @ViewBag.TransactionMasterId, SecurityTypeCodeId = Model.SecurityTypeCodeId, acid = ViewBag.acid, period = ViewBag.period, year = ViewBag.year, periodType = ViewBag.periodType, formId = DisclosurertypeformId },
+    new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccess", InsertionMode = InsertionMode.Replace, UpdateTargetId = "tradingTransactionDetailsResultDiv" }, new { @autocomplete = "off", id = "frmTradingTransactionDetails" }))
+    {
+
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" value="@ViewBag.acid" name="acid" />
+        <input type="hidden" value="@ViewBag.UserInfoId" name="UserInfoId" id="UserInfoId" />
+        <input type="hidden" value="@ViewBag.ParentId" n name="ParentId" id="ParentId" />
+        <input type="hidden" value="@ViewBag.DisclosureType" name="DisclosureType" id="DisclosureType" />
+        <input type="hidden" value="@ViewBag.period" name="period" />
+        <input type="hidden" value="@ViewBag.year" name="year" />
+        <input type="hidden" value="@ViewBag.PreclearenceID" name="PreclearenceID" />
+        <input type="hidden" value="" name="ChangeTransactioType" />
+        <input type="hidden" value="@ViewBag.SubscribedCapital" name="hidSubscribedCapital" id="hidSubscribedCapital" />
+        <input type="hidden" value="@ViewBag.GenSecuritiesPriortoAcquisitionManualInputorAutoCalculate" name="hidGenSecuritiesPriortoAcquisitionManualInputorAutoCalculate" id="hidGenSecuritiesPriortoAcquisitionManualInputorAutoCalculate" />
+        <input type="hidden" value="@ViewBag.postAcqNeMsg" id="hidPostAcqNeMsg" />
+
+        if (ViewBag.IsNegative)
+        {
+            <input type="hidden" value="1" id="hidIsNegative" />
+        }
+        else
+        {
+            <input type="hidden" value="0" id="hidIsNegative" />
+        }
+
+
+        <section class="content-header">
+            <h1>
+                @InsiderTrading.Common.Common.getResource("tra_ttl_16130")  @ViewBag.SecurityTypeName
+            </h1>
+        </section>
+
+        <section class="content">
+            @if (ViewBag.ShowTradeNote == true)
+            {
+                <label style="color:red;font-size:13px">@InsiderTrading.Common.Common.getResource("dis_lbl_50655")</label>
+            }
+
+            @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+            @Html.ValidationSummary(true)
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            @{
+
+
+        if ((ViewBag.DisclosureType != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial && ViewBag.PreclearenceID == 0))
+        {
+            <div id="divDMAtwisebalance">
+                @Html.Partial("~/Views/TradingTransaction_OS/_DMATwiseBalance.cshtml")
+            </div>
+        }
+                            }
+
+                            @if (ViewBag.DisclosureTypeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
+                            {
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.ForUserInfoId)
+                                        @if (@ViewBag.TransactionTypeCodeFlag)
+                                        {
+                                            @Html.DropDownListFor(model => model.ForUserInfoId, new SelectList(ViewBag.UserPan, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
+                                            @Html.HiddenFor(model => model.ForUserInfoId)
+                                        }
+                                        else
+                                        {
+                                            @Html.DropDownListFor(model => model.ForUserInfoId, new SelectList(ViewBag.UserPan, "Key", "Value", ""), new { @class = "form-control" })
+                                        }
+                                        @Html.ValidationMessageFor(model => model.ForUserInfoId)
+                                    </div>
+                                </div>
+
+
+                                <div id="UserDetails" style="display:none;">
+                                    @Html.HiddenFor(model => model.DMATDetailsID)
+                                </div>
+
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.SecurityTypeCodeId)
+                                        @if (@ViewBag.TransactionTypeCodeFlag)
+                                        {
+                                            @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
+                                            @Html.HiddenFor(model => model.SecurityTypeCodeId)
+                                        }
+                                        else
+                                        {
+                                            @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control" })
+                                        }
+                                        @Html.ValidationMessageFor(model => model.SecurityTypeCodeId)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.CompanyName)
+                                        @if (@ViewBag.TransactionTypeCodeFlag)
+                                        {
+                                            @Html.TextBoxFor(model => model.CompanyName, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "txtCompany", data_url = Url.Action("GetList", "RestrictedList"), disabled = "disabled" })
+                                            @Html.HiddenFor(model => model.CompanyId, new { id = "CompanyId" })
+                                            @Html.HiddenFor(model => model.CompanyName)
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(model => model.CompanyName, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "txtCompany", data_url = Url.Action("GetList", "RestrictedList") })
+                                            @Html.HiddenFor(model => model.CompanyId, new { id = "CompanyId" })
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Quantity, new { name = "cash" })
+                                        @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control numericOnly", rows = "5" })
+                                        @Html.ValidationMessageFor(model => model.Quantity)
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="txtLotSize" style="display:none">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.LotSize)
+                                        @Html.TextBoxFor(model => model.LotSize, new { @class = "form-control numericOnly", rows = "5" })
+                                        @Html.ValidationMessageFor(model => model.LotSize)
+                                    </div>
+                                </div>
+
+                            </div>
+                                
+                            <div class="row">
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="txtContractSpecification" style="display:none">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.ContractSpecification)
+                                        @Html.TextBoxFor(model => model.ContractSpecification, new { @class = "form-control", rows = "5" })
+                                        @Html.ValidationMessageFor(model => model.ContractSpecification)
+                                    </div>
+                                </div>
+                            </div>
+                            }
+                            else
+                            {
+                            <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.ForUserInfoId)
+                                            @if (@ViewBag.TransactionTypeCodeFlag)
+                                            {
+                                                @Html.DropDownListFor(model => model.ForUserInfoId, new SelectList(ViewBag.UserPan, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
+                                                @Html.HiddenFor(model => model.ForUserInfoId)
+                                            }
+                                            else
+                                            {
+                                                @Html.DropDownListFor(model => model.ForUserInfoId, new SelectList(ViewBag.UserPan, "Key", "Value", ""), new { @class = "form-control" })
+                                            }
+                                            @Html.ValidationMessageFor(model => model.ForUserInfoId)
+                                        </div>
+                                    </div>
+                           
+
+                                <div id="UserDetails" style="display:none;">
+                                    @Html.HiddenFor(model => model.DMATDetailsID)
+                                </div>
+
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.SecurityTypeCodeId)
+                                        @if (@ViewBag.TransactionTypeCodeFlag)
+                                        {
+                                          @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
+                                          @Html.HiddenFor(model => model.SecurityTypeCodeId)
+                                        }
+                                        else
+                                        {
+                                            @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control" })
+                                        }
+                                        @Html.ValidationMessageFor(model => model.SecurityTypeCodeId)
+                                    </div>
+                                </div>
+                             </div>
+
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.CompanyName)
+                                        @if (@ViewBag.TransactionTypeCodeFlag)
+                                        {
+                                            @Html.TextBoxFor(model => model.CompanyName, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "txtCompany", data_url = Url.Action("GetList", "RestrictedList"), disabled = "disabled" })
+                                            @Html.HiddenFor(model => model.CompanyId, new { id = "CompanyId" })
+                                            @Html.HiddenFor(model => model.CompanyName)
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(model => model.CompanyName, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "txtCompany", data_url = Url.Action("GetList", "RestrictedList") })
+                                            @Html.HiddenFor(model => model.CompanyId, new { id = "CompanyId" })
+                                        }
+                                    </div>
+                                </div>
+
+                                @if (@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
+                                {
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div id="sandbox-container" class="form-group">
+                                            @Html.LabelFor(model => model.DateOfAcquisition)
+                                            <div class="input-group date">
+                                                @{
+                                    string DateOfAcquisition = "";
+                                    if (Model != null)
+                                    {
+
+                                        DateOfAcquisition = InsiderTrading.Common.Common.ApplyFormatting(Model.DateOfAcquisition, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+                                    }
+                                    @Html.TextBox("DateOfAcquisition", DateOfAcquisition, new { @class = "form-control" })
+
+                                                    <span class="input-group-addon"><i class="icon icon-calender"></i></span>
+
+                                                }
+                                            </div>
+                                            @Html.ValidationMessageFor(model => model.DateOfAcquisition)
+                                        </div>
+
+                                    </div>
+                                }
+
+                                @if (@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
+                                {
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.TransactionTypeCodeId)
+                                            @if (@ViewBag.TransactionTypeCodeFlag)
+                                            {
+                                                @Html.DropDownListFor(model => model.TransactionTypeCodeId, new SelectList(ViewBag.TransactionType, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
+                                                @Html.HiddenFor(model => model.TransactionTypeCodeId)
+                                            }
+                                            else
+                                            {
+                                                @Html.DropDownListFor(model => model.TransactionTypeCodeId, new SelectList(ViewBag.TransactionType, "Key", "Value", ""), new { @class = "form-control" })
+                                            }
+                                            @Html.ValidationMessageFor(model => model.TransactionTypeCodeId)
+                                        </div>
+                                    </div>
+                                }
+                             </div>
+
+                            <div class="row">
+                                @if (@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
+                                {
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.ModeOfAcquisitionCodeId)
+                                            @Html.DropDownListFor(model => model.ModeOfAcquisitionCodeId, new SelectList(ViewBag.ModeOfAcquisition, "Key", "Value", ""), new { @class = "form-control" })
+                                            @Html.HiddenFor(model => model.ModeOfAcquisitionCodeId)
+                                            @Html.ValidationMessageFor(model => model.ModeOfAcquisitionCodeId)
+                                        </div>
+                                    </div>
+                                }
+
+                                @if (@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
+                                {
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.ExchangeCodeId)
+                                            @Html.DropDownListFor(model => model.ExchangeCodeId, new SelectList(ViewBag.ExchangeTypeCode, "Key", "Value", ""), new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.ExchangeCodeId)
+                                        </div>
+                                    </div>
+                                }
+                           </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Quantity, new { name = "cash" })
+                                        @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control numericOnly", rows = "5" })
+                                        @Html.ValidationMessageFor(model => model.Quantity)
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="txtLotSize" style="display:none">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.LotSize)
+                                        @Html.TextBoxFor(model => model.LotSize, new { @class = "form-control numericOnly", rows = "5" })
+                                        @Html.ValidationMessageFor(model => model.LotSize)
+                                    </div>
+                                </div>
+                                @if (@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
+                                {
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.Value, new { name = "cash" })
+                                            @Html.TextBoxFor(model => model.Value, new { @class = "form-control two-digits", rows = "5" })
+                                            @Html.ValidationMessageFor(model => model.Value)
+                                        </div>
+                                    </div>
+                                }
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="txtContractSpecification" style="display:none">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.ContractSpecification)
+                                        @Html.TextBoxFor(model => model.ContractSpecification, new { @class = "form-control", rows = "5" })
+                                        @Html.ValidationMessageFor(model => model.ContractSpecification)
+                                    </div>
+                                </div>
+
+                            </div>
+                            }
+
+  
+                            @Html.HiddenFor(model => model.CompanyId)
+                            @Html.HiddenFor(model => model.SecurityTypeCodeId)
+                            @Html.HiddenFor(model => model.DMATDetailsID)
+                            @Html.HiddenFor(model => model.TransactionMasterId)
+                            @Html.HiddenFor(model => model.TransactionDetailsId)
+                            <div class="row">
+
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <button id="SaveDetails" type="submit" class="btn btn-success " name="Create"><i class=" fa fa-save"></i> @InsiderTrading.Common.Common.getResource("tra_btn_52063")</button>
+                                    @if((bool)ViewBag.ShowSaveAddMore_btn)
+                                    { 
+                                      <button id="Save_AddMoreDetails" type="submit" class="btn btn-success " name="Create"><i class=" fa fa-save"></i> @InsiderTrading.Common.Common.getResource("tra_btn_52064")</button>
+                                    }
+                                    <input type="hidden" name="Hdn_UserTypeCodeId" id="Hdn_UserTypeCodeId" value="false" />
+                                    <input type="hidden" name="Hdn_From" id="Hdn_From" value="false" />
+                                    <input type="hidden" name="Hdn_AddMoreDetails" id="Hdn_AddMoreDetails" value="false" />
+
+                                    <a class="btn btn-success" href='@Url.Action("Index", "TradingTransaction_OS", new { acid = ViewBag.acid, TransactionMasterId = @ViewBag.TransactionMasterId, nDisclosureTypeCodeId = @ViewBag.DisclosureType, nUserInfoId = @ViewBag.UserInfoId, nUserTypeCodeId = @ViewBag.UserTypeId, frm = @ViewBag.Frm, nYearCode = ViewBag.year, nPeriodCode = ViewBag.period, nPeriodType = ViewBag.periodType, SecurityTypeCode = ViewBag.SecurityTypeCodeId, ParentId = ViewBag.ParentId })' role="button"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14010")</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    }
+</div>
+
+@*Tushar*@
+@Html.Hidden("PopulateComboOnChange", Url.Action("PopulateCombo_OnChange", "TradingTransaction_OS"))
+@Html.Hidden("GetSubscribedcapital", Url.Action("DateOfAcquisition_OnChange", "TradingTransaction"))
+
+@if(@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
+{
+    @Html.Hidden("GetClosingBalance", Url.Action("ForUserInfoId_OnChange", "TradingTransaction_OS"))
+    @Html.Hidden("GetImpactOnPostQuantity", Url.Action("GetImpactOnPostQuantity", "TradingTransaction"))
+    @Html.Hidden("LoadBalanceDMATwise", Url.Action("LoadBalanceDMATwise", "TradingTransaction_OS"))
+}
+@*else
+{
+    @Html.Hidden("GetClosingBalance", Url.Action("ForUserInfoId_OnChange", "TradingTransaction"))
+    @Html.Hidden("GetImpactOnPostQuantity", Url.Action("GetImpactOnPostQuantity", "TradingTransaction"))
+    @Html.Hidden("LoadBalanceDMATwise", Url.Action("LoadBalanceDMATwise", "TradingTransaction"))
+}*@
+@Html.Hidden("CreateTransaction", Url.Action("Create", "TradingTransaction"))
+@Html.Hidden("btnCloseUrl", Url.Action("Create", "TradingTransaction", new { TransactionDetailsId = 11, TransactionMasterId = @ViewBag.TransactionMasterId, acid = ViewBag.acid, year = ViewBag.year, period = ViewBag.period, SecurityTypeCodeId = Model.SecurityTypeCodeId, periodType = ViewBag.periodType }))
+@*Tushar*@
+@if(ViewBag.PreclearenceID != 0)
+{
+  @Html.Hidden("Initial_OS_Index", Url.Action("Index", "TradingTransaction_OS", new { acid = ViewBag.acid, TransactionMasterId = @ViewBag.TransactionMasterId, nDisclosureTypeCodeId = @ViewBag.DisclosureType, nUserInfoId = @ViewBag.UserInfoId, nUserTypeCodeId = @ViewBag.UserTypeId, nYearCode = 0, nPeriodCode = 0, PreclearanceRequestId = 0, frm = @ViewBag.Frm, nPeriodType = 0, ShowDocumentTab = 0, SecurityTypeCode = @ViewBag.SecurityTypeCodeId }))
+}
+else
+{
+  @Html.Hidden("Initial_OS_Index", Url.Action("Index", "TradingTransaction_OS", new { acid = ViewBag.acid, TransactionMasterId = @ViewBag.TransactionMasterId, nDisclosureTypeCodeId = @ViewBag.DisclosureType, nUserInfoId = @ViewBag.UserInfoId, nUserTypeCodeId = @ViewBag.UserTypeId, nYearCode = 0, nPeriodCode = 0, PreclearanceRequestId = 0, frm = @ViewBag.Frm, nPeriodType = 0, ShowDocumentTab = 0, SecurityTypeCode = 0, ParentId = @ViewBag.ParentId }))
+}
+@Html.Hidden("btnCloseUrl_OS", Url.Action("Create", "TradingTransaction_OS", new { TransactionDetailsId = Model.TransactionDetailsId, TransactionMasterId = @ViewBag.TransactionMasterId, UserTypeCodeId = @ViewBag.UserTypeId, acid = ViewBag.acid, year = ViewBag.year, period = ViewBag.period, SecurityTypeCodeId = Model.SecurityTypeCodeId, periodType = ViewBag.periodType, frm = @ViewBag.Frm }))
+@Html.Hidden("CancelUrlUser", Url.Action("Index", "PreclearanceRequest", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE }))
+@Html.Hidden("CancelUrl", Url.Action("ListByCO", "PreclearanceRequest", new { acid = InsiderTrading.Common.ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE }))
+
+<div class="modal fade" id="myModalforAlert" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="width:80%;">
+        <div class="modal-content mymodalforalert_Content">
+            <div class="modal-header">
+                <a id="closeButton" href="#" class="close" data-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i></a>
+                <h4 class="modal-title custom_align" id="myModalLabel">Confirmation</h4>
+            </div>
+            <div class="modal-body">
+                <div id="message"></div>
+                <div class="modal-footer">
+                    @*@using (Html.BeginForm("Create", "TradingTransaction_OS", new { TransactionDetailsId = Model.TransactionDetailsId, TransactionMasterId = @ViewBag.TransactionMasterId, UserTypeCodeId = @ViewBag.UserTypeId, acid = ViewBag.acid, year = ViewBag.year, period = ViewBag.period, SecurityTypeCodeId = 139001, periodType = ViewBag.periodType, frm = @ViewBag.Frm }, FormMethod.Post))
+                    {*@
+                        <button type="submit" id="btnYes" class="btn btn-success">@InsiderTrading.Common.Common.getResource("tra_btn_16459")</button>
+                        @*<button type="button" id="btnCancel" class="btn btn-danger" data-dismiss="modal"></button>*@
+                    @*}*@
+                </div>
+            </div>
+        </div> <!-- /.modal-content -->
+    </div> <!-- /.modal-dialog -->
+</div>
+<script>
+    $('#btnYes').click(function () {
+        $('#myModalforAlert').modal('hide');
+        window.location = $('#btnCloseUrl_OS').val();
+    });
+    $('#closeButton').click(function () {
+        window.location = $('#btnCloseUrl_OS').val();
+    });
+
+    $('#btnCancel').click(function () {
+        if ($('#CancelUrl').val().indexOf("&SecurityTypeId=") >= 0) {
+            window.location = $('#CancelUrl').val();
+        }
+        else {
+            window.location = $('#CancelUrlUser').val();
+        }
+    });
+    document.getElementById('myModalforAlert').addEventListener("click", function (event) {
+        if (event.target.closest(".mymodalforalert_Content")) {
+            return;
+        }
+        else {
+            window.location = $('#btnCloseUrl_OS').val();
+        }
+
+    });
+</script>
+
+<script type="text/javascript">
+    function SearchCompany(cmpname) {
+        $(function () {
+            var CompanyName = cmpname;
+            $.ajax({
+                url: '@Url.Content("~/RestrictedList/GetExistNSEBSEDetailsJSON/")',
+                type: "GET",
+                data: { CompanyName: CompanyName },
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.agent != 0) {
+                        $("#txtCompany").val(data[0].CompanyName);
+                        $("#txtISINCode").val(data[0].ISINCode);
+                        $("#txtNSECode").val(data[0].NSECode);
+                        $("#txtBSECode").val(data[0].BSECode);
+                        $("#CompanyId").val(data[0].RLCompanyId);
+                        //alert($("#RLCompanyId").val(data[0].RLCompany));
+                    }
+                }
+            });
+        });
+    }
+
+    $(function () {
+        $('#txtCompany').autocomplete({
+            minLength: 0,
+            source: function (request, response) {
+                var url = $(this.element).data('url');
+
+                $.getJSON(url, { term: request.term }, function (data) {
+                    response($.map(data, function (item) {
+                        return {
+                            label: item.CompanyName,
+                            value: item.CompanyName
+                        }
+                    }));
+                })
+            },
+            select: function (event, ui) {
+                $(event.target).val('')  //.next('input[type=hidden]').val('');
+                var cmpname = ui.item.label;
+                SearchCompany(cmpname)
+            },
+            change: function (event, ui) {
+                if (!ui.item) {
+                    $(event.target).val('')  //.next('input[type=hidden]').val('');
+                    $('#CompanyId').val('0');
+                }
+            }
+        });
+    })
+
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        $("#SecurityTypeCodeId").change(function () {
+            var Selected_Entry = $("#SecurityTypeCodeId option:selected").val();
+            if (Selected_Entry == 139004 || Selected_Entry == 139005) {
+                $("#txtLotSize").show();
+                $("#txtContractSpecification").show();
+            }
+            else {
+                $("#txtLotSize").hide();
+                $("#txtContractSpecification").hide();
+            }
+        });
+    });
+
+    //$("#SecurityTypeCodeId").val(139001);
+
+    if($("#SecurityTypeCodeId").val() == 139004 || $("#SecurityTypeCodeId").val() == 139005)
+    {
+        $("#txtLotSize").show();
+        $("#txtContractSpecification").show();
+    }
+</script>
+
+<script type="text/javascript">
+    function OnSuccess(response) {
+             if ($(".validation-summary-errors li:visible").length === 0) {
+           
+                if ('@ViewBag.SaveAndAddMore' == 'true') {
+                    $('#TransactionDetailsId').val('0');
+                     window.location.reload();
+                }
+                else
+                {
+                    window.location = $('#Initial_OS_Index').val();
+                }
+               
+            }
+            else {
+            $("body").removeClass("loading");
+            if ($("#SecurityTypeCodeId").val() == 139004 || $("#SecurityTypeCodeId").val() == 139005) {
+                $("#txtLotSize").show();
+                $("#txtContractSpecification").show();
+                if ($("#LotSize").val() == 0) {
+                    $("#LotSize").val(null);
+                }
+            }
+            if($("#Quantity").val() == 0)
+            {
+                $("#Quantity").val(null);
+            }
+            if ($("#Value").val() == 0)
+            {
+                $("#Value").val(null);
+            }
+        }
+    }
+</script>
+
+<script type="text/javascript">
+    $("#SaveDetails").click(function () {
+        $("#Hdn_UserTypeCodeId").val('@ViewBag.UserTypeId');
+        $("#Hdn_From").val('@ViewBag.Frm');
+        $("body").addClass("loading");
+    });
+
+    $("#Save_AddMoreDetails").click(function () {
+        $("#Hdn_AddMoreDetails").val(true);
+        $("#Hdn_UserTypeCodeId").val('@ViewBag.UserTypeId');
+        $("#Hdn_From").val('@ViewBag.Frm');
+        $("body").addClass("loading");
+    });
+
+    $('#txtCompany').keydown(function (e) {
+        if (e.keyCode == 13) {
+            e.preventDefault();
+            return false;
+        }
+    });
+</script>
+

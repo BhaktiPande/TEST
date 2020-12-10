@@ -1,0 +1,154 @@
+﻿
+@{
+    ViewBag.Title = "FAQ List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content-header">    
+    @Html.AntiForgeryToken()
+    <h1>
+        FAQ List
+    </h1>
+</section>
+
+<script>
+    $(document).ready(function () {
+        var AutoOpenParent = "@ViewBag.ParentId";
+        if (AutoOpenParent != "") {
+            $(".list-faq li[child='" + AutoOpenParent + "']").slideDown();
+            $(".list-faq li[parent='" + AutoOpenParent + "']").find("i").removeClass("fa-plus-square");
+            $(".list-faq li[parent='" + AutoOpenParent + "']").find("i").addClass("fa-minus-square");
+        }
+
+        $(".list-faq li").each(function () {
+            var parentno = $(this).attr("parent");
+            if ($(".list-faq li[child='" + parentno + "']").length == 0) {
+                $(this).find("i").remove();
+            } else {
+                $(this).find("i").show();
+            }
+        });
+
+        $(".list-faq li").click(function () {
+            var parentno = $(this).attr("parent");
+            if ($(".list-faq li[child='" + parentno + "']").is(":visible")) {
+                $(".list-faq li[child^='" + parentno + "']").each(function () {
+                    $(this).find("i").removeClass("fa-minus-square");
+                    $(this).find("i").addClass("fa-plus-square");
+                });
+                $(".list-faq li[child^='" + parentno + "']").slideUp();
+                $(".list-faq li[child='" + parentno + "']").slideUp();
+                $(this).find("i").removeClass("fa-minus-square");
+                $(this).find("i").addClass("fa-plus-square");
+            }
+            else {
+                $(".list-faq li[child='" + parentno + "']").slideDown();
+                $(this).find("i").removeClass("fa-plus-square");
+                $(this).find("i").addClass("fa-minus-square");
+            }
+        });
+
+        $("#btnSearch").click(function () {
+            var searchText = $("#txtSearchFAQ").val();
+            searchText = searchText.toLowerCase();
+            if (searchText != "") {
+                $(".list-faq li").hide();
+                $(".list-faq li").each(function () {
+                    if (($(this).text().toLowerCase()).indexOf(searchText) > 0) {
+                        if ($(this).attr("child") != "") {
+                            //$(".list-faq li[parent='" + $(this).attr("child") + "']").show();
+                            //$(".list-faq li[parent='" + $(this).attr("child") + "']").click();
+                            openParentNode($(this).attr("child"));
+                            $(this).show();
+                        } else {
+                            $(this).show();
+                        }
+                    }
+                });
+            }
+            else {
+                $(".list-faq li").hide();
+                $(".list-faq li[child='']").show();
+                $(".list-faq li i.fa.fa-minus-square").removeClass("fa-minus-square").addClass("fa-plus-square");
+            }
+        });
+
+        $("#btnClear").click(function () {
+            $("#txtSearchFAQ").val("");
+            $(".list-faq li").hide();
+            $(".list-faq li[child='']").show();
+            $(".list-faq li i.fa.fa-minus-square").removeClass("fa-minus-square").addClass("fa-plus-square");
+        });
+
+    });
+
+    function openParentNode(parentid) {
+        if (parentid == "")
+            return;
+        else {
+            $(".list-faq li[parent='" + parentid + "']").show();
+            $(".list-faq li[child='" + parentid + "']").show();
+            $(".list-faq li[parent='" + parentid + "'] i.fa.fa-plus-square:visible").removeClass("fa-plus-square").addClass("fa-minus-square");
+            openParentNode($(".list-faq li[parent='" + parentid + "']").attr("child"));
+        }
+    }
+
+</script>
+
+<section class="content">
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div role="form">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="txtSearchFAQ" />
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <button type="button" class="btn btn-success" id="btnSearch"><i class="fa fa-search"> Search FAQ</i></button>
+            <button type="button" class="btn btn-success" id="btnClear"><i class="fa fa-undo"> Reset</i></button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+            @if (ViewBag.UserTypeCodeId == @InsiderTrading.Common.ConstEnum.Code.Admin || ViewBag.UserTypeCodeId == @InsiderTrading.Common.ConstEnum.Code.SuperAdminType || ViewBag.UserTypeCodeId == @InsiderTrading.Common.ConstEnum.Code.COUserType)
+            {
+                <a class="btn btn-sm btn-success pull-right showSelectedMenus" parentmenuid="@ViewBag.Menuid" childmenuid="@ViewBag.Menuid" href="~/InsiderInitialDisclosure/DisplayPolicy?CalledFrom=COFAQ&acid=193&PolicyDocumentID=7&DocumentID=21">View All</a>
+            }
+            else
+            {
+                <a class="btn btn-sm btn-success pull-right showSelectedMenus" parentmenuid="@ViewBag.Menuid" childmenuid="@ViewBag.Menuid" href="~/InsiderInitialDisclosure/DisplayPolicy?CalledFrom=InsiderFAQ&acid=154&PolicyDocumentID=7&DocumentID=21">View All</a>
+            }
+
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+            <ul class="list-faq">
+                @foreach (var faqItem in ViewBag.FAQList)
+                {
+                    var seq = @faqItem.SequenceNo;
+                    var hierarchyCountArr = seq.Split('.');
+                    int pointOcceranceCount = hierarchyCountArr.Length;
+                    int hierarchyCount = (hierarchyCountArr.Length == 1 ? 0 : hierarchyCountArr.Length) * 20;
+                    string spaceSize = hierarchyCount + "px";
+                    int seqlabel = (pointOcceranceCount - 1);
+
+                    string childAttribute = InsiderTrading.Common.Common.SubstringTillInstanceOf(@faqItem.SequenceNo, '.', hierarchyCountArr.Length - 1);
+                    var display = "";
+                    var showExpander = "";
+
+                    if (childAttribute != null && childAttribute != "")
+                        display = "none;";
+                    else
+                        display = "block";
+
+                    <li parent="@seq" child="@childAttribute" style="padding-left: @spaceSize;display: @display;">
+                        <i class="fa fa-plus-square" style="display: none;"></i> @faqItem.SequenceNo. @faqItem.FAQName
+                        <div style="font-weight:normal;">@faqItem.Contents</div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</section>

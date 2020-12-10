@@ -1,0 +1,14 @@
+﻿@model InsiderTrading.Models.Corporate_DMATDetailsModel
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    @Html.AntiForgeryToken()
+</section>
+
+<div class="alert" style="display: none;" name="ErrorMessage" gridtype="@InsiderTrading.Common.ConstEnum.GridType.DMATList"></div>
+
+<div class="search" gridtype="@InsiderTrading.Common.ConstEnum.GridType.DMATList">
+    @Html.Hidden("1", Model.UserInfoID, new { id = "1", gridtype = InsiderTrading.Common.ConstEnum.GridType.DMATList })
+    @{Html.RenderAction("Index", "DatatableGrid", new { type = InsiderTrading.Common.ConstEnum.GridType.DMATList, btnSearch = "", sSortCol = "0", acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DMAT_VIEW, bIsActionCol = false });}
+</div>
+

@@ -1,0 +1,164 @@
+﻿@model InsiderTrading.Models.MassUploadModel
+
+@{
+    ViewBag.Title = "Mass Upload";
+    ViewBag.ShowSuccess = "0";
+}
+
+<style>
+    .massuploadErrorReport{
+        width: 100%;
+    }
+        .massuploadErrorReport td, .massuploadErrorReport th{
+            border: 1px solid #000;
+        }
+
+</style>
+
+<section class="content-header">
+    <h1>
+        @ViewBag.MassUploadName
+    </h1>
+</section>
+
+
+<section class="content">
+    @using (Html.BeginForm("SaveImportedRecordsProc", "MassUpload", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", id = "frmMassUpload", role = "form", @autocomplete = "off" }))
+    {
+        if (ViewBag.AllSheetErrorsPresent != null && ViewBag.AllSheetErrorsPresent)
+        {
+            <div>
+                <div class="validation-summary-errors alert alert-danger" data-valmsg-summary="true" id="divValidationSummaryModal">
+                    <ul>
+                        <li>Following are the errors occurred during Mass Upload. Please correct the errors and try to upload the file again. You can download the error report by clicking on the link, "Download Error Report", provided below.</li>
+                    </ul>
+                </div>
+                <div style="max-height: 150px;overflow:auto;">
+                    <table class="massuploadErrorReport data-table table table-bordered table-striped dataTable">
+                        @{ var AllErrorsSheets = ViewBag.AllSheetErrors.Keys;}
+
+                        @foreach (var objErrorSheet in AllErrorsSheets)
+                        {
+                            if (ViewBag.AllSheetErrors[objErrorSheet].Count > 0)
+                            {
+                                <tr><td colspan="3"><b>Errors in sheet @objErrorSheet</b></td></tr>
+                                <tr>
+                                    <th>Excel Row Number (Sequence Number)</th>
+                                    <th>Column Header (Column Name)</th>
+                                    <th>Error Message</th>
+                                </tr>
+                                foreach (InsiderTradingMassUpload.MassUploadExcelSheetErrors objMassUploadExcelSheetErrors in ViewBag.AllSheetErrors[objErrorSheet])
+                                {
+                                    ViewBag.RowNumber = objMassUploadExcelSheetErrors.nRowNumber;
+                                    ViewBag.ColumnNumber = objMassUploadExcelSheetErrors.nColumnCount;
+                                    if (ViewBag.RowNumber == 0)
+                                    {
+                                        ViewBag.RowNumber = "";
+                                    }
+                                    else
+                                    {
+                                        if (objMassUploadExcelSheetErrors.sRowSequenceNumber == "") { 
+                                            ViewBag.RowNumber = objMassUploadExcelSheetErrors.nRowNumber;
+                                        }
+                                        else
+                                        {
+                                            ViewBag.RowNumber = objMassUploadExcelSheetErrors.nRowNumber + " (" + @objMassUploadExcelSheetErrors.sRowSequenceNumber + ")";
+                                        }
+                                    }
+                                    if (ViewBag.ColumnNumber == 0)
+                                    {
+                                        ViewBag.ColumnNumber = "";
+                                    }
+                                    else
+                                    {
+                                        ViewBag.ColumnNumber = objMassUploadExcelSheetErrors.sErrorColumnName + " (" + @objMassUploadExcelSheetErrors.nExcelColumnName + ")";
+                                    }
+                                    <tr>
+                                        <td>@ViewBag.RowNumber</td>
+                                        <td>
+                                            @ViewBag.ColumnNumber
+                                        </td>
+                                        <td>@objMassUploadExcelSheetErrors.sResourceMessage</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </table>
+                </div>
+            </div>
+            <div style="text-align: right;color:red;">
+                <a href="@Url.Action("DownloadErrorExcel", "MassUpload", new { acid = ViewBag.acid, fileguid = ViewBag.ErrorFileGuid })">Download Error Report</a>
+            </div>
+        }
+        else if (ViewBag.ErrorMessage != null && ViewBag.ErrorMessage != "" && (ViewBag.AllSheetErrorsPresent == null || !ViewBag.AllSheetErrorsPresent))
+        {
+            <div class="validation-summary-errors alert alert-danger" data-valmsg-summary="true" id="divValidationSummaryModal">
+                <ul>
+                    <li>@Html.Raw(ViewBag.ErrorMessage)</li>
+                </ul>
+            </div>
+        }
+        else
+        {
+            @*<div style="color: green;">@ViewBag.SuccessMessage</div>*@
+            if (ViewBag.SuccessMessage != "")
+            {
+                ViewBag.ShowSuccess = "1";
+            }
+        }
+        <br /><br />
+        <input type="hidden" name="massuploadid" value="@ViewBag.massuploadid" />
+        <input type="hidden" name="acid" value="@ViewBag.acid" />
+        <table style="width: 100%" cellpadding="10" cellspacing="10">
+            <tr>
+                <td style="vertical-align: top;cursor:help" title="For selecting the file click on 'Slect file' button and then click 'Upload' button.">Step 1</td>
+                <td style="width: 95%;vertical-align:top;">
+                    @Html.Partial("~/Views/Common/SingleDocumentUpload.cshtml", Model.MassUploadFile)
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">&nbsp;</td>
+            </tr>
+            <tr>
+                <td style="vertical-align: top;cursor:help;" title="Click on the 'Start Mass Upload' button to start the mass upload.">Step 2</td>
+                <td style="padding-bottom:10px;">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                        <input type="button" class="btn btn-success" id="btnStartMassUpload" value="Start Mass Upload">
+                        <button type="submit" class="btn btn-success cancel" name="Cancel" id="btnCancel">Cancel</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <br /><br />
+        <div>Note: Select the file to be used for Mass Upload, and click Upload. Then click "Start Mass Upload" to start the mass import.</div>
+    }
+</section>
+@if (ViewBag.ShowSuccess == "1")
+{
+    <script>
+        if ("@ViewBag.SuccessMessage" != "") {
+            showMessage("@ViewBag.SuccessMessage", true);
+        }
+    </script>
+}
+    <script>
+        $(document).ready(function () {
+            $("#btnStartMassUpload[type='button']").unbind("click");
+            $("#btnStartMassUpload[type='button']").click(function () {
+                if ($("#doc_00 div").length > 0) {
+                    return AskConfirmation("Confirm Mass Upload to proceed...",
+                                            "@ViewBag.MessageText",
+                                           function () {
+                                               $("#btnStartMassUpload[type='button']").attr("type", "submit");
+                                               $("#btnStartMassUpload[type='submit']").click();
+                                           }, function () {
+                                               return false;
+                                           });
+                }
+            });
+
+            
+
+        });
+
+    </script>

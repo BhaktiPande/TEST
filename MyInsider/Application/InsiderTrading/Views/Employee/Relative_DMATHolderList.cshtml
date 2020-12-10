@@ -1,0 +1,20 @@
+﻿@model InsiderTrading.Models.Relative_DMATDetailsModel
+
+ <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    @if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DMAT_CREATE))
+    {
+        <a class="btn btn-success btnEditDMATHolderDetails" data-details="0" data-details-dmat="@Model.DMATDetailsID" href="#">@InsiderTrading.Common.Common.getResource("usr_btn_11243")</a>
+    }
+    <hr />
+    <div class="alert" style="display: none;" name="ErrorMessage" gridtype="@InsiderTrading.Common.ConstEnum.GridType.DMATAccountHolderList"></div>
+    <div class="search" gridtype="@InsiderTrading.Common.ConstEnum.GridType.DMATAccountHolderList">
+        @Html.Hidden("1", Model.DMATDetailsID, new { id = "1", gridtype = InsiderTrading.Common.ConstEnum.GridType.DMATAccountHolderList })
+        @{Html.RenderAction("Index", "DatatableGrid", new { type = InsiderTrading.Common.ConstEnum.GridType.DMATAccountHolderList, btnSearch = "", sSortCol = "0", acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DMAT_VIEW, OverrideGridType = InsiderTrading.Common.ConstEnum.GridType.RelativeDMATAccountHolderList });}
+    </div>
+</div>
+<div class="col-xs-12 row spacer" id="divDMATHodlerDetails"></div>
+
+@Html.Hidden("SaveDMATHolder", Url.Action("SaveRelativeDMATHolderDetails", "Employee"))
+@Html.Hidden("EditDMATHolder", Url.Action("EditRelativeDMATHolderDetails", "Employee"))
+
+

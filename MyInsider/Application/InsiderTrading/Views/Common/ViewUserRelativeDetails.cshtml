@@ -1,0 +1,19 @@
+﻿@model InsiderTrading.Models.UserInfoModel
+@{
+    ViewBag.ToolTip = InsiderTrading.Common.Common.getResource("usr_ttl_11439");
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    @Html.AntiForgeryToken()
+</section>
+
+<div class="alert" style="display: none;" name="ErrorMessage" gridtype="@InsiderTrading.Common.ConstEnum.GridType.UserRelativeList"></div>
+<div class="search" gridtype="@InsiderTrading.Common.ConstEnum.GridType.UserRelativeList">
+    @Html.Hidden("1", Model.UserInfoId, new { id = "1", gridtype = InsiderTrading.Common.ConstEnum.GridType.UserRelativeList })
+    @{Html.RenderAction("Index", "DatatableGrid", new { type = InsiderTrading.Common.ConstEnum.GridType.UserRelativeList, btnSearch = "", sSortCol = "0", acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_RELATIVEUSER_VIEW});}
+</div>
+@if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_RELATIVEUSER_VIEW))
+{
+      @Html.Hidden("View", Url.Action("ViewDetails", "Employee", new { id = "EmployeeView", datatype = InsiderTrading.Common.ConstEnum.Code.RelativeType, acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_RELATIVEUSER_VIEW, nUserInfoID_ForBack = Model.UserInfoId }), new { @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = InsiderTrading.Common.ConstEnum.GridType.UserRelativeList + "_usr_grd_11073", param = "{'text':'','href':'" + Url.Action("ViewDetails", "Employee", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_RELATIVEUSER_VIEW, sCalledFrom = "RelativeView", nUserInfoID_ForBack = Model.UserInfoId }) + "&nUserInfoID=<UserInfoId>','class':'display-icon icon icon-eye ','title':'" + @ViewBag.ToolTip + "'}" })
+}

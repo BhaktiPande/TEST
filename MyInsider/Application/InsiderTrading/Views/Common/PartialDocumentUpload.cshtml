@@ -1,0 +1,37 @@
+﻿@model InsiderTrading.Models.DocumentDetailsModel
+@{
+    ViewBag.Title = "PartialDocumentUpload";
+}
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div role="form">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Document)
+            <input type="file" id="Document" name="Document" class="form-control" />
+            @Html.ValidationMessageFor(m => m.Document)
+        </div>
+    </div>
+    <div role="form">
+        <div class="form-group">
+            @if (Model.DocumentId != 0 && Model.DocumentId != null)
+            {
+                @Html.ActionLink("Download", "Download", new { nDocumentDetailsID = Model.DocumentId })
+            }
+        </div>
+    </div>
+</div>
+@Html.HiddenFor(m => m.DocumentId)
+@Html.HiddenFor(m => m.MapToTypeCodeId)
+@Html.HiddenFor(m => m.MapToId)
+@Html.HiddenFor(m => m.PurposeCodeId)
+@if (Model.DocumentId != 0 && Model.DocumentId != null)
+{
+    @Html.Hidden("acid", InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DOCUMENT_EDIT)
+}
+else
+{
+    @Html.Hidden("acid", InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DOCUMENT_CREATE)
+}
+
+
+
+

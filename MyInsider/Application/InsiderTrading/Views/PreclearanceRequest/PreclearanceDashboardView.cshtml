@@ -1,0 +1,48 @@
+﻿@model InsiderTrading.Models.ViewModel
+@{
+    ViewBag.Title = "PreclearanceDashboardView";
+}
+
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<section class="content-header">    
+    @Html.AntiForgeryToken()  
+    @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+    <h1>PRECLEARANCE REQUEST</h1>
+
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <p>
+                <a class="btn btn-success" data-toggle="modal" href='@Url.Action("Create", "PreclearanceRequest", new { PreclearanceRequestId = 0, CalledFrom = "Edit" })' role="button"><i class="icon icon-calender"></i>   Create Pre-Clearance Request</a>
+            </p>
+        </div>
+    </div>
+
+</section><!-- /.content -->
+
+
+@*@using (Ajax.BeginForm("RenderPDF", "PreclearanceRequest", new AjaxOptions { UpdateTargetId = "pdf" }))
+{
+    <table>
+        <tr>
+            <td>
+                <fieldset>
+                    <legend>Fill the form:</legend>
+                    Some form junk can go here
+                    <br />
+                    <input type="submit" value="Display PDF" />
+                </fieldset>
+            </td>
+            <td>
+                <div id='pdf'>
+                    @{
+                            Html.RenderPartial("RenderPDF", Model);
+                    }
+                </div>
+            </td>
+        </tr>
+    </table>
+}*@

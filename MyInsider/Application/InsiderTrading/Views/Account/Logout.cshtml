@@ -1,0 +1,119 @@
+﻿@model InsiderTrading.Models.UserDetailsModel
+
+@{
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+    var objComCodeSL = new InsiderTrading.SL.ComCodeSL();
+    string LogoImagePath = Server.MapPath("~") + "/images/Logos/" + InsiderTrading.Common.ConstEnum.CLIENT_DB_NAME + "/" + InsiderTrading.Common.ConstEnum.CLIENT_DB_NAME + "_320X105.jpg";
+    string sLogoImageUrl = @Url.Content("~/images/Logos/" + InsiderTrading.Common.ConstEnum.CLIENT_DB_NAME) + "/" + @InsiderTrading.Common.ConstEnum.CLIENT_DB_NAME + "_320X105.jpg";
+}
+
+@{
+    ViewBag.Title = "Log out";
+}
+<script type="text/javascript">
+    $(window).load(function () {
+        var length = $('#ddlCompanyName').children('option').length;
+        if (length == 2) {
+            $("#ddlCompanyName").prop("selectedIndex", 1);
+            $('#UserName').next('input').focus();
+        }
+        else {
+            $("#ddlCompanyName").prop("selectedIndex", 0);
+        }
+    })
+</script>
+@if (File.Exists(LogoImagePath))
+{
+    <div class="container login-logo" style="vertical-align: middle;">
+        <img src="@Url.Content("~/images/Viligante_Normal_Logo.png")" style="float: left;vertical-align:middle;">
+        <img src="@sLogoImageUrl" style="float: right;vertical-align:middle;min-width: 320px;max-width: 320px;">
+
+    </div>
+}
+else
+{
+    <div class="container login-logo">
+        <img src=@Url.Content("~/images/Viligante_Normal_Logo.png") class="img img-responsive center-block">
+    </div>
+}
+
+<div class="striped login">
+    <div class="container">
+        @{
+            if (@ViewBag.LoginError != null && @ViewBag.LoginError != "")
+            {
+                <div id="divError" class="alert alert-error">@ViewBag.LoginError</div>
+            }
+
+            if (@ViewBag.SuccessMessage != null && @ViewBag.SuccessMessage != "")
+            {
+                <div id="divSuccess" class="alert alert-success">@ViewBag.SuccessMessage</div>
+            }
+        }
+        <div class="row">
+            <div class="center-block login-block">
+                <div class="login-panel panel panel-default">
+                    <div style="padding:10px,10px,10px,10px;">
+                        @*<div>"panel-title text-center">You have logged out successfully</div>                    
+                        <a href='ViewBag.SSOUrl'>Click here for login</a>*@
+
+                        <div style="text-align: center;font-size:15px; clear: both; padding: 13.6px;color:maroon">
+                            You have logged out successfully                         
+                         </div>
+                        <div style="text-align: center; clear: both; ">
+                            <a href='@ViewBag.SSOUrl' style="color: blue; text-decoration: underline">Click here for login</a>
+                        </div>
+                    </div>                    
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+    </div>
+@*<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnLogin").click(function () {
+            var CapUserText = $("#Captcha").val();
+            if (CapUserText != "") {
+                $("#ErrorMsg")[0].innerText = null;
+            }
+        });
+    });
+</script>*@
+
+
+@Styles.Render("~/Content/css")
+<script src="~/Scripts/Login/Decrypted/Login.js"></script>
+@*<script src="~/LoginScript/Loginjs/Login-bl.js"></script>*@
+@*<script src="~/LoginScript/Loginjs/Login-bl.js"></script>*@
+<script src="~/LoginScript/jquery.validate-vsdoc-bl.js"></script>
+<script src="~/LoginScript/jquery.validate-bl.min.js"></script>
+<script src="~/LoginScript/jquery.validate.unobtrusive-bl.min.js"></script>
+<script src="~/LoginScript/crypto/core-bl.min.js"></script>
+<script src="~/LoginScript/crypto/aes-bl.js"></script>
+<script src="~/LoginScript/crypto/enc-base64-bl.min.js"></script>
+<script src="~/LoginScript/crypto/enc-utf16-bl.min.js"></script>
+
+<script type="text/javascript">
+    function Privacy_Policydoc() {
+        $("#Privacy_Policy").modal('show');
+        $("#Privacy_Policy").show();
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

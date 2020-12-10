@@ -1,0 +1,83 @@
+﻿@if (ViewBag.GridType == @InsiderTrading.Common.ConstEnum.GridType.Report_InitialDisclosureEmployeeIndividual ||
+    ViewBag.GridType == @InsiderTrading.Common.ConstEnum.GridType.Report_PeriodEndDisclosureEmployeeIndividual ||
+    ViewBag.GridType == @InsiderTrading.Common.ConstEnum.GridType.Report_PeriodEndDisclosureEmployeeIndividualDetails ||
+    ViewBag.GridType == @InsiderTrading.Common.ConstEnum.GridType.Report_ContinuousReportEmployeeIndividual ||
+    ViewBag.GridType == @InsiderTrading.Common.ConstEnum.GridType.Report_PreclearenceReportEmployeeIndividual)
+{
+    <section class="content">        
+        <div class="filter-panel">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-body ">
+                        <div class="row">
+                            @foreach (InsiderTradingDAL.ReportHeaderKeyValueDTO objReportHeaderKeyValueDTO in ViewBag.ReportHeaderKeyValueData1)
+                            {
+                                <div class="col-lg-4 col-md-3 col-sm-6 col-xs-12">
+                                    <div role="form">
+                                        <div class="form-group">
+                                            <label for="EmployeeId">@InsiderTrading.Common.Common.getResource(@objReportHeaderKeyValueDTO.Key)</label>
+                                            @if(@objReportHeaderKeyValueDTO.DataType == 1){
+                                                @objReportHeaderKeyValueDTO.Value
+                                            }
+                                            @if(@objReportHeaderKeyValueDTO.DataType == 2){
+                                                @InsiderTrading.Common.Common.ApplyFormatting(@objReportHeaderKeyValueDTO.Value, @InsiderTrading.Common.ConstEnum.DataFormatType.Money)
+                                            }
+                                            @if(@objReportHeaderKeyValueDTO.DataType == 3){
+                                                @InsiderTrading.Common.Common.ApplyFormatting(@objReportHeaderKeyValueDTO.Value, @InsiderTrading.Common.ConstEnum.DataFormatType.Date)
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        @if (ViewBag.ReportHeaderKeyValueData2 != null && ViewBag.ReportHeaderKeyValueData2.Count > 0)
+                        { 
+                        <div class="div-spacer" style="border: 1px solid rgb(238, 238, 238); border-image: none;"></div>
+                        <div class="row">
+                            @foreach (InsiderTradingDAL.ReportHeaderKeyValueDTO objReportHeaderKeyValueDTO in ViewBag.ReportHeaderKeyValueData2)
+                            {
+                                <div class="col-lg-4 col-md-3 col-sm-6 col-xs-12">
+                                    <div role="form">
+                                        <div class="form-group">
+                                            <label for="EmployeeId">@InsiderTrading.Common.Common.getResource(@objReportHeaderKeyValueDTO.Key)</label>
+                                            @if (@objReportHeaderKeyValueDTO.DataType == 1)
+                                            {
+                                                @objReportHeaderKeyValueDTO.Value
+                                            }
+                                            @if (@objReportHeaderKeyValueDTO.DataType == 2)
+                                            {
+                                                @InsiderTrading.Common.Common.ApplyFormatting(@objReportHeaderKeyValueDTO.Value, @InsiderTrading.Common.ConstEnum.DataFormatType.Money)
+                                            }
+                                            @if (@objReportHeaderKeyValueDTO.DataType == 3)
+                                            {
+                                                @InsiderTrading.Common.Common.ApplyFormatting(@objReportHeaderKeyValueDTO.Value, @InsiderTrading.Common.ConstEnum.DataFormatType.Date)
+                                            }
+                                            @if (@objReportHeaderKeyValueDTO.TransactionMasterId != 0)
+                                            {
+                                                if (@objReportHeaderKeyValueDTO.Value != null && @objReportHeaderKeyValueDTO.Value != "" && @objReportHeaderKeyValueDTO.Value != "Pending" && @objReportHeaderKeyValueDTO.Value != "-" && ViewBag.GridType == @InsiderTrading.Common.ConstEnum.GridType.Report_InitialDisclosureEmployeeIndividual)
+                                                {
+                                                    if (InsiderTrading.Common.Common.CanPerform(@objReportHeaderKeyValueDTO.Acid))
+                                                    { 
+                                                        <a href="@Url.Action("RedirectToDisclosureLetter", "Reports", new { acid = @objReportHeaderKeyValueDTO.Acid, nTransactionLetterId = 0, nDisclosureTypeCodeId = @objReportHeaderKeyValueDTO.DisclosureTypeCodeId, nLetterForCodeId = @objReportHeaderKeyValueDTO.LetterForCodeId, nTransactionMasterId = @objReportHeaderKeyValueDTO.TransactionMasterId, EmployeeId = ViewBag.EmployeeId, LetterType = @objReportHeaderKeyValueDTO.LetterType,GridType = ViewBag.GridType,YearCode=0,PeriodCode=0,PeriodTypeId=ViewBag.PeriodTypeId,PeriodType=ViewBag.PeriodType })">( View )</a>
+                                                    }
+                                                }
+                                                else if (@objReportHeaderKeyValueDTO.Value != null && @objReportHeaderKeyValueDTO.Value != "" && @objReportHeaderKeyValueDTO.Value != "Pending" && @objReportHeaderKeyValueDTO.Value != "-" && ViewBag.GridType == @InsiderTrading.Common.ConstEnum.GridType.Report_PeriodEndDisclosureEmployeeIndividual)
+                                                {
+                                                    if (InsiderTrading.Common.Common.CanPerform(@objReportHeaderKeyValueDTO.Acid))
+                                                    {
+                                                        <a href="@Url.Action("RedirectToDisclosureLetter", "Reports", new { acid = @objReportHeaderKeyValueDTO.Acid, nTransactionLetterId = 0, nDisclosureTypeCodeId = @objReportHeaderKeyValueDTO.DisclosureTypeCodeId, nLetterForCodeId = @objReportHeaderKeyValueDTO.LetterForCodeId, nTransactionMasterId = @objReportHeaderKeyValueDTO.TransactionMasterId, EmployeeId = ViewBag.EmployeeId, LetterType = @objReportHeaderKeyValueDTO.LetterType, GridType = ViewBag.GridType, YearCode = ViewBag.YearCode, PeriodCode = ViewBag.PeriodCode, PeriodTypeId = ViewBag.PeriodTypeId, PeriodType = ViewBag.PeriodType })">( View )</a>
+                                                    }
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        }                  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
