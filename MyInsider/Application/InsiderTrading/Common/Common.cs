@@ -744,22 +744,22 @@ namespace InsiderTrading.Common
         //            objLoginUserDetails = (LoginUserDetails)InsiderTrading.Common.Common.GetSessionValue((string)ConstEnum.SessionValue.UserDetails);
         //            objUserPANDetailsDTO = objCommonSL.GetUserPanDetails(objLoginUserDetails.CompanyDBConnectionString, ComboTypeID, UserInfoId);
 
-                    foreach (var item in objUserPANDetailsDTO)
-                    {
-                        PopulateComboDTO objCombo = new PopulateComboDTO();
-                        objCombo.Key = item.ID;
-                        objCombo.Value = item.EmployeeName + '-' + item.PAN + item.RelationType;
-                        objPopulateCombo.Add(objCombo);
-                    }
-                }
-                return objPopulateCombo;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
-        #endregion GetUserPANDetails
+        //            foreach (var item in objUserPANDetailsDTO)
+        //            {
+        //                PopulateComboDTO objCombo = new PopulateComboDTO();
+        //                objCombo.Key = item.ID;
+        //                objCombo.Value = item.EmployeeName + '-' + item.PAN + item.RelationType;
+        //                objPopulateCombo.Add(objCombo);
+        //            }
+        //        }
+        //        return objPopulateCombo;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw e;
+        //    }
+        //}
+        //#endregion GetUserPANDetails
 
         #region GetPopulateCombo
         /// <summary>

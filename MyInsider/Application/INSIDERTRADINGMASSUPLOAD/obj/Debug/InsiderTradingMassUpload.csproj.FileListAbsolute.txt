@@ -10,3 +10,8 @@ D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\INSIDERTRADINGMASSUPLOA
 D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.csproj.CopyComplete
 D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.dll
 D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.pdb
+D:\Deployments\MyInsiderCode\MyInsider\Application\INSIDERTRADING\bin\InsiderTradingMassUpload.dll
+D:\Deployments\MyInsiderCode\MyInsider\Application\INSIDERTRADING\bin\InsiderTradingMassUpload.pdb
+D:\Deployments\MyInsiderCode\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.csprojResolveAssemblyReference.cache
+D:\Deployments\MyInsiderCode\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.dll
+D:\Deployments\MyInsiderCode\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.pdb

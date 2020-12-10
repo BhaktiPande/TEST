@@ -10,3 +10,7 @@ D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\InsiderTradingDAL\obj\D
 D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\InsiderTradingDAL\obj\Debug\InsiderTradingDAL.csproj.CopyComplete
 D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\InsiderTradingDAL\obj\Debug\InsiderTradingDAL.dll
 D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\InsiderTradingDAL\obj\Debug\InsiderTradingDAL.pdb
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\InsiderTradingDAL.dll
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\InsiderTradingDAL.pdb
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTradingDAL\obj\Debug\InsiderTradingDAL.dll
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTradingDAL\obj\Debug\InsiderTradingDAL.pdb
