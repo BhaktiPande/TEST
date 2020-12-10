@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SFTPFileDownload</name>
+    </assembly>
+    <members>
+        <member name="M:SFTPFileDownload.AppData.Encryption.IsKeyValid(SFTPFileDownload.AppData.SFTPFileProperties,System.Int32)">
+            <summary>
+            This method is used for check SSO login hash matching or not.
+            </summary>
+            <param name="o_SFTPFileProperties">SFTPFileProperties</param>
+            <param name="n_case">Encryption algorithum selection 1: SHA 1 Encryption algorithum</param>
+            <returns>bool</returns>
+        </member>
+        <member name="T:SFTPFileDownload.AppData.SFTPFileProperties">
+            <summary>
+            This class is used to store SFTPFileProperties
+            </summary>
+        </member>
+        <member name="M:SFTPFileDownload.AppData.SFTPFileProperties.Finalize">
+            <summary>
+            Distructor
+            </summary>
+        </member>
+        <member name="P:SFTPFileDownload.AppData.SFTPFileProperties.s_HostName">
+            <summary>
+            Host name
+            </summary>
+        </member>
+        <member name="P:SFTPFileDownload.AppData.SFTPFileProperties.s_UserName">
+            <summary>
+            User name
+            </summary>
+        </member>
+        <member name="P:SFTPFileDownload.AppData.SFTPFileProperties.s_Password">
+            <summary>
+            Password
+            </summary>
+        </member>
+        <member name="P:SFTPFileDownload.AppData.SFTPFileProperties.n_PortNumber">
+            <summary>
+            Port number
+            </summary>
+        </member>
+        <member name="P:SFTPFileDownload.AppData.SFTPFileProperties.s_SshHostKeyFingerprint">
+            <summary>
+            16 bit SSH Host Key Fingerprint e.g.: ssh-rsa 1024 xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx
+            </summary>
+        </member>
+        <member name="P:SFTPFileDownload.AppData.SFTPFileProperties.s_SourceFilePath">
+            <summary>
+            Source file path
+            </summary>
+        </member>
+        <member name="P:SFTPFileDownload.AppData.SFTPFileProperties.s_OutputPath">
+            <summary>
+            File output path
+            </summary>
+        </member>
+        <member name="P:SFTPFileDownload.AppData.SFTPFileProperties.s_EncryptedKey">
+            <summary>
+            Encrypted key
+            </summary>
+        </member>
+        <member name="T:SFTPFileDownload.SFTPFileDownload">
+            <summary>
+            SFTPFileDownload class
+            </summary>
+        </member>
+        <member name="M:SFTPFileDownload.SFTPFileDownload.DownloadFileFromSFTP(SFTPFileDownload.AppData.SFTPFileProperties,System.String@)">
+            <summary>
+            This method is used to download file from sftp server
+            </summary>
+            <param name="o_SFTPFileProperties">SFTPFileProperties required to connect sftp server</param>
+            <param name="s_ErrorMessage">Get error message if error occured while performing operation</param>
+            <returns>bool</returns>
+        </member>
+        <member name="M:SFTPFileDownload.SFTPFileDownload.Finalize">
+            <summary>
+            Distructor
+            </summary>
+        </member>
+        <member name="M:SFTPFileDownload.SFTPFileDownload.Dispose(System.Boolean)">
+            <summary>
+            Dispose method
+            </summary>
+            <param name="disposing">disposing</param>
+        </member>
+    </members>
+</doc>

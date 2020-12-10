@@ -1,0 +1,86 @@
+﻿@model InsiderTrading.Models.EmployeeModel
+@{
+    InsiderTrading.Common.LoginUserDetails objLoginUserDetails = (InsiderTrading.Common.LoginUserDetails)InsiderTrading.Common.Common.GetSessionValue(InsiderTrading.Common.ConstEnum.SessionValue.UserDetails);
+    var acid = (objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.Admin || objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.CorporateUserType) ? InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_CREATE : InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_EDIT;
+}
+
+<div class="row">
+
+    @if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_EDUCATION_CREATE))
+    {
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <p>
+                <a class="btn btn-success " id="AddEducationDetails" style="float: left; margin: 0px 15px 10px 0; role :button;">@InsiderTrading.Common.Common.getResource("usr_btn_54012") </a>
+                <button type="button" class="btn btn-success" id="btnUserDontDetails" style="display:none;" data-toggle="modal" data-target="#myModalEdu"> @InsiderTrading.Common.Common.getResource("usr_btn_54046") </button>
+            </p>
+        </div>
+    }
+    else
+    {
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <p>
+                <button type="button" class="btn btn-success" id="btnUserDontDetails" style="display:none;" data-toggle="modal" data-target="#myModalEdu"> @InsiderTrading.Common.Common.getResource("usr_btn_54057") </button>
+            </p>
+        </div>
+    }
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        @if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_EDUCATION_VIEW))
+        {
+            <div class="panel-body search" gridtype="@InsiderTrading.Common.ConstEnum.GridType.Education_List">
+
+                <b>  @InsiderTrading.Common.Common.getResource("usr_lbl_54002")</b>
+                <input type="hidden" value="@Model.userEducationModel.UserInfoID" id="1" name="" gridtype="@InsiderTrading.Common.ConstEnum.GridType.Education_List" />
+                <input type="hidden" value="1" id="5" name="" gridtype="@InsiderTrading.Common.ConstEnum.GridType.Education_List" />
+
+                @Html.Hidden("1", Model.userEducationModel.UserInfoID, new { id = "1", gridtype = InsiderTrading.Common.ConstEnum.GridType.Education_List })
+                @{
+            Html.RenderAction("Index", "DatatableGrid", new { type = InsiderTrading.Common.ConstEnum.GridType.Education_List, btnSearch = "", sSortCol = "0", acid = acid });
+                }
+            </div>
+        }
+
+        @if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_EDUCATION_EDIT))
+        {
+            @Html.Hidden("EditRow", Url.Action("EducationDetails", "Employee", new { acid = acid, nUserInfoID = Model.userEducationModel.UserInfoID, UEW_id = 0, Falg = "DEFAULT", nUserDematSaved = true, nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] }), new { @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = InsiderTrading.Common.ConstEnum.GridType.Education_List + "_usr_grd_11073", param = "{'text':'','href':'" + Url.Action("EducationDetails", "Employee", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_EDIT, nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] }) + "&nUserInfoID=<UserInfoID>&UEW_id=<UEW_id>&Flag=<Flag>&nUserDematSaved=true','class':'display-icon icon icon-edit '}" })
+        }
+        @if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_EDUCATION_DELETE))
+        {
+            @Html.Hidden("deleteRowURL", Url.Action("DeleteEducation", "Employee", new { acid = acid }), new { name = "deleteRowURL", gridtype = InsiderTrading.Common.ConstEnum.GridType.Education_List, @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = InsiderTrading.Common.ConstEnum.GridType.Education_List + "_usr_grd_11073", param = "{'name': 'deleteRow','ID':'DeleteEducation', 'queryString':'[ {ID:\"UEW_id\", key:\"<UEW_id>\"},{ID:\"formId\", key:\"80\"} ]','text':'','href':'javascript:void(0);','class':'display-icon icon icon-delete '}" })
+        }
+    </div>
+
+    @if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_WORK_CREATE))
+    {
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <p>
+                <a class="btn btn-success " id="AddWorkDetails" style="float: left; margin: 0px 15px 10px 0; role =" button">@InsiderTrading.Common.Common.getResource("usr_btn_54028") </a>
+            </p>
+        </div>
+    }
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        @if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_WORK_VIEW))
+        {
+            <div class="panel-body search" gridtype="@InsiderTrading.Common.ConstEnum.GridType.Work_List">
+                <b> @InsiderTrading.Common.Common.getResource("usr_lbl_54007")</b>
+                <input type="hidden" value="@Model.userEducationModel.UserInfoID" id="1" name="" gridtype="@InsiderTrading.Common.ConstEnum.GridType.Work_List" />
+                <input type="hidden" value="0" id="3" name="" gridtype="@InsiderTrading.Common.ConstEnum.GridType.Work_List" />
+
+                @Html.Hidden("1", Model.userEducationModel.UserInfoID, new { id = "1", gridtype = InsiderTrading.Common.ConstEnum.GridType.Work_List })
+                @{
+            Html.RenderAction("Index", "DatatableGrid", new { type = InsiderTrading.Common.ConstEnum.GridType.Work_List, btnSearch = "", sSortCol = "0", acid = acid });
+                }
+            </div>
+        }
+
+        @if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_WORK_EDIT))
+        {
+            @Html.Hidden("WorkEditRow", Url.Action("EducationDetails", "Employee", new { acid = acid, nUserInfoID = Model.userEducationModel.UserInfoID, nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] }), new { @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = InsiderTrading.Common.ConstEnum.GridType.Work_List + "_usr_grd_11073", param = "{'text':'','href':'" + Url.Action("EducationDetails", "Employee", new { acid = acid, nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] }) + "&nUserInfoID=<UserInfoID>&UEW_id=<UEW_id>&Flag=<Flag>&nUserDematSaved=true','class':'display-icon icon icon-edit '}" })
+        }
+        @if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_WORK_DELETE))
+        {
+            @Html.Hidden("deleteRowURL", Url.Action("DeleteEducation", "Employee", new { acid = acid }), new { name = "deleteRowURL", gridtype = InsiderTrading.Common.ConstEnum.GridType.Work_List, @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = InsiderTrading.Common.ConstEnum.GridType.Work_List + "_usr_grd_11073", param = "{'name': 'deleteRow','ID':'DeleteEducation', 'queryString':'[ {ID:\"UEW_id\", key:\"<UEW_id>\"},{ID:\"formId\", key:\"80\"} ]','text':'','href':'javascript:void(0);','class':'display-icon icon icon-delete '}" })
+        }
+    </div>
+</div>

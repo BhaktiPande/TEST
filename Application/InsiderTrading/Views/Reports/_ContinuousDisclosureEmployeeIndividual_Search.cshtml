@@ -1,0 +1,216 @@
+﻿@model InsiderTrading.Models.CDIndividualReportSearchViewModel
+
+@{
+    var SoftCopyLetterURL = Url.Action("RedirectToDisclosureLetter", "Reports") + "?EmployeeId=" + @ViewBag.EmployeeId + "&LetterType=S&GridType=" + @ViewBag.GridType + "&YearCode=&PeriodCode=";
+    var HardCopyLetterURL = @Url.Action("RedirectToDisclosureLetter", "Reports") + "?EmployeeId=" + @ViewBag.EmployeeId + "&LetterType=H&GridType=" + @ViewBag.GridType + "&YearCode=&PeriodCode=";
+    var ReportSearchArray = Html.Raw(Json.Encode(TempData["ReportSearchArray"]));
+    TempData.Keep("ReportSearchArray");
+}
+
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                @Html.Hidden("1", "2", new { @id = "1", gridtype = @ViewBag.GridType })
+                @Html.Hidden("2", ((object)@ViewBag.EmployeeId).ToString(), new { @id = "2", gridtype = @ViewBag.GridType })
+
+                <input type="hidden" id="SoftCopyLetterUrl" value="@SoftCopyLetterURL">
+                <input type="hidden" id="HardCopyLetterUrl" value="@HardCopyLetterURL">
+                <input type="hidden" name="HeaderSummary" value="@ViewBag.ReportHeaderKeyValueData1JSON" />
+                <input type="hidden" name="HeaderSummary" value="" />
+                <label for="DematDetailsId">@InsiderTrading.Common.Common.getResource("rpt_lbl_19124")</label>
+                @Html.DropDownList("DematDetailsId", new MultiSelectList(ViewBag.UserDmatDropDown, "Key", "Value", ""), new { @class = "form-control selectpicker", title = "Select", multiple = "multiple", gridtype = @ViewBag.GridType, id = "3" })
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                <label for="AccountHolder">@InsiderTrading.Common.Common.getResource("rpt_lbl_19125")</label>
+                @*<input name="AccountHolder" class="form-control" id="4" type="text" value="" gridtype="@ViewBag.GridType" data-val-required="The Employee Id field is required." data-val="false">*@
+                @Html.TextBoxFor(m => m.AccountHolder, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "4" })
+                @Html.ValidationMessageFor(m => m.AccountHolder)
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                <label for="RelationTypeCodeId">@InsiderTrading.Common.Common.getResource("rpt_lbl_19126")</label>
+                @Html.DropDownList("RelationTypeCodeId", new MultiSelectList(ViewBag.UserRelativesDropDown, "Key", "Value", ""), new { @class = "form-control selectpicker", title = "Select", multiple = "multiple", gridtype = @ViewBag.GridType, id = "5" })
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                <label for="SecurityTypeCodeId">@InsiderTrading.Common.Common.getResource("rpt_lbl_19119")</label>
+                @Html.DropDownList("SecurityTypeCodeId", new MultiSelectList(ViewBag.SecutiryTypeDropDown, "Key", "Value", ""), new { @class = "form-control selectpicker", title = "Select", multiple = "multiple", gridtype = @ViewBag.GridType, id = "8" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                <label for="ScriptName">@InsiderTrading.Common.Common.getResource("rpt_lbl_19169")</label>
+                @*<input name="ScriptName" class="form-control" id="6" type="text" value="" gridtype="@ViewBag.GridType" data-val-required="The Employee Id field is required." data-val="false">*@
+                @Html.TextBoxFor(m => m.ScriptName, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "6" })
+                @Html.ValidationMessageFor(m => m.ScriptName)
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                <label for="ISIN">@InsiderTrading.Common.Common.getResource("rpt_lbl_19127")</label>
+                @*<input name="ISIN" class="form-control" id="7" type="text" value="" gridtype="@ViewBag.GridType" data-val-required="The Employee Id field is required." data-val="false">*@
+                @Html.TextBoxFor(m => m.ISIN, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "7" })
+                @Html.ValidationMessageFor(m => m.ISIN)
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                <label for="TransactionTypeCodeId">@InsiderTrading.Common.Common.getResource("rpt_lbl_19120")</label>
+                @Html.DropDownList("TransactionTypeCodeId", new MultiSelectList(ViewBag.TransactionType, "Key", "Value", ""), new { @class = "form-control selectpicker", title = "Select", multiple = "multiple", gridtype = @ViewBag.GridType, id = "9" })
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                <label for="Comments">@InsiderTrading.Common.Common.getResource("rpt_lbl_19133")</label>
+                @Html.DropDownList("Comments", new MultiSelectList(ViewBag.Comments, "Key", "Value", ""), new { @class = "form-control selectpicker", multiple = "multiple selectpicker", title = "Select", gridtype = @ViewBag.GridType, id = "20" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            <label for="TransactionDateFrom">@InsiderTrading.Common.Common.getResource("rpt_lbl_19128") From</label>
+            <div class="form-group" id="sandbox-container">
+                <div class="input-group date">
+                    <input name="TransactionDateFrom" class="form-control" id="10" type="text" value="" gridtype="@ViewBag.GridType" data-val-required="The Employee Id field is required." data-val="false">
+                    <span class="input-group-addon"><i class="icon icon-calender"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            <label for="TransactionDateTo">@InsiderTrading.Common.Common.getResource("rpt_lbl_19128") To</label>
+            <div class="form-group" id="sandbox-container">
+                <div class="input-group date">
+                    <input name="TransactionDateTo" class="form-control" id="11" type="text" value="" gridtype="@ViewBag.GridType" data-val-required="The Employee Id field is required." data-val="false">
+                    <span class="input-group-addon"><i class="icon icon-calender"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            <label for="SubmissionDateFrom">@InsiderTrading.Common.Common.getResource("rpt_lbl_19129") From</label>
+            <div class="form-group" id="sandbox-container">
+                <div class="input-group date">
+                    <input name="SubmissionDateFrom" class="form-control" id="12" type="text" value="" gridtype="@ViewBag.GridType" data-val-required="The Employee Id field is required." data-val="false">
+                    <span class="input-group-addon"><i class="icon icon-calender"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            <label for="SubmissionDateTo">@InsiderTrading.Common.Common.getResource("rpt_lbl_19129") To</label>
+            <div class="form-group" id="sandbox-container">
+                <div class="input-group date">
+                    <input name="SubmissionDateTo" class="form-control" id="13" type="text" value="" gridtype="@ViewBag.GridType" data-val-required="The Employee Id field is required." data-val="false">
+                    <span class="input-group-addon"><i class="icon icon-calender"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            <label for="SoftCopySubmissionDateFrom">@InsiderTrading.Common.Common.getResource("rpt_lbl_19131") From</label>
+            <div class="form-group" id="sandbox-container">
+                <div class="input-group date">
+                    <input name="SoftCopySubmissionDateFrom" class="form-control" id="14" type="text" value="" gridtype="@ViewBag.GridType" data-val-required="The Employee Id field is required." data-val="false">
+                    <span class="input-group-addon"><i class="icon icon-calender"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            <label for="SoftCopySubmissionDateTo">@InsiderTrading.Common.Common.getResource("rpt_lbl_19131") To</label>
+            <div class="form-group" id="sandbox-container">
+                <div class="input-group date">
+                    <input name="SoftCopySubmissionDateTo" class="form-control" id="15" type="text" value="" gridtype="@ViewBag.GridType" data-val-required="The Employee Id field is required." data-val="false">
+                    <span class="input-group-addon"><i class="icon icon-calender"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            <label for="HardCopySubmissionDateFrom">@InsiderTrading.Common.Common.getResource("rpt_lbl_19132") From</label>
+            <div class="form-group" id="sandbox-container">
+                <div class="input-group date">
+                    <input name="HardCopySubmissionDateFrom" class="form-control" id="16" type="text" value="" gridtype="@ViewBag.GridType" data-val-required="The Employee Id field is required." data-val="false">
+                    <span class="input-group-addon"><i class="icon icon-calender"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            <label for="HardCopySubmissionDateTo">@InsiderTrading.Common.Common.getResource("rpt_lbl_19132") To</label>
+            <div class="form-group" id="sandbox-container">
+                <div class="input-group date">
+                    <input name="HardCopySubmissionDateTo" class="form-control" id="17" type="text" value="" gridtype="@ViewBag.GridType" data-val-required="The Employee Id field is required." data-val="false">
+                    <span class="input-group-addon"><i class="icon icon-calender"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            <label for="HardCopyByCOSubmissionDateFrom">@InsiderTrading.Common.Common.getResource("rpt_lbl_19134")e From</label>
+            <div class="form-group" id="sandbox-container">
+                <div class="input-group date">
+                    <input name="HardCopyByCOSubmissionDateFrom" class="form-control" id="18" type="text" value="" gridtype="@ViewBag.GridType" data-val-required="The Employee Id field is required." data-val="false">
+                    <span class="input-group-addon"><i class="icon icon-calender"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            <label for="HardCopyByCOSubmissionDateTo">@InsiderTrading.Common.Common.getResource("rpt_lbl_19134") To</label>
+            <div class="form-group" id="sandbox-container">
+                <div class="input-group date">
+                    <input name="HardCopyByCOSubmissionDateTo" class="form-control" id="19" type="text" value="" gridtype="@ViewBag.GridType" data-val-required="The Employee Id field is required." data-val="false">
+                    <span class="input-group-addon"><i class="icon icon-calender"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                <label for="CODRequiredStatus">@InsiderTrading.Common.Common.getResource("rpt_lbl_19103")</label>
+                @Html.DropDownList("CODRequiredStatus", new MultiSelectList(ViewBag.CODRequiredStatusDropDown, "Key", "Value", ""), new { @class = "form-control selectpicker", title = "Select", multiple = "multiple", gridtype = @ViewBag.GridType, id = "21" })
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Hidden("ReportSearchArray", ReportSearchArray);
+@Scripts.Render("~/bundles/SearchResult")

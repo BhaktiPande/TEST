@@ -1,0 +1,261 @@
+﻿@model InsiderTrading.Models.MCQReportModel
+@{
+    ViewBag.Title = "MCQ_Report";
+}
+<section class="content">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="row">
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-accordion">
+                    <div class="panel-heading active">
+                        <h4 class="panel-title">
+                            @InsiderTrading.Common.Common.getResource("usr_lbl_54136")
+                        </h4>
+                    </div>
+                    @using (Html.BeginForm("MCQ_Report", "MCQReport", null, FormMethod.Post, new { @id = "MCQReportForm", role = "form", autocomplete = "off" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+                        @Html.Hidden("MCQS_ID", 1)
+                        <div class="panel-body">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.EmployeeId)
+                                            @*@Html.TextBoxFor(m => m.EmployeeId, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.EmployeeId).ToString(), Html.ActivityResourceKeyFor(m => m.EmployeeId).ToString(), new { @class = "form-control", }))*@
+                                            @Html.TextBoxFor(model => model.EmployeeId, new { @class = "form-control", gridtype = InsiderTrading.Common.ConstEnum.GridType.MCQ_Questions_List, data_url = Url.Action("GetEmployeeList", "MCQReport") })
+                                            @Html.ValidationMessageFor(m => m.EmployeeId)
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Name)
+                                            @Html.TextBoxFor(model => model.Name, new { @class = "form-control", gridtype = InsiderTrading.Common.ConstEnum.GridType.MCQ_Questions_List, data_url = Url.Action("GetNameList", "MCQReport") })
+                                            @Html.ValidationMessageFor(m => m.Name)
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Department)
+                                            @Html.TextBoxFor(model => model.Department, new { @class = "form-control", gridtype = InsiderTrading.Common.ConstEnum.GridType.MCQ_Questions_List, data_url = Url.Action("GetDepartmentList", "MCQReport") })
+                                            @Html.ValidationMessageFor(m => m.Department)
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Designation)
+                                            @Html.TextBoxFor(model => model.Designation, new { @class = "form-control", gridtype = InsiderTrading.Common.ConstEnum.GridType.MCQ_Questions_List, data_url = Url.Action("GetDesignationList", "MCQReport") })
+                                            @Html.ValidationMessageFor(m => m.Designation)
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.MCQ_Status)
+                                            @Html.DropDownListFor(m => m.MCQ_Status, new SelectList(ViewBag.MCQ_Status, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.MCQ_Status).ToString(), Html.ActivityResourceKeyFor(m => m.MCQ_Status).ToString(), new { @class = "form-control" }))
+
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+
+                                        <div class="form-group " id="sandbox-container">
+                                            @Html.LabelFor(m => m.From_Date)
+                                            @{
+                        string FromDate = "";
+                        if (Model.From_Date != null)
+                        {
+                            FromDate = InsiderTrading.Common.Common.ApplyFormatting(Model.From_Date, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+
+                        }
+                                            }
+                                            <div class="input-group input-group-today date">
+                                                @Html.TextBox("From_Date", FromDate, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.From_Date).ToString(), Html.ActivityResourceKeyFor(m => m.From_Date).ToString(), new { @class = "form-control" }))
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+
+
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.From_Date)
+
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+
+                                        <div class="form-group" id="sandbox-container">
+                                            @Html.LabelFor(m => m.To_Date)
+                                            @{
+                        string ToDate = "";
+                        if (Model.To_Date != null)
+                        {
+                            ToDate = InsiderTrading.Common.Common.ApplyFormatting(Model.To_Date, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+
+                        }
+                                            }
+                                            <div class="input-group input-group-today date">
+                                                @Html.TextBox("To_Date", ToDate, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.To_Date).ToString(), Html.ActivityResourceKeyFor(m => m.To_Date).ToString(), new { @class = "form-control" }))
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+
+
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.To_Date)
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                        <div class="form-group">
+                                            <br />
+                                            <button type="submit" class="btn btn-success" id="brnMCQ_Download"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("usr_btn_54132")</button>
+                                            <button type="button" class="btn btn-success" id="brnMCQ_Reset">  @InsiderTrading.Common.Common.getResource("usr_btn_54133")</button>
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</section>
+
+<script type="text/javascript">
+
+    $("#EmployeeId").removeAttr("disabled");
+    $("#Name").removeAttr("disabled");
+    $("#Department").removeAttr("disabled");
+    $("#Designation").removeAttr("disabled");
+    $("#MCQ_Status").removeAttr("disabled");
+    $("#From_Date").removeAttr("disabled");
+    $("#To_Date").removeAttr("disabled");
+
+    //$("#ToDate").prop('required', true);
+
+    //$("#FromDate").prop('required', true);
+
+    $(function () {
+        $('.input-group-today').datepicker({
+            format: "dd/M/yyyy",
+            endDate: '+0d',
+            autoclose: false
+        });
+    });
+
+    $('#To_Date').change(function () {
+        var ToDate = new Date($('#To_Date').val());
+        var FromDate = new Date($('#From_Date').val());
+        if (ToDate < FromDate) {
+            $('#To_Date').val($('#From_Date').val())
+        }
+    });
+    $('#From_Date').change(function () {
+        var ToDate = new Date($('#To_Date').val());
+        var FromDate = new Date($('#From_Date').val());
+        if (ToDate < FromDate) {
+            $('#To_Date').val($('#From_Date').val())
+        }
+    });
+    //Employee ID AutoSearch
+    $(function () {
+        $('#EmployeeId').autocomplete({
+            minLength: 0,
+            source: function (request, response) {
+                var url = $(this.element).data('url');
+
+                $.getJSON(url, { term: request.term }, function (data) {
+                    response($.map(data, function (item) {
+                        return {
+                            label: item.EmployeeId,
+                            value: item.EmployeeId
+                        }
+                    }));
+                })
+            }
+
+        });
+    })
+
+    //Employee Name AutoSearch
+    $(function () {
+        $('#Name').autocomplete({
+            minLength: 0,
+            source: function (request, response) {
+                var url = $(this.element).data('url');
+
+                $.getJSON(url, { term: request.term }, function (data) {
+                    response($.map(data, function (item) {
+                        return {
+                            label: item.Name,
+                            value: item.Name
+                        }
+                    }));
+                })
+            }
+
+        });
+    })
+    //Employee's Department AutoSearch
+    $(function () {
+        $('#Department').autocomplete({
+            minLength: 0,
+            source: function (request, response) {
+                var url = $(this.element).data('url');
+
+                $.getJSON(url, { term: request.term }, function (data) {
+                    response($.map(data, function (item) {
+                        return {
+                            label: item.Department,
+                            value: item.DepartmentID
+                        }
+                    }));
+                })
+            }
+
+        });
+    })
+    //Employee's Department AutoSearch
+    $(function () {
+        $('#Designation').autocomplete({
+            minLength: 0,
+            source: function (request, response) {
+                var url = $(this.element).data('url');
+
+                $.getJSON(url, { term: request.term }, function (data) {
+                    response($.map(data, function (item) {
+                        return {
+                            label: item.Designation,
+                            value: item.Designation
+                        }
+                    }));
+                })
+            }
+
+        });
+    })
+    
+    $(document).delegate("#brnMCQ_Reset", "click", function () {
+        $("#EmployeeId").val('');
+         $("#Name").val('');
+         $("#Department").val('');
+         $("#Designation").val('');
+         $("#MCQ_Status").val('');
+         $("#From_Date").val('');
+         $("#To_Date").val('');
+    });
+    
+</script>

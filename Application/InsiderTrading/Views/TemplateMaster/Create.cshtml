@@ -1,0 +1,94 @@
+﻿@model InsiderTrading.Models.TemplateMasterModel
+
+@{
+    ViewBag.Title = InsiderTrading.Common.Common.getResource("tra_ttl_16167");
+}
+
+@using (Html.BeginForm("SaveAction", "TemplateMaster", new { ReturnUrl = ViewBag.ReturnUrl, formId = InsiderTrading.Common.ConstEnum.Code.frmSaveTemplatemaster }, FormMethod.Post, new { @id = "TemplateForm", @autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+
+
+    <section class="content-header">
+        <h1>
+            @InsiderTrading.Common.Common.getResource("tra_ttl_16167")
+        </h1>
+    </section>
+    <section class="content">
+        @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">                                             
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <input type="hidden" value="@ViewBag.ImplementedCompanyEmailId" id="hidImplementedCompanyEmailId" name="hidImplementedCompanyEmailId" />
+                                <input type="hidden" value="@ViewBag.calledFrom" id="calledFrom" name="calledFrom" />
+                                <input type="hidden" name="acid" id="acid" value="@ViewBag.acid" />
+                                <div class="form-group">
+                                    <label>@Html.LabelFor(model => model.CommunicationModeCodeId)</label>
+                                    @if (ViewBag.TemplateMasterId == 0)
+                                    {
+                                        @Html.DropDownListFor(model => model.CommunicationModeCodeId, new SelectList(ViewBag.CommunicationMode, "Key", "Value", ""), new { @class = "form-control" })
+                                    }
+                                    else
+                                    {
+                                        @Html.DropDownListFor(model => model.CommunicationModeCodeId, new SelectList(ViewBag.CommunicationMode, "Key", "Value", ""), new { @class = "form-control", @disabled = "disabled" })
+                                        @Html.HiddenFor(model => model.CommunicationModeCodeId)
+                                    }
+                                    @Html.ValidationMessageFor(model => model.CommunicationModeCodeId)
+                                </div>
+
+                            </div>
+                        </div>
+                       
+                        <div id="divPartialCreateViewTemplate">
+                            @{
+                                Html.RenderPartial("PartialCreate",Model);
+                            }
+                        </div>
+                                             
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                
+                                @if(ViewBag.IsDisplayBackButton)
+                                {
+                                    if (Model.CommunicationModeCodeId != 0)
+                                    { 
+                                        <button type="submit" class="btn btn-success" name="Save" id="btnSave" data-loading-text="Saving" autocomplete="off"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("com_btn_14017")</button>
+                                    }
+                                    else
+                                    {
+                                        <button type="submit" class="btn btn-success" name="Save" id="btnSave" disabled="disabled" data-loading-text="Saving" autocomplete="off"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("com_btn_14017")</button>
+                                    }
+                                    <button type="submit" class="btn btn-success cancel" id="Cancel" name="Cancel" data-dismiss="modal"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14011")</button>
+                                }
+                                else
+                                {
+                                    //this save action called from ajax call from UI CommunicationRuleMaster
+                                    //this variable will cotains the button Name to be Submitted to controller acttion (TemplateMaster/SaveAction)
+                                    // Changing this value will break the save call from CommunicationRuleMaster/ EditTemplate popup.
+                                    <input type="hidden" name="Save" value="" />
+                                    <button type="button" class="btn btn-success" name="Save" id="btnSave" data-loading-text="Saving" autocomplete="off">@InsiderTrading.Common.Common.getResource("com_btn_14017")</button>
+                                    <button type="button" class="btn btn-success cancel" id="Cancel" name="Cancel" data-dismiss="modal"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14011")</button>
+                                }
+                            </div>
+                        </div>
+                        @Html.HiddenFor(model => model.TemplateMasterId)
+                        <input type="hidden" name="authorization" value="Save:@ViewBag.acid" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+}
+
+@*<div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>*@
+
+@Html.Hidden("PartialCreateViewURL", Url.Action("PartialCreateView", "TemplateMaster"))
+@Scripts.Render("~/bundles/jqueryval")
+@Html.Hidden("SaveAction", Url.Action("SaveAction", "TemplateMaster", new { acid = ViewBag.acid }))
+@Scripts.Render("~/bundles/TemplateMaster")

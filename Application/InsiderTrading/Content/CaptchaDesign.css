@@ -1,0 +1,37 @@
+﻿
+/*for captcha functionality*/
+.clsCaptcha
+{
+   width: 108%;
+   margin: 35px 0px 0px -13px;
+}
+
+
+#Captcha_Text
+{
+    font-size: 16pt;
+    font-weight: 300;
+    color: white;
+    margin: 0px 0px 22px 0px;
+}
+
+.Captcha_Val_Txt
+{
+    font-size: 16pt;
+    font-weight: 300;
+    color: red;
+    margin: 0px 0px 22px 120px;
+}
+
+.CaptchaTxt{
+    border-radius: 4px !important;
+    box-shadow: none;
+    border-color: #d2d6de;
+    background: #f2f4f1;
+}
+
+.CaptchaTxtError
+{
+    border-color:red;
+}
+

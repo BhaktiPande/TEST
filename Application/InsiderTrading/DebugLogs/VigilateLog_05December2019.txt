@@ -1,0 +1,10 @@
+12/05/2019 06:26 PM 	 InsiderTrading.Common 	 Common 	 getSystemConnectionString 	  	 GetSystemConnectionString method called  	 
+12/05/2019 06:26 PM 	 InsiderTrading.Common 	 Common 	 getSystemConnectionString 	  	 Before connection string  	 
+12/05/2019 06:26 PM 	 InsiderTrading.Common 	 Common 	 getSystemConnectionString 	  	 Before decrypt connection strng +IyWX8SJvfE6UQX8hAX3i/VWmdpnIpoZi6o9Yxnb0/vCUpwhdF526YXZRa6/wjwF+4Y2gXKzDF5/VKcsdyT+EGnQr/Fi/Q3SY3IUji3HBaDQF7/GnVhBhsFkNjEkKLvVF1FrEXBjp0ctP9kGs30U6nWMzypD9wJrmunU2+IdLXAvGiPNOCsplr+NS4oWNxpHYqNgb5AXv5lVvxxQCyHzng== 	 
+12/05/2019 06:26 PM 	 InsiderTrading.Common 	 Common 	 getSystemConnectionString 	  	 After Connection string data source=ESPS-TS-01;initial catalog=Vigilante_Master;persist security info=True;user id=VigilanteDBUser;Password=DBUser@123;MultipleActiveResultSets=True; 	 
+12/05/2019 06:26 PM 	 InsiderTrading 	 MvcApplication 	 Application_Error 	  	 Start method 	 
+12/05/2019 06:27 PM 	 InsiderTrading.Common 	 Common 	 getSystemConnectionString 	  	 GetSystemConnectionString method called  	 
+12/05/2019 06:27 PM 	 InsiderTrading.Common 	 Common 	 getSystemConnectionString 	  	 Before connection string  	 
+12/05/2019 06:27 PM 	 InsiderTrading.Common 	 Common 	 getSystemConnectionString 	  	 Before decrypt connection strng +IyWX8SJvfE6UQX8hAX3i/VWmdpnIpoZi6o9Yxnb0/vCUpwhdF526YXZRa6/wjwF+4Y2gXKzDF5/VKcsdyT+EGnQr/Fi/Q3SY3IUji3HBaDQF7/GnVhBhsFkNjEkKLvVF1FrEXBjp0ctP9kGs30U6nWMzypD9wJrmunU2+IdLXAvGiPNOCsplr+NS4oWNxpHYqNgb5AXv5lVvxxQCyHzng== 	 
+12/05/2019 06:27 PM 	 InsiderTrading.Common 	 Common 	 getSystemConnectionString 	  	 After Connection string data source=ESPS-TS-01;initial catalog=Vigilante_Master;persist security info=True;user id=VigilanteDBUser;Password=DBUser@123;MultipleActiveResultSets=True; 	 
+12/05/2019 06:27 PM 	 InsiderTrading 	 MvcApplication 	 Application_Error 	  	 Start method 	 

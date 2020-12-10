@@ -1,0 +1,55 @@
+﻿@model InsiderTrading.Models.Relative_DMATAccountHolderDetailsModel
+
+@{
+    bool showSaveButton = false; //flag to show save button
+
+    if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DMAT_CREATE) ||
+        InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DMAT_EDIT))
+    {
+        showSaveButton = true;
+    }
+}
+@using (Html.BeginForm("", "", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form", id = "frmDMATHolderDetails", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="">
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+            <div role="form">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.AccountHolderName)
+                    @Html.TextBoxFor(m => m.AccountHolderName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.AccountHolderName)
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+            <div role="form">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.PAN)
+                    @Html.TextBoxFor(m => m.PAN, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.PAN)
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+            <div role="form">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.RelationTypeCodeId)
+                    @Html.DropDownListFor(m => m.RelationTypeCodeId, new SelectList(ViewBag.RelationTypeDropdown, "Key", "Value", ""), new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.RelationTypeCodeId)
+                </div>
+            </div>
+        </div>
+        @Html.HiddenFor(m => m.DMATAccountHolderId)
+        @Html.HiddenFor(m => m.DMATDetailsID)
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            @if (showSaveButton)
+            {
+                <a class="btn btn-success " href='javascript:void(0)' role="button" id="btnSaveDMATHolderDetails" gridtype="@InsiderTrading.Common.ConstEnum.GridType.DMATAccountHolderList" data-loading-text="Saving" autocomplete="off"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("com_btn_14017")</a>
+            }
+            <button type="button" class="btn btn-success" id="dmatholder_cancelButton">@InsiderTrading.Common.Common.getResource("com_btn_14010")</button>
+        </div>
+    </div>
+}
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/jQueryFixes")

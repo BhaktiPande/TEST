@@ -1,0 +1,104 @@
+﻿@model InsiderTrading.Models.PreReportSearchViewModel
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                @Html.Hidden("1", "", new { @id = "1", gridtype = @ViewBag.GridType })
+                @*<label for="EmployeeId">@InsiderTrading.Common.Common.getResource("rpt_lbl_19173")</label>
+                <input name="EmployeeId" class="form-control" id="2" type="text" value="" gridtype="@ViewBag.GridType" data-val-required="The Employee Id field is required." data-val="false">*@
+                @Html.LabelFor(m => m.EmployeeId)
+                @Html.TextBoxFor(m => m.EmployeeId, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "2" })
+                @Html.ValidationMessageFor(m => m.EmployeeId)
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                @*<label for="InsiderName">@InsiderTrading.Common.Common.getResource("rpt_lbl_19174")</label>
+                <input name="InsiderName" class="form-control" id="3" type="text" value="" gridtype="@ViewBag.GridType" data-val-required="The Insider Name field is required." data-val="false">*@
+                @Html.LabelFor(m => m.InsiderName)
+                @Html.TextBoxFor(m => m.InsiderName, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "3" })
+                @Html.ValidationMessageFor(m => m.InsiderName)
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                @*<label for="Designation">@InsiderTrading.Common.Common.getResource("rpt_lbl_19175")</label>
+                <input name="Designation" class="form-control" id="4" type="text" value="" gridtype="@ViewBag.GridType" data-val-required="The Designation field is required." data-val="false">*@
+                @Html.LabelFor(m => m.Designation)
+                @Html.TextBoxFor(m => m.Designation, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "4" })
+                @Html.ValidationMessageFor(m => m.Designation)
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                @*<label for="Grade">@InsiderTrading.Common.Common.getResource("rpt_lbl_19176")</label>
+                <input name="Grade" class="form-control" id="5" type="text" value="" gridtype="@ViewBag.GridType" data-val-required="The Grade field is required." data-val="false">*@
+                @Html.LabelFor(m => m.Grade)
+                @Html.TextBoxFor(m => m.Grade, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "5" })
+                @Html.ValidationMessageFor(m => m.Grade)
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                @*<label for="Location">@InsiderTrading.Common.Common.getResource("rpt_lbl_19177")</label>
+                <input name="Location" class="form-control" id="6" type="text" value="" gridtype="@ViewBag.GridType" data-val-required="The Location field is required." data-val="false">*@
+                @Html.LabelFor(m => m.Location)
+                @Html.TextBoxFor(m => m.Location, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "6" })
+                @Html.ValidationMessageFor(m => m.Location)
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                @*<label for="Department">@InsiderTrading.Common.Common.getResource("rpt_lbl_19178")</label>
+                <input name="Department" class="form-control" id="7" type="text" value="" gridtype="@ViewBag.GridType" data-val-required="The Department field is required." data-val="false">*@
+                @Html.LabelFor(m => m.Department)
+                @Html.TextBoxFor(m => m.Department, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "7" })
+                @Html.ValidationMessageFor(m => m.Department)
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                @*<label for="CompanyName">@InsiderTrading.Common.Common.getResource("rpt_lbl_19179")</label>
+                <input name="CompanyName" class="form-control" id="8" type="text" value="" gridtype="@ViewBag.GridType" data-val-required="The Company Name field is required." data-val="false">*@
+                @Html.LabelFor(m => m.CompanyName)
+                @Html.TextBoxFor(m => m.CompanyName, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "8" })
+                @Html.ValidationMessageFor(m => m.CompanyName)
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                <label for="TypeOfInsider">@InsiderTrading.Common.Common.getResource("rpt_lbl_19180")</label>
+                @Html.DropDownList("TypeOfInsider", new MultiSelectList(ViewBag.UserTypeDropDown, "Key", "Value", ""), new { @class = "form-control selectpicker", title = "Select", multiple = "multiple", gridtype = @ViewBag.GridType, id = "9" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div role="form">
+            <div class="form-group">
+                <label>Insider Status</label>
+                @Html.DropDownList("InsiderStatus", new MultiSelectList(ViewBag.InsiderStatusDropDown, "Key", "Value", ""), new { @class = "form-control selectpicker", title = "Select", multiple = "multiple", gridtype = @ViewBag.GridType, id = "43" })
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Hidden("View", Url.Action("PreclearenceEmployeeIndividual", "Reports", new { acid = @ViewBag.acid }), new { @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'text':'','href':'" + Url.Action("PreclearenceEmployeeIndividual", "Reports", new { acid = @ViewBag.acid }) + "&EmployeeId=<UserInfoId>','class':'display-icon icon icon-eye'}" })
+
+

@@ -1,0 +1,387 @@
+﻿@model InsiderTrading.Models.PreclearanceRequestModel
+@{
+    ViewBag.Title = "Create";
+}
+@using (Html.BeginForm("Save", "PreclearanceRequest", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "form", @autocomplete = "off", id = "frmPreclearanceRequest" }))
+{
+    @Html.AntiForgeryToken()
+    <section class="content-header">
+        <h1>@InsiderTrading.Common.Common.getResource("dis_ttl_17076")</h1>
+    </section>
+    <section class="content">
+        @if (ViewBag.ShowTradeNote == true)
+        {
+            <label style="color:red;font-size:13px"> @InsiderTrading.Common.Common.getResource("dis_lbl_50655")</label>
+        }
+
+        @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        @{
+
+    if (ViewBag.NonTradingPeriodFlagMessage != null && ViewBag.NonTradingPeriodFlagMessage != "")
+    {
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12">
+                <label style="color:blue;font-size:12px">@ViewBag.NonTradingPeriodFlagMessage</label>
+            </div>
+        </div>
+    }
+                        }
+                        @{
+    if ((ViewBag.IsPreviousPeriodEndSubmissionOwnSecurity == 1 || ViewBag.IsPreviousPeriodEndSubmissionOtherSecurity == 1) && Model.PreclearanceRequestId == 0)
+    {
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12">
+                @if (ViewBag.RequiredModuleID == InsiderTrading.Common.ConstEnum.Code.RequiredModuleBoth)
+                {
+                    <label style="color:red;font-size:12px">@InsiderTrading.Common.Common.getResource(ViewBag.SubsequentPeriodEndResourceOwnSecurity).Replace("$1", "Own Security")</label>
+                    <label style="color:red;font-size:12px">@InsiderTrading.Common.Common.getResource(ViewBag.SubsequentPeriodEndResourceOtherSecurity).Replace("$1", "Other Security")</label>
+                }
+                else
+                {
+                    <label style="color:red;font-size:12px">@InsiderTrading.Common.Common.getResource(ViewBag.SubsequentPeriodEndOrPreciousPeriodEndResource)</label>
+                }
+            </div>
+        </div>
+    }
+                        }
+                        <div class="row">
+                            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                                <div class="form-group">
+                                    <label>&nbsp;</label>
+                                    <div class="controls">
+                                        @Html.RadioButtonFor(model => model.PreclearanceRequestForCodeId, InsiderTrading.Common.ConstEnum.Code.PreclearanceRequestForSelf, Model.PreclearanceRequestForCodeId == InsiderTrading.Common.ConstEnum.Code.PreclearanceRequestForSelf ? new { Checked = "checked" } : null) @InsiderTrading.Common.Common.getResource("dis_lbl_17077")
+                                        @{
+    if (ViewBag.UserTypeCodeId != InsiderTrading.Common.ConstEnum.Code.CorporateUserType)
+    {
+        @Html.RadioButtonFor(model => model.PreclearanceRequestForCodeId, InsiderTrading.Common.ConstEnum.Code.PreclearanceRequestForRelative, Model.PreclearanceRequestForCodeId == InsiderTrading.Common.ConstEnum.Code.PreclearanceRequestForRelative ? new { Checked = "checked" } : null) @InsiderTrading.Common.Common.getResource("dis_lbl_17078")
+    }
+                                        }
+                                        @Html.HiddenFor(m => m.PreclearanceRequestForCodeId)
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="DivRelativeDetails">
+                                @{
+    if (Model.PreclearanceRequestForCodeId == InsiderTrading.Common.ConstEnum.Code.PreclearanceRequestForRelative)
+    {
+        @Html.Partial("~/Views/PreclearanceRequest/_RelativeDetails.cshtml")
+    }
+                                }
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                @if (Model.PreclearanceStatusCodeId == null || Model.PreclearanceStatusCodeId == InsiderTrading.Common.ConstEnum.Code.PreclearanceRequestStatusConfirmed)
+                                {
+                                    <div class="row">
+                                        &nbsp;
+                                    </div>
+                                }
+                                <div class="row">
+                                    @Html.LabelFor(m => m.PreClearanceRequestedDate) &nbsp;&nbsp;
+                                    @InsiderTrading.Common.Common.ApplyFormatting(Model.PreClearanceRequestedDate, InsiderTrading.Common.ConstEnum.DataFormatType.Date)
+                                </div>
+                                @if (Model.PreclearanceStatusCodeId == InsiderTrading.Common.ConstEnum.Code.PreclearanceRequestStatusApproved || Model.PreclearanceStatusCodeId == InsiderTrading.Common.ConstEnum.Code.PreclearanceRequestStatusRejected)
+                                {
+                                    <div class="row">
+                                        @Html.LabelFor(m => m.PreclearanceStatusName) &nbsp;&nbsp; @Html.DisplayFor(m => m.PreclearanceStatusName)&nbsp;&nbsp;&nbsp;
+                                        @Html.LabelFor(m => m.EventDate) @InsiderTrading.Common.Common.ApplyFormatting(Model.EventDate, InsiderTrading.Common.ConstEnum.DataFormatType.Date)
+                                        </div>
+                                        if (ViewBag.IsPreClearanceEditable != InsiderTrading.Common.ConstEnum.Code.IsPreClearanceEditable)
+                                        { 
+                                            <div class="row">
+                                                @Html.LabelFor(m => m.PreclearanceTakenQtyOld) &nbsp;&nbsp; @Html.DisplayFor(m => m.PreclearanceTakenQtyOld)&nbsp;&nbsp;&nbsp;
+                                                @Html.LabelFor(m => m.DisplayPreclearanceValidityDate) &nbsp;&nbsp; @InsiderTrading.Common.Common.ApplyFormatting(Model.PreclearanceValidityDate, InsiderTrading.Common.ConstEnum.DataFormatType.Date)
+                                                @Html.LabelFor(m => m.DisplayPreclearanceValidityDateChanged) &nbsp;&nbsp; @InsiderTrading.Common.Common.ApplyFormatting(Model.PreclearanceValidityDateChanged, InsiderTrading.Common.ConstEnum.DataFormatType.Date)
+                                            </div>
+                                        }
+
+                                }
+                            </div>
+                            <div id="divDMATwiseBalance"></div>
+                            @*@if (Model.PreclearanceStatusCodeId == InsiderTrading.Common.ConstEnum.Code.PreclearanceRequestStatusApproved || Model.PreclearanceStatusCodeId == InsiderTrading.Common.ConstEnum.Code.PreclearanceRequestStatusRejected) {
+                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                <label>&nbsp;</label>
+                                <p>
+                                @Html.LabelFor(m => m.PreclearanceStatusName) &nbsp;@Html.DisplayFor(m => m.PreclearanceStatusName)&nbsp;&nbsp;&nbsp;&nbsp;@Html.LabelFor(m => m.EventDate)
+                                @InsiderTrading.Common.Common.ApplyFormatting(Model.EventDate, InsiderTrading.Common.ConstEnum.DataFormatType.Date)
+                                </p>
+                                </div>
+                                </div>
+                                }*@
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.TransactionTypeCodeId)
+                                    @Html.DropDownListFor(m => m.TransactionTypeCodeId, new SelectList(ViewBag.TransactionList, "Key", "Value", ""), new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.TransactionTypeCodeId)
+                                </div>
+                            </div>
+                            <div id="DivSecurityTypeDetails">
+                                @{
+                                if (Model.TransactionTypeCodeId != null && Model.TransactionTypeCodeId > 0)
+                                {
+                                    @Html.Partial("~/Views/PreclearanceRequest/SecurityTypeDetails.cshtml")
+                                }
+                                }
+                            </div>               
+
+
+                            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.CompanyId)
+                                    @Html.TextBoxFor(m => m.CompanyName, new { @class = "form-control", @disabled = "disabled" })
+                                    @Html.ValidationMessageFor(m => m.CompanyId)
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.SecuritiesToBeTradedQty)
+                                    @Html.TextBoxFor(m => m.SecuritiesToBeTradedQty, "{0:N0}", new { @class = "form-control numericOnly" })
+                                    @Html.ValidationMessageFor(m => m.SecuritiesToBeTradedQty)
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.SecuritiesToBeTradedValue)
+                                    @Html.TextBoxFor(m => m.SecuritiesToBeTradedValue, "{0:N0}", new { @class = "form-control numericOnly" })
+                                    @Html.ValidationMessageFor(m => m.SecuritiesToBeTradedValue)
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="form-group" style="display:none;">
+                                    @Html.LabelFor(m => m.ProposedTradeRateRangeFrom)
+                                    @Html.TextBoxFor(m => m.ProposedTradeRateRangeFrom, "{0:N0}", new { @class = "form-control numericOnly" })
+                                    @Html.ValidationMessageFor(m => m.ProposedTradeRateRangeFrom)
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="form-group" style="display:none;">
+                                    @Html.LabelFor(m => m.ProposedTradeRateRangeTo)
+                                    @Html.TextBoxFor(m => m.ProposedTradeRateRangeTo, "{0:N0}", new { @class = "form-control numericOnly" })
+                                    @Html.ValidationMessageFor(m => m.ProposedTradeRateRangeTo)
+                                </div>
+                            </div>
+
+                            <div id="DivModeOfAcquisition">
+                                @{
+                                if (Model.TransactionTypeCodeId != null && Model.TransactionTypeCodeId > 0)
+                                {
+                                    @Html.Partial("~/Views/PreclearanceRequest/ModeOfAcqisition.cshtml")
+                                }
+                                }
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div id="divDMAT">
+                                @Html.Partial("~/Views/PreclearanceRequest/_DEMATList.cshtml")
+                            </div>
+                        </div>
+
+                        @{
+    if (@ViewBag.CalledFrom != "Edit" && ViewBag.ApprovalReason)
+    {
+        <div class="row">
+            <div class="col-lg-11 col-md-11 col-sm-12 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ReasonForApprovalCodeId)
+                    @Html.DisplayFor(m => m.ReasonForApprovalText, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+    }
+                        }
+
+                        @{
+    if (@ViewBag.CalledFrom != "Edit" && ViewBag.ApprovalReasonText)
+    {
+        <div class="row">
+            <div class="col-lg-11 col-md-11 col-sm-12 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ReasonForApproval)
+                    @Html.DisplayFor(m => m.ReasonForApproval, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+    }
+                        }
+
+                        @{
+    //if (@ViewBag.CalledFrom == "Edit")
+    //{
+    if (@ViewBag.PreClrUPSIDeclarationMessage != null && @ViewBag.PreClrUPSIDeclarationMessage != "")
+    {
+        <div class="row">
+            <div class="col-lg-1">
+                <div class="form-group">
+                    @{
+        if (ViewBag.CalledFrom == "Edit")
+        {
+            @Html.CheckBox("agree", new { @class = "cr-check" })
+        }
+        else
+        {
+            <input type="checkbox" disabled="disabled" checked="checked">
+        }
+                    }
+                </div>
+            </div>
+            <div class="col-lg-11 col-md-11 col-sm-6 col-xs-12">
+                <div class="form-group ax_shape">
+                    <label class="normalLable">
+                        @*@InsiderTrading.Common.Common.getResource("dis_lbl_17088")*@
+                        @Html.Raw(@ViewBag.PreClrUPSIDeclarationMessage);
+                        @*In this connection, I hereby confirm that: <br />
+                            1. I/my immediate relative(s) do not have any access nor have received or obtained access to or in possession of any Unpublished Price Sensitive Information relating to the Bank and/or its securities, till the time of signing of this application.<br />
+                            2. I unconditionally and irrevocably undertake on behalf of myself and on behalf of my immediate relative (s) that if, I gain access to or receive any unpublished price sensitive information as aforesaid after the signing of this application but before the execution of the transaction(s), I shall forthwith inform the Compliance Officer of the same. I and my Immediate Relative (s) would not deal in the securities of the Bank till the time such unpublished price sensitive information becomes public.<br />
+                            3. I / my immediate relative (s) have not contravened the Code of Conduct to Regulate, Monitor and Report Trading by Insiders, in any manner whatsoever and that the proposed trade would not be in violation of SEBI Insider Trading Regulations, 2015.<br />
+                            4. I have made full and true disclosure in the matter.<br />
+                            5. I further confirm that, in case the pre-clearance is granted, the said shares/securities of the Bank will be sold/purchased within seven trading days of the receipt of
+                            pre-clearance and the details of such sale/purchase shall be intimated to the Bank within two trading days from the date of execution of trade.
+                        *@
+                    </label>
+                </div>
+            </div>
+        </div>
+    }
+    //}
+                        }
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12">
+                                @{
+                                    if ((ViewBag.RequiredModuleID == InsiderTrading.Common.ConstEnum.Code.RequiredModuleBoth && ViewBag.IsPreviousPeriodEndSubmissionOtherSecurity != 1 && ViewBag.IsPreviousPeriodEndSubmissionOwnSecurity != 1)
+                                            || (ViewBag.RequiredModuleID != InsiderTrading.Common.ConstEnum.Code.RequiredModuleBoth && (ViewBag.IsPreviousPeriodEndSubmissionOtherSecurity != 1 && ViewBag.IsPreviousPeriodEndSubmissionOwnSecurity != 1)))
+                                    {
+        <button type="button" name="Save" id="Save" class="confirm btn btn-success" data-loading-text="Saving" autocomplete="off"><i class="fa fa-check"></i> @InsiderTrading.Common.Common.getResource("dis_btn_17089")</button>
+                                    <button type="button" name="Save1" id="Save1" class="confirm btn btn-success hide"><i class="fa fa-save"></i> CONFIRM</button>
+                                    }
+                                }
+                                @{
+    string view_name = "";
+    string controller_name = "#";
+    RouteValueDictionary controller_paramter = new RouteValueDictionary();
+
+    if (ViewBag.acid == InsiderTrading.Common.ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE)
+    {
+        if (ViewBag.back_link == "preclereq")
+        {
+            view_name = "ApproveRejectAction";
+            controller_name = "PreclearanceRequest";
+            controller_paramter.Add("acid", InsiderTrading.Common.ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE);
+            controller_paramter.Add("PreclearanceRequestId", ViewBag.previous_preclearance_id);
+        }
+        else
+        {
+            view_name = "ListByCO";
+            controller_name = "PreclearanceRequest";
+            controller_paramter.Add("acid", InsiderTrading.Common.ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE);
+        }
+    }
+    else
+    {
+        if (ViewBag.back_link == "preclereq")
+        {
+            view_name = "Create";
+            controller_name = "PreclearanceRequest";
+            controller_paramter.Add("PreclearanceRequestId", ViewBag.previous_preclearance_id);
+            controller_paramter.Add("CalledFrom", "Edit");
+            controller_paramter.Add("acid", InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE);
+        }
+        else if (ViewBag.back_link == "dashboard")
+        {
+            view_name = "index";
+            controller_name = "InsiderDashboard";
+            controller_paramter.Add("acid", InsiderTrading.Common.ConstEnum.UserActions.DASHBOARD_INSIDERUSER);
+        }
+        else
+        {
+            view_name = "Index";
+            controller_name = "PreclearanceRequest";
+            controller_paramter.Add("acid", InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE);
+        }
+    }
+
+    <a class="btn btn-success cancel" id="cancelButton" data-toggle="modal" href='@Url.Action(view_name, controller_name, controller_paramter)' role="button">@InsiderTrading.Common.Common.getResource("com_btn_14010")</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+
+        @{
+    //check to show Insider pre clearance list
+    if (ViewBag.show_Insider_pre_clearance_list)
+    {
+        int grid_type = InsiderTrading.Common.ConstEnum.GridType.PreClearanceDetailsList_Insider;
+        int activity_id = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE;
+
+        <div class="row search" gridtype="@grid_type">
+            <h4>@InsiderTrading.Common.Common.getResource("dis_lbl_17428")</h4>
+
+            @Html.Hidden("uid", Model.UserInfoId, new { id = "1", gridtype = grid_type })
+
+            @{
+        Html.RenderAction("Index", "DatatableGrid", new { type = grid_type, btnSearch = "", sSortCol = "0", acid = activity_id, bIsPagination = false });
+            }
+            @Html.Hidden("perclearancelink", Url.Action("Create", "PreclearanceRequest", new { CalledFrom = "View", acid = activity_id, blink = "preclereq", prevpcid = Model.PreclearanceRequestId }))
+            @Html.Hidden("transactiondetailslink", Url.Action("Index", "TradingTransaction", new { acid = activity_id, frm = "preclereq", PreclearanceRequestId = Model.PreclearanceRequestId }))
+        </div>
+    }
+        }
+
+        @Html.HiddenFor(m => m.UserInfoId)
+        @Html.HiddenFor(m => m.DMATDetailsID1)
+
+        @Html.HiddenFor(m => m.PreclearanceRequestId)
+        @Html.HiddenFor(m => m.CompanyId)
+        <input type="hidden" name="AgreeMessage" id="AgreeMessage" value="@ViewBag.PreClrUPSIDeclarationMessage" />
+        <input type="hidden" name="CalledFrom" id="CalledFrom" value="@ViewBag.CalledFrom" />
+        <input type="hidden" name="UserInfoIdPassDMAT" id="UserInfoIdPassDMAT" value="@ViewBag.UserInfoIdPassDMAT" />
+        <input type="hidden" name="UserInfoId11" id="UserInfoId1" value="@ViewBag.UserInfoId" />
+        <input type="hidden" name="ConfirmMessage" id="ConfirmMessage" value="@InsiderTrading.Common.Common.getResource("dis_msg_17092")" />
+        <input type="hidden" name="AlertDays" id="AlertDays" value="@ViewBag.AlertDays" />
+        <input type="hidden" name="AlertMessage" id="AlertMessage" value="@ViewBag.AlertMessage" />
+        <input type="hidden" name="RequiredUserRelativeMessage" id="RequiredUserRelativeMessage" value="@InsiderTrading.Common.Common.getResource("dis_msg_17094")" />
+        <input type="hidden" name="AgreeTermsMsg" id="AgreeTermsMsg" value="@InsiderTrading.Common.Common.getResource("dis_msg_17095")" />
+        <input type="hidden" name="authorization" value="Save:81,Delete:@InsiderTrading.Common.ConstEnum.UserActions.CRUSER_COUSER_DELETE" />
+        <input type="hidden" name="acid" id="acid" value="@ViewBag.acid" />
+        <input type="hidden" name="BlockedPeriodMessage" id="BlockedPeriodMessage" value="@ViewBag.BlockedPeriodMessage" />
+        <input type="hidden" name="PreclearaceRequestInsiderUserAction" id="PreclearaceRequestInsiderUserAction" value="@InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE" />
+        <input type="hidden" name="PreclearaceRequestCOUserAction" id="PreclearaceRequestCOUserAction" value="@InsiderTrading.Common.ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE" />
+        @Html.Hidden("DownloadFormE", Url.Action("DownloadFormE", "PreclearanceRequest", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE }))
+        @Html.Hidden("showExercisepool", (int)@ViewBag.Show_Exercise_Pool)
+        <input type="hidden" name="SelectExercisePool" id="SelectExercisePool" value="@InsiderTrading.Common.Common.getResource("dis_msg_17423")" />
+    </section><!-- /.content -->
+
+}
+<div id="divDMATDetailsModal" style="display:none;"></div>
+<div id="divDocumentDetailsModal" style="display:none;"></div>
+@Html.Hidden("SaveData", Url.Action("Save", "PreclearanceRequest"))
+@Html.Hidden("UserInfoIdRelativeChange", Url.Action("UserInfoIdRelativeChange", "PreclearanceRequest"))
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/PreclearanceRequest")
+@Scripts.Render("~/bundles/JqueryConfirm")
+@Scripts.Render("~/bundles/customannotation")
+
+@Html.Hidden("DisclosureList", Url.Action("Index", "PreclearanceRequest"), new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE })
+@Html.Hidden("EditDMAT", Url.Action("EditDMATDetails", "Employee"), new { UserInfoID = ViewBag.UserInfoIdPassDMAT, acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DMAT_CREATE })
+@Html.Hidden("SaveDMAT", Url.Action("SaveDMATDetails", "Employee"))
+@Html.Hidden("LoadRelative", Url.Action("LoadRelative", "PreclearanceRequest"))
+@Html.Hidden("LoadSecurityType", Url.Action("LoadSecurityType", "PreclearanceRequest"))
+@Html.Hidden("LoadBalanceDMATwise", Url.Action("LoadBalanceDMATwise", "PreclearanceRequest"))
+@Html.Hidden("LoadModeOfAquisition", Url.Action("LoadModeOfAquisition", "PreclearanceRequest"))
+
+

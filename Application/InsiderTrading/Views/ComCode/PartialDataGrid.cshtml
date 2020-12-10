@@ -1,0 +1,31 @@
+﻿
+
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <p>
+            @{if (ViewBag.AddNew != 0 && InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.OTHERMASTER_COMCODE_CREATE))
+            {
+                <a class="btn btn-success icon icon-add-user" data-toggle="modal" role="button" id="btnAddNew">@InsiderTrading.Common.Common.getResource("mst_btn_10036")</a>
+            }
+            }
+        </p>
+    </div>
+</div>
+
+<div class="alert" style="display: none;" name="ErrorMessage" gridtype="@ViewBag.GridType"></div>
+
+@{
+    if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.OTHERMASTER_COMCODE_EDIT))
+    {
+        @Html.Hidden("Edit", Url.Action("Edit", "ComCode", new { acid = InsiderTrading.Common.ConstEnum.UserActions.OTHERMASTER_COMCODE_EDIT, CalledFrom = "Edit" }), new { @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'text':'','href':'" + Url.Action("Edit", "ComCode", new { acid = InsiderTrading.Common.ConstEnum.UserActions.OTHERMASTER_COMCODE_EDIT, CalledFrom = "Edit" }) + "&CodeID=<CodeID>','class':'display-icon icon icon-edit'}" })
+
+    }
+
+    if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.OTHERMASTER_COMCODE_DELETE))
+    {
+        @*@Html.Hidden("deleteRowURL", Url.Action("DeleteFromGrid", "ComCode", new { acid = InsiderTrading.Common.ConstEnum.UserActions.OTHERMASTER_COMCODE_DELETE, CalledFrom = "Delete" }), new { name = "deleteRowURL", gridtype = @ViewBag.GridType, @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'name': 'deleteRow','ID':'CodeID','key':'<CodeID>','CodeID':'<CodeID>','text':'','href':'javascript:void(0);','class':'display-icon icon icon-delete btnDeleteComCode'}" })*@
+        @Html.Hidden("deleteRowURL", Url.Action("DeleteFromGrid", "ComCode", new { acid = InsiderTrading.Common.ConstEnum.UserActions.OTHERMASTER_COMCODE_DELETE, CalledFrom = "Delete" }), new { @class = "gridtypecontrol", ctrtype = "link", gridtype = @ViewBag.GridType, gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'text':'', 'href':'javascript:void(0);', 'name':'deleteRow', 'queryString':'[ {ID:\"CodeID\", key:\"<CodeID>\"},{ID:\"formId\", key:\"89\"} ]', 'class':'display-icon icon icon-delete btnDeleteComCode'}" })
+    }
+
+    Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "", sSortCol = "0", acid = @ViewBag.UserAction });
+}

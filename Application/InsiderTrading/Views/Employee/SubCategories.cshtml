@@ -1,0 +1,16 @@
+﻿@model InsiderTrading.Models.EmployeeModel
+
+<div role="form">
+    <div class="form-group">
+        @Html.LabelFor(m => m.userInfoModel.SubCategory)
+        @if (ViewBag.SubCategoryDropDown.Count > 1)
+        { 
+            @Html.DropDownListFor(m => m.userInfoModel.SubCategory, new SelectList(ViewBag.SubCategoryDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.SubCategory).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.SubCategory).ToString(), new { @class = "form-control" }))
+        }
+        else
+        {
+            @Html.DropDownListFor(m => m.userInfoModel.SubCategory, new SelectList(ViewBag.SubCategoryDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.SubCategory).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.SubCategory).ToString(), new { @class = "form-control" }))
+        }
+        @Html.ValidationMessageFor(m => m.userInfoModel.SubCategory)
+    </div>
+</div>

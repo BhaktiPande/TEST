@@ -1,0 +1,20 @@
+﻿@model List<InsiderTrading.Models.DocumentDetailsModel>
+@{
+    int user_action = (int)ViewData["user_action"];
+}
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 clsFileUpload">
+    @if (Model != null && Model.Count > 0)
+{
+    foreach (InsiderTrading.Models.DocumentDetailsModel obj in Model)
+    {
+        //check if file is upload or not
+        if (obj.DocumentId != null)
+        {
+            <div class="row">
+                @Html.ActionLink(obj.DocumentName, "Download", "Document", new { nDocumentDetailsID = obj.DocumentId, GUID = obj.GUID, sDocumentName = obj.DocumentName, sFileType = obj.FileType, acid = user_action }, null)
+            </div>
+        }
+    }
+}
+</div>

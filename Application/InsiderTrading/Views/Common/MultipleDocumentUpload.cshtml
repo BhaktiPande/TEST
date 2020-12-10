@@ -1,0 +1,90 @@
+﻿@model List<InsiderTrading.Models.DocumentDetailsModel>
+@{
+    ViewBag.Title = "MultipleDocumentUpload";
+    int MapToCodeTypeId = Model[0].MapToTypeCodeId;
+    int Index = Model[0].Index;
+    int SubIndex = Model.LastOrDefault().SubIndex;
+    if(SubIndex == -1) {
+        SubIndex = 0;
+    }
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    @Html.AntiForgeryToken()
+</section>
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 clsFileUpload">
+    <div class="clsParentFileUpload row">
+        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+            <div class=" fileinput input-group fileinput-new" data-provides="fileinput">
+                <div class="form-control" data-trigger="fileinput">
+                    <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                    <span class="fileinput-filename"></span>
+                </div>
+                <span class="input-group-addon btn btn-default btn-file">
+                    <span class="fileinput-new">Select file</span>
+                    <span class="fileinput-exists">Change</span>
+                    <input type="hidden" value="" name="...">
+                    <input type="file" name='[@Index].Value[@SubIndex].Document' class="form-control document" />
+                    @Html.ValidationMessageFor(m => m[0].Document)
+                </span>
+                <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times-circle-o"></i></a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+            <button type="button" data-details="@MapToCodeTypeId" data-index="@Model[0].Index" data-flag="false" class="btn btn-success clsStartFileUpload" id="fleUpload"><i class="fa fa-upload"></i> Upload</button>
+        </div>
+    </div>
+
+    <div class="clsDivDynamic row" id="doc_@Index@Model[0].SubIndex">
+        @foreach (InsiderTrading.Models.DocumentDetailsModel objDocumentDetailsModel in Model)
+        {
+            if (objDocumentDetailsModel.DocumentId != 0 && objDocumentDetailsModel.DocumentId != null)
+            {
+                <div id="@objDocumentDetailsModel.Index@objDocumentDetailsModel.SubIndex">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        @Html.ActionLink(objDocumentDetailsModel.DocumentName, "Download", "Document", new { nDocumentDetailsID = objDocumentDetailsModel.DocumentId, GUID = objDocumentDetailsModel.GUID, sDocumentName = objDocumentDetailsModel.DocumentName, sFileType = objDocumentDetailsModel.FileType }, null)
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <a href="javascript:void(0);" class="display-icon icon icon-delete deleteDocument" querystring="[{key:'acid','value':@InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DOCUMENT_DELETE},{key:'nDocumentDetailsID',value:@objDocumentDetailsModel.DocumentId},{key:'nIndex',value:@objDocumentDetailsModel.Index},{key:'nSubIndex',value:@objDocumentDetailsModel.SubIndex},{key:'GUID',value:'@objDocumentDetailsModel.GUID'}]"></a>
+                    </div>
+                </div>
+            
+                <input type="hidden" name="[@objDocumentDetailsModel.Index].Key" value="@objDocumentDetailsModel.MapToTypeCodeId" />
+                <input type="hidden" name="[@objDocumentDetailsModel.Index].Value[@objDocumentDetailsModel.SubIndex].DocumentId" value="@objDocumentDetailsModel.DocumentId" />
+                <input type="hidden" name="[@objDocumentDetailsModel.Index].Value[@objDocumentDetailsModel.SubIndex].MapToTypeCodeId" value="@objDocumentDetailsModel.MapToTypeCodeId" />
+                <input type="hidden" name="[@objDocumentDetailsModel.Index].Value[@objDocumentDetailsModel.SubIndex].MapToId" value="@objDocumentDetailsModel.MapToId" />
+                <input type="hidden" name="[@objDocumentDetailsModel.Index].Value[@objDocumentDetailsModel.SubIndex].PurposeCodeId" value="@objDocumentDetailsModel.PurposeCodeId" />
+                <input type="hidden" name="[@objDocumentDetailsModel.Index].Value[@objDocumentDetailsModel.SubIndex].GUID" value="@objDocumentDetailsModel.GUID" />
+                <input type="hidden" name="[@objDocumentDetailsModel.Index].Value[@objDocumentDetailsModel.SubIndex].Index" value="@objDocumentDetailsModel.Index" />
+                <input type="hidden" name="[@objDocumentDetailsModel.Index].Value[@objDocumentDetailsModel.SubIndex].SubIndex" value="@objDocumentDetailsModel.SubIndex" />
+            }
+        }
+    </div>
+</div>
+@Html.Hidden("buttonName")
+@Html.Hidden("index")
+@Html.Hidden("divclone")
+@if (Model[0].DocumentId != 0 && Model[0].DocumentId != null)
+{
+    @Html.Hidden("acid", InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DOCUMENT_EDIT)
+}
+else
+{
+    @Html.Hidden("acid", InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DOCUMENT_CREATE)
+}
+@if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_EDIT))
+{
+    @Html.Hidden("DeleteSingleDocument", Url.Action("DeleteSingleDocumentDetails", "Document", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DOCUMENT_DELETE }))
+}
+@Html.Hidden("DownloadDocument", Url.Action("Download", "Document"))
+@Html.Hidden("UploadDocument", Url.Action("UploadDocument", "Document"))
+
+
+
+
+
+
+
+

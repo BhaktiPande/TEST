@@ -1,0 +1,107 @@
+﻿@model InsiderTrading.Models.EmployeeModel
+@{
+    ViewBag.Title = InsiderTrading.Common.Common.getResource("usr_ttl_11250");
+    ViewBag.ToolTipWhenPersonalDetailsNotConfirmed = Html.Raw("title='" + InsiderTrading.Common.Common.getResource("usr_ttl_11438") + "'");
+}
+<!-- Content Header (Page header) -->
+@*<section class="content-header">
+    <h1>@InsiderTrading.Common.Common.getResource("usr_ttl_11250")</h1>
+</section>*@
+@Html.Partial("~/Views/Common/PersonalDetailsBreadcrumbs.cshtml")
+<section class="content">
+    @Html.Partial("~/Views/Employee/PartialWarningInfoMsg.cshtml", new ViewDataDictionary() { { "PolicyDocument", ViewBag.IsShowMsgPDocNotApp }, { "TradingPolicy", ViewBag.IsShowMsgTPocNotApp }, { "ConfirmDetails", ViewBag.IsShowMsgConfirmDetails } })
+
+    <div class="row">
+        @using (Html.BeginForm("Create", "NonEmployeeInsider", new { ReturnUrl = ViewBag.ReturnUrl, formId = InsiderTrading.Common.ConstEnum.Code.frmCreateNonEmployee }, FormMethod.Post, new { role = "form", autocomplete = "off" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="panel-group" id="accordion">
+                    <div class="panel panel-accordion">
+                        <div class="panel-heading active">
+                            <h4 class="panel-title">
+                                @InsiderTrading.Common.Common.getResource("usr_ttl_11239")  & @InsiderTrading.Common.Common.getResource("usr_ttl_11240")
+                            </h4>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse in">
+
+                            @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+                            <div class="panel-body">
+                                @Html.Partial("~/Views/Common/CreateNonEmployee.cshtml", Model.userInfoModel)
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            if (Model.userInfoModel.UserInfoId != 0)
+            {
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    @*//check if to show confirm personal details button or not*@
+                    @*@if ((bool)ViewBag.show_confirm_personal_details_btn)
+                        {
+                            @Html.Hidden("confirm_msg", @InsiderTrading.Common.Common.getResource("usr_lbl_11494"))
+                            <button type="button" class="btn btn-success" name="ConfirmDetails" id="ConfirmDetails"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("usr_btn_11419")</button>
+                        }*@
+
+                    @*<a class="btn btn-success" href='@Url.Action("ViewDetails", "Employee", new { acid = ViewBag.user_action_ViewDetails, nUserInfoID = Model.userInfoModel.UserInfoId })' role="button">@InsiderTrading.Common.Common.getResource("com_btn_14018")</a>*@
+
+                    @if ((bool)ViewBag.show_not_login_user_details)
+                    {
+                        <a class="btn btn-success" href='@Url.Action("Index", "Employee", new { acid = ViewBag.user_action_ViewDetails })' role="button">@InsiderTrading.Common.Common.getResource("com_btn_14011")</a>
+                    }
+                </div>
+
+                <input type="hidden" name="authorization" value="Create:@ViewBag.user_action,ConfirmDetails:@ViewBag.user_action" />
+            }
+        }
+    </div>
+</section>
+<div id="divDMATDetailsModal" style="display:none;"></div>
+<div id="divDocumentDetailsModal" style="display:none;"></div>
+@Scripts.Render("~/bundles/nonEmployeeInsider")
+
+
+@{
+    var IsNewNonEmpRegistration = @ViewBag.NewNonEmpRegistration;
+    var MobNumberCountryCode = @InsiderTrading.Common.ConstEnum.CountryCode;
+}
+<script type="text/javascript">
+    var MobNumCountryCode = "@MobNumberCountryCode";
+    var Chk_IsNewNonEmpRegistration = "@IsNewNonEmpRegistration";
+    if (Chk_IsNewNonEmpRegistration) {
+        $("#txt_NonEmpMobNo").val(MobNumCountryCode);
+    }
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        if ('@Session["Confirm_PersonalDetails_Required"]' != 'True' && '@Session["UserInfoId"]' != 0) {
+            $("#btn_GetUserDetails").removeClass("btn-warning").addClass("btn-success");
+            $("#btn_GetUserDematDetails").removeClass("btn-danger").addClass("btn-success");
+            $("#btn_GetUserEducationDetails").removeClass("btn-danger").addClass("btn-success");
+            $("#btn_GetUserRelativeDetails").removeClass("btn-danger").addClass("btn-success");
+            $("#btn_ConfirmDetails").removeClass("btn-danger").addClass("btn-success");
+        }
+        else {
+            $("#btn_GetUserDetails").removeClass("btn-warning").addClass("btn-warning");
+            $("#btn_GetUserDematDetails").removeClass("btn-danger").addClass("btn-danger");
+            $("#btn_GetUserEducationDetails").removeClass("btn-danger").addClass("btn-danger");
+            $("#btn_GetUserRelativeDetails").removeClass("btn-danger").addClass("btn-danger");
+            $("#btn_ConfirmDetails").removeClass("btn-danger").addClass("btn-danger");
+        }
+
+        if ($("#btn_GetUserDematDetails").hasClass("btn-danger")) {
+            $('#btn_GetUserDematDetails').attr("disabled", "disabled");
+            $('#btn_GetUserEducationDetails').attr("disabled", "disabled");
+            $('#btn_GetUserRelativeDetails').attr("disabled", "disabled");
+            $('#btn_ConfirmDetails').attr("disabled", "disabled");
+        }
+        else {
+            $('#btn_GetUserDematDetails').removeAttr("disabled", "disabled");
+            $('#btn_GetUserEducationDetails').removeAttr("disabled", "disabled");
+            $('#btn_GetUserRelativeDetails').removeAttr("disabled", "disabled");
+            $('#btn_ConfirmDetails').removeAttr("disabled", "disabled");
+        }
+    });
+</script>

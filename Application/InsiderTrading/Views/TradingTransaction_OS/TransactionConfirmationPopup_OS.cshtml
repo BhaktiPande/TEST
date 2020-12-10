@@ -1,0 +1,133 @@
+﻿
+<script>
+    $(document).ready(function () {
+        if ('@ViewBag.IsError' == 1) {
+            $("#PopupHeader").html("Alert");
+        }
+        else {
+            $("#PopupHeader").html("Confirmation");
+        }
+        $('#btnYesIConfirm').click(function () {
+            
+           
+           
+            $("#btnSubmitTransaction").trigger("click");          
+        });
+    });
+</script>
+
+
+
+<div id="divConfirmPopup">
+
+    @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+    @{
+        if (ViewBag.IsError == 1)
+        {
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    @Html.Raw(ViewBag.ErrorMessage)<!--Please Enter and/or upload KMBL and non KMBL holdings.-->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="pull-left">
+                    <p>
+                        <button type="button" class="btn btn-danger cancel" id="Cancel" name="Cancel" data-dismiss="modal"><i class="fa fa-times"></i> @ViewBag.ButtonText</button>
+                    </p>
+                </div>
+            </div>
+        }
+        if (ViewBag.IsDuplicateRecordFound == 1)
+        {
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <p>
+                        @Html.Raw(ViewBag.MainHeading)
+                    </p>
+                    @{
+                        string savedMessage = string.Empty;
+                        if ((ViewBag.SavedMessage).Count > 0)
+                        {
+                            <p>
+                                @Html.Raw(ViewBag.SavedHeading)
+                            </p>
+                            for (int temp = 0; temp < (ViewBag.SavedMessage).Count; temp++)
+                            {
+                                savedMessage = savedMessage + "<p>" + (temp + 1) + ". " + (ViewBag.SavedMessage)[temp] + "</p>";
+                            }
+                            @Html.Raw(savedMessage);
+                        }
+
+                    }
+                    <p>
+                        @Html.Raw(ViewBag.LastHeading)
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="pull-left">
+                    <p>
+                        <button id="btnYesIConfirm" class="btn btn-success"><i class="fa fa-check"></i>@InsiderTrading.Common.Common.getResource("tra_btn_16459")</button>
+                        <button type="button" class="btn btn-danger cancel" id="btnCancel" name="Cancel" data-dismiss="modal"><i class="fa fa-times"></i>No</button>
+                    </p>
+                </div>
+            </div>
+        }
+        else if (ViewBag.DisclouserType == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeContinuous && ViewBag.IsError == 0)
+        {
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    @InsiderTrading.Common.Common.getResource("tra_msg_53062")
+                </div>
+            </div>
+            <br />
+            <div class="modal-footer">
+                <div class="pull-left">
+                    <p>
+                        <button id="btnYesIConfirm" class="btn btn-success"><i class="fa fa-check"></i>@InsiderTrading.Common.Common.getResource("tra_btn_16459")</button>
+                        <button type="button" class="btn btn-danger cancel" id="Cancel" name="Cancel" data-dismiss="modal"><i class="fa fa-times"></i>No</button>
+
+                    </p>
+                </div>
+            </div>
+        }
+        else if (ViewBag.DisclouserType == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
+        {
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    @InsiderTrading.Common.Common.getResource("tra_msg_52071")
+                </div>
+            </div>
+            <br />
+            <div class="modal-footer">
+                <div class="pull-left">
+                    <p>
+                        <button id="btnYesIConfirm" class="btn btn-success"><i class="fa fa-check"></i>@InsiderTrading.Common.Common.getResource("tra_btn_16459")</button>
+                        <button type="button" class="btn btn-danger cancel" id="Cancel" name="Cancel" data-dismiss="modal"><i class="fa fa-times"></i>No</button>
+
+                    </p>
+                </div>
+            </div>
+        }
+        else if (ViewBag.DisclouserType == InsiderTrading.Common.ConstEnum.Code.DisclosureTypePeriodEnd)
+        {
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    @InsiderTrading.Common.Common.getResource("dis_msg_54167")
+                </div>
+            </div>
+            <br />
+            <div class="modal-footer">
+                <div class="pull-left">
+                    <p>
+                        <button id="btnYesIConfirm" class="btn btn-success"><i class="fa fa-check"></i>@InsiderTrading.Common.Common.getResource("dis_btn_54168")</button>
+                        <button type="button" class="btn btn-danger cancel" id="Cancel" name="Cancel" data-dismiss="modal"><i class="fa fa-times"></i>@InsiderTrading.Common.Common.getResource("dis_btn_54169")</button>
+
+                    </p>
+                </div>
+            </div>
+        }
+        
+    }
+
+</div>

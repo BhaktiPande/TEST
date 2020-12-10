@@ -1,0 +1,149 @@
+﻿@model InsiderTrading.Models.NSEGroupDocumentMappingModel
+
+@{
+    ViewBag.Title = "NSEUploadDoc";
+}
+<section class="content-header">    
+    <h1>@InsiderTrading.Common.Common.getResource("nse_lbl_50511")</h1>
+   @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+</section>
+
+<section class="content">
+    <!-- Search form content -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @using (Html.BeginForm("UploadDocument", "NSEDownload", new { ReturnUrl = ViewBag.ReturnUrl, groupId = ViewBag.groupId }, FormMethod.Post, new { @class = "", role = "", @autocomplete = "off" }))
+                    {
+                        @Html.AntiForgeryToken()                        
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="form-group" id="sandbox-container">
+                                    @Html.Label(@InsiderTrading.Common.Common.getResource("nse_lbl_50506")):@ViewBag.groupId
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="form-group" id="sandbox-container">
+                                    @Html.Label(@InsiderTrading.Common.Common.getResource("nse_lbl_50507")):@ViewBag.DownloadDate
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="form-group" id="sandbox-container">
+                                    <a href="@Url.Action("downloadzipfolder", "NSEDownload", new { acid = InsiderTrading.Common.ConstEnum.UserActions.NSEDownload, GroupId = ViewBag.groupId })"><img src="~/images/NSEDownload/download-pdf.jpg" style='height:30px;width:30px;' class="Download_Pdf" alt="" /></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="form-group" id="sandbox-container">
+                                    @Html.Label(@InsiderTrading.Common.Common.getResource("nse_lbl_50508"))
+                                    @{
+                        string SubmissionFromDate = "";
+                        SubmissionFromDate = InsiderTrading.Common.Common.ApplyFormatting("", InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+                                    }
+                                    <div class="input-group date">
+                                        @Html.TextBox("SubmissionFromDate", SubmissionFromDate, null, new { @class = "form-control", @name = "SubmissionFromDate", gridtype = @ViewBag.GridType, id = "4" })
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <!-- form field row 4 -->
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    @{
+                                        @Html.Label(@InsiderTrading.Common.Common.getResource("rul_lbl_15245"))
+                                        @Html.Partial("~/Views/Common/MultiDocumentUpload.cshtml", Model.NSEGroupDocumentFile, new ViewDataDictionary() { { "user_action", ViewBag.UserAction } })
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    <!-- form buttons -->
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                @{
+    <button type="button" name="hdSave" class="btn btn-success" id="hdSave" data-toggle="modal" data-target="#myModal"><i class="fa fa-save"> @InsiderTrading.Common.Common.getResource("com_btn_14017")</i></button>
+                                    <button type="submit" name="Save" class="btn btn-success" id="btnSave"><i class="fa fa-save"> @InsiderTrading.Common.Common.getResource("com_btn_14017")</i></button>
+
+                                    <a class="btn btn-success" data-toggle="modal" href='@Url.Action("Index", "NSEDownload", new { acid = ViewBag.UserAction})' role="button">Back</a>
+                                }
+                            </div>
+                        </div>
+                        <input type="hidden" name="authorization" value="Save:223" />
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="addCode" tabindex="-1" role="dialog" aria-labelledby="AddCodelabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+@Scripts.Render("~/bundles/PolicyDocuments")
+@Scripts.Render("~/bundles/CompareDateAnnotation")
+
+<div class="container">
+    @*<h2>Modal Example</h2>*@
+    <!-- Trigger the modal with a button -->
+    @*<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>*@
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    @*<p>Are You sure to download the data for the selected transactions?</p>*@
+                    @InsiderTrading.Common.Common.getResource("nse_msg_50545")
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="btnYes" class="btn btn-success">Yes</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#btnSave').hide();
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#hdSave").click(function () {
+
+            $($(this).data("target")).show();
+        });
+    });
+</script>
+
+<script>
+    $('#btnYes').click(function () {
+        $('#btnSave').trigger('click');
+        $('#myModal').modal('hide');
+    });
+</script>
+
+

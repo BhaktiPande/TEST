@@ -1,0 +1,74 @@
+﻿@model InsiderTrading.Models.DMATDetailsModel
+@{
+    int user_type = (ViewData["user_type"] != null) ? (int)ViewData["user_type"] : 0;
+}
+
+
+@if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DMAT_CREATE) && ViewBag.EmpPANNumber != null)
+{
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <p>
+                <a class="btn btn-success btnAddDMATDetails"><i class="icon"></i> @InsiderTrading.Common.Common.getResource("usr_btn_11241")</a>
+
+                <button type="button" class="btn btn-success" id="btnUserDemat" data-toggle="modal" data-target="#myModal"> @InsiderTrading.Common.Common.getResource("usr_btn_50764") </button>
+            </p>
+        </div>
+    </div>
+}
+else if (ViewBag.EmpPANNumber == null)
+{
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <p style="color:red">@InsiderTrading.Common.Common.getResource("usr_msg_50595")</p>
+            <p>
+                <a class="btn btn-success disabled btnAddDMATDetails"><i class="icon"></i> @InsiderTrading.Common.Common.getResource("usr_btn_11241")</a>
+
+                <button type="button" class="btn btn-success" id="btnUserDemat" data-toggle="modal" data-target="#myModal"> @InsiderTrading.Common.Common.getResource("usr_btn_50764") </button>
+            </p>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            @*<p style="color:red">@InsiderTrading.Common.Common.getResource("usr_msg_50595")</p>*@
+            <p>
+                @*<a class="btn btn-success disabled btnAddDMATDetails"><i class="icon"></i> @InsiderTrading.Common.Common.getResource("usr_btn_11241")</a>*@
+
+                @*<button type="button" class="btn btn-success" id="btnUserDemat" data-toggle="modal" data-target="#myModal"> @InsiderTrading.Common.Common.getResource("usr_btn_50764") </button>*@
+                <button type="button" class="btn btn-success" id="btnUserDemat" data-toggle="modal" data-target="#myModal">@InsiderTrading.Common.Common.getResource("usr_btn_51000") </button>
+            </p>
+        </div>
+    </div>
+}
+
+
+<div class="alert" style="display: none;" name="ErrorMessage" gridtype="@InsiderTrading.Common.ConstEnum.GridType.DMATList"></div>
+
+@if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DMAT_VIEW))
+{
+    <div class="search" gridtype="@InsiderTrading.Common.ConstEnum.GridType.DMATList">
+
+        @Html.Hidden("1", Model.UserInfoID, new { id = "1", gridtype = InsiderTrading.Common.ConstEnum.GridType.DMATList })
+
+        @{
+    Html.RenderAction("Index", "DatatableGrid", new { sGridTagName = "DatatableGrid_demat", type = InsiderTrading.Common.ConstEnum.GridType.DMATList, btnSearch = "", sSortCol = "0", acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DMAT_VIEW });
+        }
+    </div>
+}
+
+@Scripts.Render("~/bundles/DMATDetails")
+
+@Html.Hidden("usertype", user_type)
+
+@Html.Hidden("AddDMAT", Url.Action("EditDMATDetails", "Employee"), new { UserInfoID = Model.UserInfoID, acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DMAT_CREATE,formId = 11})
+@Html.Hidden("SaveDMAT", Url.Action("SaveDMATDetails", "Employee"))
+
+@Html.Hidden("canEdit", InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DMAT_EDIT))
+@Html.Hidden("EditDMAT", Url.Action("EditDMATDetails", "Employee"), new { UserInfoID = Model.UserInfoID, acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DMAT_EDIT })
+
+@Html.Hidden("canDel", InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DMAT_DELETE))
+@Html.Hidden("deleteRowURL", Url.Action("DeleteDMATDetails", "Employee", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DMAT_DELETE }), new { id = "DeleteDMAT", gridtype = InsiderTrading.Common.ConstEnum.GridType.DMATList, acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DMAT_DELETE })
+

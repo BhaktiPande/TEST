@@ -1,0 +1,12 @@
+E:\MyESOPsReleases\10.0.1\Vigilante\Application\INSIDERTRADING\bin\InsiderTradingMassUpload.dll
+E:\MyESOPsReleases\10.0.1\Vigilante\Application\INSIDERTRADING\bin\InsiderTradingMassUpload.pdb
+E:\MyESOPsReleases\10.0.1\Vigilante\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.csprojResolveAssemblyReference.cache
+E:\MyESOPsReleases\10.0.1\Vigilante\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.dll
+E:\MyESOPsReleases\10.0.1\Vigilante\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.pdb
+D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\INSIDERTRADING\bin\InsiderTradingMassUpload.dll
+D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\INSIDERTRADING\bin\InsiderTradingMassUpload.pdb
+D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.csprojAssemblyReference.cache
+D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.csproj.CoreCompileInputs.cache
+D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.csproj.CopyComplete
+D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.dll
+D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.pdb

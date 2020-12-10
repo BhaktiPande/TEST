@@ -1,0 +1,280 @@
+﻿@model InsiderTrading.Models.TransactionLetterModel
+@{
+    if(Model.IsActive)
+    {
+    	ViewBag.Title = InsiderTrading.Common.Common.getResource("dis_ttl_17101");
+    }
+    else
+    {    
+      ViewBag.Title = InsiderTrading.Common.Common.getResource("tra_lbl_16298");
+    }
+}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+@{
+    if (Model.IsActive)
+    {
+        <h1>@InsiderTrading.Common.Common.getResource("dis_ttl_17101")</h1>
+    }
+    else
+    {
+        <h1>@InsiderTrading.Common.Common.getResource("tra_lbl_16298")</h1>
+    }
+}
+</section>
+@{
+    ViewBag.NoRecordsfoundMessage = "";
+    if (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypePeriodEnd)  //DisclosureType.PeriodEnd)
+    {
+        ViewBag.NoRecordsfoundMessage = "Not Traded";
+    }
+    else if (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)//DisclosureType.Initial)
+    {
+        ViewBag.NoRecordsfoundMessage = "No Holdings";
+    }
+    else
+    {
+        ViewBag.NoRecordsfoundMessage = "Not Traded";
+    }
+}
+<script>
+    function datatableCallFunction() {
+        mergeRowsForColumnNo($("#DataTables_Table_0"), 0);
+        $("#DataTables_Table_0").addClass("notable-striped");
+    }
+</script>
+<section class="content">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @using (Html.BeginForm("CreateLetter", "TradingTransaction", new { ReturnUrl = ViewBag.ReturnUrl, formId = 71 }, FormMethod.Post, new { role = "form", autocomplete = "off" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+                        if (Model.IsActive)
+                        {
+                            if (ViewBag.UserTypeCode == 101003 || ViewBag.UserTypeCode == 101004 || ViewBag.UserTypeCode == 101006)
+                            {
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        <div role="form">
+                                            <div class="form-group">
+                                                <img src='@ViewBag.CompanyName' class="img img-responsive center-block">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        @{
+                                string sDate = "";
+                                sDate = InsiderTrading.Common.Common.ApplyFormatting(Model.Date, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+                                        }
+                                        <div role="form">
+                                            <div class="form-group">
+                                                <div class="form-group" id="sandbox-container">
+                                                    @Html.LabelFor(m => m.Date)
+                                                    <div class="input-group">
+                                                        @Html.TextBox("Date", sDate, new { @class = "form-control", @readonly = "readonly" })
+                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                    </div>
+                                                    @Html.ValidationMessageFor(m => m.Date)
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        <div role="form">
+                                            <div class="form-group">
+                                                @Html.LabelFor(m => m.ToAddress1)
+                                                @Html.TextAreaFor(m => m.ToAddress1, new { @class = "form-control", @readonly = "readonly" })
+                                                @Html.ValidationMessageFor(m => m.ToAddress1)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        @{
+                                if (Model.ToAddress2 != null)
+                                {
+                                    <div role="form">
+                                        <div class="form-group">
+
+                                            @Html.LabelFor(m => m.ToAddress2)
+                                            @Html.TextAreaFor(m => m.ToAddress2, new { @class = "form-control", @readonly = "readonly" })
+                                            @Html.ValidationMessageFor(m => m.ToAddress2)
+                                        </div>
+                                    </div>
+                                }
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                        <div role="form">
+                                            <div class="form-group">
+                                                @Html.LabelFor(m => m.Subject)
+                                                @Html.TextAreaFor(m => m.Subject, new { @class = "form-control", rows = "1", @readonly = "readonly" })
+                                                @Html.ValidationMessageFor(m => m.Subject)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                        <div role="form">
+                                            <div class="form-group">
+                                                @Html.LabelFor(m => m.Contents)
+                                                @Html.TextAreaFor(m => m.Contents, new { @class = "form-control", rows = "6", @readonly = "readonly" })
+                                                @Html.ValidationMessageFor(m => m.Contents)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        <div role="form">
+                                            <div class="form-group">
+                                                @Html.LabelFor(m => m.Signature)
+                                                @Html.TextAreaFor(m => m.Signature, new { @class = "form-control", @readonly = "readonly" })
+                                                @Html.ValidationMessageFor(m => m.Signature)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        <div role="form">
+                                            <div class="form-group">
+                                                <img src='@ViewBag.CompanyName' class="img img-responsive center-block">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        @{
+                                string sDate = "";
+                                sDate = InsiderTrading.Common.Common.ApplyFormatting(Model.Date, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+                                        }
+                                        <div role="form">
+                                            <div class="form-group">
+                                                <div class="form-group" id="sandbox-container">
+                                                    @Html.LabelFor(m => m.Date)
+                                                    <div class="input-group date">
+                                                        @Html.TextBox("Date", sDate, new { @class = "form-control" })
+                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                    </div>
+                                                    @Html.ValidationMessageFor(m => m.Date)
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        <div role="form">
+                                            <div class="form-group">
+                                                @Html.LabelFor(m => m.ToAddress1)
+                                                @Html.TextAreaFor(m => m.ToAddress1, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(m => m.ToAddress1)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        @{
+                                if (Model.ToAddress2 != null)
+                                {
+                                    <div role="form">
+                                        <div class="form-group">
+
+                                            @Html.LabelFor(m => m.ToAddress2)
+                                            @Html.TextAreaFor(m => m.ToAddress2, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(m => m.ToAddress2)
+                                        </div>
+                                    </div>
+                                }
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                        <div role="form">
+                                            <div class="form-group">
+                                                @Html.LabelFor(m => m.Subject)
+                                                @Html.TextAreaFor(m => m.Subject, new { @class = "form-control", rows = "1" })
+                                                @Html.ValidationMessageFor(m => m.Subject)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                        <div role="form">
+                                            <div class="form-group">
+                                                @Html.LabelFor(m => m.Contents)
+                                                @Html.TextAreaFor(m => m.Contents, new { @class = "form-control", rows = "6" })
+                                                @Html.ValidationMessageFor(m => m.Contents)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        <div role="form">
+                                            <div class="form-group">
+                                                @Html.LabelFor(m => m.Signature)
+                                                @Html.TextAreaFor(m => m.Signature, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(m => m.Signature)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        <div class="row">
+                            <section class="content search" gridtype="@ViewBag.GridType">
+                                @{
+                                    @Html.Hidden("tmid", Model.TransactionMasterId, new { id = "1", gridtype = @ViewBag.GridType });
+                                    @Html.Hidden("IsForLetter", "1", new { id = "3", gridtype = @ViewBag.GridType });
+                                    Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "btnSearch", sSortCol = "0", acid = ViewBag.UserAction, OverrideGridType = @ViewBag.OverrideGridType, bIsPagination = true, bIsActionCol = false, sNoRecordsfoundMessage = @ViewBag.NoRecordsfoundMessage, sCallBackFunction = "datatableCallFunction" });
+                                }
+                            </section>
+                        </div>
+                        
+                        <!-- form buttons -->
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <button type="submit" name="SaveLetter" class="btn btn-success" id="btnSave"><i class="fa fa-save"> @InsiderTrading.Common.Common.getResource("com_btn_14017")</i></button>
+                                <button type="submit" name="Cancel" class="btn btn-success cancel" id="btnCancel" data-dismiss="modal"> @InsiderTrading.Common.Common.getResource("com_btn_14010")</button>
+                            </div>
+                        </div>
+
+                            @Html.HiddenFor(m => m.DisclosureTypeCodeId)
+                            @Html.HiddenFor(m => m.LetterForCodeId)
+                            @Html.HiddenFor(m => m.TransactionMasterId)
+                            @Html.HiddenFor(m => m.TransactionLetterId)
+                            @Html.HiddenFor(m => m.IsActive)
+                        
+                            @Html.Hidden("year", (Int32)@ViewBag.PeriodEndYear);
+                            @Html.Hidden("period", (Int32)@ViewBag.PeriodEndPeriod);
+                            @Html.Hidden("uid", (Int32)@ViewBag.uid);
+                            @Html.Hidden("pdtype", (String)ViewBag.PeriodType);
+                            @Html.Hidden("pdtypeId", (Int32)ViewBag.PeriodTypeId);
+                            @Html.Hidden("IsStockExchange", (Boolean)@ViewBag.IsStockExchange);
+                            <input type="hidden" name="authorization" value="SaveLetter:@ViewBag.UserAction" />
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

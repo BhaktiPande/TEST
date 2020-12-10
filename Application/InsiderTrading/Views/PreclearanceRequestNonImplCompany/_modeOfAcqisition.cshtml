@@ -1,0 +1,28 @@
+﻿@model InsiderTrading.Models.PreclearanceRequestNonImplCompanyModel
+
+@{
+    ViewBag.Title = "ModeOfAcqisition";
+    var html_attr = new Dictionary<string, object> { };
+    html_attr.Add("class", "form-control");
+    if (Model.PreclearanceStatusCodeId != null)
+    {
+        html_attr.Add("disabled", "disabled");
+    }
+}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    @Html.AntiForgeryToken()
+</section>
+
+<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+    <div class="form-group">
+
+        @Html.LabelFor(m => m.ModeOfAcquisitionCodeId)
+        @Html.DropDownListFor(m => m.ModeOfAcquisitionCodeId, new SelectList(ViewBag.ModeOfAcquisition, "Key", "Value", ""), html_attr)
+        @Html.ValidationMessageFor(m => m.ModeOfAcquisitionCodeId)
+        @Html.HiddenFor(m => m.ModeOfAcquisitionCodeId)
+
+    </div>
+</div>
+
+

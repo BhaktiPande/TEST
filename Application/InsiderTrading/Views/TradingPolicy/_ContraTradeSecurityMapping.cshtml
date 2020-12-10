@@ -1,0 +1,89 @@
+﻿@model InsiderTrading.Models.TradingPolicyModel
+@{
+    ViewBag.Title = "Contra Trade Security Mapping";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    @Html.AntiForgeryToken()
+</section>
+
+@if (Model.ContraTradeSelectedSecurityTypeList != null)
+{
+    var checkedValue = false;
+    var loopCount = 0;
+    @:<div class="row">
+    foreach (var SecurityType in Model.ContraTradeSelectedSecurityTypeList)
+    {
+       var split  = SecurityType.Value.Split('-');
+       var checkedSecuirty = split[1];
+       if (checkedSecuirty != null && checkedSecuirty!="")
+       {
+           checkedValue = true;
+       }
+       else
+       {
+           checkedValue = false;
+       }
+       if (loopCount < 3) {
+           if (loopCount == 0) { 
+            <div class="col-md-3 col-md-3 col-sm-8 col-xs-8">
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                </div>
+            </div>
+            }
+            <div class="col-md-3 col-md-3 col-sm-8 col-xs-8">
+                <div class="form-group">
+                    @if (checkedValue)
+                    {
+                        <input type="checkbox" class="checkbox contratradesecurity" name="contratradesecuritytype" checked="checked" value="@SecurityType.Key" id="@SecurityType.Key" />
+                    }
+                    else
+                    {
+                        <input type="checkbox" class="checkbox contratradesecurity" name="contratradesecuritytype" value="@SecurityType.Key" id="@SecurityType.Key" />
+                    }
+                    <span for="@SecurityType.Key">@split[0]</span>
+                </div>
+            </div>
+            @*<div class="col-md-2 col-md-2 col-sm-8 col-xs-8">
+                <div class="form-group">
+                    <span for="@SecurityType.Key">@split[0]</span>
+                </div>
+            </div>*@
+       }
+       else
+       {
+                @*if (loopCount == 3) { 
+            <div class="col-md-3 col-md-3 col-sm-8 col-xs-8">
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                </div>
+            </div>
+               }*@
+            <div class="col-md-3 col-md-3 col-sm-8 col-xs-8">
+                <div class="form-group">
+                    @if (checkedValue)
+                    {
+                        <input type="checkbox" class="checkbox contratradesecurity" name="contratradesecuritytype" checked="checked" value="@SecurityType.Key" id="@SecurityType.Key" />
+                    }
+                    else
+                    {
+                        <input type="checkbox" class="checkbox contratradesecurity" name="contratradesecuritytype" value="@SecurityType.Key" id="@SecurityType.Key" />
+                    }
+                    <span for="@SecurityType.Key">@split[0]</span>
+                </div>
+            </div>
+            @*<div class="col-md-2 col-md-2 col-sm-8 col-xs-8">
+                <div class="form-group">
+                    <span for="@SecurityType.Key">@split[0]</span>
+                </div>
+            </div>*@
+       
+       }
+        loopCount = loopCount+1;
+        }
+         @:</div>
+}
+
+

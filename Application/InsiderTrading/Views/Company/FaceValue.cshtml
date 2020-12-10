@@ -1,0 +1,98 @@
+﻿@model InsiderTrading.Models.CompanyFaceValueModel
+@using InsiderTrading.Common;
+@{
+    ViewBag.Title = "FaceValue";
+}
+    
+
+<div class="panel-body search" gridtype="@ViewBag.GridType">
+    <input type="hidden" value="@ViewBag.Param1" id="1" gridtype="@ViewBag.GridType" />
+    <input type="hidden" name="CompanyId" value="@ViewBag.CompanyId" />
+    <input type="hidden" id="Currency" name="Currency" value="@Common.GetCultureValue()" />
+    @using (Html.BeginForm("", "", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "form", @autocomplete = "off", id = "frmFaceValue" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group" id="sandbox-container">
+                    @Html.LabelFor(m => m.FaceValueDate)
+
+                   @{
+        string FaceValueDate = "";
+        if (Model != null)
+        {
+            FaceValueDate = InsiderTrading.Common.Common.ApplyFormatting(Model.FaceValueDate, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+
+        }
+                    }
+                    <div class="input-group date">
+                        @Html.TextBox("FaceValueDate", FaceValueDate, null, new { @class = "form-control" })
+
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.FaceValueDate)
+                    @Html.HiddenFor(m => m.FaceValueDate)
+                    
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.FaceValue)
+                    @Html.TextBoxFor(m => m.FaceValue, "{0:N2}", new { @class = "form-control two-digits" })
+                    @Html.ValidationMessageFor(m => m.FaceValue)
+                    
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.CurrencyID)
+                    @Html.DropDownListFor(m => m.CurrencyID, new SelectList(ViewBag.CurrencyDropDown, "Key", "Value", ""), new { @class = "form-control " })
+                    @Html.ValidationMessageFor(m => m.CurrencyID)
+                </div>
+            </div>
+        </div>
+          @Html.HiddenFor(m => m.CompanyFaceValueID)
+        @Html.HiddenFor(m => m.CompanyID)
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                @{
+        if (ViewBag.CalledFrom == "Edit") { 
+                <button type="button" class="btn btn-success" data-loading-text="Saving" id="SaveCompanyFaceValue" name="SaveCompanyFaceValue" autocomplete="off"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("com_btn_14019")</button>
+                }
+                }
+                <a class="btn btn-success cancel" href='@Url.Action("Index", "Company", new {acid = @InsiderTrading.Common.ConstEnum.UserActions.COMPANY_VIEW})' role="button"> @InsiderTrading.Common.Common.getResource("com_btn_14011")</a>
+            </div>
+        </div>
+        <hr>
+        <div class="div-spacer"></div>
+
+        Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "", sSortCol = "0", acid = InsiderTrading.Common.ConstEnum.UserActions.COMPANY_VIEW });
+
+        <input type="hidden" id="Current" value="@InsiderTrading.Common.Common.ApplyFormatting(InsiderTrading.Common.Common.GetCurrentDate(null), InsiderTrading.Common.ConstEnum.DataFormatType.Date)" />
+
+
+    }
+</div>
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/jQueryFixes")
+@Scripts.Render("~/bundles/Company")
+@Scripts.Render("~/bundles/accounting")
+@Scripts.Render("~/bundles/CompareDateAnnotation")
+<script src="~/Scripts/dist/js/custom.js"></script>
+
+@Html.Hidden("SaveFaceValue", Url.Action("SaveCompanyFaceValue", "Company"))
+@*@if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.COMPANY_VIEW))
+{
+    @Html.Hidden("ViewFaceValue", Url.Action("ViewCompanyFaceValueDetails", "Company", new { acid = InsiderTrading.Common.ConstEnum.UserActions.COMPANY_EDIT }), new { @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{ 'CompanyFaceValueID':'<CompanyFaceValueID>','text':'','href':'javascript:void(0);','class':'display-icon icon icon-eye btnViewFaceValue'}" })
+}*@
+@if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.COMPANY_EDIT) && ViewBag.CalledFrom == "Edit")
+{   
+    @Html.Hidden("EditFaceValue", Url.Action("EditCompanyFaceValueDetails", "Company", new { acid = InsiderTrading.Common.ConstEnum.UserActions.COMPANY_EDIT }), new { @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{ 'CompanyFaceValueID':'<CompanyFaceValueID>','text':'','href':'javascript:void(0);','class':'display-icon icon icon-edit btnEditFaceValue'}" })
+}
+@if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.COMPANY_EDIT) && ViewBag.CalledFrom == "Edit")
+{
+    @*@Html.Hidden("deleteRowURL", Url.Action("DeleteCompanyFaceValueDetails", "Company", new { acid = InsiderTrading.Common.ConstEnum.UserActions.COMPANY_EDIT, CompanyId = @ViewBag.CompanyID }), new { name = "deleteRowURL", gridtype = @ViewBag.GridType, @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{ 'name': 'deleteRow','ID':'CompanyFaceValueID','key':'<CompanyFaceValueID>','CompanyFaceValueID':'<CompanyFaceValueID>','text':'','href':'javascript:void(0);','class':'display-icon icon icon-delete btnDeleteFaceValue'}" })*@
+    @Html.Hidden("deleteRowURL", Url.Action("DeleteCompanyFaceValueDetails", "Company", new { acid = InsiderTrading.Common.ConstEnum.UserActions.COMPANY_EDIT, CompanyId = @ViewBag.CompanyID }), new { @class = "gridtypecontrol", ctrtype = "link", gridtype = @ViewBag.GridType, gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'text':'', 'href':'javascript:void(0);', 'name':'deleteRow', 'queryString':'[ {ID:\"CompanyFaceValueID\", key:\"<CompanyFaceValueID>\"},{ID:\"formId\", key:\"104\"} ]', 'class':'display-icon icon icon-delete btnDeleteFaceValue'}" })
+}
+
