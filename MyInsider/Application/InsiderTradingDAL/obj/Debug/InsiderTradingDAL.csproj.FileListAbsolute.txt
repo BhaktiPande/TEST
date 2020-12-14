@@ -18,4 +18,3 @@ D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTradin
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTrading\bin\InsiderTradingDAL.pdb
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTradingDAL\obj\Debug\InsiderTradingDAL.dll
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTradingDAL\obj\Debug\InsiderTradingDAL.pdb
-D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTradingDAL\obj\Debug\InsiderTradingDAL.csproj.CopyComplete
