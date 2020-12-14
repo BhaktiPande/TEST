@@ -76,3 +76,43 @@ D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\InsiderTrading\obj\Debu
 D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\InsiderTrading\obj\Debug\InsiderTrading.csproj.CoreCompileInputs.cache
 D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\InsiderTrading\obj\Debug\InsiderTrading.dll
 D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\InsiderTrading\obj\Debug\InsiderTrading.pdb
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\obj\Debug\InsiderTrading.csprojResolveAssemblyReference.cache
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\obj\Debug\InsiderTrading.dll
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\obj\Debug\InsiderTrading.pdb
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\InsiderTrading.dll.config
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\InsiderTrading.dll
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\InsiderTrading.pdb
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\ICSharpCode.SharpZipLib.pdb
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\ICSharpCode.SharpZipLib.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\InsiderTradingDAL.pdb
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\InsiderTradingEncryption.pdb
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\InsiderTradingExcelWriter.pdb
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\InsiderTradingMassUpload.pdb
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\itextsharp.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\NLog.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\System.Net.Http.Formatting.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\System.Web.Http.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\System.Web.Http.WebHost.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\System.Web.Helpers.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\System.Web.Mvc.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\System.Web.Optimization.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\System.Web.Razor.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\System.Web.WebPages.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\System.Web.WebPages.Deployment.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\System.Web.WebPages.Razor.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\Newtonsoft.Json.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\Antlr3.Runtime.pdb
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\EntityFramework.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\EntityFramework.SqlServer.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\Microsoft.AspNet.Identity.Core.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\Microsoft.AspNet.Identity.Owin.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\Microsoft.Owin.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\Microsoft.Owin.Security.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\Microsoft.Owin.Security.Facebook.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\Microsoft.Owin.Security.Cookies.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\Microsoft.Owin.Security.OAuth.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\Microsoft.Owin.Security.Google.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\Microsoft.Owin.Security.Twitter.xml
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
