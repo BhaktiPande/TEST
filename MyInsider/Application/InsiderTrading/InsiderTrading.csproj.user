@@ -3,6 +3,16 @@
   <PropertyGroup>
     <ProjectView>ShowAllFiles</ProjectView>
     <LastActiveSolutionConfig>Debug|Any CPU</LastActiveSolutionConfig>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup>
+    <ReferencePath>D:\Vrushali\Azure Dev\AzureRepository\MyInsider\Application\InsiderTrading\bin\</ReferencePath>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>

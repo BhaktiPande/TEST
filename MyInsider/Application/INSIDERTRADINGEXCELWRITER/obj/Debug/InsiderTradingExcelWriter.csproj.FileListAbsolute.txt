@@ -19,3 +19,4 @@ D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\INSIDERTRADIN
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\INSIDERTRADINGEXCELWRITER\obj\Debug\InsiderTradingExcelWriter.csproj.CopyComplete
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\INSIDERTRADINGEXCELWRITER\obj\Debug\InsiderTradingExcelWriter.dll
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\INSIDERTRADINGEXCELWRITER\obj\Debug\InsiderTradingExcelWriter.pdb
+D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\INSIDERTRADINGEXCELWRITER\obj\Debug\InsiderTradingExcelWriter.csprojAssemblyReference.cache

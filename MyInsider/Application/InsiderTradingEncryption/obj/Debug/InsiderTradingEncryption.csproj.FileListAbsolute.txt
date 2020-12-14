@@ -17,3 +17,4 @@ D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTradin
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTrading\bin\InsiderTradingEncryption.pdb
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTradingEncryption\obj\Debug\InsiderTradingEncryption.dll
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTradingEncryption\obj\Debug\InsiderTradingEncryption.pdb
+D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTradingEncryption\obj\Debug\InsiderTradingEncryption.csprojAssemblyReference.cache
