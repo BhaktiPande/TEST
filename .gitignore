@@ -1,0 +1,5 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/MyInsider/Application/.vs/InsiderTrading/v16/Server/sqlite3/db.lock
