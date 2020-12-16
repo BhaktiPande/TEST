@@ -1956,7 +1956,7 @@ namespace InsiderTrading.Controllers
                     else if (DisclosureTypeCodeId == ConstEnum.Code.DisclosureTypeContinuous)
                         IsSave = objTradingTransactionSL_OS.InsertTransactionFormDetails_ForTrade(objLoginUserDetails.CompanyDBConnectionString, objTransactionLetterDTO_OS);
                     else
-                        IsSave = objTradingTransactionSL_OS.InsertTransactionFormDetails_ForPeriodEnd(objLoginUserDetails.CompanyDBConnectionString, objTransactionLetterDTO_OS, uid);
+                        IsSave = objTradingTransactionSL_OS.InsertTransactionFormDetails_ForPeriodEnd(objLoginUserDetails.CompanyDBConnectionString, objTransactionLetterDTO_OS);
 
                     objTradingTransactionMasterDTO_OS.TransactionMasterId = TransactionMasterId;
                     objTradingTransactionMasterDTO_OS.TransactionStatusCodeId = ConstEnum.Code.DisclosureStatusForSoftCopySubmitted;
@@ -2498,14 +2498,12 @@ namespace InsiderTrading.Controllers
                 {
                     if (UserTypeCodeID == ConstEnum.Code.EmployeeType)
                     {
-                        //lstList = FillComboValues(ConstEnum.ComboType.UserPANList, Convert.ToString(UserInfoId), null, null, null, null, true);
-                        lstList = Common.Common.GetUserPANDetails(ConstEnum.ComboType.UserPANList, UserInfoId);
+                        lstList = FillComboValues(ConstEnum.ComboType.UserPANList, Convert.ToString(UserInfoId), null, null, null, null, true);
                         ViewBag.UserPan = lstList;
                     }
                     else
                     {
-                        //lstList = FillComboValues(ConstEnum.ComboType.RelUserPANList, Convert.ToString(UserInfoId), null, null, null, null, true);
-                        lstList = Common.Common.GetUserPANDetails(ConstEnum.ComboType.RelUserPANList, UserInfoId);
+                        lstList = FillComboValues(ConstEnum.ComboType.RelUserPANList, Convert.ToString(UserInfoId), null, null, null, null, true);
                         ViewBag.UserPan = lstList;
                     }
                 }
@@ -2513,13 +2511,11 @@ namespace InsiderTrading.Controllers
                 {
                     if (nPreclearenceID != 0 && UserTypeCodeID == ConstEnum.Code.RelativeType)
                     {
-                        lstList = Common.Common.GetUserPANDetails(ConstEnum.ComboType.RelUserPANList, UserInfoId);
-                        //lstList = FillComboValues(ConstEnum.ComboType.RelUserPANList, Convert.ToString(UserInfoId), null, null, null, null, true);
+                        lstList = FillComboValues(ConstEnum.ComboType.RelUserPANList, Convert.ToString(UserInfoId), null, null, null, null, true);
                     }
                     else
                     {
-                        lstList = Common.Common.GetUserPANDetails(ConstEnum.ComboType.UserPANList, UserInfoId);
-                        //lstList = FillComboValues(ConstEnum.ComboType.UserPANList, Convert.ToString(UserInfoId), null, null, null, null, true);
+                        lstList = FillComboValues(ConstEnum.ComboType.UserPANList, Convert.ToString(UserInfoId), null, null, null, null, true);
                     }
                     ViewBag.UserPan = lstList;
                 }
