@@ -147,20 +147,30 @@ BEGIN
 END
 
 --- INSERT SCRIPT FOR Admin Role----
-If NOT EXISTS (SELECT ActivityId FROM [usr_RoleActivity] where ActivityID=337 AND RoleID=1)
-BEGIN
-     INSERT INTO usr_RoleActivity(ActivityID,RoleID,CreatedBy,CreatedOn,ModifiedBy,ModifiedOn)
-	 VALUES 
-	 (337,1,1,GETDATE(),1,GETDATE())
-END
+CREATE TABLE #RolesByUserType1(ID INT IDENTITY(1,1),RoleID INT)
+INSERT INTO #RolesByUserType1
+SELECT RoleId FROM usr_RoleMaster WHERE UserTypeCodeId in (101002,101001)
+DECLARE @nCount1 INT = 1
+DECLARE @nTotCount1 INT = 0
+DECLARE @nRoleID1 INT = 0
+SELECT @nTotCount1 = COUNT(RoleID) FROM #RolesByUserType1
 
---- INSERT SCRIPT FOR Role CO----
-If NOT EXISTS (SELECT ActivityId FROM [usr_RoleActivity] where ActivityID=337 AND RoleID=3)
+WHILE @nCount1 <= @nTotCount1
 BEGIN
-     INSERT INTO usr_RoleActivity(ActivityID,RoleID,CreatedBy,CreatedOn,ModifiedBy,ModifiedOn)
-	 VALUES 
-	 (337,3,1,GETDATE(),1,GETDATE())
+	SET @nRoleID1 = (SELECT RoleID FROM #RolesByUserType1 WHERE ID = @nCount1)
+	
+	IF NOT EXISTS (SELECT ActivityID FROM usr_RoleActivity WHERE ActivityID ='337' AND RoleID = @nRoleID1)
+	BEGIN
+			INSERT INTO usr_RoleActivity(ActivityID,RoleID,CreatedBy,CreatedOn,ModifiedBy,ModifiedOn)
+			VALUES(337,@nRoleID1,1,GETDATE(),1,GETDATE())
+	END
+
+	SET @nCount1 = @nCount1 + 1
+	SET @nRoleID1 = 0
 END
+DROP TABLE #RolesByUserType1
+
+
 
 --- INSERT SCRIPT FOR usr_UserRelation for activityId Create----------
 
@@ -172,20 +182,28 @@ BEGIN
 END
 
 --- INSERT SCRIPT FOR Admin Role Create----
-If NOT EXISTS (SELECT ActivityId FROM [usr_RoleActivity] where ActivityID=338 AND RoleID=1)
-BEGIN
-     INSERT INTO usr_RoleActivity(ActivityID,RoleID,CreatedBy,CreatedOn,ModifiedBy,ModifiedOn)
-	 VALUES 
-	 (338,1,1,GETDATE(),1,GETDATE())
-END
+CREATE TABLE #RolesByUserType2(ID INT IDENTITY(1,1),RoleID INT)
+INSERT INTO #RolesByUserType2
+SELECT RoleId FROM usr_RoleMaster WHERE UserTypeCodeId in (101002,101001)
+DECLARE @nCount2 INT = 1
+DECLARE @nTotCount2 INT = 0
+DECLARE @nRoleID2 INT = 0
+SELECT @nTotCount2 = COUNT(RoleID) FROM #RolesByUserType2
 
---- INSERT SCRIPT FOR Role CO Create----
-If NOT EXISTS (SELECT ActivityId FROM [usr_RoleActivity] where ActivityID=338 AND RoleID=3)
+WHILE @nCount2 <= @nTotCount2
 BEGIN
-     INSERT INTO usr_RoleActivity(ActivityID,RoleID,CreatedBy,CreatedOn,ModifiedBy,ModifiedOn)
-	 VALUES 
-	 (338,3,1,GETDATE(),1,GETDATE())
+	SET @nRoleID2 = (SELECT RoleID FROM #RolesByUserType2 WHERE ID = @nCount2)
+	
+	IF NOT EXISTS (SELECT ActivityID FROM usr_RoleActivity WHERE ActivityID ='338' AND RoleID = @nRoleID2)
+	BEGIN
+			INSERT INTO usr_RoleActivity(ActivityID,RoleID,CreatedBy,CreatedOn,ModifiedBy,ModifiedOn)
+			VALUES(338,@nRoleID2,1,GETDATE(),1,GETDATE())
+	END
+
+	SET @nCount2 = @nCount2 + 1
+	SET @nRoleID2 = 0
 END
+DROP TABLE #RolesByUserType2
 
 --- INSERT SCRIPT FOR usr_UserRelation for activityId Edit
 
@@ -197,20 +215,29 @@ BEGIN
 END
 
 --- INSERT SCRIPT FOR Admin Role Edit----
-If NOT EXISTS (SELECT ActivityId FROM [usr_RoleActivity] where ActivityID=339 AND RoleID=1)
-BEGIN
-     INSERT INTO usr_RoleActivity(ActivityID,RoleID,CreatedBy,CreatedOn,ModifiedBy,ModifiedOn)
-	 VALUES 
-	 (339,1,1,GETDATE(),1,GETDATE())
-END
+CREATE TABLE #RolesByUserType3(ID INT IDENTITY(1,1),RoleID INT)
+INSERT INTO #RolesByUserType3
+SELECT RoleId FROM usr_RoleMaster WHERE UserTypeCodeId in (101002,101001)
+DECLARE @nCount3 INT = 1
+DECLARE @nTotCount3 INT = 0
+DECLARE @nRoleID3 INT = 0
+SELECT @nTotCount3 = COUNT(RoleID) FROM #RolesByUserType3
 
---- INSERT SCRIPT FOR Role CO Edit----
-If NOT EXISTS (SELECT ActivityId FROM [usr_RoleActivity] where ActivityID=339 AND RoleID=3)
+WHILE @nCount3 <= @nTotCount3
 BEGIN
-     INSERT INTO usr_RoleActivity(ActivityID,RoleID,CreatedBy,CreatedOn,ModifiedBy,ModifiedOn)
-	 VALUES 
-	 (339,3,1,GETDATE(),1,GETDATE())
+	SET @nRoleID3 = (SELECT RoleID FROM #RolesByUserType3 WHERE ID = @nCount3)
+	
+	IF NOT EXISTS (SELECT ActivityID FROM usr_RoleActivity WHERE ActivityID ='339' AND RoleID = @nRoleID3)
+	BEGIN
+			INSERT INTO usr_RoleActivity(ActivityID,RoleID,CreatedBy,CreatedOn,ModifiedBy,ModifiedOn)
+			VALUES(339,@nRoleID3,1,GETDATE(),1,GETDATE())
+	END
+
+	SET @nCount3 = @nCount3 + 1
+	SET @nRoleID3 = 0
 END
+DROP TABLE #RolesByUserType3
+
 
 --- INSERT SCRIPT FOR usr_UserRelation for activityId delete
 
@@ -222,20 +249,28 @@ BEGIN
 END
 
 --- INSERT SCRIPT FOR Admin Role delete----
-If NOT EXISTS (SELECT ActivityId FROM [usr_RoleActivity] where ActivityID=340 AND RoleID=1)
-BEGIN
-     INSERT INTO usr_RoleActivity(ActivityID,RoleID,CreatedBy,CreatedOn,ModifiedBy,ModifiedOn)
-	 VALUES 
-	 (340,1,1,GETDATE(),1,GETDATE())
-END
+CREATE TABLE #RolesByUserType4(ID INT IDENTITY(1,1),RoleID INT)
+INSERT INTO #RolesByUserType4
+SELECT RoleId FROM usr_RoleMaster WHERE UserTypeCodeId in (101002,101001)
+DECLARE @nCount4 INT = 1
+DECLARE @nTotCount4 INT = 0
+DECLARE @nRoleID4 INT = 0
+SELECT @nTotCount4 = COUNT(RoleID) FROM #RolesByUserType4
 
---- INSERT SCRIPT FOR Role CO delete----
-If NOT EXISTS (SELECT ActivityId FROM [usr_RoleActivity] where ActivityID=340 AND RoleID=3)
+WHILE @nCount4 <= @nTotCount4
 BEGIN
-     INSERT INTO usr_RoleActivity(ActivityID,RoleID,CreatedBy,CreatedOn,ModifiedBy,ModifiedOn)
-	 VALUES 
-	 (340,3,1,GETDATE(),1,GETDATE())
+	SET @nRoleID4 = (SELECT RoleID FROM #RolesByUserType4 WHERE ID = @nCount4)
+	
+	IF NOT EXISTS (SELECT ActivityID FROM usr_RoleActivity WHERE ActivityID ='340' AND RoleID = @nRoleID4)
+	BEGIN
+			INSERT INTO usr_RoleActivity(ActivityID,RoleID,CreatedBy,CreatedOn,ModifiedBy,ModifiedOn)
+			VALUES(340,@nRoleID4,1,GETDATE(),1,GETDATE())
+	END
+
+	SET @nCount4 = @nCount4 + 1
+	SET @nRoleID4 = 0
 END
+DROP TABLE #RolesByUserType4
 
 ------INSERT SCRIPT FOR Trading Policy Other Security List ------
 IF NOT EXISTS (SELECT CodeID FROM com_Code WHERE CodeID=122113)
