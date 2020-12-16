@@ -1,0 +1,356 @@
+﻿@model InsiderTrading.Models.TradingPolicyModel_OS
+@{
+    ViewBag.Title = "_ContinuousDisclosureRequired_OS";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    @Html.AntiForgeryToken()
+</section>
+<div class="panel-body">
+    <div class="row">
+        <div class="col-lg-5 col-md-5 col-sm-6 col-xs-12">
+            <div class="form-group">
+                @Html.LabelFor(m => m.StExTradePerformDtlsSubmitToCOByInsdrLimit, new { @class = "normalLable" })
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
+            <div class="form-group">
+                @Html.TextBoxFor(m => m.StExTradePerformDtlsSubmitToCOByInsdrLimit, @InsiderTrading.Common.Common.IsTradingPolicyEdit("TextNumber", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId))
+            </div>
+        </div>
+        <div class="col-lg-5 col-md-5 col-sm-6 col-xs-12">
+            <div class="form-group">
+                <label class="normalLable">@InsiderTrading.Common.Common.getResource("rul_lbl_55274")</label>
+                @Html.ValidationMessageFor(m => m.StExTradePerformDtlsSubmitToCOByInsdrLimit)
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
+        <div class="form-group">
+            @Html.LabelFor(model => model.SeekDeclarationFromEmpRegPossessionOfUPSIFlag, new { @class = "control-label text-left" })
+        </div>
+    </div>
+    <div class="col-md-9 col-md-4 col-sm-6 col-xs-8">
+        <div class="form-group">
+            <label class="radio-inline" for="radios-0">
+                @Html.RadioButtonFor(model => model.SeekDeclarationFromEmpRegPossessionOfUPSIFlag, "True", new { id = "PreClrSeek" }) <label class="normalLable"> @InsiderTrading.Common.Common.getResource("rul_lbl_55246")</label>
+            </label>
+            <label class="radio-inline" for="radios-1">
+                @Html.RadioButtonFor(model => model.SeekDeclarationFromEmpRegPossessionOfUPSIFlag, "False", new { id = "ClrSeek" }) <label class="normalLable"> @InsiderTrading.Common.Common.getResource("rul_lbl_55247")</label>
+            </label>
+            @if (ViewBag.SeekDeclarationUPSIFlag == true)
+            {
+                <input type="hidden" value="true" id="DeclarationUPSIFlag" />
+            }
+        </div>
+    </div>
+
+    <div id="DivPreClrDeclaration">
+        <div class="col-lg-5 col-md-5 col-sm-8 col-xs-12">
+            <div class="form-group">
+                @InsiderTrading.Common.Common.getResource("rul_lbl_55248")
+            </div>
+        </div>
+        <div class="col-md-9 col-md-4 col-sm-6 col-xs-8">
+            <div class="form-group">
+                @Html.TextAreaFor(m => m.DeclarationFromInsiderAtTheTimeOfContinuousDisclosures, new { id = "DecFrmInsContDis", @class = "form-control" })
+                @if (ViewBag.DeclarationFromInsiderAtTheTimeOfContinuousDisclosures != null)
+                {
+                    <input type="hidden" value="@ViewBag.DeclarationFromInsiderAtTheTimeOfContinuousDisclosures" id="DeclFrmInsiderContDisVal" />
+                }
+                @Html.ValidationMessageFor(m => m.DeclarationFromInsiderAtTheTimeOfContinuousDisclosures)
+            </div>
+        </div>
+
+        <div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
+            <div class="form-group">
+                @InsiderTrading.Common.Common.getResource("rul_lbl_55249")
+            </div>
+        </div>
+        <div class="col-md-9 col-md-4 col-sm-6 col-xs-8">
+            <div class="form-group">
+                <label class="radio-inline" for="radios-0">
+                    @Html.RadioButtonFor(model => model.DeclarationToBeMandatoryFlag, "True", new { id = "DeclarationMandatoryFlag" }) <label class="normalLable"> @InsiderTrading.Common.Common.getResource("rul_lbl_55246")</label>
+                </label>
+                <label class="radio-inline" for="radios-1">
+                    @Html.RadioButtonFor(model => model.DeclarationToBeMandatoryFlag, "False", new { id = "DeclarationFlag" }) <label class="normalLable"> @InsiderTrading.Common.Common.getResource("rul_lbl_55247")</label>
+                </label>
+            </div>
+        </div>
+
+        <div class="col-lg-5 col-md-5 col-sm-6 col-xs-12">
+            <div class="form-group">
+                @InsiderTrading.Common.Common.getResource("rul_lbl_55250")
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
+            <div class="form-group">
+                <label class="radio-inline" for="radios-0">
+                    @Html.RadioButtonFor(model => model.DisplayDeclarationPostSubmissionOfContinuouseDisclosureFlag, "True", new { id = "DeclarationPostSubOfContiDiscFlag", @checked = "checked" }) <label class="normalLable"> @InsiderTrading.Common.Common.getResource("rul_lbl_55246")</label>
+                </label>
+                <label class="radio-inline" for="radios-1">
+                    @Html.RadioButtonFor(model => model.DisplayDeclarationPostSubmissionOfContinuouseDisclosureFlag, "False", new { id = "DeclarationPostiDiscFlag" }) <label class="normalLable"> @InsiderTrading.Common.Common.getResource("rul_lbl_55247")</label>
+                </label>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $(document).ready(function () {
+                if ($("#DeclarationUPSIFlag").val() == "true") {
+                    $("#DivPreClrDeclaration").show();
+                }
+                else {
+                    $("#DivPreClrDeclaration").hide();
+                }
+            });
+        });
+
+        $(function () {
+            $('#PreClrSeek').click(function () {
+                if ($('#DeclFrmInsiderContDisVal').val() != "") {
+                    $('#DecFrmInsContDis').val($('#DeclFrmInsiderContDisVal').val());
+                }
+                $("#DivPreClrDeclaration").show();
+            });
+
+            $('#ClrSeek').click(function () {
+                $("#DivPreClrDeclaration").hide();
+            });
+        });
+        $(document).ready(function () {
+            $(':radio[name="StExSubmitTradeDiscloAllTradeFlag"]').change(function () {
+                var values = $("#frmTradingPolicy").serializeArray();
+                values.push({
+                    name: "acid",
+                    value: $("#TradingPolicyUserAction").val()
+                });
+                var a = $(this).filter(':checked').val();
+                if (a == 'False') {
+                    if ($('input:radio[name=TradingPolicyForCodeId]').filter(":checked").val() == 135001) {
+                        if ($("#AutoSubmitTransaction").val() == 178001) {
+                            $(':radio[name="StExSingMultiTransTradeFlagCodeId"]').prop("disabled", false);
+                        } else {
+                            $(':radio[name="StExSingMultiTransTradeFlagCodeId"]').prop("checked", $('#MultipleTransactionTrade').val());
+                            $(':radio[name="StExSingMultiTransTradeFlagCodeId"]').attr("disabled", true);
+                        }
+                        $(':radio[name="StExForAllSecuritiesFlag"]').attr("disabled", false);
+                        $('#lblSingleTransactionTrade').removeClass("TextGray");
+                    } else if ($('input:radio[name=TradingPolicyForCodeId]').filter(":checked").val() == 135002) {
+                        $(':radio[name="StExSingMultiTransTradeFlagCodeId"]').prop("checked", $('#MultipleTransactionTrade').val());
+                        $('#lblSingleTransactionTrade').addClass("TextGray");
+                        $.ajax({
+                            url: $("#RadioButtonChangeTransaction").val(),
+                            type: 'post',
+                            headers: getRVToken(),
+                            cache: false,
+                            data: values,
+                            success: function (result) {
+                                $('#SingleTransactionDiv').html(result);
+                            },
+                            error: function (result) {
+                            }
+                        });
+
+                        $(':radio[name="StExForAllSecuritiesFlag"]').attr("disabled", false);
+                    }
+                    $(':radio[name="StExSingMultiTransTradeFlagCodeId"]').attr("disabled", true);
+                    $('#lblSingleTransactionTrade').addClass("TextGray");
+                    $.ajax({
+                        url: $("#ContinuousLimitsURL").val(),
+                        type: 'post',
+                        headers: getRVToken(),
+                        cache: false,
+                        data: values,
+                        success: function (result) {
+                            $('#DivContinuousLimits').html(result);
+                        },
+                        error: function (result) {
+                        }
+                    });
+
+                    $.ajax({
+                        url: $("#ContinousSecurityFlagChange").val(),
+                        type: 'post',
+                        headers: getRVToken(),
+                        cache: false,
+                        data: values,
+                        success: function (result) {
+                            $('#ContinousSecuritywiseLimitList').html(result);
+                        },
+                        error: function (result) {
+                        }
+                    });
+                }
+                else {
+                    $(':radio[name="StExSingMultiTransTradeFlagCodeId"]').attr("disabled", true);
+                    $(':radio[name="StExSingMultiTransTradeFlagCodeId"]').prop("checked", null);
+                    $(':radio[name="StExForAllSecuritiesFlag"]').attr("disabled", true);
+                    $(':radio[name="StExForAllSecuritiesFlag"]').prop("checked", null);
+                    $('#SingleTransactionDiv').empty();
+                    $('#DivYearType').empty();
+                    $('#DivContinuousLimits').html("");
+                    $('#ContinousSecuritywiseLimitList').empty();
+                }
+            });
+
+
+            $(function () {
+                var values = $("#frmTradingPolicy").serializeArray();
+                values.push({
+                    name: "acid",
+                    value: $("#TradingPolicyUserAction").val()
+                });
+
+                if ($('input:radio[name=StExSubmitTradeDiscloAllTradeFlag]').filter(":checked").val() == 'False') {
+                    $.ajax({
+                        url: $("#ContinuousLimitsURL").val(),
+                        type: 'post',
+                        headers: getRVToken(),
+                        cache: false,
+                        data: values,
+                        success: function (result) {
+                            $('#DivContinuousLimits').html(result);
+                        },
+                        error: function (result) {
+                        }
+                    });
+                }
+
+                if ($('input:radio[name=StExSubmitTradeDiscloAllTradeFlag]').filter(":checked").val() == 'False'
+                    && $('input:radio[name=TradingPolicyForCodeId]').filter(":checked").val() == 135001) {
+                    $(':radio[name="StExSingMultiTransTradeFlagCodeId"]').prop("disabled", false);
+                    $(':radio[name="StExForAllSecuritiesFlag"]').attr("disabled", false);
+                    $('#lblSingleTransactionTrade').removeClass("TextGray");
+                }
+                else if ($('input:radio[name=StExSubmitTradeDiscloAllTradeFlag]').filter(":checked").val() == 'False'
+                    && $('input:radio[name=TradingPolicyForCodeId]').filter(":checked").val() == 135002) {
+                    $(':radio[name="StExSingMultiTransTradeFlagCodeId"]').prop("checked", $('#MultipleTransactionTrade').val());
+                    $.ajax({
+                        url: $("#RadioButtonChangeTransaction").val(),
+                        type: 'post',
+                        headers: getRVToken(),
+                        cache: false,
+                        data: values,
+                        success: function (result) {
+                            $('#SingleTransactionDiv').html(result);
+                        },
+                        error: function (result) {
+                        }
+                    });
+                    $(':radio[name="StExSingMultiTransTradeFlagCodeId"]').attr("disabled", true);
+                    $('#lblSingleTransactionTrade').addClass("TextGray");
+                }
+                else {
+
+                    $(':radio[name="StExSingMultiTransTradeFlagCodeId"]').attr("disabled", true);
+                    $(':radio[name="StExSingMultiTransTradeFlagCodeId"]').prop("checked", null);
+                    $(':radio[name="StExForAllSecuritiesFlag"]').attr("disabled", true);
+                    $(':radio[name="StExForAllSecuritiesFlag"]').prop("checked", null);
+
+                }
+                if ($('input:radio[name=StExSubmitDiscloToStExByCOFlag]').filter(":checked").val() == 'False') {
+                    $(':checkbox[name="StExSubmitDiscloToStExByCOSoftcopyFlag"]').attr("disabled", true);
+                    $(':checkbox[name="StExSubmitDiscloToStExByCOHardcopyFlag"]').attr("disabled", true);
+                    $(':checkbox[name="StExSubmitDiscloToStExByCOSoftcopyFlag"]').prop("checked", null);
+                    $(':checkbox[name="StExSubmitDiscloToStExByCOHardcopyFlag"]').prop("checked", null);
+                    $(':checkbox[name="StExSubmitDiscloToStExByCOHardcopyFlag_disable"]').prop("checked", null);
+                    $("input[name='StExSubmitDiscloToStExByCOHardcopyFlag']").val("false");
+
+                } else {
+                    $(':checkbox[name="StExSubmitDiscloToStExByCOHardcopyFlag"]').prop("checked", true);
+                    $(':checkbox[name="StExSubmitDiscloToStExByCOSoftcopyFlag"]').attr("disabled", true);
+                    $(':checkbox[name="StExSubmitDiscloToStExByCOHardcopyFlag"]').attr("disabled", true);
+                    $(':checkbox[name="StExSubmitDiscloToStExByCOHardcopyFlag_disable"]').prop("checked", true);
+                    $("input[name='StExSubmitDiscloToStExByCOHardcopyFlag']").val("true");
+                }
+
+            });
+
+            $(':radio[name="StExSubmitDiscloToStExByCOFlag"]').change(function () {
+                var a = $(this).filter(':checked').val();
+                var values = $("#frmTradingPolicy").serializeArray();
+                values.push({
+                    name: "acid",
+                    value: $("#TradingPolicyUserAction").val()
+                });
+                if (a == 'True') {
+                    $('#DivConDisSubmissionStockExchange').html("");
+                    $.ajax({
+                        url: $("#ContinuousDisclosureSubmissionStockExchangeURL").val(),
+                        type: 'post',
+                        headers: getRVToken(),
+                        cache: false,
+                        data: values,
+                        success: function (result) {
+                            $('#DivConDisSubmissionStockExchange').html(result);
+                        },
+                        error: function (result) {
+                        }
+                    });
+                } else {
+                    $('#DivConDisSubmissionStockExchange').empty();
+                }
+            });
+
+            $(':radio[name="StExSubmitDiscloToStExByCOFlag"]').change(function () {
+                var a = $(this).filter(':checked').val();
+                if (a == 'True') {
+                    $(':checkbox[name="StExSubmitDiscloToStExByCOHardcopyFlag"]').prop("checked", true);
+                    $(':checkbox[name="StExSubmitDiscloToStExByCOSoftcopyFlag"]').prop("disabled", true);
+                    $(':checkbox[name="StExSubmitDiscloToStExByCOHardcopyFlag"]').prop("disabled", true);
+                    $(':checkbox[name="StExSubmitDiscloToStExByCOHardcopyFlag_disable"]').prop("checked", true);
+                    $("input[name='StExSubmitDiscloToStExByCOHardcopyFlag']").val("true");
+                }
+                else {
+                    $(':checkbox[name="StExSubmitDiscloToStExByCOSoftcopyFlag"]').attr("disabled", true);
+                    $(':checkbox[name="StExSubmitDiscloToStExByCOHardcopyFlag"]').attr("disabled", true);
+                    $(':checkbox[name="StExSubmitDiscloToStExByCOSoftcopyFlag"]').prop("checked", null);
+                    $(':checkbox[name="StExSubmitDiscloToStExByCOHardcopyFlag"]').prop("checked", null);
+                    $(':checkbox[name="StExSubmitDiscloToStExByCOHardcopyFlag_disable"]').prop("checked", null);
+                    $("input[name='StExSubmitDiscloToStExByCOHardcopyFlag']").val("false");
+                }
+            });
+
+            $(':checkbox[name="StExSubmitDiscloToStExByCOHardcopyFlag"]').change(function () {
+
+                if ($(this).is(":checked")) {
+                    $(':checkbox[name="StExSubmitDiscloToStExByCOSoftcopyFlag"]').prop("checked", true);
+                }
+            });
+
+        });
+
+        function securityRadioButtonChange() {
+            var value = $('input:radio[name=StExForAllSecuritiesFlag]').filter(":checked").val();//  $('input:radio[name=]:checked').val();
+            var values = $("#frmTradingPolicy").serializeArray();
+            values.push({
+                name: "acid",
+                value: $("#TradingPolicyUserAction").val()
+            });
+            if (value != 'null') {
+                $('#ContinousSecuritywiseLimitList').html("");
+                $.ajax({
+                    url: $("#ContinousSecurityFlagChange").val(),
+                    type: 'post',
+                    headers: getRVToken(),
+                    cache: false,
+                    data: values,
+                    success: function (result) {
+                        $('#ContinousSecuritywiseLimitList').html(result);
+                    },
+                    error: function (result) {
+                    }
+                });
+            }
+        }
+
+
+
+    </script>
+
+    @Html.Hidden("ContinousSecurityFlagChange", Url.Action("ContinousSecurityFlagChange", "TradingPolicy_OS"))
+    @Html.Hidden("RadioButtonChangeTransaction", Url.Action("RadioButtonChangeTransaction", "TradingPolicy_OS"))
+    @Html.Hidden("ContinuousLimitsURL", Url.Action("ContinuousLimitsURL", "TradingPolicy_OS"))

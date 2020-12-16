@@ -50,6 +50,8 @@ BEGIN
 	DECLARE @nTP_PreclearanceRequestSingleOrMultiple					INT
 	DECLARE @nTP_PreClrApprovalPreclearORPreclearTradeFlag				INT -- 0=Preclearance details, 1=Preclearance and Trade details
 	DECLARE @nTP_PreClrForAllSecuritiesFlag								INT -- 0: For selected securities, 1: For ALL securities
+	DECLARE @ERR_PRECLEARANCE_REQUESTED									INT = 17383 --? Cannot save new preclearance request, as a preclearance is already requested and not yet approved.
+	DECLARE @ERR_PRECLEARANCE_OPEN										INT = 17384 --? Earlier preclearance request is not yet closed. Close the preclearance request by providing all details or reason for Not/partial trading.
 	DECLARE @nPeriodType INT
 
 	DECLARE @nTransactionMode_MapToTypeCode_PreclearnaceOS INT = 132015
@@ -71,6 +73,10 @@ BEGIN
 	DECLARE @nPledgeQuantity                            INT = 0
 	DECLARE @nImptPostShareQtyCodeId INT
 	DECLARE @nActionCodeID INT
+
+	DECLARE @nPCLStatusCode_Requested									INT = 144001
+	DECLARE @nPCLStatusCode_Approved									INT = 144002
+	DECLARE @nPCLStatusCode_Rejected									INT = 144003
 	--Impact on Post Share quantity	
     DECLARE @nLess INT = 505002    
     DECLARE @nNo   INT = 505004
@@ -97,6 +103,7 @@ BEGIN
 	DECLARE @bIsWithinLimits							BIT
 	DECLARE @bWithinLimit								BIT = 1
 	DECLARE @bNotWithinLimit							BIT = 0
+	SET @out_iIsAutoApproved = 0
 	--Temp tables
 	CREATE TABLE #tmpTrading(ApplicabilityMstId INT,UserInfoId INT,MapToId INT)
 
@@ -110,7 +117,7 @@ BEGIN
 		END
 		
 		SELECT 1 --Petapoco
-
+		
 		IF @inp_nPreclearanceRequestId IS NULL OR @inp_nPreclearanceRequestId = 0
 		BEGIN
 			--Call Contra Trade check
@@ -210,6 +217,40 @@ BEGIN
 				SET @nVirtualQuantity = 0
 				SET @nActualQuantity = 0
 			END
+		END
+
+		----print 'Check @ERR_PRECLEARANCE_REQUESTED - Check that preclearance in requested state exists'		
+		-- #2 Allow new pre clearance to be created when earlier pre clearance is open
+		-- PreClrAllowNewForOpenPreclearFlag = 1 -> Allow any preclearance
+		IF @nTP_PreClrAllowNewForOpenPreclearFlag = 0
+		BEGIN
+			----print 'Checking....'
+			-- Check that preclearance in requested state exists
+			IF EXISTS (SELECT PreclearanceRequestId FROM tra_PreclearanceRequest_NonImplementationCompany
+							WHERE UserInfoId = @inp_iUserInfoId
+								AND PreclearanceStatusCodeId = @nPCLStatusCode_Requested)
+			BEGIN
+				SET @out_nReturnValue = @ERR_PRECLEARANCE_REQUESTED
+				RETURN @out_nReturnValue				
+			END
+			
+			----print '@ERR_PRECLEARANCE_OPEN - Check if non-closed preclearance exists'
+			-- Check if non-closed preclearance exists
+			-- If PreClrAllowNewForOpenPreclearFlag = 0 -> Check that all other preclearance requests are closed
+			--	1)	Insider creates a pre-clearance and CO approves and full trade details are provided by insider
+			--	2)	Insider creates a pre-clearance and CO approves and not traded details (full) are provided by insider
+			--	3)	Insider creates a pre-clearance and CO approves and partial trade details provide and remaining not traded details are provided by insider
+			--	4)	Insider creates a pre-clearance and CO rejects
+			IF EXISTS (SELECT PreclearanceRequestId FROM tra_PreclearanceRequest_NonImplementationCompany 
+							WHERE UserInfoId = @inp_iUserInfoId
+								AND PreclearanceStatusCodeId = @nPCLStatusCode_Approved
+								AND ReasonForNotTradingCodeId IS NULL
+								AND IsPartiallyTraded = 1)
+			BEGIN
+				SET @out_nReturnValue = @ERR_PRECLEARANCE_OPEN
+				RETURN @out_nReturnValue
+			END
+		
 		END
 
 		-- validation for security quantity and security avaiable in pool
@@ -354,30 +395,42 @@ BEGIN
 			----SELECT @nSecuritiesToBeTradedValue AS 'SecuritiesToBeTradedValue',@nSecurityValueLimit AS 'SecurityValueLimit'
 			--SELECT @nSecuritiesToBeTradedValue AS 'SecuritiesToBeTradedValue',@nPerOfSubCapital AS 'PerOfSubCapital'
 			-- Check if the request crosses the limit
-			IF (@nSecurityQtyLimit IS NOT NULL AND @nSecurityQtyLimit < @inp_dSecuritiesToBeTradedQty) -- Limit on qty is set and exceeds
-				OR (@nSecurityValueLimit IS NOT NULL AND @nSecurityValueLimit < @inp_dSecuritiesToBeTradedValue) -- Limit on value is set and exceeds
+			
+			IF(@nTP_PreClrTradesApprovalReqFlag=1)
 			BEGIN
-				SET @bIsWithinLimits = @bNotWithinLimit
+				SET @out_iIsAutoApproved = 0
+				SET @out_nReturnValue = 0
+				RETURN @out_nReturnValue
 			END
 			ELSE
 			BEGIN
-				SET @bIsWithinLimits = @bWithinLimit
-			END
-			
-			IF @bIsWithinLimits = @bWithinLimit
-			BEGIN
-				IF @nTP_AutoAprReqForBelowEnteredValue = 0 -- Auto approval is not req below the entered value
-				BEGIN
-					SET @out_nReturnValue = @ERR_PRECLEARANCENOTNEEDED_VALUESWITHINLIMIT
-					RETURN @out_nReturnValue
+				IF (@nSecurityQtyLimit IS NOT NULL AND @nSecurityQtyLimit < @inp_dSecuritiesToBeTradedQty) -- Limit on qty is set and exceeds
+					OR (@nSecurityValueLimit IS NOT NULL AND @nSecurityValueLimit < @inp_dSecuritiesToBeTradedValue) -- Limit on value is set and exceeds
+				BEGIN			
+					SET @bIsWithinLimits = @bNotWithinLimit
 				END
 				ELSE
-				BEGIN
-					-- Set flag for autoapproval
-					SET @out_iIsAutoApproved = 1
-					--select @out_iIsAutoApproved as 'Auto Approve'
+				BEGIN			
+					SET @bIsWithinLimits = @bWithinLimit
+				END
+			
+				IF @bIsWithinLimits = @bWithinLimit
+				BEGIN			
+					IF @nTP_AutoAprReqForBelowEnteredValue = 0 -- Auto approval is not req below the entered value
+					BEGIN
+						SET @out_nReturnValue = @ERR_PRECLEARANCENOTNEEDED_VALUESWITHINLIMIT
+						RETURN @out_nReturnValue
+					END
+					ELSE
+					BEGIN				
+						-- Set flag for autoapproval
+						SET @out_iIsAutoApproved = 1
+						--select @out_iIsAutoApproved as 'Auto Approve'
+					END
 				END
 			END
+
+
 	END TRY
 	BEGIN CATCH	
 		SET @out_nSQLErrCode    =  ERROR_NUMBER()

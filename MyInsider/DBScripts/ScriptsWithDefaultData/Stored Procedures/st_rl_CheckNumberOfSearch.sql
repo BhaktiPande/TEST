@@ -10,7 +10,7 @@ Description:	Check how many times employee search for company
 
 Returns:		1, if Success.
 				
-Created by:		Priyanka,Rutuja
+Created by:		Priyanka,Rajashri
 Created on:		15-Dec-2016
 
 Modification History:
@@ -19,8 +19,9 @@ Modified By		Modified On	Description
 Usage:
 EXEC st_rl_CheckNumberOfSearch 2
 -------------------------------------------------------------------------------------------------*/
-CREATE PROCEDURE [dbo].[st_rl_CheckNumberOfSearch]
+CREATE PROCEDURE [dbo].[st_rl_CheckNumberOfSearch] 
 	@inp_iUserId INT,
+	--@inp_iRequiredModule INT,
 	@out_parameter          INT = 0 OUTPUT,
 	@out_nReturnValue		INT = 0 OUTPUT,
 	@out_nSQLErrCode		INT = 0 OUTPUT,				-- Output SQL Error Number, if error occurred.
@@ -40,6 +41,7 @@ BEGIN
 		DECLARE @SearchLimit INT
 		DECLARE @ConfigurationTypeCodeId INT
 		DECLARE @ConfigurationCodeId INT
+		DECLARE @TradingPolicyId INT
 		
 		SET @ConfigurationTypeCodeId=180003
 		SET @ConfigurationCodeId=185006
@@ -52,20 +54,37 @@ BEGIN
 
 		IF @out_sSQLErrMessage IS NULL
 			SET @out_sSQLErrMessage = ''
+			DECLARE @inp_iRequiredModule INT
 
-		SET @UserCount = (SELECT COUNT(CreatedOn) FROM dbo.rl_SearchAudit WHERE CONVERT(DATE, [CreatedOn]) = CONVERT(DATE, GETDATE())AND UserInfoId=@inp_iUserId);
 
-		SET @SearchLimit = (SELECT RLSearchLimit FROM com_CompanySettingConfiguration WHERE ConfigurationTypeCodeId=@ConfigurationTypeCodeId AND ConfigurationCodeId=@ConfigurationCodeId);
-		
+
+			SELECT @inp_iRequiredModule =RequiredModule FROM mst_Company WHERE CompanyId=1
+
+			
+       If(@inp_iRequiredModule=513001) --Own Securities
+	     BEGIN
+		     SET @UserCount = (SELECT COUNT(CreatedOn) FROM dbo.rl_SearchAudit WHERE CONVERT(DATE, [CreatedOn]) = CONVERT(DATE, GETDATE())AND UserInfoId=@inp_iUserId);			
+   		     SET @SearchLimit = (SELECT RLSearchLimit FROM com_CompanySettingConfiguration WHERE ConfigurationTypeCodeId=@ConfigurationTypeCodeId AND ConfigurationCodeId=@ConfigurationCodeId);
+	     END
+	   ELSE IF (@inp_iRequiredModule=513002 OR @inp_iRequiredModule=513003 ) --Other Securities Or Both
+	   BEGIN  
+	   print(1234)
+	        SET @UserCount = (SELECT COUNT(CreatedOn) FROM dbo.rl_SearchAudit WHERE CONVERT(DATE, [CreatedOn]) = CONVERT(DATE, GETDATE())AND UserInfoId=@inp_iUserId);			
+			
+			SET @TradingPolicyId = (SELECT MAX(MapToId) FROM vw_ApplicableTradingPolicyForUser_OS WHERE UserInfoId=@inp_iUserId);	
+				Select @SearchLimit= rl.SearchLimit from rul_TradingPolicy_OS TPOS JOIN rl_RestrictedListConfig RL on TPOS.RestrictedListConfigId=RL.Id
+				where TPOS.TradingPolicyId=	@TradingPolicyId	
+		END
+	  
 		--Check whether search limit exceeds by user
-		IF (@SearchLimit = 0)
+		IF (@SearchLimit = 0 or @SearchLimit IS NULL )
 		BEGIN	
 				SET @out_parameter = 1  --true
 				RETURN @out_parameter
 		END
 		
 		ELSE IF(@UserCount<@SearchLimit)
-		BEGIN
+		BEGIN --print 'in'
 				SET @out_parameter = 1  --true
 				RETURN @out_parameter
 		END
@@ -83,7 +102,7 @@ BEGIN
 	BEGIN CATCH		
 		SET @out_nSQLErrCode    =  ERROR_NUMBER()
 		SET @out_sSQLErrMessage =   ERROR_MESSAGE()
-		
+		--print ERROR_MESSAGE()
 		-- Return common error if required, otherwise specific error.		
 		SET @out_nReturnValue  = dbo.uf_com_GetErrorCode(@ERR_DURING_FETCH_MASSUPLOAD_COUNT, ERROR_NUMBER())
 		RETURN @out_nReturnValue		

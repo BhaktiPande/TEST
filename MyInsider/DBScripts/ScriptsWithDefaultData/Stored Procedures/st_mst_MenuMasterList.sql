@@ -61,16 +61,26 @@ BEGIN
 		select @CurrentRequiredModule = RequiredModule,@MCQRequiredModule=IsMCQRequired from mst_company where IsImplementing=1
 		IF(@MCQRequiredModule=521001)
 		BEGIN
-		UPDATE mst_MenuMaster SET StatusCodeID = 102001 WHERE upper(MenuName) =upper('MCQ Settings') and MenuID=66
-		UPDATE mst_MenuMaster SET StatusCodeID = 102001 WHERE upper(MenuName) =upper('MCQ Report') and MenuID=67
+			UPDATE mst_MenuMaster SET StatusCodeID = 102001 WHERE upper(MenuName) =upper('MCQ Settings') and MenuID=66
+			UPDATE mst_MenuMaster SET StatusCodeID = 102001 WHERE upper(MenuName) =upper('MCQ Report') and MenuID=67
 		END
 		ELSE 
 		BEGIN
 			UPDATE mst_MenuMaster SET StatusCodeID = 102002 WHERE upper(MenuName) =upper('MCQ Settings') and MenuID=66
 			UPDATE mst_MenuMaster SET StatusCodeID = 102002 WHERE upper(MenuName) =upper('MCQ Report') and MenuID=67
 		END
-		print(@inp_sUserInfoId)
-		print(@nInActiveStatusCode)
+
+		IF(@CurrentRequiredModule=@OwnSecurityModule)
+		BEGIN
+			UPDATE usr_Activity set StatusCodeID=105001 where ActivityID=218
+			UPDATE mst_MenuMaster set StatusCodeID=102001 where MenuID in(56,57)
+		END
+		ELSE
+		BEGIN
+			UPDATE usr_Activity set StatusCodeID=105002 where ActivityID=218
+			UPDATE mst_MenuMaster set StatusCodeID=102002 where MenuID in(56,57)
+		END
+
 		IF(@CurrentRequiredModule<>@BothSecurityModule)
 		BEGIN
 			INSERT INTO #tmpMenuList(MenuId, ParentMenuID)
@@ -106,6 +116,7 @@ BEGIN
 			WHERE UserInfoIdTo = @inp_sUserInfoId AND MChild.StatusCodeId != @nInActiveStatusCode
 			AND DelegationFrom <= @dtToday AND DelegationTo >= @dtToday
 		END
+		
 
 		
 		INSERT INTO #tmpMenuList(MenuId, ParentMenuID)
