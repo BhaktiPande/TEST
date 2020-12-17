@@ -2668,3 +2668,82 @@ BEGIN
 	(114150,'rul_grd_55379',1,6,0,155001,NULL,NULL)
 END
 
+IF NOT EXISTS (SELECT CodeID FROM com_Code WHERE CodeID=122115)
+BEGIN
+     INSERT INTO com_Code(CodeID,CodeName,CodeGroupId,[Description],IsVisible,IsActive,DisplayOrder,DisplayCode,ParentCodeId,ModifiedBy,ModifiedOn)
+	 VALUES 
+	 (122115,'Applicability_OS',122,'Applicability_OS',1,1,'115',null,null,1,GETDATE())
+END
+GO
+
+IF NOT EXISTS (SELECT ResourceId from mst_Resource where ResourceId=55330)
+BEGIN
+    INSERT INTO mst_Resource(ResourceId,ResourceKey,ResourceValue,ResourceCulture,ModuleCodeId,CategoryCodeId,ScreenCodeId,OriginalResourceValue,ModifiedBy,ModifiedOn)
+	VALUES
+     (55330,'rul_grd_55330','Employee Name','en-US','103006','104003','122115','Employee Name',1,GETDATE())
+END
+
+IF NOT EXISTS (SELECT ResourceId from mst_Resource where ResourceId=55331)
+BEGIN
+    INSERT INTO mst_Resource(ResourceId,ResourceKey,ResourceValue,ResourceCulture,ModuleCodeId,CategoryCodeId,ScreenCodeId,OriginalResourceValue,ModifiedBy,ModifiedOn)
+	VALUES
+     (55331,'rul_grd_55331','Employee Id','en-US','103006','104003','122115','Employee Id',1,GETDATE())
+END
+
+IF NOT EXISTS (SELECT ResourceId from mst_Resource where ResourceId=55332)
+BEGIN
+    INSERT INTO mst_Resource(ResourceId,ResourceKey,ResourceValue,ResourceCulture,ModuleCodeId,CategoryCodeId,ScreenCodeId,OriginalResourceValue,ModifiedBy,ModifiedOn)
+	VALUES
+     (55332,'rul_grd_55332','Department','en-US','103006','104003','122115','Department',1,GETDATE())
+END
+
+IF NOT EXISTS (SELECT ResourceId from mst_Resource where ResourceId=55333)
+BEGIN
+    INSERT INTO mst_Resource(ResourceId,ResourceKey,ResourceValue,ResourceCulture,ModuleCodeId,CategoryCodeId,ScreenCodeId,OriginalResourceValue,ModifiedBy,ModifiedOn)
+	VALUES
+     (55333,'rul_grd_55333','Grade','en-US','103006','104003','122115','Grade',1,GETDATE())
+END
+
+IF NOT EXISTS (SELECT ResourceId from mst_Resource where ResourceId=55334)
+BEGIN
+    INSERT INTO mst_Resource(ResourceId,ResourceKey,ResourceValue,ResourceCulture,ModuleCodeId,CategoryCodeId,ScreenCodeId,OriginalResourceValue,ModifiedBy,ModifiedOn)
+	VALUES
+     (55334,'rul_grd_55334','Designation','en-US','103006','104003','122115','Designation',1,GETDATE())
+END
+
+IF NOT EXISTS (SELECT ResourceId from mst_Resource where ResourceId=55342)
+BEGIN
+    INSERT INTO mst_Resource(ResourceId,ResourceKey,ResourceValue,ResourceCulture,ModuleCodeId,CategoryCodeId,ScreenCodeId,OriginalResourceValue,ModifiedBy,ModifiedOn)
+	VALUES
+     (55342,'rul_grd_55342','Category','en-US','103006','104003','122115','Category',1,GETDATE())
+END
+
+IF NOT EXISTS (SELECT ResourceId from mst_Resource where ResourceId=55343)
+BEGIN
+    INSERT INTO mst_Resource(ResourceId,ResourceKey,ResourceValue,ResourceCulture,ModuleCodeId,CategoryCodeId,ScreenCodeId,OriginalResourceValue,ModifiedBy,ModifiedOn)
+	VALUES
+     (55343,'rul_grd_55343','Sub Category','en-US','103006','104003','122115','Sub Category',1,GETDATE())
+END
+
+IF NOT EXISTS (SELECT ResourceId from mst_Resource where ResourceId=55344)
+BEGIN
+    INSERT INTO mst_Resource(ResourceId,ResourceKey,ResourceValue,ResourceCulture,ModuleCodeId,CategoryCodeId,ScreenCodeId,OriginalResourceValue,ModifiedBy,ModifiedOn)
+	VALUES
+     (55344,'rul_grd_55344','Role','en-US','103006','104003','122115','Role',1,GETDATE())
+END
+
+IF NOT EXISTS (SELECT ResourceId from mst_Resource where ResourceId=55328)
+BEGIN
+    INSERT INTO mst_Resource(ResourceId,ResourceKey,ResourceValue,ResourceCulture,ModuleCodeId,CategoryCodeId,ScreenCodeId,OriginalResourceValue,ModifiedBy,ModifiedOn)
+	VALUES
+     (55328,'rul_lbl_55328','Yes','en-US','103006','104002','122114','Yes',1,GETDATE())
+END
+
+IF NOT EXISTS (SELECT ResourceId from mst_Resource where ResourceId=55329)
+BEGIN
+    INSERT INTO mst_Resource(ResourceId,ResourceKey,ResourceValue,ResourceCulture,ModuleCodeId,CategoryCodeId,ScreenCodeId,OriginalResourceValue,ModifiedBy,ModifiedOn)
+	VALUES
+     (55329,'rul_grd_55329','No','en-US','103006','104002','122114','No',1,GETDATE())
+END
+
+
