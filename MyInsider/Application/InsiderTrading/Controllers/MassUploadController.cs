@@ -35,7 +35,18 @@ namespace InsiderTrading.Controllers
         {
             ViewBag.acid = acid;
             List<MassUploadDTO> lstMassUploadDTO = new List<MassUploadDTO>();
-            lstMassUploadDTO = GetAllMassUpload();
+            MassUploadSL massUploadSL = new MassUploadSL();
+
+            if (acid == 337)
+            {
+                lstMassUploadDTO = GetAllMassUpload().Where(c => c.MassUploadExcelId == 2 | c.MassUploadExcelId == 5).ToList();
+                lstMassUploadDTO = massUploadSL.GetSequenceMassUploadList(lstMassUploadDTO);
+            }
+            else
+            {
+                lstMassUploadDTO = GetAllMassUpload();
+                lstMassUploadDTO = massUploadSL.GetSequenceMassUploadList(lstMassUploadDTO);
+            }
             ViewBag.AllMassUpload = lstMassUploadDTO;
             return View("~/Views/Common/MassUpload.cshtml");
         }
