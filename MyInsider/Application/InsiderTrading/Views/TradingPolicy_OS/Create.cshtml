@@ -1,0 +1,485 @@
+﻿@model InsiderTrading.Models.TradingPolicyModel_OS
+@{
+    ViewBag.Title = @InsiderTrading.Common.Common.getResource("rul_ttl_55232");
+}
+
+@using (Html.BeginForm("Cancel", "TradingPolicy_OS", new { ReturnUrl = ViewBag.ReturnUrl}, FormMethod.Post, new { @class = "", role = "", @autocomplete = "off", id = "frmTradingPolicy" }))
+{
+    @Html.AntiForgeryToken()
+    <section class="content-header">
+        <p><a href="@Url.Action("Index", "TradingPolicy_OS", new { acid = InsiderTrading.Common.ConstEnum.UserActions.TRADING_POLICY_OTHER_SECURITY_VIEW })"><i class=" fa fa-chevron-left"></i> Back to Search List</a></p>
+        <h1>
+            @InsiderTrading.Common.Common.getResource("rul_ttl_55232")
+        </h1>
+    </section>
+
+
+    <section class="content">
+        @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label>@InsiderTrading.Common.Common.getResource("rul_ttl_55233")</label>
+                                <div class="panel-group" id="accordion">
+                                    
+                                    <div class="panel panel-accordion">
+                                        <div class="panel-heading active">
+                                            <h4 class="panel-title">
+                                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                                    <span class="fa fa-plus pull-right"></span>
+                                                    @InsiderTrading.Common.Common.getResource("rul_ttl_55234")
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapseOne" class="panel-collapse in">
+                                            <div class="panel-body">
+                                                <div class="row">
+                                                    <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                                                        <div class="form-group">
+                                                            @Html.Label(InsiderTrading.Common.Common.getResource("rul_lbl_55235"))
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                                                        <div class="form-group">
+                                                            @Html.RadioButtonFor(model => model.TradingPolicyForCodeId, InsiderTrading.Common.ConstEnum.Code.TradingPolicyInsiderType,
+                                                            Model.TradingPolicyForCodeId == InsiderTrading.Common.ConstEnum.Code.TradingPolicyInsiderType ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)
+                                                            : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull1", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) @InsiderTrading.Common.Common.getResource("rul_lbl_55236")
+                                                        </div>
+                                                    </div>                                                    
+                                                    <div class="col-lg-4 col-md-4 col-sm-3 col-xs-12">
+                                                        <div class="form-group">
+                                                            @Html.ValidationMessageFor(m => m.TradingPolicyForCodeId)
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(m => m.TradingPolicyName)
+                                                            @Html.TextBoxFor(m => m.TradingPolicyName,
+                                                                        @InsiderTrading.Common.Common.IsTradingPolicyEdit("Text", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId))
+                                                            @Html.ValidationMessageFor(m => m.TradingPolicyName)
+                                                            @Html.HiddenFor(m => m.TradingPolicyName)
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12">
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(m => m.TradingPolicyDescription)
+                                                            @Html.TextAreaFor(m => m.TradingPolicyDescription,
+                                                            @InsiderTrading.Common.Common.IsTradingPolicyEdit("Text", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)
+                                                       )
+                                                            @Html.ValidationMessageFor(m => m.TradingPolicyDescription)
+                                                            @Html.HiddenFor(m => m.TradingPolicyDescription)
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                                        <div class="form-group" id="sandbox-container">
+                                                            @Html.LabelFor(m => m.ApplicableFromDate)
+                                                            @{
+                                                                string FromDate = "";
+                                                                if (Model.ApplicableFromDate != null)
+                                                                {
+                                                                    FromDate = InsiderTrading.Common.Common.ApplyFormatting(Model.ApplicableFromDate, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+
+                                                                }
+                                                            }
+                                                            <div class="input-group date">
+                                                                @Html.TextBox("ApplicableFromDate", FromDate, null,
+                                                             new { @class = "form-control" })@*@InsiderTrading.Common.Common.IsTradingPolicyEdit("Text", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)*@
+                                                           
+                                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                        </div>
+                                                        @Html.ValidationMessageFor(m => m.ApplicableFromDate)
+                                                        @Html.HiddenFor(m => m.ApplicableFromDate)
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                                    <div class="form-group" id="sandbox-container">
+                                                        @Html.LabelFor(m => m.ApplicableToDate)
+                                                        @{
+                                                            string ToDate = "";
+                                                            if (Model.ApplicableToDate != null)
+                                                            {
+                                                                ToDate = InsiderTrading.Common.Common.ApplyFormatting(Model.ApplicableToDate, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+
+                                                            }
+                                                        }
+                                                        <div class="input-group date">
+                                                            @Html.TextBox("ApplicableToDate", ToDate, null, new { @class = "form-control" })
+                                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                        </div>
+                                                        @Html.ValidationMessageFor(m => m.ApplicableToDate)
+                                                        @Html.HiddenFor(m => m.ApplicableToDate)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                  
+                                
+                                <!-- End Trading policy panel-->
+                                <div class="panel panel-accordion">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" id="preAccordion">
+                                                <span class="fa fa-plus pull-right"></span>
+                                                    @InsiderTrading.Common.Common.getResource("rul_ttl_55238") 
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseTwo" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <div id="DivPreClearanceRequired">
+                                                @{
+                                                     @Html.Partial("~/Views/TradingPolicy_OS/_PreclearanceRequirement_OS.cshtml")                                                    
+                                                }
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                       
+                                    
+                                <!-- End Pre-clearance requirement panel-->
+
+                                <div class="panel panel-accordion">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven">
+                                                <span class="fa fa-plus pull-right"></span>
+                                                    @InsiderTrading.Common.Common.getResource("rul_ttl_55239") 
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseSeven" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                                    <div class="form-group">
+                                                        @Html.Label(InsiderTrading.Common.Common.getResource("rul_lbl_55240"), new { @class = "control-label text-left" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3 col-md-3 col-sm-8 col-xs-8">
+                                                    <div class="form-group">
+                                                        <label class="radio-inline" for="radios-0">
+                                                            @Html.RadioButtonFor(model => model.DiscloInitReqFlag, "True", Model.DiscloInitReqFlag == true ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) @InsiderTrading.Common.Common.getResource("rul_lbl_55241")
+                                                        </label>
+                                                        <label class="radio-inline" for="radios-1">
+                                                            @Html.RadioButtonFor(model => model.DiscloInitReqFlag, "False", Model.DiscloInitReqFlag == false ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) @InsiderTrading.Common.Common.getResource("rul_lbl_55242")
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label class="normalLable" style="font-style:italic">@InsiderTrading.Common.Common.getResource("rul_lbl_55243")</label>
+                                                        <label class="radio-inline" for="radios-0">
+                                                            @Html.CheckBoxFor(model => model.DiscloInitReqSoftcopyFlag, @InsiderTrading.Common.Common.IsTradingPolicyEdit("Checkbox", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId))
+                                                            @Html.LabelFor(m => m.DiscloInitReqSoftcopyFlag, new { @class = "normalLable" })
+                                                        </label>
+                                                        <label class="radio-inline" for="radios-1">
+                                                            @Html.CheckBoxFor(model => model.DiscloInitReqHardcopyFlag, @InsiderTrading.Common.Common.IsTradingPolicyEdit("Checkbox", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId))
+                                                            @Html.LabelFor(m => m.DiscloInitReqHardcopyFlag, new { @class = "normalLable" })
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="DivInitialDisclosure">
+                                                @{   
+                                                    if (Model.DiscloInitReqFlag) 
+                                                    { 
+                                                        @Html.Partial("~/Views/TradingPolicy_OS/_InitialDisclosure_OS.cshtml")
+                                                    }
+                                                }
+                                            </div>
+                                                
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Disclosure frequencey-Initial disclosure panel-->
+
+                                <div class="panel panel-accordion">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                                                <span class="fa fa-plus pull-right"></span>
+                                                    @InsiderTrading.Common.Common.getResource("rul_ttl_55244") 
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseThree" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-4 col-md-4 col-sm-3 col-xs-12">
+                                                    <div class="form-group">
+                                                        @Html.Label(InsiderTrading.Common.Common.getResource("rul_lbl_55245"), new { @class = "control-label text-left" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label class="radio-inline" for="radios-0">
+                                                            @Html.RadioButtonFor(model => model.StExSubmitDiscloToCOByInsdrFlag, "True", Model.StExSubmitDiscloToCOByInsdrFlag == true ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) @InsiderTrading.Common.Common.getResource("rul_lbl_55241")
+                                                        </label>
+                                                        <label class="radio-inline" for="radios-1">
+                                                            @Html.RadioButtonFor(model => model.StExSubmitDiscloToCOByInsdrFlag, "False", Model.StExSubmitDiscloToCOByInsdrFlag == false ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) @InsiderTrading.Common.Common.getResource("rul_lbl_55242")
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label style="font-style:italic" class="normalLable">@InsiderTrading.Common.Common.getResource("rul_lbl_55243")</label>
+                                                        <label class="radio-inline" for="radios-0">
+                                                            @Html.CheckBoxFor(model => model.StExSubmitDiscloToCOByInsdrSoftcopyFlag, @InsiderTrading.Common.Common.IsTradingPolicyEdit("Checkbox", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId))
+                                                            @Html.LabelFor(m => m.StExSubmitDiscloToCOByInsdrSoftcopyFlag, new { @class = "normalLable" })
+                                                        </label>
+                                                        <label class="radio-inline" for="radios-1">
+                                                            @Html.CheckBoxFor(model => model.StExSubmitDiscloToCOByInsdrHardcopyFlag, @InsiderTrading.Common.Common.IsTradingPolicyEdit("Checkbox", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId))
+                                                            @Html.LabelFor(m => m.StExSubmitDiscloToCOByInsdrHardcopyFlag, new { @class = "normalLable" })
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                            <div id="DIVCOntinuousDisclosureRequired">
+                                                @{ 
+                                                    if (Model.StExSubmitDiscloToCOByInsdrFlag) 
+                                                    { 
+                                                        @Html.Partial("~/Views/TradingPolicy_OS/_ContinuousDisclosureRequired_OS.cshtml")
+                                                    }
+                                                }
+                                            </div>
+                                        
+
+                                        @*New field added on 2-Jun-2016 for UPSI declaration on Continuous Disclosures page(YES BANK customization)*@
+                                        
+
+                                           
+                                        @*end new field added on 2-Jun-2016(YES BANK customization)*@
+
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <!-- End Disclosure frequencey-Trade(Continuous) disclosure panel-->
+
+                                <div class="panel panel-accordion">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+                                                <span class="fa fa-plus pull-right"></span>
+                                                    @InsiderTrading.Common.Common.getResource("rul_ttl_55251") 
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseFour" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-4 col-md-4 col-sm-3 col-xs-12">
+                                                    <div class="form-group">
+                                                        @Html.Label(InsiderTrading.Common.Common.getResource("rul_lbl_55252"), new { @class = "control-label text-left" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label class="radio-inline" for="radios-0">
+                                                            @Html.RadioButtonFor(model => model.DiscloPeriodEndReqFlag, "True", Model.DiscloPeriodEndReqFlag == true ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) @InsiderTrading.Common.Common.getResource("rul_lbl_55241")
+                                                        </label>
+                                                        <label class="radio-inline" for="radios-1">
+                                                            @Html.RadioButtonFor(model => model.DiscloPeriodEndReqFlag, "False", Model.DiscloPeriodEndReqFlag == false ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) @InsiderTrading.Common.Common.getResource("rul_lbl_55242")
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label style="font-style:italic" class="normalLable">@InsiderTrading.Common.Common.getResource("rul_lbl_55243")  </label>
+                                                        <label class="radio-inline" for="radios-0">
+                                                            @Html.CheckBoxFor(model => model.DiscloPeriodEndReqSoftcopyFlag, @InsiderTrading.Common.Common.IsTradingPolicyEdit("CheckBox", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId))
+                                                                @Html.LabelFor(m => m.DiscloPeriodEndReqSoftcopyFlag, new { @class = "normalLable" })</label>
+                                                        <label class="radio-inline" for="radios-1">
+                                                            @Html.CheckBoxFor(model => model.DiscloPeriodEndReqHardcopyFlag, @InsiderTrading.Common.Common.IsTradingPolicyEdit("CheckBox", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId))
+                                                                @Html.LabelFor(m => m.DiscloPeriodEndReqHardcopyFlag, new { @class = "normalLable" })</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="DivPeiodEndDisclosure">
+                                                @{
+                                                    if (Model.DiscloPeriodEndReqFlag)
+                                                    {
+                                                        @Html.Partial("~/Views/TradingPolicy_OS/_PeriodEndDisclosure_OS.cshtml")
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Disclosure frequencey-Period end disclosure panel-->
+                                 
+                                <div class="panel panel-accordion">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseSix">
+                                                <span class="fa fa-plus pull-right"></span>
+                                                @InsiderTrading.Common.Common.getResource("rul_ttl_55258")
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseSix" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                               
+                                            <div class="row">
+                                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                    <div class="form-group">
+                                                        @Html.Label(InsiderTrading.Common.Common.getResource("rul_lbl_55261"), new { @class = "normalLable" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-1 col-md-1 col-sm-3 col-xs-12">
+                                                    <div class="form-group">
+                                                        @Html.TextBoxFor(m => m.GenContraTradeNotAllowedLimit, @InsiderTrading.Common.Common.IsTradingPolicyEdit("TextNumber", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId))
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label class="normalLable">@InsiderTrading.Common.Common.getResource("rul_lbl_55262")</label>
+                                                        @Html.ValidationMessageFor(m => m.GenContraTradeNotAllowedLimit)
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12">
+                                                    <div class="form-group">
+                                                        @Html.Label(InsiderTrading.Common.Common.getResource("rul_lbl_55263"), new { @class = "normalLable" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                    <div class="form-group">
+                                                        @Html.DropDownList("SelectedGenExceptionFor", new MultiSelectList(ViewBag.GenExceptionForList, "Key", "Value", Model.AssignedGenExceptionForList.Select(m => m.Key)), @InsiderTrading.Common.Common.IsTradingPolicyEdit("MultiSelect", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId))
+                                                        @Html.ValidationMessageFor(m => m.GenExceptionFor)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End General panel-->
+
+                                 
+                                <!-- End Document panel-->
+                                </div>
+
+                                </div>
+                        </div>
+                        <!-- /.row (nested) -->
+                        <div class="row">
+                            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                                <div class="form-group">
+                                    @Html.Label(InsiderTrading.Common.Common.getResource("rul_lbl_55267"))
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                                <div class="form-group">
+                                    @{
+                                        if (ViewBag.HasApplicabilityDefinedFlag == 1)
+                                        {
+                                            @Html.RadioButtonFor(model => model.TradingPolicyStatusCodeId, InsiderTrading.Common.ConstEnum.Code.TradingPolicyStatusActive, Model.TradingPolicyStatusCodeId == InsiderTrading.Common.ConstEnum.Code.TradingPolicyStatusActive ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) @InsiderTrading.Common.Common.getResource("rul_lbl_55268")
+                                        }
+                                        else
+                                        {
+                                            @Html.RadioButtonFor(model => model.TradingPolicyStatusCodeId, InsiderTrading.Common.ConstEnum.Code.TradingPolicyStatusActive, new { disabled = "disabled" }
+                                                                                    ) @InsiderTrading.Common.Common.getResource("rul_lbl_55268")
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                                <div class="form-group">
+                                    @{if (ViewBag.HasApplicabilityDefinedFlag == 1)
+                                    {
+                                        @Html.RadioButtonFor(model => model.TradingPolicyStatusCodeId, InsiderTrading.Common.ConstEnum.Code.TradingPolicyStatusInactive, Model.TradingPolicyStatusCodeId == InsiderTrading.Common.ConstEnum.Code.TradingPolicyStatusInactive ? new { Checked = "checked" } : null) @InsiderTrading.Common.Common.getResource("rul_lbl_55269")
+                                    }
+                                    else
+                                    {
+                                        @Html.RadioButtonFor(model => model.TradingPolicyStatusCodeId, InsiderTrading.Common.ConstEnum.Code.TradingPolicyStatusInactive, new { disabled = "disabled" }) @InsiderTrading.Common.Common.getResource("rul_lbl_55269")
+                                    }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        @Html.HiddenFor(m => m.TradingPolicyId)
+                        @Html.HiddenFor(m => m.PreSecuritiesValuesList)
+                        <input type="hidden" value="@ViewBag.CalledFrom" id="CalledFrom" name="CalledFrom" />
+                        <input type="hidden" value="@ViewBag.AutoSubmitTransaction" id="AutoSubmitTransaction" name="AutoSubmitTransaction" />
+                        <input type="hidden" value="@ViewBag.OccurrenceFrequencyYearly" id="OccurrenceFrequencyYearly" />
+                        <input type="hidden" value="@ViewBag.TradingPolicyEmployeeType" id="TradingPolicyEmployeeType" />
+                        <input type="hidden" value="@ViewBag.MultipleTransactionTrade" id="MultipleTransactionTrade" />
+                        <input type="hidden" value="@ViewBag.HasApplicabilityDefinedFlag" id="HasApplicabilityDefinedFlag" />
+                        <input type="hidden" value="@ViewBag.TradingPolicyType" id="TradingPolicyType" />
+                        <input type="hidden" value="@ViewBag.ParentTradingPolicy" id="ParentTradingPolicy" name="ParentTradingPolicy" />
+                        <input type="hidden" value="@ViewBag.CountUserAndOverlapTradingPolicy" id="CountUserAndOverlapTradingPolicy" name="CountUserAndOverlapTradingPolicy" />
+                        <input type="hidden" value="@InsiderTrading.Common.Common.getResource("rul_msg_15395")" id="AffectApplicability" name="AffectApplicability" />
+                        <input type="hidden" value="@ViewBag.TradingPolicyUserAction" id="TradingPolicyUserAction" name="TradingPolicyUserAction" />
+                        <input type="hidden" value="@InsiderTrading.Common.ConstEnum.UserActions.TRADING_POLICY_OTHER_SECURITY_DELETE" id="TradingPolicyDeleteUserAction" name="TradingPolicyDeleteUserAction" />
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                <button type="button" class="btn btn-success" id="BasicInfo" data-loading-text="Saving" autocomplete="off" name="BasicInfo" gridtype="114131"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("com_btn_14017")</button>
+                                @{
+                                    if (Model != null && Model.TradingPolicyId > 0)
+                                    {
+                                        if (ViewBag.CalledFrom == "Edit")
+                                        {
+                                            <a id="btnDefineApplicablility" name="btnDefineApplicablility" class="btn btn-success" data-toggle="modal" href='@Url.Action("ViewApplicablity_OS", "TradingPolicy_OS", new { TradingPolicyId = Model.TradingPolicyId,acid= @ViewBag.TradingPolicyUserAction, CalledFrom = @ViewBag.CalledFrom, TradingPolicyForCodeTypeID = Model.TradingPolicyForCodeId, ParentTradingPolicy = @ViewBag.ParentTradingPolicy })' role="button"><i class="icon icon-calender"></i>   @InsiderTrading.Common.Common.getResource("rul_btn_55270")</a>
+                                        }
+                                        else
+                                        {
+                                            <a id="btnDefineApplicablility" name="btnDefineApplicablility" class="btn btn-success" data-toggle="modal" href='@Url.Action("ViewApplicablity_OS", "TradingPolicy_OS", new { TradingPolicyId = Model.TradingPolicyId,acid= @ViewBag.TradingPolicyUserAction, CalledFrom = @ViewBag.CalledFrom, TradingPolicyForCodeTypeID = Model.TradingPolicyForCodeId, ParentTradingPolicy = @ViewBag.ParentTradingPolicy })' role="button"><i class="icon icon-calender"></i>   @InsiderTrading.Common.Common.getResource("rul_btn_55271")</a>
+                                        }
+                                    }
+                                }
+                                @{
+                                    if (Model != null && Model.TradingPolicyId > 0 && InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.TRADING_POLICY_OTHER_SECURITY_DELETE) && ViewBag.CalledFrom == "Edit")
+                                    {
+       
+                                            @*<button type="button" id="DeleteTradingPolicy" name="DeleteTradingPolicy" class="btn btn-success" data-loading-text="Deleting" autocomplete="off">@InsiderTrading.Common.Common.getResource("com_btn_14009")</button>*@
+                                    }
+                                }
+                                <button type="submit" class="btn btn-success cancel" id="cancelButton" data-dismiss="modal" name="Cancel"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14010")</button>
+                                <button type="button" name="Save1" id="Save1" class="confirm btn btn-success hide"><i class="fa fa-save"></i> CONFIRM</button>
+                                <button type="button" name="Save2" id="Save2" class="confirm btn btn-success hide"><i class="fa fa-save"></i> CONFIRM1</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+<div id="divOverlapModal" style="display:none;"></div>
+@Scripts.Render("~/bundles/JqueryConfirm")
+@Scripts.Render("~/bundles/jqueryval")
+
+
+@Scripts.Render("~/bundles/CompareDateAnnotation")
+
+@Html.Hidden("RadioButtonChangeTransaction", Url.Action("RadioButtonChangeTransaction", "TradingPolicy_OS"))
+@Html.Hidden("TradingPolicyForCodeType", Url.Action("TradingPolicyForCodeType", "TradingPolicy_OS"))
+@Html.Hidden("PreClearanceTransactionForTrade", Url.Action("PreClearanceTransactionForTrade", "TradingPolicy_OS"))
+@Html.Hidden("PreClrPartialTradeNotDoneFlagURL", Url.Action("PreClrPartialTradeNotDoneFlagURL", "TradingPolicy_OS"))
+@Html.Hidden("DiscloInitReqFlagURL", Url.Action("DiscloInitReqFlagURL", "TradingPolicy_OS"))
+@Html.Hidden("DiscloPeriodEndReqFlagURL", Url.Action("DiscloPeriodEndReqFlagURL", "TradingPolicy_OS"))
+@Html.Hidden("SaveTradingPolicy", Url.Action("BasicInfo", "TradingPolicy_OS"))
+@Html.Hidden("CreateTradingPolicy", Url.Action("Create", "TradingPolicy_OS"))
+@Html.Hidden("DeleteTradingPolicyDetails", Url.Action("DeleteTradingPolicy", "TradingPolicy_OS"))
+@Html.Hidden("ContinousSecurityFlagChange", Url.Action("ContinousSecurityFlagChange", "TradingPolicy_OS"))
+@Html.Hidden("ContinuousDisclosureRequiredURL", Url.Action("ContinuousDisclosureRequiredURL", "TradingPolicy_OS"))
+@Html.Hidden("ContinuousDisclosureSubmissionStockExchangeURL", Url.Action("ContinuousDisclosureSubmissionStockExchangeURL", "TradingPolicy_OS"))
+@Html.Hidden("PeriodEndDisclosureSubmissionStockExchangeURL", Url.Action("PeriodEndDisclosureSubmissionStockExchangeURL", "TradingPolicy_OS"))
+@Html.Hidden("PolicyList", Url.Action("Index", "TradingPolicy_OS"))
+@Html.Hidden("ViewOverlappedUser", Url.Action("ViewOverlappedUser", "TradingPolicy_OS"))
+@Html.Hidden("ContraTradeSecuirtyMapping", Url.Action("ContraTradeSecuirtyMapping", "TradingPolicy_OS"))

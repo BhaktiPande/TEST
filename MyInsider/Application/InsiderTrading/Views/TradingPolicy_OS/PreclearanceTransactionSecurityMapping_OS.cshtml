@@ -1,0 +1,170 @@
+﻿@model InsiderTrading.Models.TradingPolicyModel_OS
+
+<div class="form-group">
+
+    @if (ViewBag.SelectPreclearanceTransaction != null)
+    {
+        foreach (var selectedTransactionType in ViewBag.SelectPreclearanceTransaction)
+    {
+        @:<div class="row">
+        var firstLoopCounter = 0;
+        var SecondLoopCounter = 0;
+        foreach (var info in Model.AllTransactionSecurityMappingList)
+        {
+            if (selectedTransactionType == info.TransactionTypeCodeId.ToString())
+            {
+                    bool checkedValue = false;
+                    List<InsiderTradingDAL.TradingPolicyForTransactionSecurityDTO_OS> list = ViewBag.TradingPolicyForTransactionSecurityList;
+                    if (list != null)
+                    {
+                        InsiderTradingDAL.TradingPolicyForTransactionSecurityDTO_OS selectedObject = list.Find(iii => iii.TransactionModeCodeId.ToString() == selectedTransactionType
+                                    && iii.SecurityTypeCodeId == info.SecurityTypeCodeId);
+                        if (selectedObject != null)
+                        {
+                            checkedValue = true;
+                        }
+                    }
+                 if (firstLoopCounter == 0)
+                {
+                    <div class="col-md-2 col-md-2 col-sm-8 col-xs-8">
+                        <label for="@selectedTransactionType">@info.TransactionType</label>
+                    </div>
+                }
+                firstLoopCounter++;
+                if (SecondLoopCounter < 3)
+                {
+                    <div class="col-md-1 col-md-1 col-sm-8 col-xs-8">
+                    
+                       @if (checkedValue)
+                       {
+                           <input type="checkbox" class="checkbox preclearancetransactiosecurity" name="selectedRoles" checked="checked" value="@info.SecurityType" id="@selectedTransactionType-@info.SecurityTypeCodeId" />
+                       }
+                       else { 
+                        <input type="checkbox" class="checkbox preclearancetransactiosecurity" name="selectedRoles"  value="@info.SecurityType" id="@selectedTransactionType-@info.SecurityTypeCodeId" />
+                       }
+                    </div>
+                    if (SecondLoopCounter == 2)
+                    {
+                        <div class="col-md-2 col-md-2 col-sm-8 col-xs-8">
+                            <span for="@info.SecurityType">@info.SecurityType</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-2 col-md-2 col-sm-8 col-xs-8">
+                            <span for="@info.SecurityType">@info.SecurityType</span>
+                        </div>
+                    }
+                }
+                else
+                {
+                    SecondLoopCounter = 0;
+                    <div class="col-md-2 col-md-2 col-sm-8 col-xs-8">
+                        <label for="@selectedTransactionType">&nbsp;</label>
+                    </div>
+                    <div class="col-md-1 col-md-1 col-sm-8 col-xs-8">
+                        @*<input type="checkbox" class="checkbox preclearancetransactiosecurity" name="@a-@info.SecurityType" value="@info.SecurityType" id="@a-@info.SecurityTypeCodeId" />*@
+                        @if (checkedValue)
+                        {
+                            <input type="checkbox" class="checkbox preclearancetransactiosecurity" name="selectedRoles" checked="checked" value="@info.SecurityType" id="@selectedTransactionType-@info.SecurityTypeCodeId" />
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="checkbox preclearancetransactiosecurity" name="selectedRoles" value="@info.SecurityType" id="@selectedTransactionType-@info.SecurityTypeCodeId" />
+                        }
+                    </div>
+                    <div class="col-md-2 col-md-2 col-sm-8 col-xs-8">
+                        <span for="@info.SecurityType">@info.SecurityType</span>
+                    </div>
+
+                }
+                SecondLoopCounter++;
+            }
+        }
+        @:</div>
+}
+    }
+    else { 
+
+    foreach (var selectedTransactionType in Model.AssignedPreClearancerequiredforTransactionList)
+    {
+        @:<div class="row">
+        var firstLoopCounter = 0;
+        var SecondLoopCounter = 0;
+        foreach (var info in Model.AllTransactionSecurityMappingList)
+        {
+            if (selectedTransactionType.Key == info.TransactionTypeCodeId.ToString())
+            {
+                    bool checkedValue = false;
+                    List<InsiderTradingDAL.TradingPolicyForTransactionSecurityDTO_OS> list = ViewBag.TradingPolicyForTransactionSecurityList;
+                    if (list != null)
+                    {
+                        InsiderTradingDAL.TradingPolicyForTransactionSecurityDTO_OS selectedObject = list.Find(iii => iii.TransactionModeCodeId.ToString() == selectedTransactionType.Key
+                                    && iii.SecurityTypeCodeId == info.SecurityTypeCodeId);
+                        if (selectedObject != null)
+                        {
+                            checkedValue = true;
+                        }
+                    }
+                 if (firstLoopCounter == 0)
+                {
+                    <div class="col-md-2 col-md-2 col-sm-8 col-xs-8">
+                        <label for="@selectedTransactionType.Value">@info.TransactionType</label>
+                    </div>
+                }
+                firstLoopCounter++;
+                if (SecondLoopCounter < 3)
+                {
+                    <div class="col-md-1 col-md-1 col-sm-8 col-xs-8">
+                    
+                       @if (checkedValue)
+                       {
+                           <input type="checkbox" class="checkbox preclearancetransactiosecurity" name="selectedRoles" checked="checked" value="@info.SecurityType" id="@selectedTransactionType.Key-@info.SecurityTypeCodeId" />
+                       }
+                       else { 
+                        <input type="checkbox" class="checkbox preclearancetransactiosecurity" name="selectedRoles"  value="@info.SecurityType" id="@selectedTransactionType.Key-@info.SecurityTypeCodeId" />
+                       }
+                    </div>
+                    if (SecondLoopCounter == 2)
+                    {
+                        <div class="col-md-2 col-md-2 col-sm-8 col-xs-8">
+                            <span for="@info.SecurityType">@info.SecurityType</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-2 col-md-2 col-sm-8 col-xs-8">
+                            <span for="@info.SecurityType">@info.SecurityType</span>
+                        </div>
+                    }
+                }
+                else
+                {
+                    SecondLoopCounter = 0;
+                    <div class="col-md-2 col-md-2 col-sm-8 col-xs-8">
+                        <label for="@selectedTransactionType.Value">&nbsp;</label>
+                    </div>
+                    <div class="col-md-1 col-md-1 col-sm-8 col-xs-8">
+                        @*<input type="checkbox" class="checkbox preclearancetransactiosecurity" name="@a-@info.SecurityType" value="@info.SecurityType" id="@a-@info.SecurityTypeCodeId" />*@
+                        @if (checkedValue)
+                        {
+                            <input type="checkbox" class="checkbox preclearancetransactiosecurity" name="selectedRoles" checked="checked" value="@info.SecurityType" id="@selectedTransactionType.Key-@info.SecurityTypeCodeId" />
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="checkbox preclearancetransactiosecurity" name="selectedRoles" value="@info.SecurityType" id="@selectedTransactionType.Key-@info.SecurityTypeCodeId" />
+                        }
+                    </div>
+                    <div class="col-md-2 col-md-2 col-sm-8 col-xs-8">
+                        <span for="@info.SecurityType">@info.SecurityType</span>
+                    </div>
+
+                }
+                SecondLoopCounter++;
+            }
+        }
+        @:</div>
+}
+    }
+
+</div>

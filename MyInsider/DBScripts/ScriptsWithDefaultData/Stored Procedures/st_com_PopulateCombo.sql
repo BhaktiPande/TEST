@@ -158,7 +158,7 @@ BEGIN
 	-- com_code
 	IF(@inp_iComboType = 1)
 	BEGIN
-		-- Param1 = CodeGroupId, Param2 = ParentCodeId	
+		-- Param1 = CodeGroupId, Param2 = ParentCodeId		
 		
 		IF(@inp_sParam1=518)
 		BEGIN			

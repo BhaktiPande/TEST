@@ -7,7 +7,7 @@ var Level1 = {};
 var Level2 = {};
 var OldLevel0Key = '', OldLevel1Key = '';
 var GridsToMaintainSearchAndPaging = ["114001", "114002", "114007", "114009", "114015", "114020", "114024", "114025", "114050", "114052", "114053", "114054", "114058", "114059", "114060", "114061", "114062", "114122", "114123", "114125", "114126"];
-var GridsToNotMaintainPagingOnly = ["114005", "114010", "114011", "114012", "114013", "114014", "114016", "114022", "114031", "114033", "114034", "114035", "114036", "114037", "114038", "114039", "114040", "114043", "114045", "114048", "114049", "114066", "114067", "114068", "114069", "114070", "114071", "114093", "114094", "114098", "508008", "508005", "122098", "122100", "114101", "114102", "114103", "114104", "114109", "114110", "114117", "114107", "114108", "114115", "114116", "114127", "114128"];
+var GridsToNotMaintainPagingOnly = ["114005", "114010", "114011", "114012", "114013", "114014", "114016", "114022", "114031", "114033", "114034", "114035", "114036", "114037", "114038", "114039", "114040", "114043", "114045", "114048", "114049", "114066", "114067", "114068", "114069", "114070", "114071", "114093", "114094", "114098", "508008", "508005", "122098", "122100", "114101", "114102", "114103", "114104", "114109", "114110", "114117", "114107", "114108", "114115", "114116", "114127", "114128","114129"];
 
 var isDefaultNoSort = false;
 
@@ -194,6 +194,11 @@ DatatableGrid.prototype.init = function () {
     var GridType_114128_sortOffList = ["dis_grd_51019", "dis_grd_51020", "dis_grd_51021", "dis_grd_51022", "dis_grd_51025"];
     sortOffList = sortOffList.concat(GridType_114128_sortOffList);
 
+    var GridType_114129_sortOffList = ["rul_grd_55089", "rul_grd_55090", "rul_grd_55091", "rul_grd_55092", "rul_grd_55093"];
+    sortOffList = sortOffList.concat(GridType_114129_sortOffList);
+
+    var GridType_114131_sortOffList = ["rul_grd_55324", "rul_grd_55325", "rul_grd_55326", "rul_grd_55327"];
+    sortOffList = sortOffList.concat(GridType_114131_sortOffList);
 
     objThis = this;
     var nTotalWidth = 0;
@@ -615,7 +620,7 @@ DatatableGrid.prototype.reset = function () {
         }
         acid = (GridType == "114048") ? 165 : (GridType == "114049") ? 167 : (GridType == "114050") ? 186 :
             (GridType == "114059") ? 187 : (GridType == "114001") ? 1 : (GridType == "114002") ? 5 :
-            (GridType == "114052") ? 186 : (GridType == "114023") ? 197 : 0;
+            (GridType == "114052") ? 186 : (GridType == "114023") ? 197 : (GridType == "114132") ? 197 : 0;
 
         if (GridType == "114048" || GridType == "114049" || GridType == "114050" || GridType == "114059") {
             $.ajax({
@@ -1395,7 +1400,14 @@ DatatableGrid.prototype.format = {
             return createActionControlArray(obj, '114023_usr_grd_11228');
         }
     },
+    //Applicability employee insider OS.
+    'GridType_114132': {        
+        'usr_grd_11228': function (obj, type) {
+            return createActionControlArray(obj, '114132_usr_grd_11228');
+        }
+    },
     //Trading Policy List
+     
     'GridType_114024': {
         'rul_grd_15053': function (obj, type) {
             return dateTimeFormat(obj.aData['rul_grd_15053']);
@@ -1425,6 +1437,44 @@ DatatableGrid.prototype.format = {
             return createActionControlArray(obj, objThis.GridType + '_usr_grd_11073');
         }
     },
+
+
+    //Trading Policy Other Security List
+    'GridType_114129': {
+        'rul_grd_55090': function (obj, type) {
+            return dateTimeFormat(obj.aData['rul_grd_55090']);
+        },
+        'rul_grd_55091': function (obj, type) {
+            return dateTimeFormat(obj.aData['rul_grd_55091']);
+        },
+        'rul_grd_55093': function (obj, type) {
+            var status = '';
+            switch (obj.aData['rul_grd_55093']) {
+                case 'Active':
+                    status = '<i class="icon status icon-light-on light-orange"></i>';
+                    break;
+                case 'Inactive':
+                    status = '<i class="icon status icon-light-off light-gray"></i>';
+                    break;
+                case 'Incomplete':
+                    status = 'Incomplete';
+                    break;
+                default:
+                    status = '';
+                    break;
+            }
+            return status;
+        }
+        ,
+        'usr_grd_11073': function (obj, type) {
+            //if (obj.aData['TradingPolicyId'] != null)
+            //{
+            //   // $("#AddTradingPolicy").hide();
+            //}
+            return createActionControlArray(obj, objThis.GridType + '_usr_grd_11073');
+        }
+    },
+
 
     //Trading Policy History List
     'GridType_114025': {
@@ -1459,10 +1509,52 @@ DatatableGrid.prototype.format = {
             return createActionControlArray(obj, objThis.GridType + '_usr_grd_11073');
         }
     },
+     
+
+         //Trading Policy Other Security History List
+    'GridType_114130': {
+        'rul_grd_55136': function (obj, type) {
+            return dateTimeFormat(obj.aData['rul_grd_55136']);
+        },
+        'rul_grd_55137': function (obj, type) {
+            return dateTimeFormat(obj.aData['rul_grd_55137']);
+        },
+        'rul_grd_55140': function (obj, type) {
+            return dateTimeFormat(obj.aData['rul_grd_55140']);
+        },
+        'rul_grd_55139': function (obj, type) {
+            var status = '';
+            switch (obj.aData['rul_grd_55139']) {
+                case 'Active':
+                    status = '<i class="icon status icon-light-on light-orange"></i>';
+                    break;
+                case 'Inactive':
+                    status = '<i class="icon status icon-light-off light-gray"></i>';
+                    break;
+                case 'Incomplete':
+                    status = 'Incomplete';
+                    break;
+                default:
+                    status = '';
+                    break;
+            }
+            return status;
+        },
+        'usr_grd_11073': function (obj, type) {
+            return createActionControlArray(obj, objThis.GridType + '_usr_grd_11073');
+        }
+    },
+
     //Applicability employee insider.
     'GridType_114026': {
         'usr_grd_11228': function (obj, type) {
             return createActionControlArray(obj, '114026_usr_grd_11228');
+        }
+    },
+    //Applicability employee insider OS.
+    'GridType_114133': {
+        'usr_grd_11228': function (obj, type) {
+            return createActionControlArray(obj, '114133_usr_grd_11228');
         }
     },
     //Applicability search corporate.
@@ -1471,16 +1563,34 @@ DatatableGrid.prototype.format = {
             return createActionControlArray(obj, '114027_usr_grd_11228');
         }
     },
+    //Applicability search corporate.
+    'GridType_114135': {
+        'usr_grd_11228': function (obj, type) {
+            return createActionControlArray(obj, '114135_usr_grd_11228');
+        }
+    },
     //Applicability association corporate.
     'GridType_114028': {
         'usr_grd_11228': function (obj, type) {
             return createActionControlArray(obj, '114028_usr_grd_11228');
         }
     },
+    //Applicability association corporate OS.
+    'GridType_114136': {
+        'usr_grd_11228': function (obj, type) {
+            return createActionControlArray(obj, '114136_usr_grd_11228');
+        }
+    },
     //Applicability search non-employee insider.
     'GridType_114029': {
         'usr_grd_11228': function (obj, type) {
             return createActionControlArray(obj, '114029_usr_grd_11228');
+        }
+    },
+    //Applicability search non-employee insider OS.
+    'GridType_114137': {
+        'usr_grd_11228': function (obj, type) {
+            return createActionControlArray(obj, '114137_usr_grd_11228');
         }
     },
     //Applicability association non-employee insider.
@@ -1490,6 +1600,12 @@ DatatableGrid.prototype.format = {
         }
     },
 
+    //Applicability association non-employee insider OS.
+    'GridType_114138': {
+        'usr_grd_11228': function (obj, type) {
+            return createActionControlArray(obj, '114138_usr_grd_11228');
+        }
+    },
 
     //Demat Initial Disclosure List For share   //BYSA
     'GridType_114071': {
@@ -1797,6 +1913,12 @@ DatatableGrid.prototype.format = {
     'GridType_114032': {
         'usr_grd_11228': function (obj, type) {
             return createActionControlArray(obj, '114032_usr_grd_11228');
+        }
+    },
+    //Applicability filter employee insider OS.
+    'GridType_114139': {
+        'usr_grd_11228': function (obj, type) {
+            return createActionControlArray(obj, '114139_usr_grd_11228');
         }
     },
     //policy document agreed or viewd by user list
@@ -2223,7 +2345,7 @@ DatatableGrid.prototype.format = {
                         if (obj.aData['SubmissionDaysRemaining'] > -1) {
                             val_return += '<p class="inline-block">';
                             val_return += '<span class="days-count">' + obj.aData['SubmissionDaysRemaining'] + '</span>';
-                            val_return += '<span>Working Days Left</span>';
+                            val_return += '<span>Days Left</span>';
                             val_return += '</p>';
                         }
                     }
@@ -2430,6 +2552,41 @@ DatatableGrid.prototype.format = {
             var str = "";
             if (obj.aData['rul_grd_15364'] != null) {
                 str = '<input type="text" value="' + formatIndianFloat(obj.aData['rul_grd_15364']) + '" class="form-control two-digits inpValueOfShare" name="TradingPolicyModel.PreSecuritiesValuesModel[' + rowCount + '].ValueOfShare" />';
+            } else {
+                str = '<input type="text" value="" class="form-control two-digits inpValueOfShare " name="TradingPolicyModel.PreSecuritiesValuesModel[' + rowCount + '].ValueOfShare" />';
+            }
+            return str;
+        },
+    },
+
+    'GridType_114131': {
+        'rul_grd_55325': function (obj, type) {
+            var str = "";
+            str = '<input type="hidden" value="' + obj.aData['SecurityCodeID'] + '" class="form-control inpSecurityCodeID" name="TradingPolicyModel.PreSecuritiesValuesModel[' + rowCount + '].SecurityCodeID" id="" />';
+            if (obj.aData['rul_grd_55325'] != null) {
+                str = str + '<input type="text" value="' + formatIndianNumber(obj.aData['rul_grd_55325']) + '" class="form-control numericOnly inpNoOfShare" name="TradingPolicyModel.PreSecuritiesValuesModel[' + rowCount + '].NoOfShare" />';
+            } else {
+                str = str + '<input type="text" value="" class="form-control numericOnly inpNoOfShare " name="TradingPolicyModel.PreSecuritiesValuesModel[' + rowCount + '].NoOfShare" />';
+            }
+            return str;
+
+        },
+        'rul_grd_55326': function (obj, type) {
+            var str = "";
+            if (obj.aData['rul_grd_55326'] != null) {
+                str = '<input type="text" value="' + formatIndianFloat(obj.aData['rul_grd_55326']) + '" class="form-control two-digits inpCapital" name="TradingPolicyModel.PreSecuritiesValuesModel['
+                    + rowCount + '].Capital" data-val-regex-pattern="^(100\.00|100\.0|100)|([0-9]{1,2}){0,1}(\.[0-9]{1,2}){0,1}$" data-val-regex="Enter valid % of paid up and subscribed capital" />';
+                str = str + '<span data-valmsg-replace="true" data-valmsg-for="TradingPolicyModel.PreSecuritiesValuesModel['
+                    + rowCount + '].Capital" class="field-validation-valid"></span>'
+            } else {
+                str = '<input type="text" value="" class="form-control two-digits inpCapital " name="TradingPolicyModel.PreSecuritiesValuesModel[' + rowCount + '].Capital" />';
+            }
+            return str;
+        },
+        'rul_grd_55327': function (obj, type) {
+            var str = "";
+            if (obj.aData['rul_grd_55327'] != null) {
+                str = '<input type="text" value="' + formatIndianFloat(obj.aData['rul_grd_55327']) + '" class="form-control two-digits inpValueOfShare" name="TradingPolicyModel.PreSecuritiesValuesModel[' + rowCount + '].ValueOfShare" />';
             } else {
                 str = '<input type="text" value="" class="form-control two-digits inpValueOfShare " name="TradingPolicyModel.PreSecuritiesValuesModel[' + rowCount + '].ValueOfShare" />';
             }
@@ -3376,16 +3533,9 @@ DatatableGrid.prototype.format = {
                     break;
                 case "Not Required":
                     status = '<a  >';
-                    if (obj.aData['dis_grd_50608'] == "Inactive" && obj.aData['TextSoftCopyDate'] == "Not Required") {
-                        status = status + '<p class="text-center status-gray"">';
-                        status = status + '<button type="submit" class="btn btn-gray btn-shape btn-round btn-md center-block"><i class="ico ico-exc"></i> ';
-                        status = status + obj.aData['dis_grd_50608'];
-                    }
-                    else {
-                        status = status + '<p class="text-center status-gray"">';
-                        status = status + '<button type="submit" class="btn btn-gray btn-shape btn-round btn-md center-block"><i class="ico ico-barred"></i> ';
-                        status = status + obj.aData['TextSoftCopyDate'];
-                    }
+                    status = status + '<p class="text-center status-gray"">';
+                    status = status + '<button type="submit" class="btn btn-gray btn-shape btn-round btn-md center-block"><i class="ico ico-barred"></i> ';
+                    status = status + obj.aData['TextSoftCopyDate'];
                     status = status + '</button></p> </a>';
                     break;
                 case null:
@@ -4031,7 +4181,8 @@ DatatableGrid.prototype.format = {
                 status = '<a href="' + $('#View').val() + '&pclid=' + obj.aData['PreclearanceRequestId'] + '" firstButton="firstButton" style="color:blue;">';
                 status = status + obj.aData['dis_grd_53013'];
                 status = status + '</a>';
-                if (obj.aData["dis_grd_53013"] != "" && obj.aData['PreclearanceStatusCodeId'] == 144002 && obj.aData['IsPreclearanceFormForImplementingCompany'] == 1) {
+                if (obj.aData["dis_grd_53013"] != "" && obj.aData['PreclearanceStatusCodeId'] == 144002){                    
+                    //&& obj.aData['IsPreclearanceFormForImplementingCompany'] == 1) {
                     if (obj.aData['IsFORMEGenrated'] == "1") {
                         status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '&PreClearanceRequestId=' + obj.aData['DisplaySequenceNo'] + '&DisplayCode=' + obj.aData['dis_grd_53013'] + '" class="glyphicon glyphicon-download-alt downloadforme" title="Download Form E file" >';
                         status = status + '</a>';
@@ -4091,10 +4242,10 @@ DatatableGrid.prototype.format = {
                 case 154002:
 
                     if (obj.aData['PreclearanceStatusCodeId'] == '144002') {//Preclearance approved
-                        status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '" firstButton="firstButton" >';
+                        status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=239&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '" firstButton="firstButton" >';
                     }
                     else {
-                        status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '">';
+                        status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=239&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '">';
                     }
                     status = status + '<p class="text-center status-orange">';
                     status = status + '<button type="submit" class="btn btn-warning btn-shape btn-round btn-md center-block"><i class="ico ico-exc"></i> ';
@@ -4104,15 +4255,15 @@ DatatableGrid.prototype.format = {
                 case 154001:
                     if (obj.aData['dis_grd_53016'] == '') {
                         if (obj.aData['PreclearanceRequestId'] == null)
-                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '" firstButton="firstButton" >';
+                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=239&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '" firstButton="firstButton" >';
                         else
-                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '" firstButton="firstButton" >';
+                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=239&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '" firstButton="firstButton" >';
                     }
                     else {
                         if (obj.aData['PreclearanceRequestId'] == null)
-                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '">';
+                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=239&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '">';
                         else
-                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '">';
+                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=239&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '">';
                     }
                     status = status + '<p class="text-center status-green">';
                     status = status + '<button type="submit" class="btn btn-success btn-shape btn-arrow  btn-md center-block"><i class="ico ico-check"></i> ';
@@ -4126,10 +4277,10 @@ DatatableGrid.prototype.format = {
                     break;
                 case 154006:
                     if (obj.aData['dis_grd_53016'] == '') {
-                        status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '" firstButton="firstButton" >';
+                        status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=239&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '" firstButton="firstButton" >';
                     }
                     else {
-                        status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '">';
+                        status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=239&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '">';
                     }
                     status = status + '<p class="text-center status-orange">';
                     status = status + '<button type="submit" class="btn btn-warning btn-shape btn-round  btn-md center-block"><i class="ico ico-note"></i> ';
@@ -4153,10 +4304,10 @@ DatatableGrid.prototype.format = {
                 case 154004:
                     if (obj.aData['TransactionMasterID'] > 0) {
                         if (obj.aData['dis_grd_53016'] == '') {
-                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '" firstButton="firstButton" >';
+                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=239&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '" firstButton="firstButton" >';
                         }
                         else {
-                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '">';
+                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=239&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '">';
                         }
                         status = status + '<p class="text-center status-green">';
                         status = status + '<button type="submit" class="btn btn-success btn-shape btn-arrow btn-md"><i class="ico ico-check"></i> ';
@@ -4177,10 +4328,10 @@ DatatableGrid.prototype.format = {
                     else {
                         if (obj.aData['IsPartiallyTraded'] == 1 && obj.aData['ShowAddButton'] == 1) {
                             if (obj.aData['dis_grd_53016'] == '') {
-                                status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '" firstButton="firstButton" >';
+                                status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=239&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '" firstButton="firstButton" >';
                             }
                             else {
-                                status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '">';
+                                status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=239&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '">';
                             }
                             status = status + '<p class="text-center status-orange">';
                             status = status + '<button type="submit" class="btn btn-warning btn-shape btn-round  btn-md center-block"><i class="fa fa-plus-square"></i> ';
@@ -4190,10 +4341,10 @@ DatatableGrid.prototype.format = {
                         else {
                             if (obj.aData['IsPartiallyTraded'] == 1) {
                                 if (obj.aData['dis_grd_53016'] == '') {
-                                    status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '" firstButton="firstButton" >';
+                                    status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=239&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '" firstButton="firstButton" >';
                                 }
                                 else {
-                                    status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '">';
+                                    status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=239&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '">';
                                 }
                                 status = status + '<p class="text-center status-green">';
                                 status = status + '<button type="submit" class="btn btn-success btn-shape btn-arrow btn-md"><i class="ico ico-check"></i> ';
@@ -4221,7 +4372,7 @@ DatatableGrid.prototype.format = {
                     status = status + '</button></p> </a>';
                     break;
                 case 1:
-                    status = '<a href="' + $('#SoftcopyView').val() + '?acid=155&MapToTypeCodeId=132020&nTransactionMasterId=' + obj.aData['TransactionMasterID'] + '&DisplayCode=Form C  for OS ' + '">';
+                    status = '<a href="' + $('#SoftcopyView').val() + '?acid=239&MapToTypeCodeId=132020&nTransactionMasterId=' + obj.aData['TransactionMasterID'] + '&DisplayCode=Form C  for OS ' + '">';
                     status = status + '<p class="text-center status-green">';
                     status = status + '<button type="submit" class="btn btn-success btn-shape btn-arrow btn-md"><i class="ico ico-check"></i> ';
                     status = status + dateTimeFormat(obj.aData['SoftcopySubmissionDate']);
@@ -4297,7 +4448,8 @@ DatatableGrid.prototype.format = {
                 status = '<a href="' + $('#View').val() + '&pclid=' + obj.aData['PreclearanceRequestId'] + '" firstButton="firstButton" style="color:blue;">';
                 status = status + obj.aData['dis_grd_53040'];
                 status = status + '</a>';
-                if (obj.aData["dis_grd_53040"] != "" && obj.aData['PreclearanceStatusCodeId'] == 153046 && obj.aData['IsPreclearanceFormForImplementingCompany'] == 1) {
+                if (obj.aData["dis_grd_53040"] != "" && obj.aData['PreclearanceStatusCodeId'] == 153046){
+                    //&& obj.aData['IsPreclearanceFormForImplementingCompany'] == 1) {
                     if (obj.aData['IsFORMEGenrated'] == "1") {
                         status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '&PreClearanceRequestId=' + obj.aData['DisplaySequenceNo'] + '&DisplayCode=' + obj.aData['dis_grd_53040'] + '" class="glyphicon glyphicon-download-alt downloadforme" title="Download Form E file" >';
                         status = status + '</a>';
@@ -4392,15 +4544,15 @@ DatatableGrid.prototype.format = {
 
                     if (obj.aData['dis_grd_53043'] == '') {
                         if (obj.aData['PreclearanceRequestId'] == null)
-                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '" firstButton="firstButton" >';
+                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=240&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '" firstButton="firstButton" >';
                         else
-                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '" firstButton="firstButton" >';
+                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=240&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '" firstButton="firstButton" >';
                     }
                     else {
                         if (obj.aData['PreclearanceRequestId'] == null)
-                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '">';
+                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=240&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '">';
                         else
-                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '">';
+                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=240&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '">';
                     }
                     status = status + '<p class="text-center status-orange">';
                     status = status + '<button type="submit" class="btn btn-warning btn-shape btn-round btn-md center-block"><i class="ico ico-exc"></i> ';
@@ -4410,15 +4562,15 @@ DatatableGrid.prototype.format = {
                 case 154001:
                     if (obj.aData['dis_grd_53043'] == '') {
                         if (obj.aData['PreclearanceRequestId'] == null)
-                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '" firstButton="firstButton" >';
+                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=240&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '" firstButton="firstButton" >';
                         else
-                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '" firstButton="firstButton" >';
+                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=240&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '" firstButton="firstButton" >';
                     }
                     else {
                         if (obj.aData['PreclearanceRequestId'] == null)
-                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '">';
+                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=240&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '">';
                         else
-                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '">';
+                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=240&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '">';
                     }
                     status = status + '<p class="text-center status-green">';
                     status = status + '<button type="submit" class="btn btn-success btn-shape btn-arrow  btn-md center-block"><i class="ico ico-check"></i> ';
@@ -4432,10 +4584,10 @@ DatatableGrid.prototype.format = {
                     break;
                 case 154006:
                     if (obj.aData['dis_grd_53043'] == '') {
-                        status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '" firstButton="firstButton" >';
+                        status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=240&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '" firstButton="firstButton" >';
                     }
                     else {
-                        status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '">';
+                        status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=240&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '">';
                     }
                     status = status + '<p class="text-center status-orange">';
                     status = status + '<button type="submit" class="btn btn-warning btn-shape btn-round  btn-md center-block"><i class="ico ico-note"></i> ';
@@ -4445,10 +4597,10 @@ DatatableGrid.prototype.format = {
                     break;
                 case 154005:
                     if (obj.aData['dis_grd_53043'] == '') {
-                        status = '<a href="' + $('#NotTradedView').val() + '?CalledFrom=COPage&acid=239' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '" firstButton="firstButton" >';
+                        status = '<a href="' + $('#NotTradedView').val() + '?CalledFrom=COPage&acid=240' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '" firstButton="firstButton" >';
                     }
                     else {
-                        status = '<a href="' + $('#NotTradedView').val() + '?CalledFrom=COPage&acid=239' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '">';
+                        status = '<a href="' + $('#NotTradedView').val() + '?CalledFrom=COPage&acid=240' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '">';
                     }
                     status = status + '<p class="text-center status-red">';
                     status = status + '<button type="submit" class="btn btn-danger btn-shape btn-round  btn-md center-block"><i class="ico ico-exch"></i> ';
@@ -4459,10 +4611,10 @@ DatatableGrid.prototype.format = {
                 case 154004:
                     if (obj.aData['TransactionMasterID'] > 0) {
                         if (obj.aData['dis_grd_53043'] == '') {
-                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '" firstButton="firstButton" >';
+                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=240&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '" firstButton="firstButton" >';
                         }
                         else {
-                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '">';
+                            status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=240&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '">';
                         }
                         status = status + '<p class="text-center status-green">';
                         status = status + '<button type="submit" class="btn btn-success btn-shape btn-arrow btn-md"><i class="ico ico-check"></i> ';
@@ -4470,10 +4622,10 @@ DatatableGrid.prototype.format = {
                         status = status + '</button></p> </a>';
                     } else if (obj.aData['ReasonForNotTradingCodeId'] != null) {
                         if (obj.aData['dis_grd_53043'] == '') {
-                            status = '<a href="' + $('#NotTradedView').val() + '?CalledFrom=COPage&acid=239' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '" firstButton="firstButton" >';
+                            status = '<a href="' + $('#NotTradedView').val() + '?CalledFrom=COPage&acid=240' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '" firstButton="firstButton" >';
                         }
                         else {
-                            status = '<a href="' + $('#NotTradedView').val() + '?CalledFrom=COPage&acid=239' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '">';
+                            status = '<a href="' + $('#NotTradedView').val() + '?CalledFrom=COPage&acid=240' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '">';
                         }
                         status = status + '<p class="text-center status-green-end">';
                         status = status + '<button type="submit" class="btn btn-success btn-shape btn-round btn-md"><i class="ico ico-check"></i> ';
@@ -4483,10 +4635,10 @@ DatatableGrid.prototype.format = {
                     else {
                         if (obj.aData['IsPartiallyTraded'] == 1 && obj.aData['ShowAddButton'] == 1) {
                             if (obj.aData['dis_grd_53043'] == '') {
-                                status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '" firstButton="firstButton" >';
+                                status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=240&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '" firstButton="firstButton" >';
                             }
                             else {
-                                status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '">';
+                                status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=240&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '">';
                             }
                             status = status + '<p class="text-center status-orange">';
                             status = status + '<button type="submit" class="btn btn-warning btn-shape btn-round  btn-md center-block"><i class="fa fa-plus-square"></i> ';
@@ -4496,10 +4648,10 @@ DatatableGrid.prototype.format = {
                         else {
                             if (obj.aData['IsPartiallyTraded'] == 1) {
                                 if (obj.aData['dis_grd_53043'] == '') {
-                                    status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '" firstButton="firstButton" >';
+                                    status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=240&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '" firstButton="firstButton" >';
                                 }
                                 else {
-                                    status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=155&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '">';
+                                    status = '<a href="' + $('#TradingDetailsPending').val() + '?acid=240&TransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nUserInfoId=' + obj.aData['UserInfoId'] + '&nDisclosureTypeCodeId=147002' + '&PreclearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&SecurityTypeCode=' + obj.aData['SecurityType'] + '&nUserTypeCodeId=' + obj.aData['UserType'] + '">';
                                 }
                                 status = status + '<p class="text-center status-green">';
                                 status = status + '<button type="submit" class="btn btn-success btn-shape btn-arrow btn-md"><i class="ico ico-check"></i> ';
@@ -4534,7 +4686,7 @@ DatatableGrid.prototype.format = {
                     break;
                 case 1:
                     //status = '<a href="' + $('#SoftcopyView').val() + '&nTransactionLetterId=0&nTransactionMasterId=' + obj.aData['TransactionMasterID'] + '&nDisclosureTypeCodeId=147002&nLetterForCodeId=151001' + '">';
-                    status = '<a href="' + $('#SoftcopyView').val() + '?acid=155&MapToTypeCodeId=132020&nTransactionMasterId=' + obj.aData['TransactionMasterID'] + '&DisplayCode=Form C  for OS ' + '">';
+                    status = '<a href="' + $('#SoftcopyView').val() + '?acid=240&MapToTypeCodeId=132020&nTransactionMasterId=' + obj.aData['TransactionMasterID'] + '&DisplayCode=Form C  for OS ' + '">';
                     status = status + '<p class="text-center status-green">';
                     status = status + '<button type="submit" class="btn btn-success btn-shape btn-arrow btn-md"><i class="ico ico-check"></i> ';
                     status = status + dateTimeFormat(obj.aData['SoftcopySubmissionDate']);
@@ -5594,10 +5746,22 @@ DatatableGrid.prototype.format = {
             return createActionControlArray(obj, '114055_usr_grd_11228');
         }
     },
+    //Applicability search CO insider OS.
+    'GridType_114143': {
+        'usr_grd_11228': function (obj, type) {
+            return createActionControlArray(obj, '114143_usr_grd_11228');
+        }
+    },
     //Applicability association CO insider.
     'GridType_114056': {
         'usr_grd_11228': function (obj, type) {
             return createActionControlArray(obj, '114056_usr_grd_11228');
+        }
+    },
+    //Applicability association CO insider OS.
+    'GridType_114144': {
+        'usr_grd_11228': function (obj, type) {
+            return createActionControlArray(obj, '114144_usr_grd_11228');
         }
     },
     //Notification List for DashBoard.
@@ -5832,6 +5996,19 @@ DatatableGrid.prototype.format = {
         'rul_grd_15403': function (obj, type) {
             if (obj.aData['rul_grd_15403'] != null) {
                 return dateTimeFormat(obj.aData['rul_grd_15403']);
+            }
+        }
+    },
+    // Userwise Overlap Trading Policy List for OS
+    'GridType_114150': {
+        'rul_grd_55378': function (obj, type) {
+            if (obj.aData['rul_grd_55378'] != null) {
+                return dateTimeFormat(obj.aData['rul_grd_55378']);
+            }
+        },
+        'rul_grd_55379': function (obj, type) {
+            if (obj.aData['rul_grd_55379'] != null) {
+                return dateTimeFormat(obj.aData['rul_grd_55379']);
             }
         }
     },
@@ -6252,10 +6429,22 @@ DatatableGrid.prototype.format = {
             return createActionControlArray(obj, '114089_usr_grd_11228');
         }
     },
+    //Applicability employee OS .
+    'GridType_114145': {
+        'usr_grd_11228': function (obj, type) {
+            return createActionControlArray(obj, '114145_usr_grd_11228');
+        }
+    },
     //Applicability filter employee .
     'GridType_114090': {
         'usr_grd_11228': function (obj, type) {
             return createActionControlArray(obj, '114090_usr_grd_11228');
+        }
+    },
+    //Applicability filter employee OS .
+    'GridType_114146': {
+        'usr_grd_11228': function (obj, type) {
+            return createActionControlArray(obj, '114146_usr_grd_11228');
         }
     },
     //Applicability employee non insider.
@@ -6265,6 +6454,12 @@ DatatableGrid.prototype.format = {
         }
     },
 
+    //Applicability employee non insider OS.
+    'GridType_114147': {
+        'usr_grd_11228': function (obj, type) {
+            return createActionControlArray(obj, '114147_usr_grd_11228');
+        }
+    },
     //Trading Transaction Uploaded Document List.
     'GridType_114093': {
         'usr_grd_11073': function (obj, type) {
