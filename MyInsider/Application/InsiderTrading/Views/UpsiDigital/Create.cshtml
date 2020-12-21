@@ -81,12 +81,12 @@
                                             <div class="form-group" id="sandbox-container">
                                                 @Html.LabelFor(m => m.SharingDate)
                                                 @{
-                                string DOJ = "";
-                                if (Model.SharingDate != null)
-                                {
-                                    DOJ = InsiderTrading.Common.Common.ApplyFormatting(Model.SharingDate, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+                                                    string DOJ = "";
+                                                    if (Model.SharingDate != null)
+                                                    {
+                                                        DOJ = InsiderTrading.Common.Common.ApplyFormatting(Model.SharingDate, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
 
-                                }
+                                                    }
                                                 }
                                                 <div class="input-group input-group-today date">
                                                     @Html.TextBox("SharingDate", DOJ, Html.ActivityResourceKeyFor(m => m.SharingDate).ToString(), new { @class = "form-control", @id = "SharingDate" })
@@ -160,6 +160,15 @@
                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                                                 <div role="form">
                                                     <div class="form-group">
+                                                        @Html.LabelFor(m => m.E_mail)
+                                                        @Html.TextBoxFor(m => m.E_mail, new { @class = "form-control Test", @id = "E_mail", data_url = Url.Action("GetEmail", "UpsiDigital"), @maxlength = "300" })
+                                                        @Html.ValidationMessageFor(m => m.E_mail)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                <div role="form">
+                                                    <div class="form-group">
                                                         @Html.LabelFor(m => m.Name)
                                                         @Html.TextBoxFor(m => m.Name, new { @class = "form-control Test", @maxlength = "150", @id = "Name" })
                                                         @Html.ValidationMessageFor(m => m.Name)
@@ -186,6 +195,9 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+                                        </div>
+                                        <div class="row">
                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                                                 <div role="form">
                                                     <div class="form-group">
@@ -195,23 +207,12 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                                                 <div role="form">
                                                     <div class="form-group">
                                                         @Html.LabelFor(m => m.Phone)
                                                         @Html.TextBoxFor(m => m.Phone, new { @class = "form-control Test", @id = "Phone" })
                                                         @Html.ValidationMessageFor(m => m.Phone)
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.E_mail)
-                                                        @Html.TextBoxFor(m => m.E_mail, new { @class = "form-control Test", @id = "E_mail" })
-                                                        @Html.ValidationMessageFor(m => m.E_mail)
                                                     </div>
                                                 </div>
                                             </div>
@@ -329,6 +330,43 @@
             }
         });
     })
+    $(function () {
+        $('#E_mail').autocomplete({
+            minLength: 0,
+            source: function (request, response) {
+                var url = $(this.element).data('url');
+
+                $.getJSON(url, { term: request.term }, function (data) {
+                    response($.map(data, function (item) {
+                        return {
+                            label: item.E_mail,
+                            value: item.E_mail
+                        }
+                    }));
+                });
+                $('#Name').val("");
+                $('#PAN').val("");
+                $('#txtCompany').val("");
+                $('#txtAddress').val("");
+                $('#Phone').val("");
+            },
+            select: function (a, b) {
+                getOtherUsersValue(b.item.value);
+            }
+        });
+    })
+
+    function getOtherUsersValue(value) {
+        var url = $('#E_mail').data('url');
+        $.getJSON(url, { term: value })
+            .done(function (data) {
+                $('#Name').val(data[0].Name);
+                $('#PAN').val(data[0].PAN);
+                $('#txtCompany').val(data[0].CompanyName);
+                $('#txtAddress').val(data[0].CompanyAddress);
+                $('#Phone').val(data[0].Phone);
+        })
+    }
     $(function () {
         $('#time').datetimepicker({
             format: 'HH:mm'

@@ -109,6 +109,20 @@ namespace InsiderTrading.Controllers
                 nUpsiSharingData.DocumentNumber = Convert.ToString(objUpsiTempAutoId.DocumentNo);
             }
 
+            List<OtherUsersDetails> OtherUsersDetailsList = new List<OtherUsersDetails>();
+            using (var objUserInfoSL = new UserInfoSL())
+            {
+                OtherUsersDetailsList = objUserInfoSL.GetOtherUserDetailsList(objLoginUserDetails.CompanyDBConnectionString, objLoginUserDetails.LoggedInUserID, "");
+            }
+
+            var list = new List<SelectListItem>();
+            foreach (var item in OtherUsersDetailsList)
+            {
+                list.Add(new SelectListItem { Text = item.Email, Value = item.Email });
+            }
+            ViewBag.OtherUsersDetailsList = list;
+
+
             ViewBag.UPSISetting = GetUPSISetting();
 
 
@@ -926,6 +940,44 @@ namespace InsiderTrading.Controllers
 
         }
         #endregion Export UPSI Sharing Data
+
+        #region GetEmail
+        /// <summary>
+        /// This Method Auto Serch email
+        /// </summary>
+        /// <param name="term"></param>
+        /// <returns></returns>
+
+        public JsonResult GetEmail(string term = "")
+        {
+            try
+            {
+                LoginUserDetails objLoginUserDetails = (LoginUserDetails)Common.Common.GetSessionValue(ConstEnum.SessionValue.UserDetails);
+                objLoginUserDetails = (LoginUserDetails)Common.Common.GetSessionValue(ConstEnum.SessionValue.UserDetails);
+                List<OtherUsersDetails> OtherUsersDetailsList = new List<OtherUsersDetails>();
+                using (var objUserInfoSL = new UserInfoSL())
+                {
+                    OtherUsersDetailsList = objUserInfoSL.GetOtherUserDetailsList(objLoginUserDetails.CompanyDBConnectionString, objLoginUserDetails.LoggedInUserID, term);
+                }
+                return Json(OtherUsersDetailsList.Select(m => new
+                {
+                    E_mail = m.Email,
+                    m.Name,
+                    m.PAN,
+                    m.CompanyAddress,
+                    m.CompanyName,
+                    m.Phone
+
+                }), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception exp)
+            {
+                string sErrMessage = Common.Common.getResource(exp.InnerException.Data[0].ToString());
+                ModelState.AddModelError("Error", sErrMessage);
+                return null;
+            }
+        }
+        #endregion
 
         #region Dispose
         protected override void Dispose(bool disposing)
