@@ -26,7 +26,7 @@ AS
 )
 SELECT AM.* FROM rul_ApplicabilityMaster_OS AM JOIN
 (SELECT MapToTypeCodeId, MapToId, MAX(ApplicabilityId) AS ApplicabilityId
-FROM rul_ApplicabilityMaster_OS AM JOIN rul_TradingPolicy_OS TP ON MapToTypeCodeId = 132002 AND AM.MapToId = TP.TradingPolicyId
+FROM rul_ApplicabilityMaster_OS AM JOIN rul_TradingPolicy_OS TP ON MapToTypeCodeId = 132022 AND AM.MapToId = TP.TradingPolicyId
 INNER JOIN tblTradingPolicy tblTP ON AM.MapToId = tblTP.TradingPolicyId
 GROUP BY MapToTypeCodeId, MapToId) AS AMCurrent
 ON AM.ApplicabilityId = AMCurrent.ApplicabilityId

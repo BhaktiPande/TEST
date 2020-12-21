@@ -1,0 +1,57 @@
+﻿@model InsiderTrading.Models.TradingPolicyModel_OS
+@{
+    ViewBag.Title = "TradingPolicyHistoryList_OS";
+}
+
+
+<!-- Content Header (Page header) -->
+
+<section class="content-header">
+    @Html.AntiForgeryToken()
+    <p><a href="@Url.Action("Index", "TradingPolicy_OS", new { acid = InsiderTrading.Common.ConstEnum.UserActions.TRADING_POLICY_OTHER_SECURITY_VIEW })"><i class=" fa fa-chevron-left"></i> Back to Search List</a></p>
+    @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+    <h1>Trading Policy Other Security History</h1>
+
+</section>
+<!-- Main content -->
+<section class="content  search" gridtype="@ViewBag.GridType">
+    <input type="hidden" value="@ViewBag.Param1" id="1" gridtype="@ViewBag.GridType" />
+    <input type="hidden" value="@ViewBag.CalledFrom" id="CalledFrom" name="CalledFrom" />
+    <input type="hidden" value="@ViewBag.ParentTradingPolicy" id="ParentTradingPolicy" name="ParentTradingPolicy" />
+        <hr>
+   
+    <div class="div-spacer"></div>
+
+    @{Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "btnSearch", sSortCol = "0", acid = InsiderTrading.Common.ConstEnum.UserActions.CRUSER_COUSER_VIEW });}
+
+
+    <div class="div-spacer"></div><br />
+    <div class="form-group">
+    </div>
+ 
+
+    <div class="col-xs-12 form-group row">
+
+        <div class="col-xs-3">
+
+            <a class="btn btn-success" data-toggle="modal" href='@Url.Action("Index", "TradingPolicy_OS", new { acid = InsiderTrading.Common.ConstEnum.UserActions.TRADING_POLICY_OTHER_SECURITY_VIEW })' role="button"><i class="fa fa-chevron-left"></i>   Back</a>
+        </div>
+    </div>
+</section><!-- /.content -->
+@*</div>*@<!-- /.content-wrapper -->
+
+@*<script src="../../Scripts/TradingPolicy_OS.js"></script>*@
+
+<script src="~/Scripts/TradingPolicy_OS.js"></script>
+
+@Scripts.Render("~/bundles/JqueryConfirm")
+
+@if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.CRUSER_COUSER_VIEW))
+{
+    @Html.Hidden("View", Url.Action("Create", "TradingPolicy_OS", new { acid = 337, CalledFrom = "History", ParentTradingPolicy = @ViewBag.ParentTradingPolicy }), new { @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'text':'','href':'" + Url.Action("Create", "TradingPolicy_OS", new { acid = 337, CalledFrom = "History", ParentTradingPolicy = @ViewBag.ParentTradingPolicy }) + "&TradingPolicyId=<TradingPolicyId>','class':'display-icon icon icon-eye'}" })
+}
+@Html.Hidden("RadioButtonChangeTransaction", Url.Action("RadioButtonChangeTransaction", "TradingPolicy_OS"))
+
+
+
+

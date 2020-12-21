@@ -94,13 +94,38 @@ namespace InsiderTrading.Controllers
             {
                 CompanySettingConfigurationDTO objCompanySettingConfigurationDTO = null;
                 LoginUserDetails objLoginUserDetails = (LoginUserDetails)InsiderTrading.Common.Common.GetSessionValue((string)ConstEnum.SessionValue.UserDetails);
-                using (CompaniesSL objCompaniesSL = new CompaniesSL())
+
+                using (var objInsiderInitialDisclosureSL = new InsiderInitialDisclosureSL())
                 {
-                    objCompanySettingConfigurationDTO = objCompaniesSL.GetEnterUploadSettingsConfigurationDetails(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.Code.CompanyConfigType_RestrictedListSetting, ConstEnum.Code.RestrictedListSetting_Preclearance_Form_F_Required);
-                    ViewBag.FormFRequire = objCompanySettingConfigurationDTO.ConfigurationValueCodeId;
-                    objCompanySettingConfigurationDTO = objCompaniesSL.GetEnterUploadSettingsConfigurationDetails(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.Code.CompanyConfigType_RestrictedListSetting, ConstEnum.Code.RestrictedListSetting_Preclearance_Form_F_TemplateFile);
-                    ViewBag.DocumentId = objCompanySettingConfigurationDTO.ConfigurationValueOptional;
+                    InsiderInitialDisclosureDTO objInsiderInitialDisclosureDTO = null;
+                    objInsiderInitialDisclosureDTO = objInsiderInitialDisclosureSL.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
+                    RequiredModuleID = objInsiderInitialDisclosureDTO.RequiredModule;
                 }
+                if (RequiredModuleID == ConstEnum.Code.RequiredModuleOtherSecurity || RequiredModuleID == ConstEnum.Code.RequiredModuleBoth)
+                {
+                    ViewBag.RequiredModule = true;
+                }
+                else
+                {
+                    ViewBag.RequiredModule = false;
+                }
+                                
+                if(ViewBag.RequiredModule == true)
+                {
+                    ViewBag.FormFRequire = InsiderTrading.Common.ConstEnum.Code.CompanyConfig_YesNoSettings_No;
+                }
+                else
+                {
+                    using (CompaniesSL objCompaniesSL = new CompaniesSL())
+                    {
+                        objCompanySettingConfigurationDTO = objCompaniesSL.GetEnterUploadSettingsConfigurationDetails(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.Code.CompanyConfigType_RestrictedListSetting, ConstEnum.Code.RestrictedListSetting_Preclearance_Form_F_Required);
+                        ViewBag.FormFRequire = objCompanySettingConfigurationDTO.ConfigurationValueCodeId;
+                        objCompanySettingConfigurationDTO = objCompaniesSL.GetEnterUploadSettingsConfigurationDetails(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.Code.CompanyConfigType_RestrictedListSetting, ConstEnum.Code.RestrictedListSetting_Preclearance_Form_F_TemplateFile);
+                        ViewBag.DocumentId = objCompanySettingConfigurationDTO.ConfigurationValueOptional;
+                    }
+
+                }
+                
                 TemplateMasterDTO objTemplateMasterDTO = null;
                 using (var objTemplateMasterSL = new TemplateMasterSL())
                 {
@@ -119,20 +144,7 @@ namespace InsiderTrading.Controllers
                 ViewBag.GridAllow = TempData["GridAllow"] == null ? false : TempData["GridAllow"];
                 TempData.Remove("IsPreClearanceAllow");
                 TempData.Remove("GridAllow");
-                using (var objInsiderInitialDisclosureSL = new InsiderInitialDisclosureSL())
-                {
-                    InsiderInitialDisclosureDTO objInsiderInitialDisclosureDTO = null;
-                    objInsiderInitialDisclosureDTO = objInsiderInitialDisclosureSL.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
-                    RequiredModuleID = objInsiderInitialDisclosureDTO.RequiredModule;
-                }
-                if (RequiredModuleID == ConstEnum.Code.RequiredModuleOtherSecurity || RequiredModuleID == ConstEnum.Code.RequiredModuleBoth)
-                {
-                    ViewBag.RequiredModule = true;
-                }
-                else
-                {
-                    ViewBag.RequiredModule = false;
-                }
+               
             }
             catch (Exception exp)
             {
@@ -162,11 +174,14 @@ namespace InsiderTrading.Controllers
                 int result = 0;
                 int resultCode = 0;
                 int resultMsgCode = 0;
+                int resultSPCode=0;
+                CompanySettingConfigurationDTO restrictedListSettingPreclearanceApproval = null;
                 string AlertMessage = string.Empty;
                 int RequiredModuleID = 0;
                 bool isModelRequired = false;
                 restrictedListSL = new RestrictedListSL();
                 CompanySettingConfigurationDTO objCompanySettingConfigurationDTO = null;
+                TradingPolicyDTO_OS objTradingPolicyDTO_OS = null;
 
                 TemplateMasterDTO objTemplateMasterDTO = null;
                 using (var objTemplateMasterSL = new TemplateMasterSL())
@@ -201,6 +216,41 @@ namespace InsiderTrading.Controllers
                     isModelRequired = false;
                 }
                 ViewBag.RequiredModule = isModelRequired;
+             //Add the new code for the other security Restricted list  (03/02/2020) 
+                if (isModelRequired == false)
+                {
+                                        
+                    RestrictedListSL objRestrictedListSL = new RestrictedListSL();
+                    resultSPCode = objRestrictedListSL.RestrictedlistSearchLimit(objLoginUserDetails.CompanyDBConnectionString, objLoginUserDetails.LoggedInUserID);
+                    using (CompaniesSL objCompaniesSL = new CompaniesSL())
+                    {
+                        objCompanySettingConfigurationDTO = objCompaniesSL.GetEnterUploadSettingsConfigurationDetails(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.Code.CompanyConfigType_RestrictedListSetting, ConstEnum.Code.RestrictedListSetting_Preclearance_Form_F_Required);
+                        ViewBag.FormFRequire = objCompanySettingConfigurationDTO.ConfigurationValueCodeId;
+                        objCompanySettingConfigurationDTO = objCompaniesSL.GetEnterUploadSettingsConfigurationDetails(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.Code.CompanyConfigType_RestrictedListSetting, ConstEnum.Code.RestrictedListSetting_Preclearance_Form_F_TemplateFile);
+                        ViewBag.DocumentId = objCompanySettingConfigurationDTO.ConfigurationValueOptional;
+                    }
+                    using (CompaniesSL objCompaniesSL = new CompaniesSL())
+                    {
+                        objCompanySettingConfigurationDTO = objCompaniesSL.GetEnterUploadSettingsConfigurationDetails(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.Code.CompanyConfigType_RestrictedListSetting, ConstEnum.Code.RestrictedListSetting_Preclearance_required);
+
+                    }
+                    using (CompaniesSL objCompaniesSL = new CompaniesSL())
+                    {
+                        restrictedListSettingPreclearanceApproval = objCompaniesSL.GetEnterUploadSettingsConfigurationDetails(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.Code.CompanyConfigType_RestrictedListSetting, ConstEnum.Code.RestrictedListSetting_Preclearance_Approval);
+                    }
+                }
+                else
+                {
+                    ViewBag.FormFRequire = InsiderTrading.Common.ConstEnum.Code.CompanyConfig_YesNoSettings_No;
+                    RestrictedListSL objRestrictedListSL = new RestrictedListSL();
+                    resultSPCode = objRestrictedListSL.RestrictedlistSearchLimit(objLoginUserDetails.CompanyDBConnectionString, objLoginUserDetails.LoggedInUserID);
+                    using (TradingPolicySL_OS objTradingPolicySL_OS = new TradingPolicySL_OS())
+                    {
+                        objTradingPolicyDTO_OS = objTradingPolicySL_OS.GetTradingPolicySettingConfigurationDetails(objLoginUserDetails.CompanyDBConnectionString, objLoginUserDetails.LoggedInUserID);
+
+                    }
+                }
+                
                 using (RestrictedListSL objRestrictedListSL = new RestrictedListSL())
                 {
                     resultMsgCode = objRestrictedListSL.RestrictedlistSearchLimit(objLoginUserDetails.CompanyDBConnectionString, objLoginUserDetails.LoggedInUserID);
@@ -208,14 +258,7 @@ namespace InsiderTrading.Controllers
                     {
                         TempData["RestrictedListValue"] = "1";
                         objRestrictedSearchAudittDTO = restrictedListSL.RestrictedlistdetailsSL(objLoginUserDetails.CompanyDBConnectionString, AutoCompleteSearchParameters(restrictedListModel), out result);
-                        using (CompaniesSL objCompaniesSL = new CompaniesSL())
-                        {
-                            objCompanySettingConfigurationDTO = objCompaniesSL.GetEnterUploadSettingsConfigurationDetails(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.Code.CompanyConfigType_RestrictedListSetting, ConstEnum.Code.RestrictedListSetting_Preclearance_Form_F_Required);
-                            ViewBag.FormFRequire = objCompanySettingConfigurationDTO.ConfigurationValueCodeId;
-                            objCompanySettingConfigurationDTO = objCompaniesSL.GetEnterUploadSettingsConfigurationDetails(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.Code.CompanyConfigType_RestrictedListSetting, ConstEnum.Code.RestrictedListSetting_Preclearance_Form_F_TemplateFile);
-                            ViewBag.DocumentId = objCompanySettingConfigurationDTO.ConfigurationValueOptional;
-                        }
-
+                       
                         if (result > 0)
                         {
                             ArrayList lst = new ArrayList();
@@ -233,62 +276,105 @@ namespace InsiderTrading.Controllers
                         }
                         else
                         {
-                            using (CompaniesSL objCompaniesSL = new CompaniesSL())
+                            if (isModelRequired == false)
                             {
-                                objCompanySettingConfigurationDTO = objCompaniesSL.GetEnterUploadSettingsConfigurationDetails(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.Code.CompanyConfigType_RestrictedListSetting, ConstEnum.Code.RestrictedListSetting_Preclearance_required);
-
-                            }
-                            if (objLoginUserDetails.DateOfBecomingInsider != null && objCompanySettingConfigurationDTO.ConfigurationValueCodeId == ConstEnum.Code.CompanyConfig_YesNoSettings_Yes)
-                            {
-
-                                ViewBag.RLSearchAudId = objRestrictedSearchAudittDTO.RlSearchAuditId;
-                                ViewBag.RLCompId = objRestrictedSearchAudittDTO.RlCompanyId;
-
                                 using (CompaniesSL objCompaniesSL = new CompaniesSL())
                                 {
-                                    objCompanySettingConfigurationDTO = objCompaniesSL.GetEnterUploadSettingsConfigurationDetails(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.Code.CompanyConfigType_RestrictedListSetting, ConstEnum.Code.RestrictedListSetting_Preclearance_Approval);
-                                    if (objCompanySettingConfigurationDTO.ConfigurationValueCodeId == ConstEnum.Code.RestrictedList_PreclearanceApproval_Manual)
-                                    {
-                                        //ArrayList lst = new ArrayList();
-                                        //lst.Add(restrictedListModel.CompanyName.Replace("'", "\'").Replace("\"", "\""));
-                                        //ViewBag.AlertMsg = Common.Common.getResource("rl_msg_50015", lst);
+                                    objCompanySettingConfigurationDTO = objCompaniesSL.GetEnterUploadSettingsConfigurationDetails(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.Code.CompanyConfigType_RestrictedListSetting, ConstEnum.Code.RestrictedListSetting_Preclearance_required);
 
-                                        //ViewBag.IsPreClearanceAllow = false;
-                                        //ViewBag.GridAllow = false;
-                                        //return View();
-                                        if (TempData["List"] != null || TempData["PreClrList"] != null)
-                                        {
-                                            ViewBag.IsPreClearanceAllow = true;
-                                            ViewBag.GridAllow = true;
-                                        }
-                                        else
-                                        {
-                                            ViewBag.IsPreClearanceAllow = true;
-                                            ViewBag.GridAllow = false;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (TempData["List"] != null || TempData["PreClrList"] != null)
-                                        {
-                                            ViewBag.IsPreClearanceAllow = true;
-                                            ViewBag.GridAllow = true;
-                                        }
-                                        else
-                                        {
-                                            ViewBag.IsPreClearanceAllow = true;
-                                            ViewBag.GridAllow = false;
-                                        }
-                                    }
                                 }
+                                if (objLoginUserDetails.DateOfBecomingInsider != null && objCompanySettingConfigurationDTO.ConfigurationValueCodeId == ConstEnum.Code.CompanyConfig_YesNoSettings_Yes)
+                                {
 
+                                    ViewBag.RLSearchAudId = objRestrictedSearchAudittDTO.RlSearchAuditId;
+                                    ViewBag.RLCompId = objRestrictedSearchAudittDTO.RlCompanyId;
+
+                                    using (CompaniesSL objCompaniesSL = new CompaniesSL())
+                                    {
+                                        objCompanySettingConfigurationDTO = objCompaniesSL.GetEnterUploadSettingsConfigurationDetails(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.Code.CompanyConfigType_RestrictedListSetting, ConstEnum.Code.RestrictedListSetting_Preclearance_Approval);
+                                        if (objCompanySettingConfigurationDTO.ConfigurationValueCodeId == ConstEnum.Code.RestrictedList_PreclearanceApproval_Manual)
+                                        {
+                                            if (TempData["List"] != null || TempData["PreClrList"] != null)
+                                            {
+                                                ViewBag.IsPreClearanceAllow = true;
+                                                ViewBag.GridAllow = true;
+                                            }
+                                            else
+                                            {
+                                                ViewBag.IsPreClearanceAllow = true;
+                                                ViewBag.GridAllow = false;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (TempData["List"] != null || TempData["PreClrList"] != null)
+                                            {
+                                                ViewBag.IsPreClearanceAllow = true;
+                                                ViewBag.GridAllow = true;
+                                            }
+                                            else
+                                            {
+                                                ViewBag.IsPreClearanceAllow = true;
+                                                ViewBag.GridAllow = false;
+                                            }
+                                        }
+                                    }
+
+                                }
+                                else
+                                {
+                                    ArrayList lst = new ArrayList();
+                                    lst.Add(restrictedListModel.CompanyName.Replace("'", "\'").Replace("\"", "\""));
+                                    ViewBag.AlertMsg = Common.Common.getResource("rl_msg_50015", lst);
+                                    return View();
+                                }
                             }
                             else
                             {
-                                ArrayList lst = new ArrayList();
-                                lst.Add(restrictedListModel.CompanyName.Replace("'", "\'").Replace("\"", "\""));
-                                ViewBag.AlertMsg = Common.Common.getResource("rl_msg_50015", lst);
-                                return View();
+                                if (objLoginUserDetails.DateOfBecomingInsider != null && objTradingPolicyDTO_OS.IsPreClearanceRequired==true)
+                                {
+                                    ViewBag.RLSearchAudId = objRestrictedSearchAudittDTO.RlSearchAuditId;
+                                    ViewBag.RLCompId = objRestrictedSearchAudittDTO.RlCompanyId;
+
+                                    using (CompaniesSL objCompaniesSL = new CompaniesSL())
+                                    {
+
+                                        if (objTradingPolicyDTO_OS.PreClrTradesApprovalReqFlag == true)                                            
+                                        {
+                                            if (TempData["List"] != null || TempData["PreClrList"] != null)
+                                            {
+                                                ViewBag.IsPreClearanceAllow = true;
+                                                ViewBag.GridAllow = true;
+                                            }
+                                            else
+                                            {
+                                                ViewBag.IsPreClearanceAllow = true;
+                                                ViewBag.GridAllow = false;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (TempData["List"] != null || TempData["PreClrList"] != null)
+                                            {
+                                                ViewBag.IsPreClearanceAllow = true;
+                                                ViewBag.GridAllow = true;
+                                            }
+                                            else
+                                            {
+                                                ViewBag.IsPreClearanceAllow = true;
+                                                ViewBag.GridAllow = false;
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    ArrayList lst = new ArrayList();
+                                    lst.Add(restrictedListModel.CompanyName.Replace("'", "\'").Replace("\"", "\""));
+                                    ViewBag.AlertMsg = Common.Common.getResource("rl_msg_50015", lst);
+                                    return View();
+                                }
+
                             }
                         }
                     }

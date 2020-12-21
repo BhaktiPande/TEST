@@ -46,7 +46,8 @@ BEGIN
 			  ,SoftCopyReq
 			  ,HardCopyReq		
 			  ,RUL.SeekDeclarationFromEmpRegPossessionOfUPSIFlag,RUL.DeclarationFromInsiderAtTheTimeOfContinuousDisclosures,RUL.DeclarationToBeMandatoryFlag,
-			  RUL.DisplayDeclarationPostSubmissionOfContinuouseDisclosureFlag			  
+			  RUL.DisplayDeclarationPostSubmissionOfContinuouseDisclosureFlag
+			  ,RUL.PreClrReasonForNonTradeReqFlag			  
 			From tra_TransactionMaster_OS tra
 			LEFT JOIN rul_TradingPolicy_OS RUL ON RUL.TradingPolicyId = tra.TradingPolicyId
 			Where TransactionMasterId = @inp_iTransactionMasterId

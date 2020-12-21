@@ -339,6 +339,12 @@ namespace InsiderTrading.Controllers
             {
                 lstCategoryList[0].Value = "<input type='checkbox' name='select_all' value='1' id='select-all' GridType='"+ type +"'>";
             }
+
+            if (type == "114132")//Select all Applicability for EmployeeInsider OS 
+            {
+                lstCategoryList[0].Value = "<input type='checkbox' name='select_all' value='1' id='select-all' GridType='" + type + "'>";
+            }
+
             if ( type == "114089")//Select all Applicability for EmployeeNonInsider 
             {
                 lstCategoryList[0].Value = "<input type='checkbox'  name='select_all_EmpNonIns' value='1' id='select_all_EmpNonIns' GridType='" + type + "'>";

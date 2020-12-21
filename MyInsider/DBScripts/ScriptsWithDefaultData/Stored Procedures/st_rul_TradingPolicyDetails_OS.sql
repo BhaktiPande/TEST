@@ -5,9 +5,14 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-/*-------------------------------------------------------------------------------------------------
+/* ======================================================================================================
 
--------------------------------------------------------------------------------------------------*/
+--Description:	Marks the Trading Policy details is fetch.
+
+-- Author      :Rajashri Sathe
+
+-- ======================================================================================================*/
+
 CREATE PROCEDURE [dbo].[st_rul_TradingPolicyDetails_OS]
 	@inp_iTradingPolicyId INT,							-- Id of the TradingPolicy whose details are to be fetched.
 	@out_nReturnValue		INT = 0 OUTPUT,
@@ -36,7 +41,7 @@ BEGIN
 				@ERR_TRADINGPOLICY_GETDETAILS = 15058 /*Error occurred while fetching trading policy details.*/
 
 		--Check if the TradingPolicy whose details are being fetched exists
-		IF (NOT EXISTS(SELECT TradingPolicyId FROM rul_TradingPolicy WHERE TradingPolicyId = @inp_iTradingPolicyId))
+		IF (NOT EXISTS(SELECT TradingPolicyId FROM rul_TradingPolicy_OS WHERE TradingPolicyId = @inp_iTradingPolicyId))
 		BEGIN	
 				SET @out_nReturnValue = @ERR_TRADINGPOLICY_NOTFOUND
 				RETURN (@out_nReturnValue)
@@ -68,9 +73,10 @@ BEGIN
 				PreClrAllowNewForOpenPreclearFlag,PreClrAllowNewForOpenPreclearFlag,PreClrMultipleAboveInCodeId,PreClrApprovalPreclearORPreclearTradeFlag,
 				PreClrTradesAutoApprovalReqFlag,PreClrSingMultiPreClrFlagCodeId,
 				GenCashAndCashlessPartialExciseOptionForContraTrade,GenSecuritiesPriortoAcquisitionManualInputorAutoCalculate, 
-				TradingThresholdLimtResetFlag,ContraTradeBasedOn, SeekDeclarationFromEmpRegPossessionOfUPSIFlag, DeclarationFromInsiderAtTheTimeOfContinuousDisclosures, DeclarationToBeMandatoryFlag, DisplayDeclarationPostSubmissionOfContinuouseDisclosureFlag,
-				IsPreclearanceFormForImplementingCompany,PreclearanceWithoutPeriodEndDisclosure,PreClrApprovalReasonReqFlag
-		FROM rul_TradingPolicy_OS
+				TradingThresholdLimtResetFlag,177001 as  ContraTradeBasedOn, SeekDeclarationFromEmpRegPossessionOfUPSIFlag, DeclarationFromInsiderAtTheTimeOfContinuousDisclosures, DeclarationToBeMandatoryFlag, DisplayDeclarationPostSubmissionOfContinuouseDisclosureFlag,
+				IsPreclearanceFormForImplementingCompany,PreclearanceWithoutPeriodEndDisclosure,PreClrApprovalReasonReqFlag,IsPreClearanceRequired,
+				Id	,SearchType,	SearchLimit,	ApprovalType,	IsDematAllowed,	IsFormFRequired
+		FROM rul_TradingPolicy_OS TP join rl_RestrictedListConfig rl on TP.RestrictedListConfigId=rl.Id
 		WHERE TradingPolicyId = @inp_iTradingPolicyId
 		AND IsDeletedFlag = 0 /*Get details of non-deleted record only*/
 		

@@ -154,6 +154,8 @@ BEGIN
 					@nApprovedBy = ApprovedBy
 					FROM #tempPreClearanceList WHERE ID = @nCounter
 					-- check exercise pool option and set quantity for preclearance 
+					SELECT  @nTradingPolicyID = ISNULL(MAX(MapToId), 0) FROM vw_ApplicableTradingPolicyForUser_OS  where UserInfoId = @nUserInfoId
+
 					IF (@nSecurityTypeCodeId  = @nSecurityType_Share)
 					BEGIN
 						SELECT @nOtherQuantity_FromPool = VirtualQuantity FROM tra_BalancePool_OS 
@@ -175,7 +177,7 @@ BEGIN
 						END
 						ELSE IF (@nTransactionTypeCodeId = @TranscationType_Pledge OR @nTransactionTypeCodeId = @TranscationType_PledgeRevoke OR @nTransactionTypeCodeId = @TranscationType_PledgeInvoke)
 						BEGIN
-							SELECT @imptpostshareqtycodeid = impt_post_share_qty_code_id FROM tra_TransactionTypeSettings WHERE trans_type_code_id = @nTransactionTypeCodeId 
+							SELECT @imptpostshareqtycodeid = impt_post_share_qty_code_id FROM tra_TransactionTypeSettings_OS WHERE trans_type_code_id = @nTransactionTypeCodeId 
 							AND mode_of_acquis_code_id = @nModeOfAcquisitionCodeId AND security_type_code_id = @nSecurityTypeCodeId
 						    					   
 							IF(@imptpostshareqtycodeid = @PledgeImpactOnPostQuantity_No)						     
@@ -196,7 +198,7 @@ BEGIN
 					BEGIN
 					IF (@nTransactionTypeCodeId = @TranscationType_Pledge OR @nTransactionTypeCodeId = @TranscationType_PledgeRevoke OR @nTransactionTypeCodeId = @TranscationType_PledgeInvoke)
 					BEGIN							
-						SELECT @imptpostshareqtycodeid = impt_post_share_qty_code_id FROM tra_TransactionTypeSettings WHERE trans_type_code_id = @nTransactionTypeCodeId 
+						SELECT @imptpostshareqtycodeid = impt_post_share_qty_code_id FROM tra_TransactionTypeSettings_OS WHERE trans_type_code_id = @nTransactionTypeCodeId 
 						AND mode_of_acquis_code_id = @nModeOfAcquisitionCodeId AND security_type_code_id = @nSecurityTypeCodeId
 												   
 						IF(@imptpostshareqtycodeid = @PledgeImpactOnPostQuantity_No)						     
@@ -353,13 +355,50 @@ BEGIN
 	--		END			
 	--	END	
 	--END
-					-- check if pre-clearance is auto approve or not, if auto approve then change status to approve
-					SELECT @ApprovalType = ISNULL(ConfigurationValueCodeId,0) FROM com_CompanySettingConfiguration 
-					WHERE ConfigurationTypeCodeId = @ConfigurationType_RestrictedListSetting AND ConfigurationCodeId = @ConfigurationCode_PreclearanceApproval
-					SET @nPreclearanceStatusCode = CASE WHEN @ApprovalType = @PreclearanceApproval_AutoApprove THEN @PreclearanceStatus_Approve ELSE @nPreclearanceStatusCodeId END
-					SET @bIsAutoApprove = CASE WHEN @ApprovalType = @PreclearanceApproval_AutoApprove THEN 1 ELSE 0 END
-					DECLARE @nIsPartiallyTraded INT = 1
+					
+					DECLARE @inp_iRequiredModule INT=0
+					SELECT @inp_iRequiredModule =RequiredModule FROM mst_Company WHERE CompanyId=1
 
+					IF(@inp_iRequiredModule=513001)
+					BEGIN
+						-- check if pre-clearance is auto approve or not, if auto approve then change status to approve
+						SELECT @ApprovalType = ISNULL(ConfigurationValueCodeId,0) FROM com_CompanySettingConfiguration 
+						WHERE ConfigurationTypeCodeId = @ConfigurationType_RestrictedListSetting AND ConfigurationCodeId = @ConfigurationCode_PreclearanceApproval
+						SET @nPreclearanceStatusCode = CASE WHEN @ApprovalType = @PreclearanceApproval_AutoApprove THEN @PreclearanceStatus_Approve ELSE @nPreclearanceStatusCodeId END
+						SET @bIsAutoApprove = CASE WHEN @ApprovalType = @PreclearanceApproval_AutoApprove THEN 1 ELSE 0 END
+					END
+					ELSE
+					BEGIN
+					DECLARE @out_bIsContraTrade BIT = 0
+					DECLARE @out_sContraTradeTillDate NVARCHAR(500)
+					
+					
+						EXEC st_tra_PreclearanceRequestNonImplCompanySaveValidations 
+						0,@nTradingPolicyID,@nUserInfoId,	@nUserInfoIdRelative,@nTransactionTypeCodeId,						
+						@nSecurityTypeCodeId,@nSecuritiesToBeTradedQty,	@nSecuritiesToBeTradedValue	,@nCompanyId,@nModeOfAcquisitionCodeId ,
+						@nDMATDetailsID,@out_bIsContraTrade	OUTPUT,	@out_sContraTradeTillDate OUTPUT,@bIsAutoApprove OUTPUT,@out_nReturnValue OUTPUT,
+						@out_nSQLErrCode OUTPUT,@out_sSQLErrMessage	OUTPUT				
+																				
+					IF @out_nReturnValue <> 0
+					BEGIN
+						print(@out_nReturnValue)
+						RETURN
+					END
+					
+					IF @bIsAutoApprove = 1
+					BEGIN
+						SET @nPreclearanceStatusCode = 144002						
+						SET @nApprovedBy = 1						
+					END
+					ELSE 
+					BEGIN
+						SET @bIsAutoApprove = 0
+						SET @nPreclearanceStatusCode = @nPreclearanceStatusCodeId			
+					END
+					END
+
+					DECLARE @nIsPartiallyTraded INT = 1
+					
 					INSERT INTO tra_PreclearanceRequest_NonImplementationCompany(RlSearchAuditId,DisplaySequenceNo,PreclearanceRequestForCodeId,UserInfoId,UserInfoIdRelative,TransactionTypeCodeId,
 					SecurityTypeCodeId,SecuritiesToBeTradedQty,PreclearanceStatusCodeId,CompanyId,
 					DMATDetailsID,ReasonForNotTradingCodeId,ReasonForNotTradingText,SecuritiesToBeTradedValue, IsAutoApproved,
@@ -384,7 +423,7 @@ BEGIN
 					END
 					SELECT 1 -- this select statement is for PetaPoco
 
-					SELECT  @nTradingPolicyID = ISNULL(MAX(MapToId), 0) FROM vw_ApplicableTradingPolicyForUser_OS  where UserInfoId = @nUserInfoId
+					
 					
 					EXEC @out_nReturnValue = st_tra_TradingTransactionMasterCreate_OS 0,@nPreclearanceRequestId,@nUserInfoId,@nContinousDisclosureType,
 			    															@nDisclosureStatusNotConfirmed,0,@nTradingPolicyID,NULL,NULL,NULL,NULL,@nUserInfoId,

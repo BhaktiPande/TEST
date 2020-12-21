@@ -207,7 +207,7 @@
                             }
                         }
                         <!-- form field row 5 -->
-                        if (Model.PreclearanceStatusCodeId == null)
+                        @*if (Model.PreclearanceStatusCodeId == null)
                         {
                         <div class="row">
                             <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
@@ -218,7 +218,46 @@
                             </div>
                         </div>
                         <br>
-                        }
+                        }*@
+                        
+                        
+                        
+                        if (ViewBag.RequiredModuleID == 513001)
+                            {
+                                <div class="row">
+                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                                        @Html.CheckBox("declare", false, new { @class = "cr-check" })
+                                    </div>
+                                    <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+                                        @InsiderTrading.Common.Common.getResource("dis_lbl_17479")
+                                    </div>
+                                </div>
+                                <br>
+                            }
+                            else
+                            {
+                                if (ViewBag.UPSISeekDeclarationRequiredFlag == true)
+                                {
+                                    <div class="row">
+                                        @if (Model.PreclearanceStatusCodeId==null)
+                                        {
+                                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                                            @Html.CheckBox("declare", false, new { @class = "cr-check" })
+                                        </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                                                @Html.CheckBox("declare", true, new { @disabled = "disabled" })
+                                            </div>
+                                        }
+                                        <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+                                            @ViewBag.UPSISeekDeclaration
+                                        </div>
+                                    </div>
+                                    <br>
+                                }
+                            }
 
                         <!-- form buttons -->
                         <div class="row">
@@ -245,6 +284,7 @@
                         </div>
                         @Html.HiddenFor(m => m.SequenceNo)
                         }
+                    
                         @Html.Hidden("DematListURL", Url.Action("DematList", "PreclearanceRequestNonImplCompany"))
                         @Html.Hidden("AgreeTermsMsg", InsiderTrading.Common.Common.getResource("dis_lbl_17481"))
 
@@ -260,6 +300,19 @@
                         @Html.Hidden("LoadSecurityType", Url.Action("LoadSecurityType", "PreclearanceRequestNonImplCompany"))
                         <input type="hidden" name="UserInfoIdPassDMAT" id="UserInfoIdPassDMAT" value="@ViewBag.UserInfoIdPassDMAT" />
                         <input type="hidden" name="UserInfoId11" id="UserInfoId1" value="@ViewBag.UserInfoId" />
+                    
+                    
+                    <input type="hidden" name="RequiredModule" id="RequiredModule" value="@ViewBag.RequiredModuleID" />
+                    @if (ViewBag.UPSISeekDeclarationRequiredFlag==true)
+                    {
+                    <input type="hidden" name="UPSISeekDecReq11" id="UPSISeekDecReq11" value="1" />
+                    }
+                    else
+                    {
+                        <input type="hidden" name="UPSISeekDecReq11" id="UPSISeekDecReq11" value="0" />
+                    }
+                    
+                   
                     </div>
                 </div>
                     </div>
