@@ -39,7 +39,7 @@ namespace InsiderTrading.Controllers
 
             if (acid == 337)
             {
-                lstMassUploadDTO = GetAllMassUpload().Where(c => c.MassUploadExcelId == 2 | c.MassUploadExcelId == 5).ToList();
+                lstMassUploadDTO = GetAllMassUpload().Where(c => c.MassUploadExcelId == 2 | c.MassUploadExcelId == 5 | c.MassUploadExcelId == 57 | c.MassUploadExcelId == 58).ToList();
                 lstMassUploadDTO = massUploadSL.GetSequenceMassUploadList(lstMassUploadDTO);
             }
             else
