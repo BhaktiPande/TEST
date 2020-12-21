@@ -11,7 +11,7 @@
 }
 <!-- Content Header (Page header) -->
 <section class="content-header">
-    @Html.AntiForgeryToken()
+    @*@Html.AntiForgeryToken()*@
 </section>
 
 <script>
@@ -197,7 +197,7 @@
             else {
                 var Chk_DeclaFrmInsContDis = false;
             }
-            var data = { 'nTradingTransactionMasterId': $('#TransactionMasterId').val(), 'nDisclosureTypecodeId': $('#DisclosureTypecodeId').val(), 'acid': '@ViewBag.acid', 'Chk_DeclaFrmInsContDis': Chk_DeclaFrmInsContDis, 'IsDeclarationToBeMandatory': '@ViewBag.DeclarationToBeMandatoryFlag', __RequestVerificationToken: token, formId: DisclosurertypeformId };
+            var data = { 'nTradingTransactionMasterId': $('#TransactionMasterId').val(), 'nDisclosureTypecodeId': $('#DisclosureTypecodeId').val(), 'acid': '@ViewBag.acid', 'Chk_DeclaFrmInsContDis': Chk_DeclaFrmInsContDis, 'IsDeclarationToBeMandatory': '@ViewBag.DeclarationToBeMandatoryFlag', __RequestVerificationToken: token, formId: DisclosurertypeformId,ParentId:'@ViewBag.ParentId' };
 
             $.ajax({
                 url: '@Url.Action("Submit", "TradingTransaction_OS")',
@@ -283,17 +283,31 @@
         
             var form = $('#__AjaxAntiForgeryFormOther');
             var token = $('input[name="__RequestVerificationToken"]', form).val();
-
+            var Limited = sessionStorage.getItem("checkvalues");            
             var DisclosurertypeNottradedformId = 56;
-
-            if ($('#lstReasonsForNotTrading').val() != "0") {
+            if ('@ViewBag.ReasonForNotTradedRequired'== 'True')
+            {
+                if ($('#lstReasonsForNotTrading').val() != "0" && $('#lstReasonsForNotTrading').val() != null) {
+                    sessionStorage.setItem("checkvalues", 101);
+                    $('#lstReasonsForNotTrading').parent().find("field-validation-error").html();
+                    var data = { 'nPreclearenceId': $('#PreclearenceId').val(), 'nReasonForNotTrading': $('#lstReasonsForNotTrading').val(), 'sReasonForNotTradingText': $("#txtReasonForNotTradingText").val(), 'acid': '@ViewBag.acid', __RequestVerificationToken: token, formId: DisclosurertypeNottradedformId };
+                    ConfirmBox(data, '@InsiderTrading.Common.Common.getResource("dis_msg_53052").Replace("$2", ViewBag.CompanyName + " and other than " + ViewBag.CompanyName)', '@Url.Action("TransactionNotTraded", "TradingTransaction_OS")');
+                }
+                else {
+                    if (Limited!='100')
+                    {
+                        sessionStorage.setItem("checkvalues", 100);
+                        $('#lstReasonsForNotTrading').parent().append("<span class='field-validation-error'>@InsiderTrading.Common.Common.getResource("tra_msg_16148")</span>");
+                    }
+                }
+            }
+            else
+            {
                 $('#lstReasonsForNotTrading').parent().find("field-validation-error").html();
-                var data = { 'nPreclearenceId': $('#PreclearenceId').val(), 'nReasonForNotTrading': $('#lstReasonsForNotTrading').val(), 'sReasonForNotTradingText': $("#txtReasonForNotTradingText").val(), 'acid': '@ViewBag.acid', __RequestVerificationToken: token, formId: DisclosurertypeNottradedformId };
+                var data = { 'nPreclearenceId': $('#PreclearenceId').val(), 'nReasonForNotTrading': '515515', 'sReasonForNotTradingText': $("#txtReasonForNotTradingText").val(), 'acid': '@ViewBag.acid', __RequestVerificationToken: token, formId: DisclosurertypeNottradedformId };
                 ConfirmBox(data, '@InsiderTrading.Common.Common.getResource("dis_msg_53052").Replace("$2", ViewBag.CompanyName + " and other than " + ViewBag.CompanyName)', '@Url.Action("TransactionNotTraded", "TradingTransaction_OS")');
             }
-            else {
-                $('#lstReasonsForNotTrading').parent().append("<span class='field-validation-error'>@InsiderTrading.Common.Common.getResource("tra_msg_16148")</span>");
-            }
+            
         });
 
         //$('#hold-div-1,#hold-div-2').addClass('hold-div');
@@ -758,7 +772,7 @@
                                                             {
                                                                 if (ViewBag.PreclearenceId != null)
                                                                 {
-                                                                    <a id="btntblGrid" href='@Url.Action("Create", "TradingTransaction_OS", new { TransactionDetailsId = 0, TransactionMasterId = @ViewBag.TransactionMasterId, UserTypeCodeId = @ViewBag.UserTypeId, SecurityTypeCodeId = @ViewBag.SecurityTypeCodeID, acid = ViewBag.acid, period = ViewBag.nPeriodCode, year = ViewBag.nYearCode, periodType = ViewBag.nPeriodType,UserInfoId = ViewBag.UserInfoId })' class="btn btn-success"><i class="fa fa-plus"></i>Add @ViewBag.SecurityType</a>
+                                                                    <a id="btntblGrid" href='@Url.Action("Create", "TradingTransaction_OS", new { TransactionDetailsId = 0, TransactionMasterId = @ViewBag.TransactionMasterId, UserTypeCodeId = @ViewBag.UserTypeId, SecurityTypeCodeId = @ViewBag.SecurityTypeCodeID, acid = ViewBag.acid, period = ViewBag.nPeriodCode, year = ViewBag.nYearCode, periodType = ViewBag.nPeriodType, UserInfoId = ViewBag.UserInfoId })' class="btn btn-success"><i class="fa fa-plus"></i>Add @ViewBag.SecurityType</a>
                                                                 }
                                                                 else
                                                                 {

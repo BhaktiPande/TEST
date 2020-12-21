@@ -1,0 +1,456 @@
+﻿@model InsiderTrading.Models.TradingPolicyModel_OS
+@{
+    ViewBag.Title = "_PreclearanceRequirement_OS";
+}
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+<script src="~/Scripts/TradingPolicy_OS.js"></script>
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    @Html.AntiForgeryToken()
+</section>
+<div class="row">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
+        <div class="form-group">
+            @Html.Label(@InsiderTrading.Common.Common.getResource("rul_lbl_55310"))
+        </div>
+    </div>
+    <div class="col-md-9 col-md-8 col-sm-8 col-xs-8">
+        <div class="form-group">
+            @Html.RadioButtonFor(model => model.SearchType, InsiderTrading.Common.ConstEnum.Code.RestrictedList_Search_Perpetual_OS,
+                   Model.SearchType == InsiderTrading.Common.ConstEnum.Code.RestrictedList_Search_Perpetual_OS ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)
+                  : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull1", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) <label class="normalLable">@InsiderTrading.Common.Common.getResource("rul_lbl_55311")</label>
+
+                @Html.RadioButtonFor(model => model.SearchType, InsiderTrading.Common.ConstEnum.Code.RestrictedList_Search_Limited_OS,
+                Model.SearchType == InsiderTrading.Common.ConstEnum.Code.RestrictedList_Search_Limited_OS ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)
+                : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) <label class="normalLable">@InsiderTrading.Common.Common.getResource("rul_lbl_55312")</label>
+
+                <span id="noOfHits">
+                    @Html.TextBoxFor(model => model.SearchLimit, new { placeholder = "Enter number of hits/day", maxlength = "2", style = "display:none;width:200px" ,@class="form-control"})
+                    <br />
+                    @Html.ValidationMessageFor(model => model.SearchLimit)
+
+                </span>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="display:none">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
+        <div class="form-group">
+            @Html.Label(@InsiderTrading.Common.Common.getResource("rul_lbl_55364"))
+        </div>
+    </div>
+    <div class="col-md-9 col-md-8 col-sm-8 col-xs-8">
+        <div class="form-group">
+            @Html.RadioButtonFor(model => model.ApprovalType, InsiderTrading.Common.ConstEnum.Code.RestrictedList_Type_Auto_OS,
+                   Model.ApprovalType == InsiderTrading.Common.ConstEnum.Code.RestrictedList_Type_Auto_OS ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)
+                  : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull1", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) <label class="normalLable">@InsiderTrading.Common.Common.getResource("rul_lbl_55365")</label>
+
+                @Html.RadioButtonFor(model => model.ApprovalType, InsiderTrading.Common.ConstEnum.Code.RestrictedList_Type_Manual_OS,
+                Model.ApprovalType == InsiderTrading.Common.ConstEnum.Code.RestrictedList_Type_Manual_OS ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)
+                : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) <label class="normalLable">@InsiderTrading.Common.Common.getResource("rul_lbl_55366")</label>
+                            
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
+            <div class="form-group">
+                @Html.Label(@InsiderTrading.Common.Common.getResource("rul_lbl_55315"))
+            </div>
+        </div>
+        <div class="col-md-9 col-md-8 col-sm-8 col-xs-8">
+            <div class="form-group">
+                <label class="radio-inline" for="radios-0">               
+                   
+                    @Html.RadioButtonFor(model => model.IsPreClearanceRequired, "True", new { @class = "PreClrReqRadio" }) <label class="normalLable"> @InsiderTrading.Common.Common.getResource("rul_lbl_55313")</label>
+                </label>
+                <label class="radio-inline" for="radios-1">
+                    @Html.RadioButtonFor(model => model.IsPreClearanceRequired, "False", new { @class = "PreClrReqRadio" }) <label class="normalLable"> @InsiderTrading.Common.Common.getResource("rul_lbl_55314")</label>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div id="hideAll">
+        <div class="row">
+            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4">
+                <div class="form-group">
+                    @Html.Label(@InsiderTrading.Common.Common.getResource("rul_lbl_55309"))
+                </div>
+            </div>
+            <div class="col-md-3 col-md-3 col-sm-8 col-xs-8">
+                <div class="form-group">
+                    @Html.DropDownList("SelectedPreClearancerequiredforTransaction",
+                    new MultiSelectList(ViewBag.TransactionTypeList, "Key", "Value", Model.AssignedPreClearancerequiredforTransactionList.Select(m => m.Key)),
+                    @InsiderTrading.Common.Common.IsTradingPolicyEdit("MultiSelect", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId))
+                    @Html.ValidationMessageFor(m => m.SelectedPreClearancerequiredforTransaction)
+                </div>
+            </div>
+            <div class="col-md-7 col-md-7 col-sm-8 col-xs-8" >
+                <div id="divTransactionSecurityMapping">
+                    @{
+                        if (Model.AssignedPreClearancerequiredforTransactionList != null && Model.AssignedPreClearancerequiredforTransactionList.Count > 0)
+                        {
+                            @Html.Partial("~/Views/TradingPolicy_OS/PreclearanceTransactionSecurityMapping_OS.cshtml")
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div id="DivProhibitDuringNonTradingPeriod" style="display:none">
+            @{
+                if (Model.AssignedPreClearancerequiredforTransactionList != null && Model.AssignedPreClearancerequiredforTransactionList.Count > 0)
+                {
+                    @Html.Partial("~/Views/TradingPolicy_OS/_ProhibitTradingNonTradingPeriod_OS.cshtml")
+                }
+            }
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-4 col-xs-4">
+                <div class="form-group">
+                    @Html.Label(InsiderTrading.Common.Common.getResource("rul_lbl_55198"), new { @class = "control-label text-left" })
+                </div>
+            </div>
+            <div class="col-md-5 col-md-5 col-sm-8 col-xs-8">
+                <div class="form-group">
+                    <label class="radio-inline" for="radios-0">
+                        @Html.RadioButtonFor(model => model.PreClrAllowNewForOpenPreclearFlag, "True", Model.PreClrAllowNewForOpenPreclearFlag == true ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) <label class="normalLable"> @InsiderTrading.Common.Common.getResource("rul_lbl_55246")</label>
+                    </label>
+                    <label class="radio-inline" for="radios-1">
+                        @Html.RadioButtonFor(model => model.PreClrAllowNewForOpenPreclearFlag, "False", Model.PreClrAllowNewForOpenPreclearFlag == false ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) <label class="normalLable"> @InsiderTrading.Common.Common.getResource("rul_lbl_55247")</label>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
+                <div class="form-group">
+                    @Html.Label(InsiderTrading.Common.Common.getResource("rul_lbl_55157"), new { @class = "control-label text-left" })
+                </div>
+            </div>
+            <div class="col-md-9 col-md-8 col-sm-8 col-xs-8">
+                <div class="form-group">
+                    <label class="radio-inline" for="radios-0">
+                        @Html.RadioButtonFor(model => model.PreClrTradesApprovalReqFlag, "True",
+                Model.PreClrTradesApprovalReqFlag == true ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) <label class="normalLable"> @InsiderTrading.Common.Common.getResource("rul_lbl_55328")</label>
+            </label>
+            <label class="radio-inline" for="radios-1">
+                @Html.RadioButtonFor(model => model.PreClrTradesApprovalReqFlag, "False",
+                Model.PreClrTradesApprovalReqFlag == false ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) <label class="normalLable"> @InsiderTrading.Common.Common.getResource("rul_lbl_55329")</label>
+            </label>
+        </div>
+    </div>
+</div>
+
+<div id="DivPreclearanceTransaction">
+    @{
+        if (!Model.PreClrTradesApprovalReqFlag)
+        {
+            @Html.Partial("~/Views/TradingPolicy_OS/_PreclearanceTransaction_OS.cshtml")
+        }
+    }
+</div>
+
+<div class="row" style="display:none">
+    <div class="col-lg-6 col-md-6 col-sm-4 col-xs-4">
+        <div class="form-group">
+            @Html.Label(@InsiderTrading.Common.Common.getResource("rul_lbl_55316"))
+        </div>
+    </div>
+
+    <div class="col-md-5 col-md-5 col-sm-8 col-xs-8" >
+        <div class="form-group">
+            <label class="radio-inline" for="radios-0">
+                @Html.RadioButtonFor(model => model.IsDematAllowed, "True",
+                Model.IsDematAllowed == true ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)
+                : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull1", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) <label class="normalLable"> @InsiderTrading.Common.Common.getResource("rul_lbl_55246")</label>
+            </label>
+            <label class="radio-inline" for="radios-1">
+                @Html.RadioButtonFor(model => model.IsDematAllowed, "False",
+                Model.IsDematAllowed == false ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) <label class="normalLable"> @InsiderTrading.Common.Common.getResource("rul_lbl_55247")</label>
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-4 col-md-3 col-sm-4 col-xs-12">
+        <div class="form-group">
+            @Html.LabelFor(m => m.PreClrCOApprovalLimit, new { @class = "normalLable" })
+        </div>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+        <div class="form-group">
+            @Html.TextBoxFor(m => m.PreClrCOApprovalLimit, @InsiderTrading.Common.Common.IsTradingPolicyEdit("TextNumber", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId))
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="form-group">
+            <label class="normalLable">@InsiderTrading.Common.Common.getResource("rul_lbl_55285")</label>
+            @Html.ValidationMessageFor(m => m.PreClrCOApprovalLimit)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-4 col-md-3 col-sm-4 col-xs-12">
+        <div class="form-group">
+            @Html.LabelFor(m => m.PreClrApprovalValidityLimit, new { @class = "normalLable" })
+        </div>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+        <div class="form-group">
+            @Html.TextBoxFor(m => m.PreClrApprovalValidityLimit, @InsiderTrading.Common.Common.IsTradingPolicyEdit("TextNumber", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId))
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="form-group">
+            <label class="normalLable">@InsiderTrading.Common.Common.getResource("rul_lbl_55286")</label>
+            @Html.ValidationMessageFor(m => m.PreClrApprovalValidityLimit)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-4">
+        <div class="form-group">
+            @Html.Label(InsiderTrading.Common.Common.getResource("rul_lbl_55162"), new { @class = "control-label text-left" })
+        </div>
+    </div>
+    <div class="col-md-9 col-md-4 col-sm-6 col-xs-8">
+        <div class="form-group">
+            <label class="radio-inline" for="radios-0">
+                @Html.RadioButtonFor(model => model.PreClrSeekDeclarationForUPSIFlag, "True", Model.PreClrSeekDeclarationForUPSIFlag == true ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId))
+                <label class="normalLable"> @InsiderTrading.Common.Common.getResource("rul_lbl_55246")</label>
+            </label>
+            <label class="radio-inline" for="radios-1">
+                @Html.RadioButtonFor(model => model.PreClrSeekDeclarationForUPSIFlag, "False", Model.PreClrSeekDeclarationForUPSIFlag == false ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId))
+                <label class="normalLable"> @InsiderTrading.Common.Common.getResource("rul_lbl_55247")</label>
+            </label>
+        </div>
+    </div>
+</div>
+
+<div id="DivPreClrUPSIDeclaration">
+    @{
+        if (Model.PreClrSeekDeclarationForUPSIFlag)
+        {
+            @Html.Partial("~/Views/TradingPolicy_OS/_SeekDeclarationUPSI_OS.cshtml")
+        }
+    }
+</div>
+
+<div class="row">
+    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-4">
+        <div class="form-group">
+            @Html.Label(InsiderTrading.Common.Common.getResource("rul_lbl_55164"))
+        </div>
+    </div>
+    <div class="col-md-9 col-md-4 col-sm-6 col-xs-8">
+        <div class="form-group">
+            <label class="radio-inline" for="radios-0">
+                @Html.RadioButtonFor(model => model.PreClrReasonForNonTradeReqFlag, "True", Model.PreClrReasonForNonTradeReqFlag == true ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) @InsiderTrading.Common.Common.getResource("rul_lbl_55246")
+            </label>
+            <label class="radio-inline" for="radios-1">
+                @Html.RadioButtonFor(model => model.PreClrReasonForNonTradeReqFlag, "False", Model.PreClrReasonForNonTradeReqFlag == false ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) @InsiderTrading.Common.Common.getResource("rul_lbl_55247")
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="display:none">
+    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-4">
+        <div class="form-group">
+            @Html.Label(InsiderTrading.Common.Common.getResource("rul_lbl_55208"))
+        </div>
+    </div>
+    <div class="col-md-9 col-md-4 col-sm-6 col-xs-8">
+        <div class="form-group">
+            <label class="radio-inline" for="radios-0">
+                @Html.RadioButtonFor(model => model.PreClrApprovalReasonReqFlag, "True", Model.PreClrApprovalReasonReqFlag == true ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) @InsiderTrading.Common.Common.getResource("rul_lbl_55246")
+            </label>
+            <label class="radio-inline" for="radios-1">
+                @Html.RadioButtonFor(model => model.PreClrApprovalReasonReqFlag, "False", Model.PreClrApprovalReasonReqFlag == false ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) @InsiderTrading.Common.Common.getResource("rul_lbl_55247")
+            </label>
+        </div>
+    </div>
+</div>
+
+
+<div class="row"  style="display:none">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
+        <div class="form-group">
+            @Html.Label(@InsiderTrading.Common.Common.getResource("rul_lbl_55320"))
+        </div>
+    </div>
+
+    <div class="col-md-9 col-md-8 col-sm-8 col-xs-8">
+        <div class="form-group">
+            <label class="radio-inline" for="radios-0">
+                @Html.RadioButtonFor(model => model.IsFormFRequired, "True",
+                Model.IsFormFRequired == true ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)
+                : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull1", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) <label class="normalLable"> @InsiderTrading.Common.Common.getResource("rul_lbl_55246")</label>
+            </label>
+            <label class="radio-inline" for="radios-1">
+                @Html.RadioButtonFor(model => model.IsFormFRequired, "False", Model.IsFormFRequired == false ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) <label class="normalLable"> @InsiderTrading.Common.Common.getResource("rul_lbl_55247")</label>
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="row"style="display:none">
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-4">
+        <div class="form-group">
+            @Html.LabelFor(model => model.PreclearanceWithoutPeriodEndDisclosure)
+        </div>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-6 col-xs-4">
+        <div class="form-group">
+            @Html.RadioButtonFor(model => model.PreclearanceWithoutPeriodEndDisclosure, InsiderTrading.Common.ConstEnum.Code.Allow_Before_And_After_Period_End_LastSubmissionDate,
+                    Model.PreclearanceWithoutPeriodEndDisclosure == InsiderTrading.Common.ConstEnum.Code.Allow_Before_And_After_Period_End_LastSubmissionDate ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)
+                    : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) @InsiderTrading.Common.Common.getResource("rul_lbl_55287")
+                </div>
+            </div>
+        </div>
+        <div class="row" style="display:none">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-4">
+                <div class="form-group">
+                    &nbsp;
+                </div>
+            </div>
+            <div class="col-lg-5 col-md-5 col-sm-6 col-xs-4">
+                <div class="form-group">
+                    @Html.RadioButtonFor(model => model.PreclearanceWithoutPeriodEndDisclosure, InsiderTrading.Common.ConstEnum.Code.Allow_Till_Period_End_LastSubmissionDate,
+                     Model.PreclearanceWithoutPeriodEndDisclosure == InsiderTrading.Common.ConstEnum.Code.Allow_Till_Period_End_LastSubmissionDate ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) 
+                     : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) @InsiderTrading.Common.Common.getResource("rul_lbl_55288")
+                </div>
+            </div>
+        </div>
+        <div class="row"style="display:none">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-4">
+                <div class="form-group">
+                    &nbsp;
+                </div>
+            </div>
+            <div class="col-lg-5 col-md-5 col-sm-6 col-xs-4">
+                <div class="form-group">
+                    @Html.RadioButtonFor(model => model.PreclearanceWithoutPeriodEndDisclosure, InsiderTrading.Common.ConstEnum.Code.Allow_No,
+                     Model.PreclearanceWithoutPeriodEndDisclosure == InsiderTrading.Common.ConstEnum.Code.Allow_No ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) 
+                     : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull1", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) @InsiderTrading.Common.Common.getResource("rul_lbl_55247")
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+            function DisableUnselectedSecurityTypeControl() {
+                debugger;
+                var dataTable = $("table[name='DatatableGrid']").dataTable();
+                var array = '@Html.Raw(Json.Encode(ViewBag.GenSecurityTypeList))';
+                var obj = JSON.parse(array);
+                var nPreClrForAllSecuritiesFlag = $(':radio[name="PreClrForAllSecuritiesFlag"]').filter(':checked').val();
+
+                if (nPreClrForAllSecuritiesFlag == 'false') {
+                    setTimeout(function () {
+                        for (var i = 0; i < obj.length; i++) {
+                            dataTable.find("input[value='" + obj[i].Key + "']").closest("tr").find("input[type='text']").attr("disabled", "disabled");
+                        }
+
+                        $("input[type='checkbox'].preclearancetransactiosecurity:checked").each(function () {
+                            var value = this.id;
+                            if ($(this).is(":checked")) {
+                                dataTable.find("input[value='" + value.split('-')[1] + "']").closest("tr").find("input[type='text']").removeAttr("disabled");
+                                if ($("#TradingPolicyId").val() == 0) {
+                                    $('#DivContraTradeSecurityMapping #' + value.split('-')[1]).prop("checked", true);
+                                }
+                            }
+                        });
+
+                    }, 1000);
+                } else {
+
+                    setTimeout(function () {
+                        for (var i = 0; i < obj.length; i++) {
+                            dataTable.find("input[value='null']").closest("tr").find("input[type='text']").attr("disabled", "disabled");
+                        }
+                        $("input[type='checkbox'].preclearancetransactiosecurity:checked").each(function () {
+                            var value = this.id;
+                            if ($(this).is(":checked")) {
+                                dataTable.find("input[value='null']").closest("tr").find("input[type='text']").removeAttr("disabled");
+                                if ($("#TradingPolicyId").val() == 0) {
+                                    $('#DivContraTradeSecurityMapping #' + value.split('-')[1]).prop("checked", true);
+                                }
+                            }
+                        });
+
+                    }, 1000);
+                }
+            }
+
+        function check() {
+            debugger;
+            var values = $("#frmTradingPolicy").serializeArray();
+            values.push({
+                name: "acid",
+                value: $("#TradingPolicyUserAction").val()
+            });
+            
+            $.ajax({
+                url: $("#PreclearanceSecurityFlagChange").val(),
+                type: 'post',
+                headers: getRVToken(),
+                cache: false,
+                data: values,
+                success: function (result) {
+                    $('#PreSecuritywiseLimitList').html(result);
+                    DisableUnselectedSecurityTypeControl();
+                },
+                error: function (result) {
+                    alert(result);
+
+                }
+            });
+        }
+    </script>
+    @Scripts.Render("~/bundles/jqueryval")
+    @Html.Hidden("PreClearanceTransactionForTrade", Url.Action("PreClearanceTransactionForTrade", "TradingPolicy_OS"))
+    @Html.Hidden("PreClrSeekDeclarationForUPSIFlagURL", Url.Action("PreClrSeekDeclarationForUPSIFlagURL", "TradingPolicy_OS"))
+    @Html.Hidden("PreclearanceSecurityFlagChange", Url.Action("PreclearanceSecurityFlagChange", "TradingPolicy_OS"))
+    @Html.Hidden("ProhibitPreclearanceValueChange", Url.Action("ProhibitPreclearanceValueChange", "TradingPolicy_OS"))
+    @Html.Hidden("TransactionSecuityMappingChange", Url.Action("TransactionSecuityMappingChange", "TradingPolicy_OS"))
+<script>
+
+        $('#preAccordion').click(function () {           
+            var Limited = '@Model.SearchType';
+            if (Limited == 0)
+            {
+                var Limited = sessionStorage.getItem("checkvalues");
+            }
+            if (Limited == '528002') {
+            $("#SearchLimit").show();
+        }
+          else {
+               $("#SearchLimit").hide();               
+            }
+
+        });
+        $(document).ready(function () {
+      
+        $('.PreClrReqRadio').click(function () {
+            if ($('.PreClrReqRadio')[0].checked == true) {
+                $("#hideAll").show();
+            }
+            else if ($('.PreClrReqRadio')[1].checked == true) {
+                $("#hideAll").hide();
+            }
+        });
+    });
+
+</script>

@@ -255,9 +255,59 @@ namespace InsiderTradingDAL
 
         [PetaPoco.Column("PreclearanceWithoutPeriodEndDisclosure")]
         public int PreclearanceWithoutPeriodEndDisclosure { get; set; }
+
+        //Add new Column for restricted list in OS
+
+        //[PetaPoco.Column("IsPreClearanceRequired")]
+        public bool IsPreClearanceRequired { get; set; }
+
+        //[PetaPoco.Column("RestrictedListConfigId")]
+        public int? RestrictedListConfigId { get; set; }
+
+        // [PetaPoco.Column("Id")]
+        public int? Id { get; set; }
+
+        //// [PetaPoco.Column("SearchType")]
+        public int? SearchType { get; set; }
+
+        //// [PetaPoco.Column("SearchLimit")]
+        public int? SearchLimit { get; set; }
+
+        // [PetaPoco.Column("ApprovalType")]
+        public int? ApprovalType { get; set; }
+        // [PetaPoco.Column("IsDematAllowed")]
+        public bool? IsDematAllowed { get; set; }
+
+        ////  [PetaPoco.Column("IsFormFRequired")]
+        public bool? IsFormFRequired { get; set; }
+
     }
 
-    public class ApplicableTradingPolicyDetailsDTO_OS
+    //[PetaPoco.TableName("rul_TradingPolicy_OS")]
+    public class PreClrSettingForTradingPolicyDTO_OS
+    {
+        //    //[PetaPoco.Column("Id")]
+        //    public int? Id { get; set; }
+
+        //    //[PetaPoco.Column("SearchType")]
+        //    public int? SearchType { get; set; }
+
+        //    //[PetaPoco.Column("SearchLimit")]
+        //    public int? SearchLimit { get; set; }
+
+        //    //[PetaPoco.Column("ApprovalType")]
+        //    public int? ApprovalType { get; set; }
+
+        //    //[PetaPoco.Column("IsDematAllowed")]
+        //    public bool? IsDematAllowed { get; set; }
+
+        //    //[PetaPoco.Column("IsFormFRequired")]
+        //    public bool? IsFormFRequired { get; set; }
+
+
+        }
+
+        public class ApplicableTradingPolicyDetailsDTO_OS
     {
         [PetaPoco.Column("TradingPolicyId")]
         public int TradingPolicyId { get; set; }
@@ -291,7 +341,7 @@ namespace InsiderTradingDAL
 
         [PetaPoco.Column("PreClrApprovalValidityLimit")]
         public int PreClrApprovalValidityLimit { get; set; }
-        
+
     }
 
     public class TransactionSecurityMapConfigDTO_OS
