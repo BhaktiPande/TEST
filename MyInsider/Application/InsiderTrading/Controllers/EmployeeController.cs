@@ -396,7 +396,6 @@ namespace InsiderTrading.Controllers
                     objUserInfoDTO.UIDAI_IdentificationNo = objEmployeeModel.userInfoModel.UIDAI_IdentificationNo;
                     objUserInfoDTO.IdentificationTypeId = objEmployeeModel.userInfoModel.IdentificationTypeId;
                     objUserInfoDTO.AllowUpsiUser = objEmployeeModel.userInfoModel.AllowUpsiUser;
-                    objUserInfoDTO.PersonalAddress = objEmployeeModel.userInfoModel.PersonalAddress;
                     if (objUserInfoDTO.StateId == 0)
                         objUserInfoDTO.StateId = null;
 
@@ -2630,7 +2629,6 @@ namespace InsiderTrading.Controllers
             Response.Clear();
             Response.Buffer = true;
             Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            Response.Write("<meta http-equiv=Content-Type content=text/html;charset=UTF-8>");
             Response.Charset = "";
             Response.AddHeader("content-disposition", "attachment;filename=" + exlFilename + "");
             StringWriter sWriter = new StringWriter();
