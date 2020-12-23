@@ -229,13 +229,13 @@ BEGIN
   			IF (@inp_sInsiderName IS NOT NULL AND @inp_sInsiderName <> '')
 			BEGIN
 				print '@inp_sInsiderName'
-				SELECT @sSQL = @sSQL + ' AND CASE WHEN UserTypeCodeId = 101004 THEN C.CompanyName ELSE ISNULL(FirstName, N'''') + N'' '' + ISNULL(LastName, N'''') END like N''%' + @inp_sInsiderName + '%'''
+				SELECT @sSQL = @sSQL + ' AND CASE WHEN UserTypeCodeId = 101004 THEN C.CompanyName ELSE ISNULL(FirstName, '''') + '' '' + ISNULL(LastName, '''') END like ''%' + @inp_sInsiderName + '%'''
 			
 			END
   			IF (@inp_sDesignation IS NOT NULL AND @inp_sDesignation <> '')
 			BEGIN
 				print '@inp_sDesignation'
-				SELECT @sSQL = @sSQL + ' AND (CDesignation.CodeName like N''%' + @inp_sDesignation + '%'' OR DesignationText like N''%' + @inp_sDesignation + '%'')'
+				SELECT @sSQL = @sSQL + ' AND (CDesignation.CodeName like ''%' + @inp_sDesignation + '%'' OR DesignationText like ''%' + @inp_sDesignation + '%'')'
 			
 			END
   			IF (@inp_sGrade IS NOT NULL AND @inp_sGrade <> '')
@@ -258,7 +258,7 @@ BEGIN
   			IF (@inp_sCompanyName IS NOT NULL AND @inp_sCompanyName <> '')
 			BEGIN
 				print '@inp_sCompanyName'
-				SELECT @sSQL = @sSQL + ' AND C.CompanyName like N''%' + @inp_sCompanyName + '%'''
+				SELECT @sSQL = @sSQL + ' AND C.CompanyName like ''%' + @inp_sCompanyName + '%'''
 			
 			END
   			IF (@inp_sTypeOfInsider IS NOT NULL AND @inp_sTypeOfInsider <> '')
@@ -420,10 +420,10 @@ BEGIN
 		
 		SELECT @sSQL = 'SELECT '
 		SELECT @sSQL = @sSQL + 'EmployeeId AS rpt_grd_19074, '
-		SELECT @sSQL = @sSQL + 'InsiderName AS rpt_grd_19075, '
+		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(InsiderName) AS rpt_grd_19075, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_FormatDateValue(JoiningDate,0) AS rpt_grd_19076, '
 		SELECT @sSQL = @sSQL + 'CINNumber AS rpt_grd_19077, '
-		SELECT @sSQL = @sSQL + 'CONVERT(NVARCHAR(max),Designation) AS rpt_grd_19078, '
+		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max),Designation),1)) AS rpt_grd_19078, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max),Grade),1)) AS rpt_grd_19079, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max),Location),1)) AS rpt_grd_19080, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max),Department),1)) AS rpt_grd_19081, '

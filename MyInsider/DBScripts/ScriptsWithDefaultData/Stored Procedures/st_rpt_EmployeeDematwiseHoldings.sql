@@ -49,7 +49,6 @@ SELECT
 	[MiddleName] AS [Middle Name],
 	[LastName] AS [Last Name],
 	[AddressLine1] AS  [Address],
-	PersonalAddress AS PersonalAddress,
 	[PinCode] AS [PinCode],
 	[CountryName] AS [Country],
 	[EmailId] AS [Email Address],

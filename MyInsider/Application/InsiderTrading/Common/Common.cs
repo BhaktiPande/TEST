@@ -1445,9 +1445,9 @@ namespace InsiderTrading.Common
             {
                 WSC_html_attr.Add("Checked", "checked");
             }
-            else if (sControl == "RadioNull")
+            else if (sControl == "RadioNull1")
             {
-                // WSC_html_attr.Add("Checked", "");
+                WSC_html_attr.Add("Checked", "checked");
             }
             else if (sControl == "CheckBox")
             {

@@ -244,8 +244,7 @@ DECLARE     @nEmployeeStatusLive                                                
 					    CASE WHEN EXISTS (SELECT UserInfoID FROM usr_UserInfo WHERE UserInfoID NOT IN (SELECT UserInfoID FROM tra_TransactionMaster) and Et.SecurityType is null)
 					    THEN '-'
 					    ELSE et.TotalHoldingsSelfRelatives
-					    END END AS 'Total Holdings (Self & Relatives)',
-						u.PersonalAddress
+					    END END AS 'Total Holdings (Self & Relatives)'
 					    
 			         from usr_UserInfo u 
 					 left join com_Code codeCountry on u.CountryId = codeCountry.CodeID

@@ -8,7 +8,7 @@ GO
 CREATE TYPE UpsiTempSharingDataType AS TABLE
 (
        
-		Company_Name                NVarchar(500) NULL,
+		Company_Name                Varchar(500) NULL,
 		Company_Address				Varchar(500) NULL,
 		Category_Shared             nvarchar(50) NULL,
 		Reason_sharing      	    nvarchar(500) NULL,
