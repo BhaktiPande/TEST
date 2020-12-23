@@ -20,6 +20,8 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -55,6 +57,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Users\Tusharw\Desktop\EXCEL CODE\EPPlus.dll</HintPath>
     </Reference>
+    <Reference Include="ESOP.SSO.Library, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\ESOP.SSO.Library.dll</HintPath>
+    </Reference>
+    <Reference Include="ESOP.Utility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\ESOP.Utility.dll</HintPath>
+    </Reference>
     <Reference Include="ExcelNumberFormat">
       <HintPath>..\packages\ExcelNumberFormat.1.0.3\lib\net20\ExcelNumberFormat.dll</HintPath>
     </Reference>
@@ -81,8 +91,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\InsiderTradingEncryption.dll</HintPath>
     </Reference>
-    <Reference Include="InsiderTradingExcelWriter">
-      <HintPath>..\..\Required DLLs\InsiderTradingExcelWriter.dll</HintPath>
+    <Reference Include="InsiderTradingExcelWriter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\InsiderTradingExcelWriter.dll</HintPath>
     </Reference>
     <Reference Include="InsiderTradingMassUpload, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -386,12 +397,14 @@
     <Compile Include="Models\SSOModel.cs" />
     <Compile Include="Models\TemplateMasterModel.cs" />
     <Compile Include="Models\TradingPolicyModel.cs" />
+    <Compile Include="Models\TradingPolicyModel_OS.cs" />
     <Compile Include="Models\TradingTransactionModel.cs" />
     <Compile Include="Models\TradingTransactionModel_OS.cs" />
     <Compile Include="Models\TradingTransactionReportModel_OS.cs" />
     <Compile Include="Models\TradingWindowEventModel.cs" />
     <Compile Include="Models\TradingWindowListModel.cs" />
     <Compile Include="Models\TransactionLetterModel.cs" />
+    <Compile Include="Models\TwoFactorAuthModel.cs" />
     <Compile Include="Models\UpsiSharingData.cs" />
     <Compile Include="Models\UserDetailsModel.cs" />
     <Compile Include="Models\UserInfoModel.cs" />
@@ -400,7 +413,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SL\ActivitySL.cs" />
     <Compile Include="SL\ApplicabilitySL.cs" />
+    <Compile Include="SL\ApplicabilitySL_OS.cs" />
     <Compile Include="SL\CODashboardSL.cs" />
+    <Compile Include="SL\CODashboardSL_OS.cs" />
     <Compile Include="SL\ComCodeSL.cs" />
     <Compile Include="SL\CommonSL.cs" />
     <Compile Include="SL\CommunicationRuleMasterSL.cs" />
@@ -411,10 +426,12 @@
     <Compile Include="SL\EmailPropertiesSL.cs" />
     <Compile Include="SL\GenericSLImpl.cs" />
     <Compile Include="SL\InsiderDashboardSL.cs" />
+    <Compile Include="SL\InsiderDashboardSL_OS.cs" />
     <Compile Include="SL\InsiderInitialDisclosureSL.cs" />
     <Compile Include="SL\MCQSL.cs" />
     <Compile Include="SL\MenuMasterSL.cs" />
     <Compile Include="SL\NotificationSL.cs" />
+    <Compile Include="SL\NotificationSL_OS.cs" />
     <Compile Include="SL\NSEGroupSL.cs" />
     <Compile Include="SL\PasswordConfigSL.cs" />
     <Compile Include="SL\PeriodEndDisclosureSL.cs" />
@@ -434,6 +451,7 @@
     <Compile Include="SL\TradingTransactionSL.cs" />
     <Compile Include="SL\TradingTransactionSL_OS.cs" />
     <Compile Include="SL\TradingWindowEventSL.cs" />
+    <Compile Include="SL\TwoFactorAuthSL.cs" />
     <Compile Include="SL\UpsiSL.cs" />
     <Compile Include="SL\UserInfoSL.cs" />
     <Compile Include="Startup.cs" />

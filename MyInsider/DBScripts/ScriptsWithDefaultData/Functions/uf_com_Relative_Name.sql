@@ -14,11 +14,11 @@ CREATE FUNCTION [dbo].[uf_com_Relative_Name]
 (
 	@UserInfoID int
 )
-RETURNS VARCHAR(max)
+RETURNS NVARCHAR(max)
 AS
 BEGIN
 	-- Declare the return variable here
-	DECLARE @ResultVar VARCHAR(max)
+	DECLARE @ResultVar NVARCHAR(max)
 	SET @ResultVar = ''
 	
 	SELECT @ResultVar = @ResultVar + ISNULL(UI.FirstName,'') + ' ' + ISNULL(UI.LastName,'') + ',' FROM usr_UserRelation UR INNER JOIN usr_UserInfo UI ON UR.UserInfoIdRelative = UI.UserInfoId
