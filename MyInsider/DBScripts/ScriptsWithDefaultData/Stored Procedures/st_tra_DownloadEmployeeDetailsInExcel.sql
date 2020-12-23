@@ -245,7 +245,10 @@ DECLARE     @nEmployeeStatusLive                                                
 					    THEN '-'
 					    ELSE et.TotalHoldingsSelfRelatives
 					    END END AS 'Total Holdings (Self & Relatives)',
+<<<<<<< HEAD
 						u.EmployeeId as 'Employee ID'
+=======
+>>>>>>> b860724 (Arebic Input field and one field personal address added)
 						u.PersonalAddress
 					    
 			         from usr_UserInfo u 
