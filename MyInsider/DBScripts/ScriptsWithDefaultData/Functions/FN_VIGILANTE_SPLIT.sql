@@ -34,7 +34,7 @@ BEGIN
 		  ELSE 
 			SELECT @Piece = @RepParam 
 		  
-		  INSERT  @Values(Param) VALUES(CAST(@Piece AS VARCHAR(max))) 
+		  INSERT  @Values(Param) VALUES(CAST(@Piece AS nVARCHAR(max))) 
 		  SELECT @RepParam = RIGHT(@RepParam, LEN(@RepParam) - @chrind) 			  
 		  
 		  IF LEN(@RepParam) = 0 BREAK 

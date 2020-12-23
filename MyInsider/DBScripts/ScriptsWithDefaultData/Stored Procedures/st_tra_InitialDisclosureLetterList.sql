@@ -151,7 +151,7 @@ BEGIN
 			IF(@nNoInitialHoldingFlag = 1)
 			BEGIN 
 				CREATE TABLE #LetterRecordsNoHolding (
-					UserInfoId INT, dis_grd_17131 VARCHAR(MAX), dis_grd_17132 VARCHAR(50), dis_grd_17133 DATETIME, dis_grd_17134 VARCHAR(50),
+					UserInfoId INT, dis_grd_17131 NVARCHAR(MAX), dis_grd_17132 NVARCHAR(50), dis_grd_17133 DATETIME, dis_grd_17134 VARCHAR(50),
 					dis_grd_17135 VARCHAR(50), dis_grd_17136 VARCHAR(50), dis_grd_17137 VARCHAR(50)
 				)
 				
@@ -231,7 +231,7 @@ BEGIN
 			ELSE 
 			BEGIN 
 				CREATE TABLE #LetterRecords (
-					TransactionDetailsId BIGINT, ForUserInfoId INT, dis_grd_17131 VARCHAR(MAX), dis_grd_17132 VARCHAR(MAX), 
+					TransactionDetailsId BIGINT, ForUserInfoId INT, dis_grd_17131 NVARCHAR(MAX), dis_grd_17132 VARCHAR(MAX), 
 					dis_grd_17133 datetime, dis_grd_17134 VARCHAR(MAX), dis_grd_17135 VARCHAR(MAX), dis_grd_17136 VARCHAR(MAX), 
 					dis_grd_17137 VARCHAR(MAX)
 				)
