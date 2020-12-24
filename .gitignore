@@ -2,4 +2,15 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/MyInsider/Application/.vs/InsiderTrading/v16/Server/sqlite3/db.lock
+/MyInsider/Application/InsiderTradingDAL/obj/Release
+/MyInsider/InsiderTrading_NotificationService/InsiderTrading_NotificationService/obj
+/MyInsider/Application/.vs/InsiderTrading
+/MyInsider/Application/DataUploadUtility/obj/Release
+/MyInsider/Application/InsiderTradingEncryption/obj/Release
+/MyInsider/Application/InsiderTradingSSO/obj/Release
+/MyInsider/Application/INSIDERTRADINGMASSUPLOAD/obj/Release
+/MyInsider/Application/INSIDERTRADINGEXCELWRITER/obj/Release
+/MyInsider/Application/InsiderTrading/bin
+/.vs/EtisalatAzure/v16/.suo
+/MyInsider/Application/InsiderTrading/obj
+/MyInsider/Application/InsiderTrading/DebugLogs

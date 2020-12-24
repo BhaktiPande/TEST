@@ -158,8 +158,8 @@ BEGIN
 				IF (@bShowOriginalUserDetails = 1)
 				BEGIN
 					SELECT 
-						ISNULL(u.FirstName+' ',' ') + ISNULL(u.MiddleName+ ' ',' ') + ISNULL(u.LastName,' ') + '##' + ISNULL(u.PAN,'') 
-						+ '##' + CASE WHEN u.UserTypeCodeId = 101004 THEN ISNULL(u.CIN,' ') ELSE ISNULL(u.DIN,' ') END + '##' + ISNULL(u.AddressLine1,'')+ ' ' + ISNULL(', ' + u.PinCode,'')  + CASE WHEN ISNULL(CCountry.DisplayCode,'') = '' THEN ISNULL(', ' + CCountry.CodeName,'') ELSE ISNULL(', ' + CCountry.DisplayCode,'') END  + '##' + ISNULL(u.MobileNumber,'')
+						ISNULL(u.FirstName+N' ',N' ') + ISNULL(u.MiddleName+ N' ',N' ') + ISNULL(u.LastName,N' ') + '##' + ISNULL(u.PAN,N'') 
+						+ '##' + CASE WHEN u.UserTypeCodeId = 101004 THEN ISNULL(u.CIN,N' ') ELSE ISNULL(u.DIN,' ') END + '##' + ISNULL(u.AddressLine1,'')+ ' ' + ISNULL(', ' + u.PinCode,'')  + CASE WHEN ISNULL(CCountry.DisplayCode,'') = '' THEN ISNULL(', ' + CCountry.CodeName,'') ELSE ISNULL(', ' + CCountry.DisplayCode,'') END  + '##' + ISNULL(u.MobileNumber,'')
 						as dis_grd_17187,
 						@RELATIONTYPE_SELF as dis_grd_17188,
 						NULL as dis_grd_17189,
@@ -185,8 +185,8 @@ BEGIN
 				ELSE
 				BEGIN
 					SELECT 
-						ISNULL(TUD.FirstName+' ', ' ') + ISNULL(TUD.MiddleName+ ' ', ' ') + ISNULL(TUD.LastName, ' ') + '##' 
-							+ ISNULL(TUD.PanNumber, '') + '##' 
+						ISNULL(TUD.FirstName+N' ', N' ') + ISNULL(TUD.MiddleName+ N' ', N' ') + ISNULL(TUD.LastName, N' ') + '##' 
+							+ ISNULL(TUD.PanNumber, N'') + '##' 
 							+ ISNULL(TUD.DIN, '') + '##' 
 							+ ISNULL(TUD.Address, '')+ ' ' 
 							+ ISNULL(', ' + TUD.Pincode, '')  
@@ -218,8 +218,8 @@ BEGIN
 				IF (@bShowOriginalUserDetails = 1)
 				BEGIN
 					select 
-						ISNULL(u.FirstName + ' ',' ') + ISNULL(u.MiddleName + ' ',' ') + ISNULL(u.LastName,' ') + '##' + ISNULL(u.PAN,'') 
-						+ '##' + CASE WHEN u.UserTypeCodeId = 101004 THEN ISNULL(u.CIN,' ') ELSE ISNULL(u.DIN,' ') END + '##' + ISNULL(u.AddressLine1,'')+ ' ' + ISNULL(', ' + u.PinCode,'')  + CASE WHEN ISNULL(CCountry.DisplayCode,'') = '' THEN ISNULL(', ' + CCountry.CodeName,'') ELSE ISNULL(', ' + CCountry.DisplayCode,'') END  + '##' + ISNULL(u.MobileNumber,'')
+						ISNULL(u.FirstName + N' ',N' ') + ISNULL(u.MiddleName + N' ',N' ') + ISNULL(u.LastName,N' ') + '##' + ISNULL(u.PAN,'') 
+						+ '##' + CASE WHEN u.UserTypeCodeId = 101004 THEN ISNULL(u.CIN,N' ') ELSE ISNULL(u.DIN,N' ') END + '##' + ISNULL(u.AddressLine1,'')+ ' ' + ISNULL(', ' + u.PinCode,'')  + CASE WHEN ISNULL(CCountry.DisplayCode,'') = '' THEN ISNULL(', ' + CCountry.CodeName,'') ELSE ISNULL(', ' + CCountry.DisplayCode,'') END  + '##' + ISNULL(u.MobileNumber,'')
 						as dis_grd_17187,					
 						case when t.relationType = '' Then t.relationType ELSE t.relationType END AS dis_grd_17188,
 						null as dis_grd_17189,
@@ -281,17 +281,18 @@ BEGIN
 				END
 				ELSE
 				BEGIN
+
 				    --Modified(added #Temp_Table) to handle the date of intimation of the transactions on form c having Soft Copy submission is “Not Required” till the threshold limit (as set in Trading Policy -> Continuous Disclosures Section).  
 					select * into #Temp_Table from 
 					(
 					select 
-						ISNULL(TUD.FirstName + ' ', ' ') + ISNULL(TUD.MiddleName + ' ', ' ') + ISNULL(TUD.LastName, ' ') + '##' 
-							+ ISNULL(TUD.PanNumber, '') + '##' 
-							+ ISNULL(TUD.DIN, ' ') + '##' 
-							+ ISNULL(TUD.Address, '')+ ' ' 
-							+ ISNULL(', ' + TUD.Pincode, '')  
-							+ ISNULL(', ' + TUD.Country, '')  + '##' 
-							+ ISNULL(TUD.MobileNumber, '') as dis_grd_17187,					
+						ISNULL(TUD.FirstName + N' ', N' ') + ISNULL(TUD.MiddleName + N' ', N' ') + ISNULL(TUD.LastName, N' ') + N'##' 
+							+ ISNULL(TUD.PanNumber, N'') + N'##' 
+							+ ISNULL(TUD.DIN, N' ') + '##' 
+							+ ISNULL(TUD.Address, N'')+ N' ' 
+							+ ISNULL(', ' + TUD.Pincode, N'')  
+							+ ISNULL(', ' + TUD.Country, N'')  + N'##' 
+							+ ISNULL(TUD.MobileNumber, N'') as dis_grd_17187,					
 						ISNULL(TUD.FormCategoryPerson, '') AS dis_grd_17188,
 						null as dis_grd_17189,
 						case 

@@ -49,6 +49,8 @@
     <Compile Include="Activity\DTO\ActivityResourceMappingDTO.cs" />
     <Compile Include="APPLICABILITY\ApplicabilityDAL.cs" />
     <Compile Include="APPLICABILITY\DTO\ApplicabilityDTO.cs" />
+    <Compile Include="APPLICABILITY_OS\ApplicabilityDAL_OS.cs" />
+    <Compile Include="APPLICABILITY_OS\DTO\ApplicabilityDTO_OS.cs" />
     <Compile Include="ComCode\ComCodeDAL.cs" />
     <Compile Include="ComCode\DTO\ComCodeDTO.cs" />
     <Compile Include="Common\CommonDAL.cs" />

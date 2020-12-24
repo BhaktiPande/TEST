@@ -46,8 +46,8 @@ CREATE PROCEDURE [dbo].[st_tra_COInitialDisclosureList]
 	,@inp_sSortField						VARCHAR(255)
 	,@inp_sSortOrder						VARCHAR(5)	
     ,@inp_sUserInfoId						INT     
-    ,@inp_sEmployeeName						VARCHAR(50)  
-    ,@inp_sDesignation						VARCHAR(50)  
+    ,@inp_sEmployeeName						NVARCHAR(1000)  
+    ,@inp_sDesignation						NVARCHAR(1000)  
     ,@inp_dtEmailSentDate					DATETIME    
     ,@inp_dtHodlingDetailsSubmissionFrom	DATETIME
     ,@inp_dtHodlingDetailsSubmissionTo		DATETIME
@@ -149,7 +149,7 @@ BEGIN
 		SELECT UserId,0,NULL,NULL,0,0 
 		FROM @InsiderList 
 		
-		CREATE TABLE #tUserData (Seq INT identity(1,1),UserInfoId INT,TMID INT, Name VARCHAR(max),Designation VARCHAR(max),
+		CREATE TABLE #tUserData (Seq INT identity(1,1),UserInfoId INT,TMID INT, Name NVARCHAR(max),Designation NVARCHAR(max),
 		TextEmailSentDate VARCHAR(max),EmailSentDate DATETIME,
 		TextInitialDisclosureDate VARCHAR(max),InitialDisclosureDate DATETIME ,	InitialDisclosureStatus INT,
 		TextSoftCopyDate VARCHAR(max),SoftCopyDate DATETIME ,SoftCopyStatus INT, 
@@ -168,10 +168,12 @@ BEGIN
 							WHEN t7.TMID IS NOT NULL THEN t7.TMID
 					END AS TransactionMasterId,
 					CASE WHEN u.UserTypeCodeId = 101004 THEN company.CompanyName ELSE ISNULL(u.FirstName,'') + ' ' + isnull(u.LastName,'') END AS Name,
+
 					CASE WHEN u.UserTypeCodeId = 101004 THEN u.DesignationText ELSE
 					  	 CASE WHEN c.DisplayCode IS NULL OR c.DisplayCode = '' 
-							THEN CodeName 
+							THEN CASE WHEN CodeName IS NULL OR CodeName='' THEN u.DesignationText ELSE CodeName END
 							ELSE DisplayCode END END										AS Designation,
+
 					CASE	WHEN t1.DateOfEvent IS NULL THEN @PendingStatus
 							WHEN t1.DateOfEvent IS NULL AND t6.DateOfEvent IS NULL 
 								 THEN @PendingStatus							 												
@@ -315,8 +317,8 @@ BEGIN
 		
 		--select 'dbg2', * from #tUserData tUserData JOIN tra_TransactionMaster TM ON tUserData.TMID = TM.TransactionMasterId
 		--	JOIN eve_EventLog EL ON TM.TransactionMasterId = EL.MapToId AND MapToTypeCodeId = 132005 AND EventCodeId = 153008
-		--WHERE InitialDisclosureStatus = 154002		
-
+		--WHERE InitialDisclosureStatus = 154002
+		
 		CREATE TABLE #tmpConfirmEmp
 		(
 		ID int Identity(1,1),

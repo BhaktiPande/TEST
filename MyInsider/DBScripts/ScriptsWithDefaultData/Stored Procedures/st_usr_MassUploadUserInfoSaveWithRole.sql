@@ -68,9 +68,11 @@ CREATE PROCEDURE [dbo].[st_usr_MassUploadUserInfoSaveWithRole]
     ,@inp_sCIN						NVARCHAR(50)
     ,@inp_sDIN						NVARCHAR(50)
     ,@inp_sRoleId					VARCHAR(500)
+	,@inp_sPersonalAddress  		VARCHAR(50)= null
 	,@out_nReturnValue				INT = 0 OUTPUT
 	,@out_nSQLErrCode				INT = 0 OUTPUT				-- Output SQL Error Number, if error occurred.
 	,@out_sSQLErrMessage			VARCHAR(500) = '' OUTPUT  -- Output SQL Error Message, if error occurred.	
+
 AS
 BEGIN
 	DECLARE @sSQL NVARCHAR(MAX)
@@ -197,9 +199,9 @@ BEGIN
 					@inp_sAddressLine1, @inp_sAddressLine2, @inp_iCountryId, @inp_iStateId, @inp_sCity, @inp_sPinCode, @inp_dtDateOfJoining, @inp_dtDateOfBecomingInsider,
 					@inp_sPAN, @inp_iCategory, @inp_iSubCategory, @inp_iGradeId, @inp_iDesignationId, @inp_iSubDesignationId, @inp_sLocation, @inp_iDepartmentId, @inp_iStatusCodeId, 
 					@inp_iLoggedInUserId, @inp_sLoginID, @inp_sPassword, @inp_iIsInsider,@inp_sDIN, 
-					NULL,NULL,NULL,0,
+					NULL,NULL,NULL,0,@inp_sPersonalAddress,   
 					@out_nReturnValue OUTPUT, @out_nSQLErrCode OUTPUT, @out_sSQLErrMessage OUTPUT
-			
+ 	
 		END
 		ELSE IF @inp_iUserTypeCodeID = @nUserType_CorporateUser
 		BEGIN
@@ -220,9 +222,9 @@ BEGIN
 					@inp_iStateId, @inp_sCity, @inp_sPinCode, @inp_sMobileNumber, @inp_sEmailId, @inp_sPAN, @inp_dtDateOfJoining,
 					@inp_dtDateOfBecomingInsider, @inp_sCategoryText, @inp_sSubCategoryText, @inp_sGradeText, @inp_sDesignationText,
 					@inp_sSubDesignationText, @inp_sLocation, @inp_sDepartmentText, @inp_iStatusCodeId, @inp_iLoggedInUserId,
-					@inp_iIsInsider, @inp_sLoginID, @inp_sPassword,@inp_sDIN,0,
+					@inp_iIsInsider, @inp_sLoginID, @inp_sPassword,@inp_sDIN,0,@inp_sPersonalAddress, 
 					@out_nReturnValue OUTPUT, @out_nSQLErrCode OUTPUT, @out_sSQLErrMessage OUTPUT
-	
+					
 		END
 		ELSE IF @inp_iUserTypeCodeID = @nUserType_Relative
 		BEGIN

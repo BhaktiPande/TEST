@@ -93,7 +93,7 @@
         </div>
     </div>
     @{
-        //check if to show following option to login user -- if do not show role then hide div 
+        //check if to show following option to login user -- if do not show role then hide div
         if ((bool)ViewBag.show_not_login_user_details)
         {
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -111,24 +111,24 @@
                         <div role="form">
                             <div class="form-group">
                                 <div class="row" style="margin-left: 5px;margin-right: 5px;">
-                                @Html.LabelFor(m => m.AssignedRole)
-                                @{
-                                    //check if user has permission to add role
-                                    if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.CRUSER_ROLEMASTER_CREATE))
-                                    {
-                                        if ((bool)ViewBag.show_create_role_link)
+                                    @Html.LabelFor(m => m.AssignedRole)
+                                    @{
+                                        //check if user has permission to add role
+                                        if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.CRUSER_ROLEMASTER_CREATE))
                                         {
-                                            @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-                                            <div class="form-group">
-                                                <a href="javascript:void(0);" class="create-link" id="AT" type="button" data-toggle='modal' data-target='#addRoleMaster'>
-                                                    @InsiderTrading.Common.Common.getResource("usr_lbl_11339")
-                                                </a>
-                                            </div>
+                                            if ((bool)ViewBag.show_create_role_link)
+                                            {
+                                                @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+                                                <div class="form-group">
+                                                    <a href="javascript:void(0);" class="create-link" id="AT" type="button" data-toggle='modal' data-target='#addRoleMaster'>
+                                                        @InsiderTrading.Common.Common.getResource("usr_lbl_11339")
+                                                    </a>
+                                                </div>
+                                            }
                                         }
                                     }
-                                }
-                                @Html.ListBoxFor(m => m.SubmittedRole, new MultiSelectList(Model.DefaultRole, "Key", "Value", Model.AssignedRole.Select(m => m.Key)), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.AssignedRole).ToString(), Html.ActivityResourceKeyFor(m => m.AssignedRole).ToString(), new { multiple = "multiple", @class = "form-control multiselect" }, 0, 1))
-                                @Html.ValidationMessageFor(m => m.SubmittedRole)
+                                    @Html.ListBoxFor(m => m.SubmittedRole, new MultiSelectList(Model.DefaultRole, "Key", "Value", Model.AssignedRole.Select(m => m.Key)), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.AssignedRole).ToString(), Html.ActivityResourceKeyFor(m => m.AssignedRole).ToString(), new { multiple = "multiple", @class = "form-control multiselect" }, 0, 1))
+                                    @Html.ValidationMessageFor(m => m.SubmittedRole)
                                 </div>
                             </div>
                         </div>
@@ -138,13 +138,13 @@
         }
         else
         {
-            //set hidden variable for role which need to be pass for saving 
+            //set hidden variable for role which need to be pass for saving
             @*@Html.HiddenFor(m => m.SubmittedRole)*@
         }
     }
-    
+
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <div class="row">   
+        <div class="row">
             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                 <div role="form">
                     <div class="form-group">
@@ -172,17 +172,17 @@
                     </div>
                 </div>
             </div>
-           @if (objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.EmployeeType || objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.NonEmployeeType)
-           { 
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                <div class="form-group">
-                    @Html.LabelFor(m => m.AssignedRole)
-                    @foreach (var item in Model.AssignedRole)
-                    {
-                        <div><u>@item.Value</u></div>
-                    }
+            @if (objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.EmployeeType || objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.NonEmployeeType)
+            {
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.AssignedRole)
+                        @foreach (var item in Model.AssignedRole)
+                        {
+                            <div><u>@item.Value</u></div>
+                        }
+                    </div>
                 </div>
-            </div>
             }
 
         </div>
@@ -220,7 +220,7 @@
                 <div role="form">
                     <div class="form-group">
                         @Html.LabelFor(m => m.AddressLine1)
-                        @Html.TextAreaFor(m => m.AddressLine1, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.AddressLine1).ToString(), Html.ActivityResourceKeyFor(m => m.AddressLine1).ToString(), new { @class = "form-control", style = "height:34px"  }, 0, 1))
+                        @Html.TextAreaFor(m => m.AddressLine1, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.AddressLine1).ToString(), Html.ActivityResourceKeyFor(m => m.AddressLine1).ToString(), new { @class = "form-control", style = "height:34px" }, 0, 1))
                         @Html.ValidationMessageFor(m => m.AddressLine1)
                     </div>
                 </div>
@@ -320,9 +320,11 @@
                         @Html.ValidationMessageFor(m => m.DepartmentName)
                     </div>
                 </div>
-            </div>    
+            </div>
         </div>
     </div>
+
+
 </div>
 <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -370,6 +372,15 @@
             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                 <div role="form">
                     <div class="form-group">
+                        @Html.LabelFor(m => m.PersonalAddress)
+                        @Html.TextBoxFor(m => m.PersonalAddress, @InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.PersonalAddress).ToString(), Html.ActivityResourceKeyFor(m => m.PersonalAddress).ToString(), new { @class = "form-control" }, 0, 1))
+                       <br /> @Html.ValidationMessageFor(m => m.PersonalAddress)
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                <div role="form">
+                    <div class="form-group">
                         <label></label> <br />
                         @if (objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.Admin || objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.COUserType)
                         {
@@ -380,9 +391,9 @@
                     </div>
                 </div>
             </div>
-            
-           
-           
+
+
+
         </div>
     </div>
 </div>
