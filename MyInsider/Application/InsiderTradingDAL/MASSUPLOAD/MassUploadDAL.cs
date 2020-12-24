@@ -1135,6 +1135,49 @@ namespace InsiderTradingDAL
         }
         #endregion GetDataTableName
 
+        #region GetAllRelativePAN
+        /// <summary>
+        /// This function will be fetching all the records of PAN of all relatives
+        /// </summary>
+        /// <param name="sConnectionString"></param>
+        /// <param name="sUserInfoId"></param>
+        /// <returns></returns>
+        public List<string> GetAllRelativePAN(string sConnectionString, int sUserInfoId)
+        {
+            List<string> res = null;
+            using (var db = new PetaPoco.Database(sConnectionString, "System.Data.SqlClient") { EnableAutoSelect = false })
+            {
+                res = db.Query<string>("exec st_usr_RelativesPANList @UserInfoId",
+                    new
+                    {
+                        UserInfoId = sUserInfoId
+                    }).ToList<string>();
+            }
+            return res;
+        }
+        #endregion
+
+        #region GetAllRelativeLoginId
+        /// <summary>
+        /// This function will be fetching all the records of Login Id's of all relatives
+        /// </summary>
+        /// <param name="sConnectionString"></param>
+        /// <param name="sUserInfoId"></param>
+        /// <returns></returns>
+        public List<string> GetAllRelativeLoginId(string sConnectionString, int sUserInfoId)
+        {
+            List<string> res = null;
+            using (var db = new PetaPoco.Database(sConnectionString, "System.Data.SqlClient") { EnableAutoSelect = false })
+            {
+                res = db.Query<string>("exec st_usr_RelativesLoginIDList @UserInfoId",
+                    new
+                    {
+                        UserInfoId = sUserInfoId
+                    }).ToList<string>();
+            }
+            return res;
+        }
+        #endregion
 
         #region IDisposable Members
         /// <summary>
