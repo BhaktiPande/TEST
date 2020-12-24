@@ -58,7 +58,7 @@ CREATE PROCEDURE [dbo].[st_rpt_InitialDisclosureEmployeeIndividual]
 	,@inp_iOutputSeq			INT -- 1: User details, 2: Transaction status details, 3: Transaction Details
 	,@inp_iUserInfoId			VARCHAR(MAX) -- = 339
 	,@inp_sDMATDEtailsId		VARCHAR(200) -- Comma separated DematDetailsId 1,3,4 etc
-	,@inp_sAccountHolder		VARCHAR(100)
+	,@inp_sAccountHolder		NVARCHAR(100)
 	,@inp_sRelationTypeCodeId	VARCHAR(200) -- Null: Filter not applicable, 0: Self, NonZero: Actual relation id (Comma separated ids)
 	,@inp_sSecurityTypeCodeID	VARCHAR(200) -- Comma separated SecurityCodeIds 139001, 139002 etc
 	,@out_nReturnValue			INT = 0 OUTPUT
@@ -99,7 +99,7 @@ BEGIN
 	DECLARE @nDataType_Int INT = 2
 	DECLARE @nDataType_Date INT = 3
 
-	DECLARE @tmpUserDetails TABLE(Id INT IDENTITY(1,1), RKey VARCHAR(20), Value VARCHAR(50), DataType INT, TransactionMasterId VARCHAR(500) DEFAULT 0, DisclosureTypeCodeId INT DEFAULT 0, LetterForCodeId INT DEFAULT 0, Acid INT DEFAULT 0, LetterType char DEFAULT '')
+	DECLARE @tmpUserDetails TABLE(Id INT IDENTITY(1,1), RKey VARCHAR(20), Value NVARCHAR(50), DataType INT, TransactionMasterId VARCHAR(500) DEFAULT 0, DisclosureTypeCodeId INT DEFAULT 0, LetterForCodeId INT DEFAULT 0, Acid INT DEFAULT 0, LetterType char DEFAULT '')
 	DECLARE @tmpUserTable TABLE(Id INT IDENTITY(1,1), UserInfoId INT, UserInfoIdRelative INT, SecurityTypeCodeId INT, DMATDetailsID INT, Relation VARCHAR(100))
 	DECLARE @tmpDMATIds TABLE(DMATDetailsID INT)
 	DECLARE @tmpSecurities TABLE(SecurityTypeCodeId INT)
@@ -213,8 +213,8 @@ BEGIN
 			
 			INSERT INTO @tmpUserDetails(RKey, Value, DataType, TransactionMasterId)
 			VALUES ('rpt_lbl_19018', @sEmployeeID, @nDataType_String,0),
-				('rpt_lbl_19019', dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max), @sInsiderName),1)), @nDataType_String,0),
-				('rpt_lbl_19020', dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max), @sDesignation),1)), @nDataType_String,0),
+				('rpt_lbl_19019', CONVERT(NVARCHAR(max), @sInsiderName) , @nDataType_String,0),
+				('rpt_lbl_19020', CONVERT(NVARCHAR(max), @sDesignation) , @nDataType_String,0),
 				('rpt_lbl_19021', dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max), @sGrade),1)), @nDataType_String,0),
 				('rpt_lbl_19022', dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max), @sLocation),1)), @nDataType_String,0),
 				('rpt_lbl_19023', dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max), @sDepartment),1)), @nDataType_String,0),
@@ -393,12 +393,12 @@ BEGIN
 				-- Output #3 : Transaction details
 
 				create table #tempFinal( RowNo int identity(1,1) ,UserInfoId	int, 
-											rpt_grd_19032 varchar(max),	
-											rpt_grd_19033 varchar(max),	
-											rpt_grd_19034 varchar(max),	
-											rpt_grd_19035 varchar(max),
-											rpt_grd_19036 varchar(max),
-											rpt_grd_19037 varchar(max),
+											rpt_grd_19032 Nvarchar(max),	
+											rpt_grd_19033 Nvarchar(max),	
+											rpt_grd_19034 Nvarchar(max),	
+											rpt_grd_19035 Nvarchar(max),
+											rpt_grd_19036 Nvarchar(max),
+											rpt_grd_19037 Nvarchar(max),
 											rpt_grd_19038 int)
 			insert into #tempFinal
 				SELECT 
@@ -454,7 +454,7 @@ BEGIN
 				select TransactionMasterId from tra_TransactionMaster tm where UserInfoId in(
 				select UserInfoIdRelative from usr_UserRelation where UserInfoId=@inp_iUserInfoId)
 
-				DECLARE @CompName varchar(max)
+				DECLARE @CompName Nvarchar(max)
 				DECLARE @ISNNo varchar(max)
 				select @CompName=c.CompanyName,@ISNNo=c.ISINNumber from usr_UserInfo u inner join mst_Company c on u.CompanyId=c.CompanyId where UserInfoId= @inp_iUserInfoId
 				insert into #tempFinal

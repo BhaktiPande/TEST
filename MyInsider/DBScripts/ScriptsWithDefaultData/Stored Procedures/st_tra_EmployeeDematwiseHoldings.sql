@@ -178,7 +178,9 @@ BEGIN
 			 ELSE dmat.TMID END
 		AS [TMID],
    COALESCE(CAST(transummarydmat.ClosingBalance AS VARCHAR(20)), '-')
-        AS [Holdings]
+        AS [Holdings],
+		u.PersonalAddress
+
 FROM usr_UserInfo u
 LEFT JOIN usr_Authentication a ON u.UserInfoId=A.UserInfoID
 LEFT JOIN mst_Company cm ON cm.CompanyId=u.CompanyId
