@@ -16,7 +16,7 @@ BEGIN
 			
 SELECT 
 
-	UserInfoId AS 'User ID',
+	EmployeeID AS 'User ID',
 	UserName AS 'User Name', 
 	FirstName AS 'First Name', 		
 	MiddleName AS 'Middle Name', 	
