@@ -156,7 +156,7 @@ DECLARE     @nEmployeeStatusLive                                                
 			   ELSE ISNULL(ET.SelfHoldings,0) + ET.RelativesHolding END AS RelativesHolding
 			FROM #TempRelativesHoldings rh
 			left JOIN #EmployeeWithTransaction et on et.UserID=rh.UserInfoID and et.SecurityType=rh.SecurityType
-			WHERE rh.Holdings <> 0 AND et.SecurityType IS NULL
+			WHERE et.SecurityType IS NULL
 			
 			INSERT INTO #EmployeeWithTransaction(UserID, ApplicableTradingPolicyName,TradingPolicyFromDate,TradingPolicyToDate,
 			SecurityType,SelfHoldings,RelativesHolding,TotalHoldingsSelfRelatives)  
@@ -244,7 +244,8 @@ DECLARE     @nEmployeeStatusLive                                                
 					    CASE WHEN EXISTS (SELECT UserInfoID FROM usr_UserInfo WHERE UserInfoID NOT IN (SELECT UserInfoID FROM tra_TransactionMaster) and Et.SecurityType is null)
 					    THEN '-'
 					    ELSE et.TotalHoldingsSelfRelatives
-					    END END AS 'Total Holdings (Self & Relatives)'
+					    END END AS 'Total Holdings (Self & Relatives)',
+						u.EmployeeId as 'Employee ID'
 					    
 			         from usr_UserInfo u 
 					 left join com_Code codeCountry on u.CountryId = codeCountry.CodeID
