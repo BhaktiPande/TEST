@@ -2770,5 +2770,42 @@ namespace InsiderTradingDAL
 
         }
 
+        #region GetOtherUserDetailsList
+        /// <summary>
+        /// This method is used for fetching the list of users other users. 
+        /// for Employees, Corporate and Non Employee types users.
+        /// </summary>
+        /// <param name="i_sConnectionString">Connection string for which database</param>
+        /// <param name="sharingBy">logged in user Id</param>
+        /// <returns>Other User Details List</returns>
+        public List<OtherUsersDetails> GetOtherUserDetailsList(string i_sConnectionString, int sharingBy, string term)
+        {
+            #region Paramters
+            List<OtherUsersDetails> otherUsersDetailsList = null;
+
+            #endregion Paramters
+
+            try
+            {
+                PetaPoco.Database db;
+
+                using (db = new PetaPoco.Database(i_sConnectionString, "System.Data.SqlClient") { EnableAutoSelect = false })
+                {
+                    otherUsersDetailsList = db.Query<OtherUsersDetails>("exec st_usr_GetOtherUserDetails @SharingBy,@Term",
+                        new
+                        {
+                            SharingBy = sharingBy,
+                            Term = term
+                        }).ToList();
+                }
+
+            }
+            catch (Exception exp)
+            {
+                throw exp;
+            }
+            return otherUsersDetailsList;
+        }
+        #endregion GetOtherUserDetailsList
     }
 }

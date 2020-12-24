@@ -9,3 +9,11 @@ D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\InsiderTradingEncryptio
 D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\InsiderTradingEncryption\obj\Debug\InsiderTradingEncryption.csproj.CoreCompileInputs.cache
 D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\InsiderTradingEncryption\obj\Debug\InsiderTradingEncryption.dll
 D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\InsiderTradingEncryption\obj\Debug\InsiderTradingEncryption.pdb
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\InsiderTradingEncryption.dll
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTrading\bin\InsiderTradingEncryption.pdb
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTradingEncryption\obj\Debug\InsiderTradingEncryption.dll
+D:\Deployments\MyInsiderCode\MyInsider\Application\InsiderTradingEncryption\obj\Debug\InsiderTradingEncryption.pdb
+D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTrading\bin\InsiderTradingEncryption.dll
+D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTrading\bin\InsiderTradingEncryption.pdb
+D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTradingEncryption\obj\Debug\InsiderTradingEncryption.dll
+D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTradingEncryption\obj\Debug\InsiderTradingEncryption.pdb

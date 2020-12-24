@@ -360,4 +360,14 @@ namespace InsiderTradingDAL
         public string DuplicateMobileNo { get; set; }
 
     }
+
+    public class OtherUsersDetails
+    {
+        public string Email { get; set; }
+        public string Name { get; set; }
+        public string PAN { get; set; }
+        public string CompanyName { get; set; }
+        public string CompanyAddress { get; set; }
+        public string Phone { get; set; }
+    }
 }
