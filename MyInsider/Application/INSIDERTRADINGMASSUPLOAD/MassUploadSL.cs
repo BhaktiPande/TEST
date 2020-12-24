@@ -2017,18 +2017,79 @@ namespace InsiderTradingMassUpload
                     }
                     iCounter++;
                 }
-                
+
+                object loginUserDetails = HttpContext.Current.Session["UserDetails"];
+                System.Reflection.PropertyInfo usrTypeCode = loginUserDetails.GetType().GetProperty("UserTypeCodeId");
+                System.Reflection.PropertyInfo conString = loginUserDetails.GetType().GetProperty("CompanyDBConnectionString");
+                System.Reflection.PropertyInfo usrInfoId = loginUserDetails.GetType().GetProperty("LoggedInUserID");
+                System.Reflection.PropertyInfo usrName = loginUserDetails.GetType().GetProperty("UserName");
+                int userTypeCodeId = (int)usrTypeCode.GetValue(loginUserDetails);
+                string connectionString = (string)conString.GetValue(loginUserDetails);
+                int userInfoID = (int)usrInfoId.GetValue(loginUserDetails);
+                string userName = (string)usrName.GetValue(loginUserDetails);
+                MassUploadDAL massUploadDAL = new MassUploadDAL();
+                UserInfoSL objUserInfoSL = new UserInfoSL();
+                UserInfoDTO objUserInfoDTO = objUserInfoSL.GetUserDetails(connectionString, userInfoID);
+                List<string> panList = new List<string>();
+                List<string> userList = new List<string>();
+                if (objUserInfoDTO != null)
+                {
+                    panList = massUploadDAL.GetAllRelativePAN(connectionString, userInfoID);
+                    panList.Add(objUserInfoDTO.PAN);
+                    userList = massUploadDAL.GetAllRelativeLoginId(connectionString, userInfoID);
+                    userList.Add(userName);
+                }
+
+
                 List<MassUploadResponseDTO> lstResponse = new List<MassUploadResponseDTO>();
                 lstResponse = new List<MassUploadResponseDTO>();
                 int nRowCounter = 2;
                 foreach (List<string> objRowsColumns in i_lstRowWiseData)
                 {
+                    bool bErrorInRow = false;
+                    if ((userTypeCodeId == 101003 || userTypeCodeId == 101004 || userTypeCodeId == 101006) && (i_sExcelSheetName == "InitialDisclosure"))
+                    {
+                        string value = Convert.ToString(objRowsColumns[2]);
+                        bool isValid = panList.Any(c => c.Contains(value));
+                        if (!isValid)
+                        {
+                            lstResponse.Add(new MassUploadResponseDTO(-999, Convert.ToString(value) + " is not valid value"));
+                            bErrorInRow = true;
+                            //AddSheetWiseRemovedParentRows(i_sExcelSheetName, nRowCounter - 2);
+                            AddSheetWiseErrors(i_sExcelSheetName, lstResponse);
+                            m_bErrorPresentInExcelSheets = true;
+                            List<MassUploadExcelSheetErrors> excelSheetErrors = new List<MassUploadExcelSheetErrors>
+                            {
+                                new MassUploadExcelSheetErrors(1, 1, "", "Invalid PAN Number", "", "PAN", "")
+                            };
+                            m_nExcelsheetUIValidationsErrors[i_sExcelSheetName] = excelSheetErrors;
+                            return tblMassUploadDataTable;
+                        }
+                    }
+                    else if ((userTypeCodeId == 101003 || userTypeCodeId == 101004 || userTypeCodeId == 101006) && (i_sExcelSheetName == "OnGoingContDisc"))
+                    {
+                        string value = Convert.ToString(objRowsColumns[1]);
+                        bool isValid = userList.Any(c => c.Contains(value));
+                        if (!isValid)
+                        {
+                            lstResponse.Add(new MassUploadResponseDTO(-999, Convert.ToString(value) + " is not valid value"));
+                            bErrorInRow = true;
+                            AddSheetWiseErrors(i_sExcelSheetName, lstResponse);
+                            m_bErrorPresentInExcelSheets = true;
+                            List<MassUploadExcelSheetErrors> excelSheetErrors = new List<MassUploadExcelSheetErrors>
+                            {
+                                new MassUploadExcelSheetErrors(1, 1, "", "Invalid User Name", "", "UserName", "")
+                            };
+                            m_nExcelsheetUIValidationsErrors[i_sExcelSheetName] = excelSheetErrors;
+                            return tblMassUploadDataTable;
+                        }
+                    }
+
                     objRowsTemp = objRowsColumns;
                     DataRow objDataTableRow = tblMassUploadDataTable.NewRow();
                     iCounter = 0;
-                    bool bErrorInRow = false;
 
-                    if (objRowsColumns != null)
+                    if (objRowsColumns != null && !bErrorInRow)
                     {
                         foreach (object objData in objRowsColumns)
                         {
@@ -2851,6 +2912,41 @@ namespace InsiderTradingMassUpload
         }
         #endregion GetDataTableName
 
+        #region GetSequenceMassUploadList
+        /// <summary>
+        /// This function will return sequenced mass uploads list
+        /// </summary>
+        /// <param name="lstMassUploadDTO"></param>
+        /// <returns></returns>
+        public List<MassUploadDTO> GetSequenceMassUploadList(List<MassUploadDTO> lstMassUploadDTO)
+        {
+            try
+            {
+                bool isDataAvailable = lstMassUploadDTO.Any(c => c.MassUploadExcelId == 57);
+                if (isDataAvailable)
+                {
+                    var initialDisclosure = lstMassUploadDTO.First(c => c.MassUploadName == "Initial Disclosure Mass Upload - Other Securities");
+                    int oneposition = lstMassUploadDTO.FindIndex(c => c.MassUploadName == "Initial Disclosure Mass Upload");
+                    lstMassUploadDTO.Remove(initialDisclosure);
+                    lstMassUploadDTO.Insert(oneposition + 1, initialDisclosure);
+                }
+
+                bool isOngoingAvailable = lstMassUploadDTO.Any(c => c.MassUploadExcelId == 58);
+                if (isOngoingAvailable)
+                {
+                    var continuousDisclosure = lstMassUploadDTO.FirstOrDefault(c => c.MassUploadName == "On Going Continuous Disclosure Mass Upload - Other Securities");
+                    int secondPosition = lstMassUploadDTO.FindIndex(c => c.MassUploadName == "On Going Continuous Disclosure Mass Upload");
+                    lstMassUploadDTO.Remove(continuousDisclosure);
+                    lstMassUploadDTO.Insert(secondPosition + 1, continuousDisclosure);
+                }
+            }
+            catch (Exception exp)
+            {
+
+            }
+            return lstMassUploadDTO;
+        }
+        #endregion GetSequenceMassUploadList
 
         #region IDisposable Members
         /// <summary>

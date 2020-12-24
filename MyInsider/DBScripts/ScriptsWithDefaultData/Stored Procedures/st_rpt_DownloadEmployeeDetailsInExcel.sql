@@ -16,7 +16,7 @@ BEGIN
 			
 SELECT 
 
-	UserInfoId AS 'User ID',
+	EmployeeID AS 'User ID',
 	UserName AS 'User Name', 
 	FirstName AS 'First Name', 		
 	MiddleName AS 'Middle Name', 	
@@ -24,6 +24,7 @@ SELECT
 	CompanyName AS 'Company Name',
 	RoleName AS 'Role',
 	AddressLine1 AS 'Address',
+	PersonalAddress As 'Personal Address',
 	PinCode AS 'Pin Code',
 	CountryName AS 'Country',
 	EmailId AS 'Email Address',
