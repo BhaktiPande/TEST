@@ -158,7 +158,7 @@ BEGIN
 	-- com_code
 	IF(@inp_iComboType = 1)
 	BEGIN
-		-- Param1 = CodeGroupId, Param2 = ParentCodeId		
+		-- Param1 = CodeGroupId, Param2 = ParentCodeId	
 		
 		IF(@inp_sParam1=518)
 		BEGIN			
@@ -981,7 +981,9 @@ BEGIN
 		ELSE
 			CONCAT(UI.FirstName, ' ',UI.LASTNAME,' - (',UI.EmployeeId,')') 
 		END AS Value from usr_UserInfo UI INNER JOIN mst_Company MC ON MC.CompanyId=UI.CompanyId 
-		WHERE (UI.DateOfSeparation IS NULL OR UI.DateOfSeparation > dbo.uf_com_GetServerDate()) AND UI.StatusCodeId = 102001
+		WHERE (UI.DateOfSeparation IS NULL OR UI.DateOfSeparation > dbo.uf_com_GetServerDate()) AND UI.StatusCodeId = 102001		
+		ORDER BY CASE WHEN FirstName >= 'A' THEN 1 ELSE 0 END DESC,
+         FirstName ASC			
 
 
 		RETURN 0;
