@@ -159,7 +159,7 @@ BEGIN
 					case when td.SecurityTypeCodeId in (@SecuriyType_Futures,@SecuriyType_Options) AND td.TransactionTypeCodeID = @TRANSACTION_TYPE_BUY THEN CONVERT(VARCHAR(MAX),td.Value) ELSE 0 END  + 
 					case when td.SecurityTypeCodeId in (@SecuriyType_Futures,@SecuriyType_Options) AND td.TransactionTypeCodeID = @TRANSACTION_TYPE_SELL THEN CONVERT(VARCHAR(MAX),td.Value) ELSE 0 END  +
 					case when td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN CONVERT(VARCHAR(MAX),Value) ELSE 0 END as '(Calculate aggregate value of total sell and buy share value)'			
-						
+					,currency.DisplayCode as Currency
 					from tra_TransactionDetails td					
 					join usr_UserInfo u on u.UserInfoId = td.ForUserInfoId
 					join com_Code C on C.CodeID = td.SecurityTypeCodeId
@@ -171,6 +171,7 @@ BEGIN
 					RIGHT JOIN tra_NSEGroupDetails NSEGr ON tm.UserInfoId=NSEGr.UserInfoId		   
 				   	AND tm.TransactionMasterId = NSEGr.TransactionMasterId
 					join #tempTRA_MST tmid on tmid.TransactionMasterId = tm.TransactionMasterId
+					LEFT JOIN com_Code currency ON currency.CodeID = td.CurrencyID
 					WHERE NSEGr.GroupId=@GroupId AND tm.DisclosureTypeCodeId=147002 
 				   	AND tm.TransactionStatusCodeId NOT IN (@nTranStatus_Submitted)
 				   	AND (tm.SoftCopyReq = 1 OR (tm.SoftCopyReq = 0 AND tm.HardCopyByCOSubmissionDate IS NOT NULL))			

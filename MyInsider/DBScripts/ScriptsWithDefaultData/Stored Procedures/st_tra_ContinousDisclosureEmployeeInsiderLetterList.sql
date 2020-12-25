@@ -281,6 +281,8 @@ BEGIN
 				END
 				ELSE
 				BEGIN
+
+				print 'samadhan'
 				    --Modified(added #Temp_Table) to handle the date of intimation of the transactions on form c having Soft Copy submission is “Not Required” till the threshold limit (as set in Trading Policy -> Continuous Disclosures Section).  
 					select * into #Temp_Table from 
 					(
@@ -375,7 +377,8 @@ BEGIN
 							when td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN CAcquisitionType.CodeName 
 							ELSE '-' 
 						END as dis_grd_17425,
-						TD.TransactionDetailsId AS TransactionDetailsId
+						TD.TransactionDetailsId AS TransactionDetailsId,
+						currency.DisplayCode  as rpt_grd_54229
 					from tra_TransactionDetails td
 					join com_Code C on C.CodeID = td.SecurityTypeCodeId
 					join tra_TransactionMaster tm on tm.TransactionMasterId = td.TransactionMasterId
@@ -384,10 +387,11 @@ BEGIN
 					JOIN @tmpTransactions tmIds ON tm.TransactionMasterId = tmIds.TransactionMasterId
 					LEFT JOIN tra_TradingTransactionUserDetails TUD ON td.TransactionDetailsId = TUD.TransactionDetailsId 
 								AND TUD.FormDetails = 1 AND TUD.TransactionMasterId = tmIds.TransactionMasterId
+					LEFT JOIN com_Code currency ON currency.CodeID = TD.CurrencyID
 					)as Temp_Table
 					update #Temp_Table set dis_grd_17424 = (select MAX(dis_grd_17424) from #Temp_Table where dis_grd_17424 is not null)
 					where UserSecurityTypeCode in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb)
-					select dis_grd_17187,dis_grd_17188,dis_grd_17189,dis_grd_17190,dis_grd_17191,dis_grd_17192,dis_grd_17193,dis_grd_17194,dis_grd_17195,dis_grd_17196,dis_grd_17197,dis_grd_17198,dis_grd_17199,dis_grd_17200,dis_grd_17201,dis_grd_17202,dis_grd_17424,dis_grd_17425 from #Temp_Table
+					select dis_grd_17187,dis_grd_17188,dis_grd_17189,dis_grd_17190,dis_grd_17191,dis_grd_17192,dis_grd_17193,dis_grd_17194,dis_grd_17195,dis_grd_17196,dis_grd_17197,dis_grd_17198,dis_grd_17199,dis_grd_17200,dis_grd_17201,dis_grd_17202,dis_grd_17424,dis_grd_17425, rpt_grd_54229 from #Temp_Table
 					ORDER BY dis_grd_17190,TransactionDetailsId,dis_grd_17201
 					
 				END
@@ -424,8 +428,8 @@ BEGIN
 					null as dis_grd_17416,
 					case when td.SecurityTypeCodeId in (@SecuriyType_Futures,@SecuriyType_Options) AND td.TransactionTypeCodeID = @TRANSACTION_TYPE_SELL THEN CONVERT(VARCHAR(MAX),td.Value) ELSE '-' END  AS dis_grd_17417,
 					case when td.SecurityTypeCodeId in (@SecuriyType_Futures,@SecuriyType_Options) AND td.TransactionTypeCodeID = @TRANSACTION_TYPE_SELL THEN CONVERT(VARCHAR(MAX),(Quantity * LotSize)) ELSE '-' END  AS dis_grd_17418,
-					case when Cexchange.DisplayCode IS NULL OR Cexchange.DisplayCode = '' then Cexchange.CodeName else Cexchange.DisplayCode end as dis_grd_17208
-					
+					case when Cexchange.DisplayCode IS NULL OR Cexchange.DisplayCode = '' then Cexchange.CodeName else Cexchange.DisplayCode end as dis_grd_17208,
+					currency.DisplayCode as   rpt_grd_54229
 					from tra_TransactionDetails td
 					join @temp t on t.UserInfoId = td.ForUserInfoId
 					join usr_UserInfo u on u.UserInfoId = t.UserInfoId
@@ -435,6 +439,7 @@ BEGIN
 					join com_Code CTransType on CTransType.CodeID = td.TransactionTypeCodeId
 					join com_Code Cexchange on Cexchange.CodeID = td.ExchangeCodeId
 					JOIN @tmpTransactions tmIds ON tm.TransactionMasterId = tmIds.TransactionMasterId
+					LEFT JOIN com_Code currency ON currency.CodeID = TD.CurrencyID
 					ORDER BY TD.SecurityTypeCodeId,td.TransactionDetailsId,TD.DateOfAcquisition
 				END
 				ELSE 
@@ -467,8 +472,8 @@ BEGIN
 						when td.SecurityTypeCodeId in (@SecuriyType_Futures,@SecuriyType_Options) AND td.TransactionTypeCodeID = @TRANSACTION_TYPE_SELL THEN CONVERT(VARCHAR(MAX),(Quantity * LotSize)) 
 						ELSE '-' 
 					END  AS dis_grd_17418,
-					TUD.StockExchange as dis_grd_17208
-					
+					TUD.StockExchange as dis_grd_17208,
+					currency.DisplayCode as   rpt_grd_54229
 					from tra_TransactionDetails td
 					--join @temp t on t.UserInfoId = td.ForUserInfoId
 					--join usr_UserInfo u on u.UserInfoId = t.UserInfoId
@@ -480,6 +485,7 @@ BEGIN
 					JOIN @tmpTransactions tmIds ON tm.TransactionMasterId = tmIds.TransactionMasterId
 					LEFT JOIN tra_TradingTransactionUserDetails TUD ON td.TransactionDetailsId = TUD.TransactionDetailsId 
 								AND TUD.FormDetails = 1 AND TUD.TransactionMasterId = tmIds.TransactionMasterId
+					LEFT JOIN com_Code currency ON currency.CodeID = TD.CurrencyID
 								ORDER BY TD.SecurityTypeCodeId,td.TransactionDetailsId, TD.DateOfAcquisition
 				END
 				
