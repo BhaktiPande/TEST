@@ -157,23 +157,24 @@ BEGIN
 
 	-- com_code
 	IF(@inp_iComboType = 1)
-	BEGIN
-		-- Param1 = CodeGroupId, Param2 = ParentCodeId		
+		BEGIN
+		-- Param1 = CodeGroupId, Param2 = ParentCodeId	
 		
 		IF(@inp_sParam1=518)
 		BEGIN			
-				CREATE TABLE #temp (CodeID INT, CodeName VARCHAR(255),CodeGroupId int, Description varchar(200), IsVisible bit,IsActive bit, DisplayOrder int, DisplayCode varchar(50), ParentCodeId int) 
+				CREATE TABLE #temp (CodeID INT, CodeName NVARCHAR(255),CodeGroupId int, Description NVARCHAR(200), IsVisible bit,IsActive int, DisplayOrder int, DisplayCode NVARCHAR(MAX),
+				 ParentCodeId int) 
 				INSERT INTO #temp SELECT CodeID, CodeName, CodeGroupId, Description, IsVisible,IsActive, DisplayOrder, DisplayCode, ParentCodeId
 				FROM com_Code
-				WHERE CodeGroupId = @inp_sParam1 AND CodeName NOT LIKE '%Other%'	
+				WHERE CodeGroupId = @inp_sParam1 AND CodeName NOT LIKE 'Other%'	
 				INSERT INTO #temp SELECT CodeID, CodeName, CodeGroupId, Description, IsVisible,IsActive, DisplayOrder, DisplayCode, ParentCodeId
 				FROM com_Code 
-				Where CodeGroupId = @inp_sParam1 AND CodeName LIKE '%Other%'
+				Where CodeGroupId = @inp_sParam1 AND CodeName LIKE 'Other%'
 
 				SELECT	 CodeID AS ID
 					,CASE WHEN DisplayCode IS NULL OR DisplayCode = '' THEN CodeName ELSE DisplayCode END AS Value
 				FROM #temp WHERE CodeGroupId=@inp_sParam1
-				
+				DROP TABLE #temp
 		END	
 		ELSE 		
 			BEGIN
@@ -186,7 +187,7 @@ BEGIN
 				--ORDER BY DisplayOrder ASC
 				ORDER BY CASE WHEN DisplayCode IS NULL OR DisplayCode = '' THEN CodeName ELSE DisplayCode END
 			END
-			DROP TABLE #temp
+			
 		RETURN 0;
 	END 
 		
