@@ -207,7 +207,7 @@ BEGIN
 			ID INT IDENTITY(1,1),DmatId INT,UserInfoId INT,	DEMATAccountNumber NVARCHAR(100),DPBank NVARCHAR(500),
 			DPID NVARCHAR(100),TMID NVARCHAR(100),tra_grd_16194 VARCHAR(100),Quantity DECIMAL(18,3),
 			ESOPExcerciseOptionQty DECIMAL(18,3),OtherExcerciseOptionQty DECIMAL(18,3),	Value DECIMAL(18,3),
-			LotSize INT,tra_grd_16200 VARCHAR(500),SecurityTypeCodeId INT,TransStatusCodeId INT, Currency NVARCHAR(50)
+			LotSize INT,tra_grd_16200 VARCHAR(500),SecurityTypeCodeId INT,TransStatusCodeId INT, Currency int
 			)
 			INSERT INTO #tmpTransDetails
 			SELECT	
@@ -379,8 +379,12 @@ BEGIN
 		TransContractSpecification nvarchar(550),
 		TransSecurityTypeCodeId INT,
 		TransUserinfoId INT	,	
-		Currency NVARCHAR(50)
+		CurrencyID int
 		)
+
+
+
+
 			INSERT INTO #tmpTransDmat
 			SELECT	
 			TD.TransactionDetailsId,
@@ -400,7 +404,7 @@ BEGIN
 			TD.ContractSpecification AS tra_grd_16200,
 			TD.SecurityTypeCodeId,
 			TD.ForUserInfoId,
-			currency.DisplayCode as rpt_grd_54229
+			TD.CurrencyID as rpt_grd_54229
 			FROM	tra_TransactionDetails TD
 			LEFT JOIN #tmpEvaluatePercentagePrePostTransaction tmp ON TD.TransactionDetailsId=tmp.TransactionDetailsId
 			JOIN tra_TransactionMaster TM ON TD.TransactionMasterId = TM.TransactionMasterId
@@ -408,7 +412,7 @@ BEGIN
 			LEFT JOIN usr_DMATDetails DD ON TD.DMATDetailsID = DD.DMATDetailsID
 			LEFT JOIN usr_UserRelation UR ON TM.UserInfoId = UR.UserInfoId AND TD.ForUserInfoId = UR.UserInfoIdRelative
 			LEFT JOIN com_Code CRelation ON UR.RelationTypeCodeId = CRelation.CodeID
-			LEFT JOIN com_Code currency ON currency.CodeID = TD.CurrencyID
+			--LEFT JOIN com_Code currency ON currency.CodeID = TD.CurrencyID
 			WHERE TD.TransactionMasterId =@inp_iTransactionMasterId AND ForUserInfoId=@inp_nUserInfoId AND 	TD.SecurityTypeCodeId=@inp_nSecurityTypeCodeId
 		
 
@@ -435,6 +439,7 @@ BEGIN
 					DELETE FROM #tmpTransDmat WHERE TransDmatId IS NULL AND TransUserinfoId=@inp_nUserInfoId
 				END
 	
+		--select * from #tmpUserDmat
 			 
 			SELECT 
 			TTD.TransId, 
@@ -453,7 +458,7 @@ BEGIN
 			ISNULL(TTD.TransContractSpecification,'') AS tra_grd_16200,			
 			TTD.TransSecurityTypeCodeId AS SecurityTypeCodeId,
 			@nTransactionStatus AS TransStatusCodeId,
-			TUD.Currency AS rpt_grd_54229
+			ISNULL(TTD.CurrencyID,0 )AS rpt_grd_54229
 			FROM #tmpUserDmat TUD
 			FULL OUTER JOIN #tmpTransDmat TTD ON TTD.TransId=TUD.TransId
 			DROP TABLE #tmpUserDmat

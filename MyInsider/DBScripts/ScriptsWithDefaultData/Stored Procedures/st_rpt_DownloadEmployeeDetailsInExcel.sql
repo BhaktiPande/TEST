@@ -24,6 +24,7 @@ SELECT
 	CompanyName AS 'Company Name',
 	RoleName AS 'Role',
 	AddressLine1 AS 'Address',
+	PersonalAddress As 'Personal Address',
 	PinCode AS 'Pin Code',
 	CountryName AS 'Country',
 	EmailId AS 'Email Address',

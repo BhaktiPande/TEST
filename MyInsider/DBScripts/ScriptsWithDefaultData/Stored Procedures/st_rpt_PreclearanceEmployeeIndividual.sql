@@ -123,7 +123,7 @@ BEGIN
 	DECLARE @nDataType_String INT = 1
 
 	DECLARE @sEmployeeID NVARCHAR(50)
-	DECLARE @sInsiderName NVARCHAR(100)
+	DECLARE @sInsiderName NVARCHAR(max)
 	
 	DECLARE @sPNT VARCHAR(10) = 'PNT'
 	DECLARE @sPCL VARCHAR(10) = 'PCL'
@@ -133,7 +133,7 @@ BEGIN
 	DECLARE @nExchangeTypeCodeId_NSE INT = 116001
 	
 	CREATE TABLE #tmpPreclearance(Id INT IDENTITY(1,1), UserInfoId INT, TransactionMasterId INT, TransactionMasterIdText VARCHAR(20), TransactionDetailsId INT, PreclearanceId VARCHAR(50), RequestDate DATETIME,
-	ScripName VARCHAR(100), ISIN VARCHAR(100), TransactionTypeCodeId INT, SecurityTypeCodeId INT, PreQuantity INT, PreValue DECIMAL(25, 4),
+	ScripName NVARCHAR(100), ISIN VARCHAR(100), TransactionTypeCodeId INT, SecurityTypeCodeId INT, PreQuantity INT, PreValue DECIMAL(25, 4),
 	PreclearanceStatusId INT, PreStatusDate DATETIME, PreApplicableTill DATETIME, BuyQuantity INT, SellQuantity INT, DateOfAcquisition DATETIME,
 	TradeValue DECIMAL(25,4), ReasonForNotTradedCodeId INT, 
 	CommentId_Ok INT, CommentId_TrdAftPClDate INT, CommentId_TrdWithoutPcl INT, CommentId_PclNotRq INT, CommentId_TrdDuringBlckout INT,
@@ -149,7 +149,7 @@ BEGIN
 	DECLARE @tmpTransactionIdForLimits TABLE (TransactionMasterId INT, TradeQty INT, TradeValue DECIMAL(25,4), 
 				TradingPolicyId INT, SecurityTypeCodeId INT, MinAcqDate DATETIME, TradeQtyLimit INT, TradeValueLimit DECIMAL(20,4), PercentageLimit DECIMAL(10,4), ValueFromPerc DECIMAL(20,4), PaidUpCapital DECIMAL(20,4))
 	
-	DECLARE @tmpUserDetails TABLE(Id INT IDENTITY(1,1), RKey VARCHAR(20), Value VARCHAR(50), DataType INT)
+	DECLARE @tmpUserDetails TABLE(Id INT IDENTITY(1,1), RKey NVARCHAR(20), Value NVARCHAR(max), DataType INT)
 	
 	DECLARE curTDds CURSOR FOR 
 	SELECT TransactionDetailsId FROM #tmpPreclearance
@@ -289,7 +289,7 @@ BEGIN
 					
 			INSERT INTO @tmpUserDetails(RKey, Value, DataType)
 			VALUES ('rpt_lbl_19173', @sEmployeeID, @nDataType_String),
-				('rpt_lbl_19174', dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max), @sInsiderName),1)), @nDataType_String)
+				('rpt_lbl_19174',   CONVERT(NVARCHAR(max), @sInsiderName) , @nDataType_String)
 
 			INSERT INTO #tmpList(RowNumber, EntityID)
 			VALUES (1,1)

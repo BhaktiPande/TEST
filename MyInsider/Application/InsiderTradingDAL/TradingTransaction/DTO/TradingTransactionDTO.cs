@@ -112,6 +112,7 @@ namespace InsiderTradingDAL
         public string tra_grd_16200 { get; set; }
         public string dmatId { get; set; }
         public string UserInfoId { get; set; }
+        public int rpt_grd_54229 { get; set; }
     }
 
     public class DataItemForRelative

@@ -158,8 +158,8 @@ BEGIN
 				IF (@bShowOriginalUserDetails = 1)
 				BEGIN
 					SELECT 
-						ISNULL(u.FirstName+' ',' ') + ISNULL(u.MiddleName+ ' ',' ') + ISNULL(u.LastName,' ') + '##' + ISNULL(u.PAN,'') 
-						+ '##' + CASE WHEN u.UserTypeCodeId = 101004 THEN ISNULL(u.CIN,' ') ELSE ISNULL(u.DIN,' ') END + '##' + ISNULL(u.AddressLine1,'')+ ' ' + ISNULL(', ' + u.PinCode,'')  + CASE WHEN ISNULL(CCountry.DisplayCode,'') = '' THEN ISNULL(', ' + CCountry.CodeName,'') ELSE ISNULL(', ' + CCountry.DisplayCode,'') END  + '##' + ISNULL(u.MobileNumber,'')
+						ISNULL(u.FirstName+N' ',N' ') + ISNULL(u.MiddleName+ N' ',N' ') + ISNULL(u.LastName,N' ') + '##' + ISNULL(u.PAN,N'') 
+						+ '##' + CASE WHEN u.UserTypeCodeId = 101004 THEN ISNULL(u.CIN,N' ') ELSE ISNULL(u.DIN,' ') END + '##' + ISNULL(u.AddressLine1,'')+ ' ' + ISNULL(', ' + u.PinCode,'')  + CASE WHEN ISNULL(CCountry.DisplayCode,'') = '' THEN ISNULL(', ' + CCountry.CodeName,'') ELSE ISNULL(', ' + CCountry.DisplayCode,'') END  + '##' + ISNULL(u.MobileNumber,'')
 						as dis_grd_17187,
 						@RELATIONTYPE_SELF as dis_grd_17188,
 						NULL as dis_grd_17189,
@@ -185,8 +185,8 @@ BEGIN
 				ELSE
 				BEGIN
 					SELECT 
-						ISNULL(TUD.FirstName+' ', ' ') + ISNULL(TUD.MiddleName+ ' ', ' ') + ISNULL(TUD.LastName, ' ') + '##' 
-							+ ISNULL(TUD.PanNumber, '') + '##' 
+						ISNULL(TUD.FirstName+N' ', N' ') + ISNULL(TUD.MiddleName+ N' ', N' ') + ISNULL(TUD.LastName, N' ') + '##' 
+							+ ISNULL(TUD.PanNumber, N'') + '##' 
 							+ ISNULL(TUD.DIN, '') + '##' 
 							+ ISNULL(TUD.Address, '')+ ' ' 
 							+ ISNULL(', ' + TUD.Pincode, '')  
@@ -218,8 +218,8 @@ BEGIN
 				IF (@bShowOriginalUserDetails = 1)
 				BEGIN
 					select 
-						ISNULL(u.FirstName + ' ',' ') + ISNULL(u.MiddleName + ' ',' ') + ISNULL(u.LastName,' ') + '##' + ISNULL(u.PAN,'') 
-						+ '##' + CASE WHEN u.UserTypeCodeId = 101004 THEN ISNULL(u.CIN,' ') ELSE ISNULL(u.DIN,' ') END + '##' + ISNULL(u.AddressLine1,'')+ ' ' + ISNULL(', ' + u.PinCode,'')  + CASE WHEN ISNULL(CCountry.DisplayCode,'') = '' THEN ISNULL(', ' + CCountry.CodeName,'') ELSE ISNULL(', ' + CCountry.DisplayCode,'') END  + '##' + ISNULL(u.MobileNumber,'')
+						ISNULL(u.FirstName + N' ',N' ') + ISNULL(u.MiddleName + N' ',N' ') + ISNULL(u.LastName,N' ') + '##' + ISNULL(u.PAN,'') 
+						+ '##' + CASE WHEN u.UserTypeCodeId = 101004 THEN ISNULL(u.CIN,N' ') ELSE ISNULL(u.DIN,N' ') END + '##' + ISNULL(u.AddressLine1,'')+ ' ' + ISNULL(', ' + u.PinCode,'')  + CASE WHEN ISNULL(CCountry.DisplayCode,'') = '' THEN ISNULL(', ' + CCountry.CodeName,'') ELSE ISNULL(', ' + CCountry.DisplayCode,'') END  + '##' + ISNULL(u.MobileNumber,'')
 						as dis_grd_17187,					
 						case when t.relationType = '' Then t.relationType ELSE t.relationType END AS dis_grd_17188,
 						null as dis_grd_17189,
@@ -282,18 +282,17 @@ BEGIN
 				ELSE
 				BEGIN
 
-				print 'samadhan'
 				    --Modified(added #Temp_Table) to handle the date of intimation of the transactions on form c having Soft Copy submission is “Not Required” till the threshold limit (as set in Trading Policy -> Continuous Disclosures Section).  
 					select * into #Temp_Table from 
 					(
 					select 
-						ISNULL(TUD.FirstName + ' ', ' ') + ISNULL(TUD.MiddleName + ' ', ' ') + ISNULL(TUD.LastName, ' ') + '##' 
-							+ ISNULL(TUD.PanNumber, '') + '##' 
-							+ ISNULL(TUD.DIN, ' ') + '##' 
-							+ ISNULL(TUD.Address, '')+ ' ' 
-							+ ISNULL(', ' + TUD.Pincode, '')  
-							+ ISNULL(', ' + TUD.Country, '')  + '##' 
-							+ ISNULL(TUD.MobileNumber, '') as dis_grd_17187,					
+						ISNULL(TUD.FirstName + N' ', N' ') + ISNULL(TUD.MiddleName + N' ', N' ') + ISNULL(TUD.LastName, N' ') + N'##' 
+							+ ISNULL(TUD.PanNumber, N'') + N'##' 
+							+ ISNULL(TUD.DIN, N' ') + '##' 
+							+ ISNULL(TUD.Address, N'')+ N' ' 
+							+ ISNULL(', ' + TUD.Pincode, N'')  
+							+ ISNULL(', ' + TUD.Country, N'')  + N'##' 
+							+ ISNULL(TUD.MobileNumber, N'') as dis_grd_17187,					
 						ISNULL(TUD.FormCategoryPerson, '') AS dis_grd_17188,
 						null as dis_grd_17189,
 						case 
@@ -377,8 +376,7 @@ BEGIN
 							when td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN CAcquisitionType.CodeName 
 							ELSE '-' 
 						END as dis_grd_17425,
-						TD.TransactionDetailsId AS TransactionDetailsId,
-						currency.DisplayCode  as rpt_grd_54229
+						TD.TransactionDetailsId AS TransactionDetailsId
 					from tra_TransactionDetails td
 					join com_Code C on C.CodeID = td.SecurityTypeCodeId
 					join tra_TransactionMaster tm on tm.TransactionMasterId = td.TransactionMasterId
@@ -387,11 +385,10 @@ BEGIN
 					JOIN @tmpTransactions tmIds ON tm.TransactionMasterId = tmIds.TransactionMasterId
 					LEFT JOIN tra_TradingTransactionUserDetails TUD ON td.TransactionDetailsId = TUD.TransactionDetailsId 
 								AND TUD.FormDetails = 1 AND TUD.TransactionMasterId = tmIds.TransactionMasterId
-					LEFT JOIN com_Code currency ON currency.CodeID = TD.CurrencyID
 					)as Temp_Table
 					update #Temp_Table set dis_grd_17424 = (select MAX(dis_grd_17424) from #Temp_Table where dis_grd_17424 is not null)
 					where UserSecurityTypeCode in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb)
-					select dis_grd_17187,dis_grd_17188,dis_grd_17189,dis_grd_17190,dis_grd_17191,dis_grd_17192,dis_grd_17193,dis_grd_17194,dis_grd_17195,dis_grd_17196,dis_grd_17197,dis_grd_17198,dis_grd_17199,dis_grd_17200,dis_grd_17201,dis_grd_17202,dis_grd_17424,dis_grd_17425, rpt_grd_54229 from #Temp_Table
+					select dis_grd_17187,dis_grd_17188,dis_grd_17189,dis_grd_17190,dis_grd_17191,dis_grd_17192,dis_grd_17193,dis_grd_17194,dis_grd_17195,dis_grd_17196,dis_grd_17197,dis_grd_17198,dis_grd_17199,dis_grd_17200,dis_grd_17201,dis_grd_17202,dis_grd_17424,dis_grd_17425 from #Temp_Table
 					ORDER BY dis_grd_17190,TransactionDetailsId,dis_grd_17201
 					
 				END
@@ -428,8 +425,8 @@ BEGIN
 					null as dis_grd_17416,
 					case when td.SecurityTypeCodeId in (@SecuriyType_Futures,@SecuriyType_Options) AND td.TransactionTypeCodeID = @TRANSACTION_TYPE_SELL THEN CONVERT(VARCHAR(MAX),td.Value) ELSE '-' END  AS dis_grd_17417,
 					case when td.SecurityTypeCodeId in (@SecuriyType_Futures,@SecuriyType_Options) AND td.TransactionTypeCodeID = @TRANSACTION_TYPE_SELL THEN CONVERT(VARCHAR(MAX),(Quantity * LotSize)) ELSE '-' END  AS dis_grd_17418,
-					case when Cexchange.DisplayCode IS NULL OR Cexchange.DisplayCode = '' then Cexchange.CodeName else Cexchange.DisplayCode end as dis_grd_17208,
-					currency.DisplayCode as   rpt_grd_54229
+					case when Cexchange.DisplayCode IS NULL OR Cexchange.DisplayCode = '' then Cexchange.CodeName else Cexchange.DisplayCode end as dis_grd_17208
+					
 					from tra_TransactionDetails td
 					join @temp t on t.UserInfoId = td.ForUserInfoId
 					join usr_UserInfo u on u.UserInfoId = t.UserInfoId
@@ -439,7 +436,6 @@ BEGIN
 					join com_Code CTransType on CTransType.CodeID = td.TransactionTypeCodeId
 					join com_Code Cexchange on Cexchange.CodeID = td.ExchangeCodeId
 					JOIN @tmpTransactions tmIds ON tm.TransactionMasterId = tmIds.TransactionMasterId
-					LEFT JOIN com_Code currency ON currency.CodeID = TD.CurrencyID
 					ORDER BY TD.SecurityTypeCodeId,td.TransactionDetailsId,TD.DateOfAcquisition
 				END
 				ELSE 
@@ -472,8 +468,8 @@ BEGIN
 						when td.SecurityTypeCodeId in (@SecuriyType_Futures,@SecuriyType_Options) AND td.TransactionTypeCodeID = @TRANSACTION_TYPE_SELL THEN CONVERT(VARCHAR(MAX),(Quantity * LotSize)) 
 						ELSE '-' 
 					END  AS dis_grd_17418,
-					TUD.StockExchange as dis_grd_17208,
-					currency.DisplayCode as   rpt_grd_54229
+					TUD.StockExchange as dis_grd_17208
+					
 					from tra_TransactionDetails td
 					--join @temp t on t.UserInfoId = td.ForUserInfoId
 					--join usr_UserInfo u on u.UserInfoId = t.UserInfoId
@@ -485,7 +481,6 @@ BEGIN
 					JOIN @tmpTransactions tmIds ON tm.TransactionMasterId = tmIds.TransactionMasterId
 					LEFT JOIN tra_TradingTransactionUserDetails TUD ON td.TransactionDetailsId = TUD.TransactionDetailsId 
 								AND TUD.FormDetails = 1 AND TUD.TransactionMasterId = tmIds.TransactionMasterId
-					LEFT JOIN com_Code currency ON currency.CodeID = TD.CurrencyID
 								ORDER BY TD.SecurityTypeCodeId,td.TransactionDetailsId, TD.DateOfAcquisition
 				END
 				
