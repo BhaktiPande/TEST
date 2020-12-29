@@ -16,9 +16,11 @@ CREATE TYPE [InitialDisListType] AS TABLE(
 [SecuritiesToBeTradedQty]	[decimal](15, 4)  NULL,
 [ESOPQty] [decimal](15, 4) NULL,
 [OtherthanESOPQty] [decimal](15, 4)  NULL,
+[Currency]	int ,
 [SecuritiesToBeTradedValue]	[decimal](20, 4)  NULL,
 [LotSize] [INT]  NULL,
 [ContractSpecification]	VARCHAR(200) NULL
+
 )
 
 

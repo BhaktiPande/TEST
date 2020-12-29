@@ -266,6 +266,7 @@
       <DependentUpon>SSRSReportViewer.aspx</DependentUpon>
     </Compile>
     <Compile Include="Common\AnnotationDateCompare.cs" />
+    <Compile Include="Common\ApplyArebicFont.cs" />
     <Compile Include="Common\ButtonAttribute.cs" />
     <Compile Include="Common\Common.cs" />
     <Compile Include="Common\ConstEnum.cs" />
@@ -3076,6 +3077,7 @@
     <Content Include="Views\PeriodEndDisclosure_OS\UserStatusOS.cshtml" />
     <Content Include="Views\Reports_OS\Index.cshtml" />
     <Content Include="Views\Shared\_MCQLayout.cshtml" />
+    <Content Include="Views\TradingTransaction\SubmitOwnSecurities.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Elmah\" />

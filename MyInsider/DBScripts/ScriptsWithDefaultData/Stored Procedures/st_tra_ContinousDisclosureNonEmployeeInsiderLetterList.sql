@@ -262,7 +262,8 @@ BEGIN
 						case when td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN td.DateOfAcquisition ELSE NULL END as dis_grd_17223,
 						case when td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN td.DateOfAcquisition ELSE NULL END as dis_grd_17224,
 						case when td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN GETDATE() ELSE NULL END as dis_grd_17426,
-						case when td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN CAcquisitionType.CodeName ELSE '-' END as dis_grd_17427
+						case when td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN CAcquisitionType.CodeName ELSE '-' END as dis_grd_17427,
+						currency.DisplayCode as rpt_grd_54229
 					from tra_TransactionDetails td
 					join @temp t on t.UserInfoId = td.ForUserInfoId
 					join usr_UserInfo u on u.UserInfoId = t.UserInfoId
@@ -274,6 +275,8 @@ BEGIN
 					join com_Code Cexchange on Cexchange.CodeID = td.ExchangeCodeId
 					LEFT JOIN com_Code CCountry ON CCountry.CodeID = u.CountryId and CCountry.CodeGroupId = @CountryCodeGroupID
 					JOIN @tmpTransactions tmIds ON tm.TransactionMasterId = tmIds.TransactionMasterId
+					LEFT JOIN com_Code currency ON currency.CodeID = TD.CurrencyID
+
 				END
 				ELSE
 				BEGIN
@@ -375,7 +378,8 @@ BEGIN
 						case 
 							when td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN CAcquisitionType.CodeName 
 							ELSE '-' 
-						END as dis_grd_17427
+						END as dis_grd_17427,
+						currency.DisplayCode as rpt_grd_54229
 					from tra_TransactionDetails td
 					join com_Code C on C.CodeID = td.SecurityTypeCodeId
 					join tra_TransactionMaster tm on tm.TransactionMasterId = td.TransactionMasterId
@@ -384,10 +388,11 @@ BEGIN
 					JOIN @tmpTransactions tmIds ON tm.TransactionMasterId = tmIds.TransactionMasterId
 					LEFT JOIN tra_TradingTransactionUserDetails TUD ON td.TransactionDetailsId = TUD.TransactionDetailsId 
 								AND TUD.FormDetails = 1 AND TUD.TransactionMasterId = tmIds.TransactionMasterId 
+					LEFT JOIN com_Code currency ON currency.CodeID = TD.CurrencyID
 				    )as Temp_Table
 					update #Temp_Table set dis_grd_17426 = (select MAX(dis_grd_17426) from #Temp_Table where dis_grd_17426 is not null)
 					where UserSecurityTypeCode in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb)
-					select dis_grd_17209,dis_grd_17210,dis_grd_17211,dis_grd_17212,dis_grd_17213,dis_grd_17214,dis_grd_17215,dis_grd_17216,dis_grd_17217,dis_grd_17218,dis_grd_17219,dis_grd_17220,dis_grd_17221,dis_grd_17222,dis_grd_17223,dis_grd_17224,dis_grd_17426,dis_grd_17427 from #Temp_Table
+					select dis_grd_17209,dis_grd_17210,dis_grd_17211,dis_grd_17212,dis_grd_17213,dis_grd_17214,dis_grd_17215,dis_grd_17216,dis_grd_17217,dis_grd_17218,dis_grd_17219,dis_grd_17220,dis_grd_17221,dis_grd_17222,dis_grd_17223,dis_grd_17224,dis_grd_17426,dis_grd_17427, rpt_grd_54229 from #Temp_Table
 				END
 			END
 		END
@@ -424,6 +429,7 @@ BEGIN
 						case when td.SecurityTypeCodeId in (@SecuriyType_Futures,@SecuriyType_Options) AND td.TransactionTypeCodeID = @TRANSACTION_TYPE_SELL THEN CONVERT(VARCHAR(MAX),td.Value) ELSE '-' END as dis_grd_17421,
 						case when td.SecurityTypeCodeId in (@SecuriyType_Futures,@SecuriyType_Options)  AND td.TransactionTypeCodeID = @TRANSACTION_TYPE_SELL THEN CONVERT(VARCHAR(MAX),(Quantity * LotSize)) ELSE '-' END as dis_grd_17422,
 						case when Cexchange.DisplayCode IS NULL OR Cexchange.DisplayCode = '' then Cexchange.CodeName else Cexchange.DisplayCode end as dis_grd_17230
+					,currency.DisplayCode as rpt_grd_54229
 					from tra_TransactionDetails td
 					join @temp t on t.UserInfoId = td.ForUserInfoId
 					join usr_UserInfo u on u.UserInfoId = t.UserInfoId
@@ -434,6 +440,7 @@ BEGIN
 					join com_Code CTransType on CTransType.CodeID = td.TransactionTypeCodeId
 					join com_Code Cexchange on Cexchange.CodeID = td.ExchangeCodeId
 					JOIN @tmpTransactions tmIds ON tm.TransactionMasterId = tmIds.TransactionMasterId
+					LEFT JOIN com_Code currency ON currency.CodeID = TD.CurrencyID
 				END
 				ELSE
 				BEGIN
@@ -465,7 +472,8 @@ BEGIN
 							when td.SecurityTypeCodeId in (@SecuriyType_Futures,@SecuriyType_Options)  AND td.TransactionTypeCodeID = @TRANSACTION_TYPE_SELL THEN CONVERT(VARCHAR(MAX),(Quantity * LotSize)) 
 							ELSE '-' 
 						END as dis_grd_17422,
-						TUD.StockExchange as dis_grd_17230
+						TUD.StockExchange as dis_grd_17230,
+						currency.DisplayCode as rpt_grd_54229
 					from tra_TransactionDetails td
 					--join @temp t on t.UserInfoId = td.ForUserInfoId
 					--join usr_UserInfo u on u.UserInfoId = t.UserInfoId
@@ -478,6 +486,7 @@ BEGIN
 					JOIN @tmpTransactions tmIds ON tm.TransactionMasterId = tmIds.TransactionMasterId
 					LEFT JOIN tra_TradingTransactionUserDetails TUD ON td.TransactionDetailsId = TUD.TransactionDetailsId 
 								AND TUD.FormDetails = 1 AND TUD.TransactionMasterId = tmIds.TransactionMasterId
+					LEFT JOIN com_Code currency ON currency.CodeID = TD.CurrencyID
 				END
 				
 				
