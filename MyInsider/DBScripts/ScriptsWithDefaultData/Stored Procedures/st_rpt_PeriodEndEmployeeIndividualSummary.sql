@@ -41,7 +41,7 @@ CREATE PROCEDURE [dbo].[st_rpt_PeriodEndEmployeeIndividualSummary]
 	,@inp_iPeriodCodeId			INT
 	,@inp_iUserInfoId			VARCHAR(MAX)
 	,@inp_sDMATDetailsId		VARCHAR(200) -- Comma separated list of DMAT ids
-	,@inp_sAcHolderName			VARCHAR(100)
+	,@inp_sAcHolderName			NVARCHAR(100)
 	,@inp_sRelationTypeCodeId	VARCHAR(200) -- Null: No filter applied, 0: Self, NonZero: RelationId from com_Code -- Comma separated list
 	,@inp_sSecurityTypeCodeId	VARCHAR(200) -- '139001, 139002' comma separated list of securitytypes
 	,@out_nReturnValue			INT = 0 OUTPUT
@@ -86,7 +86,7 @@ BEGIN
 	DECLARE @dtPEStart DATETIME
 	DECLARE @dtPEEnd DATETIME
 	
-	DECLARE @tmpUserDetails TABLE(Id INT IDENTITY(1,1), RKey VARCHAR(20), Value VARCHAR(50), DataType INT, TransactionMasterId INT DEFAULT 0, DisclosureTypeCodeId INT DEFAULT 0, LetterForCodeId INT DEFAULT 0, Acid INT DEFAULT 0, LetterType char DEFAULT '')
+	DECLARE @tmpUserDetails TABLE(Id INT IDENTITY(1,1), RKey VARCHAR(20), Value NVARCHAR(max), DataType INT, TransactionMasterId INT DEFAULT 0, DisclosureTypeCodeId INT DEFAULT 0, LetterForCodeId INT DEFAULT 0, Acid INT DEFAULT 0, LetterType char DEFAULT '')
 	DECLARE @tmpUserTable TABLE(Id INT IDENTITY(1,1), UserInfoId INT, UserInfoIdRelative INT, SecurityTypeCodeId INT, DMATDetailsID INT, Relation VARCHAR(100), Holdings Decimal(20), Value Decimal(25,4))
 	DECLARE @tmpDMATIds TABLE(DMATDetailsID INT)
 	DECLARE @tmpSecurities TABLE(SecurityTypeCodeId INT)
@@ -195,7 +195,7 @@ BEGIN
 		
 			-- Output #1 : USer details
 			SELECT @sEmployeeID = EmployeeId, 
-					@sInsiderName = CASE WHEN UserTypeCodeId = 101004 THEN C.CompanyName ELSE ISNULL(FirstName, '') + ' ' + ISNULL(LastName, '') END,
+					@sInsiderName = CASE WHEN UserTypeCodeId = 101004 THEN C.CompanyName ELSE ISNULL(FirstName, N'') + N' ' + ISNULL(LastName, N'') END,
 					@sDesignation = CASE WHEN UserTypeCodeId = 101003 THEN CDesignation.CodeName ELSE DesignationText END,
 					@sGrade = CASE WHEN UserTypeCodeId = 101003 THEN CGrade.CodeName ELSE GradeText END,
 					@sLocation = UF.Location,
@@ -212,8 +212,8 @@ BEGIN
 			
 			INSERT INTO @tmpUserDetails(RKey, Value, DataType)
 			VALUES ('rpt_lbl_19135', @sEmployeeID, @nDataType_String),
-				('rpt_lbl_19136', dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max), @sInsiderName),1)), @nDataType_String),
-				('rpt_lbl_19137', dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max), @sDesignation),1)), @nDataType_String),
+				('rpt_lbl_19136',  CONVERT(nvarchar(max), @sInsiderName) , @nDataType_String),
+				('rpt_lbl_19137', CONVERT(NVARCHAR(max), @sDesignation), @nDataType_String),
 				('rpt_lbl_19147', ISNULL(@sCINDIN, ''), @nDataType_String),
 				('rpt_lbl_19138', dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max), @sGrade),1)), @nDataType_String),
 				('rpt_lbl_19139', dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max), @sLocation),1)), @nDataType_String),
@@ -335,7 +335,7 @@ BEGIN
 					LEFT JOIN tra_TransactionSummaryDMATWise tSummary ON tmpSummary.TransactionSummaryDMATWiseId = tSummary.TransactionSummaryDMATWiseId
 				
 				SELECT 
-					CASE WHEN UF.UserTypeCodeId = 101004 THEN C.CompanyName ELSE ISNULL(UFRelative.FirstName, '') + ' ' + ISNULL(UFRelative.LastName, '') END AS rpt_grd_19054,
+					CASE WHEN UF.UserTypeCodeId = 101004 THEN C.CompanyName ELSE ISNULL(UFRelative.FirstName, N'') + N' ' + ISNULL(UFRelative.LastName, N'') END AS rpt_grd_19054,
 					Relation AS rpt_grd_19055,
 					DMat.DEMATAccountNumber AS rpt_grd_19056, 
 					C.CompanyName AS rpt_grd_19057,

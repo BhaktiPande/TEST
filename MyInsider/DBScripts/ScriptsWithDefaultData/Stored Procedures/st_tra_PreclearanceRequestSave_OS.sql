@@ -605,6 +605,44 @@ BEGIN
 			END
 		END
 
+		/*--------------------------------------------Logic implemented for Not Traded OS ---------------------------------------------------*/
+   IF @inp_iReasonForNotTradingCodeId IS NOT NULL OR @inp_iReasonForNotTradingCodeId <> 0
+	BEGIN	
+		
+		DECLARE @nPreApprovedStatus INT =144002 ---Approved		
+		DECLARE @nNotTradeResonCodeId INT=0 
+		DECLARE @nMapToTypeCodeId INT=132004
+		DECLARE @nMapToId INT=0
+		DECLARE @nModifiedBy INT=0
+		DECLARE @nUserInfoIdNT INT = 0
+		DECLARE @nEventCodeID_PreClearanceNotTraded INT =153070 --Not Traded
+
+		SELECT @nNotTradeResonCodeId = MAX(ReasonForNotTradingCodeId) FROM tra_PreclearanceRequest_NonImplementationCompany WHERE PreclearanceRequestId = @inp_nPreclearanceRequestId				
+	
+		SELECT @nPreApprovedStatus= MAX(PreclearanceStatusCodeId)FROM tra_PreclearanceRequest_NonImplementationCompany WHERE PreclearanceStatusCodeId=@nPreApprovedStatus and PreclearanceRequestId = @inp_nPreclearanceRequestId
+	
+
+		SELECT  @nMapToId=MAX(PreclearanceRequestId) FROM tra_PreclearanceRequest_NonImplementationCompany WHERE PreclearanceRequestId = @inp_nPreclearanceRequestId
+	
+
+		SELECT @nModifiedBy = max(ModifiedBy) FROM tra_PreclearanceRequest_NonImplementationCompany WHERE PreclearanceRequestId = @inp_nPreclearanceRequestId 
+		
+
+		SELECT @nUserInfoId = max(UserInfoId) FROM tra_PreclearanceRequest_NonImplementationCompany WHERE PreclearanceRequestId = @inp_nPreclearanceRequestId 
+		
+
+		IF(@nPreApprovedStatus=144002 AND @nNotTradeResonCodeId IS NOT NULL)
+		BEGIN		
+		 IF(NOT EXISTS(SELECT EventLogId From eve_EventLog WHERE UserInfoId = @nUserInfoId AND MapToTypeCodeId = @nMapToTypeCodeId AND MapToId = @nMapToId AND EventCodeId = @nEventCodeID_PreClearanceNotTraded))
+			BEGIN			
+				INSERT INTO eve_EventLog(EventCodeId, EventDate, UserInfoId, MapToTypeCodeId, MapToId, CreatedBy)
+						VALUES(@nEventCodeID_PreClearanceNotTraded,dbo.uf_com_GetServerDate(),@nUserInfoId, @nMapToTypeCodeId, @nMapToId, @nModifiedBy)
+			END 
+		END	
+	END
+
+/*--------------------------------------------Logic implemented for Not Traded---------------------------------------------------*/	
+
 		SELECT 1
 		
 	END TRY
