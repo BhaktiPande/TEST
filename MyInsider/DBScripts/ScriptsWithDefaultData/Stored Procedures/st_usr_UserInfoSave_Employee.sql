@@ -73,6 +73,7 @@ CREATE PROCEDURE [dbo].[st_usr_UserInfoSave_Employee]
 	,@inp_sUIDAI_IdentificationNo	varchar(50)= null
 	,@inp_sIdentificationTypeId		INT=0
 	,@inp_sAllowUpsiUser			BIT
+	,@inp_sPersonalAddress  		VARCHAR(50)=null
 	,@out_nReturnValue				INT = 0 OUTPUT
 	,@out_nSQLErrCode				INT = 0 OUTPUT				-- Output SQL Error Number, if error occurred.
 	,@out_sSQLErrMessage			VARCHAR(500) = '' OUTPUT  -- Output SQL Error Message, if error occurred.	AS
@@ -121,7 +122,7 @@ BEGIN
 				AddressLine1, AddressLine2, CountryId, StateId, City, PinCode, DateOfJoining, 
 				DateOfBecomingInsider, PAN, Category, SubCategory, GradeId, DesignationId, SubDesignationId,
 				Location, DepartmentId, IsInsider,UserTypeCodeId,StatusCodeId,DIN,
-				CreatedBy, CreatedOn, ModifiedBy,ModifiedOn,ResidentTypeId,UIDAI_IdentificationNo,IdentificationTypeId,AllowUpsiUser
+				CreatedBy, CreatedOn, ModifiedBy,ModifiedOn,ResidentTypeId,UIDAI_IdentificationNo,IdentificationTypeId,AllowUpsiUser,PersonalAddress
 				--, LoginID, Password
 				--, ContactPerson, SubCategory, LandLine1, LandLine2, Website, TAN, Description, UPSIAccessOfCompanyID, ParentId, RelationWithEmployee
 			)
@@ -132,7 +133,7 @@ BEGIN
 				@inp_dtDateOfBecomingInsider, @inp_sPAN, @inp_iCategory, @inp_iSubCategory, @inp_iGradeId, @inp_iDesignationId, @inp_iSubDesignationId,
 				@inp_sLocation, @inp_iDepartmentId, @inp_iIsInsider, @inp_iUserTypeCodeID, @inp_iStatusCodeId,@inp_sDIN,
 				@inp_iLoggedInUserId, dbo.uf_com_GetServerDate(), @inp_iLoggedInUserId, dbo.uf_com_GetServerDate() 
-				,@inp_sResidentTypeId,@inp_sUIDAI_IdentificationNo,@inp_sIdentificationTypeId,@inp_sAllowUpsiUser
+				,@inp_sResidentTypeId,@inp_sUIDAI_IdentificationNo,@inp_sIdentificationTypeId,@inp_sAllowUpsiUser,@inp_sPersonalAddress
 			)
 			
 			SET @inp_iUserInfoId = SCOPE_IDENTITY()
@@ -179,7 +180,8 @@ BEGIN
 				ResidentTypeId=@inp_sResidentTypeId,
 				UIDAI_IdentificationNo=@inp_sUIDAI_IdentificationNo,
 				IdentificationTypeId=@inp_sIdentificationTypeId,
-				AllowUpsiUser=@inp_sAllowUpsiUser
+				AllowUpsiUser=@inp_sAllowUpsiUser,
+				PersonalAddress=@inp_sPersonalAddress
 			WHERE UserInfoId = @inp_iUserInfoId	
 			
 		END

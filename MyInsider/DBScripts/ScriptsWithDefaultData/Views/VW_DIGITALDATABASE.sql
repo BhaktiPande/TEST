@@ -12,9 +12,9 @@ Modified By		Modified On		Description
 CREATE VIEW VW_DIGITALDATABASE
 AS
 	SELECT UI.userinfoid, 
-		ISNULL(UI.FirstName,'') + ' ' + ISNULL(UI.LASTNAME,'') EmployeeName,
+		ISNULL(UI.FirstName,N'') + N' ' + ISNULL(UI.LASTNAME,N'') EmployeeName,
 		ISNULl(case when PAN is null then ui.UIDAI_IdentificationNo else UI.PAN end,'') IdentificationNo,
-		ISNULL(desig.CodeName,'') Designation,
+		ISNULL(desig.CodeName,N'') Designation,
 		ISNULL(UI.EMPLOYEEID,'') EmployeeID,
 		ISNULL(Dept.CodeName,'') Department,
 		ISNULL(UI.Location,'') Location,

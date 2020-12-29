@@ -20,6 +20,8 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -54,6 +56,14 @@
     <Reference Include="EPPlus, Version=2.7.0.1, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Users\Tusharw\Desktop\EXCEL CODE\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="ESOP.SSO.Library, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Deployments\Code\Application\InsiderTrading\bin\ESOP.SSO.Library.dll</HintPath>
+    </Reference>
+    <Reference Include="ESOP.Utility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Deployments\Code\Application\InsiderTrading\bin\ESOP.Utility.dll</HintPath>
     </Reference>
     <Reference Include="ExcelNumberFormat">
       <HintPath>..\packages\ExcelNumberFormat.1.0.3\lib\net20\ExcelNumberFormat.dll</HintPath>
@@ -266,6 +276,7 @@
       <DependentUpon>SSRSReportViewer.aspx</DependentUpon>
     </Compile>
     <Compile Include="Common\AnnotationDateCompare.cs" />
+    <Compile Include="Common\ApplyArebicFont.cs" />
     <Compile Include="Common\ButtonAttribute.cs" />
     <Compile Include="Common\Common.cs" />
     <Compile Include="Common\ConstEnum.cs" />
@@ -290,6 +301,7 @@
     <Compile Include="Common\WriteToFileLog.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApplicabilityController.cs" />
+    <Compile Include="Controllers\Applicability_OSController.cs" />
     <Compile Include="Controllers\ClawBackReportController.cs" />
     <Compile Include="Controllers\CODashboardController.cs" />
     <Compile Include="Controllers\COInitialDisclosureController.cs" />
@@ -331,10 +343,12 @@
     <Compile Include="Controllers\SSRSReportController.cs" />
     <Compile Include="Controllers\TemplateMasterController.cs" />
     <Compile Include="Controllers\TradingPolicyController.cs" />
+    <Compile Include="Controllers\TradingPolicy_OSController.cs" />
     <Compile Include="Controllers\TradingTransactionController.cs" />
     <Compile Include="Controllers\TradingTransactionController_OS.cs" />
     <Compile Include="Controllers\TradingWindowEventController.cs" />
     <Compile Include="Controllers\TradingWindowsOtherController.cs" />
+    <Compile Include="Controllers\TwoFactorAuthController.cs" />
     <Compile Include="Controllers\UpsiDigitalController.cs" />
     <Compile Include="Controllers\UserDetailsController.cs" />
     <Compile Include="Filters\AuthorizationPrivilegeFilter.cs" />
@@ -386,12 +400,14 @@
     <Compile Include="Models\SSOModel.cs" />
     <Compile Include="Models\TemplateMasterModel.cs" />
     <Compile Include="Models\TradingPolicyModel.cs" />
+    <Compile Include="Models\TradingPolicyModel_OS.cs" />
     <Compile Include="Models\TradingTransactionModel.cs" />
     <Compile Include="Models\TradingTransactionModel_OS.cs" />
     <Compile Include="Models\TradingTransactionReportModel_OS.cs" />
     <Compile Include="Models\TradingWindowEventModel.cs" />
     <Compile Include="Models\TradingWindowListModel.cs" />
     <Compile Include="Models\TransactionLetterModel.cs" />
+    <Compile Include="Models\TwoFactorAuthModel.cs" />
     <Compile Include="Models\UpsiSharingData.cs" />
     <Compile Include="Models\UserDetailsModel.cs" />
     <Compile Include="Models\UserInfoModel.cs" />
@@ -400,7 +416,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SL\ActivitySL.cs" />
     <Compile Include="SL\ApplicabilitySL.cs" />
+    <Compile Include="SL\ApplicabilitySL_OS.cs" />
     <Compile Include="SL\CODashboardSL.cs" />
+    <Compile Include="SL\CODashboardSL_OS.cs" />
     <Compile Include="SL\ComCodeSL.cs" />
     <Compile Include="SL\CommonSL.cs" />
     <Compile Include="SL\CommunicationRuleMasterSL.cs" />
@@ -411,10 +429,12 @@
     <Compile Include="SL\EmailPropertiesSL.cs" />
     <Compile Include="SL\GenericSLImpl.cs" />
     <Compile Include="SL\InsiderDashboardSL.cs" />
+    <Compile Include="SL\InsiderDashboardSL_OS.cs" />
     <Compile Include="SL\InsiderInitialDisclosureSL.cs" />
     <Compile Include="SL\MCQSL.cs" />
     <Compile Include="SL\MenuMasterSL.cs" />
     <Compile Include="SL\NotificationSL.cs" />
+    <Compile Include="SL\NotificationSL_OS.cs" />
     <Compile Include="SL\NSEGroupSL.cs" />
     <Compile Include="SL\PasswordConfigSL.cs" />
     <Compile Include="SL\PeriodEndDisclosureSL.cs" />
@@ -434,6 +454,7 @@
     <Compile Include="SL\TradingTransactionSL.cs" />
     <Compile Include="SL\TradingTransactionSL_OS.cs" />
     <Compile Include="SL\TradingWindowEventSL.cs" />
+    <Compile Include="SL\TwoFactorAuthSL.cs" />
     <Compile Include="SL\UpsiSL.cs" />
     <Compile Include="SL\UserInfoSL.cs" />
     <Compile Include="Startup.cs" />
@@ -655,6 +676,12 @@
     <Content Include="Document\Templates\MassUpload\RLDepartmentWiseMassUploadTemplate.xlsx" />
     <Content Include="Document\Templates\MassUpload\SeparationMassuploadTemplate.xls" />
     <Content Include="Document\EmployeePeriodEndMassUpload.xlsx" />
+    <Content Include="fonts\tradbdo.ttf" />
+    <Content Include="Controllers\EmployeeController.cs.bak" />
+    <Content Include="Controllers\InsiderInitialDisclosureController.cs.bak" />
+    <Content Include="Controllers\NonEmployeeInsiderController.cs.bak" />
+    <Content Include="Controllers\TradingTransactionController.cs.bak" />
+    <Content Include="Controllers\UpsiDigitalController.cs.bak" />
     <None Include="Properties\PublishProfiles\InsiderTrading.pubxml" />
     <Content Include="Scripts\bootstrap\css\bootstrap.css.map" />
     <Content Include="Scripts\bootstrap\fonts\glyphicons-halflings-regular.eot" />
@@ -3076,6 +3103,31 @@
     <Content Include="Views\PeriodEndDisclosure_OS\UserStatusOS.cshtml" />
     <Content Include="Views\Reports_OS\Index.cshtml" />
     <Content Include="Views\Shared\_MCQLayout.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\Create.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\Index.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\PreclearanceTransactionSecurityMapping_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\TradingPolicyHistoryList_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\ViewOverlapedUserList_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_ContinousSecuritywiseValueList_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_ContinuousDisclosureRequired_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_ContinuousDisclosureSubmissionStockExchange_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_ContinuousLimits_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_ContraTradeSecurityMapping_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_InitialDisclosure_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_MultipleTransactionTrade_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_PeriodEndDisclosureSubmissionStockExchange_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_PeriodEndDisclosure_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_PreclearanceNotRequired_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_PreclearanceRequirement_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_PreclearanceTransaction_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_PreClrAllowRestrictedList_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_Preclrpartialtradenotdoneflag_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_PreSecuritywiseLimitList_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_ProhibitTradingNonTradingPeriod_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_SeekDeclarationUPSI_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_SingleTransactionTrade_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_YearType_OS.cshtml" />
+    <Content Include="Views\APPLICABILITY_OS\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Elmah\" />

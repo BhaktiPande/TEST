@@ -19,7 +19,7 @@ Parag			08-Aug-2016		Made change to save transaction detail for form in case of 
 Raghvendra		07-Sep-2016		Changed the GETDATE() call with function dbo.uf_com_GetServerDate(). This function will return the date to be used as server date.
 								
 Usage:
-EXEC st_tra_TransactionUserDetailsSave <transaction master id>
+EXEC st_tra_TradingTransactionUserDetailsSave 14148 <transaction master id>
 -------------------------------------------------------------------------------------------------*/
 CREATE PROCEDURE [dbo].[st_tra_TradingTransactionUserDetailsSave]
 	@inp_nTransactionMasterId				BIGINT,
@@ -57,12 +57,12 @@ BEGIN
 		-- create temp table to save user info for each transaction details
 		CREATE TABLE #tmpUserDetails(
 			TransactionMasterId BIGINT NOT NULL, TransactionDetailsId BIGINT NULL, UserInfoId INT NOT NULL, 
-			EmployeeId VARCHAR(50) NULL, FirstName VARCHAR(50) NULL, MiddleName VARCHAR(50) NULL, FormCategoryPerson VARCHAR(550) NULL,
-			LastName VARCHAR(50) NULL, Relation VARCHAR(550) NULL,  Email VARCHAR(250) NULL, MobileNumber VARCHAR(15) NULL,
-			CompanyName VARCHAR(200) NULL, [Address] VARCHAR(500) NULL, Country VARCHAR(550) NULL, Pincode VARCHAR(50) NULL,
+			EmployeeId VARCHAR(50) NULL, FirstName NVARCHAR(MAX) NULL, MiddleName NVARCHAR(MAX) NULL, FormCategoryPerson VARCHAR(550) NULL,
+			LastName NVARCHAR(MAX) NULL, Relation VARCHAR(550) NULL,  Email VARCHAR(250) NULL, MobileNumber VARCHAR(15) NULL,
+			CompanyName NVARCHAR(Max) NULL, [Address] VARCHAR(500) NULL, Country VARCHAR(550) NULL, Pincode VARCHAR(50) NULL,
 			ContactPerson VARCHAR(100) NULL, DateOfJoining DATETIME NULL, DateOfBecomingInsider DATETIME NULL, PanNumber VARCHAR(50) NULL,
 			Landline1 VARCHAR(50) NULL, Landline2 VARCHAR(50) NULL, TanNumber VARCHAR(50) NULL, Category VARCHAR(550) NULL, 
-			Subcategory VARCHAR(550) NULL, Grade VARCHAR(550) NULL, Designation VARCHAR(550) NULL, Subdesignation VARCHAR(550) NULL,
+			Subcategory VARCHAR(550) NULL, Grade VARCHAR(550) NULL, Designation NVARCHAR(MAX) NULL, Subdesignation VARCHAR(550) NULL,
 			Location VARCHAR(50) NULL, Department VARCHAR(550) NULL, UPSIAccessofcompany INT NULL, DematAccountNumber VARCHAR(50) NULL,
 			DPBank VARCHAR(550) NULL, DPId VARCHAR(50) NULL, TMId VARCHAR(50) NULL, StockExchange VARCHAR(550) NULL,
 			ForUserInfoId INT NULL, CINNumber VARCHAR(50) NULL, DIN VARCHAR(50) NULL, UserTypeCode INT, ModifiedBy INT
