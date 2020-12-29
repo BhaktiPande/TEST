@@ -88,7 +88,8 @@ BEGIN
 				ISNULL(UI.FirstName,'') + ' ' +ISNULL(UI.LastName,'') AS 'Information Updated By',					
 				UPPER(REPLACE(CONVERT(NVARCHAR, C.SharingDate, 106),' ','/') + ' ' + convert(varchar(5), C.SharingTime)) As 'Date And Time Of Sharing',
 				MS.CodeName  AS 'Mode Of Communication',
-				UPPER(REPLACE(CONVERT(NVARCHAR, C.PublishDate, 106),' ','/')) AS 'Date Of Publishing'
+				UPPER(REPLACE(CONVERT(NVARCHAR, C.PublishDate, 106),' ','/')) AS 'Date Of Publishing',
+				CASE WHEN EXISTS(SELECT 1 FROM  usr_UserInfo WHERE EmailId = UD.Email) THEN 'Registered User' ELSE 'Unregistered User' END AS 'UPSI Recipient'
 							
 				
 		FROM	#tmpList T INNER JOIN
