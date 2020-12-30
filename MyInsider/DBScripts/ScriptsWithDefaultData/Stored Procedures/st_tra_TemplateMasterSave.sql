@@ -41,7 +41,7 @@ CREATE PROCEDURE [dbo].[st_tra_TemplateMasterSave]
 		@inp_sToAddress2				NVARCHAR(250), -- Applicable for Transaction Letter.
 		@inp_sSubject					NVARCHAR(150), -- Applicable only for email and transaction letter. Empty string or NULL in case of CM- SMS/Alert/Popup
 		@inp_sContents					NVARCHAR(MAX), -- will contain formatted text along with placeholders in between the content, where placeholder will be from a placeholder master table. Placeholders will be handled at a later stage, not in first cut.
-		@inp_sSignature					NVARCHAR(200), -- Applicable for Letter, Email.
+		@inp_sSignature					NVARCHAR(MAX), -- Applicable for Letter, Email.
 		@inp_sCommunicationFrom			NVARCHAR(100), -- Appliable only in case of Email and SMS - email from email address / SMS from number.
 		@inp_sSequenceNo				NVARCHAR(50), -- Applicable for FAQ
 		@inp_bIsCommunicationTemplate	BIT,  -- 1: Active, 0: Inactive (In case of communcation type as Letter used to check "ToAddress2" field is required or not 
