@@ -20,3 +20,4 @@
 /MyInsider/Application/InsiderTradingSSO/obj/Release
 /MyInsider/Application/DataUploadUtility/obj/Release
 /MyInsider/Application/INSIDERTRADINGEXCELWRITER/obj/Release
+/MyInsider/DBScripts/ScriptsWithDefaultData/Stored Procedures/st_tra_ContinousDisclosureEmployeeInsiderLetterList1.sql
