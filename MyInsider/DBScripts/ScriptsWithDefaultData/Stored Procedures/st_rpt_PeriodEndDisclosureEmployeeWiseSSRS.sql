@@ -88,7 +88,7 @@ print 'st_rpt_PeriodEndDisclosureEmployeeWise'
 	CREATE TABLE #tmpPEDisclosure(UserInfoId INT, EmployeeId NVARCHAR(50), InsiderName NVARCHAR(200), UserPAN NVARCHAR(MAX),SeperationDate DATETIME, LiveSeperated VARCHAR(MAX),
 	JoiningDate DATETIME, DateOfInactivation DATETIME, CINNumber NVARCHAR(100), Designation NVARCHAR(512), Grade NVARCHAR(512), Location NVARCHAR(512),
 	Department NVARCHAR(512), Category VARCHAR(512), SubCategory VARCHAR(512), StatusCodeId VARCHAR(50), CompanyName NVARCHAR(200),ISINNumber NVARCHAR(200), TypeOfInsider NVARCHAR(50), SubmissionDate DATETIME,
-	SoftCopySubmissionDate DATETIME, HardCopySubmissionDate DATETIME, CommentId INT DEFAULT 162003, TransactionMasterId INT, 
+	SoftCopySubmissionDate VARCHAR(512), HardCopySubmissionDate VARCHAR(512), CommentId INT DEFAULT 162003, TransactionMasterId INT, 
 	LastSubmissionDate DATETIME, PEndDate DATETIME, YearCodeId INT, PeriodCodeId INT,PeriodTypeId INT,PeriodType varchar(50),softCopyReq INT,HardCopyReq INT)
 
 	DECLARE @tmpTransactionIds TABLE (TransactionMasterId INT, UserInfoId INT)
@@ -182,7 +182,7 @@ print 'st_rpt_PeriodEndDisclosureEmployeeWise'
 		
 		--SELECT @sSQL = @sSQL + 'AND DateOfBecomingInsider <= ''' + CONVERT(VARCHAR(11), @dtPEEnd) + ''' '
 		--SELECT @sSQL = @sSQL + 'AND (DateOfSeparation IS NULL OR ''' + CONVERT(VARCHAR(11), @dtPEStart) + '''  <= DateOfSeparation) '
-		SELECT @sSQL = @sSQL + ' AND (DateOfInactivation IS NULL OR dbo.uf_com_GetServerDate() < DateOfInactivation) '
+		--SELECT @sSQL = @sSQL + ' AND (DateOfInactivation IS NULL OR dbo.uf_com_GetServerDate() < DateOfInactivation) '
 
 		IF ((@inp_iUserInfoId IS NOT NULL AND @inp_iUserInfoId <> '0')
 		  OR (@inp_sEmployeeID IS NOT NULL AND @inp_sEmployeeID <> '')
@@ -289,8 +289,7 @@ print 'st_rpt_PeriodEndDisclosureEmployeeWise'
 		END
 
 		UPDATE tmpTD
-		SET 
-		--LastSubmissionDate = CONVERT(date, dbo.uf_tra_GetNextTradingDateOrNoOfDays(TM.PeriodEndDate, DiscloPeriodEndToCOByInsdrLimit, NULL, 0, 1, 0, @nExchangeTypeCodeId_NSE)), -- DATEADD(D, DiscloPeriodEndToCOByInsdrLimit, TM.PeriodEndDate),
+		SET LastSubmissionDate = CONVERT(date, dbo.uf_tra_GetNextTradingDateOrNoOfDays(TM.PeriodEndDate, DiscloPeriodEndToCOByInsdrLimit, NULL, 0, 1, 0, @nExchangeTypeCodeId_NSE)), -- DATEADD(D, DiscloPeriodEndToCOByInsdrLimit, TM.PeriodEndDate),
 			CommentId = @iCommentsId_NotSubmittedInTime
 		FROM #tmpPEDisclosure tmpTD JOIN tra_TransactionMaster TM ON tmpTD.TransactionMasterId = TM.TransactionMasterId 
 			JOIN tra_UserPeriodEndMapping UPEMap ON UPEMap.PEEndDate IS NOT NULL AND UPEMap.PEEndDate = TM.PeriodEndDate 
@@ -317,8 +316,39 @@ print 'st_rpt_PeriodEndDisclosureEmployeeWise'
 			ISINNumber =c.ISINNumber,
 			TypeOfInsider = CUserType.CodeName + CASE WHEN DateOfBecomingInsider IS NOT NULL THEN @sInsider ELSE '' END,
 			SubmissionDate = vwIn.DetailsSubmitDate,
-			SoftCopySubmissionDate =  vwIn.ScpSubmitDate,
-			HardCopySubmissionDate = vwIn.HcpSubmitDate,
+			SoftCopySubmissionDate = 
+			CASE 
+				WHEN vwIn.SoftCopyReq = 1 AND vwIn.DetailsSubmitStatus = 1 THEN -- if soft copy is required 
+					(CASE 
+						WHEN vwIn.ScpSubmitStatus = 0 THEN 'Pending'
+						WHEN vwIn.ScpSubmitStatus = 1 THEN CONVERT(VARCHAR(max), UPPER(REPLACE(CONVERT(NVARCHAR, vwIn.ScpSubmitDate, 106),' ','/')))
+						ELSE '-' END)
+				WHEN vwIn.SoftCopyReq = 0 AND vwIn.DetailsSubmitStatus = 1 THEN 'Not Required'  -- if soft copy is NOT required
+				ELSE '-' 
+			END,
+			HardCopySubmissionDate = 
+			CASE 
+				WHEN vwIn.HardCopyReq = 1 AND vwIn.DetailsSubmitStatus = 1 THEN -- if hard copy is required 
+					(CASE 
+						WHEN vwIn.SoftCopyReq = 1 THEN   -- if soft copy is required 
+							(CASE 
+								WHEN vwIn.ScpSubmitStatus = 0 THEN  ''
+								WHEN vwIn.ScpSubmitStatus = 1 AND vwIn.HcpSubmitStatus = 0 THEN  'Pending'
+								WHEN vwIn.ScpSubmitStatus = 1 AND vwIn.HcpSubmitStatus = 1 THEN  CONVERT(VARCHAR(max), UPPER(REPLACE(CONVERT(NVARCHAR, vwIn.HcpSubmitDate, 106),' ','/')))
+								ELSE '-' END)
+						ELSE    -- if soft copy is NOT required
+							(CASE 
+								WHEN vwIn.HcpSubmitStatus = 0 THEN 'Pending' 
+								WHEN vwIn.HcpSubmitStatus = 1 THEN CONVERT(VARCHAR(max), UPPER(REPLACE(CONVERT(NVARCHAR, vwIn.HcpSubmitDate, 106),' ','/'))) 
+								ELSE '-' END)
+						END) 
+				WHEN vwIn.HardCopyReq = 0 AND vwIn.DetailsSubmitStatus = 1 THEN		-- if hard copy is NOT required
+					(CASE
+						WHEN vwIn.SoftCopyReq = 1 AND vwIn.ScpSubmitStatus = 1 THEN 'Not Required'	-- if soft copy is required
+						WHEN vwIn.SoftCopyReq = 0 THEN 'Not Required'  -- if soft copy is NOT required
+						ELSE '-' END)
+				ELSE '-' 
+			END,
 			TransactionMasterId = vwIn.TransactionMasterId,		
 			LastSubmissionDate = CONVERT(date, dbo.uf_tra_GetNextTradingDateOrNoOfDays(TM.PeriodEndDate, DiscloPeriodEndToCOByInsdrLimit, NULL, 0, 1, 0, @nExchangeTypeCodeId_NSE)), -- DATEADD(D, DiscloPeriodEndToCOByInsdrLimit, TM.PeriodEndDate),
 			YearCodeId = UPEMap.YearCodeId, 
@@ -414,8 +444,8 @@ print 'st_rpt_PeriodEndDisclosureEmployeeWise'
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(TypeOfInsider) AS rpt_grd_19048, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatDateValue(LastSubmissionDate,0)) AS rpt_grd_19049, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatDateValue(SubmissionDate,1)) AS rpt_grd_19073, '
-		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatDateValue(SoftCopySubmissionDate,softCopyReq)) AS rpt_grd_19051, '
-		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatDateValue(HardCopySubmissionDate,HardCopyReq)) AS rpt_grd_19052, '
+		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(SoftCopySubmissionDate) AS rpt_grd_19051, '
+		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(HardCopySubmissionDate) AS rpt_grd_19052, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(RComment.ResourceValue) AS rpt_grd_19053, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(YearCodeId) AS YearCodeId, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(PeriodCodeId) AS PeriodCodeId, UserInfoID , TransactionMasterId, '
@@ -492,11 +522,18 @@ print 'st_rpt_PeriodEndDisclosureEmployeeWise'
 				CASE WHEN UF.UserTypeCodeId = 101004 THEN C.CompanyName ELSE ISNULL(UF.FirstName, '') + ' ' + ISNULL(UF.LastName, '') END
 				AS UserName,DD.DEMATAccountNumber,UF.PAN,CSecurity.CodeName,tmp.yearcodeid,tmp.periodcodeid
 				FROM usr_UserInfo UF 
-					JOIN com_Code CSecurity ON CSecurity.CodeGroupId = 139
-					JOIN usr_DMATDetails DD ON UF.UserInfoId = DD.UserInfoID
+					--JOIN com_Code CSecurity ON CSecurity.CodeGroupId = 139
+					--JOIN usr_DMATDetails DD ON UF.UserInfoId = DD.UserInfoID
+					--JOIN mst_Company C ON UF.CompanyId = C.CompanyId
+					--JOIN @tmpDMATIds tmpDD ON DD.DMATDetailsID = tmpDD.DMATDetailsID
+					--JOIN @tmpSecurities tmpSecurity ON tmpSecurity.SecurityTypeCodeId = CSecurity.CodeID
+					--JOIN @tmpRelatives tRelative ON tRelative.RelativeTypeCodeId = 0
+					--join #TempMaster tmp on tmp.userinfoid=UF.UserInfoId
+					left JOIN com_Code CSecurity ON CSecurity.CodeGroupId = 139
+					left JOIN usr_DMATDetails DD ON UF.UserInfoId = DD.UserInfoID
 					JOIN mst_Company C ON UF.CompanyId = C.CompanyId
-					JOIN @tmpDMATIds tmpDD ON DD.DMATDetailsID = tmpDD.DMATDetailsID
-					JOIN @tmpSecurities tmpSecurity ON tmpSecurity.SecurityTypeCodeId = CSecurity.CodeID
+					left JOIN @tmpDMATIds tmpDD ON DD.DMATDetailsID = tmpDD.DMATDetailsID 
+					LEFT JOIN @tmpSecurities tmpSecurity ON tmpSecurity.SecurityTypeCodeId = CSecurity.CodeID
 					JOIN @tmpRelatives tRelative ON tRelative.RelativeTypeCodeId = 0
 					join #TempMaster tmp on tmp.userinfoid=UF.UserInfoId
 				WHERE 
@@ -510,13 +547,13 @@ print 'st_rpt_PeriodEndDisclosureEmployeeWise'
 				AS UserName,DD.DEMATAccountNumber,UFRelative.PAN,CSecurity.CodeName,tmp.yearcodeid,tmp.periodcodeid
 				FROM usr_UserInfo UF
 					JOIN usr_UserRelation UR ON UR.UserInfoId = UF.UserInfoId
-					JOIN com_Code CSecurity ON CSecurity.CodeGroupId = 139 
-					JOIN com_Code CRelation ON UR.RelationTypeCodeId = CRelation.CodeID
+					LEFT JOIN com_Code CSecurity ON CSecurity.CodeGroupId = 139 
+					LEFT JOIN com_Code CRelation ON UR.RelationTypeCodeId = CRelation.CodeID
 					JOIN usr_DMATDetails DD ON UR.UserInfoIdRelative = DD.UserInfoID
 					JOIN mst_Company C ON UF.CompanyId = C.CompanyId
 					JOIN usr_UserInfo UFRelative ON UR.UserInfoIdRelative = UFRelative.UserInfoId
-					JOIN @tmpDMATIds tmpDD ON tmpDD.DMATDetailsID = DD.DMATDetailsID
-					JOIN @tmpSecurities tmpSecurity ON tmpSecurity.SecurityTypeCodeId = CSecurity.CodeID								
+					LEFT JOIN @tmpDMATIds tmpDD ON tmpDD.DMATDetailsID = DD.DMATDetailsID
+					LEFT JOIN @tmpSecurities tmpSecurity ON tmpSecurity.SecurityTypeCodeId = CSecurity.CodeID								
 					JOIN @tmpRelatives tRelative ON tRelative.RelativeTypeCodeId = CRelation.CodeID
 					join #TempMaster tmp on tmp.userinfoid=UF.UserInfoId
 				WHERE 
