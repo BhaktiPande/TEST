@@ -2734,7 +2734,7 @@ namespace InsiderTradingMassUpload
                 objCommonOpenXMLObject.SaveWorkSheet();
                 objCommonOpenXMLObject.CloseSpreadSheet();
 
-                System.IO.File.Copy(i_sExportDocumentFolderPath + sTmpFileName + ".xlsx", i_sDocumentFolderPath + "MassUploadError\\" + sTmpFileName + ".xlsx");
+                System.IO.File.Copy(i_sExportDocumentFolderPath + sTmpFileName + ".xlsx", i_sDocumentFolderPath + "MassUploadError/" + sTmpFileName + ".xlsx");
             }
             else
             {
