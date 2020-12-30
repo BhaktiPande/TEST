@@ -57,6 +57,7 @@ CREATE PROCEDURE [dbo].[st_usr_UserInfoSave_NonEmployee]
     ,@inp_sPassword					VARCHAR(200) = null
 	,@inp_sDIN						NVARCHAR(50)
 	,@inp_sAllowUpsiUser			BIT
+	,@inp_sPersonalAddress  		VARCHAR(50)= null
 	,@out_nReturnValue				INT = 0 OUTPUT
 	,@out_nSQLErrCode				INT = 0 OUTPUT				-- Output SQL Error Number, if error occurred.
 	,@out_sSQLErrMessage			VARCHAR(500) = '' OUTPUT  -- Output SQL Error Message, if error occurred.	AS
@@ -92,7 +93,7 @@ BEGIN
 				AddressLine1, AddressLine2, CountryId, StateId, City, PinCode, DateOfJoining, 
 				DateOfBecomingInsider, PAN, CategoryText, SubCategoryText, GradeText, DesignationText, SubDesignationText,
 				Location, DepartmentText, IsInsider, UserTypeCodeId, StatusCodeId,DIN,AllowUpsiUser,
-				CreatedBy, CreatedOn, ModifiedBy, ModifiedOn
+				CreatedBy, CreatedOn, ModifiedBy, ModifiedOn,PersonalAddress
 			)
 			Values
 			(
@@ -100,7 +101,7 @@ BEGIN
 				@inp_sAddressLine1, @inp_sAddressLine2, @inp_iCountryId, @inp_iStateId, @inp_sCity, @inp_sPinCode, @inp_dtDateOfJoining, 
 				@inp_dtDateOfBecomingInsider, @inp_sPAN, @inp_sCategoryText, @inp_sSubCategoryText, @inp_sGradeText, @inp_sDesignationText, @inp_sSubDesignationText,
 				@inp_sLocation, @inp_sDepartmentText, @inp_iIsInsider, @inp_iUserTypeCodeID, @inp_iStatusCodeId,@inp_sDIN,@inp_sAllowUpsiUser,
-				@inp_iLoggedInUserId, dbo.uf_com_GetServerDate(), @inp_iLoggedInUserId, dbo.uf_com_GetServerDate() 
+				@inp_iLoggedInUserId, dbo.uf_com_GetServerDate(), @inp_iLoggedInUserId, dbo.uf_com_GetServerDate() ,@inp_sPersonalAddress  
 			)
 			
 			SET @inp_iUserInfoId = SCOPE_IDENTITY()
@@ -145,7 +146,8 @@ BEGIN
 				DIN = @inp_sDIN,
 				ModifiedBy	 = @inp_iLoggedInUserId,
 				ModifiedOn	 = dbo.uf_com_GetServerDate(),
-				AllowUpsiUser=@inp_sAllowUpsiUser
+				AllowUpsiUser=@inp_sAllowUpsiUser,
+				PersonalAddress=@inp_sPersonalAddress
 			WHERE UserInfoId = @inp_iUserInfoId	
 			
 		END
