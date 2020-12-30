@@ -29,7 +29,7 @@ BEGIN
 		DECLARE @ncount INT = 0
 		DECLARE @ERR_NOTIFICATIONDETAILS_LIST INT = 18036 -- Error occurred while fetching list of Notification.
 		DECLARE @nDisplayAlertCode INT = 164001
-		DECLARE @tmpNotificationQueue TABLE (Id INT IDENTITY(1,1),NotificationQueueId INT , RuleModeId INT, ModeCodeId INT, EventLogId INT, UserId INT,[Subject] NVARCHAR(150)
+		DECLARE @tmpNotificationQueue TABLE (Id INT IDENTITY(1,1),NotificationQueueId INT , RuleModeId INT, ModeCodeId INT, EventLogId INT, UserId INT,[Subject] NVARCHAR(MAX)
 			,[Contents] NVARCHAR(MAX), ResponseStatusCodeId INT ,CreatedOn DATETIME,[NotificationTYPE] VARCHAR(50))
      
 	 Declare @UserTypeCodeId int =0
@@ -115,7 +115,7 @@ BEGIN
 					FROM @tmpNotificationQueue NQ
 					INNER JOIN cmu_NotificationOntheFly CNQ ON NQ.NotificationQueueId = CNQ.NotificationId and NQ.NotificationTYPE='ONTHEFLY'
 						order by CNQ.CreatedOn desc
-				)tb2
+				)tb2 order by CreatedOn desc
 
 			RETURN 0
 			

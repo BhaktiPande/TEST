@@ -1010,7 +1010,7 @@ namespace InsiderTrading.Controllers
 
                     var msHtml = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(LetterHTMLContent));
 
-                    iTextSharp.tool.xml.XMLWorkerHelper.GetInstance().ParseXHtml(writer, doc, msHtml, msCss);
+                    iTextSharp.tool.xml.XMLWorkerHelper.GetInstance().ParseXHtml(writer, doc, msHtml, msCss, System.Text.Encoding.UTF8, new ApplyArebicFont(System.Web.HttpContext.Current.Server.MapPath("~/fonts") + ConfigurationManager.AppSettings["ArebicFontName"].ToString()));
                 }
                 doc.SetPageSize(PageSize.A4.Rotate());
                 doc.NewPage();
@@ -1019,7 +1019,7 @@ namespace InsiderTrading.Controllers
 
                 var msHtml1 = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(FormHTMLContent));
                 //Parse the HTML
-                iTextSharp.tool.xml.XMLWorkerHelper.GetInstance().ParseXHtml(writer, doc, msHtml1, msCss1);
+                iTextSharp.tool.xml.XMLWorkerHelper.GetInstance().ParseXHtml(writer, doc, msHtml1, msCss1, System.Text.Encoding.UTF8, new ApplyArebicFont(System.Web.HttpContext.Current.Server.MapPath("~/fonts") + ConfigurationManager.AppSettings["ArebicFontName"].ToString()));
                 doc.Close();
                 //close the MemoryStream, grab all of the active bytes from the stream
                 bytes = ms.ToArray();
@@ -2554,7 +2554,7 @@ namespace InsiderTrading.Controllers
                             {
                                 using (var msHtml = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(LetterHTMLContent)))
                                 {
-                                    iTextSharp.tool.xml.XMLWorkerHelper.GetInstance().ParseXHtml(writer, doc, msHtml, msCss);
+                                    iTextSharp.tool.xml.XMLWorkerHelper.GetInstance().ParseXHtml(writer, doc, msHtml, msCss, System.Text.Encoding.UTF8, new ApplyArebicFont(System.Web.HttpContext.Current.Server.MapPath("~/fonts") + ConfigurationManager.AppSettings["ArebicFontName"].ToString()));
                                 }
                             }
 
