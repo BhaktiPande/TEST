@@ -286,6 +286,7 @@ namespace InsiderTrading.Controllers
                                             objUpsiSharingDataTable.DocumentNumber = objUpsiSharingData.DocumentNumber;
                                             objUpsiSharingDataTable.UserInfoId = objLoginUserDetails.LoggedInUserID;
                                             objUpsiSharingDataTable.PublishDate = objUpsiSharingData.PublishDate;
+                                            objUpsiSharingDataTable.CHKUserAndOther = objUpsiSharingData.CHKUserAndOther;
                                             objdata.Add(objUpsiSharingDataTable);
                                         }
                                     }
@@ -464,7 +465,7 @@ namespace InsiderTrading.Controllers
                 dt.Columns.Add(new DataColumn("UserInfoId", typeof(int)));
                 dt.Columns.Add(new DataColumn("ModeOfSharing", typeof(int)));
                 dt.Columns.Add(new DataColumn("Time", typeof(TimeSpan)));
-                dt.Columns.Add(new DataColumn("Temp1", typeof(string)));
+                dt.Columns.Add(new DataColumn("IsRegisteredUser", typeof(string)));
                 dt.Columns.Add(new DataColumn("Temp2", typeof(string)));
                 dt.Columns.Add(new DataColumn("Temp3", typeof(string)));
                 dt.Columns.Add(new DataColumn("Temp4", typeof(string)));
@@ -493,7 +494,7 @@ namespace InsiderTrading.Controllers
                         dt.Rows[rowCount]["UserInfoId"] = Convert.ToInt32(UsrContact.UserInfoId);
                         dt.Rows[rowCount]["ModeOfSharing"] = UsrContact.ModeOfSharing;
                         dt.Rows[rowCount]["Time"] = UsrContact.Time;
-                        dt.Rows[rowCount]["Temp1"] = UsrContact.Temp1;
+                        dt.Rows[rowCount]["IsRegisteredUser"] = UsrContact.CHKUserAndOther;
                         dt.Rows[rowCount]["Temp2"] = UsrContact.Temp2;
                         dt.Rows[rowCount]["Temp3"] = UsrContact.Temp3;
                         dt.Rows[rowCount]["Temp4"] = UsrContact.Temp4;
