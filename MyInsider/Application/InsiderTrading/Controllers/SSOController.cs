@@ -5,6 +5,9 @@ using InsiderTrading.Models;
 using System;
 using System.Collections;
 using System.Configuration;
+using System.Security.Claims;
+using System.Text;
+using System.Threading;
 using System.Web.Mvc;
 
 namespace InsiderTrading.Controllers
@@ -44,14 +47,43 @@ namespace InsiderTrading.Controllers
                 Generic.Instance().ConnectionStringValue = DBConnection;
                 Generic.Instance().SsoLogFilePath = ConfigurationManager.AppSettings["SSOLogfilePath"].ToString();
                 Generic.Instance().SsoLogStoreLocation = ConfigurationManager.AppSettings["SSOLogStoreLocation"].ToString();
-
-                if (response["SAMLResponse"] != null)
+                using (ESOP.SSO.Library.SAMLResponse samlResponse = new ESOP.SSO.Library.SAMLResponse())
                 {
-                    using (ESOP.SSO.Library.SAMLResponse samlResponse = new ESOP.SSO.Library.SAMLResponse())
+                    ViewBag.RequestStatus = CommonConstant.s_SSOProcessing;
+                    samlResponse.LoadXmlFromBase64(response["SAMLResponse"]);
+                    if (samlResponse.SsoProperty.IsValidateSSO)
                     {
-                        samlResponse.LoadXmlFromBase64(response["SAMLResponse"]);
+                        //samlResponse.SsoProperty.IsValidateSSO = samlResponse.IsSSOValidate;
                         TempData["samlResponseData"] = samlResponse.SsoProperty;
                         return RedirectToAction("InitiateIDPOrSP", "SSO");
+                    }
+
+                }
+            }
+            catch (Exception exception)
+            {
+                ViewBag.RequestStatus = exception.Message.ToString();
+            }
+
+            return View("SSO");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AssertionConsumerNew(FormCollection response)
+        {
+            try
+            {
+                string empnumber = HttpContext.User.Identity.Name;
+                var prinicpal = (ClaimsPrincipal)Thread.CurrentPrincipal;
+
+                if (prinicpal != null)
+                {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    foreach (var item in prinicpal.Claims)
+                    {
+                        stringBuilder.AppendLine(item.Type.ToString() + ": " + item.Value);
+                        //LogWriter.LogMessage(item.Type.ToString() + ": " + item.Value, true);
                     }
                 }
 
@@ -63,6 +95,58 @@ namespace InsiderTrading.Controllers
 
             return View("SSO");
         }
+        #region // POST: /SSO/AssertionConsumer
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AssertionConsumerAirtel(FormCollection response)
+        {
+            try
+            {
+                string EmailId = string.Empty;
+                string CompanyName = string.Empty;
+                string empnumber = HttpContext.User.Identity.Name;
+                var prinicpal = (ClaimsPrincipal)Thread.CurrentPrincipal;
+                string companyName = ConfigurationManager.AppSettings["Airtel"].ToString();
+                if (prinicpal != null)
+                {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    foreach (var item in prinicpal.Claims)
+                    {
+                        stringBuilder.AppendLine(item.Type.ToString() + ": " + item.Value);
+                        //LogWriter.LogMessage(item.Type.ToString() + ": " + item.Value, true);
+                    }
+                }
+
+                //EmailId = Request.QueryString["EmailId"];
+                //CompanyName = Request.QueryString["CompanyName"];
+
+                Hashtable ht_Parmeters = new Hashtable();
+                //empnumber = "anand.kulkarni@esopdirect.com";
+                ht_Parmeters.Add(CommonConstant.s_AttributeEmail, empnumber);
+                ht_Parmeters.Add(CommonConstant.s_AttributeComapnyName, companyName);
+
+                ViewBag.RequestStatus = CommonConstant.sRequestStatusSAML_RESPONSE;
+                ViewBag.IsRequestValid = false;
+                using (SSOModel SSOModel = new SSOModel())
+                {
+                    SSOModel.SetupLoginDetails(ht_Parmeters);
+                    ViewBag.IsRequestValid = true;
+                    Session["loginStatus"] = 1;
+                    HttpContext.Session.Add("UserCaptchaText", string.Empty);
+                    HttpContext.Session.Add(ConstEnum.SessionValue.CookiesValidationKey, "");
+                    HttpContext.Session.Add("formField", "130");
+                    return RedirectToAction("Index", "Home", new { acid = Convert.ToString(0) });
+                }
+            }
+            catch (Exception exception)
+            {
+                ViewBag.RequestStatus = exception.Message.ToString();
+            }
+
+            return View("SSO");
+        }
+        #endregion
+
         #endregion
 
         #region // POST: /SSO/AssertionConsumer
@@ -130,6 +214,7 @@ namespace InsiderTrading.Controllers
                             }
                             else
                             {
+                                ViewBag.RequestStatus = CommonConstant.sRequestStatusSAML_REQUEST;
                                 string getSamalRequest = SSOModel.CreateNewAuthnRequest(sSoData);
                                 Response.Redirect(sSoData.IDP_SP_URL + "?SAMLRequest=" + getSamalRequest, true);
                             }
@@ -158,6 +243,11 @@ namespace InsiderTrading.Controllers
                                         HttpContext.Session.Add(ConstEnum.SessionValue.CookiesValidationKey, "");
                                         return RedirectToAction("Index", "Home", new { acid = Convert.ToString(0) });
                                     }
+                                }
+                                else
+                                {
+                                    ViewBag.RequestStatus = CommonConstant.s_InvalidResponse;
+                                    ViewBag.IsRequestValid = false;
                                 }
 
                             }
