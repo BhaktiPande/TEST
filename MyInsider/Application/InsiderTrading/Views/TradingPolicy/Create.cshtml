@@ -44,24 +44,24 @@
         @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
         <div class="row">
             <div class="col-lg-12">
-                <div class="panel panel-default">
-                    <div class="panel-body">
+                <div class="card panel-default">
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label>@InsiderTrading.Common.Common.getResource("rul_ttl_15142")</label>
                                 <div class="panel-group" id="accordion">
                                     
-                                    <div class="panel panel-accordion">
-                                        <div class="panel-heading active">
-                                            <h4 class="panel-title">
+                                    <div class="card panel-accordion">
+                                        <div class="card-header active">
+                                            <h4 class="card-title">
                                                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
                                                     <span class="fa fa-plus pull-right"></span>
                                                     @InsiderTrading.Common.Common.getResource("rul_ttl_15139")
                                                 </a>
                                             </h4>
                                         </div>
-                                        <div id="collapseOne" class="panel-collapse in">
-                                            <div class="panel-body">
+                                        <div id="collapseOne" class="panel-collapse show">
+                                            <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
                                                         <div class="form-group">
@@ -159,9 +159,9 @@
                                     </div>
                                     <!-- End Trading policy panel-->
 
-                                    <div class="panel panel-accordion">
-                                        <div class="panel-heading">
-                                            <h4 class="panel-title">
+                                    <div class="card panel-accordion">
+                                        <div class="card-header">
+                                            <h4 class="card-title">
                                                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
                                                     <span class="fa fa-plus pull-right"></span>
                                                     @InsiderTrading.Common.Common.getResource("rul_ttl_15143") 
@@ -169,7 +169,7 @@
                                             </h4>
                                         </div>
                                         <div id="collapseTwo" class="panel-collapse collapse">
-                                            <div class="panel-body">
+                                            <div class="card-body">
                                                 <div id="DivPreClearanceRequired">
                                                 @{
                                                     if (Model.TradingPolicyForCodeId == InsiderTrading.Common.ConstEnum.Code.TradingPolicyInsiderType)
@@ -188,9 +188,9 @@
                                     </div>
                                     <!-- End Pre-clearance requirement panel-->
 
-                                    <div class="panel panel-accordion">
-                                        <div class="panel-heading">
-                                            <h4 class="panel-title">
+                                    <div class="card panel-accordion">
+                                        <div class="card-header">
+                                            <h4 class="card-title">
                                                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven">
                                                     <span class="fa fa-plus pull-right"></span>
                                                     @InsiderTrading.Common.Common.getResource("rul_ttl_15144") 
@@ -198,7 +198,7 @@
                                             </h4>
                                         </div>
                                         <div id="collapseSeven" class="panel-collapse collapse">
-                                            <div class="panel-body">
+                                            <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                                         <div class="form-group">
@@ -244,9 +244,9 @@
                                     </div>
                                     <!-- End Disclosure frequencey-Initial disclosure panel-->
 
-                                    <div class="panel panel-accordion">
-                                        <div class="panel-heading">
-                                            <h4 class="panel-title">
+                                    <div class="card panel-accordion">
+                                        <div class="card-header">
+                                            <h4 class="card-title">
                                                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
                                                     <span class="fa fa-plus pull-right"></span>
                                                     @InsiderTrading.Common.Common.getResource("rul_ttl_15145") 
@@ -254,7 +254,7 @@
                                             </h4>
                                         </div>
                                         <div id="collapseThree" class="panel-collapse collapse">
-                                            <div class="panel-body">
+                                            <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-lg-4 col-md-4 col-sm-3 col-xs-12">
                                                         <div class="form-group">
@@ -371,9 +371,9 @@
                                     </div>
                                     <!-- End Disclosure frequencey-Trade(Continuous) disclosure panel-->
 
-                                    <div class="panel panel-accordion">
-                                        <div class="panel-heading">
-                                            <h4 class="panel-title">
+                                    <div class="card panel-accordion">
+                                        <div class="card-header">
+                                            <h4 class="card-title">
                                                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
                                                     <span class="fa fa-plus pull-right"></span>
                                                     @InsiderTrading.Common.Common.getResource("rul_ttl_15146") 
@@ -381,7 +381,7 @@
                                             </h4>
                                         </div>
                                         <div id="collapseFour" class="panel-collapse collapse">
-                                            <div class="panel-body">
+                                            <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-lg-4 col-md-4 col-sm-3 col-xs-12">
                                                         <div class="form-group">
@@ -423,9 +423,9 @@
                                     </div>
                                     <!-- End Disclosure frequencey-Period end disclosure panel-->
 
-                                    <div class="panel panel-accordion">
-                                        <div class="panel-heading">
-                                            <h4 class="panel-title">
+                                    <div class="card panel-accordion">
+                                        <div class="card-header">
+                                            <h4 class="card-title">
                                                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
                                                     <span class="fa fa-plus pull-right"></span>
                                                     @InsiderTrading.Common.Common.getResource("rul_ttl_15147") 
@@ -433,7 +433,7 @@
                                             </h4>
                                         </div>
                                         <div id="collapseFive" class="panel-collapse collapse">
-                                            <div class="panel-body">
+                                            <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                         <div class="form-group">
@@ -506,9 +506,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="panel panel-accordion">
-                                        <div class="panel-heading">
-                                            <h4 class="panel-title">
+                                    <div class="card panel-accordion">
+                                        <div class="card-header">
+                                            <h4 class="card-title">
                                                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseSix">
                                                     <span class="fa fa-plus pull-right"></span>
                                                     @InsiderTrading.Common.Common.getResource("rul_ttl_15454")
@@ -516,7 +516,7 @@
                                             </h4>
                                         </div>
                                         <div id="collapseSix" class="panel-collapse collapse">
-                                            <div class="panel-body">
+                                            <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                                                         <div class="form-group">
@@ -587,9 +587,9 @@
                                     </div>
                                     <!-- End General panel-->
 
-                                    <div class="panel panel-accordion">
-                                        <div class="panel-heading">
-                                            <h4 class="panel-title">
+                                    <div class="card panel-accordion">
+                                        <div class="card-header">
+                                            <h4 class="card-title">
                                                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseEight">
                                                     <span class="fa fa-plus pull-right"></span>
                                                     Documents
@@ -597,7 +597,7 @@
                                             </h4>
                                         </div>
                                         <div id="collapseEight" class="panel-collapse collapse">
-                                            <div class="panel-body">
+                                            <div class="card-body">
                                                 @{
     if (Model.TradingPolicyId == null || Model.TradingPolicyId == 0)
     {

@@ -12,7 +12,7 @@
 </section>
 
 <section class="content">
-    <table style="width:100%" class="data-table table table-bordered table-striped dataTable">
+    <table id="massUpload" style="width:100%" class="data-table table table-bordered table-striped dataTable">
         <tr>
             <th>
                 Mass Upload Type
@@ -20,9 +20,9 @@
             <th>
                 Action
             </th>
-            @*<th>
+            <th>
                 Template (XLS)
-            </th>*@
+            </th>
             <th>
                 Template (XLSX)
             </th>
@@ -34,9 +34,9 @@
                 <tr>
                     <td>@objMassUpload.MassUploadName</td>
                     <td>@{Html.RenderAction("Index", "MassUpload", new { acid = ViewBag.acid, massuploadid = @objMassUpload.MassUploadExcelId });}</td>
-                    @*<td>
+                    <td>
                         <a href="@Url.Action("DownloadTemplateExcel", "MassUpload", new { acid = ViewBag.acid, MassUploadId = @objMassUpload.MassUploadExcelId, Type = "xls" })">Download Template</a>
-                    </td>*@
+                    </td>
                     <td>
                         <a href="@Url.Action("DownloadTemplateExcel", "MassUpload", new { acid = ViewBag.acid, MassUploadId = @objMassUpload.MassUploadExcelId, Type = "xlsx" })">Download Template</a>
                     </td>
@@ -48,9 +48,9 @@
                  <tr>
                     <td>@objMassUpload.MassUploadName</td>
                     <td>@{Html.RenderAction("Index", "MassUpload", new { acid = ViewBag.acid, massuploadid = @objMassUpload.MassUploadExcelId });}</td>
-                   @*<td>                       
+                   <td>                       
                        <a href="@Url.Action("DownloadTemplateExcel", "MassUpload", new { acid = ViewBag.acid, MassUploadId = @objMassUpload.MassUploadExcelId, Type = "xls" })">Download Template</a>                      
-                   </td>*@
+                   </td>
                      <td>
                          @if (@objMassUpload.MassUploadExcelId == 6)
                          {
