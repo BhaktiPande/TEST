@@ -170,7 +170,8 @@ BEGIN
 				MS.CodeName  AS dis_grd_55010,
 				C.PublishDate AS dis_grd_55011,
 				C.UserInfoId, --@UserType as dis_grd_55024
-				CASE WHEN EXISTS(SELECT 1 FROM  usr_UserInfo WHERE EmailId = UD.Email) THEN 'Registered User' ELSE 'Unregistered User' END AS dis_grd_71001
+				--CASE WHEN EXISTS(SELECT 1 FROM  usr_UserInfo WHERE EmailId = UD.Email) THEN 'Registered User' ELSE 'Unregistered User' END AS dis_grd_71001
+				CASE WHEN (UD.IsRegisteredUser = 'True') THEN 'Registered User' ELSE 'Unregistered User' END AS dis_grd_71001
 				
 		FROM	#tmpList T INNER JOIN
 		        usr_UPSIDocumentDetail UD ON UD.UPSIDocumentDtsId= T.EntityID 
