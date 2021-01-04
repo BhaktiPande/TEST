@@ -460,35 +460,73 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 pull-left">
-                                        <div role="form">
-                                            @Html.Hidden("confirm_role", ((bool)ViewBag.show_create_role_link))
-                                            <button type="submit" class="btn btn-success pull-left" name="Create" id="emp_detail_save"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("usr_btn_50769")</button>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="row">
+                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                <div role="form">
+                                                    <div class="form-group">
+                                                        @Html.LabelFor(m => m.userInfoModel.PersonalAddress)
+                                                        @Html.TextAreaFor(m => m.userInfoModel.PersonalAddress, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.PersonalAddress).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.PersonalAddress).ToString(), new { @class = "form-control", style = "height:34px" }))
+                                                        <br />@Html.ValidationMessageFor(m => m.userInfoModel.PersonalAddress)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                <div role="form">
+                                                    <div class="form-group">
 
-                                            @if (objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.Admin || objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.COUserType)
-                                            {
-                                                @*<a class="btn btn-success" href='@Url.Action("Index", "Employee", new { acid = ViewBag.user_action_ViewDetails })' role="button">@InsiderTrading.Common.Common.getResource("com_btn_14010")</a>*@
-                                            }
-                                            else
-                                            {
-                                                if (!(bool)ViewBag.show_not_login_user_details)
-                                                {
-                                                    @*<a class="btn btn-success" href='@Url.Action("ViewDetails", "Employee", new { acid = ViewBag.user_action_ViewDetails, nUserInfoID = Model.userInfoModel.UserInfoId })' role="button">@InsiderTrading.Common.Common.getResource("com_btn_14010")</a>*@
-                                                }
-                                                else
-                                                {
-                                                    <a class="btn btn-success" href='@Url.Action("Index", "Home", new { acid = "0" })' role="button">@InsiderTrading.Common.Common.getResource("com_btn_14010")</a>
-                                                }
-                                            }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                <div role="form">
+                                                    <div class="form-group">
 
-                                            @Html.Hidden("partial_fetch", (int)ViewBag.user_action)
-                                            <input type="hidden" name="authorization" value="Create:@ViewBag.user_action,ConfirmDetails:@ViewBag.user_action" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                <div role="form">
+                                                    <div class="form-group">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 pull-left">
+                                            <div role="form">
+                                                @Html.Hidden("confirm_role", ((bool)ViewBag.show_create_role_link))
+                                                <button type="submit" class="btn btn-success pull-left" name="Create" id="emp_detail_save"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("usr_btn_50769")</button>
 
-                        </div>
+                                                @if (objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.Admin || objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.COUserType)
+                                                {
+                                                    @*<a class="btn btn-success" href='@Url.Action("Index", "Employee", new { acid = ViewBag.user_action_ViewDetails })' role="button">@InsiderTrading.Common.Common.getResource("com_btn_14010")</a>*@
+                                                }
+                                                else
+                                                {
+                                                    if (!(bool)ViewBag.show_not_login_user_details)
+                                                    {
+                                                        @*<a class="btn btn-success" href='@Url.Action("ViewDetails", "Employee", new { acid = ViewBag.user_action_ViewDetails, nUserInfoID = Model.userInfoModel.UserInfoId })' role="button">@InsiderTrading.Common.Common.getResource("com_btn_14010")</a>*@
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="btn btn-success" href='@Url.Action("Index", "Home", new { acid = "0" })' role="button">@InsiderTrading.Common.Common.getResource("com_btn_14010")</a>
+                                                    }
+                                                }
+
+                                                @Html.Hidden("partial_fetch", (int)ViewBag.user_action)
+                                                <input type="hidden" name="authorization" value="Create:@ViewBag.user_action,ConfirmDetails:@ViewBag.user_action" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
                     </div>
                 </div>
             </div>

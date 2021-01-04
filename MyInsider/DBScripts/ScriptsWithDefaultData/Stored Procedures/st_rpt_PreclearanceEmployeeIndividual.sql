@@ -123,7 +123,7 @@ BEGIN
 	DECLARE @nDataType_String INT = 1
 
 	DECLARE @sEmployeeID NVARCHAR(50)
-	DECLARE @sInsiderName NVARCHAR(100)
+	DECLARE @sInsiderName NVARCHAR(max)
 	
 	DECLARE @sPNT VARCHAR(10) = 'PNT'
 	DECLARE @sPCL VARCHAR(10) = 'PCL'
@@ -133,13 +133,13 @@ BEGIN
 	DECLARE @nExchangeTypeCodeId_NSE INT = 116001
 	
 	CREATE TABLE #tmpPreclearance(Id INT IDENTITY(1,1), UserInfoId INT, TransactionMasterId INT, TransactionMasterIdText VARCHAR(20), TransactionDetailsId INT, PreclearanceId VARCHAR(50), RequestDate DATETIME,
-	ScripName VARCHAR(100), ISIN VARCHAR(100), TransactionTypeCodeId INT, SecurityTypeCodeId INT, PreQuantity INT, PreValue DECIMAL(25, 4),
+	ScripName NVARCHAR(100), ISIN VARCHAR(100), TransactionTypeCodeId INT, SecurityTypeCodeId INT, PreQuantity INT, PreValue DECIMAL(25, 4),
 	PreclearanceStatusId INT, PreStatusDate DATETIME, PreApplicableTill DATETIME, BuyQuantity INT, SellQuantity INT, DateOfAcquisition DATETIME,
 	TradeValue DECIMAL(25,4), ReasonForNotTradedCodeId INT, 
 	CommentId_Ok INT, CommentId_TrdAftPClDate INT, CommentId_TrdWithoutPcl INT, CommentId_PclNotRq INT, CommentId_TrdDuringBlckout INT,
 	CommentId_Pending INT, CommentId_QtyExceeds INT, CommentId_ValueExceeds INT, CommentId_QtyValueExceeds INT, CommentId_TradeDetailsNotSubmitted INT, CommentId_ContraTrade INT, 
 	CommentId_PartiallyTraded INT, CommentId_BalanceTradeDetailsPending INT, CommentText VARCHAR(MAX), ContraTradeQty DECIMAL(10,0),TradingPolicyId INT,ModeofAcquisition INT
-	,UpdatedValidity DATETIME, Preclearance_comments VARCHAR(MAX),UpdatedNoOfSecurity INT)
+	,UpdatedValidity DATETIME, Preclearance_comments VARCHAR(MAX),UpdatedNoOfSecurity INT, CurrencyId INT)
 
 	DECLARE @tmpPCLQty TABLE(PreclearanceId INT, TradeQty INT, TradeValue DECIMAL(25,4), CommentId INT, 
 			TradingPolicyId INT, SecurityTypeCodeId INT, MinAcqDate DATETIME, TradeQtyLimit INT, TradeValueLimit DECIMAL(20,4), PercentageLimit DECIMAL(10,4), ValueFromPerc DECIMAL(20,4), PaidUpCapital DECIMAL(20,4))
@@ -149,7 +149,7 @@ BEGIN
 	DECLARE @tmpTransactionIdForLimits TABLE (TransactionMasterId INT, TradeQty INT, TradeValue DECIMAL(25,4), 
 				TradingPolicyId INT, SecurityTypeCodeId INT, MinAcqDate DATETIME, TradeQtyLimit INT, TradeValueLimit DECIMAL(20,4), PercentageLimit DECIMAL(10,4), ValueFromPerc DECIMAL(20,4), PaidUpCapital DECIMAL(20,4))
 	
-	DECLARE @tmpUserDetails TABLE(Id INT IDENTITY(1,1), RKey VARCHAR(20), Value VARCHAR(50), DataType INT)
+	DECLARE @tmpUserDetails TABLE(Id INT IDENTITY(1,1), RKey NVARCHAR(20), Value NVARCHAR(max), DataType INT)
 	
 	DECLARE curTDds CURSOR FOR 
 	SELECT TransactionDetailsId FROM #tmpPreclearance
@@ -289,7 +289,7 @@ BEGIN
 					
 			INSERT INTO @tmpUserDetails(RKey, Value, DataType)
 			VALUES ('rpt_lbl_19173', @sEmployeeID, @nDataType_String),
-				('rpt_lbl_19174', dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max), @sInsiderName),1)), @nDataType_String)
+				('rpt_lbl_19174',   CONVERT(NVARCHAR(max), @sInsiderName) , @nDataType_String)
 
 			INSERT INTO #tmpList(RowNumber, EntityID)
 			VALUES (1,1)
@@ -374,7 +374,7 @@ BEGIN
 			INSERT INTO #tmpPreclearance(TransactionMasterId, TransactionMasterIdText, TransactionDetailsId, UserInfoId, PreclearanceId, RequestDate, ScripName, ISIN, TransactionTypeCodeId, SecurityTypeCodeId,
 					PreQuantity, PreValue, PreclearanceStatusId, PreStatusDate,
 					BuyQuantity, SellQuantity, DateOfAcquisition, TradeValue, ReasonForNotTradedCodeId,TradingPolicyId,ModeofAcquisition
-					,UpdatedNoOfSecurity,Preclearance_comments,UpdatedValidity,PreApplicableTill
+					,UpdatedNoOfSecurity,Preclearance_comments,UpdatedValidity,PreApplicableTill,CurrencyId  
 					)
 			SELECT DISTINCT TM.TransactionMasterId, 
 					CASE WHEN PR.PreclearanceRequestId IS NULL THEN @sPNT + CONVERT(VARCHAR(10), TM.DisplayRollingNumber) ELSE @sPCL + CONVERT(VARCHAR(10), TM.DisplayRollingNumber) END,
@@ -402,7 +402,8 @@ BEGIN
 				,PR.SecuritiesToBeTradedQty,
 				PR.ReasonForApproval,
 				PR.PreclearanceValidityDateUpdatedByCO,
-				PR.PreclearanceValidityDateOld			
+				PR.PreclearanceValidityDateOld,	
+				ISNULL( TD.CurrencyId,PR.CurrencyId) as currency
 				FROM #tmpTransactionIds tmpTM JOIN tra_TransactionMaster TM ON tmpTM.TransactionMasterId = TM.TransactionMasterId
 				JOIN usr_UserInfo UF ON TM.UserInfoId = UF.UserInfoId
 				JOIN mst_Company C ON UF.CompanyId = C.CompanyId
@@ -415,7 +416,7 @@ BEGIN
 												)
 												AND ELPre.MapToTypeCodeId = 132004 AND ELPre.MapToId = PR.PreclearanceRequestId
 			
-			
+		       
 			-- Update Applicable till date
 			--UPDATE tmpData
 			--SET PreApplicableTill = ELApp.EventDate--CONVERT(date, dbo.uf_tra_GetNextTradingDateOrNoOfDaysWithWinCloseDate(ELApp.EventDate,TP.PreClrApprovalValidityLimit,null,0,1,0,@nExchangeTypeCodeId_NSE,TEMP.EventType,TEMP.WindowCloseDate))
@@ -787,13 +788,16 @@ BEGIN
 				TransactionDetailsId
 				,tmpData.UpdatedNoOfSecurity AS usr_grd_52131,
 				dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max),tmpData.Preclearance_comments),1) AS usr_grd_52132,
-				dbo.uf_rpt_FormatDateValue(tmpData.UpdatedValidity,0) AS usr_grd_52133
+				dbo.uf_rpt_FormatDateValue(tmpData.UpdatedValidity,0) AS usr_grd_52133,
+				Currency.DisplayCode  as rpt_grd_54229
+
 			FROM #tmpList t JOIN #tmpPreclearance tmpData ON t.EntityID = tmpData.Id
 				JOIN com_Code CTransaction ON tmpData.TransactionTypeCodeId = CTransaction.CodeID
 				JOIN com_Code CSecurity ON tmpData.SecurityTypeCodeId = CSecurity.CodeID
 				LEFT JOIN tra_TransactionMaster TM ON tmpData.TransactionMasterId = TM.TransactionMasterId
 				LEFT JOIN com_Code CPreStatus ON tmpData.PreclearanceStatusId = CPreStatus.CodeID
 				LEFT JOIN com_Code CRsnNotTrd ON tmpData.ReasonForNotTradedCodeId = CRsnNotTrd.CodeID
+				LEFT JOIN com_Code Currency ON Currency.CodeID = tmpData.CurrencyId
 				--LEFT JOIN #tmpComments tComment ON tmpData.CommentId = tComment.CodeId
 			WHERE ((@inp_iPageSize = 0)
 						OR (T.RowNumber BETWEEN ((@inp_iPageNo - 1) * @inp_iPageSize + 1) AND (@inp_iPageNo * @inp_iPageSize)))

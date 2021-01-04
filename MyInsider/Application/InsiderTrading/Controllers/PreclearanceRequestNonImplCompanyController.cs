@@ -16,6 +16,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
+using System.Linq.Expressions;
+using System.Configuration;
 
 namespace InsiderTrading.Controllers
 {
@@ -108,7 +110,7 @@ namespace InsiderTrading.Controllers
                             {
                                 using (var msHtml = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(LetterHTMLContent)))
                                 {
-                                    iTextSharp.tool.xml.XMLWorkerHelper.GetInstance().ParseXHtml(writer, doc, msHtml, msCss);
+                                    iTextSharp.tool.xml.XMLWorkerHelper.GetInstance().ParseXHtml(writer, doc, msHtml, msCss, System.Text.Encoding.UTF8, new ApplyArebicFont(System.Web.HttpContext.Current.Server.MapPath("~/fonts") + ConfigurationManager.AppSettings["ArebicFontName"].ToString()));
                                 }
                             }
 
@@ -2324,11 +2326,11 @@ namespace InsiderTrading.Controllers
                 if (bReturn)
                 {
                     statusFlag = true;
-                    ErrorDictionary.Add("success", "Preclearance rejected successfully");
+                    ErrorDictionary.Add("success", "Preclearance approved successfully");
                 }
                 else
                 {
-                    ErrorDictionary.Add("error", "Preclearance rejection failed");
+                    ErrorDictionary.Add("error", "Preclearance approval failed");
                 }
                 return Json(new { status = statusFlag, Message = ErrorDictionary }, JsonRequestBehavior.AllowGet);
             }

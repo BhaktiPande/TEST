@@ -370,6 +370,15 @@
             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                 <div role="form">
                     <div class="form-group">
+                        @Html.LabelFor(m => m.PersonalAddress)
+                        @Html.TextBoxFor(m => m.PersonalAddress, @InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.PersonalAddress).ToString(), Html.ActivityResourceKeyFor(m => m.PersonalAddress).ToString(), new { @class = "form-control" }, 0, 1))
+                       <br /> @Html.ValidationMessageFor(m => m.PersonalAddress)
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                <div role="form">
+                    <div class="form-group">
                         <label></label> <br />
                         @if (objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.Admin || objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.COUserType)
                         {

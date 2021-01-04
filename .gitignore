@@ -1,0 +1,23 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/MyInsider/Application/.vs/InsiderTrading/v16/Server/sqlite3/db.lock
+/MyInsider/DBScripts/.vs
+/MyInsider/DBScripts/ScriptsWithDefaultData/.vs/ScriptsWithDefaultData/v16
+/MyInsider/DBScripts/ScriptsWithDefaultData/.vs
+/MyInsider/DBScripts/ScriptsWithDefaultData/002. Tables/.vs/002. Tables/v16
+/MyInsider/DBScripts/ScriptsWithDefaultData/002. Tables/.vs/ProjectSettings.json
+/MyInsider/DBScripts/ScriptsWithDefaultData/002. Tables/.vs
+/MyInsider/DBScripts/ScriptsWithDefaultData/Stored Procedures/.vs
+/MyInsider/InsiderTrading_NotificationService/InsiderTrading_NotificationService/obj
+/.vs/EtisalatCurrency/v16
+/MyInsider/Application/InsiderTrading
+/MyInsider/Application/InsiderTradingDAL/obj/Debug
+/MyInsider/Application/InsiderTradingDAL/obj/Release
+/MyInsider/Application/InsiderTradingEncryption/obj
+/MyInsider/Application/INSIDERTRADINGMASSUPLOAD/obj/Release
+/MyInsider/Application/InsiderTradingSSO/obj/Release
+/MyInsider/Application/DataUploadUtility/obj/Release
+/MyInsider/Application/INSIDERTRADINGEXCELWRITER/obj/Release
+/MyInsider/DBScripts/ScriptsWithDefaultData/Stored Procedures/st_tra_ContinousDisclosureEmployeeInsiderLetterList1.sql

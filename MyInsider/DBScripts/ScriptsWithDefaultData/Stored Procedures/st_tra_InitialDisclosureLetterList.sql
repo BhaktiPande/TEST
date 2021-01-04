@@ -151,7 +151,7 @@ BEGIN
 			IF(@nNoInitialHoldingFlag = 1)
 			BEGIN 
 				CREATE TABLE #LetterRecordsNoHolding (
-					UserInfoId INT, dis_grd_17131 VARCHAR(MAX), dis_grd_17132 VARCHAR(50), dis_grd_17133 DATETIME, dis_grd_17134 VARCHAR(50),
+					UserInfoId INT, dis_grd_17131 NVARCHAR(MAX), dis_grd_17132 NVARCHAR(50), dis_grd_17133 DATETIME, dis_grd_17134 VARCHAR(50),
 					dis_grd_17135 VARCHAR(50), dis_grd_17136 VARCHAR(50), dis_grd_17137 VARCHAR(50)
 				)
 				
@@ -231,7 +231,7 @@ BEGIN
 			ELSE 
 			BEGIN 
 				CREATE TABLE #LetterRecords (
-					TransactionDetailsId BIGINT, ForUserInfoId INT, dis_grd_17131 VARCHAR(MAX), dis_grd_17132 VARCHAR(MAX), 
+					TransactionDetailsId BIGINT, ForUserInfoId INT, dis_grd_17131 NVARCHAR(MAX), dis_grd_17132 VARCHAR(MAX), 
 					dis_grd_17133 datetime, dis_grd_17134 VARCHAR(MAX), dis_grd_17135 VARCHAR(MAX), dis_grd_17136 VARCHAR(MAX), 
 					dis_grd_17137 VARCHAR(MAX)
 				)
@@ -414,13 +414,15 @@ BEGIN
 									END) 
 							ELSE '-' 
 						END as dis_grd_17142,
-						CASE WHEN td.SecurityTypeCodeId = @SecuriyType_Options THEN CONVERT(VARCHAR(MAX),Value) ELSE '-' END as dis_grd_17143
+						CASE WHEN td.SecurityTypeCodeId = @SecuriyType_Options THEN CONVERT(VARCHAR(MAX),Value) ELSE '-' END as dis_grd_17143,
+						currency.DisplayCode as rpt_grd_54229
 				from	tra_TransactionDetails td
 						JOIN @temp t ON t.UserInfoId = td.ForUserInfoId
 						JOIN usr_UserInfo u on u.UserInfoId = t.UserInfoId 
 						LEFT JOIN mst_Company co ON u.CompanyId = co.CompanyId
 						JOIN com_Code C ON C.CodeID = td.SecurityTypeCodeId
 						JOIN tra_TransactionMaster tm ON tm.TransactionMasterId = td.TransactionMasterId
+						LEFT JOIN com_Code currency ON currency.CodeID = TD.CurrencyID
 				where	td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb,@SecuriyType_Futures,@SecuriyType_Options) 
 					and tm.DisclosureTypeCodeId = @Discclosureype_Initial AND td.TransactionMasterId = @inp_iTransactionMasterId /*and
 					td.SecurityTypeCodeId in( @SecuriyType_Futures,@SecuriyType_Options)*/

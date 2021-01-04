@@ -130,7 +130,8 @@ BEGIN
 
 		SELECT UR.UserRelationId AS UserRelationId,
 			UR.UserInfoIdRelative AS UserInfoId,
-			dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max),ISNULL(UF.FirstName,'') + ' ' + ISNULL(UF.LastName,'')),1) AS usr_grd_11086, -- DependentName,
+			 CONVERT(NVARCHAR(max),ISNULL(UF.FirstName,'') + ' ' + ISNULL(UF.LastName,'')) AS usr_grd_11086,
+			--dbo.uf_rpt_FormatValue(CONVERT(NVARCHAR(max),ISNULL(UF.FirstName,'') + ' ' + ISNULL(UF.LastName,'')),1) AS usr_grd_11086, -- DependentName,
 			dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max),CRelation.CodeName),1) AS usr_grd_11087, --Relation,
 			dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max),ISNULL(UF.AddressLine1,'') + ' ' + ISNULL(UF.AddressLine2, '')),1) AS usr_grd_11088, --Address,
 			dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max),UF.MobileNumber),1) AS usr_grd_11089, --ContactNumber,

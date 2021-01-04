@@ -128,14 +128,14 @@ DatatableGrid.prototype.init = function () {
     var GridType_114005_sortOffList = ["usr_grd_50755", "usr_grd_11094", "usr_grd_11095", "usr_grd_11096", "usr_grd_11097", "usr_grd_11098", "usr_grd_50752"];
     sortOffList = sortOffList.concat(GridType_114005_sortOffList);
 
-    var GridType_114071_sortOffList = ["tra_grd_16190", "tra_grd_16191", "tra_grd_16192", "tra_grd_16193", "tra_grd_16194", "tra_grd_16195", "tra_grd_16196", "tra_grd_16197", "tra_grd_16198", "tra_grd_16199", "tra_grd_16200"];
+    var GridType_114071_sortOffList = ["tra_grd_16190", "tra_grd_16191", "tra_grd_16192", "tra_grd_16193", "tra_grd_16194", "tra_grd_16195", "tra_grd_16196", "tra_grd_16197", "tra_grd_16198", "tra_grd_16199", "tra_grd_16200","rpt_grd_54229"];
     sortOffList = sortOffList.concat(GridType_114071_sortOffList);
 
     //BYSA
     var GridType_114101_sortOffList = ["tra_grd_50651", "tra_grd_50652", "tra_grd_50653", "tra_grd_50654", "tra_grd_50655", "tra_grd_50656", "tra_grd_50657", "tra_grd_50658", "tra_grd_50659", "tra_grd_50660", "tra_grd_50661"];
     sortOffList = sortOffList.concat(GridType_114101_sortOffList);
     //BYSA
-    var GridType_114102_sortOffList = ["tra_grd_50741", "tra_grd_50742", "tra_grd_50743", "tra_grd_50744", "tra_grd_50745", "tra_grd_50746", "tra_grd_50747", "tra_grd_50748", "tra_grd_50749", "tra_grd_50750", "tra_grd_50783", "tra_grd_50784"];
+    var GridType_114102_sortOffList = ["tra_grd_50741", "tra_grd_50742", "tra_grd_50743", "tra_grd_50744", "tra_grd_50745", "tra_grd_50746", "tra_grd_50747", "tra_grd_50748", "tra_grd_50749", "tra_grd_50750", "tra_grd_50783", "tra_grd_50784", "rpt_grd_54229"];
     sortOffList = sortOffList.concat(GridType_114102_sortOffList);
 
     var GridType_114103_sortOffList = ["dis_grd_50754", "dis_grd_50755", "dis_grd_50756", "dis_grd_50757", "dis_grd_50758"];
@@ -1731,9 +1731,70 @@ DatatableGrid.prototype.format = {
                 str = '<input type="text" id="txttra_grd_16200" class="form-control"  value="' + obj.aData['tra_grd_16200'] + '" readonly="readonly" data-toggle="tooltip" title="' + DematMsg.value + '"/>'
             }
             return str;
+        },
+        'rpt_grd_54229': function (obj, type) {
+            var arr = JSON.parse($('#hdCurrencyList').val());
+
+            var options = "";
+            var str = "";
+            if (obj.aData['TransStatusCodeId'] == 148003) {
+                str = "<select name='rpt_grd_54229' id='drpCurrency'  class='form-control' disabled >";
+            } else {
+                str = "<select name='rpt_grd_54229' id='drpCurrency'  class='form-control'  >";
+            }
+        
+            if (obj.aData['DmatId'] != '' && obj.aData['DmatId'] != null && (obj.aData['TransStatusCodeId'] == 148002 || obj.aData['TransStatusCodeId'] == 148001)) {
+               
+                arr.forEach(function (item) {
+                    if (obj.aData['rpt_grd_54229'] == 117001 && item.Key == 117001) {
+                        options = options + "<option value=" + item.Key + " selected> " + item.Value + " </option>";
+                    }
+                    else if (obj.aData['rpt_grd_54229'] == 117002 && item.Key == 117002) {
+                        options = options + "<option value=" + item.Key + " selected> " + item.Value + " </option>";
+                    }
+                    else if (obj.aData['rpt_grd_54229'] == 117003 && item.Key == 117003) {
+                        options = options + "<option value=" + item.Key + " selected> " + item.Value + " </option>";
+                    }
+                    else { options = options + "<option value=" + item.Key + "> " + item.Value + " </option>"; }
+                });
+                
+           }
+            else if (obj.aData['DmatId'] != '' && obj.aData['DmatId'] != null && obj.aData['TransStatusCodeId'] == 148003) {
+
+                arr.forEach(function (item) {
+                    if (obj.aData['rpt_grd_54229'] == 117001 && item.Key == 117001) {
+                        options = options + "<option value=" + item.Key + " selected> " + item.Value + " </option>";
+                    }
+                    else if (obj.aData['rpt_grd_54229'] == 117002 && item.Key == 117002) {
+                        options = options + "<option value=" + item.Key + " selected> " + item.Value + " </option>";
+                    }
+                    else if (obj.aData['rpt_grd_54229'] == 117003 && item.Key == 117003) {
+                        options = options + "<option value=" + item.Key + " selected> " + item.Value + " </option>";
+                    }
+                    else { options = options + "<option value=" + item.Key + "> " + item.Value + " </option>"; }
+                });
+                
+            }
+            else {
+                arr.forEach(function (item) {
+                    if (obj.aData['rpt_grd_54229'] == 117001 && item.Key == 117001) {
+                        options = options + "<option value=" + item.Key + " selected> " + item.Value + " </option>";
+                    }
+                    else if (obj.aData['rpt_grd_54229'] == 117002 && item.Key == 117002) {
+                        options = options + "<option value=" + item.Key + " selected> " + item.Value + " </option>";
+                    }
+                    else if (obj.aData['rpt_grd_54229'] == 117003 && item.Key == 117003) {
+                        options = options + "<option value=" + item.Key + " selected > " + item.Value + " </option>";
+                    }
+                    else { options = options + "<option value=" + item.Key + "> " + item.Value + " </option>"; }
+                });
+            }
+            str = str + options+"</select>";
+            return str;
         }
          ,
         'tra_grd_16198': function (obj, type) {
+           
             var str = "";
             if (obj.aData['DmatId'] != '' && obj.aData['DmatId'] != null && (obj.aData['TransStatusCodeId'] == 148002 || obj.aData['TransStatusCodeId'] == 148001)) {
                 str = '<input type="text" id="txttra_grd_16198" class="form-control" onKeyPress="return onlyNumbers(this)" maxlength="10" value="' + obj.aData['tra_grd_16198'] + '"/>'
@@ -1747,6 +1808,8 @@ DatatableGrid.prototype.format = {
             }
             return str;
         }
+      
+        
     },
     //Relative Initial Disclosure List For share   //BYSA
     'GridType_114102': {
@@ -1854,6 +1917,67 @@ DatatableGrid.prototype.format = {
             else {
                 str = '<input type="text" id="txttra_grd_50783" class="form-control" onKeyPress="return onlyNumbers(this)" maxlength="10" value="' + obj.aData['tra_grd_50783'] + '" readonly="readonly" data-toggle="tooltip" title="' + DematMsg.value + '"/>'
             }
+            return str;
+        },
+        'rpt_grd_54229': function (obj, type) {
+            var arr = JSON.parse($('#hdCurrencyList').val());
+
+            var options = "";
+            var str = "";
+
+            if (obj.aData['TransStatusCodeId'] == 148003) {
+                str = "<select name='rpt_grd_54229' id='drpCurrency'  class='form-control' disabled >";
+            } else {
+                str = "<select name='rpt_grd_54229' id='drpCurrency'  class='form-control'  >";
+            }
+
+            if (obj.aData['relDmatId'] != '' && obj.aData['relDmatId'] != null && (obj.aData['TransStatusCodeId'] == 148002 || obj.aData['TransStatusCodeId'] == 148001)) {
+
+                arr.forEach(function (item) {
+                    if (obj.aData['rpt_grd_54229'] == 117001 && item.Key == 117001) {
+                        options = options + "<option value=" + item.Key + " selected> " + item.Value + " </option>";
+                    }
+                    else if (obj.aData['rpt_grd_54229'] == 117002 && item.Key == 117002) {
+                        options = options + "<option value=" + item.Key + " selected> " + item.Value + " </option>";
+                    }
+                    else if (obj.aData['rpt_grd_54229'] == 117003 && item.Key == 117003) {
+                        options = options + "<option value=" + item.Key + " selected> " + item.Value + " </option>";
+                    }
+                    else { options = options + "<option value=" + item.Key + "> " + item.Value + " </option>"; }
+                });
+
+            }
+            else if (obj.aData['relDmatId'] != '' && obj.aData['relDmatId'] != null && obj.aData['TransStatusCodeId'] == 148003) {
+
+                arr.forEach(function (item) {
+                    if (obj.aData['rpt_grd_54229'] == 117001 && item.Key == 117001) {
+                        options = options + "<option value=" + item.Key + " selected> " + item.Value + " </option>";
+                    }
+                    else if (obj.aData['rpt_grd_54229'] == 117002 && item.Key == 117002) {
+                        options = options + "<option value=" + item.Key + " selected> " + item.Value + " </option>";
+                    }
+                    else if (obj.aData['rpt_grd_54229'] == 117003 && item.Key == 117003) {
+                        options = options + "<option value=" + item.Key + " selected> " + item.Value + " </option>";
+                    }
+                    else { options = options + "<option value=" + item.Key + "> " + item.Value + " </option>"; }
+                });
+
+            }
+            else {
+                arr.forEach(function (item) {
+                    if (obj.aData['rpt_grd_54229'] == 117001 && item.Key == 117001) {
+                        options = options + "<option value=" + item.Key + " selected> " + item.Value + " </option>";
+                    }
+                    else if (obj.aData['rpt_grd_54229'] == 117002 && item.Key == 117002) {
+                        options = options + "<option value=" + item.Key + " selected> " + item.Value + " </option>";
+                    }
+                    else if (obj.aData['rpt_grd_54229'] == 117003 && item.Key == 117003) {
+                        options = options + "<option value=" + item.Key + " selected> " + item.Value + " </option>";
+                    }
+                    else { options = options + "<option value=" + item.Key + "> " + item.Value + " </option>"; }
+                });
+            }
+            str = str + options + "</select>";
             return str;
         },
         'tra_grd_50784': function (obj, type) {

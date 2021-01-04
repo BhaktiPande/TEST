@@ -89,11 +89,12 @@ BEGIN
 	
 	DECLARE @nPreviousPeriodHolding INT
 	DECLARE @nCurrentPeriodHolding INT
+	DECLARE @nCurrency NVARCHAR(50)
 	
 	DECLARE @nPreviousPeriodValue DECIMAL(25,4)
 	DECLARE @nCurrentPeriodValue DECIMAL(25,4)
 	
-	DECLARE @sScriptName VARCHAR(100)
+	DECLARE @sScriptName NVARCHAR(100)
 	DECLARE @sISIN VARCHAR(100)
 	DECLARE @sPreviousHolding VARCHAR(100) -- 'rpt_lbl_19236', 'Previous Holdings'
 	DECLARE @sCurrentHolding VARCHAR(100) -- 'rpt_lbl_19237', 'Current Holdings'
@@ -104,10 +105,10 @@ BEGIN
 	DECLARE @nTransactionType_CashlessAll INT = 143004
 	DECLARE @nTransactionType_CashlessPartial INT = 143005
 	
-	DECLARE @tmpUserDetails TABLE(Id INT IDENTITY(1,1), RKey VARCHAR(20), Value VARCHAR(50), DataType INT)
+	DECLARE @tmpUserDetails TABLE(Id INT IDENTITY(1,1), RKey VARCHAR(20), Value NVARCHAR(max), DataType INT)
 	DECLARE @tmpUserTable TABLE(Id INT IDENTITY(1,1), UserInfoId INT, UserInfoIdRelative INT, SecurityTypeCodeId INT, DMATDetailsID INT, Relation VARCHAR(100), Holdings Decimal(20), Value Decimal(25,4))
 	DECLARE @tmpFinal TABLE(Id INT IDENTITY(1,1), ScriptName NVARCHAR(200), ISIN VARCHAR(100), SecurityType VARCHAR(100), TransactionType VARCHAR(100),
-							PreviousHoldings INT, BuyQuantity INT, SellQuantity INT, Value DECIMAL(25,4), DateOfAcquisition DATETIME)
+							PreviousHoldings INT, BuyQuantity INT, SellQuantity INT, Value DECIMAL(25,4), DateOfAcquisition DATETIME, Currency NVARCHAR(50) )
 	
 	DECLARE @nPeriodTypeCodeId INT
 	
@@ -184,7 +185,7 @@ BEGIN
 			
 			INSERT INTO @tmpUserDetails(RKey, Value, DataType)
 			VALUES ('rpt_lbl_19135', @sEmployeeID, @nDataType_String),
-				('rpt_lbl_19136', dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max), @sInsiderName),1)), @nDataType_String),
+				('rpt_lbl_19136',  CONVERT(NVARCHAR(max), @sInsiderName) , @nDataType_String),
 				('rpt_lbl_19137', dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max), @sDesignation),1)), @nDataType_String),
 				('rpt_lbl_19147', ISNULL(@sCINDIN, ''), @nDataType_String),
 				('rpt_lbl_19138', dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max), @sGrade),1)), @nDataType_String),
@@ -269,8 +270,9 @@ BEGIN
 					SELECT @nPreviousPeriodHolding = 0, @nPreviousPeriodValue = 0
 				END
 				
-				SELECT top(1) @nCurrentPeriodHolding = ClosingBalance, @nCurrentPeriodValue = Value
+				SELECT top(1) @nCurrentPeriodHolding = ClosingBalance, @nCurrentPeriodValue = Value, @nCurrency=currency.DisplayCode
 				FROM tra_TransactionSummaryDMATWise
+					LEFT JOIN com_Code currency ON currency.CodeID = CurrencyID
 				WHERE UserInfoId = @inp_iUserInfoId
 					AND UserInfoIdRelative = ISNULL(@inp_iUserInfoIdRelative, @inp_iUserInfoId)
 					AND SecurityTypeCodeId = @inp_iSecurityTypeCodeId
@@ -287,10 +289,10 @@ BEGIN
 
 				--INSERT INTO @tmpFinal (ScriptName, ISIN) VALUES (@sScriptName, @sISIN)
 
-				INSERT INTO @tmpFinal (ScriptName, ISIN, TransactionType, PreviousHoldings, Value) VALUES (@sScriptName, @sISIN, @sPreviousHolding, @nPreviousPeriodHolding, @nPreviousPeriodValue)
+				INSERT INTO @tmpFinal (ScriptName, ISIN, TransactionType, PreviousHoldings, Value, Currency ) VALUES (@sScriptName, @sISIN, @sPreviousHolding, @nPreviousPeriodHolding, @nPreviousPeriodValue, @nCurrency)
 
 				INSERT INTO @tmpFinal (SecurityType, TransactionType,
-							PreviousHoldings, BuyQuantity, SellQuantity, Value, DateOfAcquisition)			
+							PreviousHoldings, BuyQuantity, SellQuantity, Value, DateOfAcquisition,Currency)			
 				SELECT CSecurity.CodeName SecurityType, CTransactionType.CodeName AS TransactionType, NULL,
 					CASE WHEN TD.TransactionTypeCodeId = @nTransactionType_Buy OR TD.TransactionTypeCodeId = @nTransactionType_CashExercise THEN TD.Quantity 
 						WHEN TD.TransactionTypeCodeId = @nTransactionType_Sell THEN 0
@@ -307,11 +309,13 @@ BEGIN
 						WHEN TD.TransactionTypeCodeId = @nTransactionType_CashlessAll THEN TD.Value + TD.Value2
 						WHEN TD.TransactionTypeCodeId = @nTransactionType_CashlessPartial THEN TD.Value + TD.Value2
 						ELSE 0 END AS Value,
-						TD.DateOfAcquisition
+						TD.DateOfAcquisition,
+						currency.DisplayCode as Currency
 					--,TD.* 
 				From tra_TransactionDetails TD JOIN tra_TransactionMaster TM ON TM.TransactionMasterId = TD.TransactionMasterId
 					JOIN com_Code CSecurity ON TD.SecurityTypeCodeId = CSecurity.CodeID
 					JOIN com_Code CTransactionType ON TransactionTypeCodeId = CTransactionType.CodeID
+					LEFT JOIN com_Code currency ON currency.CodeID = TD.CurrencyID
 				WHERE UserInfoId = @inp_iUserInfoId
 					AND TD.ForUserInfoId = ISNULL(@inp_iUserInfoIdRelative, @inp_iUserInfoId)
 					AND TD.SecurityTypeCodeId = @inp_iSecurityTypeCodeId
@@ -324,7 +328,7 @@ BEGIN
 					SELECT SUM(BuyQuantity), SUM(SellQuantity) FROM @tmpFinal
 				END
 				
-				INSERT INTO @tmpFinal (TransactionType, PreviousHoldings, Value) VALUES (@sCurrentHolding, @nCurrentPeriodHolding, @nCurrentPeriodValue)
+				INSERT INTO @tmpFinal (TransactionType, PreviousHoldings, Value, Currency) VALUES (@sCurrentHolding, @nCurrentPeriodHolding, @nCurrentPeriodValue, @nCurrency) 
 
 				SELECT ScriptName AS rpt_grd_19062,
 					 ISIN AS rpt_grd_19063,
@@ -334,7 +338,8 @@ BEGIN
 					 BuyQuantity AS rpt_grd_19068,
 					 SellQuantity AS rpt_grd_19069,
 					 Value AS rpt_grd_19070,
-					 dbo.uf_rpt_FormatDateValue(DateOfAcquisition,0) AS rpt_grd_19071
+					 dbo.uf_rpt_FormatDateValue(DateOfAcquisition,0) AS rpt_grd_19071,
+					 Currency as rpt_grd_54229
 				FROM @tmpFinal t
 				ORDER BY t.Id
 			END
