@@ -59,7 +59,7 @@
     </Reference>
     <Reference Include="ESOP.SSO.Library, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\ESOP.SSO.Library.dll</HintPath>
+      <HintPath>..\ESOP.SSO.Library\bin\Release\ESOP.SSO.Library.dll</HintPath>
     </Reference>
     <Reference Include="ESOP.Utility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -277,6 +277,7 @@
       <DependentUpon>SSRSReportViewer.aspx</DependentUpon>
     </Compile>
     <Compile Include="Common\AnnotationDateCompare.cs" />
+    <Compile Include="Common\ApplyArebicFont.cs" />
     <Compile Include="Common\ButtonAttribute.cs" />
     <Compile Include="Common\Common.cs" />
     <Compile Include="Common\ConstEnum.cs" />
@@ -301,6 +302,7 @@
     <Compile Include="Common\WriteToFileLog.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApplicabilityController.cs" />
+    <Compile Include="Controllers\Applicability_OSController.cs" />
     <Compile Include="Controllers\ClawBackReportController.cs" />
     <Compile Include="Controllers\CODashboardController.cs" />
     <Compile Include="Controllers\COInitialDisclosureController.cs" />
@@ -342,12 +344,15 @@
     <Compile Include="Controllers\SSRSReportController.cs" />
     <Compile Include="Controllers\TemplateMasterController.cs" />
     <Compile Include="Controllers\TradingPolicyController.cs" />
+    <Compile Include="Controllers\TradingPolicy_OSController.cs" />
     <Compile Include="Controllers\TradingTransactionController.cs" />
     <Compile Include="Controllers\TradingTransactionController_OS.cs" />
     <Compile Include="Controllers\TradingWindowEventController.cs" />
     <Compile Include="Controllers\TradingWindowsOtherController.cs" />
+    <Compile Include="Controllers\TwoFactorAuthController.cs" />
     <Compile Include="Controllers\UpsiDigitalController.cs" />
     <Compile Include="Controllers\UserDetailsController.cs" />
+    <Compile Include="CurrentUser.cs" />
     <Compile Include="Filters\AuthorizationPrivilegeFilter.cs" />
     <Compile Include="Filters\GlobalFilter.cs" />
     <Compile Include="Filters\InitialCheckFilter.cs" />
@@ -458,6 +463,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Readme\Elmah.txt" />
+    <Content Include="ClientPublicCertificate\AuthnRequest.xml" />
     <Content Include="CommonSSRSReport\SSRSReportViewer.aspx" />
     <Content Include="Content\bootstrap-datetimepicker.css" />
     <Content Include="Content\bootstrap-datetimepicker.min.css" />
@@ -510,6 +516,7 @@
     <Content Include="LoginScript\jQuery\jQuery-2.1.3.js" />
     <Content Include="LoginScript\Loginjs\Login-bl.js" />
     <Content Include="LoginScript\slimScroll\jquery.slimscroll-bl.min.js" />
+    <Content Include="Rotativa\wkhtmltopdf.exe" />
     <Content Include="Scripts\BrowserClose\BrowserClose.js" />
     <Content Include="Scripts\CryptoAlgorithm\CryptoAlgorithm.js" />
     <Content Include="Scripts\Login\Login.js" />
@@ -673,6 +680,7 @@
     <Content Include="Document\Templates\MassUpload\RLDepartmentWiseMassUploadTemplate.xlsx" />
     <Content Include="Document\Templates\MassUpload\SeparationMassuploadTemplate.xls" />
     <Content Include="Document\EmployeePeriodEndMassUpload.xlsx" />
+    <Content Include="ClientPublicCertificate\TGBL.cer" />
     <None Include="Properties\PublishProfiles\InsiderTrading.pubxml" />
     <Content Include="Scripts\bootstrap\css\bootstrap.css.map" />
     <Content Include="Scripts\bootstrap\fonts\glyphicons-halflings-regular.eot" />

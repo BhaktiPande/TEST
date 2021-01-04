@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.757
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsiderTrading", "InsiderTrading\InsiderTrading.csproj", "{8D6E5DCE-BB32-4E59-8E82-E499948A46F0}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -21,6 +21,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataUploadUtility", "DataUploadUtility\DataUploadUtility.csproj", "{7E4CD3EA-E99B-48A8-9972-8EF85F29EC9D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsiderTradingSSO", "InsiderTradingSSO\InsiderTradingSSO.csproj", "{49B2EF00-4A18-4A85-883B-0C537091A874}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESOP.SSO.Library", "ESOP.SSO.Library\ESOP.SSO.Library.csproj", "{3DEC257D-2C62-46EE-8597-E641DC2DAA2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,8 +58,15 @@ Global
 		{49B2EF00-4A18-4A85-883B-0C537091A874}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49B2EF00-4A18-4A85-883B-0C537091A874}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49B2EF00-4A18-4A85-883B-0C537091A874}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DEC257D-2C62-46EE-8597-E641DC2DAA2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DEC257D-2C62-46EE-8597-E641DC2DAA2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DEC257D-2C62-46EE-8597-E641DC2DAA2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DEC257D-2C62-46EE-8597-E641DC2DAA2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C0B116A7-1D8D-4C2B-BD4C-6E03D33937E2}
 	EndGlobalSection
 EndGlobal

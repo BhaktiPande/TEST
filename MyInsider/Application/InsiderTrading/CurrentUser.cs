@@ -27,7 +27,7 @@ namespace InsiderTrading
                     }
                     List<SqlParameter> inputParams = new List<SqlParameter>();
                     inputParams.Add(new SqlParameter("@OLMID", SqlDbType.VarChar, 50) { Value = strOLMID });
-                    string id = "1";// Convert.ToString(DBHelper.ExecuteScalar("<ADD Produre for user detail> ", inputParams));
+                    string id = "1"; //Convert.ToString(DBHelper.ExecuteScalar("<ADD Produre for user detail> ", inputParams));
                     if (string.IsNullOrEmpty(id))
                     {
                         return 0;

@@ -14,3 +14,7 @@
 /.vs/EtisalatAzure/v16/.suo
 /MyInsider/Application/InsiderTrading/obj
 /MyInsider/Application/InsiderTrading/DebugLogs
+/MyInsider/ESOP.RuntimePool
+/MyInsider/Application/ESOP.SSO.Library/obj
+/MyInsider/Application/InsiderTradingDAL/obj/Debug
+/MyInsider/Application/InsiderTradingEncryption/obj/Debug

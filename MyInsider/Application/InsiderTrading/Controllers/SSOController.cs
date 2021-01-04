@@ -5,6 +5,7 @@ using InsiderTrading.Models;
 using System;
 using System.Collections;
 using System.Configuration;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading;
@@ -102,27 +103,38 @@ namespace InsiderTrading.Controllers
         {
             try
             {
+                WriteToFileLog.Instance(ConfigurationManager.AppSettings["Airtel"].ToString()).Write("Here Calling the AssertionConsumerAirtel Method on SSOController ");
                 string EmailId = string.Empty;
                 string CompanyName = string.Empty;
-                string empnumber = HttpContext.User.Identity.Name;
+                string empployeeId = HttpContext.User.Identity.Name;
+                WriteToFileLog.Instance(ConfigurationManager.AppSettings["Airtel"].ToString()).Write("HttpContext.User.Identity.Name :-" + empployeeId);
+                string strOLMID = HttpContext.User.Identity.Name;
+                if (strOLMID.Contains('\\'))
+                {
+                    string[] userName = strOLMID.Split('\\');
+                    if (userName.Count() > 0)
+                    {
+                        strOLMID = userName[1];
+                        WriteToFileLog.Instance(ConfigurationManager.AppSettings["Airtel"].ToString()).Write("OLMID :-" + strOLMID);
+                    }
+                }
                 var prinicpal = (ClaimsPrincipal)Thread.CurrentPrincipal;
                 string companyName = ConfigurationManager.AppSettings["Airtel"].ToString();
                 if (prinicpal != null)
                 {
-                    StringBuilder stringBuilder = new StringBuilder();
+                    StringBuilder claimBuilder = new StringBuilder();
                     foreach (var item in prinicpal.Claims)
                     {
-                        stringBuilder.AppendLine(item.Type.ToString() + ": " + item.Value);
+                        claimBuilder.AppendLine(item.Type.ToString() + ": " + item.Value);
                         //LogWriter.LogMessage(item.Type.ToString() + ": " + item.Value, true);
                     }
+                    WriteToFileLog.Instance(ConfigurationManager.AppSettings["Airtel"].ToString()).Write("Claim Principle :-" + claimBuilder.ToString());
                 }
-
-                //EmailId = Request.QueryString["EmailId"];
-                //CompanyName = Request.QueryString["CompanyName"];
-
+                //string empEmail = "anand.kulkarni@esopdirect.com";
+                //string empId = "Halt1";
                 Hashtable ht_Parmeters = new Hashtable();
-                //empnumber = "anand.kulkarni@esopdirect.com";
-                ht_Parmeters.Add(CommonConstant.s_AttributeEmail, empnumber);
+                ht_Parmeters.Add(CommonConstant.s_AttributeEmployeeId, empployeeId);
+                ht_Parmeters.Add(CommonConstant.s_AttributeEmail, "");
                 ht_Parmeters.Add(CommonConstant.s_AttributeComapnyName, companyName);
 
                 ViewBag.RequestStatus = CommonConstant.sRequestStatusSAML_RESPONSE;
