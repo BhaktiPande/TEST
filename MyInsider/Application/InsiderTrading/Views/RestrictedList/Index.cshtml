@@ -37,8 +37,8 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="panel panel-default">
-                <div class="panel-body">
+            <div class="card panel-default">
+                <div class="card-body">
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                             <div class="form-group">
@@ -129,7 +129,7 @@
     <div class="div-spacer"></div><br />
 </section>
 
-@*@Scripts.Render("~/bundles/RestrictedSearch")*@
+@Scripts.Render("~/bundles/RestrictedSearch")
 @{
     if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_VIEW))
     {

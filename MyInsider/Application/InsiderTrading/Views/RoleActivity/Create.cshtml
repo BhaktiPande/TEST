@@ -87,7 +87,7 @@
         }
         $(".chkModuleSelectAll").click(function () {
             //   alert("test" + $(this).parents('.panel .panel-accordion').find('input[type="checkbox"]'));
-            selection(this, $(this).closest('.card.panel-accordion').find('input[type="checkbox"]'));
+            selection(this, $(this).closest('.panel.panel-accordion').find('input[type="checkbox"]'));
         })
         $(".chkScreenSelectAll").click(function () {
             selection(this, $(this).closest('table').find('input[type="checkbox"][id^="' + $(this).attr('id') + '"]'));
@@ -109,9 +109,9 @@
             $('[id="' + id + '"]:not([disabled=disabled])').prop("checked", false);
 
         if ($('[id="' + id + '"]').closest('table').find('.chkScreenSelectAll').length == $('[id="' + id + '"]').closest('table').find('.chkScreenSelectAll:checked').length)
-            $('[id="' + id + '"]').closest('.card.panel-accordion').find('.chkModuleSelectAll').prop("checked", true);
+            $('[id="' + id + '"]').closest('.panel.panel-accordion').find('.chkModuleSelectAll').prop("checked", true);
         else
-            $('[id="' + id + '"]').closest('.card.panel-accordion').find('.chkModuleSelectAll').prop("checked", false);
+            $('[id="' + id + '"]').closest('.panel.panel-accordion').find('.chkModuleSelectAll').prop("checked", false);
     }
     function DisplayErrors(errors) {
         $('input').removeClass('input-validation-error');
@@ -223,7 +223,7 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <label>Role Activity Access Setup</label>
-                <div class="card-header panel-group" id="accordion_RoleActivity" style="margin-bottom:20px">
+                <div class="card-header" id="accordion_RoleActivity" style="margin-bottom:20px">
                     @{if (ViewBag.RoleActivityDictionary.Count > 0)
                     {
                         int count = 0;

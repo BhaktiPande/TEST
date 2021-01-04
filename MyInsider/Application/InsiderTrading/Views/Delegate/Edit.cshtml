@@ -220,7 +220,7 @@
         }
 
         $(".chkModuleSelectAll").click(function () {
-            selection(this, $(this).parents('.card .panel-accordion').find('input[type="checkbox"]'));
+            selection(this, $(this).parents('.panel .panel-accordion').find('input[type="checkbox"]'));
         })
 
         $(".chkScreenSelectAll").click(function () {
@@ -245,9 +245,9 @@
             $('[id="' + id + '"]:not([disabled=disabled])').prop("checked", false);
 
         if ($('[id="' + id + '"]').parents('table').find('.chkScreenSelectAll').length == $('[id="' + id + '"]').parents('table').find('.chkScreenSelectAll:checked').length)
-            $('[id="' + id + '"]').parents('.card .panel-accordion').find('.chkModuleSelectAll').prop("checked", true);
+            $('[id="' + id + '"]').parents('.panel .panel-accordion').find('.chkModuleSelectAll').prop("checked", true);
         else
-            $('[id="' + id + '"]').parents('.card .panel-accordion').find('.chkModuleSelectAll').prop("checked", false);
+            $('[id="' + id + '"]').parents('.panel .panel-accordion').find('.chkModuleSelectAll').prop("checked", false);
         //If all child activity are disabled then the screen/Module checkbox should be disabled
         if ($('[id^="' + id + '"][type=checkbox]:not([id="' + id + '"])').length == $('[id^="' + id + '"][type=checkbox]:not([id="' + id + '"]):checked[disabled=disabled]').length) {
             $('[id="' + id + '"]:not([disabled=disabled])').attr("disabled", "disabled");
@@ -255,7 +255,9 @@
         }
         if ($('[id="' + id + '"]').parents('table').find('.chkScreenSelectAll').length == $('[id="' + id + '"]').parents('table').find('.chkScreenSelectAll:checked[disabled=disabled]').length) {
 
-            $('[id="' + id + '"]').parents('.card .panel-accordion').find('.chkModuleSelectAll').attr("disabled", "disabled");
+            $('[id="' + id + '"]').parents('.panel .panel-accordion').find('.chkModuleSelectAll').attr("disabled", "disabled");
         }
+
+
     }
 </script>

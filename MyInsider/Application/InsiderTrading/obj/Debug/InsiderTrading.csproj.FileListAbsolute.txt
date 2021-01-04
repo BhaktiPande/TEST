@@ -131,3 +131,5 @@ D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTradin
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTrading\bin\InsiderTradingEncryption.pdb
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTrading\bin\InsiderTradingExcelWriter.pdb
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTrading\bin\InsiderTradingMassUpload.pdb
+D:\UIUPGRADE\MyInsider\Application\InsiderTrading\obj\Debug\InsiderTrading.csprojAssemblyReference.cache
+D:\UIUPGRADE\MyInsider\Application\InsiderTrading\obj\Debug\InsiderTrading.csproj.CoreCompileInputs.cache

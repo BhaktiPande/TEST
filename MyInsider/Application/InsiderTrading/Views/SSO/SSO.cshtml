@@ -23,21 +23,21 @@
             <td>
                 <table style="color:white;font-size:x-large; width:100%;">
                     <tr>
-                        <td class="panel-heading">
-                            <h5 class="panel-title text-center" style="color:white;font-size:x-large;">Vigilanté - Single Sign On</h5>
+                        <td class="card-header">
+                            <h5 class="card-title text-center" style="color:white;font-size:x-large;">Vigilanté - Single Sign On</h5>
                         </td>
                     </tr>
                     
                     @if (Convert.ToString(ViewBag.RequestStatus) != InsiderTrading.Models.CommonConstant.sRequestStatusNONE)
                     {
-                        <tr class="panel-title text-center">
+                        <tr class="card-title text-center">
 
                             <td>
                                 <img src=@Url.Content("~/images/Loading.gif") class="img img-responsive center-block">
                             </td>
 
                         </tr>
-                        <tr class="panel-title text-center">
+                        <tr class="card-title text-center">
                             @if (Convert.ToString(ViewBag.RequestStatus) == InsiderTrading.Models.CommonConstant.sRequestStatusSSO_DEACTIVATED)
                             {
                                 <td class="img img-responsive center-block">
@@ -71,7 +71,7 @@
                     }
                     else
                     {
-                        <tr class="panel-title text-center">
+                        <tr class="card-title text-center">
                             <td>
                                 Please check the request that you are trying to initiate.
                             </td>

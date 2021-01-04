@@ -3,7 +3,7 @@
 }
 <section class="content">    
     @Html.AntiForgeryToken()
-    <div class="row add-insider">
+    <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <div class="row">
                 <a class="employee" href='@Url.Action("create", "Employee", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_CREATE })'>
@@ -22,13 +22,13 @@
                 </a>
                 <a class="corporate" href='@Url.Action("Index", "CorporateUser", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_CREATE })'>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                        <div class="card panel-category">
-                            <div class="card-header">
+                        <div class="panel panel-category">
+                            <div class="panel-heading">
                                 <p class="text-center">
                                     <i class="icon icon-corporate"></i>
                                 </p>
                             </div>
-                            <div class="card-body">
+                            <div class="panel-body">
                                 <h4 class="title">@InsiderTrading.Common.Common.getResource("usr_lbl_11328")</h4>
                             </div>
                         </div>
@@ -36,13 +36,13 @@
                 </a>
                 <a class="non-employee" href='@Url.Action("create", "NonEmployeeInsider", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_CREATE })'>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                        <div class="card panel-category">
-                            <div class="card-header">
+                        <div class="panel panel-category">
+                            <div class="panel-heading">
                                 <p class="text-center">
                                     <i class="icon icon-non-employee"></i>
                                 </p>
                             </div>
-                            <div class="card-body">
+                            <div class="panel-body">
                                 <h4 class="title">@InsiderTrading.Common.Common.getResource("usr_lbl_11329")</h4>
                             </div>
                         </div>

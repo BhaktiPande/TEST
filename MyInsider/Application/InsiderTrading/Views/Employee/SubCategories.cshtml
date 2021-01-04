@@ -9,7 +9,7 @@
         }
         else
         {
-            @Html.DropDownListFor(m => m.userInfoModel.SubCategory, new SelectList(ViewBag.SubCategoryDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.SubCategory).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.SubCategory).ToString(), new { @class = "form-control" }))
+            @Html.DropDownListFor(m => m.userInfoModel.SubCategory, new SelectList(ViewBag.SubCategoryDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.SubCategory).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.SubCategory).ToString(), new { @class = "form-control", @disabled = "disabled" }))
         }
         @Html.ValidationMessageFor(m => m.userInfoModel.SubCategory)
     </div>

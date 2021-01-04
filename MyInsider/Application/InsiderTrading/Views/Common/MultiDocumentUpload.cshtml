@@ -35,7 +35,7 @@
                     <div class=" fileinput input-group fileinput-new" data-provides="fileinput">
                         <div class="form-control" data-trigger="fileinput" style="min-height: 34px;height: auto;">
                             <i class="glyphicon glyphicon-file fileinput-exists"></i>
-                            <span class="fileinput-filename" style="display:inline;word-break: break-all"></span>
+                            <span class="fileinput-filename" style="display:inline"></span>
                         </div>
                         <span class="input-group-addon btn btn-default btn-file">
                             <span class="fileinput-new">Select file</span>
@@ -44,7 +44,7 @@
                             <input type="file" name='[@Index].Value[@SubIndex].Document' class="form-control document" />
                             @Html.ValidationMessageFor(m => m[0].Document)
                         </span>
-                        <a href="#" onClick="window.location.reload();return false;" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times-circle-o"></i></a>
+                        <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times-circle-o"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" id="uploadButtonDiv">
@@ -67,7 +67,7 @@
                     }
                 }    
             </div>
-            <div class="clsDivDynamic row" style="word-break: break-all" id="doc_@Index@SubIndex">
+            <div class="clsDivDynamic row" id="doc_@Index@SubIndex">
                 @if (objDocModel.DocumentId != 0 && objDocModel.DocumentId != null)
                 {
                     <div id="@Index@SubIndex">

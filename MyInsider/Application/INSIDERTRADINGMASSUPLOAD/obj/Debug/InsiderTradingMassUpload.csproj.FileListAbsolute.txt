@@ -21,3 +21,10 @@ D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\INSIDERTRADIN
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.csproj.CopyComplete
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.dll
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.pdb
+D:\UIUPGRADE\MyInsider\Application\INSIDERTRADING\bin\InsiderTradingMassUpload.dll
+D:\UIUPGRADE\MyInsider\Application\INSIDERTRADING\bin\InsiderTradingMassUpload.pdb
+D:\UIUPGRADE\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.csprojAssemblyReference.cache
+D:\UIUPGRADE\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.csproj.CoreCompileInputs.cache
+D:\UIUPGRADE\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.csproj.CopyComplete
+D:\UIUPGRADE\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.dll
+D:\UIUPGRADE\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.pdb

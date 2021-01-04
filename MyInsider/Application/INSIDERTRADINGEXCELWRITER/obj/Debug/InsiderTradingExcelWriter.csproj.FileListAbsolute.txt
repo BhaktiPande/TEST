@@ -20,3 +20,10 @@ D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\INSIDERTRADIN
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\INSIDERTRADINGEXCELWRITER\obj\Debug\InsiderTradingExcelWriter.dll
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\INSIDERTRADINGEXCELWRITER\obj\Debug\InsiderTradingExcelWriter.pdb
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\INSIDERTRADINGEXCELWRITER\obj\Debug\InsiderTradingExcelWriter.csprojAssemblyReference.cache
+D:\UIUPGRADE\MyInsider\Application\INSIDERTRADING\bin\InsiderTradingExcelWriter.dll
+D:\UIUPGRADE\MyInsider\Application\INSIDERTRADING\bin\InsiderTradingExcelWriter.pdb
+D:\UIUPGRADE\MyInsider\Application\INSIDERTRADINGEXCELWRITER\obj\Debug\InsiderTradingExcelWriter.csprojAssemblyReference.cache
+D:\UIUPGRADE\MyInsider\Application\INSIDERTRADINGEXCELWRITER\obj\Debug\InsiderTradingExcelWriter.csproj.CoreCompileInputs.cache
+D:\UIUPGRADE\MyInsider\Application\INSIDERTRADINGEXCELWRITER\obj\Debug\InsiderTradingExcelWriter.csproj.CopyComplete
+D:\UIUPGRADE\MyInsider\Application\INSIDERTRADINGEXCELWRITER\obj\Debug\InsiderTradingExcelWriter.dll
+D:\UIUPGRADE\MyInsider\Application\INSIDERTRADINGEXCELWRITER\obj\Debug\InsiderTradingExcelWriter.pdb
