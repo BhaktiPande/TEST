@@ -241,8 +241,8 @@ BEGIN
 		RLCL.CompanyName AS usr_grd_50008, /*CompanyName*/
 		CONVERT(DATE,RL.ApplicableFromDate,110) AS usr_grd_50009,
 		CONVERT(DATE,RL.ApplicableToDate,110) AS usr_grd_50010,
-		(ISNULL(UI.FirstName,'') +' '+ ISNULL(UI.LastName,'')) AS usr_grd_50011,		
-		ISNULL(tEmp.NoOfUserId,0) AS usr_grd_50012
+		(ISNULL(UI.FirstName,'') +' '+ ISNULL(UI.LastName,'')) AS usr_grd_50011		
+		--ISNULL(tEmp.NoOfUserId,0) AS usr_grd_50012
 		FROM	#tmpList T INNER JOIN rl_RistrictedMasterList RL ON T.EntityID = RL.RlMasterId
 				INNER JOIN rl_CompanyMasterList RLCL ON RL.RlCompanyId = RLCL.RlCompanyId
 				INNER JOIN usr_UserInfo UI ON UI.UserInfoId = RL.CreatedBy	
