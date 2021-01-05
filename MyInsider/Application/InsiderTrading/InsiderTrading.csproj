@@ -771,6 +771,8 @@
     <Content Include="Document\EmployeePeriodEndMassUpload.xlsx" />
     <Content Include="bin\InsiderTrading.dll.config" />
     <Content Include="ClientPublicCertificate\TGBL.cer" />
+    <Content Include="Document\Templates\MassUpload\InitialDisclosureMassUpload_OtherSecuritiesTemplate.xlsx" />
+    <Content Include="Document\Templates\MassUpload\OnGoingContinuousDisclosuretransactions_OtherSecuritiesTemplate.xlsx" />
     <None Include="Properties\PublishProfiles\InsiderTrading.pubxml" />
     <Content Include="Scripts\bootstrap\css\bootstrap.css.map" />
     <Content Include="Scripts\bootstrap\fonts\glyphicons-halflings-regular.eot" />

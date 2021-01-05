@@ -2053,7 +2053,7 @@ namespace InsiderTradingMassUpload
                 foreach (List<string> objRowsColumns in i_lstRowWiseData)
                 {
                     bool bErrorInRow = false;
-                    if ((userTypeCodeId == 101003 || userTypeCodeId == 101004 || userTypeCodeId == 101006) && (i_sExcelSheetName == "InitialDisclosure"))
+                    if ((userTypeCodeId == 101003 || userTypeCodeId == 101004 || userTypeCodeId == 101006) && i_sExcelSheetName.Contains("InitialDisclosure"))
                     {
                         string value = Convert.ToString(objRowsColumns[2]);
                         bool isValid = panList.Any(c => c.Contains(value));
@@ -2061,7 +2061,6 @@ namespace InsiderTradingMassUpload
                         {
                             lstResponse.Add(new MassUploadResponseDTO(-999, Convert.ToString(value) + " is not valid value"));
                             bErrorInRow = true;
-                            //AddSheetWiseRemovedParentRows(i_sExcelSheetName, nRowCounter - 2);
                             AddSheetWiseErrors(i_sExcelSheetName, lstResponse);
                             m_bErrorPresentInExcelSheets = true;
                             List<MassUploadExcelSheetErrors> excelSheetErrors = new List<MassUploadExcelSheetErrors>
@@ -2072,7 +2071,7 @@ namespace InsiderTradingMassUpload
                             return tblMassUploadDataTable;
                         }
                     }
-                    else if ((userTypeCodeId == 101003 || userTypeCodeId == 101004 || userTypeCodeId == 101006) && (i_sExcelSheetName == "OnGoingContDisc"))
+                    else if ((userTypeCodeId == 101003 || userTypeCodeId == 101004 || userTypeCodeId == 101006) && i_sExcelSheetName.Contains("OnGoingContDisc"))
                     {
                         string value = Convert.ToString(objRowsColumns[1]);
                         bool isValid = userList.Any(c => c.Contains(value));
