@@ -30,9 +30,9 @@
             <div class="panel-group" id="accordion">
                 @if (ViewBag.sCalledFrom != "RelativeView")
                 {
-                    <div class="panel panel-accordion">
-                        <div class="panel-heading active">
-                            <h4 class="panel-title">
+                    <div class="card panel-accordion">
+                        <div class="card-header active">
+                            <h4 class="card-title">
                                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
                                     <span class="fa fa-minus pull-right"></span>
                                     @InsiderTrading.Common.Common.getResource("usr_ttl_11239")  & @InsiderTrading.Common.Common.getResource("usr_ttl_11240")
@@ -40,7 +40,7 @@
                             </h4>
                         </div>
                         <div id="collapseOne" class="panel-collapse collapse in">
-                            <div class="panel-body">
+                            <div class="card-body">
                                 @Html.Partial("~/Views/Common/ViewUserDetails.cshtml", Model.userInfoModel)
                             </div>
                         </div>
@@ -48,9 +48,9 @@
                 }
                 @if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DMAT_VIEW))
                 {
-                    <div class="panel panel-accordion">
-                        <div class="panel-heading active">
-                            <h4 class="panel-title">
+                    <div class="card panel-accordion">
+                        <div class="card-header active">
+                            <h4 class="card-title">
                                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
                                     <span class="fa fa-plus pull-right"></span>
                                     @InsiderTrading.Common.Common.getResource("usr_lbl_11348")
@@ -82,9 +82,9 @@
                 }
                 @if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DOCUMENT_VIEW))
                 {
-                    <div class="panel panel-accordion">
-                        <div class="panel-heading active">
-                            <h4 class="panel-title">
+                    <div class="card panel-accordion">
+                        <div class="card-header active">
+                            <h4 class="card-title">
                                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
                                     <span class="fa fa-plus pull-right"></span>
                                     @InsiderTrading.Common.Common.getResource("usr_lbl_11349")
@@ -93,7 +93,7 @@
                         </div>
 
                         <div id="collapseThree" class="panel-collapse collapse">
-                            <div class="panel-body">
+                            <div class="card-body">
                                 @Html.Partial("~/Views/Common/ViewDocumentDetails.cshtml", Model.documentDetailsModel)
                             </div>
                         </div>
@@ -102,9 +102,9 @@
                 }
                 @if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_RELATIVEUSER_VIEW) && ViewBag.sCalledFrom != "RelativeView")
                 {
-                    <div class="panel panel-accordion">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">
+                    <div class="card panel-accordion">
+                        <div class="card-header">
+                            <h4 class="card-title">
                                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
                                     <span class="fa fa-plus pull-right"></span>
                                     @InsiderTrading.Common.Common.getResource("usr_lbl_11350")
@@ -113,7 +113,7 @@
                         </div>
 
                         <div id="collapseFive" class="panel-collapse collapse">
-                            <div class="panel-body">
+                            <div class="card-body">
                                 @Html.Partial("~/Views/Common/ViewUserRelativeDetails.cshtml", Model.userInfoModel)
                             </div>
                         </div>

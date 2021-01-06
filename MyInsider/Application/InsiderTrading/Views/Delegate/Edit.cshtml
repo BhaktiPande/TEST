@@ -43,8 +43,8 @@
     @Html.HiddenFor(m => m.DelegationId)
     <div class="row">
         <div class="col-lg-12">
-            <div class="panel panel-default">
-                <div class="panel-body">
+            <div class="card panel-default">
+                <div class="card-body">
                     <div class="row">
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                             <div>
@@ -110,9 +110,9 @@
                                 foreach (var objRoleModuleActivityDictionary in ViewBag.RoleActivityDictionary)
                                 {
                                     count++;
-                                    <div class="panel panel-accordion">
-                                        <div class="panel-heading">
-                                            <h4 class="panel-title">
+                                    <div class="card panel-accordion">
+                                        <div class="card-header">
+                                            <h4 class="card-title">
                                                 <div class="checkbox">
                                                     <input type="checkbox" name="chkModule" id="chkModule_@count" class="chkModuleSelectAll">
                                                     <label for="chkModule_@count"></label>
@@ -124,7 +124,7 @@
                                             </h4>
                                         </div>
                                         <div id="delegationMaster_@count" class="panel-collapse collapse">
-                                            <div class="panel-body">
+                                            <div class="card-body">
                                                 <div class="table-responsive">
                                                     <table class="table table-bordered table-striped">
                                                         <tbody>
@@ -220,7 +220,7 @@
         }
 
         $(".chkModuleSelectAll").click(function () {
-            selection(this, $(this).parents('.panel .panel-accordion').find('input[type="checkbox"]'));
+            selection(this, $(this).parents('.card .panel-accordion').find('input[type="checkbox"]'));
         })
 
         $(".chkScreenSelectAll").click(function () {
@@ -245,9 +245,9 @@
             $('[id="' + id + '"]:not([disabled=disabled])').prop("checked", false);
 
         if ($('[id="' + id + '"]').parents('table').find('.chkScreenSelectAll').length == $('[id="' + id + '"]').parents('table').find('.chkScreenSelectAll:checked').length)
-            $('[id="' + id + '"]').parents('.panel .panel-accordion').find('.chkModuleSelectAll').prop("checked", true);
+            $('[id="' + id + '"]').parents('.card .panel-accordion').find('.chkModuleSelectAll').prop("checked", true);
         else
-            $('[id="' + id + '"]').parents('.panel .panel-accordion').find('.chkModuleSelectAll').prop("checked", false);
+            $('[id="' + id + '"]').parents('.card .panel-accordion').find('.chkModuleSelectAll').prop("checked", false);
         //If all child activity are disabled then the screen/Module checkbox should be disabled
         if ($('[id^="' + id + '"][type=checkbox]:not([id="' + id + '"])').length == $('[id^="' + id + '"][type=checkbox]:not([id="' + id + '"]):checked[disabled=disabled]').length) {
             $('[id="' + id + '"]:not([disabled=disabled])').attr("disabled", "disabled");
@@ -255,7 +255,7 @@
         }
         if ($('[id="' + id + '"]').parents('table').find('.chkScreenSelectAll').length == $('[id="' + id + '"]').parents('table').find('.chkScreenSelectAll:checked[disabled=disabled]').length) {
 
-            $('[id="' + id + '"]').parents('.panel .panel-accordion').find('.chkModuleSelectAll').attr("disabled", "disabled");
+            $('[id="' + id + '"]').parents('.card .panel-accordion').find('.chkModuleSelectAll').attr("disabled", "disabled");
         }
 
 
