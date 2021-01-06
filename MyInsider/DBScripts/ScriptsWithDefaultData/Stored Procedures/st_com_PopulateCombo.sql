@@ -157,23 +157,24 @@ BEGIN
 
 	-- com_code
 	IF(@inp_iComboType = 1)
-	BEGIN
+		BEGIN
 		-- Param1 = CodeGroupId, Param2 = ParentCodeId	
 		
 		IF(@inp_sParam1=518)
 		BEGIN			
-				CREATE TABLE #temp (CodeID INT, CodeName VARCHAR(255),CodeGroupId int, Description varchar(200), IsVisible bit,IsActive bit, DisplayOrder int, DisplayCode varchar(50), ParentCodeId int) 
+				CREATE TABLE #temp (CodeID INT, CodeName NVARCHAR(255),CodeGroupId int, Description NVARCHAR(200), IsVisible bit,IsActive int, DisplayOrder int, DisplayCode NVARCHAR(MAX),
+				 ParentCodeId int) 
 				INSERT INTO #temp SELECT CodeID, CodeName, CodeGroupId, Description, IsVisible,IsActive, DisplayOrder, DisplayCode, ParentCodeId
 				FROM com_Code
-				WHERE CodeGroupId = @inp_sParam1 AND CodeName NOT LIKE '%Other%'	
+				WHERE CodeGroupId = @inp_sParam1 AND CodeName NOT LIKE 'Other%'	
 				INSERT INTO #temp SELECT CodeID, CodeName, CodeGroupId, Description, IsVisible,IsActive, DisplayOrder, DisplayCode, ParentCodeId
 				FROM com_Code 
-				Where CodeGroupId = @inp_sParam1 AND CodeName LIKE '%Other%'
+				Where CodeGroupId = @inp_sParam1 AND CodeName LIKE 'Other%'
 
 				SELECT	 CodeID AS ID
 					,CASE WHEN DisplayCode IS NULL OR DisplayCode = '' THEN CodeName ELSE DisplayCode END AS Value
 				FROM #temp WHERE CodeGroupId=@inp_sParam1
-				
+				DROP TABLE #temp
 		END	
 		ELSE 		
 			BEGIN
@@ -186,7 +187,7 @@ BEGIN
 				--ORDER BY DisplayOrder ASC
 				ORDER BY CASE WHEN DisplayCode IS NULL OR DisplayCode = '' THEN CodeName ELSE DisplayCode END
 			END
-			DROP TABLE #temp
+			
 		RETURN 0;
 	END 
 		
@@ -640,7 +641,7 @@ BEGIN
 		SET @inp_sParam2 = 103301--103013
 		IF(@inp_sParam1 = 1)
 		BEGIN
-			SELECT Distinct RL.CompanyName AS Value,RlCompanyID AS ID  
+			SELECT Distinct RL.CompanyName +' '+'-'+'('+RL.ISINCode + ')' AS Value,RlCompanyID AS ID  
 			FROM rl_CompanyMasterList RL
 			JOIN com_Code code On RL.ModuleCodeId = code.CodeID
 			WHERE RL.StatusCodeID = 105001 AND ModuleCodeId = @inp_sParam2			
@@ -966,6 +967,9 @@ BEGIN
 	
 	IF(@inp_iComboType = 40)
 	BEGIN	   
+		CREATE TABLE #tempUPSI(ID Int, Value NVARCHAR(500))
+
+		INSERT INTO #tempUPSI (ID, Value)
 		SELECT UI.UserInfoId AS ID,
 		CASE WHEN UI.UserTypeCodeId NOT IN(101007) 
 		THEN 
@@ -981,8 +985,12 @@ BEGIN
 		ELSE
 			CONCAT(UI.FirstName, ' ',UI.LASTNAME,' - (',UI.EmployeeId,')') 
 		END AS Value from usr_UserInfo UI INNER JOIN mst_Company MC ON MC.CompanyId=UI.CompanyId 
-		WHERE (UI.DateOfSeparation IS NULL OR UI.DateOfSeparation > dbo.uf_com_GetServerDate()) AND UI.StatusCodeId = 102001
+		WHERE (UI.DateOfSeparation IS NULL OR UI.DateOfSeparation > dbo.uf_com_GetServerDate()) AND UI.StatusCodeId = 102001		
+		ORDER BY CASE WHEN FirstName >= 'A' THEN 1 ELSE 0 END DESC,
+         FirstName ASC			
 
+		 SELECT ID, Value FROM #tempUPSI ORDER BY CASE WHEN Value >= 'A' THEN 1 ELSE 0 END DESC, Value ASC
+		 DROP TABLE #tempUPSI
 
 		RETURN 0;
 	END

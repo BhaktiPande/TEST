@@ -41,7 +41,7 @@ BEGIN
 	CREATE TABLE #tmpUpsiDetails
 		(		
 		ID							INT IDENTITY(1,1) NOT NULL,
-		Company_Name                Varchar(500),
+		Company_Name                NVarchar(500),
 		Company_Address				Varchar(500),
 		Category_Shared             nvarchar(50),
 		Reason_sharing      	    nvarchar(500),
@@ -54,7 +54,7 @@ BEGIN
        	UserInfoId					INT,
 		ModeOfSharing				INT,
 		SharingTime					TIME,
-		Temp1						NVARCHAR(250),
+		IsRegisteredUser			NVARCHAR(250),
 		Temp2						NVARCHAR(250),
 		Temp3						NVARCHAR(250),
 		Temp4						NVARCHAR(250),
@@ -65,7 +65,7 @@ BEGIN
 
 		)
 		INSERT INTO #tmpUpsiDetails 
-		SELECT Company_Name,Company_Address,Category_Shared,Reason_sharing,Comments,PAN,Name,Phone,E_mail,SharingDate,UserInfoId,ModeOfSharing,SharingTime,Temp1,Temp2,Temp3,Temp4,Temp5,DocumentNo,Sharedby,PublishDate FROM @inp_tblUpsiTempSharingDataType
+		SELECT Company_Name,Company_Address,Category_Shared,Reason_sharing,Comments,PAN,Name,Phone,E_mail,SharingDate,UserInfoId,ModeOfSharing,SharingTime,IsRegisteredUser,Temp2,Temp3,Temp4,Temp5,DocumentNo,Sharedby,PublishDate FROM @inp_tblUpsiTempSharingDataType
 
 		SELECT @nTotCount=COUNT(ID) FROM #tmpUpsiDetails
 		BEGIN
@@ -86,10 +86,10 @@ BEGIN
 			INSERT INTO usr_UPSIDocumentDetail
 				(
 					
-				UPSIDocumentId,Name,PAN ,CompanyName,CompanyAddress,Phone,Email,Temp1,Temp2,Temp3,Temp4,Temp5,Sharedby,SharingBy,SharingOn,UpdatedBy,UpdatedOn
+				UPSIDocumentId,Name,PAN ,CompanyName,CompanyAddress,Phone,Email,IsRegisteredUser,Temp2,Temp3,Temp4,Temp5,Sharedby,SharingBy,SharingOn,UpdatedBy,UpdatedOn
 				)
 		    SELECT 
-			    @CustomerID,Name,PAN,Company_Name,Company_Address,Phone,E_mail,Temp1,Temp2,Temp3,Temp4,Temp5,Sharedby,UserInfoId, GETDATE() ,UserInfoId ,GETDATE()
+			    @CustomerID,Name,PAN,Company_Name,Company_Address,Phone,E_mail,IsRegisteredUser,Temp2,Temp3,Temp4,Temp5,Sharedby,UserInfoId, GETDATE() ,UserInfoId ,GETDATE()
 				
 		    FROM 
 			   #tmpUpsiDetails where ID=@nCount+1

@@ -6,8 +6,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-/*-------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------*/
+
 CREATE PROCEDURE [dbo].[st_rul_ApplicableTradingPolicyDetails_OS]
 	@inp_iUserInfoID									INT,						-- Id of the PreclearanceRequest whose details are to be fetched.
 	@inp_iTransacationMasterId							BIGINT = 0,					-- transanction master id .
@@ -48,11 +47,6 @@ BEGIN
 		SET @nTradingWindowStatusActive = 131002
 		SET @nTradingWindowEventTypeFinancialResult  = 126001
 
-		--SELECT TOP 1 TP.TradingPolicyId,TP.PreClrTradeDiscloLimit 
-		--FROM rul_TradingPolicy TP
-		--JOIN vw_ApplicableTradingPolicyForUser ATPFU ON TP.TradingPolicyId = ATPFU.MapToId 
-		--WHERE ATPFU.UserInfoId = @inp_iUserInfoID
-		--ORDER BY MapToId DESC
 		
 		IF (@inp_iTransacationMasterId = 0)
 		BEGIN
@@ -71,38 +65,38 @@ BEGIN
 			FROM tra_TransactionMaster_OS where TransactionMasterId = @inp_iTransacationMasterId AND UserInfoId = @inp_iUserInfoID
 		END
 		
-		IF(EXISTS(SELECT MapToId FROM vw_ApplicableTradingWindowEventOtherForUser ATWEOFU
-			JOIN rul_TradingWindowEvent TWE ON ATWEOFU.MapToId = TWE.TradingWindowEventId
-			WHERE ATWEOFU.UserInfoId = @inp_iUserInfoId AND TWE.WindowCloseDate <= dbo.uf_com_GetServerDate() 
-				  AND  dbo.uf_com_GetServerDate() < TWE.WindowOpenDate 
-				  AND TWE.TradingWindowStatusCodeId = @nTradingWindowStatusActive
-				  ))
+		--IF(EXISTS(SELECT MapToId FROM vw_ApplicableTradingWindowEventOtherForUser ATWEOFU
+		--	JOIN rul_TradingWindowEvent TWE ON ATWEOFU.MapToId = TWE.TradingWindowEventId
+		--	WHERE ATWEOFU.UserInfoId = @inp_iUserInfoId AND TWE.WindowCloseDate <= dbo.uf_com_GetServerDate() 
+		--		  AND  dbo.uf_com_GetServerDate() < TWE.WindowOpenDate 
+		--		  AND TWE.TradingWindowStatusCodeId = @nTradingWindowStatusActive
+		--		  ))
 				 
-		BEGIN
-			SET @nNonTradingPeriodFlag = 1
+		--BEGIN
+		--	SET @nNonTradingPeriodFlag = 1
 			
-			SELECT  @dtWindowCloseFrom = TWE.WindowCloseDate,
-					@dtWindowOpen = TWE.WindowOpenDate
-			FROM vw_ApplicableTradingWindowEventOtherForUser ATWEOFU
-			JOIN rul_TradingWindowEvent TWE ON ATWEOFU.MapToId = TWE.TradingWindowEventId
-			WHERE ATWEOFU.UserInfoId = @inp_iUserInfoId AND TWE.WindowCloseDate <= dbo.uf_com_GetServerDate() 
-				  AND  dbo.uf_com_GetServerDate() < TWE.WindowOpenDate 
-				  AND TWE.TradingWindowStatusCodeId = @nTradingWindowStatusActive
-		END
+		--	SELECT  @dtWindowCloseFrom = TWE.WindowCloseDate,
+		--			@dtWindowOpen = TWE.WindowOpenDate
+		--	FROM vw_ApplicableTradingWindowEventOtherForUser ATWEOFU
+		--	JOIN rul_TradingWindowEvent TWE ON ATWEOFU.MapToId = TWE.TradingWindowEventId
+		--	WHERE ATWEOFU.UserInfoId = @inp_iUserInfoId AND TWE.WindowCloseDate <= dbo.uf_com_GetServerDate() 
+		--		  AND  dbo.uf_com_GetServerDate() < TWE.WindowOpenDate 
+		--		  AND TWE.TradingWindowStatusCodeId = @nTradingWindowStatusActive
+		--END
 		-- Check for Trading window event - Financial
-		IF(EXISTS(SELECT TradingWindowEventId FROM rul_TradingWindowEvent 
-		where WindowCloseDate <= dbo.uf_com_GetServerDate() AND dbo.uf_com_GetServerDate() < WindowOpenDate
-		AND EventTypeCodeId = @nTradingWindowEventTypeFinancialResult --and TradingWindowStatusCodeId = @nTradingWindowStatusActive
-		))
-		BEGIN
-			SET @nNonTradingPeriodFlag = 1
+		--IF(EXISTS(SELECT TradingWindowEventId FROM rul_TradingWindowEvent 
+		--where WindowCloseDate <= dbo.uf_com_GetServerDate() AND dbo.uf_com_GetServerDate() < WindowOpenDate
+		--AND EventTypeCodeId = @nTradingWindowEventTypeFinancialResult --and TradingWindowStatusCodeId = @nTradingWindowStatusActive
+		--))
+		--BEGIN
+		--	SET @nNonTradingPeriodFlag = 1
 			
-			SELECT @dtWindowCloseFrom = WindowCloseDate,@dtWindowOpen = WindowOpenDate 
-			FROM rul_TradingWindowEvent 
-			WHERE WindowCloseDate <= dbo.uf_com_GetServerDate() AND dbo.uf_com_GetServerDate() < WindowOpenDate
-			AND EventTypeCodeId = @nTradingWindowEventTypeFinancialResult --and TradingWindowStatusCodeId = @nTradingWindowStatusActive
+		--	SELECT @dtWindowCloseFrom = WindowCloseDate,@dtWindowOpen = WindowOpenDate 
+		--	FROM rul_TradingWindowEvent 
+		--	WHERE WindowCloseDate <= dbo.uf_com_GetServerDate() AND dbo.uf_com_GetServerDate() < WindowOpenDate
+		--	AND EventTypeCodeId = @nTradingWindowEventTypeFinancialResult --and TradingWindowStatusCodeId = @nTradingWindowStatusActive
 			
-		END
+		--END
 		
 		-- check if need to use security pool for not 
 		IF EXISTS(SELECT * FROM rul_TradingPolicyForTransactionMode_OS 

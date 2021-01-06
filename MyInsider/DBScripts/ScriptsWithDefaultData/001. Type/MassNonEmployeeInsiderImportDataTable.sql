@@ -1,3 +1,7 @@
+
+
+IF EXISTS(SELECT NAME FROM SYS.PROCEDURES WHERE NAME = 'st_com_MassUploadCommonProcedureExecution')
+	DROP PROCEDURE st_com_MassUploadCommonProcedureExecution	
 IF EXISTS (SELECT NAME FROM SYS.TYPES WHERE NAME = 'MassNonEmployeeInsiderImportDataTable')
 	DROP TYPE MassNonEmployeeInsiderImportDataTable
 	
@@ -26,5 +30,6 @@ CREATE TYPE MassNonEmployeeInsiderImportDataTable AS TABLE
 	GradeText nVARCHAR(200),
 	DesignationText nVARCHAR(200),
 	SubDesignationText nVARCHAR(200),
-	DepartmentText nVARCHAR(200)
+	DepartmentText nVARCHAR(200),
+	PersonalAddress  nvarchar(50)
 )

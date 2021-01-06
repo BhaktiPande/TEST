@@ -69,6 +69,9 @@ namespace InsiderTradingDAL
         [PetaPoco.Column("AddressLine2")]
         public string AddressLine2 { get; set; }
 
+        [PetaPoco.Column("PersonalAddress")]
+        public string PersonalAddress { get; set; }
+
         [PetaPoco.Column("CountryId")]
         public int? CountryId { get; set; }
         public string CountryName { get; set; }
@@ -359,5 +362,15 @@ namespace InsiderTradingDAL
 
         public string DuplicateMobileNo { get; set; }
 
+    }
+
+    public class OtherUsersDetails
+    {
+        public string Email { get; set; }
+        public string Name { get; set; }
+        public string PAN { get; set; }
+        public string CompanyName { get; set; }
+        public string CompanyAddress { get; set; }
+        public string Phone { get; set; }
     }
 }

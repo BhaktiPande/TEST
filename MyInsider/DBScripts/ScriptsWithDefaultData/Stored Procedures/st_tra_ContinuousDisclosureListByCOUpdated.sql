@@ -299,7 +299,7 @@ BEGIN
 			[HardcopySubmissionDate] DATETIME NULL,[Submission_to_Stock_Exchange] BIGINT NULL,[HardCopySubmitCOToExchangeDate] DATETIME NULL,		
 			[HardCopySubmitCOToExchangeButtonText] VARCHAR(50) NULL,[HardCopySubmitCOToExchangeWithin] VARCHAR(50) NULL,[HardCopySubmitCOToExchangeWithinText] VARCHAR(50) NULL,		
 			[EmployeeID] VARCHAR(50) NULL,[PAN] VARCHAR(50) NULL,[EmployeeStatus] VARCHAR(50) NULL,[EmployeeStatusCodeID] BIGINT NULL,
-			[DateOfSeparation] VARCHAR(50)NULL,[DesignationText] VARCHAR(550) NULL,[InsiderName] [nvarchar] (500) NULL,				
+			[DateOfSeparation] VARCHAR(50)NULL,[DesignationText] NVARCHAR(550) NULL,[InsiderName] [nvarchar] (500) NULL,				
 			[PreClearance_Qty] DECIMAL(15,4) NULL,[IsAddButtonRow] VARCHAR(50) NULL,[UserInfoID] INT  NULL,[IsPartiallyTraded] INT NULL,				
 			[ShowAddButton] INT NULL,[ReasonForNotTradingCodeId] VARCHAR(500) NULL,[Trade_Qty] VARCHAR(500) NULL,[NotTradedStatus1] VARCHAR(50) NULL,				
 			[IsAutoApproved] INT NULL,[IsAutoApprovedText] VARCHAR(50) NULL,[Total_Traded_Value] VARCHAR(50) NULL,[IsPreclearanceFormForImplementingCompany] INT NULL,		
@@ -427,7 +427,7 @@ END
 		END
 		PRINT '-------------'
 
-
+		
 		INSERT INTO #TempFinalTransactionWithSorting
 		SELECT Temp.TransactionMasterId, Temp.PreClearanceRequestID,Temp.ID,
 		CASE WHEN Temp.TransactionMasterId = 0 THEN (SELECT TOP 1 TransactionMasterId FROM tra_TransactionMaster WHERE PreclearanceRequestId = Temp.PreclearanceRequestId) 
@@ -489,12 +489,13 @@ END
 		
 		IF(@inp_sEmployeeName IS NOT NULL OR @inp_sEmployeeName <> 0)
 		BEGIN
-			SELECT @sSQL = @sSQL + ' AND InsiderName like ''%' + CONVERT(VARCHAR,@inp_sEmployeeName) + '%'''
+			SELECT @sSQL = @sSQL + ' AND InsiderName like N''%' + CONVERT(NVARCHAR(Max),@inp_sEmployeeName) + '%'''
 		END
 		
 		IF(@inp_sDesignation IS NOT NULL OR @inp_sDesignation <> 0)
-		BEGIN				
-			SELECT @sSQL = @sSQL + ' AND DesignationText like ''%' + CONVERT(VARCHAR,@inp_sDesignation) + '%'''
+		BEGIN
+					
+			SELECT @sSQL = @sSQL + ' AND DesignationText like N''%' + CONVERT(NVARCHAR(max),@inp_sDesignation) + '%'''
 		END
 		
 		IF(@inp_iPreclearanceCodeID IS NOT NULL OR @inp_iPreclearanceCodeID <> 0)

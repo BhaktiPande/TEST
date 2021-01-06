@@ -1,0 +1,71 @@
+﻿@model InsiderTrading.Models.TradingPolicyModel_OS
+@{
+    ViewBag.Title = "_InitialDisclosure_OS";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    @Html.AntiForgeryToken()
+</section>
+
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @Html.LabelFor(m => m.DiscloInitLimit, new { @class = "normalLable" })
+        </div>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
+        <div class="form-group">
+            @Html.TextBoxFor(m => m.DiscloInitLimit, @InsiderTrading.Common.Common.IsTradingPolicyEdit("TextNumber", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId))
+        </div>
+    </div>
+    <div class="col-lg-7 col-md-7 col-sm-6 col-xs-12">
+        <div class="form-group">
+            <label class="normalLable">@InsiderTrading.Common.Common.getResource("rul_lbl_55281")</label>
+            @Html.ValidationMessageFor(m => m.DiscloInitLimit)
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @Html.LabelFor(m => m.DiscloInitDateLimit, new { @class = "normalLable" })
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+        <div class="form-group" id="sandbox-container">
+            @{
+                string DiscloInitDateLimit = "";
+                if (Model.DiscloInitDateLimit != null)
+                {
+                    DiscloInitDateLimit = InsiderTrading.Common.Common.ApplyFormatting(Model.DiscloInitDateLimit, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+
+                }
+            }
+            <div class="input-group date">
+                @Html.TextBox("DiscloInitDateLimit", DiscloInitDateLimit, null, @InsiderTrading.Common.Common.IsTradingPolicyEdit("Text", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId))
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="form-group">
+            <label class="normalLable">@InsiderTrading.Common.Common.getResource("rul_lbl_55282")</label>
+            @Html.ValidationMessageFor(m => m.DiscloInitDateLimit)
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $(':checkbox[name="DiscloInitSubmitToStExByCOHardcopyFlag"]').change(function () {
+
+            if ($(this).is(":checked")) {
+                $(':checkbox[name="DiscloInitSubmitToStExByCOSoftcopyFlag"]').prop("checked", true);
+            }
+        });
+    });
+ </script>

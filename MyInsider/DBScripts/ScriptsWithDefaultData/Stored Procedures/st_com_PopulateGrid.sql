@@ -1308,6 +1308,60 @@ BEGIN
 					@inp_sParam17,@inp_sParam18,@inp_sParam19,@inp_sParam20, @out_nReturnValue OUTPUT, @out_nSQLErrCode OUTPUT,@out_sSQLErrMessage OUTPUT
 	END
 
+	ELSE IF(@inp_iGridType = 114129)
+	BEGIN
+			-- Trading policy Other Security list
+			EXEC @iRetVal = st_rul_TradingPolicyList_OS @inp_iPageSize, @inp_iPageNo, @inp_sSortField, @inp_sSortOrder,
+					@inp_sParam1,@inp_sParam2,@inp_sParam3,
+					@out_nReturnValue OUTPUT, @out_nSQLErrCode OUTPUT,@out_sSQLErrMessage OUTPUT
+	END
+
+		ELSE IF(@inp_iGridType = 114130)
+	BEGIN
+			-- Trading policy other securities list of history records
+			EXEC @iRetVal = st_rul_TradingPolicyHistoryList_OS @inp_iPageSize, @inp_iPageNo, @inp_sSortField, @inp_sSortOrder,
+					@inp_sParam1,
+					@out_nReturnValue OUTPUT, @out_nSQLErrCode OUTPUT,@out_sSQLErrMessage OUTPUT
+	END	
+
+	ELSE IF(@inp_iGridType = 114131)
+	BEGIN
+			-- Trading Policy Other Securitywise Value List
+			EXEC @iRetVal = st_rul_TradingPolicySecuritywiseLimitsList_OS @inp_iPageSize, @inp_iPageNo, @inp_sSortField, @inp_sSortOrder,
+					@inp_sParam1, @inp_sParam2,@inp_sParam3,
+					@out_nReturnValue OUTPUT, @out_nSQLErrCode OUTPUT,@out_sSQLErrMessage OUTPUT
+	END
+	
+	ELSE IF(@inp_iGridType = 114132)
+	BEGIN
+			-- Applicability Search List - Employee
+			EXEC @iRetVal = st_rul_ApplicabilitySearchList_Employee_OS @inp_iPageSize, @inp_iPageNo, @inp_sSortField, @inp_sSortOrder,@inp_iGridType,
+					@inp_sParam1,@inp_sParam2,@inp_sParam3,@inp_sParam4,@inp_sParam5,@inp_sParam6,@inp_sParam7,@inp_sParam8,@inp_sParam9,@inp_sParam10,
+					@out_nReturnValue OUTPUT, @out_nSQLErrCode OUTPUT,@out_sSQLErrMessage OUTPUT
+	END	
+	ELSE IF(@inp_iGridType = 114133)
+	BEGIN
+			-- Applicability Association List - Employee OS
+			EXEC @iRetVal = st_rul_ApplicabilityAssociationList_Employee_OS @inp_iPageSize, @inp_iPageNo, @inp_sSortField, @inp_sSortOrder,@inp_iGridType,
+					@inp_sParam1,@inp_sParam2,@inp_sParam3,@inp_sParam4,@inp_sParam5,@inp_sParam6,
+					@out_nReturnValue OUTPUT, @out_nSQLErrCode OUTPUT,@out_sSQLErrMessage OUTPUT
+	END
+
+	ELSE IF(@inp_iGridType = 114139)
+	BEGIN
+			-- Applicability Filter List for combination of department-grade-designation in OS
+			EXEC @iRetVal = st_rul_ApplicabilityFilterList_Employee_OS @inp_iPageSize, @inp_iPageNo, @inp_sSortField, @inp_sSortOrder,@inp_iGridType,
+					@inp_sParam1,@inp_sParam2,@inp_sParam3,
+					@out_nReturnValue OUTPUT, @out_nSQLErrCode OUTPUT,@out_sSQLErrMessage OUTPUT
+	END
+	ELSE IF(@inp_iGridType = 114150)
+	BEGIN
+			-- Overlapping trading policy list for users of a trading policy
+			EXEC @iRetVal = st_rul_UserwiseOverlapTradingPolicyList_OS @inp_iPageSize, @inp_iPageNo, @inp_sSortField, @inp_sSortOrder,
+					@inp_sParam1,
+					@out_nReturnValue OUTPUT, @out_nSQLErrCode OUTPUT,@out_sSQLErrMessage OUTPUT
+	END
+
 	-- In case the Specific List Procedure returned Error, then return it back.
 	IF (@iRetVal = 0)
 	BEGIN
