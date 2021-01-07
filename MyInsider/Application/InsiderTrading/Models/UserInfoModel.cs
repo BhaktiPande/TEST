@@ -125,6 +125,64 @@ namespace InsiderTrading.Models
         public string PersonalAddress { get; set; }
 
         [DataType(DataType.Text)]
+        [ResourceKey("PhoneNumber")]
+        [ActivityResourceKey("usr_lbl_72001")]
+        [DisplayName("usr_lbl_72001")]
+        [StringLength(1000)]
+        [RegularExpression(ConstEnum.DataValidation.MobileNo, ErrorMessage = "usr_msg_72002")]
+        public string PhoneNumber { get; set; }
+
+        [DataType(DataType.DateTime)]
+        [ResourceKey("DateOfBirth")]
+        [ActivityResourceKey("usr_lbl_72003")]
+        [DisplayName("usr_lbl_72003")]
+        
+        [RegularExpression(ConstEnum.DataValidation.DescriptionType, ErrorMessage = "usr_msg_72004")]
+        public DateTime? DateOfBirth { get; set; }
+
+        [DataType(DataType.Text)]
+        [ResourceKey("EmiratesId")]
+        [ActivityResourceKey("usr_lbl_72005")]
+        [DisplayName("usr_lbl_72005")]
+        [StringLength(1000)]
+        [RegularExpression(ConstEnum.DataValidation.NumbersOnly, ErrorMessage = "usr_msg_72006")]
+        public string EmiratesId { get; set; }
+
+        [DataType(DataType.DateTime)]
+        [ResourceKey("EmiratesId_ExpiryDate")]
+        [ActivityResourceKey("usr_lbl_72007")]
+        [DisplayName("usr_lbl_72007")]
+      
+        [RegularExpression(ConstEnum.DataValidation.DescriptionType, ErrorMessage = "usr_msg_72008")]
+        public DateTime? EmiratesId_ExpiryDate { get; set; }
+
+
+        [DataType(DataType.DateTime)]
+        [ResourceKey("Passport_ExpiryDate")]
+        [ActivityResourceKey("usr_lbl_72009")]
+        [DisplayName("usr_lbl_72009")]
+      
+        [RegularExpression(ConstEnum.DataValidation.DescriptionType, ErrorMessage = "usr_msg_72010")]
+        public DateTime? Passport_ExpiryDate { get; set; }
+
+        [DataType(DataType.DateTime)]
+        [ResourceKey("DateRemoved_asInsider")]
+        [ActivityResourceKey("usr_lbl_72011")]
+        [DisplayName("usr_lbl_72011")]
+    
+        [RegularExpression(ConstEnum.DataValidation.DescriptionType, ErrorMessage = "usr_msg_72012")]
+        public DateTime? DateRemoved_asInsider { get; set; }
+
+        [DataType(DataType.Text)]
+        [ResourceKey("ReasonRemoved_asInsider")]
+        [ActivityResourceKey("usr_lbl_72013")]
+        [DisplayName("usr_lbl_72013")]
+        [StringLength(1000)]
+        [RegularExpression(ConstEnum.DataValidation.DescriptionType, ErrorMessage = "usr_msg_72014")]
+        public string ReasonRemoved_asInsider { get; set; }
+
+
+        [DataType(DataType.Text)]
         [ResourceKey("AddressLine2")]
         [DisplayName("usr_lbl_11008")]
         [StringLength(1000)]
