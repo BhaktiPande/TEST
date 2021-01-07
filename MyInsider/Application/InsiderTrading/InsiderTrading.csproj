@@ -66,6 +66,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\ESOP.Utility.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
+
     </Reference>
     <Reference Include="ExcelNumberFormat">
       <HintPath>..\packages\ExcelNumberFormat.1.0.3\lib\net20\ExcelNumberFormat.dll</HintPath>
@@ -303,6 +304,7 @@
     <Compile Include="Common\WriteToFileLog.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApplicabilityController.cs" />
+    <Compile Include="Controllers\Applicability_OSController.cs" />
     <Compile Include="Controllers\ClawBackReportController.cs" />
     <Compile Include="Controllers\CODashboardController.cs" />
     <Compile Include="Controllers\COInitialDisclosureController.cs" />
@@ -344,6 +346,7 @@
     <Compile Include="Controllers\SSRSReportController.cs" />
     <Compile Include="Controllers\TemplateMasterController.cs" />
     <Compile Include="Controllers\TradingPolicyController.cs" />
+    <Compile Include="Controllers\TradingPolicy_OSController.cs" />
     <Compile Include="Controllers\TradingTransactionController.cs" />
     <Compile Include="Controllers\TradingTransactionController_OS.cs" />
     <Compile Include="Controllers\TradingWindowEventController.cs" />
@@ -774,6 +777,7 @@
     <Content Include="ClientPublicCertificate\TGBL.cer" />
     <Content Include="Document\Templates\MassUpload\InitialDisclosureMassUpload_OtherSecuritiesTemplate.xlsx" />
     <Content Include="Document\Templates\MassUpload\OnGoingContinuousDisclosuretransactions_OtherSecuritiesTemplate.xlsx" />
+    <Content Include="fonts\tradbdo.ttf" />
     <None Include="Properties\PublishProfiles\InsiderTrading.pubxml" />
     <Content Include="Scripts\bootstrap\css\bootstrap.css.map" />
     <Content Include="Scripts\bootstrap\fonts\glyphicons-halflings-regular.eot" />
@@ -3195,6 +3199,31 @@
     <Content Include="Views\PeriodEndDisclosure_OS\UserStatusOS.cshtml" />
     <Content Include="Views\Reports_OS\Index.cshtml" />
     <Content Include="Views\Shared\_MCQLayout.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\Create.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\Index.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\PreclearanceTransactionSecurityMapping_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\TradingPolicyHistoryList_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\ViewOverlapedUserList_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_ContinousSecuritywiseValueList_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_ContinuousDisclosureRequired_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_ContinuousDisclosureSubmissionStockExchange_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_ContinuousLimits_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_ContraTradeSecurityMapping_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_InitialDisclosure_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_MultipleTransactionTrade_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_PeriodEndDisclosureSubmissionStockExchange_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_PeriodEndDisclosure_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_PreclearanceNotRequired_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_PreclearanceRequirement_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_PreclearanceTransaction_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_PreClrAllowRestrictedList_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_Preclrpartialtradenotdoneflag_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_PreSecuritywiseLimitList_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_ProhibitTradingNonTradingPeriod_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_SeekDeclarationUPSI_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_SingleTransactionTrade_OS.cshtml" />
+    <Content Include="Views\TradingPolicy_OS\_YearType_OS.cshtml" />
+    <Content Include="Views\APPLICABILITY_OS\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Elmah\" />

@@ -290,7 +290,7 @@ BEGIN
 						       HardcopySubmissionwithin INT DEFAULT NULL,
 						       HardCopySubmitCOToExchangeFlag INT,HardCopySubmissionCOToExchangeFlag INT DEFAULT NULL,
 						       HardCopySubmitCOToExchangeDate DATETIME NULL,HardCopySubmitCOToExchangeWithin INT DEFAULT NULL,
-						       TradedQty DECIMAL(10,0),DisplayNumber INT, TMIdForOrder BIGINT,IsEnterAndUploadEvent INT DEFAULT 0, IndividualTradedValue INT,ReasonForNotTradingCodeId INT)
+						       TradedQty DECIMAL(10,0),DisplayNumber INT, TMIdForOrder BIGINT,IsEnterAndUploadEvent INT DEFAULT 0, IndividualTradedValue INT,ReasonForNotTradingCodeId INT, CurrencyId INT)
 						       
 		CREATE TABLE #TempDuplicateRecords(TransactionStatus INT, TransactionType INT, SecurityType INT, DateOfAcquisition DATE, Quantity DECIMAL(10,0), Value DECIMAL(10,0)
 						,DMATAccountNo NVARCHAR(50),DPID VARCHAR(50),DPName NVARCHAR(200),TMID VARCHAR(50), TransactionID INT, ModeOfAcquisition INT, ExchangeCode INT,Relation VARCHAR(50))
@@ -879,6 +879,8 @@ BEGIN
 				,CASE WHEN GFD.GeneratedFormDetailsId IS NULL THEN 0 ELSE 1 END AS IsFORMEGenrated
 				,IsEnterAndUploadEvent 
 				,Temp.IndividualTradedValue AS dis_grd_50647
+				,currency.DisplayCode AS rpt_grd_54229
+
 		FROM #tmpList T 
 		INNER JOIN #tmpUsers Temp ON Temp.Id = T.EntityID
 		LEFT JOIN tra_TransactionMaster TM ON TM.TransactionMasterId = Temp.TransactionMasterID
@@ -890,6 +892,7 @@ BEGIN
 		LEFT JOIN com_Code coderelation ON UR.RelationTypeCodeId = coderelation.CodeID
 		JOIN rul_TradingPolicy TP ON Temp.TradingPolicyId = TP.TradingPolicyId	
 		LEFT JOIN tra_GeneratedFormDetails GFD ON Temp.PreClearanceRequestID = GFD.MapToId AND GFD.MapToTypeCodeId = 132004
+		LEFT JOIN com_Code currency ON currency.CodeID = TD.CurrencyID
 		WHERE   Temp.TransactionMasterId IS NOT NULL AND ((@inp_iPageSize = 0) OR (T.RowNumber BETWEEN ((@inp_iPageNo - 1) * @inp_iPageSize + 1) AND (@inp_iPageNo * @inp_iPageSize)))
 		ORDER BY T.RowNumber
 		
