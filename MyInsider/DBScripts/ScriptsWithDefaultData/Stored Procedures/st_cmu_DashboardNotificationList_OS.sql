@@ -42,69 +42,57 @@ BEGIN
 		IF @out_sSQLErrMessage IS NULL
 			SET @out_sSQLErrMessage = ''
 			
-			INSERT INTO @tmpNotificationQueue (NotificationQueueId,[Subject],[Contents],[NotificationTYPE])
-				SELECT TOP 10 MAX ([NotificationQueueId] )
+				INSERT INTO @tmpNotificationQueue (NotificationQueueId,RuleModeId,ModeCodeId,[Subject],[Contents],CreatedOn,[NotificationTYPE])
+				SELECT TOP 10 [NotificationQueueId],
+						RuleModeId,ModeCodeId
 					  ,[Subject]
 					  ,[Contents]
+					  ,CreatedOn
 					  ,'CMU' AS  NotificationTYPE
 				FROM cmu_NotificationQueue 
 				WHERE  case when @UserTypeCodeId =101001 or @UserTypeCodeId= 101002 then 1 else UserId end =case when @UserTypeCodeId =101001 or @UserTypeCodeId= 101002 then 1 else @inp_nLoggedInUserId  end 
 					AND ResponseStatusCodeId IS NULL
-					AND ModeCodeId = 1516002
-					GROUP BY [Subject],[Contents]
+					AND ModeCodeId = 156002
+					ORDER BY NotificationQueueId DESC
+					--GROUP BY [Subject],[Contents]
 					
 			SELECT @ncount = COUNT(Id) FROM @tmpNotificationQueue
 			
 			IF @ncount < 10
 			BEGIN
-				INSERT INTO @tmpNotificationQueue (NotificationQueueId,[Subject],[Contents],[NotificationTYPE])
-				SELECT TOP 10 MAX ([NotificationQueueId] )
+				INSERT INTO @tmpNotificationQueue (NotificationQueueId,RuleModeId,ModeCodeId,[Subject],[Contents],CreatedOn,[NotificationTYPE])
+				SELECT TOP 10 [NotificationQueueId],
+						RuleModeId,ModeCodeId
 					  ,[Subject]
 					  ,[Contents]
+					  ,CreatedOn
 					  ,'CMU' AS  NotificationTYPE
 				FROM cmu_NotificationQueue 
 				WHERE  case when @UserTypeCodeId =101001 or @UserTypeCodeId= 101002 then 1 else UserId end =case when @UserTypeCodeId =101001 or @UserTypeCodeId= 101002 then 1 else @inp_nLoggedInUserId  end
 					AND ResponseStatusCodeId IS NOT NULL
-					AND ModeCodeId = 0
-					GROUP BY [Subject],[Contents]
-					
-					UNION
-
-					SELECT TOP 10 MAX ([NotificationId])  as NotificationQueueId
-					  ,[Subject]
-					  ,'' as [Contents]
-					  ,'ONTHEFLY' AS  NotificationTYPE
-				FROM cmu_NotificationOntheFly 
-				WHERE  case when @UserTypeCodeId =101001 or @UserTypeCodeId= 101002 then 1 else UserId end =case when @UserTypeCodeId =101001 or @UserTypeCodeId= 101002 then 1 else @inp_nLoggedInUserId  end
-					AND ResponseStatusCodeId IS NOT NULL
-					GROUP BY [Subject] 
+					AND ModeCodeId = 156002
+					ORDER BY NotificationQueueId DESC
+					--GROUP BY [Subject],[Contents]
 					
 			END
+
+			INSERT INTO @tmpNotificationQueue (NotificationQueueId,RuleModeId,ModeCodeId,[Subject],[Contents],CreatedOn,[NotificationTYPE])
+			SELECT TOP 10  [NotificationId]  as NotificationQueueId
+						, 0 ,0
+					  ,[Subject]
+					  ,'' AS [Contents]
+					  ,CreatedOn
+					  ,'ONTHEFLY' AS  NotificationTYPE
+				FROM cmu_NotificationOntheFly 
+				WHERE case when @UserTypeCodeId =101001 or @UserTypeCodeId= 101002 then 1 else UserId end =case when @UserTypeCodeId =101001 or @UserTypeCodeId= 101002 then 1 else @inp_nLoggedInUserId  end
+					AND ResponseStatusCodeId IS NOT NULL
+					ORDER BY NotificationQueueId DESC
 		
-			SELECT * FROM 
-					(SELECT  TOP 10 NQ.NotificationQueueId AS NotificationQueueId
-						,CASE WHEN NQ.[Subject] IS NULL OR NQ.[Subject] = '' THEN NQ.Contents ELSE NQ.[Subject] END AS Contents
-						, CNQ.ModeCodeId AS ModeCodeId
-						,CNQ.RuleModeId
-						,CNQ.CreatedOn
-						,NotificationTYPE
-					FROM @tmpNotificationQueue NQ
-					INNER JOIN cmu_NotificationQueue CNQ ON NQ.NotificationQueueId = CNQ.NotificationQueueId and NQ.NotificationTYPE='CMU'
-						order by CNQ.CreatedOn desc
-					)tb1
-			UNION
-			SELECT * FROM 
-					(
-					SELECT  TOP 10 NQ.NotificationQueueId AS NotificationQueueId
-						,CASE WHEN NQ.[Subject] IS NULL OR NQ.[Subject] = '' THEN NQ.Contents ELSE NQ.[Subject] END AS Contents
-						, 0 AS ModeCodeId
-						,0 AS RuleModeId
-						,CNQ.CreatedOn
-						,NotificationTYPE
-					FROM @tmpNotificationQueue NQ
-					INNER JOIN cmu_NotificationOntheFly CNQ ON NQ.NotificationQueueId = CNQ.NotificationId and NQ.NotificationTYPE='ONTHEFLY'
-						order by CNQ.CreatedOn desc
-					)tb2
+			SELECT NotificationQueueId, CASE WHEN [Subject] IS NULL OR [Subject] = '' THEN Contents ELSE [Subject] END AS Contents,
+					ModeCodeId,RuleModeId,CreatedOn,NotificationTYPE 
+			FROM @tmpNotificationQueue
+			ORDER BY CreatedOn DESC
+
 			RETURN 0
 			
 	END	 TRY
