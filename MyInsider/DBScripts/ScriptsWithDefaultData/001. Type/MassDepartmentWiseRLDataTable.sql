@@ -14,7 +14,8 @@ GO
 
 CREATE TYPE [dbo].[MassDepartmentWiseRLDataTable] AS TABLE
 (		
-	CompanyName				NVARCHAR(200),	
+	CompanyName				NVARCHAR(200),
+	ISINCode				NVARCHAR(500),
 	ApplicableFrom			DATETIME,
 	ApplicableTo			DATETIME,
 	MassCounter				INT

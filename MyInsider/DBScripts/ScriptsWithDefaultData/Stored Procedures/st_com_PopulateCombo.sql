@@ -641,7 +641,7 @@ BEGIN
 		SET @inp_sParam2 = 103301--103013
 		IF(@inp_sParam1 = 1)
 		BEGIN
-			SELECT Distinct RL.CompanyName AS Value,RlCompanyID AS ID  
+			SELECT Distinct RL.CompanyName +' '+'-'+'('+RL.ISINCode + ')' AS Value,RlCompanyID AS ID  
 			FROM rl_CompanyMasterList RL
 			JOIN com_Code code On RL.ModuleCodeId = code.CodeID
 			WHERE RL.StatusCodeID = 105001 AND ModuleCodeId = @inp_sParam2			

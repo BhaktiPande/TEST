@@ -262,18 +262,20 @@ BEGIN
 						JOIN usr_UserRelation UR ON UR.UserInfoId = UI.UserInfoId
 						WHERE UR.UserInfoId = @inp_iUserInfoId  
 						AND UR.RelationTypeCodeId = @inp_nRelationCodeId
-						AND LOWER(ISNULL(UI.FirstName,'') + ISNULL(UI.LastName,'')) = LOWER(@inp_sFirstLastName)
+						--AND LOWER(ISNULL(UI.FirstName,'') + ISNULL(UI.LastName,'')) = LOWER(@inp_sFirstLastName)
 						) AS RelativesList
-					join usr_UserInfo UI ON UI.UserInfoid = RelativesList.UserInfoIdRelative)
+					join usr_UserInfo UI ON UI.UserInfoid = RelativesList.UserInfoIdRelative
+					WHERE LOWER(ISNULL(UI.FirstName,'') + ISNULL(UI.LastName,'')) = LOWER(REPLACE(@inp_sFirstLastName,' ','')))
 				BEGIN
 					SELECT @inp_iForUserInfoId = RelativesList.UserInfoIdRelative from (
 						SELECT UR.UserInfoIdRelative FROM usr_UserInfo UI 
 						JOIN usr_UserRelation UR ON UR.UserInfoId = UI.UserInfoId
 						WHERE UR.UserInfoId = @inp_iUserInfoId  
 						AND UR.RelationTypeCodeId = @inp_nRelationCodeId
-						AND LOWER(ISNULL(UI.FirstName,'') + ISNULL(UI.LastName,'')) = LOWER(@inp_sFirstLastName)
+						--AND LOWER(ISNULL(UI.FirstName,'') + ISNULL(UI.LastName,'')) = LOWER(@inp_sFirstLastName)
 						) AS RelativesList
-					join usr_UserInfo UI ON UI.UserInfoid = RelativesList.UserInfoIdRelative					
+					join usr_UserInfo UI ON UI.UserInfoid = RelativesList.UserInfoIdRelative
+					WHERE LOWER(ISNULL(UI.FirstName,'') + ISNULL(UI.LastName,'')) = LOWER(REPLACE(@inp_sFirstLastName,' ',''))
 				END
 				ELSE
 				BEGIN
@@ -581,6 +583,7 @@ BEGIN
 									'MASSUPLOAD',
 									NULL,
 									0,
+									0,
 									@out_nSavedTransactionMasterID out, 
 									@out_nDisclosureCompletedFlag out,
 									@out_nReturnValue out, 
@@ -638,6 +641,7 @@ BEGIN
 									@inp_iLoggedInUserId,
 									'MASSUPLOAD',
 									NULL,
+									0,
 									0,
 									@out_nSavedTransactionMasterID out, 
 									@out_nDisclosureCompletedFlag out,
