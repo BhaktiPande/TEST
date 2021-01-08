@@ -1,5 +1,4 @@
-﻿using ESOP.SSO.Library;
-using ESOP.Utility;
+﻿using ESOP.SSOandEncryption;
 using InsiderTrading.Common;
 using InsiderTrading.Models;
 using System;
@@ -47,7 +46,7 @@ namespace InsiderTrading.Controllers
 
                 if (response["SAMLResponse"] != null)
                 {
-                    using (ESOP.SSO.Library.SAMLResponse samlResponse = new ESOP.SSO.Library.SAMLResponse())
+                    using (ESOP.SSOandEncryption.SAMLResponse samlResponse = new ESOP.SSOandEncryption.SAMLResponse())
                     {
                         samlResponse.LoadXmlFromBase64(response["SAMLResponse"]);
                         TempData["samlResponseData"] = samlResponse.SsoProperty;
@@ -111,7 +110,7 @@ namespace InsiderTrading.Controllers
         {
             try
             {
-                ESOP.SSO.Library.SSO sSoData = TempData["samlResponseData"] as ESOP.SSO.Library.SSO;
+                ESOP.SSOandEncryption.SSO sSoData = TempData["samlResponseData"] as ESOP.SSOandEncryption.SSO;
                 Hashtable ht_Parmeters = new Hashtable();
                 ht_Parmeters.Add(CommonConstant.s_AttributeEmail, sSoData.AttributeEmailFromSAMLResponse);
                 //ht_Parmeters.Add(CommonConstant.s_AttributeEmail, "anand.kulkarni@esopdirect.com");
