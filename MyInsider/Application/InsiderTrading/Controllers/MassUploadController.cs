@@ -22,7 +22,7 @@ namespace InsiderTrading.Controllers
 
         [AuthorizationPrivilegeFilter]
         public ActionResult AllMassUpload(int acid)
-        {
+        { 
             ViewBag.acid = acid;
             LoginUserDetails objLoginUserDetails = null;
             objLoginUserDetails = (LoginUserDetails)Common.Common.GetSessionValue(Common.ConstEnum.SessionValue.UserDetails);

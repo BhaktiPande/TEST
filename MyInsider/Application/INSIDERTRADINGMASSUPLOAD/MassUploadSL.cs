@@ -3208,7 +3208,7 @@ namespace InsiderTradingMassUpload
             {
                 int nRowCounter = 1;//There is one header row present so
                 int SECURITYTYPE_COLUMN_NO = 4;
-                int LOTSIZE = 12;
+                int LOTSIZE = 12; 
 
                 List<MassUploadExcelSheetErrors> lstErrors = new List<MassUploadExcelSheetErrors>();
 
