@@ -301,6 +301,7 @@
     <Compile Include="Common\SSRSReportObjects.cs" />
     <Compile Include="Common\WriteToFileLog.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ADFSController.cs" />
     <Compile Include="Controllers\ApplicabilityController.cs" />
     <Compile Include="Controllers\Applicability_OSController.cs" />
     <Compile Include="Controllers\ClawBackReportController.cs" />

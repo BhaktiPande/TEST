@@ -69,8 +69,8 @@ namespace InsiderTrading.Controllers
             return View("SSO");
         }
 
-        [HttpPost]
-        [AllowAnonymous]
+        //[HttpPost]
+        //[AllowAnonymous]
         public ActionResult AssertionConsumerNew(FormCollection response)
         {
             try
