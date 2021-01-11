@@ -59,7 +59,7 @@ namespace InsiderTrading.Models
         [ActivityResourceKey("usr_lbl_11331")]
         [DisplayName("usr_lbl_11331")]
         [StringLength(100)]
-        //[RegularExpression(ConstEnum.DataValidation.UserNameType, ErrorMessage = "usr_msg_50489")]
+        [RegularExpression(ConstEnum.DataValidation.UserNameType, ErrorMessage = "usr_msg_50489")]
         public string FirstName { get; set; }
 
         [DataType(DataType.Text)]
@@ -67,7 +67,7 @@ namespace InsiderTrading.Models
         [ActivityResourceKey("usr_lbl_11332")]
         [DisplayName("usr_lbl_11332")]
         [StringLength(100)]
-       // [RegularExpression(ConstEnum.DataValidation.UserNameType, ErrorMessage = "usr_msg_50489")]
+        [RegularExpression(ConstEnum.DataValidation.UserNameType, ErrorMessage = "usr_msg_50489")]
         public string MiddleName { get; set; }
 
         [DataType(DataType.Text)]
@@ -75,7 +75,7 @@ namespace InsiderTrading.Models
         [ActivityResourceKey("usr_lbl_11333")]
         [DisplayName("usr_lbl_11333")]
         [StringLength(100)]
-        //[RegularExpression(ConstEnum.DataValidation.UserNameType, ErrorMessage = "usr_msg_50489")]
+        [RegularExpression(ConstEnum.DataValidation.UserNameType, ErrorMessage = "usr_msg_50489")]
         public string LastName { get; set; }
 
         [ResourceKey("EmployeeId")]
@@ -89,7 +89,7 @@ namespace InsiderTrading.Models
         [DisplayName("usr_lbl_11335")]
         public int? CompanyId { get; set; }
 
-       // [RegularExpression(ConstEnum.DataValidation.AlphanumericWithSpace, ErrorMessage = "usr_msg_50491")]
+        [RegularExpression(ConstEnum.DataValidation.AlphanumericWithSpace, ErrorMessage = "usr_msg_50491")]
         public string CompanyName { get; set; }
 
         [ResourceKey("CountryId")]
@@ -115,72 +115,6 @@ namespace InsiderTrading.Models
         [StringLength(1000)]
         [RegularExpression(ConstEnum.DataValidation.DescriptionType, ErrorMessage = "dis_msg_50513")]
         public string AddressLine1 { get; set; }
-
-        [DataType(DataType.Text)]
-        [ResourceKey("Address Personal")]
-        [ActivityResourceKey("usr_lbl_54227")]
-        [DisplayName("usr_lbl_54227")]
-        [StringLength(1000)]
-        [RegularExpression(ConstEnum.DataValidation.DescriptionType, ErrorMessage = "usr_msg_54228")]
-        public string PersonalAddress { get; set; }
-
-        [DataType(DataType.Text)]
-        [ResourceKey("PhoneNumber")]
-        [ActivityResourceKey("usr_lbl_72001")]
-        [DisplayName("usr_lbl_72001")]
-        [StringLength(1000)]
-        [RegularExpression(ConstEnum.DataValidation.MobileNo, ErrorMessage = "usr_msg_72002")]
-        public string PhoneNumber { get; set; }
-
-        [DataType(DataType.DateTime)]
-        [ResourceKey("DateOfBirth")]
-        [ActivityResourceKey("usr_lbl_72003")]
-        [DisplayName("usr_lbl_72003")]
-        
-        [RegularExpression(ConstEnum.DataValidation.DescriptionType, ErrorMessage = "usr_msg_72004")]
-        public DateTime? DateOfBirth { get; set; }
-
-        [DataType(DataType.Text)]
-        [ResourceKey("EmiratesId")]
-        [ActivityResourceKey("usr_lbl_72005")]
-        [DisplayName("usr_lbl_72005")]
-        [StringLength(1000)]
-        [RegularExpression(ConstEnum.DataValidation.NumbersOnly, ErrorMessage = "usr_msg_72006")]
-        public string EmiratesId { get; set; }
-
-        [DataType(DataType.DateTime)]
-        [ResourceKey("EmiratesId_ExpiryDate")]
-        [ActivityResourceKey("usr_lbl_72007")]
-        [DisplayName("usr_lbl_72007")]
-      
-        [RegularExpression(ConstEnum.DataValidation.DescriptionType, ErrorMessage = "usr_msg_72008")]
-        public DateTime? EmiratesId_ExpiryDate { get; set; }
-
-
-        [DataType(DataType.DateTime)]
-        [ResourceKey("Passport_ExpiryDate")]
-        [ActivityResourceKey("usr_lbl_72009")]
-        [DisplayName("usr_lbl_72009")]
-      
-        [RegularExpression(ConstEnum.DataValidation.DescriptionType, ErrorMessage = "usr_msg_72010")]
-        public DateTime? Passport_ExpiryDate { get; set; }
-
-        [DataType(DataType.DateTime)]
-        [ResourceKey("DateRemoved_asInsider")]
-        [ActivityResourceKey("usr_lbl_72011")]
-        [DisplayName("usr_lbl_72011")]
-    
-        [RegularExpression(ConstEnum.DataValidation.DescriptionType, ErrorMessage = "usr_msg_72012")]
-        public DateTime? DateRemoved_asInsider { get; set; }
-
-        [DataType(DataType.Text)]
-        [ResourceKey("ReasonRemoved_asInsider")]
-        [ActivityResourceKey("usr_lbl_72013")]
-        [DisplayName("usr_lbl_72013")]
-        [StringLength(1000)]
-        [RegularExpression(ConstEnum.DataValidation.DescriptionType, ErrorMessage = "usr_msg_72014")]
-        public string ReasonRemoved_asInsider { get; set; }
-
 
         [DataType(DataType.Text)]
         [ResourceKey("AddressLine2")]
@@ -315,7 +249,7 @@ namespace InsiderTrading.Models
         [ResourceKey("DesignationName")]
         [ActivityResourceKey("usr_lbl_11430")]
         [DisplayName("usr_lbl_11430")]
-       // [RegularExpression(ConstEnum.DataValidation.AlphanumericWithSpace, ErrorMessage = "usr_msg_50489")]
+        [RegularExpression(ConstEnum.DataValidation.AlphanumericWithSpace, ErrorMessage = "usr_msg_50489")]
         public string DesignationName { get; set; }
 
         [DisplayName("usr_lbl_11253")]
@@ -446,16 +380,16 @@ namespace InsiderTrading.Models
 
         [Required]
         [DisplayName("usr_lbl_11002")]
-        //[RegularExpression(ConstEnum.DataValidation.UserNameType, ErrorMessage = "usr_msg_50489")]
+        [RegularExpression(ConstEnum.DataValidation.UserNameType, ErrorMessage = "usr_msg_50489")]
         public string FirstName { get; set; }
 
         [DisplayName("usr_lbl_11003")]
-       // [RegularExpression(ConstEnum.DataValidation.UserNameType, ErrorMessage = "usr_msg_50489")]
+        [RegularExpression(ConstEnum.DataValidation.UserNameType, ErrorMessage = "usr_msg_50489")]
         public string MiddleName { get; set; }
 
         [Required]
         [DisplayName("usr_lbl_11004")]
-       // [RegularExpression(ConstEnum.DataValidation.UserNameType, ErrorMessage = "usr_msg_50489")]
+        [RegularExpression(ConstEnum.DataValidation.UserNameType, ErrorMessage = "usr_msg_50489")]
         public string LastName { get; set; }
 
         [Required]
@@ -704,7 +638,7 @@ namespace InsiderTrading.Models
         [ActivityResourceKey("usr_lbl_11357")]
         [DisplayName("usr_lbl_11357")]
         [StringLength(100)]
-       // [RegularExpression(ConstEnum.DataValidation.UserNameType, ErrorMessage = "usr_msg_50489")]
+        [RegularExpression(ConstEnum.DataValidation.UserNameType, ErrorMessage = "usr_msg_50489")]
         //[Required]
         public string FirstName { get; set; }
 
@@ -713,7 +647,7 @@ namespace InsiderTrading.Models
         [ActivityResourceKey("usr_lbl_11358")]
         [DisplayName("usr_lbl_11358")]
         [StringLength(100)]
-        //[RegularExpression(ConstEnum.DataValidation.UserNameType, ErrorMessage = "usr_msg_50489")]
+        [RegularExpression(ConstEnum.DataValidation.UserNameType, ErrorMessage = "usr_msg_50489")]
         //[Required]
         public string MiddleName { get; set; }
 
@@ -722,7 +656,7 @@ namespace InsiderTrading.Models
         [ActivityResourceKey("usr_lbl_11359")]
         [DisplayName("usr_lbl_11359")]
         [StringLength(100)]
-        //[RegularExpression(ConstEnum.DataValidation.UserNameType, ErrorMessage = "usr_msg_50489")]
+        [RegularExpression(ConstEnum.DataValidation.UserNameType, ErrorMessage = "usr_msg_50489")]
         //[Required]
         public string LastName { get; set; }
 

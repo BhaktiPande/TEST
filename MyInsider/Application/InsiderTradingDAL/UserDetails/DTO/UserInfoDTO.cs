@@ -69,34 +69,6 @@ namespace InsiderTradingDAL
         [PetaPoco.Column("AddressLine2")]
         public string AddressLine2 { get; set; }
 
-        [PetaPoco.Column("PersonalAddress")]
-        public string PersonalAddress { get; set; }
-
-        [PetaPoco.Column("PhoneNumber")]
-        public string PhoneNumber { get; set; }
-
-        [PetaPoco.Column("DateOfBirth")]
-        public DateTime? DateOfBirth { get; set; }
-
-
-
-        [PetaPoco.Column("EmiratesId")]
-        public string EmiratesId { get; set; }
-
-        [PetaPoco.Column("EmiratesId_ExpiryDate")]
-        public DateTime? EmiratesId_ExpiryDate { get; set; }
-
-        [PetaPoco.Column("Passport_ExpiryDate")]
-        public DateTime? Passport_ExpiryDate { get; set; }
-
-        [PetaPoco.Column("DateRemoved_asInsider")]
-        public DateTime? DateRemoved_asInsider { get; set; }
-
-
-        [PetaPoco.Column("ReasonRemoved_asInsider")]
-        public string ReasonRemoved_asInsider { get; set; }
-
-
         [PetaPoco.Column("CountryId")]
         public int? CountryId { get; set; }
         public string CountryName { get; set; }

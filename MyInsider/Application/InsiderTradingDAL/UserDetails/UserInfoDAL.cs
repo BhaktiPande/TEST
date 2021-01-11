@@ -244,7 +244,7 @@ namespace InsiderTradingDAL
                                       + ", @inp_sLandLine2, @inp_sWebsite, @inp_sPAN, @inp_sTAN, @inp_sDescription, @inp_iCategory, @inp_iSubCategory, @inp_iGradeId, @inp_iDesignationId, @inp_iSubDesignationId"
                                       + ", @inp_sLocation, @inp_iDepartmentId, @inp_iUPSIAccessOfCompanyID, @inp_iParentId, @inp_iRelationWithEmployee, @inp_iStatusCodeId, @inp_sCategoryText, @inp_sSubCategoryText"
                                       + ", @inp_sGradeText, @inp_sDesignationText, @inp_sSubDesignationText, @inp_sDepartmentText, @inp_iLoggedInUserId"
-                                      + ", @inp_sLoginID, @inp_sPassword, @inp_iIsInsider,@inp_sCIN,@inp_sDIN,@inp_sRelativeStatus,@inp_sDoYouHaveDMATEAccountFlag,@inp_sSaveNAddDematflag,@inp_sResidentTypeId,@inp_sUIDAI_IdentificationNo, @inp_sIdentificationTypeId,@inp_sAllowUpsiUser,@inp_sPersonalAddress,@inp_sPhoneNumber,@inp_sDateOfBirth,@inp_sEmiratesId,@inp_sEmiratesId_ExpiryDate,@inp_sPassport_ExpiryDate,@inp_sDateRemoved_asInsider,@inp_sReasonRemoved_asInsider, @out_nReturnValue OUTPUT, @out_nSQLErrCode OUTPUT, @out_sSQLErrMessage OUTPUT",
+                                      + ", @inp_sLoginID, @inp_sPassword, @inp_iIsInsider,@inp_sCIN,@inp_sDIN,@inp_sRelativeStatus,@inp_sDoYouHaveDMATEAccountFlag,@inp_sSaveNAddDematflag,@inp_sResidentTypeId,@inp_sUIDAI_IdentificationNo, @inp_sIdentificationTypeId,@inp_sAllowUpsiUser, @out_nReturnValue OUTPUT, @out_nSQLErrCode OUTPUT, @out_sSQLErrMessage OUTPUT",
                             new
                             {
 
@@ -302,16 +302,6 @@ namespace InsiderTradingDAL
                                 inp_sUIDAI_IdentificationNo=i_objUserInfoDTO.UIDAI_IdentificationNo,
                                 inp_sIdentificationTypeId=i_objUserInfoDTO.IdentificationTypeId,
                                 inp_sAllowUpsiUser = i_objUserInfoDTO.AllowUpsiUser,
-                                inp_sPersonalAddress=i_objUserInfoDTO.PersonalAddress,
-                                inp_sPhoneNumber = i_objUserInfoDTO.PhoneNumber,
-                                inp_sDateOfBirth = i_objUserInfoDTO.DateOfBirth,
-                                inp_sEmiratesId = i_objUserInfoDTO.EmiratesId,
-                                inp_sEmiratesId_ExpiryDate = i_objUserInfoDTO.EmiratesId_ExpiryDate,
-                                inp_sPassport_ExpiryDate = i_objUserInfoDTO.Passport_ExpiryDate,
-                                inp_sDateRemoved_asInsider = i_objUserInfoDTO.DateRemoved_asInsider,
-                                inp_sReasonRemoved_asInsider = i_objUserInfoDTO.ReasonRemoved_asInsider,
-
-
                                 out_nReturnValue = nReturnValue,
                                 out_nSQLErrCode = nSQLErrCode,
                                 out_sSQLErrMessage = sSQLErrMessage

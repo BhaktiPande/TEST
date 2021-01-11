@@ -137,8 +137,7 @@ BEGIN
 				   @sRoles as SubmittedRoleIds,UI.DIN, UI.ResidentTypeId,UI.UIDAI_IdentificationNo,UI.IdentificationTypeId,
 				   CONVERT(bit, CASE WHEN (@nCurrentDateTime > @nReconfirmationDate OR EventLogId IS NULL) AND @nFrequency != 0 THEN 1 ELSE 0 END) AS IsRequiredConfirmPersonalDetails,UI.AllowUpsiUser,
 				   ISNULL(UI.IsBlocked,0) as IsBlocked,
-				   Rtrim( Ltrim( Blocked_UnBlock_Reason)) as Blocked_UnBlock_Reason, UI.PersonalAddress
-
+				   Rtrim( Ltrim( Blocked_UnBlock_Reason)) as Blocked_UnBlock_Reason
 				   --CONVERT(bit, CASE WHEN EventLogId IS NOT NULL THEN 1 ELSE 0 END) AS IsRequiredConfirmPersonalDetails
 			From   usr_UserInfo UI 
 				   LEFT JOIN usr_Authentication AUT ON UI.UserInfoId = AUT.UserInfoID
@@ -170,7 +169,6 @@ BEGIN
 				   UI.DesignationText as DesignationName--UI.DesignationId	
 				   , @sRoles as SubmittedRoleIds,UI.CIN,UI.UserTypeCodeId,
 				   CONVERT(bit, CASE WHEN EventLogId IS NOT NULL THEN 0 ELSE 1 END) AS IsRequiredConfirmPersonalDetails, CategoryText AS CategoryName, SubCategoryText AS SubCategoryName,UI.AllowUpsiUser
-				   ,UI.PersonalAddress
 			FROM   usr_UserInfo UI
 			LEFT JOIN usr_Authentication AUT ON UI.UserInfoId = AUT.UserInfoID
 			LEFT JOIN mst_Company C ON UI.CompanyId = C.CompanyId
@@ -200,7 +198,6 @@ BEGIN
 				   UI.IsInsider, UI.UserTypeCodeId, @sRoles as SubmittedRoleIds,UI.DIN,
 				   --CONVERT(bit, CASE WHEN EventLogId IS NOT NULL THEN 1 ELSE 0 END) AS IsRequiredConfirmPersonalDetails	
 				    CONVERT(bit, CASE WHEN (@nCurrentDateTime > @nReconfirmationDate OR EventLogId IS NULL) AND @nFrequency != 0 THEN 1 ELSE 0 END) AS IsRequiredConfirmPersonalDetails,UI.AllowUpsiUser
-					, UI.PersonalAddress
 				   --CdCategory.CodeName AS CategoryName, CdSubCategory.CodeName AS SubCategoryName, 
 				   --CdDepartment.CodeName as DepartmentName, CdDesignation.CodeName AS DesignationName,
 				   --CdGrade.CodeName AS GradeName

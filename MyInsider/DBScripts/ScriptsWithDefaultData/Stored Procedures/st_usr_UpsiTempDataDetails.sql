@@ -41,7 +41,7 @@ BEGIN
 	CREATE TABLE #tmpUpsiDetails
 		(		
 		ID							INT IDENTITY(1,1) NOT NULL,
-		Company_Name                NVarchar(500),
+		Company_Name                Varchar(500),
 		Company_Address				Varchar(500),
 		Category_Shared             nvarchar(50),
 		Reason_sharing      	    nvarchar(500),

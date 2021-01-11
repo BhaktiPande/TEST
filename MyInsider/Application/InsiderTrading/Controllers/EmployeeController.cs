@@ -394,7 +394,7 @@ namespace InsiderTrading.Controllers
                     objUserInfoDTO.UIDAI_IdentificationNo = objEmployeeModel.userInfoModel.UIDAI_IdentificationNo;
                     objUserInfoDTO.IdentificationTypeId = objEmployeeModel.userInfoModel.IdentificationTypeId;
                     objUserInfoDTO.AllowUpsiUser = objEmployeeModel.userInfoModel.AllowUpsiUser;
-                    objUserInfoDTO.PersonalAddress = objEmployeeModel.userInfoModel.PersonalAddress;
+
                     objUserInfoDTO.PhoneNumber = objEmployeeModel.userInfoModel.PhoneNumber;
                     objUserInfoDTO.DateOfBirth = objEmployeeModel.userInfoModel.DateOfBirth;
                     objUserInfoDTO.EmiratesId = objEmployeeModel.userInfoModel.EmiratesId;
@@ -402,6 +402,7 @@ namespace InsiderTrading.Controllers
                     objUserInfoDTO.Passport_ExpiryDate = objEmployeeModel.userInfoModel.Passport_ExpiryDate;
                     objUserInfoDTO.DateRemoved_asInsider = objEmployeeModel.userInfoModel.DateRemoved_asInsider;
                     objUserInfoDTO.ReasonRemoved_asInsider = objEmployeeModel.userInfoModel.ReasonRemoved_asInsider;
+
 
 
                     if (objUserInfoDTO.StateId == 0)
@@ -2637,7 +2638,6 @@ namespace InsiderTrading.Controllers
             Response.Clear();
             Response.Buffer = true;
             Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            Response.Write("<meta http-equiv=Content-Type content=text/html;charset=UTF-8>");
             Response.Charset = "";
             Response.AddHeader("content-disposition", "attachment;filename=" + exlFilename + "");
             StringWriter sWriter = new StringWriter();

@@ -286,7 +286,7 @@ BEGIN
 					select 
 						CASE 
 							WHEN TUD.UserTypeCode = @UserTYpe_Corporate THEN ISNULL(TUD.CompanyName,' ') 
-							ELSE ISNULL(TUD.FirstName + N' ',N' ') + ISNULL(TUD.MiddleName + N' ',N' ') + ISNULL(TUD.LastName,N' ') 
+							ELSE ISNULL(TUD.FirstName + ' ',' ') + ISNULL(TUD.MiddleName + ' ',' ') + ISNULL(TUD.LastName,' ') 
 						END + '##' 
 							+ ISNULL(TUD.PanNumber, '') + '##' 
 							+ CASE 

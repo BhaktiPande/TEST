@@ -94,7 +94,7 @@ BEGIN
 	DECLARE @nPreviousPeriodValue DECIMAL(25,4)
 	DECLARE @nCurrentPeriodValue DECIMAL(25,4)
 	
-	DECLARE @sScriptName NVARCHAR(100)
+	DECLARE @sScriptName VARCHAR(100)
 	DECLARE @sISIN VARCHAR(100)
 	DECLARE @sPreviousHolding VARCHAR(100) -- 'rpt_lbl_19236', 'Previous Holdings'
 	DECLARE @sCurrentHolding VARCHAR(100) -- 'rpt_lbl_19237', 'Current Holdings'
@@ -105,7 +105,7 @@ BEGIN
 	DECLARE @nTransactionType_CashlessAll INT = 143004
 	DECLARE @nTransactionType_CashlessPartial INT = 143005
 	
-	DECLARE @tmpUserDetails TABLE(Id INT IDENTITY(1,1), RKey VARCHAR(20), Value NVARCHAR(max), DataType INT)
+	DECLARE @tmpUserDetails TABLE(Id INT IDENTITY(1,1), RKey VARCHAR(20), Value VARCHAR(50), DataType INT)
 	DECLARE @tmpUserTable TABLE(Id INT IDENTITY(1,1), UserInfoId INT, UserInfoIdRelative INT, SecurityTypeCodeId INT, DMATDetailsID INT, Relation VARCHAR(100), Holdings Decimal(20), Value Decimal(25,4))
 	DECLARE @tmpFinal TABLE(Id INT IDENTITY(1,1), ScriptName NVARCHAR(200), ISIN VARCHAR(100), SecurityType VARCHAR(100), TransactionType VARCHAR(100),
 							PreviousHoldings INT, BuyQuantity INT, SellQuantity INT, Value DECIMAL(25,4), DateOfAcquisition DATETIME, Currency NVARCHAR(50) )
@@ -185,7 +185,7 @@ BEGIN
 			
 			INSERT INTO @tmpUserDetails(RKey, Value, DataType)
 			VALUES ('rpt_lbl_19135', @sEmployeeID, @nDataType_String),
-				('rpt_lbl_19136',  CONVERT(NVARCHAR(max), @sInsiderName) , @nDataType_String),
+				('rpt_lbl_19136', dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max), @sInsiderName),1)), @nDataType_String),
 				('rpt_lbl_19137', dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max), @sDesignation),1)), @nDataType_String),
 				('rpt_lbl_19147', ISNULL(@sCINDIN, ''), @nDataType_String),
 				('rpt_lbl_19138', dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max), @sGrade),1)), @nDataType_String),

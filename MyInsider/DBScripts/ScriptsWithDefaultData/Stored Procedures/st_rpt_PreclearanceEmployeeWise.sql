@@ -195,13 +195,13 @@ BEGIN
   			IF (@inp_sInsiderName IS NOT NULL AND @inp_sInsiderName <> '')
 			BEGIN
 				print '@inp_sInsiderName'
-				SELECT @sSQL = @sSQL + ' AND CASE WHEN UserTypeCodeId = 101004 THEN C.CompanyName ELSE ISNULL(FirstName, N'''') + N'' '' + ISNULL(LastName, N'''') END like N''%' + @inp_sInsiderName + '%'''
+				SELECT @sSQL = @sSQL + ' AND CASE WHEN UserTypeCodeId = 101004 THEN C.CompanyName ELSE ISNULL(FirstName, '''') + '' '' + ISNULL(LastName, '''') END like ''%' + @inp_sInsiderName + '%'''
 			
 			END
   			IF (@inp_sDesignation IS NOT NULL AND @inp_sDesignation <> '')
 			BEGIN
 				print '@inp_sDesignation'
-				SELECT @sSQL = @sSQL + ' AND (CDesignation.CodeName like N''%' + @inp_sDesignation + '%'' OR DesignationText like N''%' + @inp_sDesignation + '%'')'
+				SELECT @sSQL = @sSQL + ' AND (CDesignation.CodeName like ''%' + @inp_sDesignation + '%'' OR DesignationText like ''%' + @inp_sDesignation + '%'')'
 			
 			END
   			IF (@inp_sGrade IS NOT NULL AND @inp_sGrade <> '')
@@ -224,7 +224,7 @@ BEGIN
   			IF (@inp_sCompanyName IS NOT NULL AND @inp_sCompanyName <> '')
 			BEGIN
 				print '@inp_sCompanyName'
-				SELECT @sSQL = @sSQL + ' AND C.CompanyName like N''%' + @inp_sCompanyName + '%'''
+				SELECT @sSQL = @sSQL + ' AND C.CompanyName like ''%' + @inp_sCompanyName + '%'''
 			
 			END
   			IF (@inp_sTypeOfInsider IS NOT NULL AND @inp_sTypeOfInsider <> '')
@@ -311,13 +311,13 @@ BEGIN
 		
 		SELECT @sSQL = 'SELECT dbo.uf_rpt_ReplaceSpecialChar(UserInfoId) AS UserInfoId, dbo.uf_rpt_ReplaceSpecialChar(DateOfInactivation) AS DateOfInactivation,dbo.uf_rpt_ReplaceSpecialChar(Category) AS Category,dbo.uf_rpt_ReplaceSpecialChar(SubCategory) AS SubCategory,dbo.uf_rpt_ReplaceSpecialChar(StatusCodeId) AS StatusCodeId,'
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(EmployeeId) AS rpt_grd_19191, '
-		SELECT @sSQL = @sSQL + 'InsiderName AS rpt_grd_19192, '
+		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(InsiderName) AS rpt_grd_19192, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatDateValue(JoiningDate,0)) AS rpt_grd_19193, '
-		SELECT @sSQL = @sSQL + 'CONVERT(NVARCHAR(max),Designation)  AS rpt_grd_19194, '
+		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR,Designation),1)) AS rpt_grd_19194, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR,Grade),1)) AS rpt_grd_19195, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR,Location),1)) AS rpt_grd_19196, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR,Department),1)) AS rpt_grd_19197, '
-		SELECT @sSQL = @sSQL + 'CompanyName AS rpt_grd_19198, '
+		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(CompanyName) AS rpt_grd_19198, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(TypeOfInsider) AS rpt_grd_19199, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(Request) AS rpt_grd_19201, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(Approved) AS rpt_grd_19202, '

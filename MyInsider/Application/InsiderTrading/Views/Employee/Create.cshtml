@@ -72,20 +72,20 @@
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <div class="row">
                                             @{
-                                                //check if to show following option to login user -- if do not show role then hide div
-                                                if (!(bool)ViewBag.show_not_login_user_details)
-                                                {
-                                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                        <div role="form">
-                                                            <div class="form-group">
-                                                                @Html.LabelFor(m => m.userInfoModel.LoginID)
-                                                                @Html.TextBoxFor(m => m.userInfoModel.LoginID, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.LoginID).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.LoginID).ToString(), new { @class = "form-control", id = "txtLoginID" }))
-                                                                @Html.HiddenFor(m => m.userInfoModel.LoginID)
-                                                                @Html.ValidationMessageFor(m => m.userInfoModel.LoginID)
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                }
+                            //check if to show following option to login user -- if do not show role then hide div
+                            if (!(bool)ViewBag.show_not_login_user_details)
+                            {
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                    <div role="form">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.userInfoModel.LoginID)
+                                            @Html.TextBoxFor(m => m.userInfoModel.LoginID, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.LoginID).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.LoginID).ToString(), new { @class = "form-control", id = "txtLoginID" }))
+                                            @Html.HiddenFor(m => m.userInfoModel.LoginID)
+                                            @Html.ValidationMessageFor(m => m.userInfoModel.LoginID)
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                                             }
 
                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -124,52 +124,52 @@
 
                                     </div>
                                     @{
-                                        //check if to show following option to login user -- if do not show role then hide div
-                                        if ((bool)ViewBag.show_not_login_user_details)
-                                        {
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <div class="row">
-                                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                        <div role="form">
-                                                            <div class="form-group">
-                                                                @Html.LabelFor(m => m.userInfoModel.LoginID)
-                                                                @Html.TextBoxFor(m => m.userInfoModel.LoginID, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.LoginID).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.LoginID).ToString(), new { @class = "form-control" }))
-                                                                @Html.ValidationMessageFor(m => m.userInfoModel.LoginID)
+                                            //check if to show following option to login user -- if do not show role then hide div
+                                            if ((bool)ViewBag.show_not_login_user_details)
+                                            {
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    <div class="row">
+                                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                            <div role="form">
+                                                                <div class="form-group">
+                                                                    @Html.LabelFor(m => m.userInfoModel.LoginID)
+                                                                    @Html.TextBoxFor(m => m.userInfoModel.LoginID, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.LoginID).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.LoginID).ToString(), new { @class = "form-control" }))
+                                                                    @Html.ValidationMessageFor(m => m.userInfoModel.LoginID)
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                        <div role="form">
-                                                            <div class="form-group">
-                                                                @Html.LabelFor(m => m.userInfoModel.AssignedRole)
-                                                                @{
-                                                                    //check if user has permission to add role
-                                                                    if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.CRUSER_ROLEMASTER_CREATE))
-                                                                    {
-                                                                        if ((bool)ViewBag.show_create_role_link)
-                                                                        {
-                                                                            @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-                                                                            <div class="form-group">
-                                                                                <a href="javascript:void(0);" class="create-link" id="AT" type="button" data-toggle='modal' data-target='#addRoleMaster'>
-                                                                                    @InsiderTrading.Common.Common.getResource("usr_lbl_11339")
-                                                                                </a>
-                                                                            </div>
-                                                                        }
+                                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                            <div role="form">
+                                                                <div class="form-group">
+                                                                    @Html.LabelFor(m => m.userInfoModel.AssignedRole)
+                                                                    @{
+                                                //check if user has permission to add role
+                                                if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.CRUSER_ROLEMASTER_CREATE))
+                                                {
+                                                    if ((bool)ViewBag.show_create_role_link)
+                                                    {
+                                                        @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+                                                                        <div class="form-group">
+                                                                            <a href="javascript:void(0);" class="create-link" id="AT" type="button" data-toggle='modal' data-target='#addRoleMaster'>
+                                                                                @InsiderTrading.Common.Common.getResource("usr_lbl_11339")
+                                                                            </a>
+                                                                        </div>
+                                                    }
+                                                }
                                                                     }
-                                                                }
-                                                                @Html.ListBoxFor(m => m.userInfoModel.SubmittedRole, new MultiSelectList(Model.userInfoModel.DefaultRole, "Key", "Value", Model.userInfoModel.AssignedRole.Select(m => m.Key)), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.AssignedRole).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.AssignedRole).ToString(), new { multiple = "multiple", @class = "form-control multiselect" }))
-                                                                @Html.ValidationMessageFor(m => m.userInfoModel.SubmittedRole)
+                                                                    @Html.ListBoxFor(m => m.userInfoModel.SubmittedRole, new MultiSelectList(Model.userInfoModel.DefaultRole, "Key", "Value", Model.userInfoModel.AssignedRole.Select(m => m.Key)), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.AssignedRole).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.AssignedRole).ToString(), new { multiple = "multiple", @class = "form-control multiselect" }))
+                                                                    @Html.ValidationMessageFor(m => m.userInfoModel.SubmittedRole)
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            //set hidden variable for role which need to be pass for saving
-                                            @*@Html.HiddenFor(m => m.userInfoModel.SubmittedRole)*@
-                                        }
+                                            }
+                                            else
+                                            {
+                                                //set hidden variable for role which need to be pass for saving
+                                                @*@Html.HiddenFor(m => m.userInfoModel.SubmittedRole)*@
+                                            }
                                     }
 
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -257,69 +257,6 @@
 
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <div class="row">
-
-
-
-
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group" id="sandbox-container">
-
-                                                        @Html.LabelFor(m => m.userInfoModel.Passport_ExpiryDate)
-                                                        @{
-                                                            string passport = "";
-                                                            if (Model.userInfoModel.Passport_ExpiryDate != null)
-                                                            {
-                                                                passport = InsiderTrading.Common.Common.ApplyFormatting(Model.userInfoModel.Passport_ExpiryDate, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
-
-                                                            }
-                                                        }
-                                                        <div class="input-group date  group_date_previous">
-
-                                                            @Html.TextBox("userInfoModel.Passport_ExpiryDate", passport, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.Passport_ExpiryDate).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.Passport_ExpiryDate).ToString(), new { @class = "form-control" }))
-                                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                                        </div>
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.Passport_ExpiryDate)
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-
-                                                        @Html.LabelFor(m => m.userInfoModel.EmiratesId)
-
-                                                        @Html.TextBoxFor(m => m.userInfoModel.EmiratesId, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.EmiratesId).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.EmiratesId).ToString(), new { @class = "form-control ", id = "txtEmiratesId" }))
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.EmiratesId)
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group" id="sandbox-container">
-
-                                                        @Html.LabelFor(m => m.userInfoModel.EmiratesId_ExpiryDate)
-                                                        @{
-                                                            string Exp = "";
-                                                            if (Model.userInfoModel.EmiratesId_ExpiryDate != null)
-                                                            {
-                                                                Exp = InsiderTrading.Common.Common.ApplyFormatting(Model.userInfoModel.EmiratesId_ExpiryDate, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
-
-                                                            }
-                                                        }
-                                                        <div class="input-group date  group_date_previous ">
-                                                            @*  group_date_previous*@
-                                                            @Html.TextBox("userInfoModel.EmiratesId_ExpiryDate", Exp, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.EmiratesId_ExpiryDate).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.EmiratesId_ExpiryDate).ToString(), new { @class = "form-control" }))
-                                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                                        </div>
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.EmiratesId_ExpiryDate)
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                                                 <div role="form">
                                                     <div class="form-group">
@@ -329,29 +266,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-
-                                        </div>
-                                    </div>
-
-
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <div class="row">
-
-
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.PhoneNumber)
-
-                                                        @Html.TextBoxFor(m => m.userInfoModel.PhoneNumber, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.PhoneNumber).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.PhoneNumber).ToString(), new { @class = "form-control btnAddMobileDetails ", id = "txt_EmpMobNo" }))
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.PhoneNumber)
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                                                 <div role="form">
                                                     <div class="form-group">
@@ -361,17 +275,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.PersonalAddress)
-                                                        @Html.TextAreaFor(m => m.userInfoModel.PersonalAddress, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.PersonalAddress).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.PersonalAddress).ToString(), new { @class = "form-control", style = "height:34px" }))
-                                                        <br />@Html.ValidationMessageFor(m => m.userInfoModel.PersonalAddress)
-                                                    </div>
-                                                </div>
-                                            </div>
-
                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                                                 <div role="form">
                                                     <div class="form-group">
@@ -381,13 +284,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-                                        </div>
-                                    </div>
-
-
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <div class="row">
                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                                                 <div role="form">
                                                     <div class="form-group">
@@ -399,39 +295,20 @@
                                             </div>
 
 
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group" id="sandbox-container">
-
-                                                        @Html.LabelFor(m => m.userInfoModel.DateOfBirth)
-                                                        @{
-                                                            string DOB = "";
-                                                            if (Model.userInfoModel.DateOfBirth != null)
-                                                            {
-                                                                DOB = InsiderTrading.Common.Common.ApplyFormatting(Model.userInfoModel.DateOfBirth, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
-
-                                                            }
-                                                        }
-                                                        <div class="input-group date datepickerDOB">
-                                                            @Html.TextBox("userInfoModel.DateOfBirth", DOB, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.DateOfBirth).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.DateOfBirth).ToString(), new { @class = "form-control" }))
-                                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                                        </div>
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.DateOfBirth)
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="row">
                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                                                 <div class="form-group" id="sandbox-container">
                                                     @Html.LabelFor(m => m.userInfoModel.DateOfJoining)
                                                     @{
-                                                        string DOJ = "";
-                                                        if (Model.userInfoModel.DateOfJoining != null)
-                                                        {
-                                                            DOJ = InsiderTrading.Common.Common.ApplyFormatting(Model.userInfoModel.DateOfJoining, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+                                            string DOJ = "";
+                                            if (Model.userInfoModel.DateOfJoining != null)
+                                            {
+                                                DOJ = InsiderTrading.Common.Common.ApplyFormatting(Model.userInfoModel.DateOfJoining, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
 
-                                                        }
+                                            }
                                                     }
                                                     <div class="input-group date">
                                                         @Html.TextBox("userInfoModel.DateOfJoining", DOJ, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.DateOfJoining).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.DateOfJoining).ToString(), new { @class = "form-control" }))
@@ -440,18 +317,16 @@
                                                     @Html.ValidationMessageFor(m => m.userInfoModel.DateOfJoining)
                                                 </div>
                                             </div>
-
-
                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                                                 <div class="form-group" id="sandbox-container">
                                                     @Html.LabelFor(m => m.userInfoModel.DateOfBecomingInsider)
                                                     @{
-                                                        string DOBI = "";
-                                                        if (Model.userInfoModel.DateOfBecomingInsider != null)
-                                                        {
-                                                            DOBI = InsiderTrading.Common.Common.ApplyFormatting(Model.userInfoModel.DateOfBecomingInsider, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+                                            string DOBI = "";
+                                            if (Model.userInfoModel.DateOfBecomingInsider != null)
+                                            {
+                                                DOBI = InsiderTrading.Common.Common.ApplyFormatting(Model.userInfoModel.DateOfBecomingInsider, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
 
-                                                        }
+                                            }
                                                     }
                                                     <div class="input-group date">
                                                         @Html.TextBox("userInfoModel.DateOfBecomingInsider", DOBI, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.DateOfBecomingInsider).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.DateOfBecomingInsider).ToString(), new { @class = "form-control" }))
@@ -460,51 +335,6 @@
                                                     @Html.ValidationMessageFor(m => m.userInfoModel.DateOfBecomingInsider)
                                                 </div>
                                             </div>
-
-                                        </div>
-                                    </div>
-
-
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <div class="row">
-
-
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group" id="sandbox-container">
-
-                                                        @Html.LabelFor(m => m.userInfoModel.DateRemoved_asInsider)
-                                                        @{
-                                                            string dateRemoved = "";
-                                                            if (Model.userInfoModel.DateRemoved_asInsider != null)
-                                                            {
-                                                                dateRemoved = InsiderTrading.Common.Common.ApplyFormatting(Model.userInfoModel.DateRemoved_asInsider, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
-
-                                                            }
-                                                        }
-                                                        <div class="input-group date ">
-                                                            @Html.TextBox("userInfoModel.DateRemoved_asInsider", dateRemoved, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.DateRemoved_asInsider).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.DateRemoved_asInsider).ToString(), new { @class = "form-control" }))
-                                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                                        </div>
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.DateRemoved_asInsider)
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-
-
-
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.ReasonRemoved_asInsider)
-                                                        @Html.TextAreaFor(m => m.userInfoModel.ReasonRemoved_asInsider, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.ReasonRemoved_asInsider).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.ReasonRemoved_asInsider).ToString(), new { @class = "form-control", style = "height:34px" }))
-                                                        <br />@Html.ValidationMessageFor(m => m.userInfoModel.ReasonRemoved_asInsider)
-                                                    </div>
-                                                </div>
-                                            </div>
-
 
                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                                                 <div role="form">
@@ -515,7 +345,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                                                 <div role="form">
                                                     <div class="form-group">
@@ -528,9 +357,6 @@
 
                                         </div>
                                     </div>
-
-
-
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <div class="row">
                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="divSubDesignation">
@@ -579,9 +405,8 @@
                                             </div>
                                         </div>
                                     </div>
-
-
-
+                                </div>
+                                <div class="row">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <div class="row">
                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="divSubCategories">
@@ -616,7 +441,7 @@
                                                         <label></label> <br />
                                                         @if (objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.Admin || objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.COUserType)
                                                         {
-                                                            @Html.CheckBoxFor(model => model.userInfoModel.AllowUpsiUser)<span>&nbsp;</span> @Html.LabelFor(m => m.userInfoModel.AllowUpsiUser)
+                                                            @Html.CheckBoxFor(model => model.userInfoModel.AllowUpsiUser)<span>&nbsp;</span> @Html.LabelFor(m => m.userInfoModel.AllowUpsiUser) 
                                                             @Html.ValidationMessageFor(m => m.userInfoModel.AllowUpsiUser)
                                                         }
                                                         @Html.HiddenFor(m => m.userInfoModel.AllowUpsiUser)
@@ -626,20 +451,15 @@
 
                                             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                 <div class="form-group">
-                                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                        <div role="form">
-                                                            <div class="form-group">
 
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </div>
 
                                         </div>
                                     </div>
+                                </div>
 
-
+                                <div class="row">
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 pull-left">
                                         <div role="form">
                                             @Html.Hidden("confirm_role", ((bool)ViewBag.show_create_role_link))
@@ -672,7 +492,6 @@
                     </div>
                 </div>
             </div>
-
             if (Model.userInfoModel.UserInfoId != 0)
             {
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -778,7 +597,7 @@
                                                 <td><input type="button" class="btn btn-success" id="btnAdd" value="+"  /></td>
                                                 <p id="demo"></p>
                                             </tr>*@
-                                        counter = counter + 1;
+                                                counter = counter + 1;
                                     }
 
                                 }
@@ -831,13 +650,6 @@
         }
     });
 </script>
-
-
-
-
-
-
-
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -1004,42 +816,23 @@
 
 </script>
 
-<script type="text/javascript">
-    $(function () {
-        $('.group_date_previous').datepicker({
-            startDate: '0',
-        
-            format: "dd/M/yyyy",
-            autoClose: true
-        });
-    });
-</script>
-
-<script type="text/javascript">
-    $(function () {
-        $('.datepickerDOB').datepicker({
-            endDate: '0',
-            format: "dd/M/yyyy",
-            autoClose: true
-        });
-    });
-
-</script>
 
 
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(function(){
         var table = document.getElementById('tblCustomers');
-        var x = document.getElementsByTagName("tr");
-        for (var i = 1; i < table.rows.length; i++) {
+        var x =document.getElementsByTagName("tr");
+        for(var i=1;i <table.rows.length;i++)
+        {
 
-            table.rows[i].onfocusout = function () {
+            table.rows[i].onfocusout =function()
+            {
 
                 var row = $(this);
                 var rindex = $('input:text:eq(0)', row).val();
                 //document.getElementById("txtName").value=rindex;
                 var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-                if (rindex.match(phoneno)) {
+                if(rindex.match(phoneno)) {
                     return true;
                 }
                 else {

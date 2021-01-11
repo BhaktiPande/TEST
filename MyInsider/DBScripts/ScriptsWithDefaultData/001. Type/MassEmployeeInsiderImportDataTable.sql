@@ -32,6 +32,5 @@ CREATE TYPE MassEmployeeInsiderImportDataTable AS TABLE
 	SubDesignationID INT,
 	Location nvarchar(100),
 	DepartmentID INT,
-	DIN nvarchar(50),
-	PersonalAddress  nvarchar(50)
+	DIN nvarchar(50)
 )

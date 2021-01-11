@@ -45,7 +45,7 @@ BEGIN
 	DECLARE @ERR_TEMPLATE_NOTDEFINED INT = -3 -- Reference template is not defined by the CO. Please contact administrator.
 	DECLARE @WARN_TEMPLATE_NOTFOUND INT = -4
 
-	DECLARE @sLetterForUserDesignation NVARCHAR(Max) = ''
+	DECLARE @sLetterForUserDesignation VARCHAR(512) = ''
 
 	BEGIN TRY
 		-- SET NOCOUNT ON added to prevent extra result sets from
