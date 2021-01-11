@@ -50,9 +50,9 @@ CREATE PROCEDURE [dbo].[st_rpt_ContinuousDisclosureEmployeeIndividual]
 	,@inp_iOutputSeq			INT -- 1: User details, 2: Transaction status details, 3: Transaction Details
 	,@inp_iUserInfoId			VARCHAR(MAX) -- = 339
 	,@inp_sDMATDetailsId		VARCHAR(200) -- Comma separated DMAt ids 1, 2, 3
-	,@inp_sAccountHolder		NVARCHAR(Max)
+	,@inp_sAccountHolder		VARCHAR(100)
 	,@inp_sRelationTypeCodeId	VARCHAR(200) -- Null: Filter not applicable, 0: Self, NonZero: Actual relation id (Comma separated ids)
-	,@inp_sScripName			NVARCHAR(Max)
+	,@inp_sScripName			VARCHAR(200)
 	,@inp_sISIN					VARCHAR(20)
 	,@inp_sSecurityTypeCodeID	VARCHAR(200) -- Comma separated SecurityCodeIds 139001, 139002 etc
 	,@inp_sTransactionTypeCodeId	VARCHAR(200) -- Comma separated TranactionTypeCodeId 143001, 143004 etc
@@ -122,13 +122,13 @@ BEGIN
 	DECLARE @sContDisc_NotRequired VARCHAR(100)
 	
 	CREATE TABLE #tmpTransactionDetails(tmpTransactionDetailId INT IDENTITY(1,1), TransactionMasterId INT, TransactionDetailsId INT, 
-				UserInfoId INT, UserInfoIdRelative INT, InsiderName NVARCHAR(max),
+				UserInfoId INT, UserInfoIdRelative INT, InsiderName VARCHAR(200),
 				SecurityTypeCodeId INT, TransactionTypeCodeId INt,
 				DMATDetailsID INT, BuyQuantity INT, SellQuantity INT, Value DECIMAL(25,4), TransactionDate DATETIME, 
 				DetailsSubmissionDate DATETIME, ScpSubmissionDate DATETIME, HcpSubmissionDate DATETIME, HCpByCoSubmissionDate DATETIME,
 				ContDisReq INT, Comment INT, LastSubmissionDate DATETIME, CommentId INT, ScpReq INT, HcpReq INT, HcpToExReq INT)
 
-	DECLARE @tmpUserDetails TABLE(Id INT IDENTITY(1,1), RKey VARCHAR(20), Value NVARCHAR(50), DataType INT)
+	DECLARE @tmpUserDetails TABLE(Id INT IDENTITY(1,1), RKey VARCHAR(20), Value VARCHAR(50), DataType INT)
 	DECLARE @tmpUserTable TABLE(Id INT IDENTITY(1,1), UserInfoId INT, UserInfoIdRelative INT, SecurityTypeCodeId INT, DMATDetailsID INT, Relation VARCHAR(100))
 	DECLARE @tmpComments TABLE(CommentId INT)
 	DECLARE @tmpReq TABLE(ReqId INT)
@@ -193,7 +193,7 @@ BEGIN
 			print 'Op seq 1'		
 			-- Output #1 : USer details
 			SELECT @sEmployeeID = EmployeeId, 
-					@sInsiderName = CASE WHEN UserTypeCodeId = 101004 THEN C.CompanyName ELSE ISNULL(FirstName, N'') + N' ' + ISNULL(LastName, N'') END,
+					@sInsiderName = CASE WHEN UserTypeCodeId = 101004 THEN C.CompanyName ELSE ISNULL(FirstName, '') + ' ' + ISNULL(LastName, '') END,
 					@sDesignation = CASE WHEN UserTypeCodeId = 101003 THEN CDesignation.CodeName ELSE DesignationText END,
 					@sGrade = CASE WHEN UserTypeCodeId = 101003 THEN CGrade.CodeName ELSE GradeText END,
 					@sLocation = UF.Location,
@@ -210,8 +210,8 @@ BEGIN
 			
 			INSERT INTO @tmpUserDetails(RKey, Value, DataType)
 			VALUES ('rpt_lbl_19111', @sEmployeeID, @nDataType_String),
-				('rpt_lbl_19112',  CONVERT(NVARCHAR(max), @sInsiderName)  , @nDataType_String),
-				('rpt_lbl_19113',  CONVERT(NVARCHAR(max), @sDesignation) , @nDataType_String),
+				('rpt_lbl_19112', dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max), @sInsiderName),1)), @nDataType_String),
+				('rpt_lbl_19113', dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max), @sDesignation),1)), @nDataType_String),
 				('rpt_lbl_19123', ISNULL(@sCINDIN, ''), @nDataType_String),
 				('rpt_lbl_19114', dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max), @sGrade),1)), @nDataType_String),
 				('rpt_lbl_19115', dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max), @sLocation),1)), @nDataType_String),
@@ -464,7 +464,7 @@ BEGIN
 					ELSE 
 						CASE 
 							WHEN TUD.UserTypeCode = 101004 THEN TUD.CompanyName 
-							ELSE ISNULL(TUD.FirstName, N'') + N' ' + ISNULL(TUD.LastName, N'') 
+							ELSE ISNULL(TUD.FirstName, '') + ' ' + ISNULL(TUD.LastName, '') 
 						END
 				END As rpt_grd_19091, -- AccountHolder,
 				CASE 
