@@ -69,9 +69,6 @@ namespace InsiderTradingDAL
         [PetaPoco.Column("AddressLine2")]
         public string AddressLine2 { get; set; }
 
-        [PetaPoco.Column("PersonalAddress")]
-        public string PersonalAddress { get; set; }
-
         [PetaPoco.Column("CountryId")]
         public int? CountryId { get; set; }
         public string CountryName { get; set; }

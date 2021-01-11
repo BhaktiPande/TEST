@@ -22,7 +22,7 @@ namespace InsiderTrading.Models
         [StringLength(100)]
         [DataType(DataType.Text)]
         [DisplayName("cmp_lbl_13060")]
-       // [RegularExpression(ConstEnum.DataValidation.AlphanumericWithSpace, ErrorMessage = "cmp_msg_50501")]
+        [RegularExpression(ConstEnum.DataValidation.AlphanumericWithSpace, ErrorMessage = "cmp_msg_50501")]
         public string CompanyName { get; set; }
 
 
@@ -61,25 +61,25 @@ namespace InsiderTrading.Models
         [RegularExpression(ConstEnum.DataValidation.ISINNumber, ErrorMessage = "cmp_msg_50517")]
         public string ISINNumber { get; set; }
 
-       // [Required]
+        [Required]
         [StringLength(30)]
         [DisplayName("dis_lbl_50612")]
         [RegularExpression(ConstEnum.DataValidation.SearchValidation, ErrorMessage = "rpt_msg_50521")]
         public string SmtpServer { get; set; }
 
-        //[Required]
+        [Required]
         [StringLength(30)]
         [DisplayName("dis_lbl_50613")]
         [RegularExpression(ConstEnum.DataValidation.SearchValidation, ErrorMessage = "rpt_msg_50521")]
         public string SmtpPortNumber { get; set; }
 
-       // [Required]
+        [Required]
         [StringLength(30)]
         [DisplayName("dis_lbl_50614")]
         [RegularExpression(ConstEnum.DataValidation.SearchValidation, ErrorMessage = "rpt_msg_50521")]
         public string SmtpUserName { get; set; }
 
-       // [Required]
+        [Required]
         [Display(Name = "dis_lbl_50615")]
         [RegularExpression(ConstEnum.DataValidation.SearchValidation, ErrorMessage = "rpt_msg_50521")]
         public string SmtpPassword { get; set; }
@@ -388,11 +388,9 @@ namespace InsiderTrading.Models
         [DisplayName("cmp_lbl_55081")]
         public UPSISettingCode UPSISetting { get; set; }
 
+
         [DisplayName("cmp_lbl_55084")]
         public string InformationSharedby { get; set; }
-
-        [DisplayName("cmp_lbl_53153")]
-        public UPSISettingCode ResidentNonResidentDropdown { get; set; }
 
         [DisplayName("cmp_lbl_54178")]
         public UPSIEmailUpdateSettingCode TriggerEmailsUPSIUpdated { get; set; }

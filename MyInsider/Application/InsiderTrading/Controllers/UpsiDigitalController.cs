@@ -905,7 +905,6 @@ namespace InsiderTrading.Controllers
                 Response.Clear();
                 Response.Buffer = true;
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.Write("<meta http-equiv=Content-Type content=text/html;charset=UTF-8>");
                 Response.Charset = "";
                 Response.AddHeader("content-disposition", "attachment;filename=" + exlFilename + "");
 
