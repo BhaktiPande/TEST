@@ -2956,7 +2956,7 @@ namespace InsiderTradingMassUpload
         }
         #endregion GetSequenceMassUploadList
 
-        #region GetSequenceMassUploadList
+        #region GetUploadMassList
         /// <summary>
         /// This function will return list of upload mass uploads list
         /// </summary>
