@@ -156,6 +156,112 @@ namespace InsiderTradingDAL
         }
         #endregion GetTransactionMasterDetails
 
+        #region GetQunatityValue
+        public TradingTransactionMasterDTO_OS GetQunatityValue(string sConnectionString,int m_iDisclosureTypeCodeId,int m_iUserInfoId)
+        {
+            #region Paramters
+            int out_nReturnValue;
+            int out_nSQLErrCode;
+            string out_sSQLErrMessage;
+            #endregion Paramters
+            try
+            {
+                #region Out Paramter
+                var nout_nReturnValue = new SqlParameter("@out_nReturnValue", System.Data.SqlDbType.Int);
+                nout_nReturnValue.Direction = System.Data.ParameterDirection.Output;
+                nout_nReturnValue.Value = 0;
+                var nout_nSQLErrCode = new SqlParameter("@out_nSQLErrCode", System.Data.SqlDbType.Int);
+                nout_nSQLErrCode.Direction = System.Data.ParameterDirection.Output;
+                nout_nSQLErrCode.Value = 0;
+                var sout_sSQLErrMessage = new SqlParameter("@out_sSQLErrMessage", System.Data.SqlDbType.NVarChar);
+                sout_sSQLErrMessage.Direction = System.Data.ParameterDirection.Output;
+                sout_sSQLErrMessage.Value = string.Empty;
+                #endregion Out Paramter      
+	
+                using (var db = new PetaPoco.Database(sConnectionString, "System.Data.SqlClient") { EnableAutoSelect = false })
+                {
+                    var res = db.Query<TradingTransactionMasterDTO_OS>("exec st_tra_GetQuantity_OS @inp_iDisclosuerType,@inp_iUserInfoId,@out_nReturnValue OUTPUT,@out_nSQLErrCode OUTPUT,@out_sSQLErrMessage OUTPUT",
+                        new
+                        {
+                            //@inp_iTransactionType= m_iTransactionTypeCodeId,
+                            @inp_iDisclosuerType= m_iDisclosureTypeCodeId,
+                            @inp_iUserInfoId= m_iUserInfoId,
+                            out_nReturnValue = nout_nReturnValue,
+                            out_nSQLErrCode = nout_nSQLErrCode,
+                            out_sSQLErrMessage = sout_sSQLErrMessage,
+                        }).Single<TradingTransactionMasterDTO_OS>();
+
+                    #region Error Values
+                    if (Convert.ToInt32(nout_nReturnValue.Value) != 0)
+                    {
+                        Exception e = new Exception();
+                        out_nReturnValue = Convert.ToInt32(nout_nReturnValue.Value);
+                        string sReturnValue = sLookupPrefix + out_nReturnValue;
+                        e.Data[0] = sReturnValue;
+                        if (nout_nSQLErrCode.Value != System.DBNull.Value)
+                        {
+                            out_nSQLErrCode = Convert.ToInt32(nout_nSQLErrCode.Value);
+                            e.Data[1] = out_nSQLErrCode;
+                        }
+                        if (sout_sSQLErrMessage.Value != System.DBNull.Value)
+                        {
+                            out_sSQLErrMessage = Convert.ToString(sout_sSQLErrMessage.Value);
+                            e.Data[2] = out_sSQLErrMessage;
+                        }
+                        Exception ex = new Exception(db.LastCommand.ToString(), e);
+                        throw ex;
+                    }
+                    else
+                    {
+                        return res;
+                    }
+                    #endregion Error Values
+                }
+            }
+            catch (Exception exp)
+            {
+                throw exp;
+            }
+            finally
+            {
+
+            }
+        }
+        #endregion
+
+        #region Get_mst_company_details
+        /// <summary>
+        /// This function will Get mst_company details
+        /// </summary>
+        /// <returns></returns>
+        public TradingTransactionMasterDTO_OS Get_mst_company_details(string inp_sConnectionString)
+        {
+            PetaPoco.Database db = null;
+            TradingTransactionMasterDTO_OS objTradingTransactionMasterDAL_OS = new TradingTransactionMasterDTO_OS();
+            try
+            {
+                using (db = new PetaPoco.Database(inp_sConnectionString, "System.Data.SqlClient") { EnableAutoSelect = false })
+                {
+
+                    using (var scope = db.GetTransaction())
+                    {
+                        objTradingTransactionMasterDAL_OS = db.Query<TradingTransactionMasterDTO_OS>("exec st_com_mst_Company_Details",
+                             new
+                             {
+
+                             }).Single<TradingTransactionMasterDTO_OS>();
+                        scope.Complete();
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                throw exp;
+            }
+            return objTradingTransactionMasterDAL_OS;
+        }
+        #endregion Get_mst_company_details
+
         #region InsertUpdateIDTradingTransactionDetails_OS
         /// <summary>
         /// This method is used to save Initial Disclosure List for Other Securities

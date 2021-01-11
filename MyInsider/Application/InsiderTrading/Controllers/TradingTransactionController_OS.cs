@@ -573,6 +573,7 @@ namespace InsiderTrading.Controllers
             TradingPolicyDTO_OS objTradingPolicyDTO_OS = null;
             TradingTransactionDTO_OS objTradingTransactionDTO_OS = null;
             PreclearanceRequestNonImplCompanyDTO objPreclearanceRequestNonImplCompanyDTO = null;
+            
             ApplicableTradingPolicyDetailsDTO_OS objApplicableTradingPolicyDetailsDTO_OS = null;
             RestrictedListDTO objRestrictedListDTO = null;
             //ViewBag.ShowPopup = true;
@@ -580,6 +581,7 @@ namespace InsiderTrading.Controllers
             {
                 objLoginUserDetails = (LoginUserDetails)Common.Common.GetSessionValue(ConstEnum.SessionValue.UserDetails);
 
+                
                 ViewBag.UserTypeCode = objLoginUserDetails.UserTypeCodeId;
                 ViewBag.IsNegative = true;
                 ViewBag.ShowTradeNote = false;
@@ -598,14 +600,31 @@ namespace InsiderTrading.Controllers
 
                 using (TradingTransactionSL_OS objTradingTransactionSL_OS = new TradingTransactionSL_OS())
                 {
-                    objTradingTransactionMasterDTO_OS = objTradingTransactionSL_OS.GetTradingTransactionMasterDetails(objLoginUserDetails.CompanyDBConnectionString, TransactionMasterId);
 
+                    //Add New Code
+
+                    var EnableDisableQuantityValue = 0;
+
+                    // objTradingTransactionMasterDTO_OS objInsiderInitialDisclosureDTO = null;
+                    objTradingTransactionMasterDTO_OS = objTradingTransactionSL_OS.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
+                    //RequiredModuleID = objInsiderInitialDisclosureDTO.RequiredModule;
+                    EnableDisableQuantityValue = objTradingTransactionMasterDTO_OS.EnableDisableQuantityValue;
+                    ViewBag.EnableDisableQuantityValue = objTradingTransactionMasterDTO_OS.EnableDisableQuantityValue;
+                 
+
+
+                    ////End OF New code
+
+                    objTradingTransactionMasterDTO_OS = objTradingTransactionSL_OS.GetTradingTransactionMasterDetails(objLoginUserDetails.CompanyDBConnectionString, TransactionMasterId);
+                    
                     ViewBag.DisclosureTypeId = objTradingTransactionMasterDTO_OS.DisclosureTypeCodeId;
 
                     if (objTradingTransactionMasterDTO_OS.DisclosureTypeCodeId != ConstEnum.Code.DisclosureTypeInitial)
                     {
                         ViewBag.ShowSaveAddMore_btn = false;
                     }
+
+                   
 
                     using (TradingPolicySL_OS objTradingPolicySL_OS = new TradingPolicySL_OS())
                     {
@@ -710,7 +729,18 @@ namespace InsiderTrading.Controllers
                             //}
                         }
                     }
+
+                    if (EnableDisableQuantityValue == 400002 || EnableDisableQuantityValue == 400003)
+                    {
+                        objTradingTransactionMasterDTO_OS = objTradingTransactionSL_OS.GetQuantity(objLoginUserDetails.CompanyDBConnectionString, Convert.ToInt32(objTradingTransactionMasterDTO_OS.DisclosureTypeCodeId), Convert.ToInt32(objTradingTransactionMasterDTO_OS.UserInfoId));
+                        ViewBag.Quantity = objTradingTransactionMasterDTO_OS.Quantity;
+                        ViewBag.Value = objTradingTransactionMasterDTO_OS.Value;
+                        ViewBag.LotSize = objTradingTransactionMasterDTO_OS.LotSize;
+                        ViewBag.ContractSpecification = objTradingTransactionMasterDTO_OS.ContractSpecification;
+                    }
+
                 }
+
 
                 ViewBag.ShowPopup = true;
                 //get company name from RL_companymasterList table
@@ -792,8 +822,7 @@ namespace InsiderTrading.Controllers
                 ViewBag.IsNegative = true;
                 ViewBag.UserTypeCode = objLoginUserDetails.UserTypeCodeId;
                 ViewBag.postAcqNeMsg = Common.Common.getResource("tra_msg_16443");
-
-
+               
                 ////Tushar
                 //if (objTransactionModel_OS.TransactionMasterId != 0 && !Common.Common.CheckUserTypeAccess(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.Code.DisclosureTransaction, Convert.ToInt64(objTransactionModel_OS.TransactionMasterId), objLoginUserDetails.LoggedInUserID))
                 //{

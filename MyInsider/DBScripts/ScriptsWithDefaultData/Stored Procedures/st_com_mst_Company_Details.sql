@@ -37,7 +37,7 @@ BEGIN
 		IF @out_sSQLErrMessage IS NULL
 			SET @out_sSQLErrMessage = ''
       
-	    SELECT CompanyId, RequiredModule FROM mst_Company WHERE IsImplementing = 1
+	    SELECT CompanyId, RequiredModule,EnableDisableQuantityValue FROM mst_Company WHERE IsImplementing = 1
 
     RETURN 0
 	END	TRY
@@ -48,3 +48,5 @@ BEGIN
 		SET @out_nReturnValue	=  @ERR_PPDReConfirmation_Frequency
 	END CATCH
 END
+
+
