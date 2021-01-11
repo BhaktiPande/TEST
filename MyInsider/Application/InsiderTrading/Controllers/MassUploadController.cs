@@ -51,7 +51,7 @@ namespace InsiderTrading.Controllers
                 RequiredModuleID = objInsiderInitialDisclosureDTO.RequiredModule;
             }
 
-            if (acid == 337)
+            if (acid == 344)
             {
                 using (var objRoleActivityDAL = new RoleActivityDAL())
                 {
@@ -72,8 +72,8 @@ namespace InsiderTrading.Controllers
                         lstMassUploadDTO = massUploadSL.GetUploadMassList(GetAllMassUpload(), isOwnUnable, IsOtherEnable, objLoginUserDetails.UserTypeCodeId);
                         break;
                     case Common.ConstEnum.Code.RequiredModuleBoth:
-                        isOwnUnable = Convert.ToBoolean(lstRoleActivities.Where(c => c.ActivityID == 337).Select(c => c.IsSelected).Single());
-                        IsOtherEnable = Convert.ToBoolean(lstRoleActivities.Where(c => c.ActivityID == 338).Select(c => c.IsSelected).Single());
+                        isOwnUnable = Convert.ToBoolean(lstRoleActivities.Where(c => c.ActivityID == 344).Select(c => c.IsSelected).Single());
+                        IsOtherEnable = Convert.ToBoolean(lstRoleActivities.Where(c => c.ActivityID == 345).Select(c => c.IsSelected).Single());
 
                         lstMassUploadDTO = massUploadSL.GetUploadMassList(GetAllMassUpload(), isOwnUnable, IsOtherEnable, objLoginUserDetails.UserTypeCodeId);
                         break;
