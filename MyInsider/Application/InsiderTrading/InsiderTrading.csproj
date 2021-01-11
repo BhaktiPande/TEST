@@ -303,6 +303,7 @@
     <Compile Include="Common\WriteToFileLog.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApplicabilityController.cs" />
+    <Compile Include="Controllers\Applicability_OSController.cs" />
     <Compile Include="Controllers\ClawBackReportController.cs" />
     <Compile Include="Controllers\CODashboardController.cs" />
     <Compile Include="Controllers\COInitialDisclosureController.cs" />
@@ -344,6 +345,7 @@
     <Compile Include="Controllers\SSRSReportController.cs" />
     <Compile Include="Controllers\TemplateMasterController.cs" />
     <Compile Include="Controllers\TradingPolicyController.cs" />
+    <Compile Include="Controllers\TradingPolicy_OSController.cs" />
     <Compile Include="Controllers\TradingTransactionController.cs" />
     <Compile Include="Controllers\TradingTransactionController_OS.cs" />
     <Compile Include="Controllers\TradingWindowEventController.cs" />
@@ -400,6 +402,7 @@
     <Compile Include="Models\SSOModel.cs" />
     <Compile Include="Models\TemplateMasterModel.cs" />
     <Compile Include="Models\TradingPolicyModel.cs" />
+    <Compile Include="Models\TradingPolicyModel_OS.cs" />
     <Compile Include="Models\TradingTransactionModel.cs" />
     <Compile Include="Models\TradingTransactionModel_OS.cs" />
     <Compile Include="Models\TradingTransactionReportModel_OS.cs" />
@@ -415,6 +418,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SL\ActivitySL.cs" />
     <Compile Include="SL\ApplicabilitySL.cs" />
+    <Compile Include="SL\ApplicabilitySL_OS.cs" />
     <Compile Include="SL\CODashboardSL.cs" />
     <Compile Include="SL\CODashboardSL_OS.cs" />
     <Compile Include="SL\ComCodeSL.cs" />
@@ -607,6 +611,7 @@
     <Content Include="LoginScript\jQuery\jQuery-2.1.3.js" />
     <Content Include="LoginScript\Loginjs\Login-bl.js" />
     <Content Include="LoginScript\slimScroll\jquery.slimscroll-bl.min.js" />
+    <Content Include="LoginScript\TimerForOTP\jquery.countdownTimer.js" />
     <Content Include="Scripts\BrowserClose\BrowserClose.js" />
     <Content Include="Scripts\CryptoAlgorithm\CryptoAlgorithm.js" />
     <Content Include="Scripts\Login\Login.js" />

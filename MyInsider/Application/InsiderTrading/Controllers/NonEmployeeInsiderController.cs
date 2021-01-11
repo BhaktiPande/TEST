@@ -307,7 +307,6 @@ namespace InsiderTrading.Controllers
                     objUserInfoDTO.StatusCodeId = Common.Common.ConvertToInt32(ConstEnum.UserStatus.Active);
                     objUserInfoDTO.LoggedInUserId = objLoginUserDetails.LoggedInUserID;
                     objUserInfoDTO.AllowUpsiUser = objUserInfoModel.AllowUpsiUser;
-                    objUserInfoDTO.PersonalAddress = objUserInfoModel.PersonalAddress;
 
                     if (objUserInfoDTO.StateId == 0)
                         objUserInfoDTO.StateId = null;

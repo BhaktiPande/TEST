@@ -3,19 +3,17 @@ using InsiderTrading.Filters;
 using InsiderTrading.Models;
 using InsiderTrading.SL;
 using InsiderTradingDAL;
+using InsiderTradingDAL.InsiderInitialDisclosure.DTO;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Collections;
-using InsiderTradingDAL.InsiderInitialDisclosure.DTO;
-using System.Data.SqlClient;
-using OfficeOpenXml;
-using OfficeOpenXml.Style;
 using System.Web.UI.WebControls;
 
 
@@ -396,7 +394,6 @@ namespace InsiderTrading.Controllers
                     objUserInfoDTO.UIDAI_IdentificationNo = objEmployeeModel.userInfoModel.UIDAI_IdentificationNo;
                     objUserInfoDTO.IdentificationTypeId = objEmployeeModel.userInfoModel.IdentificationTypeId;
                     objUserInfoDTO.AllowUpsiUser = objEmployeeModel.userInfoModel.AllowUpsiUser;
-                    objUserInfoDTO.PersonalAddress = objEmployeeModel.userInfoModel.PersonalAddress;
                     if (objUserInfoDTO.StateId == 0)
                         objUserInfoDTO.StateId = null;
 
@@ -2630,16 +2627,23 @@ namespace InsiderTrading.Controllers
             Response.Clear();
             Response.Buffer = true;
             Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            Response.Write("<meta http-equiv=Content-Type content=text/html;charset=UTF-8>");
             Response.Charset = "";
             Response.AddHeader("content-disposition", "attachment;filename=" + exlFilename + "");
             StringWriter sWriter = new StringWriter();
             System.Web.UI.HtmlTextWriter hWriter = new System.Web.UI.HtmlTextWriter(sWriter);
             System.Web.UI.WebControls.GridView dtGrid = new System.Web.UI.WebControls.GridView();
             dtGrid.DataSource = dt;
-            dtGrid.DataBind();
-            dtGrid.RenderControl(hWriter);
-            Response.Write(@"<style> TD { mso-number-format:\@; } </style>");
+            if (dt.Rows.Count > 0)
+            {
+                dtGrid.DataBind();
+                dtGrid.RenderControl(hWriter);
+                Response.Write(@"<style> TD { mso-number-format:\@; } </style>");
+            }
+            else
+            {
+                Response.Write("Record is not exist");
+            }
+
             Response.Output.Write(sWriter.ToString());
             Response.Flush();
             Response.End();
@@ -3244,10 +3248,10 @@ namespace InsiderTrading.Controllers
 
 
                 return Json(new
-                           {
-                               status = false,
-                               Message = sErrMessage,
-                           }, JsonRequestBehavior.AllowGet);
+                {
+                    status = false,
+                    Message = sErrMessage,
+                }, JsonRequestBehavior.AllowGet);
 
             }
 
@@ -3361,14 +3365,14 @@ namespace InsiderTrading.Controllers
                             }
                             return Json(new
 
-                             {
-                                 status = true,
-                                 Message = Common.Common.getResource("usr_msg_11316"), //"DMAT Details Save Successfully",
-                                 type = getList,
-                                 DMATDetailsID = objDMATDetailsDTO.DMATDetailsID,
-                                 UpdateDMAT = true,
-                                 RefreshDematList = bRefreshDematList
-                             }, JsonRequestBehavior.AllowGet);
+                            {
+                                status = true,
+                                Message = Common.Common.getResource("usr_msg_11316"), //"DMAT Details Save Successfully",
+                                type = getList,
+                                DMATDetailsID = objDMATDetailsDTO.DMATDetailsID,
+                                UpdateDMAT = true,
+                                RefreshDematList = bRefreshDematList
+                            }, JsonRequestBehavior.AllowGet);
                         }
                     }
                 }
