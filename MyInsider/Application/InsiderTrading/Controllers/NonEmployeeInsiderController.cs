@@ -307,14 +307,7 @@ namespace InsiderTrading.Controllers
                     objUserInfoDTO.StatusCodeId = Common.Common.ConvertToInt32(ConstEnum.UserStatus.Active);
                     objUserInfoDTO.LoggedInUserId = objLoginUserDetails.LoggedInUserID;
                     objUserInfoDTO.AllowUpsiUser = objUserInfoModel.AllowUpsiUser;
-                    objUserInfoDTO.PhoneNumber = objUserInfoModel.PhoneNumber;
-                    objUserInfoDTO.DateOfBirth = objUserInfoModel.DateOfBirth;
-                    objUserInfoDTO.EmiratesId = objUserInfoModel.EmiratesId;
-                    objUserInfoDTO.EmiratesId_ExpiryDate = objUserInfoModel.EmiratesId_ExpiryDate;
-                    objUserInfoDTO.Passport_ExpiryDate = objUserInfoModel.Passport_ExpiryDate;
-                    objUserInfoDTO.DateRemoved_asInsider = objUserInfoModel.DateRemoved_asInsider;
-                    objUserInfoDTO.ReasonRemoved_asInsider = objUserInfoModel.ReasonRemoved_asInsider;
-
+                    
                     if (objUserInfoDTO.StateId == 0)
                         objUserInfoDTO.StateId = null;
                     if (objUserInfoDTO.CountryId == 0)
