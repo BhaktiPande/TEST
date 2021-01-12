@@ -134,33 +134,28 @@
             var transaction_type = $('#TransactionTypeCodeId').val();
             if ('@ViewBag.EnableDisableQuantityValue'== 400002 || '@ViewBag.EnableDisableQuantityValue'== 400003){
                 debugger;
-                if (transaction_type == 143001) {                   
-                    if (@ViewBag.Quantity!= null) {
+                if (transaction_type == 143001) {                
+                    
                         $('#Quantity').val(@ViewBag.Quantity);
                         $('#Value').val(@ViewBag.Quantity);
                         $('#LotSize').val(@ViewBag.LotSize);
                         $('#ContractSpecification').val(@ViewBag.ContractSpecification);
-                    }
-                    $("#Quantity").attr('readonly', true);
-                    $("#Value").attr('readonly', true);
-                    $("#LotSize").attr('readonly', true);
-                    $("#ContractSpecification").attr('readonly', true);
+                        $("#Quantity").attr('readonly', true);
+                        $("#Value").attr('readonly', true);
+                        $("#LotSize").attr('readonly', true);
+                        $("#ContractSpecification").attr('readonly', true);
                 }
                 else if (transaction_type == 143002) {
                     var AllowedModeOfacquisition1 = TransactionType_OS[$(this).val()];
-                    debugger;
-                    if (@ViewBag.Quantity!= null) {
+                    debugger;                  
                         $("#Quantity").val(AllowedModeOfacquisition1);
                         $("#Value").val(AllowedModeOfacquisition1);                        
                         $('#LotSize').val(@ViewBag.LotSize);
                         $('#ContractSpecification').val(@ViewBag.ContractSpecification);
-                        @*$('#Quantity').val(@ViewBag.Quantity);
-                        $('#Value').val(@ViewBag.Quantity);*@
-                    }
-                    $("#Quantity").attr('readonly', true);
-                    $("#Value").attr('readonly', true);
-                    $("#LotSize").attr('readonly', true);
-                    $("#ContractSpecification").attr('readonly', true);
+                        $("#Quantity").attr('readonly', true);
+                        $("#Value").attr('readonly', true);
+                        $("#LotSize").attr('readonly', true);
+                        $("#ContractSpecification").attr('readonly', true);
                 }
                 else {
                     debugger;

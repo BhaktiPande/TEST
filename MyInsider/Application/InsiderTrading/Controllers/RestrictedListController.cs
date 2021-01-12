@@ -90,6 +90,7 @@ namespace InsiderTrading.Controllers
         public ActionResult RestrictedListSearch()
         {
             int RequiredModuleID = 0;
+            int EnableDisableQuantityValue = 0;
             try
             {
                 CompanySettingConfigurationDTO objCompanySettingConfigurationDTO = null;
@@ -100,6 +101,7 @@ namespace InsiderTrading.Controllers
                     InsiderInitialDisclosureDTO objInsiderInitialDisclosureDTO = null;
                     objInsiderInitialDisclosureDTO = objInsiderInitialDisclosureSL.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
                     RequiredModuleID = objInsiderInitialDisclosureDTO.RequiredModule;
+                    EnableDisableQuantityValue = objInsiderInitialDisclosureDTO.EnableDisableQuantityValue;
                 }
                 if (RequiredModuleID == ConstEnum.Code.RequiredModuleOtherSecurity || RequiredModuleID == ConstEnum.Code.RequiredModuleBoth)
                 {
@@ -175,6 +177,8 @@ namespace InsiderTrading.Controllers
                 int resultCode = 0;
                 int resultMsgCode = 0;
                 int resultSPCode=0;
+                int EnableDisableQuantityValue = 0;
+
                 CompanySettingConfigurationDTO restrictedListSettingPreclearanceApproval = null;
                 string AlertMessage = string.Empty;
                 int RequiredModuleID = 0;
@@ -202,6 +206,9 @@ namespace InsiderTrading.Controllers
                     InsiderInitialDisclosureDTO objInsiderInitialDisclosureDTO = null;
                     objInsiderInitialDisclosureDTO = objInsiderInitialDisclosureSL.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
                     RequiredModuleID = objInsiderInitialDisclosureDTO.RequiredModule;
+                    ViewBag.EnableDisableQuantityValue= objInsiderInitialDisclosureDTO.EnableDisableQuantityValue;
+                    EnableDisableQuantityValue = objInsiderInitialDisclosureDTO.EnableDisableQuantityValue;
+                    TempData["EnableDisableQuantityValue"] = objInsiderInitialDisclosureDTO.EnableDisableQuantityValue;
                 }
                 if (RequiredModuleID == ConstEnum.Code.RequiredModuleOtherSecurity || RequiredModuleID == ConstEnum.Code.RequiredModuleBoth)
                 {
@@ -389,6 +396,23 @@ namespace InsiderTrading.Controllers
                         return View();
                     }
                 }
+                
+                using (TradingTransactionSL_OS objTradingTransactionSL_OS = new TradingTransactionSL_OS())
+                {
+                    TradingTransactionMasterDTO_OS objTradingTransactionMasterDTO_OS = null;
+                    objTradingTransactionMasterDTO_OS = new TradingTransactionMasterDTO_OS();                    
+                    if (EnableDisableQuantityValue == 400002 || EnableDisableQuantityValue == 400003)
+                    {
+                        objTradingTransactionMasterDTO_OS.DisclosureTypeCodeId = 147002;
+                        objTradingTransactionMasterDTO_OS = objTradingTransactionSL_OS.GetQuantity(objLoginUserDetails.CompanyDBConnectionString, Convert.ToInt32(objTradingTransactionMasterDTO_OS.DisclosureTypeCodeId), Convert.ToInt32(objRestrictedSearchAudittDTO.UserInfoId));
+                        TempData["SecuritiesToBeTradedQty"]= objTradingTransactionMasterDTO_OS.Quantity;
+                        TempData["SecuritiesToBeTradedValue"] = objTradingTransactionMasterDTO_OS.Value;
+                        TempData.Keep();
+                        
+                    }
+                }
+
+
             }
             catch (Exception exp)
             {

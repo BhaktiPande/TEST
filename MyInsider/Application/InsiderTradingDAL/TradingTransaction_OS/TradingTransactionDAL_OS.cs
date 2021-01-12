@@ -180,7 +180,7 @@ namespace InsiderTradingDAL
 	
                 using (var db = new PetaPoco.Database(sConnectionString, "System.Data.SqlClient") { EnableAutoSelect = false })
                 {
-                    var res = db.Query<TradingTransactionMasterDTO_OS>("exec st_tra_GetQuantity_OS @inp_iDisclosuerType,@inp_iUserInfoId,@out_nReturnValue OUTPUT,@out_nSQLErrCode OUTPUT,@out_sSQLErrMessage OUTPUT",
+                    var res = db.Query<TradingTransactionMasterDTO_OS>("exec st_tra_QuantityValueDetails_OS @inp_iDisclosuerType,@inp_iUserInfoId,@out_nReturnValue OUTPUT,@out_nSQLErrCode OUTPUT,@out_sSQLErrMessage OUTPUT",
                         new
                         {
                             //@inp_iTransactionType= m_iTransactionTypeCodeId,
