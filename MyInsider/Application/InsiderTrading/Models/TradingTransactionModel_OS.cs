@@ -71,6 +71,8 @@ namespace InsiderTrading.Models
         [DisplayName("tra_lbl_52106")]
         public int TransactionTypeCodeId { get; set; }
 
+        public int DisclosureTypeCodeId { get; set; }
+
         [DisplayName("tra_lbl_52052")]
         [Range(-9999999999.99, 9999999999.99, ErrorMessage = "tra_msg_16139")]
         public Decimal? Quantity { get; set; }
