@@ -395,16 +395,7 @@ namespace InsiderTrading.Controllers
                     objUserInfoDTO.IdentificationTypeId = objEmployeeModel.userInfoModel.IdentificationTypeId;
                     objUserInfoDTO.AllowUpsiUser = objEmployeeModel.userInfoModel.AllowUpsiUser;
 
-                    objUserInfoDTO.PhoneNumber = objEmployeeModel.userInfoModel.PhoneNumber;
-                    objUserInfoDTO.DateOfBirth = objEmployeeModel.userInfoModel.DateOfBirth;
-                    objUserInfoDTO.EmiratesId = objEmployeeModel.userInfoModel.EmiratesId;
-                    objUserInfoDTO.EmiratesId_ExpiryDate = objEmployeeModel.userInfoModel.EmiratesId_ExpiryDate;
-                    objUserInfoDTO.Passport_ExpiryDate = objEmployeeModel.userInfoModel.Passport_ExpiryDate;
-                    objUserInfoDTO.DateRemoved_asInsider = objEmployeeModel.userInfoModel.DateRemoved_asInsider;
-                    objUserInfoDTO.ReasonRemoved_asInsider = objEmployeeModel.userInfoModel.ReasonRemoved_asInsider;
-
-
-
+                    
                     if (objUserInfoDTO.StateId == 0)
                         objUserInfoDTO.StateId = null;
 
