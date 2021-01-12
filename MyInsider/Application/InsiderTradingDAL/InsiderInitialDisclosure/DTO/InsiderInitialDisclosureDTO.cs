@@ -54,6 +54,8 @@ namespace InsiderTradingDAL.InsiderInitialDisclosure.DTO
         public int CompanyID { get; set; }
 
         public int RequiredModule { get; set; }
+
+        public int EnableDisableQuantityValue { get; set; }
         public int? TradingPolicyID_OS { get; set; }
         public int ParentUserInfoID { get; set; }
     }
