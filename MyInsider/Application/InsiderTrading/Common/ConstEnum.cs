@@ -681,6 +681,11 @@ namespace InsiderTrading.Common
             public const int RequiredModuleOtherSecurity = 513002;
             public const int RequiredModuleBoth = 513003;
 
+            //Company Settings
+            public const int EnableQunatityValue = 400001;
+            public const int DisabaleShowQuantityValue = 400002;
+            public const int DisabaleHideQuantityValue = 400003;
+
             //Company configuraiton - EULAReconfirmation Setting
             public const int CompanyConfig_EULAReconfirmation_All = 523001;
             public const int CompanyConfig_EULAReconfirmation_NotAccepted = 523002;
