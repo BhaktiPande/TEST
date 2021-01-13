@@ -23,7 +23,7 @@ namespace InsiderTradingSSO.SL
             try
             {
                 UserInfoDAL objUserInfoDAL = new UserInfoDAL();
-                res = objUserInfoDAL.LoginSSOUserInfo(i_sConnectionString, ht_Parameter);
+                res = objUserInfoDAL.LoginSSOUserInfo(i_sConnectionString, ht_Parameter); 
                 
             }
             catch (Exception exp)

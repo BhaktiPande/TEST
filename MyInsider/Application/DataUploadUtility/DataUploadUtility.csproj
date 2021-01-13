@@ -76,10 +76,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Binaries\InsiderTrading.dll</HintPath>
     </Reference>
-    <Reference Include="InsiderTradingDAL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Binaries\InsiderTradingDAL.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -132,6 +128,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\Upload.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InsiderTradingDAL\InsiderTradingDAL.csproj">
+      <Project>{72ce3872-553b-400e-80a9-0fbe6135583c}</Project>
+      <Name>InsiderTradingDAL</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
