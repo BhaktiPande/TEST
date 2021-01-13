@@ -97,8 +97,8 @@ namespace InsiderTrading.Controllers
             return View("SSO");
         }
         #region // POST: /SSO/AssertionConsumer
-        [HttpPost]
-        [AllowAnonymous]
+        //[HttpPost]
+        //[AllowAnonymous]
         public ActionResult AssertionConsumerAirtel(FormCollection response)
         {
             try
@@ -131,7 +131,7 @@ namespace InsiderTrading.Controllers
                     WriteToFileLog.Instance(ConfigurationManager.AppSettings["Airtel"].ToString()).Write("Claim Principle :-" + claimBuilder.ToString());
                 }
                 //string empEmail = "anand.kulkarni@esopdirect.com";
-                //string empId = "Halt1";
+                string empId = empployeeId = "Halt1";
                 Hashtable ht_Parmeters = new Hashtable();
                 ht_Parmeters.Add(CommonConstant.s_AttributeEmployeeId, empployeeId);
                 ht_Parmeters.Add(CommonConstant.s_AttributeEmail, "");

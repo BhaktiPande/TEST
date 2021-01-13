@@ -302,6 +302,7 @@
     <Compile Include="Common\WriteToFileLog.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ADFSController.cs" />
+    <Compile Include="Controllers\AirtelController.cs" />
     <Compile Include="Controllers\ApplicabilityController.cs" />
     <Compile Include="Controllers\Applicability_OSController.cs" />
     <Compile Include="Controllers\ClawBackReportController.cs" />
@@ -3105,6 +3106,7 @@
     <Content Include="Views\Shared\_MCQLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Views\Airtel\" />
     <Folder Include="Views\Elmah\" />
     <Folder Include="Views\NewFolder1\" />
     <Folder Include="Views\Temp\" />
