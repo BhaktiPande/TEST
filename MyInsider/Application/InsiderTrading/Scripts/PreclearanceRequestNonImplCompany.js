@@ -252,30 +252,30 @@ $(document).delegate('#TransactionTypeCodeId', 'change', function (event) {
               if (transaction_type == 143001) {                 
                   $('.Qtyclass').val(SecuritiesToBeTradedQtyhd);
                   $('.Valueclass').val(SecuritiesToBeTradedValuehd);
-                  $("#Qtyclass").attr('readonly', true);
-                  $("#Valueclass").attr('readonly', true);
+                  $('.Qtyclass').attr('readonly', true);
+                  $('.Valueclass').attr('readonly', true);
                     
                 }
                 else if (transaction_type == 143002) {
                       var AllowedModeOfacquisition1 = TransactionType_OS[$(this).val()];                  
                       $('.Qtyclass').val(AllowedModeOfacquisition1);
                       $('.Valueclass').val(AllowedModeOfacquisition1);
-                      $("#Qtyclass").attr('readonly', true);
-                      $("#Valueclass").attr('readonly', true);       
+                      $('.Qtyclass').attr('readonly', true);
+                      $('.Valueclass').attr('readonly', true);       
                 }
                 else {
                     
                       $('.Qtyclass').val('');
                       $('.Valueclass').val('');                    
-                      $("#Qtyclass").attr('readonly', false);
-                      $("#Valueclass").attr('readonly', false);
+                      $('.Qtyclass').attr('readonly', false);
+                      $('.Valueclass').attr('readonly', false);
                  }
             }
     else if (EnableDisableQuantityValuehd == 400001) {          
         $('.Qtyclass').val('');
         $('.Valueclass').val('');
-        $("#Qtyclass").attr('readonly', false);
-        $("#Valueclass").attr('readonly', false);
+        $('.Qtyclass').attr('readonly', false);
+        $('.Valueclass').attr('readonly', false);
            
       }
 });
