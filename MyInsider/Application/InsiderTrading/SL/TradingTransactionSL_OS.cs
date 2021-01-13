@@ -73,6 +73,46 @@ namespace InsiderTrading.SL
         }
         #endregion GetTradingTransactionMasterDetails
 
+        public InsiderTradingDAL.TradingTransactionMasterDTO_OS GetQuantity(string sConnectionString, int m_iDisclosureTypeCodeId, int m_iUserInfoId)
+        {
+            InsiderTradingDAL.TradingTransactionMasterDTO_OS res = null;
+
+            try
+            {
+                //InsiderTradingDAL.TradingTransactionDAL objTradingTransactionDAL = new InsiderTradingDAL.TradingTransactionDAL();
+                using (var objTradingTransactionDAL_OS = new InsiderTradingDAL.TradingTransactionDAL_OS())
+                {
+                    res= objTradingTransactionDAL_OS.GetQunatityValue(sConnectionString, m_iDisclosureTypeCodeId, m_iUserInfoId);
+                }
+            }
+            catch (Exception exp)
+            {
+                throw exp;
+            }
+
+            return res;
+        }
+        #region Get_mst_company_details
+        /// <summary>
+        /// This method is used for the Get mst_company details.
+        /// </summary>
+        /// <returns></returns>
+        public InsiderTradingDAL.TradingTransactionMasterDTO_OS Get_mst_company_details(string i_sConnectionString)
+        {
+            try
+            {
+                using (var objTradingTransactionDAL_OS = new InsiderTradingDAL.TradingTransactionDAL_OS())
+                {
+                    return objTradingTransactionDAL_OS.Get_mst_company_details(i_sConnectionString);
+                }
+            }
+            catch (Exception exp)
+            {
+                throw exp;
+            }
+        }
+        #endregion Get_mst_company_details
+
         #region GetTradingTransactionMasterCreate
         /// <summary>
         /// 
