@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Mass Upload";
     ViewBag.ShowSuccess = "0";
+     var partialError = HttpContext.Current.Session["PartialError"];
 }
 
 <style>
@@ -27,10 +28,18 @@
     {
         if (ViewBag.AllSheetErrorsPresent != null && ViewBag.AllSheetErrorsPresent)
         {
+            var showPartialError = partialError;
             <div>
                 <div class="validation-summary-errors alert alert-danger" data-valmsg-summary="true" id="divValidationSummaryModal">
                     <ul>
-                        <li>Following are the errors occurred during Mass Upload. Please correct the errors and try to upload the file again. You can download the error report by clicking on the link, "Download Error Report", provided below.</li>
+                            @if (showPartialError.ToString() == "1")
+                            {
+                                <li>All valid transactions are uploaded in the system, please check not uploaded transactions in below table.</li>
+                            }
+                            else {
+                                <li>Following are the errors occurred during Mass Upload. Please correct the errors and try to upload the file again. You can download the error report by clicking on the link, "Download Error Report", provided below.</li>
+                            }
+                       
                     </ul>
                 </div>
                 <div style="max-height: 150px;overflow:auto;">

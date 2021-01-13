@@ -191,7 +191,16 @@ namespace InsiderTrading.Controllers
         [ActionName("SaveImportedRecordsProc")]
         public ActionResult Cancel(int acid)
         {
-            return RedirectToAction("AllMassUpload", "MassUpload", new { acid = InsiderTrading.Common.ConstEnum.UserActions.MASSUPLOAD_LIST });
+            LoginUserDetails objLoginUserDetails = null;
+            objLoginUserDetails = (LoginUserDetails)InsiderTrading.Common.Common.GetSessionValue((string)InsiderTrading.Common.ConstEnum.SessionValue.UserDetails);
+            if (Convert.ToInt32(objLoginUserDetails.UserTypeCodeId) == InsiderTrading.Common.ConstEnum.Code.Admin || Convert.ToInt32(objLoginUserDetails.UserTypeCodeId) == InsiderTrading.Common.ConstEnum.Code.COUserType)
+            {
+                return RedirectToAction("AllMassUpload", "MassUpload", new { acid = InsiderTrading.Common.ConstEnum.UserActions.MASSUPLOAD_LIST });
+            }
+            else
+            {
+                return RedirectToAction("AllMassUpload", "MassUpload", new { acid = InsiderTrading.Common.ConstEnum.UserActions.MASSUPLOAD_EMPLOYEE_LIST });
+            }
         }
 
         [AuthorizationPrivilegeFilter]
@@ -216,7 +225,7 @@ namespace InsiderTrading.Controllers
             bool bErrorExistInExcelSheets = false;
             bool bCheckifExcelIsvalid = false;
             int nSavedMassUploadLogId = 0;
-
+            Session["PartialError"] = 0;
             try
             {
                 objLoginUserDetails = (LoginUserDetails)InsiderTrading.Common.Common.GetSessionValue((string)InsiderTrading.Common.ConstEnum.SessionValue.UserDetails);
