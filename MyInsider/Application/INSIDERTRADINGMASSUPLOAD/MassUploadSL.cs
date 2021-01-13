@@ -1,16 +1,13 @@
-﻿using System;
+﻿using InsiderTradingDAL;
+using InsiderTradingExcelWriter.ExcelFacade;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
-using System.Data.OleDb;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
-using InsiderTradingMassUpload;
-using InsiderTradingDAL;
-using InsiderTradingExcelWriter.ExcelFacade;
-using System.IO;
 
 namespace InsiderTradingMassUpload
 {
@@ -2049,7 +2046,7 @@ namespace InsiderTradingMassUpload
 
                 List<MassUploadResponseDTO> lstResponse = new List<MassUploadResponseDTO>();
                 lstResponse = new List<MassUploadResponseDTO>();
-                int nRowCounter = 2;
+                int nRowCounter = 1;
                 foreach (List<string> objRowsColumns in i_lstRowWiseData)
                 {
                     bool bErrorInRow = false;
@@ -2065,7 +2062,7 @@ namespace InsiderTradingMassUpload
                             m_bErrorPresentInExcelSheets = true;
                             List<MassUploadExcelSheetErrors> excelSheetErrors = new List<MassUploadExcelSheetErrors>
                             {
-                                new MassUploadExcelSheetErrors(1, 1, "", "Invalid PAN Number", "", "PAN", "")
+                                new MassUploadExcelSheetErrors((nRowCounter + 1), 1, "", "Invalid PAN Number", "", "PAN", objRowsColumns[0])
                             };
                             m_nExcelsheetUIValidationsErrors[i_sExcelSheetName] = excelSheetErrors;
                             return tblMassUploadDataTable;
@@ -2074,7 +2071,7 @@ namespace InsiderTradingMassUpload
                     else if ((userTypeCodeId == 101003 || userTypeCodeId == 101004 || userTypeCodeId == 101006) && i_sExcelSheetName.Contains("OnGoingContDisc"))
                     {
                         string value = Convert.ToString(objRowsColumns[1]);
-                        bool isValid = userList.Any(c => c.Contains(value));
+                        bool isValid = userList.Any(c => c.Equals(value));
                         if (!isValid)
                         {
                             lstResponse.Add(new MassUploadResponseDTO(-999, Convert.ToString(value) + " is not valid value"));
@@ -2083,7 +2080,7 @@ namespace InsiderTradingMassUpload
                             m_bErrorPresentInExcelSheets = true;
                             List<MassUploadExcelSheetErrors> excelSheetErrors = new List<MassUploadExcelSheetErrors>
                             {
-                                new MassUploadExcelSheetErrors(1, 1, "", "Invalid User Name", "", "UserName", "")
+                                new MassUploadExcelSheetErrors((nRowCounter + 1), 1, "", "Invalid User Name", "", "UserName", objRowsColumns[0])
                             };
                             m_nExcelsheetUIValidationsErrors[i_sExcelSheetName] = excelSheetErrors;
                             return tblMassUploadDataTable;
@@ -3208,7 +3205,7 @@ namespace InsiderTradingMassUpload
             {
                 int nRowCounter = 1;//There is one header row present so
                 int SECURITYTYPE_COLUMN_NO = 4;
-                int LOTSIZE = 12; 
+                int LOTSIZE = 12;
 
                 List<MassUploadExcelSheetErrors> lstErrors = new List<MassUploadExcelSheetErrors>();
 
