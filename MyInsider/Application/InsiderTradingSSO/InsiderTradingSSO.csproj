@@ -155,7 +155,6 @@
     <Content Include="Content\SiteOLD.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <None Include="Properties\PublishProfiles\VigilanteSSO.pubxml" />
     <Content Include="Scripts\bootstrap\css\bootstrap.css" />
     <Content Include="Scripts\bootstrap\css\bootstrap.min.css" />
     <Content Include="Scripts\bootstrap\fonts\glyphicons-halflings-regular.svg" />
@@ -282,7 +281,9 @@
     <Content Include="Views\Home\AuthenticationFailed.cshtml" />
     <Content Include="Views\Home\SSOLogin.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
