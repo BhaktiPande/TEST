@@ -967,6 +967,9 @@ BEGIN
 	
 	IF(@inp_iComboType = 40)
 	BEGIN	   
+		CREATE TABLE #tempUPSI(ID Int, Value NVARCHAR(500))
+
+		INSERT INTO #tempUPSI (ID, Value)
 		SELECT UI.UserInfoId AS ID,
 		CASE WHEN UI.UserTypeCodeId NOT IN(101007) 
 		THEN 
@@ -982,8 +985,12 @@ BEGIN
 		ELSE
 			CONCAT(UI.FirstName, ' ',UI.LASTNAME,' - (',UI.EmployeeId,')') 
 		END AS Value from usr_UserInfo UI INNER JOIN mst_Company MC ON MC.CompanyId=UI.CompanyId 
-		WHERE (UI.DateOfSeparation IS NULL OR UI.DateOfSeparation > dbo.uf_com_GetServerDate()) AND UI.StatusCodeId = 102001
+		WHERE (UI.DateOfSeparation IS NULL OR UI.DateOfSeparation > dbo.uf_com_GetServerDate()) AND UI.StatusCodeId = 102001		
+		ORDER BY CASE WHEN FirstName >= 'A' THEN 1 ELSE 0 END DESC,
+         FirstName ASC			
 
+		 SELECT ID, Value FROM #tempUPSI ORDER BY CASE WHEN Value >= 'A' THEN 1 ELSE 0 END DESC, Value ASC
+		 DROP TABLE #tempUPSI
 
 		RETURN 0;
 	END

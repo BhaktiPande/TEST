@@ -1,7 +1,7 @@
 
 IF EXISTS (SELECT * FROM com_MassUploadExcel WHERE MassUploadExcelId = 54)
 BEGIN
-	update com_MassUploadExcel set MassUploadName='Employeewise restricted list',TemplateFileName='EmployeeWiseRestrictedlistTemplate' where MassUploadExcelId=54
+	update com_MassUploadExcel set MassUploadName='Employeewise Restricted List Mass Upload',TemplateFileName='EmployeeWiseRestrictedlistTemplate' where MassUploadExcelId=54
 END
 
 IF EXISTS (SELECT * FROM mst_Resource WHERE ResourceKey ='usr_msg_55067')

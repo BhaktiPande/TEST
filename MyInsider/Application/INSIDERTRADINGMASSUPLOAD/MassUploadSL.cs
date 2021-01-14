@@ -12,16 +12,15 @@ using InsiderTradingDAL;
 using InsiderTradingExcelWriter.ExcelFacade;
 using System.IO;
 
-
 namespace InsiderTradingMassUpload
 {
-    
+
     /// <summary>
     /// This emumerator contains the Excel column names
     /// </summary>
     enum EXCELColumnNumber
     {
-        A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF
+        A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, AA, AB, AC, AD, AE, AF
     }
     /// <summary>
     /// This enumn is used for specifying which type of validation to be performed for
@@ -39,7 +38,8 @@ namespace InsiderTradingMassUpload
         DEPENDENTCOLUMNVALUE
     }
 
-    enum MASSUPLOADEXCELSHEET{
+    enum MASSUPLOADEXCELSHEET
+    {
         EMPLOYEEINSIDER = 1,
         NONEMPLOYEEINSIDER = 2,
         CORPORATEINSIDER = 3,
@@ -64,7 +64,7 @@ namespace InsiderTradingMassUpload
     {
         #region Member Variables
 
-        
+
         private string[] m_sExcelColumnNames = new string[] { "", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
         private string ERROR_EXCEL_COLUMN1_HEADER = "Row Number(Sequence Number)";
         private string ERROR_EXCEL_COLUMN2_HEADER = "Column Header(Column Name)";
@@ -79,8 +79,8 @@ namespace InsiderTradingMassUpload
         private string m_sCurrentCompanyDBName;
         private string m_sEncryptionSaltValue;
 
-        
-        
+
+
         private MassUploadExcel m_objMassUploadExcel;
         private MassUploadExcelSheets m_objMassUploadExcelSheets;
 
@@ -90,7 +90,7 @@ namespace InsiderTradingMassUpload
         Dictionary<string, int> m_objCompanyNamesDisct;
         private List<RolesDTO> m_objRolesDTOList;
         Dictionary<string, int> m_objRolesNameWiseDisct;
-        
+
         private List<MassUploadExcelSheets> m_lstMassUploadSheets;
 
         private Dictionary<string, string> m_objSheetRelatedColumnMapping;
@@ -283,7 +283,7 @@ namespace InsiderTradingMassUpload
             m_sCurrentCompanyDBName = i_sCompanyDBName;
         }
 
-       
+
         /// <summary>
         /// Contructor for the MassUpload for initializing the objects and variables
         /// </summary>
@@ -312,7 +312,7 @@ namespace InsiderTradingMassUpload
             m_bErrorPresentInExcelSheets = false;
             m_sCurrentCompanyDBName = i_sCompanyDBName;
         }
-        
+
         /// <summary>
         /// Empty constructor
         /// </summary>
@@ -365,7 +365,7 @@ namespace InsiderTradingMassUpload
         /// 
         public void ReadXLSFileIntoCollection()
         {
-             #region Variables for Excel Reading
+            #region Variables for Excel Reading
             System.Data.OleDb.OleDbConnection objOledbConnection = null;
             System.Data.DataSet dtDataSet;
             System.Data.OleDb.OleDbDataAdapter objCommand;
@@ -383,7 +383,7 @@ namespace InsiderTradingMassUpload
                 foreach (string sSheetName in lstSheetnames)
                 {
                     DataTable objSheetNames = objOledbConnection.GetOleDbSchemaTable(System.Data.OleDb.OleDbSchemaGuid.Tables, null);
-                   bool o_bSheetPresent = CheckSheetPresent(objSheetNames, sSheetName);
+                    bool o_bSheetPresent = CheckSheetPresent(objSheetNames, sSheetName);
                     if (o_bSheetPresent)
                     {
                         objCommand = new System.Data.OleDb.OleDbDataAdapter("select * from [" + sSheetName + "$]", objOledbConnection);
@@ -464,8 +464,8 @@ namespace InsiderTradingMassUpload
                     if (CommonOpenXML.TotalRows == 0)
                     {
                         continue;
-                    }                    
-                   
+                    }
+
                     // read rows from sheetdata
                     for (int nRow = 0; (nRow < CommonOpenXML.TotalRows)/* && (nEmptyRows != nEmptyRowLimit)*/; nRow++)
                     {
@@ -488,8 +488,8 @@ namespace InsiderTradingMassUpload
                                     isDate = true;
                                 sValue = "";
                                 nOldActual = nActualColumnIndex;
-                                nActualColumnIndex = CommonOpenXML.GetCellValue(nActualColumnIndex, nTotalIncrement,isDate, out sValue);
-                                if (nActualColumnIndex-nOldActual>0)
+                                nActualColumnIndex = CommonOpenXML.GetCellValue(nActualColumnIndex, nTotalIncrement, isDate, out sValue);
+                                if (nActualColumnIndex - nOldActual > 0)
                                 {
                                     nIncrementDifference = nActualColumnIndex - nOldActual;
                                     nTotalIncrement = nTotalIncrement + nIncrementDifference;
@@ -515,7 +515,7 @@ namespace InsiderTradingMassUpload
                                 else
                                 {
                                     lstColumns.Add(sValue);
-                                }                                
+                                }
 
                             }
 
@@ -546,7 +546,7 @@ namespace InsiderTradingMassUpload
             {
                 CommonOpenXML.ReleaseObjects();
             }
-            
+
         }
         #endregion ReadXLSXFileIntoCollection
         #endregion ReadDataFrom Excel File
@@ -610,8 +610,8 @@ namespace InsiderTradingMassUpload
         }
         #endregion GetAllMassUpload
 
-        
-        
+
+
         #region FetchAllCodes
         /// <summary>
         /// This method will be used for fetching all the codes from com_code table and maintain the list of CodesDTO and a dictionary containing the collection
@@ -711,10 +711,10 @@ namespace InsiderTradingMassUpload
         {
             //Fetch the configuration data from the table and save it in the corresponding objects
             List<InsiderTradingDAL.MassUploadDTO> lstMassUploadDTO;
-            
+
             int nCounter = 0;
             int nOldExcelSheetId = 0;
-            Dictionary<string, List<MassUploadExcelDataTableColumnMapping>> 
+            Dictionary<string, List<MassUploadExcelDataTableColumnMapping>>
                 dictDataTableColumnMapping = new Dictionary<string, List<MassUploadExcelDataTableColumnMapping>>();
             m_objMassUploadExcelSheets = null;
             List<MassUploadExcelDataTableColumnMapping> lstColumnsMapping = new List<MassUploadExcelDataTableColumnMapping>();
@@ -878,228 +878,231 @@ namespace InsiderTradingMassUpload
 
         #region ValidateData
         /// <summary>
-            /// This function will be used for validating the data based on the validation type given for given sheet and given column no. 
-            /// This function will be called for every column in the given column.
-            /// </summary>
-            /// <param name="n_sExcelSheetName"></param>
-            /// <param name="i_nColumnCount"></param>
-            /// <param name="i_nValidationType"></param>
-            /// <param name="i_sData"></param>
-            /// <param name="?"></param>
+        /// This function will be used for validating the data based on the validation type given for given sheet and given column no. 
+        /// This function will be called for every column in the given column.
+        /// </summary>
+        /// <param name="n_sExcelSheetName"></param>
+        /// <param name="i_nColumnCount"></param>
+        /// <param name="i_nValidationType"></param>
+        /// <param name="i_sData"></param>
+        /// <param name="?"></param>
 
-        private void ValidateData(string i_sExcelSheetName, int i_nColumnCount, ValidationTypes i_nValidationType, string i_sData,object[] i_objRowArray, out bool o_bIsValid, out string o_sErrorCode, out string o_sErrorMessage)
+        private void ValidateData(string i_sExcelSheetName, int i_nColumnCount, ValidationTypes i_nValidationType, string i_sData, object[] i_objRowArray, out bool o_bIsValid, out string o_sErrorCode, out string o_sErrorMessage)
         {
-                o_bIsValid = true;
-                o_sErrorCode = "";
-                o_sErrorMessage = "";
-                try{
+            o_bIsValid = true;
+            o_sErrorCode = "";
+            o_sErrorMessage = "";
+            try
+            {
 
 
-                   
 
-                    //if (!isDependentColumnValueColumn)
-                    //{
-                        if (i_nValidationType == ValidationTypes.REQUIREDVALIDATION)//For is required validation
+
+                //if (!isDependentColumnValueColumn)
+                //{
+                if (i_nValidationType == ValidationTypes.REQUIREDVALIDATION)//For is required validation
+                {
+
+                    bool isShouldCheckForRequired = false;
+                    isShouldCheckForRequired = CheckBasedOnDependentcolumnValue(i_sExcelSheetName, i_nColumnCount, i_objRowArray);
+
+                    if (isShouldCheckForRequired)
+                    {
+                        //To check if the column is Required conditionally based on value from a given column
+                        Dictionary<int, MassUploadExcelDataTableColumnMapping> objCollection = new Dictionary<int, MassUploadExcelDataTableColumnMapping>();
+                        if (m_objSheetWiseRequiredColumns.ContainsKey(i_sExcelSheetName))
                         {
+                            objCollection = m_objSheetWiseRequiredColumns[i_sExcelSheetName];
+                        }
+                        if (objCollection.ContainsKey(i_nColumnCount))
+                        {
+                            //If the concerned column is not a dependent column and is not required based on value of other column then validate for required field.
 
-                            bool isShouldCheckForRequired = false;
-                            isShouldCheckForRequired = CheckBasedOnDependentcolumnValue(i_sExcelSheetName, i_nColumnCount, i_objRowArray);
-
-                            if (isShouldCheckForRequired)
+                            MassUploadExcelDataTableColumnMapping objColumnMappingObj = objCollection[i_nColumnCount];
+                            if (i_sData == null || i_sData == "")
                             {
-                                //To check if the column is Required conditionally based on value from a given column
-                                Dictionary<int, MassUploadExcelDataTableColumnMapping> objCollection = new Dictionary<int, MassUploadExcelDataTableColumnMapping>();
-                                if (m_objSheetWiseRequiredColumns.ContainsKey(i_sExcelSheetName))
+                                o_bIsValid = false;
+                                o_sErrorCode = objColumnMappingObj.IsRequiredErrorCode;
+                                if (o_sErrorCode == null || o_sErrorCode == "")
                                 {
-                                    objCollection = m_objSheetWiseRequiredColumns[i_sExcelSheetName];
+                                    o_sErrorMessage = "The " + m_objSheetWiseColumnsNames[i_sExcelSheetName][(int)i_nColumnCount] + " is required.";
                                 }
-                                if (objCollection.ContainsKey(i_nColumnCount))
-                                {
-                                    //If the concerned column is not a dependent column and is not required based on value of other column then validate for required field.
-
-                                    MassUploadExcelDataTableColumnMapping objColumnMappingObj = objCollection[i_nColumnCount];
-                                    if (i_sData == null || i_sData == "")
-                                    {
-                                        o_bIsValid = false;
-                                        o_sErrorCode = objColumnMappingObj.IsRequiredErrorCode;
-                                        if (o_sErrorCode == null || o_sErrorCode == "")
-                                        {
-                                            o_sErrorMessage = "The " + m_objSheetWiseColumnsNames[i_sExcelSheetName][(int)i_nColumnCount] + " is required.";
-                                        }
-                                    }
-                                }
-                                objCollection = null;
                             }
                         }
-                        else if (i_nValidationType == ValidationTypes.REGULAREXPRESSIONVALIDATION)//For Regular expression 
-                        {
-                            Dictionary<int, MassUploadExcelDataTableColumnMapping> objCollection = new Dictionary<int,MassUploadExcelDataTableColumnMapping>();
-                            if (m_objSheetWiseRegExpression.ContainsKey(i_sExcelSheetName))
-                            {
-                                objCollection = m_objSheetWiseRegExpression[i_sExcelSheetName];
-                            }
+                        objCollection = null;
+                    }
+                }
+                else if (i_nValidationType == ValidationTypes.REGULAREXPRESSIONVALIDATION)//For Regular expression 
+                {
+                    Dictionary<int, MassUploadExcelDataTableColumnMapping> objCollection = new Dictionary<int, MassUploadExcelDataTableColumnMapping>();
+                    if (m_objSheetWiseRegExpression.ContainsKey(i_sExcelSheetName))
+                    {
+                        objCollection = m_objSheetWiseRegExpression[i_sExcelSheetName];
+                    }
 
-                            if (i_sData != "")
+                    if (i_sData != "")
+                    {
+                        if (objCollection.ContainsKey(i_nColumnCount))
+                        {
+                            MassUploadExcelDataTableColumnMapping objColumnMappingObj = objCollection[i_nColumnCount];
+                            string sRgularExpression = objColumnMappingObj.ValidationRegExpress;
+                            //Regex regex = new Regex(sRgularExpression, RegexOptions.IgnoreCase);
+                            //Match match = regex.Match(i_sData);
+                            if (!Regex.IsMatch(i_sData as string, sRgularExpression, RegexOptions.IgnoreCase))
                             {
-                                if (objCollection.ContainsKey(i_nColumnCount))
+                                o_bIsValid = false;
+                                o_sErrorCode = objColumnMappingObj.ValidationRegExpErrorcode;
+                                if (o_sErrorCode == null || o_sErrorCode == "")
                                 {
-                                    MassUploadExcelDataTableColumnMapping objColumnMappingObj = objCollection[i_nColumnCount];
-                                    string sRgularExpression = objColumnMappingObj.ValidationRegExpress;
-                                    //Regex regex = new Regex(sRgularExpression, RegexOptions.IgnoreCase);
-                                    //Match match = regex.Match(i_sData);
-                                    if (!Regex.IsMatch(i_sData as string, sRgularExpression, RegexOptions.IgnoreCase))
-                                    {
-                                        o_bIsValid = false;
-                                        o_sErrorCode = objColumnMappingObj.ValidationRegExpErrorcode;
-                                        if (o_sErrorCode == null || o_sErrorCode == "")
-                                        {
-                                            o_sErrorMessage = "Regular expression failure for " + i_sData;
-                                        }
-                                    }
+                                    o_sErrorMessage = "Regular expression failure for " + i_sData;
                                 }
-                                objCollection = null;
                             }
                         }
-                        else if (i_nValidationType == ValidationTypes.MAXLENGTHVALIDATION)//For max length of data
-                        {
-                            Dictionary<int, MassUploadExcelDataTableColumnMapping> objCollection = new Dictionary<int,MassUploadExcelDataTableColumnMapping>();
+                        objCollection = null;
+                    }
+                }
+                else if (i_nValidationType == ValidationTypes.MAXLENGTHVALIDATION)//For max length of data
+                {
+                    Dictionary<int, MassUploadExcelDataTableColumnMapping> objCollection = new Dictionary<int, MassUploadExcelDataTableColumnMapping>();
 
-                            if (m_objSheetWiseMaxLengthColumns.ContainsKey(i_sExcelSheetName))
+                    if (m_objSheetWiseMaxLengthColumns.ContainsKey(i_sExcelSheetName))
+                    {
+                        objCollection = m_objSheetWiseMaxLengthColumns[i_sExcelSheetName];
+                    }
+
+                    if (objCollection.ContainsKey(i_nColumnCount))
+                    {
+                        MassUploadExcelDataTableColumnMapping objColumnMappingObj = objCollection[i_nColumnCount];
+                        if (i_sData != null && i_sData.Length > objColumnMappingObj.MaxLength)
+                        {
+                            o_bIsValid = false;
+                            o_sErrorCode = objColumnMappingObj.MaxLengthErrorCode;
+                            if (o_sErrorCode == null || o_sErrorCode == "")
                             {
-                                objCollection = m_objSheetWiseMaxLengthColumns[i_sExcelSheetName];
+                                o_sErrorMessage = "The field " + m_objSheetWiseColumnsNames[i_sExcelSheetName][(int)i_nColumnCount] + " must be a string with a maximum length of " + objColumnMappingObj.MaxLength + ".";
                             }
+                        }
+                    }
+                    objCollection = null;
+                }
+                else if (i_nValidationType == ValidationTypes.COMPANYVALIDATION)//For Company 
+                {
+                    Dictionary<int, MassUploadExcelDataTableColumnMapping> objCollection = new Dictionary<int, MassUploadExcelDataTableColumnMapping>();
+
+                    if (m_objSheetWiseCompanyColumns.ContainsKey(i_sExcelSheetName))
+                    {
+                        objCollection = m_objSheetWiseCompanyColumns[i_sExcelSheetName];
+                    }
+                    if (i_sData != "")
+                    {
+                        if (objCollection.ContainsKey(i_nColumnCount))
+                        {
+                            MassUploadExcelDataTableColumnMapping objColumnMappingObj = objCollection[i_nColumnCount];
+                            if (!m_objCompanyNamesDisct.ContainsKey(Convert.ToString(i_sData).ToLower()))
+                            {
+                                o_bIsValid = false;
+                                o_sErrorMessage = i_sData + " company is invalid";
+                            }
+                        }
+                    }
+                    objCollection = null;
+                }
+                else if (i_nValidationType == ValidationTypes.ROLEVALIDATION)//For Role 
+                {
+                    Dictionary<int, MassUploadExcelDataTableColumnMapping> objCollection = new Dictionary<int, MassUploadExcelDataTableColumnMapping>();
+
+                    if (m_objSheetWiseRoleColumns.ContainsKey(i_sExcelSheetName))
+                    {
+                        objCollection = m_objSheetWiseRoleColumns[i_sExcelSheetName];
+                    }
+                    if (i_sData != "")
+                    {
+                        if (objCollection.ContainsKey(i_nColumnCount))
+                        {
+                            MassUploadExcelDataTableColumnMapping objColumnMappingObj = objCollection[i_nColumnCount];
+                            if (!m_objRolesNameWiseDisct.ContainsKey(Convert.ToString(i_sData).ToLower()))
+                            {
+                                o_bIsValid = false;
+                                o_sErrorMessage = i_sData + " role is invalid";
+                            }
+                        }
+                    }
+                    objCollection = null;
+                }
+                else if (i_nValidationType == ValidationTypes.MASTERCODEVALIDATION)//For Master codes 
+                {
+                    bool isShouldCheckForRequired = false;
+                    isShouldCheckForRequired = CheckBasedOnDependentcolumnValue(i_sExcelSheetName, i_nColumnCount, i_objRowArray);
+
+                    if (isShouldCheckForRequired)
+                    {
+                        if (i_sData != "")
+                        {
+                            Dictionary<int, MassUploadExcelDataTableColumnMapping> objCollection = new Dictionary<int, MassUploadExcelDataTableColumnMapping>();
+
+                            if (m_objSheetWiseMasterCodeColumns.ContainsKey(i_sExcelSheetName))
+                            {
+                                objCollection = m_objSheetWiseMasterCodeColumns[i_sExcelSheetName];
+                            }
+
 
                             if (objCollection.ContainsKey(i_nColumnCount))
                             {
                                 MassUploadExcelDataTableColumnMapping objColumnMappingObj = objCollection[i_nColumnCount];
-                                if (i_sData != null && i_sData.Length > objColumnMappingObj.MaxLength)
+                                if (!m_objCodesNameWiseDisct.ContainsKey(Convert.ToString(i_sData).ToLower() + "_" + objColumnMappingObj.ApplicableDataCodeGroupId))
                                 {
                                     o_bIsValid = false;
-                                    o_sErrorCode = objColumnMappingObj.MaxLengthErrorCode;
-                                    if (o_sErrorCode == null || o_sErrorCode == "")
-                                    {
-                                        o_sErrorMessage = "The field " + m_objSheetWiseColumnsNames[i_sExcelSheetName][(int)i_nColumnCount] + " must be a string with a maximum length of " + objColumnMappingObj.MaxLength + ".";
-                                    }
+                                    o_sErrorMessage = i_sData + " value is invalid";
                                 }
                             }
                             objCollection = null;
                         }
-                        else if (i_nValidationType == ValidationTypes.COMPANYVALIDATION)//For Company 
-                        {
-                            Dictionary<int, MassUploadExcelDataTableColumnMapping> objCollection = new Dictionary<int,MassUploadExcelDataTableColumnMapping>();
-
-                            if (m_objSheetWiseCompanyColumns.ContainsKey(i_sExcelSheetName))
-                            {
-                                objCollection = m_objSheetWiseCompanyColumns[i_sExcelSheetName];
-                            }
-                            if (i_sData != "")
-                            {
-                                if (objCollection.ContainsKey(i_nColumnCount))
-                                {
-                                    MassUploadExcelDataTableColumnMapping objColumnMappingObj = objCollection[i_nColumnCount];
-                                    if (!m_objCompanyNamesDisct.ContainsKey(Convert.ToString(i_sData).ToLower()))
-                                    {
-                                        o_bIsValid = false;
-                                        o_sErrorMessage = i_sData + " company is invalid";
-                                    }
-                                }
-                            }
-                            objCollection = null;
-                        }
-                        else if (i_nValidationType == ValidationTypes.ROLEVALIDATION)//For Role 
-                        {
-                            Dictionary<int, MassUploadExcelDataTableColumnMapping> objCollection = new Dictionary<int,MassUploadExcelDataTableColumnMapping>();
-
-                            if (m_objSheetWiseRoleColumns.ContainsKey(i_sExcelSheetName))
-                            {
-                                objCollection = m_objSheetWiseRoleColumns[i_sExcelSheetName];
-                            }
-                            if (i_sData != "")
-                            {
-                                if (objCollection.ContainsKey(i_nColumnCount))
-                                {
-                                    MassUploadExcelDataTableColumnMapping objColumnMappingObj = objCollection[i_nColumnCount];
-                                    if (!m_objRolesNameWiseDisct.ContainsKey(Convert.ToString(i_sData).ToLower()))
-                                    {
-                                        o_bIsValid = false;
-                                        o_sErrorMessage = i_sData + " role is invalid";
-                                    }
-                                }
-                            }
-                            objCollection = null;
-                        }
-                        else if (i_nValidationType == ValidationTypes.MASTERCODEVALIDATION)//For Master codes 
-                        {
-                            bool isShouldCheckForRequired = false;
-                            isShouldCheckForRequired = CheckBasedOnDependentcolumnValue(i_sExcelSheetName, i_nColumnCount, i_objRowArray);
-
-                            if (isShouldCheckForRequired)
-                            {
-                                if (i_sData != "")
-                                {
-                                    Dictionary<int, MassUploadExcelDataTableColumnMapping> objCollection = new Dictionary<int, MassUploadExcelDataTableColumnMapping>();
-
-                                    if (m_objSheetWiseMasterCodeColumns.ContainsKey(i_sExcelSheetName))
-                                    {
-                                        objCollection = m_objSheetWiseMasterCodeColumns[i_sExcelSheetName];
-                                    }
-
-
-                                    if (objCollection.ContainsKey(i_nColumnCount))
-                                    {
-                                        MassUploadExcelDataTableColumnMapping objColumnMappingObj = objCollection[i_nColumnCount];
-                                        if (!m_objCodesNameWiseDisct.ContainsKey(Convert.ToString(i_sData).ToLower() + "_" + objColumnMappingObj.ApplicableDataCodeGroupId))
-                                        {
-                                            o_bIsValid = false;
-                                            o_sErrorMessage = i_sData + " value is invalid";
-                                        }
-                                    }
-                                    objCollection = null;
-                                }
-                            }
-                        }
-                        else if (i_nValidationType == ValidationTypes.DEPENDENTCOLUMN)//For dependent column  validation
-                        {
-                            Dictionary<int, MassUploadExcelDataTableColumnMapping> objCollection = new Dictionary<int,MassUploadExcelDataTableColumnMapping>();
-
-                            if (m_objSheetWiseDependentColumns.ContainsKey(i_sExcelSheetName))
-                            {
-                                objCollection = m_objSheetWiseDependentColumns[i_sExcelSheetName];
-                            }
-
-
-                            if (objCollection.ContainsKey(i_nColumnCount))
-                            {
-                                MassUploadExcelDataTableColumnMapping objColumnMappingObj = objCollection[i_nColumnCount];
-                                int? iDependentColumnNo = objColumnMappingObj.DependentColumnNumber;
-
-                                if (i_sData != null && i_sData != "" && iDependentColumnNo != null)
-                                {
-                                    if (i_objRowArray[(int)iDependentColumnNo].ToString() == "")
-                                    {
-                                        o_bIsValid = false;
-                                        o_sErrorCode = objColumnMappingObj.IsRequiredErrorCode;
-                                        if (o_sErrorCode == null || o_sErrorCode == "")
-                                        {
-                                            string nExcelColumnName = "";
-                                            if (iDependentColumnNo != 0)
-                                            {
-                                                EXCELColumnNumber enumDisplayStatus = (EXCELColumnNumber)((int)iDependentColumnNo);
-                                                nExcelColumnName = enumDisplayStatus.ToString();
-                                            }
-                                            o_sErrorMessage = "This value can be selected only when there is value in column \"" + m_objSheetWiseColumnsNames[i_sExcelSheetName][(int)iDependentColumnNo] + "\" (" + nExcelColumnName + ")";
-                                        }
-                                    }
-                                }
-                            }
-                            objCollection = null;
-                        }
-                   // }
-                }catch(Exception exp){
-
+                    }
                 }
+                else if (i_nValidationType == ValidationTypes.DEPENDENTCOLUMN)//For dependent column  validation
+                {
+                    Dictionary<int, MassUploadExcelDataTableColumnMapping> objCollection = new Dictionary<int, MassUploadExcelDataTableColumnMapping>();
+
+                    if (m_objSheetWiseDependentColumns.ContainsKey(i_sExcelSheetName))
+                    {
+                        objCollection = m_objSheetWiseDependentColumns[i_sExcelSheetName];
+                    }
+
+
+                    if (objCollection.ContainsKey(i_nColumnCount))
+                    {
+                        MassUploadExcelDataTableColumnMapping objColumnMappingObj = objCollection[i_nColumnCount];
+                        int? iDependentColumnNo = objColumnMappingObj.DependentColumnNumber;
+
+                        if (i_sData != null && i_sData != "" && iDependentColumnNo != null)
+                        {
+                            if (i_objRowArray[(int)iDependentColumnNo].ToString() == "")
+                            {
+                                o_bIsValid = false;
+                                o_sErrorCode = objColumnMappingObj.IsRequiredErrorCode;
+                                if (o_sErrorCode == null || o_sErrorCode == "")
+                                {
+                                    string nExcelColumnName = "";
+                                    if (iDependentColumnNo != 0)
+                                    {
+                                        EXCELColumnNumber enumDisplayStatus = (EXCELColumnNumber)((int)iDependentColumnNo);
+                                        nExcelColumnName = enumDisplayStatus.ToString();
+                                    }
+                                    o_sErrorMessage = "This value can be selected only when there is value in column \"" + m_objSheetWiseColumnsNames[i_sExcelSheetName][(int)iDependentColumnNo] + "\" (" + nExcelColumnName + ")";
+                                }
+                            }
+                        }
+                    }
+                    objCollection = null;
+                }
+                // }
             }
-        
+            catch (Exception exp)
+            {
+
+            }
+        }
+
         #endregion
 
         #region ManageAllValidationsForAllSheets
@@ -1176,10 +1179,11 @@ namespace InsiderTradingMassUpload
             Dictionary<int, MassUploadExcelDataTableColumnMapping> objColumnRequiredValidation = new Dictionary<int, MassUploadExcelDataTableColumnMapping>();
             try
             {
-                if (i_objMassUploadExcelDataTableColumnMapping.IsRequired) { 
+                if (i_objMassUploadExcelDataTableColumnMapping.IsRequired)
+                {
                     if (m_objSheetWiseRequiredColumns.ContainsKey(i_sSheetName))
                     {
-                        objColumnRequiredValidation = m_objSheetWiseRequiredColumns[i_sSheetName]; 
+                        objColumnRequiredValidation = m_objSheetWiseRequiredColumns[i_sSheetName];
                     }
                     objColumnRequiredValidation.Add(i_nColumnCount, i_objMassUploadExcelDataTableColumnMapping);
                     m_objSheetWiseRequiredColumns[i_sSheetName] = objColumnRequiredValidation;
@@ -1395,9 +1399,9 @@ namespace InsiderTradingMassUpload
 
             try
             {
-                foreach(DataRow objDatarow in i_objSheetTable.Rows)
+                foreach (DataRow objDatarow in i_objSheetTable.Rows)
                 {
-                    if (objDatarow.ItemArray[2].ToString().Replace("$","").CompareTo(i_sCheckSheetName) == 0)
+                    if (objDatarow.ItemArray[2].ToString().Replace("$", "").CompareTo(i_sCheckSheetName) == 0)
                     {
                         bIsSheetPresent = true;
                         break;
@@ -1418,7 +1422,7 @@ namespace InsiderTradingMassUpload
         /// </summary>
         /// <param name="?"></param>
         /// <returns></returns>
-        public void CreateHIMSExcelFromView(string i_sViewDatabaseConnectionString ,string i_sViewName, string i_sDocumentPath,out string o_sExcelFileName)
+        public void CreateHIMSExcelFromView(string i_sViewDatabaseConnectionString, string i_sViewName, string i_sDocumentPath, out string o_sExcelFileName)
         {
             List<List<object>> lstRows = new List<List<object>>();
             //m_objMassUploadDAL = new MassUploadDAL();
@@ -1427,7 +1431,7 @@ namespace InsiderTradingMassUpload
             try
             {
                 lstHimsEmployeeDTO = objMassUploadFromViewSL.FetchFromView(i_sViewDatabaseConnectionString, i_sViewName);//"data source=ATLANTIX\\SQLExpress;initial catalog=TestingEmployeeDetailsDatabase;persist security info=True;user id=sa;Password=softcorner;MultipleActiveResultSets=True;", i_sViewName);
-                
+
                 int nRowCounter = 1;
                 string sDatePart = Common.ApplyFormatting(DateTime.Now, ConstEnum.DataFormatType.DateTime12_ForFileName);
                 o_sExcelFileName = i_sDocumentPath + "HIMSImportExcel_" + sDatePart + ".xlsx";
@@ -1445,7 +1449,8 @@ namespace InsiderTradingMassUpload
                 foreach (HIMSEmployeeDTO objHIMSEmployeeDTO in lstHimsEmployeeDTO)
                 {
                     int nColumnCounter = 1;
-                    if(nRowCounter == 1){
+                    if (nRowCounter == 1)
+                    {
 
 
 
@@ -1567,8 +1572,8 @@ namespace InsiderTradingMassUpload
                         (int)InsiderTradingExcelWriter.ExcelFacade.ConstantEnum.OpenXMLStyleIndex.ARIAL_NARROW_10_TEXT_PLAIN_BACKGROUND_NORMAL_WITH_BORDERS);
                     nColumnCounter++;
 
-                     objCommonOpenXMLObject.CreateTextCell(m_sExcelColumnNames[nColumnCounter], objHIMSEmployeeDTO.FirstName, nRowCounter,
-                        (int)InsiderTradingExcelWriter.ExcelFacade.ConstantEnum.OpenXMLStyleIndex.ARIAL_NARROW_10_TEXT_PLAIN_BACKGROUND_NORMAL_WITH_BORDERS);
+                    objCommonOpenXMLObject.CreateTextCell(m_sExcelColumnNames[nColumnCounter], objHIMSEmployeeDTO.FirstName, nRowCounter,
+                       (int)InsiderTradingExcelWriter.ExcelFacade.ConstantEnum.OpenXMLStyleIndex.ARIAL_NARROW_10_TEXT_PLAIN_BACKGROUND_NORMAL_WITH_BORDERS);
                     nColumnCounter++;
 
                     objCommonOpenXMLObject.CreateTextCell(m_sExcelColumnNames[nColumnCounter], objHIMSEmployeeDTO.Middlename, nRowCounter,
@@ -1579,8 +1584,8 @@ namespace InsiderTradingMassUpload
                         (int)InsiderTradingExcelWriter.ExcelFacade.ConstantEnum.OpenXMLStyleIndex.ARIAL_NARROW_10_TEXT_PLAIN_BACKGROUND_NORMAL_WITH_BORDERS);
                     nColumnCounter++;
 
-                     objCommonOpenXMLObject.CreateTextCell(m_sExcelColumnNames[nColumnCounter], objHIMSEmployeeDTO.Address, nRowCounter,
-                        (int)InsiderTradingExcelWriter.ExcelFacade.ConstantEnum.OpenXMLStyleIndex.ARIAL_NARROW_10_TEXT_PLAIN_BACKGROUND_NORMAL_WITH_BORDERS);
+                    objCommonOpenXMLObject.CreateTextCell(m_sExcelColumnNames[nColumnCounter], objHIMSEmployeeDTO.Address, nRowCounter,
+                       (int)InsiderTradingExcelWriter.ExcelFacade.ConstantEnum.OpenXMLStyleIndex.ARIAL_NARROW_10_TEXT_PLAIN_BACKGROUND_NORMAL_WITH_BORDERS);
                     nColumnCounter++;
 
                     objCommonOpenXMLObject.CreateTextCell(m_sExcelColumnNames[nColumnCounter], objHIMSEmployeeDTO.Pincode, nRowCounter,
@@ -1591,8 +1596,8 @@ namespace InsiderTradingMassUpload
                         (int)InsiderTradingExcelWriter.ExcelFacade.ConstantEnum.OpenXMLStyleIndex.ARIAL_NARROW_10_TEXT_PLAIN_BACKGROUND_NORMAL_WITH_BORDERS);
                     nColumnCounter++;
 
-                     objCommonOpenXMLObject.CreateTextCell(m_sExcelColumnNames[nColumnCounter], objHIMSEmployeeDTO.MobileNumber, nRowCounter,
-                        (int)InsiderTradingExcelWriter.ExcelFacade.ConstantEnum.OpenXMLStyleIndex.ARIAL_NARROW_10_TEXT_PLAIN_BACKGROUND_NORMAL_WITH_BORDERS);
+                    objCommonOpenXMLObject.CreateTextCell(m_sExcelColumnNames[nColumnCounter], objHIMSEmployeeDTO.MobileNumber, nRowCounter,
+                       (int)InsiderTradingExcelWriter.ExcelFacade.ConstantEnum.OpenXMLStyleIndex.ARIAL_NARROW_10_TEXT_PLAIN_BACKGROUND_NORMAL_WITH_BORDERS);
                     nColumnCounter++;
 
                     objCommonOpenXMLObject.CreateTextCell(m_sExcelColumnNames[nColumnCounter], objHIMSEmployeeDTO.EmailAddress, nRowCounter,
@@ -1603,8 +1608,8 @@ namespace InsiderTradingMassUpload
                         (int)InsiderTradingExcelWriter.ExcelFacade.ConstantEnum.OpenXMLStyleIndex.ARIAL_NARROW_10_TEXT_PLAIN_BACKGROUND_NORMAL_WITH_BORDERS);
                     nColumnCounter++;
 
-                     objCommonOpenXMLObject.CreateTextCell(m_sExcelColumnNames[nColumnCounter], objHIMSEmployeeDTO.Role, nRowCounter,
-                        (int)InsiderTradingExcelWriter.ExcelFacade.ConstantEnum.OpenXMLStyleIndex.ARIAL_NARROW_10_TEXT_PLAIN_BACKGROUND_NORMAL_WITH_BORDERS);
+                    objCommonOpenXMLObject.CreateTextCell(m_sExcelColumnNames[nColumnCounter], objHIMSEmployeeDTO.Role, nRowCounter,
+                       (int)InsiderTradingExcelWriter.ExcelFacade.ConstantEnum.OpenXMLStyleIndex.ARIAL_NARROW_10_TEXT_PLAIN_BACKGROUND_NORMAL_WITH_BORDERS);
                     nColumnCounter++;
 
                     objCommonOpenXMLObject.CreateTextCell(m_sExcelColumnNames[nColumnCounter], objHIMSEmployeeDTO.DateOfJoining, nRowCounter,
@@ -1615,8 +1620,8 @@ namespace InsiderTradingMassUpload
                         (int)InsiderTradingExcelWriter.ExcelFacade.ConstantEnum.OpenXMLStyleIndex.ARIAL_NARROW_10_TEXT_PLAIN_BACKGROUND_NORMAL_WITH_BORDERS);
                     nColumnCounter++;
 
-                     objCommonOpenXMLObject.CreateTextCell(m_sExcelColumnNames[nColumnCounter], objHIMSEmployeeDTO.Category, nRowCounter,
-                        (int)InsiderTradingExcelWriter.ExcelFacade.ConstantEnum.OpenXMLStyleIndex.ARIAL_NARROW_10_TEXT_PLAIN_BACKGROUND_NORMAL_WITH_BORDERS);
+                    objCommonOpenXMLObject.CreateTextCell(m_sExcelColumnNames[nColumnCounter], objHIMSEmployeeDTO.Category, nRowCounter,
+                       (int)InsiderTradingExcelWriter.ExcelFacade.ConstantEnum.OpenXMLStyleIndex.ARIAL_NARROW_10_TEXT_PLAIN_BACKGROUND_NORMAL_WITH_BORDERS);
                     nColumnCounter++;
 
                     objCommonOpenXMLObject.CreateTextCell(m_sExcelColumnNames[nColumnCounter], objHIMSEmployeeDTO.SubCategory, nRowCounter,
@@ -1627,8 +1632,8 @@ namespace InsiderTradingMassUpload
                         (int)InsiderTradingExcelWriter.ExcelFacade.ConstantEnum.OpenXMLStyleIndex.ARIAL_NARROW_10_TEXT_PLAIN_BACKGROUND_NORMAL_WITH_BORDERS);
                     nColumnCounter++;
 
-                     objCommonOpenXMLObject.CreateTextCell(m_sExcelColumnNames[nColumnCounter], objHIMSEmployeeDTO.Designation, nRowCounter,
-                        (int)InsiderTradingExcelWriter.ExcelFacade.ConstantEnum.OpenXMLStyleIndex.ARIAL_NARROW_10_TEXT_PLAIN_BACKGROUND_NORMAL_WITH_BORDERS);
+                    objCommonOpenXMLObject.CreateTextCell(m_sExcelColumnNames[nColumnCounter], objHIMSEmployeeDTO.Designation, nRowCounter,
+                       (int)InsiderTradingExcelWriter.ExcelFacade.ConstantEnum.OpenXMLStyleIndex.ARIAL_NARROW_10_TEXT_PLAIN_BACKGROUND_NORMAL_WITH_BORDERS);
                     nColumnCounter++;
 
                     objCommonOpenXMLObject.CreateTextCell(m_sExcelColumnNames[nColumnCounter], objHIMSEmployeeDTO.SubDesignation, nRowCounter,
@@ -1639,8 +1644,8 @@ namespace InsiderTradingMassUpload
                         (int)InsiderTradingExcelWriter.ExcelFacade.ConstantEnum.OpenXMLStyleIndex.ARIAL_NARROW_10_TEXT_PLAIN_BACKGROUND_NORMAL_WITH_BORDERS);
                     nColumnCounter++;
 
-                     objCommonOpenXMLObject.CreateTextCell(m_sExcelColumnNames[nColumnCounter], objHIMSEmployeeDTO.Department, nRowCounter,
-                        (int)InsiderTradingExcelWriter.ExcelFacade.ConstantEnum.OpenXMLStyleIndex.ARIAL_NARROW_10_TEXT_PLAIN_BACKGROUND_NORMAL_WITH_BORDERS);
+                    objCommonOpenXMLObject.CreateTextCell(m_sExcelColumnNames[nColumnCounter], objHIMSEmployeeDTO.Department, nRowCounter,
+                       (int)InsiderTradingExcelWriter.ExcelFacade.ConstantEnum.OpenXMLStyleIndex.ARIAL_NARROW_10_TEXT_PLAIN_BACKGROUND_NORMAL_WITH_BORDERS);
                     nColumnCounter++;
 
                     objCommonOpenXMLObject.CreateTextCell(m_sExcelColumnNames[nColumnCounter], objHIMSEmployeeDTO.DIN, nRowCounter,
@@ -1741,17 +1746,17 @@ namespace InsiderTradingMassUpload
         #endregion IsExcelValid
 
         #region Add Update Log Entry
-       /// <summary>
+        /// <summary>
         /// This function will used for adding/updating a log entry based on the value of i_nMassUploadLogId for the mass upload performed.
-       /// </summary>
-       /// <param name="sConnectionString"></param>
-       /// <param name="i_nMassUploadLogId"></param>
-       /// <param name="i_nMassUploadTypeId"></param>
-       /// <param name="i_nStatusCodeId"></param>
-       /// <param name="i_sErrorReportFileName"></param>
-       /// <param name="i_nLoginUserId"></param>
-       /// <param name="o_nSavedMassUploadLogId"></param>
-        public void AddUpdateLogEntry(string sConnectionString, int i_nMassUploadLogId, int i_nMassUploadTypeId, int i_nStatusCodeId,int? i_nUploadedDocumentId, string i_sErrorReportFileName, string i_sErrorMessage,
+        /// </summary>
+        /// <param name="sConnectionString"></param>
+        /// <param name="i_nMassUploadLogId"></param>
+        /// <param name="i_nMassUploadTypeId"></param>
+        /// <param name="i_nStatusCodeId"></param>
+        /// <param name="i_sErrorReportFileName"></param>
+        /// <param name="i_nLoginUserId"></param>
+        /// <param name="o_nSavedMassUploadLogId"></param>
+        public void AddUpdateLogEntry(string sConnectionString, int i_nMassUploadLogId, int i_nMassUploadTypeId, int i_nStatusCodeId, int? i_nUploadedDocumentId, string i_sErrorReportFileName, string i_sErrorMessage,
             int i_nLoginUserId, out int o_nSavedMassUploadLogId)
         {
             string sErrCode = string.Empty;
@@ -1769,7 +1774,7 @@ namespace InsiderTradingMassUpload
 
             }
         }
-         #endregion Add Update Log Entry
+        #endregion Add Update Log Entry
 
         #region ValidateSingleExcelSheet
         /// <summary>
@@ -1807,7 +1812,7 @@ namespace InsiderTradingMassUpload
                     {
                         nNoRecordsFound = true;
                         //m_bErrorPresentInExcelSheets = true;
-                        objResponsesForError.Add(new MassUploadExcelSheetErrors(0, 0, "", "There are no records present.", "","", ""));
+                        objResponsesForError.Add(new MassUploadExcelSheetErrors(0, 0, "", "There are no records present.", "", "", ""));
                     }
                     //This is the row counter and it starts from 1 and not 0 because the first row is for header
                     nCounter = 1;
@@ -1824,7 +1829,7 @@ namespace InsiderTradingMassUpload
                                 string sDataValue = drRecordColumn.Trim();
                                 string sRowSequenceNumber = Convert.ToString(drRecordRow[0]).Trim();
                                 object[] objRowArray = drRecordRow.ToArray<object>();
-                                
+
                                 ValidateData(i_sSheetNameToValidate, nColumnCounter, ValidationTypes.MAXLENGTHVALIDATION, sDataValue, objRowArray, out bIsDataValid, out sErrorCode, out sErrorMessage);
 
                                 if (!bIsDataValid)
@@ -1836,7 +1841,8 @@ namespace InsiderTradingMassUpload
                                     objResponsesForError.Add(new MassUploadExcelSheetErrors(nCounter + 1, (nColumnCounter + 1), sErrorCode, sErrorMessage, "", m_objSheetWiseColumnsNames[i_sSheetNameToValidate][(nColumnCounter)], sRowSequenceNumber));
                                     m_bErrorPresentInExcelSheets = true;
                                 }
-                                else { 
+                                else
+                                {
                                     ValidateData(i_sSheetNameToValidate, nColumnCounter, ValidationTypes.DEPENDENTCOLUMN, sDataValue, objRowArray, out bIsDataValid, out sErrorCode, out sErrorMessage);
                                     if (!bIsDataValid)
                                     {
@@ -1957,7 +1963,7 @@ namespace InsiderTradingMassUpload
         /// <param name="i_sDatatableName"></param>
         /// <param name="i_objColumnHeaderDataType"></param>
         /// <param name="i_objRowWiseData"></param>
-        public DataTable CreateDataTable(string i_sExcelSheetName, List<MassUploadExcelDataTableColumnMapping> i_lstColumnHeaderDataType, 
+        public DataTable CreateDataTable(string i_sExcelSheetName, List<MassUploadExcelDataTableColumnMapping> i_lstColumnHeaderDataType,
             List<List<string>> i_lstRowWiseData)
         {
             //GetDataTableName      --to get the datatable name
@@ -1968,8 +1974,8 @@ namespace InsiderTradingMassUpload
             Dictionary<int, int?> objColsWithCodes = new Dictionary<int, int?>();
 
             DataTable tblMassUploadDataTable = null;
-            Dictionary<int,object> lstColumnWiseDefaultValues = new Dictionary<int,object>();
- 
+            Dictionary<int, object> lstColumnWiseDefaultValues = new Dictionary<int, object>();
+
             try
             {
                 List<string> objRowsTemp = new List<string>();
@@ -1980,16 +1986,16 @@ namespace InsiderTradingMassUpload
                         sDataTableName = GetDataTableName(objMassUploadExcelObject.MassUploadDataTableId);
                         tblMassUploadDataTable = new DataTable(sDataTableName);
                     }
-                    if (objMassUploadExcelObject.DefaultValue == null || 
+                    if (objMassUploadExcelObject.DefaultValue == null ||
                         (objMassUploadExcelObject.DefaultValue == "NULL" || objMassUploadExcelObject.DefaultValue == "null"))
                     {
-                        lstColumnWiseDefaultValues.Add(iCounter,System.DBNull.Value);
+                        lstColumnWiseDefaultValues.Add(iCounter, System.DBNull.Value);
                     }
                     else
                     {
                         if (objMassUploadExcelObject.MassUploadDataTablePropertyDataType.ToLower() == "int")
                         {
-                            lstColumnWiseDefaultValues.Add(iCounter,Convert.ToInt32(objMassUploadExcelObject.DefaultValue));
+                            lstColumnWiseDefaultValues.Add(iCounter, Convert.ToInt32(objMassUploadExcelObject.DefaultValue));
                         }
                         else if (objMassUploadExcelObject.MassUploadDataTablePropertyDataType.ToLower() == "string")
                         {
@@ -2178,7 +2184,7 @@ namespace InsiderTradingMassUpload
                     }
                     else
                     {
-                        AddSheetWiseRemovedParentRows(i_sExcelSheetName, nRowCounter-2);
+                        AddSheetWiseRemovedParentRows(i_sExcelSheetName, nRowCounter - 2);
                     }
                     nRowCounter++;
                 }
@@ -2202,7 +2208,7 @@ namespace InsiderTradingMassUpload
         /// <param name="i_sProcedureName"></param>
         /// <param name="i_sConnectionString"></param>
         /// <param name="o_objResponseList"></param>
-        public void ExecuteMassUploadCall(int i_nMassuploadType,DataTable i_objMassUploadDataTable, string i_sDataTableName, string i_sProcedureName, string i_sConnectionString, 
+        public void ExecuteMassUploadCall(int i_nMassuploadType, DataTable i_objMassUploadDataTable, string i_sDataTableName, string i_sProcedureName, string i_sConnectionString,
             out List<MassUploadResponseDTO> o_objResponseList, out string o_sSheetErrorMessageCode)
         {
             //MassUploadDAL objMassUploadDAL = new MassUploadDAL();
@@ -2227,14 +2233,15 @@ namespace InsiderTradingMassUpload
         /// <summary>
         /// This function will be used for filling the related column values with the actual values for the dependent sheets to be saved
         /// </summary>
-        public void fillExcelWithDependantData(string i_sCopyFromSheetName,string i_sCopyToSheet, int i_nCopyToColumnNo, 
-            Dictionary<string, List<List<string>>> i_objCurrentDataFromExcelSheet,int nMassUploadExcelId,
+        public void fillExcelWithDependantData(string i_sCopyFromSheetName, string i_sCopyToSheet, int i_nCopyToColumnNo,
+            Dictionary<string, List<List<string>>> i_objCurrentDataFromExcelSheet, int nMassUploadExcelId,
             out Dictionary<string, List<List<string>>> o_objReturnDataFromExcelSheet)
         {
             List<List<string>> objReturnDataFromExcelSheet = new List<List<string>>();
             o_objReturnDataFromExcelSheet = new Dictionary<string, List<List<string>>>();
             List<MassUploadResponseDTO> lstParentResponse = new List<MassUploadResponseDTO>();
-            if (m_objMassUploadExcelResponseSheetList.ContainsKey(i_sCopyFromSheetName)){
+            if (m_objMassUploadExcelResponseSheetList.ContainsKey(i_sCopyFromSheetName))
+            {
                 lstParentResponse = m_objMassUploadExcelResponseSheetList[i_sCopyFromSheetName].ResponseList;
             }
             if ((lstParentResponse.Count == 0 && nMassUploadExcelId == Convert.ToInt32(MASSUPLOADEXCELSHEET.PASTTRANSACTION)) || lstParentResponse.Count > 0)
@@ -2246,63 +2253,63 @@ namespace InsiderTradingMassUpload
                 List<int> lstRemovedRowsList = new List<int>();
                 try
                 {
-                    
+
                     //foreach (KeyValuePair<string, List<List<string>>> objExcelSheet in i_objCurrentDataFromExcelSheet)
                     //{
                     //Dictionary<string, List<List<string>>>  objExcelSheet = m_objExcelSheetWiseData[i_sCopyToSheet];
-                        int RowCounter = 0;
-                        List<List<string>> objCurrentDataFromExcelSheet = m_objExcelSheetWiseData[i_sCopyToSheet];
-                        foreach (List<string> lstRow in objCurrentDataFromExcelSheet)
+                    int RowCounter = 0;
+                    List<List<string>> objCurrentDataFromExcelSheet = m_objExcelSheetWiseData[i_sCopyToSheet];
+                    foreach (List<string> lstRow in objCurrentDataFromExcelSheet)
+                    {
+                        if (lstRow[i_nCopyToColumnNo] == "")
                         {
-                            if (lstRow[i_nCopyToColumnNo] == "")
-                            {
-                                lstRow[i_nCopyToColumnNo] = "null";
-                                objReturnDataFromExcelSheet.Add(lstRow);
-                            }
-                            else
-                            {
-                                if (!lstRemovedRows.Contains(Convert.ToInt32(lstRow[i_nCopyToColumnNo]) - 1))
-                                {
-                                    if (lstParentResponse.Count > (Convert.ToInt32(lstRow[i_nCopyToColumnNo]) - 1) && lstParentResponse[Convert.ToInt32(lstRow[i_nCopyToColumnNo]) - 1] == null)
-                                    {
-                                        lstRemovedRowsList.Add(RowCounter);
-                                        objReturnDataFromExcelSheet.Add(null);
-                                    }
-                                    else
-                                    {
-                                        if (lstParentResponse.Count > (Convert.ToInt32(lstRow[i_nCopyToColumnNo]) - 1) && lstParentResponse[Convert.ToInt32(lstRow[i_nCopyToColumnNo]) - 1].ErrorCode == 0 && lstParentResponse[Convert.ToInt32(lstRow[i_nCopyToColumnNo]) - 1].ReturnValue == 0)
-                                        {
-                                            lstRow[i_nCopyToColumnNo] = lstParentResponse[Convert.ToInt32(lstRow[i_nCopyToColumnNo]) - 1].MassUploadResponseId;
-                                            objReturnDataFromExcelSheet.Add(lstRow);
-                                        }
-                                        else
-                                        {
-                                            objReturnDataFromExcelSheet.Add(lstRow);
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    lstRemovedRowsList.Add(RowCounter);
-                                    objReturnDataFromExcelSheet.Add(null);
-                                    //Add the child sheet row in the corresponding removed row list
-
-                                }
-                            }
-                            RowCounter++;
-                        }
-
-                        objCurrentDataFromExcelSheet = null;
-
-                        if (objReturnDataFromExcelSheet.Count > 0)
-                        {
-                            o_objReturnDataFromExcelSheet[i_sCopyToSheet] = objReturnDataFromExcelSheet;
+                            lstRow[i_nCopyToColumnNo] = "null";
+                            objReturnDataFromExcelSheet.Add(lstRow);
                         }
                         else
                         {
-                            o_objReturnDataFromExcelSheet[i_sCopyToSheet] = new List<List<string>>();
+                            if (!lstRemovedRows.Contains(Convert.ToInt32(lstRow[i_nCopyToColumnNo]) - 1))
+                            {
+                                if (lstParentResponse.Count > (Convert.ToInt32(lstRow[i_nCopyToColumnNo]) - 1) && lstParentResponse[Convert.ToInt32(lstRow[i_nCopyToColumnNo]) - 1] == null)
+                                {
+                                    lstRemovedRowsList.Add(RowCounter);
+                                    objReturnDataFromExcelSheet.Add(null);
+                                }
+                                else
+                                {
+                                    if (lstParentResponse.Count > (Convert.ToInt32(lstRow[i_nCopyToColumnNo]) - 1) && lstParentResponse[Convert.ToInt32(lstRow[i_nCopyToColumnNo]) - 1].ErrorCode == 0 && lstParentResponse[Convert.ToInt32(lstRow[i_nCopyToColumnNo]) - 1].ReturnValue == 0)
+                                    {
+                                        lstRow[i_nCopyToColumnNo] = lstParentResponse[Convert.ToInt32(lstRow[i_nCopyToColumnNo]) - 1].MassUploadResponseId;
+                                        objReturnDataFromExcelSheet.Add(lstRow);
+                                    }
+                                    else
+                                    {
+                                        objReturnDataFromExcelSheet.Add(lstRow);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                lstRemovedRowsList.Add(RowCounter);
+                                objReturnDataFromExcelSheet.Add(null);
+                                //Add the child sheet row in the corresponding removed row list
+
+                            }
                         }
-                        
+                        RowCounter++;
+                    }
+
+                    objCurrentDataFromExcelSheet = null;
+
+                    if (objReturnDataFromExcelSheet.Count > 0)
+                    {
+                        o_objReturnDataFromExcelSheet[i_sCopyToSheet] = objReturnDataFromExcelSheet;
+                    }
+                    else
+                    {
+                        o_objReturnDataFromExcelSheet[i_sCopyToSheet] = new List<List<string>>();
+                    }
+
                     //}
                     m_objMassUploadExcelSheetRemovedRowsList[i_sCopyToSheet] = lstRemovedRowsList;
                 }
@@ -2399,7 +2406,7 @@ namespace InsiderTradingMassUpload
                             {
                                 objDependentUpdatedDataFromParentExcelSheet = new Dictionary<string, List<List<string>>>();
                                 fillExcelWithDependantData(objMassUploadExcelSheets.ParentSheetName, sExcelSheetName, objMassUploadExcelSheets.ColumnNoToUpdateFromParent, objDataFromExcelSheet
-                                    ,nMassUploadExcelSheetId, out objDependentUpdatedDataFromParentExcelSheet);
+                                    , nMassUploadExcelSheetId, out objDependentUpdatedDataFromParentExcelSheet);
                                 if (objDependentUpdatedDataFromParentExcelSheet.ContainsKey(sExcelSheetName))
                                     objDataFromExcelSheet[sExcelSheetName] = objDependentUpdatedDataFromParentExcelSheet[sExcelSheetName];
                                 else
@@ -2425,7 +2432,8 @@ namespace InsiderTradingMassUpload
                                     if (objResponceDTO.ReturnValue != 0)
                                     {
                                         string sErrorMessage = getResource(Convert.ToString(objResponceDTO.ReturnValue));
-                                        if(sErrorMessage == ""){
+                                        if (sErrorMessage == "")
+                                        {
                                             sErrorMessage = objResponceDTO.ErrorMessage;
                                         }
                                         objResponsesForError.Add(new MassUploadExcelSheetErrors(nResponceCounter + 1, 0, Convert.ToString(objResponceDTO.ReturnValue), sErrorMessage, "", "", ""));
@@ -2482,7 +2490,7 @@ namespace InsiderTradingMassUpload
                                     foreach (MassUploadResponseDTO objResponseDTO in objResponseList)
                                     {
                                         if (objResponseDTO != null && (objResponseDTO.ErrorCode == 0 && objResponseDTO.ErrorMessage == ""))
-                                        {}
+                                        { }
                                         else
                                         {
                                             AddSheetWiseRemovedParentRows(sExcelSheetName, nRowCounter - 2);
@@ -2602,7 +2610,7 @@ namespace InsiderTradingMassUpload
         /// </summary>
         public string WriteErrorsToExcel(string i_sExportDocumentFolderPath, string i_sDocumentFolderPath)
         {
-            
+
             int nRowCounter = 1;
             int nExcelRowCounter = 1;
             bool sErrorOccurred = true;
@@ -2619,7 +2627,7 @@ namespace InsiderTradingMassUpload
             arrColumnWidth.Add("1:40:25");
             objCommonOpenXMLObject.AssignColumnWidth(arrColumnWidth);
 
-            
+
             foreach (string sKey in objSheetWiseErrors.Keys)
             {
                 List<MassUploadExcelSheetErrors> objSheetResponse = objSheetWiseErrors[sKey];
@@ -2740,13 +2748,14 @@ namespace InsiderTradingMassUpload
             {
                 sTmpFileName = "";
             }
-            
+
             return sTmpFileName;
         }
         #endregion
 
         #region getSheetWiseErrors
-        public Dictionary<string, List<MassUploadResponseDTO>> getSheetWiseErrors() {
+        public Dictionary<string, List<MassUploadResponseDTO>> getSheetWiseErrors()
+        {
             return m_objSheetWiseError;
         }
         #endregion getSheetWiseErrors
@@ -2792,8 +2801,8 @@ namespace InsiderTradingMassUpload
                         }
                         else
                         {
-                            if (i_lstErrorObjectList.Count>0)
-                            lstUpdatedList.Add(i_lstErrorObjectList[nCounter]);
+                            if (i_lstErrorObjectList.Count > 0)
+                                lstUpdatedList.Add(i_lstErrorObjectList[nCounter]);
                         }
                         nCounter++;
                     }
@@ -2804,9 +2813,9 @@ namespace InsiderTradingMassUpload
             }
             else
             {
-                m_objSheetWiseError.Add(i_sSheetName,i_lstErrorObjectList);
+                m_objSheetWiseError.Add(i_sSheetName, i_lstErrorObjectList);
             }
-            
+
         }
         #endregion
 
@@ -2879,7 +2888,7 @@ namespace InsiderTradingMassUpload
             m_sExcelFileFullPath = i_sExcelFilePath;
         }
         #endregion SetExcelFilePath
-		#region GetRnTMassuploadDayCount
+        #region GetRnTMassuploadDayCount
         /// <summary>
         /// This function will be used for getting current date massupload count
         /// </summary>
@@ -2946,6 +2955,41 @@ namespace InsiderTradingMassUpload
             return lstMassUploadDTO;
         }
         #endregion GetSequenceMassUploadList
+
+        #region GetSequenceMassUploadList
+        /// <summary>
+        /// This function will return list of upload mass uploads list
+        /// </summary>
+        /// <param name="lstMassUploadDTO"></param>
+        /// <returns></returns>
+        public List<MassUploadDTO> GetUploadMassList(List<MassUploadDTO> lstMassUploadDTO, bool isOwnUnable, bool isOtherEnable, int userTypeCodeId)
+        {
+            try
+            {
+                if (userTypeCodeId == 101004 || userTypeCodeId == 101006)
+                {
+                    lstMassUploadDTO = lstMassUploadDTO.Where(c => c.MassUploadExcelId == 2 || c.MassUploadExcelId == 5).ToList();
+                }
+                else if (isOwnUnable && isOtherEnable)
+                {
+                    lstMassUploadDTO = lstMassUploadDTO.Where(c => c.MassUploadExcelId == 2 || c.MassUploadExcelId == 5 || c.MassUploadExcelId == 57 || c.MassUploadExcelId == 58).ToList();
+                }
+                else if (isOwnUnable)
+                {
+                    lstMassUploadDTO = lstMassUploadDTO.Where(c => c.MassUploadExcelId == 2 || c.MassUploadExcelId == 5).ToList();
+                }
+                else if (isOtherEnable)
+                {
+                    lstMassUploadDTO = lstMassUploadDTO.Where(c => c.MassUploadExcelId == 57 || c.MassUploadExcelId == 58).ToList();
+                }
+            }
+            catch (Exception exp)
+            {
+
+            }
+            return lstMassUploadDTO;
+        }
+        #endregion 
 
         #region IDisposable Members
         /// <summary>
@@ -3102,7 +3146,7 @@ namespace InsiderTradingMassUpload
         public bool IsRequired { get; set; }
         public string ValidationRegExpress { get; set; }
         public int MaxLength { get; set; }
-        public int MinLength { get;set;}
+        public int MinLength { get; set; }
         public string IsRequiredErrorCode { get; set; }
         public string ValidationRegExpErrorcode { get; set; }
         public string MaxLengthErrorCode { get; set; }
@@ -3143,7 +3187,7 @@ namespace InsiderTradingMassUpload
             this.sRowSequenceNumber = sRowSequenceNumber;
             if (i_nColumnCount != 0)
             {
-                EXCELColumnNumber enumDisplayStatus = (EXCELColumnNumber)(i_nColumnCount-1);
+                EXCELColumnNumber enumDisplayStatus = (EXCELColumnNumber)(i_nColumnCount - 1);
                 this.nExcelColumnName = enumDisplayStatus.ToString();
             }
         }
@@ -3164,7 +3208,7 @@ namespace InsiderTradingMassUpload
             {
                 int nRowCounter = 1;//There is one header row present so
                 int SECURITYTYPE_COLUMN_NO = 4;
-                int LOTSIZE = 12;
+                int LOTSIZE = 12; 
 
                 List<MassUploadExcelSheetErrors> lstErrors = new List<MassUploadExcelSheetErrors>();
 
@@ -3219,7 +3263,7 @@ namespace InsiderTradingMassUpload
                 {
                     string sRowSequenceNumber = Convert.ToString(drRecordRow[0]).Trim();
                     object[] objRowArray = drRecordRow.ToArray<object>();
-                    
+
                     if (objRowArray[TRANSACTION_TYPE].ToString().ToLower() == "cashless all" || objRowArray[TRANSACTION_TYPE].ToString().ToLower() == "cashless partial")
                     {
                         if (objRowArray[QUANTITY2].ToString().ToLower() == "")
@@ -3321,7 +3365,7 @@ namespace InsiderTradingMassUpload
         /// 
         /// </summary>
         public static void ValidationsForOnGoingContinuousDisclosureMassUpload
-            (List<List<string>> i_lstExcelSheetData,List<string> i_lstColumnNames, ref List<MassUploadExcelSheetErrors> o_lstMassUploadExcelSheetErrors)
+            (List<List<string>> i_lstExcelSheetData, List<string> i_lstColumnNames, ref List<MassUploadExcelSheetErrors> o_lstMassUploadExcelSheetErrors)
         {
             try
             {
@@ -3350,11 +3394,11 @@ namespace InsiderTradingMassUpload
                     {
                         if (objRowArray[ESOPQUANTITY_COLUMN_NO].ToString() == "")
                         {
-                            lstErrors.Add(new MassUploadExcelSheetErrors((nRowCounter + 1), (ESOPQUANTITY_COLUMN_NO+1), "", "The " + i_lstColumnNames[ESOPQUANTITY_COLUMN_NO] + " is a required.", "", i_lstColumnNames[ESOPQUANTITY_COLUMN_NO], sRowSequenceNumber));
+                            lstErrors.Add(new MassUploadExcelSheetErrors((nRowCounter + 1), (ESOPQUANTITY_COLUMN_NO + 1), "", "The " + i_lstColumnNames[ESOPQUANTITY_COLUMN_NO] + " is a required.", "", i_lstColumnNames[ESOPQUANTITY_COLUMN_NO], sRowSequenceNumber));
                         }
                         if (objRowArray[OTHERQUANTITY_COLUMN_NO].ToString() == "")
                         {
-                            lstErrors.Add(new MassUploadExcelSheetErrors((nRowCounter + 1), (OTHERQUANTITY_COLUMN_NO+1), "", "The " + i_lstColumnNames[OTHERQUANTITY_COLUMN_NO] + " is a required.", "", i_lstColumnNames[OTHERQUANTITY_COLUMN_NO], sRowSequenceNumber));
+                            lstErrors.Add(new MassUploadExcelSheetErrors((nRowCounter + 1), (OTHERQUANTITY_COLUMN_NO + 1), "", "The " + i_lstColumnNames[OTHERQUANTITY_COLUMN_NO] + " is a required.", "", i_lstColumnNames[OTHERQUANTITY_COLUMN_NO], sRowSequenceNumber));
                         }
                         if (objRowArray[ESOPQUANTITY_COLUMN_NO].ToString() != "" && objRowArray[OTHERQUANTITY_COLUMN_NO].ToString() != "")
                         {
@@ -3371,7 +3415,7 @@ namespace InsiderTradingMassUpload
                     {
                         if (objRowArray[ESOPQUANTITY_COLUMN_NO].ToString() != "")
                         {
-                           lstErrors.Add(new MassUploadExcelSheetErrors((nRowCounter + 1), (ESOPQUANTITY_COLUMN_NO + 1), "", "The " + i_lstColumnNames[ESOPQUANTITY_COLUMN_NO] + " is a required only when " + i_lstColumnNames[SECURITYTYPE_COLUMN_NO] + " contains " + objRowArray[SECURITYTYPE_COLUMN_NO].ToString().ToLower() +"." , "", i_lstColumnNames[ESOPQUANTITY_COLUMN_NO], sRowSequenceNumber));
+                            lstErrors.Add(new MassUploadExcelSheetErrors((nRowCounter + 1), (ESOPQUANTITY_COLUMN_NO + 1), "", "The " + i_lstColumnNames[ESOPQUANTITY_COLUMN_NO] + " is a required only when " + i_lstColumnNames[SECURITYTYPE_COLUMN_NO] + " contains " + objRowArray[SECURITYTYPE_COLUMN_NO].ToString().ToLower() + ".", "", i_lstColumnNames[ESOPQUANTITY_COLUMN_NO], sRowSequenceNumber));
                         }
                         if (objRowArray[OTHERQUANTITY_COLUMN_NO].ToString() != "")
                         {
@@ -3382,11 +3426,11 @@ namespace InsiderTradingMassUpload
                     {
                         if (objRowArray[QUANTITY2].ToString().ToLower() == "")
                         {
-                            lstErrors.Add(new MassUploadExcelSheetErrors((nRowCounter + 1), (QUANTITY2 + 1), "", "The " + i_lstColumnNames[QUANTITY2] + " is a required.", "", i_lstColumnNames[QUANTITY2], sRowSequenceNumber)); 
+                            lstErrors.Add(new MassUploadExcelSheetErrors((nRowCounter + 1), (QUANTITY2 + 1), "", "The " + i_lstColumnNames[QUANTITY2] + " is a required.", "", i_lstColumnNames[QUANTITY2], sRowSequenceNumber));
                         }
                         if (objRowArray[VALUE2].ToString().ToLower() == "")
                         {
-                            lstErrors.Add(new MassUploadExcelSheetErrors((nRowCounter + 1), (VALUE2 + 1), "", "The " + i_lstColumnNames[VALUE2] + " is a required.", "", i_lstColumnNames[VALUE2], sRowSequenceNumber)); 
+                            lstErrors.Add(new MassUploadExcelSheetErrors((nRowCounter + 1), (VALUE2 + 1), "", "The " + i_lstColumnNames[VALUE2] + " is a required.", "", i_lstColumnNames[VALUE2], sRowSequenceNumber));
                         }
                     }
 
