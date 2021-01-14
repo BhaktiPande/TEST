@@ -150,32 +150,33 @@
                         </div>
 
                         <!-- form field row 3 -->
-                        <div class="row">
-                            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.SecuritiesToBeTradedQty)
-                                    @Html.TextBoxFor(m => m.SecuritiesToBeTradedQty, "{0:N0}", quty_html_attr)
-                                    @Html.ValidationMessageFor(m => m.SecuritiesToBeTradedQty)
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.SecuritiesToBeTradedValue)
-                                    @Html.TextBoxFor(m => m.SecuritiesToBeTradedValue, "{0:N0}", quty_html_attr)
-                                    @Html.ValidationMessageFor(m => m.SecuritiesToBeTradedValue)
-                                </div>
-                            </div>
-                            <div id="DivModeOfAcquisition" style="margin: -15px 0px 0px 0px;">
-                                @{
-                                            @Html.Partial("~/Views/PreclearanceRequestNonImplCompany/_modeOfAcqisition.cshtml")
-                                }
-                                </div>
-                                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" style="display:none">
+                        <div class="form-group" style="display:none">
+                            @Html.LabelFor(m => m.SecuritiesToBeTradedQty)
+                            @Html.TextBoxFor(m => m.SecuritiesToBeTradedQty, "{0:N0}", quty_html_attr)
+                            @Html.ValidationMessageFor(m => m.SecuritiesToBeTradedQty)
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" style="display:none">
+                        <div class="form-group" style="display:none">
+                            @Html.LabelFor(m => m.SecuritiesToBeTradedValue)
+                            @Html.TextBoxFor(m => m.SecuritiesToBeTradedValue, "{0:N0}", quty_html_attr)
+                            @Html.ValidationMessageFor(m => m.SecuritiesToBeTradedValue)
+                        </div>
+                    </div>
+                    <div id="DivModeOfAcquisition" style="margin: -15px 0px 0px 0px;">
+                        @{
+                            @Html.Partial("~/Views/PreclearanceRequestNonImplCompany/_modeOfAcqisition.cshtml")
+                        }
+                    </div>
+                    <div id="divDMAT">
+                        @Html.Partial("~/Views/PreclearanceRequestNonImplCompany/_DEMATList.cshtml")
+                    </div>
+                </div>
 
                          <div class="row">
-                            <div id="divDMAT" >
-                                @Html.Partial("~/Views/PreclearanceRequestNonImplCompany/_DEMATList.cshtml")
-                            </div>
+                            
                         </div>
                         if (ViewBag.RequiredModuleID == InsiderTrading.Common.ConstEnum.Code.RequiredModuleBoth || ViewBag.RequiredModuleID == InsiderTrading.Common.ConstEnum.Code.RequiredModuleOtherSecurity)
                         { 
