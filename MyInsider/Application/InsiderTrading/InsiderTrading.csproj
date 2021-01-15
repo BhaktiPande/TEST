@@ -278,7 +278,6 @@
       <DependentUpon>SSRSReportViewer.aspx</DependentUpon>
     </Compile>
     <Compile Include="Common\AnnotationDateCompare.cs" />
-    <Compile Include="Common\ApplyArebicFont.cs" />
     <Compile Include="Common\ButtonAttribute.cs" />
     <Compile Include="Common\Common.cs" />
     <Compile Include="Common\ConstEnum.cs" />

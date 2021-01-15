@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 
 namespace InsiderTrading.Common
 {
@@ -98,8 +101,8 @@ namespace InsiderTrading.Common
             public const int TransactionTypeByTradingPolicy_OS = 34;
             public const int ListofSecurityTypeapplicableTradingPolicyOS = 35;
             public const int TransactionType_PNT_OS = 36;
-            public const int Listofmultipleuser = 40;
-            public const int ListofMCQ = 37;
+			public const int Listofmultipleuser = 40;
+			public const int ListofMCQ = 37;
             public const int ListofMCQAtempts = 38;
             public const int ListofAnswerType = 39;
             public const int ListOfEmployeeID = 41;
@@ -197,7 +200,7 @@ namespace InsiderTrading.Common
             public const string ReasonForNotTradingOS = "515";
             public const string IdentificationType = "516";
             public const string IdentificationTypeRelative = "517";
-            public const string CategoryOffinancial = "518";
+            public const string CategoryOffinancial = "518";  
             public const string ReasonforSharing = "519";
             public const string ModeOfSharing = "520";
             public const string MCQStatus = "522";
@@ -353,7 +356,7 @@ namespace InsiderTrading.Common
             public const int TradingTransaction_ContDisclosure_for_Other_Securities_Relatives = 114121;
             public const int UpsiSharing_data = 114122;
             public const int UpsiSharing_dataTemp = 114123;
-            public const int MCQ_Questions_List = 114124;
+ 			public const int MCQ_Questions_List = 114124;
 
             public const int Report_EULAAcceptanceReport = 114125;
             public const int PeriodEndDisclosurePeriodStatusList_OS = 114126;
@@ -687,13 +690,13 @@ namespace InsiderTrading.Common
             public const int CompanyConfig_EULAReconfirmation_All = 523001;
             public const int CompanyConfig_EULAReconfirmation_NotAccepted = 523002;
 
-            public const int frmCreateEmployee = 1;
+            public const int frmCreateEmployee=1;
             public const int frmCreateRelative = 2;
             public const int frmAddEducationDetails = 3;
             public const int frmAddUserDetails = 4;
             public const int frmChangePassword = 7;
             public const int frmPreclearanceRequest = 8;
-            public const int frmApproveRejectPreclearanceRequest = 9;
+            public const int frmApproveRejectPreclearanceRequest =9;
             public const int frmSaveOwnTradingTransaction = 10;
             public const int frmOtherPreclearanceRequest = 11;
             public const int frmSaveOtherTradingTransaction = 12;
@@ -706,8 +709,8 @@ namespace InsiderTrading.Common
             public const int frmCompanyPaidupandsubscribe = 22;
             public const int frmSaveComplianceOfficer = 24;
             public const int frmSavePersonalDetailsConfirmation = 26;
-            public const int frmSavePolicyDocument = 28;
-            public const int frmSaveTradingWindow = 30;
+            public const int frmSavePolicyDocument = 28;          
+            public const int frmSaveTradingWindow=30;
             public const int frmSaveTradingWindowOther = 31;
             public const int frmSaveTemplatemaster = 32;
             public const int frmSaveCommunicationRule = 33;
@@ -981,7 +984,6 @@ namespace InsiderTrading.Common
 
             //Mass Upload
             public const int MASSUPLOAD_LIST = 9;
-            public const int MASSUPLOAD_EMPLOYEE_LIST = 344;
 
             //DefaulterReport
             public const int DEFAULTERREPORT_LIST = 196;
@@ -1045,7 +1047,7 @@ namespace InsiderTrading.Common
             public const int USER_EULACONSENT = 334;
             public const int INSIDER_DISCLOSURE_DETAILS_PERIOD_END_DISCLOSURE_OS = 335;
             public const int CO_DISCLOSURE_DETAILS_PERIOD_END_DISCLOSURE_OS = 336;
-        }
+}
         #endregion UserActions
 
         #region Resource Category Code
@@ -1111,7 +1113,7 @@ namespace InsiderTrading.Common
         #region Dictinary ValidateTo
         public static Dictionary<string, int> ValidateTo = new Dictionary<string, int>()
         {
-            {"HomeIndex",1},
+            {"HomeIndex",1},   
             {"InsiderInitialDisclosureIndex",2},
             {"PreclearanceRequestIndex",3},
             {"PeriodEndDisclosurePeriodStatus",4}
@@ -1122,7 +1124,7 @@ namespace InsiderTrading.Common
         public static Dictionary<int, ConstEnum.RedirectTo> Redirect = new Dictionary<int, ConstEnum.RedirectTo>()
         {
             {1, new ConstEnum.RedirectTo {controller="InsiderInitialDisclosure", action="FilterIndex", acid=155}},
-            {2, new ConstEnum.RedirectTo {controller="InsiderInitialDisclosure", action="DisplayPolicy", acid=155}},
+            {2, new ConstEnum.RedirectTo {controller="InsiderInitialDisclosure", action="DisplayPolicy", acid=155}},        
         };
         #endregion Dictionary Redirect
 
@@ -1197,7 +1199,7 @@ namespace InsiderTrading.Common
             public const string AlphanumericWithDash = @"^[a-zA-Z0-9-]*$";
             public const string AlphanumWithoutLessthanGreaterthanNAsterisc = @"^[^*<>()]*$";
             public const string SearchValidation = @"^[^()<>]*$";
-
+           
         }
     }
 }
