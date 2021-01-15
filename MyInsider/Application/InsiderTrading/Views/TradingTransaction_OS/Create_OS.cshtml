@@ -35,7 +35,9 @@
     };
     var TransactionType_OS = {
         "143001": ["999"],
-        "143002": ["1"]
+        "143002": ["1"],
+        "143007": ["1"],
+        "143008":["1"]
     };
     var ModeOfAcquisitionOptions = '';
     var CashLessAll = "@InsiderTrading.Common.ConstEnum.Code.TransactionTypeCashlessAll";
@@ -134,8 +136,8 @@
             var transaction_type = $('#TransactionTypeCodeId').val();
             if ('@ViewBag.EnableDisableQuantityValue'== 400002 || '@ViewBag.EnableDisableQuantityValue'== 400003){
                 debugger;
-                if (transaction_type == 143001) {                
-                    
+                if (transaction_type == 143001 || transaction_type == 143006) {
+
                         $('#Quantity').val(@ViewBag.Quantity);
                         $('#Value').val(@ViewBag.Quantity);
                         $('#LotSize').val(@ViewBag.LotSize);
@@ -145,11 +147,11 @@
                         $("#LotSize").attr('readonly', true);
                         $("#ContractSpecification").attr('readonly', true);
                 }
-                else if (transaction_type == 143002) {
+                else if (transaction_type == 143002 || transaction_type == 143007 || transaction_type == 143008) {
                     var AllowedModeOfacquisition1 = TransactionType_OS[$(this).val()];
-                    debugger;                  
+                    debugger;
                         $("#Quantity").val(AllowedModeOfacquisition1);
-                        $("#Value").val(AllowedModeOfacquisition1);                        
+                        $("#Value").val(AllowedModeOfacquisition1);
                         $('#LotSize').val(@ViewBag.LotSize);
                         $('#ContractSpecification').val(@ViewBag.ContractSpecification);
                         $("#Quantity").attr('readonly', true);
@@ -171,16 +173,16 @@
             }
              else if ('@ViewBag.EnableDisableQuantityValue'== 400001) {
                 debugger;
-                Quantity.value = '';
-                Value.value = '';
-                LotSize.value = '';
-                ContractSpecification.value = '';
+                //Quantity.value = '';
+                //Value.value = '';
+                //LotSize.value = '';
+                //ContractSpecification.value = '';
                 $("#Quantity").attr('readonly', false);
                 $("#Value").attr('readonly', false);
                 $("#LotSize").attr('readonly', false);
                 $("#ContractSpecification").attr('readonly', false);
             }
-        });
+        }); 
           ///////Close New Code
         $(document).delegate("#DMATDetailsID", "change", function () {
             $('#divTMID input[type=text]').css('display', 'none');
@@ -1009,7 +1011,7 @@
                                                 @Html.LabelFor(model => model.Quantity, new { name = "cash" })
                                                 @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control numericOnly", @readonly = "readonly", rows = "5", id = "Quantity", Value = @ViewBag.Quantity })
                                                 @Html.ValidationMessageFor(model => model.Quantity)
-                                            </div>
+                                            </div>                                           
                                         </div>
                                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="txtLotSize" style="display:none">
                                             <div class="form-group">
@@ -1021,23 +1023,23 @@
                                     }
                                 </div>
 
-                                <div class="row">                                    
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="txtContractSpecification" style="display:none">
-                                            <div class="form-group">
-                                                @if (ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.EnableQunatityValue)
-                                                {
-                                                    @Html.LabelFor(model => model.ContractSpecification)
-                                                    @Html.TextBoxFor(model => model.ContractSpecification, new { @class = "form-control", rows = "5" })
-                                                    @Html.ValidationMessageFor(model => model.ContractSpecification)
-                                                }
-                                                else if (ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.DisabaleShowQuantityValue || ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue)
-                                                {
-                                                    @Html.LabelFor(model => model.ContractSpecification)
-                                                    @Html.TextBoxFor(model => model.ContractSpecification, new { @class = "form-control", @readonly = "readonly", rows = "5", id = "ContractSpecification", Value = @ViewBag.ContractSpecification })
-                                                    @Html.ValidationMessageFor(model => model.ContractSpecification)
-                                                }
-                                             </div>
-                                        </div>                                           
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="txtContractSpecification" style="display:none">
+                                        <div class="form-group">
+                                            @if (ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.EnableQunatityValue)
+                                            {
+                                                @Html.LabelFor(model => model.ContractSpecification)
+                                                @Html.TextBoxFor(model => model.ContractSpecification, new { @class = "form-control", rows = "5" })
+                                                @Html.ValidationMessageFor(model => model.ContractSpecification)
+                                            }
+                                            else if (ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.DisabaleShowQuantityValue || ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue)
+                                            {
+                                                @Html.LabelFor(model => model.ContractSpecification)
+                                                @Html.TextBoxFor(model => model.ContractSpecification, new { @class = "form-control", @readonly = "readonly", rows = "5", id = "ContractSpecification", Value = @ViewBag.ContractSpecification })
+                                                @Html.ValidationMessageFor(model => model.ContractSpecification)
+                                            }
+                                        </div>
+                                    </div>
                                 </div>
                             }
                             else
@@ -1168,13 +1170,31 @@
                                         </div>
                                     }
                                 </div>
+                                @*if (@ViewBag.TransactionTypeCodeId == 143001)
+                                        {
+                                            <div class="row">
+                                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                    <div class="form-group">
+                                                        @Html.CheckBoxFor(m => m.SellAllFlag, new { id = "b_SellAllFlag" })
+                                                        <label style="font-style:italic" class="normalLable">
+                                                            SellAll                                                           
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                <div class="row">
+                                        }*@
+                                    <div class="row">
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div class="form-group">
                                             @Html.LabelFor(model => model.Quantity, new { name = "cash" })
                                             @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control numericOnly", rows = "5" })
                                             @Html.ValidationMessageFor(model => model.Quantity)
+                                            @*@Html.CheckBoxFor(m => m.SellAllFlag, new { id = "b_SellAllFlag" })
+                                            <label style="font-style:italic" class="normalLable">
+                                                SellAll
+                                                
+                                            </label>*@                                          
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="txtLotSize" style="display:none">
@@ -1227,7 +1247,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                                </div>
                 </div>
             </div>
         </section>
