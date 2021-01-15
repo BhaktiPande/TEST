@@ -49,6 +49,8 @@
     <Compile Include="Activity\DTO\ActivityResourceMappingDTO.cs" />
     <Compile Include="APPLICABILITY\ApplicabilityDAL.cs" />
     <Compile Include="APPLICABILITY\DTO\ApplicabilityDTO.cs" />
+    <Compile Include="APPLICABILITY_OS\ApplicabilityDAL_OS.cs" />
+    <Compile Include="APPLICABILITY_OS\DTO\ApplicabilityDTO_OS.cs" />
     <Compile Include="ComCode\ComCodeDAL.cs" />
     <Compile Include="ComCode\DTO\ComCodeDTO.cs" />
     <Compile Include="Common\CommonDAL.cs" />
@@ -65,10 +67,14 @@
     <Compile Include="Company\CompanyDAL.cs" />
     <Compile Include="Company\DTO\CompanyDTO.cs" />
     <Compile Include="Dashboard\CODashboardDAL.cs" />
+    <Compile Include="Dashboard\CODashboardDAL_OS.cs" />
     <Compile Include="Dashboard\DTO\CODashboardDTO.cs" />
+    <Compile Include="Dashboard\DTO\CODashboardDTO_OS.cs" />
     <Compile Include="Dashboard\DTO\InsiderDashboardDTO.cs" />
+    <Compile Include="Dashboard\DTO\InsiderDashboardDTO_OS.cs" />
     <Compile Include="Dashboard\DTO\PasswordExpiryReminderDTO.cs" />
     <Compile Include="Dashboard\InsiderDashboardDAL.cs" />
+    <Compile Include="Dashboard\InsiderDashboardDAL_OS.cs" />
     <Compile Include="DataUploadUtility\DataUploadUtilityDAL.cs" />
     <Compile Include="DataUploadUtility\DTO\DataUploadUtilityDTO.cs" />
     <Compile Include="Delegation\DelegationMasterDAL.cs" />
@@ -103,6 +109,7 @@
     <Compile Include="Notification\DTO\CompanyDetailsForNotificationDTO.cs" />
     <Compile Include="Notification\DTO\NotificationDTO.cs" />
     <Compile Include="Notification\NotificationDAL.cs" />
+    <Compile Include="Notification\NotificationDAL_OS.cs" />
     <Compile Include="NSEDownLoad\DTO\NSEGroupDTO.cs" />
     <Compile Include="NSEDownLoad\NSEGroupDAL.cs" />
     <Compile Include="PasswordConfiguration\DTO\PasswordConfigDTO.cs" />
@@ -145,6 +152,8 @@
     <Compile Include="TradingTransaction_OS\TradingTransactionDAL_OS.cs" />
     <Compile Include="TradingWindowEvent\DTO\TradingWindowEventDTO.cs" />
     <Compile Include="TradingWindowEvent\TradingWindowEventDAL.cs" />
+    <Compile Include="TwoFactorAuth\DTO\TwoFactorAuthDTO.cs" />
+    <Compile Include="TwoFactorAuth\TwoFactorAuthDAL.cs" />
     <Compile Include="UpsiSharingData\DTO\UpsiDTO.cs" />
     <Compile Include="UpsiSharingData\UpsiDAL.cs" />
     <Compile Include="UserDetails\AppException.cs" />
