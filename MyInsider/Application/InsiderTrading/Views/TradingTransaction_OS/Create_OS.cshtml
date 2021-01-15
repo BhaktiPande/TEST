@@ -35,7 +35,9 @@
     };
     var TransactionType_OS = {
         "143001": ["999"],
-        "143002": ["1"]
+        "143002": ["1"],
+        "143007": ["1"],
+        "143008": ["1"]
     };
     var ModeOfAcquisitionOptions = '';
     var CashLessAll = "@InsiderTrading.Common.ConstEnum.Code.TransactionTypeCashlessAll";
@@ -128,14 +130,14 @@
             return false;
 
         }).change();
-      ///////New Code
+       ///////New Code
         $(document).delegate('#TransactionTypeCodeId', 'change', function (event) {
             debugger
             var transaction_type = $('#TransactionTypeCodeId').val();
             if ('@ViewBag.EnableDisableQuantityValue'== 400002 || '@ViewBag.EnableDisableQuantityValue'== 400003){
                 debugger;
-                if (transaction_type == 143001) {                
-                    
+                if (transaction_type == 143001 || transaction_type == 143006) {
+
                         $('#Quantity').val(@ViewBag.Quantity);
                         $('#Value').val(@ViewBag.Quantity);
                         $('#LotSize').val(@ViewBag.LotSize);
@@ -145,11 +147,11 @@
                         $("#LotSize").attr('readonly', true);
                         $("#ContractSpecification").attr('readonly', true);
                 }
-                else if (transaction_type == 143002) {
+                else if (transaction_type == 143002 || transaction_type == 143007 || transaction_type == 143008) {
                     var AllowedModeOfacquisition1 = TransactionType_OS[$(this).val()];
-                    debugger;                  
+                    debugger;
                         $("#Quantity").val(AllowedModeOfacquisition1);
-                        $("#Value").val(AllowedModeOfacquisition1);                        
+                        $("#Value").val(AllowedModeOfacquisition1);
                         $('#LotSize').val(@ViewBag.LotSize);
                         $('#ContractSpecification').val(@ViewBag.ContractSpecification);
                         $("#Quantity").attr('readonly', true);
@@ -171,10 +173,10 @@
             }
              else if ('@ViewBag.EnableDisableQuantityValue'== 400001) {
                 debugger;
-                Quantity.value = '';
-                Value.value = '';
-                LotSize.value = '';
-                ContractSpecification.value = '';
+                //Quantity.value = '';
+                //Value.value = '';
+                //LotSize.value = '';
+                //ContractSpecification.value = '';
                 $("#Quantity").attr('readonly', false);
                 $("#Value").attr('readonly', false);
                 $("#LotSize").attr('readonly', false);
