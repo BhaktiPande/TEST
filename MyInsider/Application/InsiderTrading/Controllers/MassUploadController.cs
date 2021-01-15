@@ -1,52 +1,110 @@
-﻿using System;
+﻿using InsiderTrading.Common;
+using InsiderTrading.Filters;
+using InsiderTrading.Models;
+using InsiderTrading.SL;
+using InsiderTradingDAL;
+using InsiderTradingDAL.InsiderInitialDisclosure.DTO;
+using InsiderTradingMassUpload;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
-using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.Remoting;
 using System.Web;
 using System.Web.Mvc;
-using InsiderTrading.Common;
-using InsiderTradingDAL;
-using InsiderTrading.SL;
-using InsiderTrading.Models;
-using System.IO;
-using System.Configuration;
-
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using iTextSharp.text.html;
-using iTextSharp.text.html.simpleparser;
-using System.Text;
-using System.Web.UI;
-using InsiderTrading.Filters;
-using InsiderTradingMassUpload;
-using InsiderTradingExcelWriter.ExcelFacade;
-
 
 namespace InsiderTrading.Controllers
 {
     [RolePrivilegeFilter]
     public class MassUploadController : Controller
     {
+
         [AuthorizationPrivilegeFilter]
         public ActionResult AllMassUpload(int acid)
         {
             ViewBag.acid = acid;
+            LoginUserDetails objLoginUserDetails = null;
+            objLoginUserDetails = (LoginUserDetails)Common.Common.GetSessionValue(Common.ConstEnum.SessionValue.UserDetails);
             List<MassUploadDTO> lstMassUploadDTO = new List<MassUploadDTO>();
             MassUploadSL massUploadSL = new MassUploadSL();
+            List<RoleActivityDTO> lstRoleActivities;
+            int roleId, RequiredModuleID;
 
-            if (acid == 337)
+            switch (objLoginUserDetails.UserTypeCodeId)
             {
-                lstMassUploadDTO = GetAllMassUpload().Where(c => c.MassUploadExcelId == 2 | c.MassUploadExcelId == 5 | c.MassUploadExcelId == 57 | c.MassUploadExcelId == 58).ToList();
-                lstMassUploadDTO = massUploadSL.GetSequenceMassUploadList(lstMassUploadDTO);
+                case InsiderTradingMassUpload.ConstEnum.UserTypeCodeId.Admin:
+                    roleId = 1;
+                    break;
+                case InsiderTradingMassUpload.ConstEnum.UserTypeCodeId.COUserType:
+                    roleId = 2;
+                    break;
+                default:
+                    roleId = 7;
+                    break;
+            }
+
+            using (var objInsiderInitialDisclosureSL = new InsiderInitialDisclosureSL())
+            {
+                InsiderInitialDisclosureDTO objInsiderInitialDisclosureDTO = null;
+                objInsiderInitialDisclosureDTO = objInsiderInitialDisclosureSL.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
+                RequiredModuleID = objInsiderInitialDisclosureDTO.RequiredModule;
+            }
+
+            if (acid == 344)
+            {
+                using (var objRoleActivityDAL = new RoleActivityDAL())
+                {
+                    lstRoleActivities = objRoleActivityDAL.GetDetails(objLoginUserDetails.CompanyDBConnectionString, roleId);
+                }
+
+                bool isOwnUnable = false;
+                bool IsOtherEnable = false;
+                int TradingPolicyID_OS = 0;
+                InsiderInitialDisclosureDTO objInsiderInitialDisclosureDTO = null;
+                using (var objInsiderInitialDisclosureSL = new InsiderInitialDisclosureSL())
+                {
+                    objInsiderInitialDisclosureDTO = objInsiderInitialDisclosureSL.Get_TradingPolicyID_forOS(objLoginUserDetails.CompanyDBConnectionString, objLoginUserDetails.LoggedInUserID);
+                    TradingPolicyID_OS = Convert.ToInt32(objInsiderInitialDisclosureDTO.TradingPolicyID_OS);
+                }
+
+                switch (RequiredModuleID)
+                {
+                    case Common.ConstEnum.Code.RequiredModuleOwnSecurity:
+                        isOwnUnable = true;
+                        lstMassUploadDTO = massUploadSL.GetUploadMassList(GetAllMassUpload(), isOwnUnable, IsOtherEnable, objLoginUserDetails.UserTypeCodeId);
+                        break;
+                    case Common.ConstEnum.Code.RequiredModuleOtherSecurity:
+                        IsOtherEnable = true;
+                        lstMassUploadDTO = massUploadSL.GetUploadMassList(GetAllMassUpload(), isOwnUnable, IsOtherEnable, objLoginUserDetails.UserTypeCodeId);
+                        break;
+                    case Common.ConstEnum.Code.RequiredModuleBoth:
+                        isOwnUnable = true;
+                        if (TradingPolicyID_OS != 0 && Convert.ToString(TradingPolicyID_OS) != "")
+                        {
+                            IsOtherEnable = true;
+                        }
+                        lstMassUploadDTO = massUploadSL.GetUploadMassList(GetAllMassUpload(), isOwnUnable, IsOtherEnable, objLoginUserDetails.UserTypeCodeId);
+                        break;
+                }
             }
             else
             {
-                lstMassUploadDTO = GetAllMassUpload();
-                lstMassUploadDTO = massUploadSL.GetSequenceMassUploadList(lstMassUploadDTO);
+                switch (RequiredModuleID)
+                {
+                    case Common.ConstEnum.Code.RequiredModuleOwnSecurity:
+                        lstMassUploadDTO = GetAllMassUpload().Where(c => !c.MassUploadName.Contains("- Other")).ToList();
+                        break;
+                    case Common.ConstEnum.Code.RequiredModuleOtherSecurity:
+                        lstMassUploadDTO = GetAllMassUpload().Where(c => c.MassUploadExcelId != 2 && c.MassUploadExcelId != 5 && c.MassUploadExcelId != 4 && c.MassUploadExcelId != 51).ToList();
+                        break;
+                    case Common.ConstEnum.Code.RequiredModuleBoth:
+                        lstMassUploadDTO = GetAllMassUpload();
+                        break;
+                }
             }
+
+            lstMassUploadDTO = massUploadSL.GetSequenceMassUploadList(lstMassUploadDTO);
             ViewBag.AllMassUpload = lstMassUploadDTO;
             return View("~/Views/Common/MassUpload.cshtml");
         }
@@ -133,7 +191,16 @@ namespace InsiderTrading.Controllers
         [ActionName("SaveImportedRecordsProc")]
         public ActionResult Cancel(int acid)
         {
-            return RedirectToAction("AllMassUpload", "MassUpload", new { acid = InsiderTrading.Common.ConstEnum.UserActions.MASSUPLOAD_LIST });
+            LoginUserDetails objLoginUserDetails = null;
+            objLoginUserDetails = (LoginUserDetails)InsiderTrading.Common.Common.GetSessionValue((string)InsiderTrading.Common.ConstEnum.SessionValue.UserDetails);
+            if (Convert.ToInt32(objLoginUserDetails.UserTypeCodeId) == InsiderTrading.Common.ConstEnum.Code.Admin || Convert.ToInt32(objLoginUserDetails.UserTypeCodeId) == InsiderTrading.Common.ConstEnum.Code.COUserType)
+            {
+                return RedirectToAction("AllMassUpload", "MassUpload", new { acid = InsiderTrading.Common.ConstEnum.UserActions.MASSUPLOAD_LIST });
+            }
+            else
+            {
+                return RedirectToAction("AllMassUpload", "MassUpload", new { acid = InsiderTrading.Common.ConstEnum.UserActions.MASSUPLOAD_EMPLOYEE_LIST });
+            }
         }
 
         [AuthorizationPrivilegeFilter]
@@ -158,7 +225,7 @@ namespace InsiderTrading.Controllers
             bool bErrorExistInExcelSheets = false;
             bool bCheckifExcelIsvalid = false;
             int nSavedMassUploadLogId = 0;
-
+            Session["PartialError"] = 0;
             try
             {
                 objLoginUserDetails = (LoginUserDetails)InsiderTrading.Common.Common.GetSessionValue((string)InsiderTrading.Common.ConstEnum.SessionValue.UserDetails);
@@ -486,7 +553,7 @@ namespace InsiderTrading.Controllers
                 {
                     sFilePathToDownload = null;
                 }
-                
+
             }
             catch (Exception exp)
             {
