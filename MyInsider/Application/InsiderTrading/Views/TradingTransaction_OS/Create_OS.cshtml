@@ -133,13 +133,21 @@
       ///////New Code
         $(document).delegate('#TransactionTypeCodeId', 'change', function (event) {
             debugger
-            var transaction_type = $('#TransactionTypeCodeId').val();
-            if ('@ViewBag.EnableDisableQuantityValue'== 400002 || '@ViewBag.EnableDisableQuantityValue'== 400003){
-                debugger;
+            var transaction_type = $('#TransactionTypeCodeId').val();              
+            if ('@ViewBag.EnableDisableQuantityValue' == 400002 || '@ViewBag.EnableDisableQuantityValue' == 400003) {
+
+                if (transaction_type == 143002) {
+                    if ('@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue') {
+                        $("#SellAll").show();
+                    }
+                    else {
+                        $("#SellAll").hide();
+                    }
+                }
                 if (transaction_type == 143001 || transaction_type == 143006) {
 
                         $('#Quantity').val(@ViewBag.Quantity);
-                        $('#Value').val(@ViewBag.Quantity);
+                        $('#Value').val(@ViewBag.Value);
                         $('#LotSize').val(@ViewBag.LotSize);
                         $('#ContractSpecification').val(@ViewBag.ContractSpecification);
                         $("#Quantity").attr('readonly', true);
@@ -182,7 +190,7 @@
                 $("#LotSize").attr('readonly', false);
                 $("#ContractSpecification").attr('readonly', false);
             }
-        }); 
+        });
           ///////Close New Code
         $(document).delegate("#DMATDetailsID", "change", function () {
             $('#divTMID input[type=text]').css('display', 'none');
@@ -204,6 +212,17 @@
         $('#TransactionTypeCodeId').change(function () {
             //cursor: not-allowed;
             //
+            if ($("#TransactionTypeCodeId").val() == 143002) {
+                debugger;
+                if ('@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue') {
+                    $("#SellAll").show();
+
+                }
+                else {
+                    $("#SellAll").hide();
+
+                }
+            }
             //if ($(this).val() != "0" && $("#ModeOfAcquisitionCodeId").is(":visible")) {
             if ($(this).val() != "0") {
                 var AllowedModeOfacquisition = SecurityType_ModeOfAcquisitionMapping[$(this).val()];
@@ -1226,21 +1245,12 @@
                                     }
                                     else
                                     {
-                                        var test = Model.TransactionTypeCodeId;
-                                        ViewBag.TransactionTypeCodeId = test;
                                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.Quantity, new { name = "cash" })
                                                 @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control numericOnly", rows = "5" })
                                                 @Html.ValidationMessageFor(model => model.Quantity)
 
-                                                @if (ViewBag.TransactionTypeCodeId == 143002)
-                                                {
-                                                    @Html.CheckBoxFor(m => m.SellAllFlag, new { id = "b_SellAllFlag" })
-                                                    <label style="font-style:italic" class="normalLable">
-                                                        SellAll
-                                                    </label>
-                                                }
                                             </div>
                                         </div>
                                     }
@@ -1281,13 +1291,16 @@
                                             @Html.ValidationMessageFor(model => model.ContractSpecification)
                                         </div>
                                     </div>
-
-
-
-
-
-
-
+                                </div>
+                                <div class="row" style="display:none" id="SellAll">
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            @Html.CheckBoxFor(m => m.SellAllFlag, new { id = "b_SellAllFlag" })
+                                            <label style="font-style:italic" class="normalLable">
+                                                SellAll
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                             }
 
@@ -1459,7 +1472,7 @@ else
     $(function () {
         $("#SecurityTypeCodeId").change(function () {
             var Selected_Entry = $("#SecurityTypeCodeId option:selected").val();
-            
+
             if (Selected_Entry == 139004 || Selected_Entry == 139005) {
                 if ('@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue') {
                     $("#txtLotSize").hide();
@@ -1479,20 +1492,45 @@ else
         });
     });
 
+                    var transaction_type = $('#TransactionTypeCodeId').val();
+                    if (transaction_type == 143002) {
+                    if ('@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue') {
+                        if ('@ViewBag.SellAllFlag' == 'true') {
+                            
+                            $('#b_SellAllFlag').prop("checked") == true;
+                        }
+                        else {
+                            $('#b_SellAllFlag').prop("checked") == false;
+                        }
+                        $("#SellAll").show();
+                    }
+                    else {
+                        $("#SellAll").hide();
+                    }
+                    }
+
     //$("#SecurityTypeCodeId").val(139001);
 
     if ($("#SecurityTypeCodeId").val() == 139004 || $("#SecurityTypeCodeId").val() == 139005) {
-        $("#txtLotSize").show();
-        $("#txtContractSpecification").show();
+        if ('@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue') {
+                    $("#txtLotSize").hide();
+                    $("#txtContractSpecification").hide();
+
+                }
+                else {
+                    $("#txtLotSize").show();
+                    $("#txtContractSpecification").show();
+
+                }
     }
-   
+
 </script>
 
 <script type="text/javascript">
     debugger;
     function OnSuccess(response) {
              if ($(".validation-summary-errors li:visible").length === 0) {
-           
+
                 if ('@ViewBag.SaveAndAddMore' == 'true') {
                     $('#TransactionDetailsId').val('0');
                      window.location.reload();
@@ -1501,13 +1539,22 @@ else
                 {
                     window.location = $('#Initial_OS_Index').val();
                 }
-               
+
             }
             else {
-            $("body").removeClass("loading");
+                 $("body").removeClass("loading");
+                 
             if ($("#SecurityTypeCodeId").val() == 139004 || $("#SecurityTypeCodeId").val() == 139005) {
-                $("#txtLotSize").show();
-                $("#txtContractSpecification").show();
+                if ('@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue') {
+                    $("#txtLotSize").hide();
+                    $("#txtContractSpecification").hide();
+
+                }
+                else {
+                    $("#txtLotSize").show();
+                    $("#txtContractSpecification").show();
+
+                }
                 if ($("#LotSize").val() == 0) {
                     $("#LotSize").val(null);
                 }
