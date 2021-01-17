@@ -762,20 +762,28 @@ namespace InsiderTrading.Controllers
                         objTransactionModel_OS.CompanyId = (Int32)objRestrictedListDTO.RLCompanyId;
                     }
                 }
-                TradingTransactionDTO_OS TradingTransactionDTO_OS_SellAll = null;
-                using (TradingTransactionSL_OS objTradingTransactionSL_OS = new TradingTransactionSL_OS())
+                if (objTransactionModel_OS.DisclosureTypeCodeId != 147001)
                 {
-                    TradingTransactionDTO_OS_SellAll = objTradingTransactionSL_OS.GetSellAllDetails(objLoginUserDetails.CompanyDBConnectionString,Convert.ToInt32(objTransactionModel_OS.TransactionMasterId));
-                }
-                if (TradingTransactionDTO_OS_SellAll == null)
-                {
-                    objTransactionModel_OS.SellAllFlag = false;
-                    ViewBag.SellAllFlag = false;
+                    TradingTransactionDTO_OS TradingTransactionDTO_OS_SellAll = null;
+                    using (TradingTransactionSL_OS objTradingTransactionSL_OS = new TradingTransactionSL_OS())
+                    {
+                        TradingTransactionDTO_OS_SellAll = objTradingTransactionSL_OS.GetSellAllDetails(objLoginUserDetails.CompanyDBConnectionString, Convert.ToInt32(objTransactionModel_OS.TransactionMasterId));
+                    }
+                    if (TradingTransactionDTO_OS_SellAll == null)
+                    {
+                        objTransactionModel_OS.SellAllFlag = false;
+                        ViewBag.SellAllFlag = false;
+                    }
+                    else
+                    {
+                        objTransactionModel_OS.SellAllFlag = TradingTransactionDTO_OS_SellAll.SellAllFlag;
+                        ViewBag.SellAllFlag = TradingTransactionDTO_OS_SellAll.SellAllFlag;
+                    }
                 }
                 else
                 {
-                    objTransactionModel_OS.SellAllFlag = TradingTransactionDTO_OS_SellAll.SellAllFlag;
-                    ViewBag.SellAllFlag = TradingTransactionDTO_OS_SellAll.SellAllFlag;
+                    objTransactionModel_OS.SellAllFlag = false;
+                    ViewBag.SellAllFlag = false;
                 }
                 return View("Create_OS", objTransactionModel_OS);
             }
@@ -1058,8 +1066,11 @@ namespace InsiderTrading.Controllers
                     objTradingTransactionDTO_OS.OtherExcerciseOptionQty = objTransactionModel_OS.Quantity;  
                     objTradingTransactionDTO_OS = objTradingTransactionSL_OS.InsertUpdateTradingTransactionDetails(objLoginUserDetails.CompanyDBConnectionString, objTradingTransactionDTO_OS, UserInfoId);
                     
-                        objTradingTransactionDTO_OS.SellAllFlag = objTransactionModel_OS.SellAllFlag;
+                    objTradingTransactionDTO_OS.SellAllFlag = objTransactionModel_OS.SellAllFlag;
+                    if (DisclosureType != ConstEnum.Code.DisclosureTypeInitial)
+                    {
                         objTradingTransactionDTO_OS = objTradingTransactionSL_OS.InsertUpdateSellAllDetails(objLoginUserDetails.CompanyDBConnectionString, objTradingTransactionDTO_OS, UserInfoId);
+                    }
                         
                     
 
