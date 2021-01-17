@@ -1012,6 +1012,8 @@
                                                 @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control numericOnly", @readonly = "readonly", rows = "5", id = "Quantity", Value = @ViewBag.Quantity })
                                                 @Html.ValidationMessageFor(model => model.Quantity)
                                             </div>
+
+
                                         </div>
                                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="txtLotSize" style="display:none">
                                             <div class="form-group">
@@ -1021,7 +1023,7 @@
                                             </div>
                                         </div>
                                     }
-                                    else 
+                                    else
                                     {
                                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="display:none">
                                             <div class="form-group">
@@ -1188,82 +1190,97 @@
                                     }
                                 </div>
                                 @*if (@ViewBag.TransactionTypeCodeId == 143001)
+            {
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            @Html.CheckBoxFor(m => m.SellAllFlag, new { id = "b_SellAllFlag" })
+                            <label style="font-style:italic" class="normalLable">
+                                SellAll
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            }*@
+                                <div class="row">
+                                    @if (ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue)
+                                    {
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="display:none">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Quantity, new { name = "cash" })
+                                                @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control numericOnly", rows = "5" })
+                                                @Html.ValidationMessageFor(model => model.Quantity)
+
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        var test = Model.TransactionTypeCodeId;
+                                        ViewBag.TransactionTypeCodeId = test;
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Quantity, new { name = "cash" })
+                                                @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control numericOnly", rows = "5" })
+                                                @Html.ValidationMessageFor(model => model.Quantity)                                                
+
+                                                @if (ViewBag.TransactionTypeCodeId == 143002)
+                                                {
+                                                    @Html.CheckBoxFor(m => m.SellAllFlag, new { id = "b_SellAllFlag" })
+                                                    <label style="font-style:italic" class="normalLable">
+                                                        SellAll
+                                                    </label>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="txtLotSize" style="display:none">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.LotSize)
+                                            @Html.TextBoxFor(model => model.LotSize, new { @class = "form-control numericOnly", rows = "5" })
+                                            @Html.ValidationMessageFor(model => model.LotSize)
+                                        </div>
+                                    </div>
+                                    @if (@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
+                                    {
+                                        if (ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue)
                                         {
-                                            <div class="row">
-                                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                                    <div class="form-group">
-                                                        @Html.CheckBoxFor(m => m.SellAllFlag, new { id = "b_SellAllFlag" })
-                                                        <label style="font-style:italic" class="normalLable">
-                                                            SellAll                                                           
-                                                        </label>
-                                                    </div>
+                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="display:none">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Value, new { name = "cash" })
+                                                    @Html.TextBoxFor(model => model.Value, new { @class = "form-control two-digits", rows = "5" })
+                                                    @Html.ValidationMessageFor(model => model.Value)
                                                 </div>
                                             </div>
-
-                                        }*@
-                        <div class="row">
-                            @if (ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue)
-                            {
-                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="display:none">
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.Quantity, new { name = "cash" })
-                                        @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control numericOnly", rows = "5" })
-                                        @Html.ValidationMessageFor(model => model.Quantity)
-
-                                    </div>
-                                </div>
-                            }
-                            else
-                            {
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.Quantity, new { name = "cash" })
-                                    @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control numericOnly", rows = "5" })
-                                    @Html.ValidationMessageFor(model => model.Quantity)
-
-                                </div>
-                            </div>
-                            }
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="txtLotSize" style="display:none">
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.LotSize)
-                                    @Html.TextBoxFor(model => model.LotSize, new { @class = "form-control numericOnly", rows = "5" })
-                                    @Html.ValidationMessageFor(model => model.LotSize)
-                                </div>
-                            </div>
-                            @if (@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
-                            {
-                                if (ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue)
-                                {
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="display:none">
+                                        }
+                                        else
+                                        {
+                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Value, new { name = "cash" })
+                                                    @Html.TextBoxFor(model => model.Value, new { @class = "form-control two-digits", rows = "5" })
+                                                    @Html.ValidationMessageFor(model => model.Value)
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="txtContractSpecification" style="display:none">
                                         <div class="form-group">
-                                            @Html.LabelFor(model => model.Value, new { name = "cash" })
-                                            @Html.TextBoxFor(model => model.Value, new { @class = "form-control two-digits", rows = "5" })
-                                            @Html.ValidationMessageFor(model => model.Value)
+                                            @Html.LabelFor(model => model.ContractSpecification)
+                                            @Html.TextBoxFor(model => model.ContractSpecification, new { @class = "form-control", rows = "5" })
+                                            @Html.ValidationMessageFor(model => model.ContractSpecification)
                                         </div>
                                     </div>
-                                }
-                                else
-                                {
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            @Html.LabelFor(model => model.Value, new { name = "cash" })
-                                            @Html.TextBoxFor(model => model.Value, new { @class = "form-control two-digits", rows = "5" })
-                                            @Html.ValidationMessageFor(model => model.Value)
-                                        </div>
-                                    </div>
-                                }
-                            }
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="txtContractSpecification" style="display:none">
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.ContractSpecification)
-                                    @Html.TextBoxFor(model => model.ContractSpecification, new { @class = "form-control", rows = "5" })
-                                    @Html.ValidationMessageFor(model => model.ContractSpecification)
-                                </div>
-                            </div>
 
-                        </div>
-                            }
+
+
+
+
+
+
+                                </div>
+                             }
 
 
                             @Html.HiddenFor(model => model.CompanyId)

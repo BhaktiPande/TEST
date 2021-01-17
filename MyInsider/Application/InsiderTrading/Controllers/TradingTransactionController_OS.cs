@@ -984,9 +984,9 @@ namespace InsiderTrading.Controllers
                                 ModelState.AddModelError("DupliTransaction", Common.Common.getResource("tra_msg_52067"));
                             }
                         }
-                                                   
-                            #endregion Validation Checks
-                            if (DisclosureType == ConstEnum.Code.DisclosureTypeInitial)
+
+                        #endregion Validation Checks
+                        if (DisclosureType == ConstEnum.Code.DisclosureTypeInitial)
                         {
                             objTransactionModel_OS.TransactionTypeCodeId = ConstEnum.Code.TransactionTypeBuy;
                             objTransactionModel_OS.ExchangeCodeId = ConstEnum.Code.StockExchange_NSE;
@@ -1033,8 +1033,14 @@ namespace InsiderTrading.Controllers
 
                     objTradingTransactionDTO_OS.TransactionMasterId = Convert.ToInt32(objTradingTransactionMasterDTO_OS.TransactionMasterId);
                     objTradingTransactionDTO_OS.LoggedInUserId = Convert.ToInt32(objLoginUserDetails.LoggedInUserID);
-                    objTradingTransactionDTO_OS.OtherExcerciseOptionQty = objTransactionModel_OS.Quantity;
+                    objTradingTransactionDTO_OS.OtherExcerciseOptionQty = objTransactionModel_OS.Quantity;  
                     objTradingTransactionDTO_OS = objTradingTransactionSL_OS.InsertUpdateTradingTransactionDetails(objLoginUserDetails.CompanyDBConnectionString, objTradingTransactionDTO_OS, UserInfoId);
+                    
+                        objTradingTransactionDTO_OS.SellAllFlag = objTransactionModel_OS.SellAllFlag;
+                        objTradingTransactionDTO_OS = objTradingTransactionSL_OS.InsertUpdateSellAllDetails(objLoginUserDetails.CompanyDBConnectionString, objTradingTransactionDTO_OS, UserInfoId);
+                        
+                    
+
                 }
                 if (DisclosureType != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
                     ViewBag.UserTypeId = objTradingTransactionDTO_OS.UserTypeCodeId;

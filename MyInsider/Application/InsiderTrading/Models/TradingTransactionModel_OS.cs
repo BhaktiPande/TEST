@@ -122,6 +122,8 @@ namespace InsiderTrading.Models
 
         public bool b_IsInitialDisc { get; set; }
 
+        public bool SellAllFlag { get; set; }
+
         //New column added on 2-Jun-2016(YES BANK customization)
         [DisplayName("rul_lbl_50070")]
         public bool Chk_DeclarationFromInsiderAtTheTimeOfContinuousDisclosures { get; set; }
