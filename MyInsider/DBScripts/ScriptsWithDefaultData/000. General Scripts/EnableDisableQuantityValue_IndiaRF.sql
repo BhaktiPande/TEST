@@ -56,3 +56,12 @@ BEGIN
 		(999,999, 1, 1,'143001','147002', 1,GETDATE(), 1, GETDATE())
 		
 END
+
+
+
+IF NOT EXISTS (SELECT ResourceId from mst_Resource where ResourceId=55366)
+BEGIN
+    INSERT INTO mst_Resource(ResourceId,ResourceKey,ResourceValue,ResourceCulture,ModuleCodeId,CategoryCodeId,ScreenCodeId,OriginalResourceValue,ModifiedBy,ModifiedOn)
+	VALUES
+     (55366,'rul_lbl_55366','Manual','en-US','103006','104002','122114','Limited',1,GETDATE())
+END
