@@ -273,6 +273,28 @@ namespace InsiderTrading.SL
         }
         #endregion InsertUpdateSellAllDetails
 
+        #region GetSellAllDetails
+
+        public TradingTransactionDTO_OS GetSellAllDetails(string i_sConnectionString, int transactionmasterId)
+        {
+            TradingTransactionDTO_OS objTradingTransactionDTO_OS = null;
+            try
+            {
+                //InsiderTradingDAL.TradingTransactionDAL objTradingTransactionDAL = new InsiderTradingDAL.TradingTransactionDAL();
+                using (var objTradingTransactionDAL_OS = new InsiderTradingDAL.TradingTransactionDAL_OS())
+                {
+                    objTradingTransactionDTO_OS = objTradingTransactionDAL_OS.GetSellAllDetails(i_sConnectionString, transactionmasterId);
+                }
+            }
+            catch (Exception exp)
+            {
+                throw exp;
+            }
+
+            return objTradingTransactionDTO_OS;
+        }
+        #endregion GetSellAllDetails
+
         #region InsertUpdateIDTradingTransactionDetails
         /// <summary>
         /// This method is used to save Initial Disclosure List
