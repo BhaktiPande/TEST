@@ -1471,17 +1471,21 @@ else
                     $("#txtContractSpecification").show();
 
                 }
-            }            
+            }
+            else {
+                $("#txtLotSize").hide();
+                $("#txtContractSpecification").hide();
+            }
         });
     });
 
     //$("#SecurityTypeCodeId").val(139001);
 
-    if($("#SecurityTypeCodeId").val() == 139004 || $("#SecurityTypeCodeId").val() == 139005)
-    {
+    if ($("#SecurityTypeCodeId").val() == 139004 || $("#SecurityTypeCodeId").val() == 139005) {
         $("#txtLotSize").show();
         $("#txtContractSpecification").show();
     }
+   
 </script>
 
 <script type="text/javascript">
