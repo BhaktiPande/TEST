@@ -133,17 +133,21 @@
       ///////New Code
         $(document).delegate('#TransactionTypeCodeId', 'change', function (event) {
             debugger
-            var transaction_type = $('#TransactionTypeCodeId').val();              
+            var transaction_type = $('#TransactionTypeCodeId').val();
             if ('@ViewBag.EnableDisableQuantityValue' == 400002 || '@ViewBag.EnableDisableQuantityValue' == 400003) {
 
                 if (transaction_type == 143002) {
-                    if ('@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue') {
+                    if ('@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue'|| '@ViewBag.EnableDisableQuantityValue'==400002) {
                         $("#SellAll").show();
                     }
                     else {
                         $("#SellAll").hide();
                     }
                 }
+                    else {
+                        $("#SellAll").hide();
+                    }
+
                 if (transaction_type == 143001 || transaction_type == 143006) {
 
                         $('#Quantity').val(@ViewBag.Quantity);
@@ -214,7 +218,7 @@
             //
             if ($("#TransactionTypeCodeId").val() == 143002) {
                 debugger;
-                if ('@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue') {
+                if ('@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue' || '@ViewBag.EnableDisableQuantityValue'==400002) {
                     $("#SellAll").show();
 
                 }
@@ -1494,9 +1498,9 @@ else
 
                     var transaction_type = $('#TransactionTypeCodeId').val();
                     if (transaction_type == 143002) {
-                    if ('@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue') {
+                    if ('@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue' || '@ViewBag.EnableDisableQuantityValue'==400002) {
                         if ('@ViewBag.SellAllFlag' == 'true') {
-                            
+
                             $('#b_SellAllFlag').prop("checked") == true;
                         }
                         else {
