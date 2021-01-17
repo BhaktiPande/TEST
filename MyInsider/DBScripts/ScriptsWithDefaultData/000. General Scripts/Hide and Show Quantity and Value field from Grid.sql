@@ -182,12 +182,33 @@ BEGIN
 		END
 
 		IF EXISTS(SELECT * FROM mst_Resource WHERE ResourceKey='rl_grd_50582')
-				BEGIN
+		BEGIN
 					 IF EXISTS(SELECT * FROM com_GridHeaderSetting WHERE ResourceKey='rl_grd_50582' AND GridTypeCodeId=507005)
 					 BEGIN
 						UPDATE com_GridHeaderSetting SET IsVisible=0 WHERE ResourceKey='rl_grd_50582' AND GridTypeCodeId=507005
 					 END
-				END
+		END
+		IF EXISTS(SELECT * FROM mst_Resource WHERE ResourceKey='dis_grd_53039')
+		BEGIN
+			 IF EXISTS(SELECT * FROM com_GridHeaderSetting WHERE ResourceKey='dis_grd_53039' AND GridTypeCodeId=114119)
+			 BEGIN
+				UPDATE com_GridHeaderSetting SET IsVisible=0 WHERE ResourceKey='dis_grd_53039' AND GridTypeCodeId=114119
+			 END
+		END
+		IF EXISTS(SELECT * FROM mst_Resource WHERE ResourceKey='dis_grd_53046')
+		BEGIN
+			 IF EXISTS(SELECT * FROM com_GridHeaderSetting WHERE ResourceKey='dis_grd_53046' AND GridTypeCodeId=114119)
+			 BEGIN
+				UPDATE com_GridHeaderSetting SET IsVisible=0 WHERE ResourceKey='dis_grd_53046' AND GridTypeCodeId=114119
+			 END
+		END
+		IF EXISTS(SELECT * FROM mst_Resource WHERE ResourceKey='dis_grd_53047')
+		BEGIN
+			 IF EXISTS(SELECT * FROM com_GridHeaderSetting WHERE ResourceKey='dis_grd_53047' AND GridTypeCodeId=114119)
+			 BEGIN
+				UPDATE com_GridHeaderSetting SET IsVisible=0 WHERE ResourceKey='dis_grd_53047' AND GridTypeCodeId=114119
+			 END
+		END
 END
 ELSE
 BEGIN
@@ -376,7 +397,31 @@ BEGIN
 				UPDATE com_GridHeaderSetting SET IsVisible=1 WHERE ResourceKey='rl_grd_50582' AND GridTypeCodeId=507005
 			 END
 		END
+		IF EXISTS(SELECT * FROM mst_Resource WHERE ResourceKey='dis_grd_53039')
+		BEGIN
+			 IF EXISTS(SELECT * FROM com_GridHeaderSetting WHERE ResourceKey='dis_grd_53039' AND GridTypeCodeId=114119)
+			 BEGIN
+				UPDATE com_GridHeaderSetting SET IsVisible=1 WHERE ResourceKey='dis_grd_53039' AND GridTypeCodeId=114119
+			 END
+		END
+		IF EXISTS(SELECT * FROM mst_Resource WHERE ResourceKey='dis_grd_53046')
+		BEGIN
+			 IF EXISTS(SELECT * FROM com_GridHeaderSetting WHERE ResourceKey='dis_grd_53046' AND GridTypeCodeId=114119)
+			 BEGIN
+				UPDATE com_GridHeaderSetting SET IsVisible=1 WHERE ResourceKey='dis_grd_53046' AND GridTypeCodeId=114119
+			 END
+		END
+		IF EXISTS(SELECT * FROM mst_Resource WHERE ResourceKey='dis_grd_53047')
+		BEGIN
+			 IF EXISTS(SELECT * FROM com_GridHeaderSetting WHERE ResourceKey='dis_grd_53047' AND GridTypeCodeId=114119)
+			 BEGIN
+				UPDATE com_GridHeaderSetting SET IsVisible=1 WHERE ResourceKey='dis_grd_53047' AND GridTypeCodeId=114119
+			 END
+		END
 END
+
+
+
 
 
 

@@ -4,16 +4,19 @@
 	Description :	
 */
 
-IF EXISTS (SELECT NAME FROM SYS.PROCEDURES WHERE NAME = 'st_tra_SaveSellAllDetails_OS')	
-	DROP PROCEDURE st_tra_SaveSellAllDetails_OS
+IF EXISTS (SELECT NAME FROM SYS.PROCEDURES WHERE NAME = 'st_tra_GetSellAllDetails_OS')	
+	DROP PROCEDURE st_tra_GetSellAllDetails_OS
 GO
 
-CREATE PROCEDURE [dbo].[st_tra_SaveSellAllDetails_OS] 
-	@inp_iTransactionMasterId BIGINT,	
-	@inp_bSellAllFlag BIT,									--1=SellAll,0=Not SellAll
-	@inp_iForUserInfoId		INT,
-	@inp_iCompanyId INT,
-	@inp_iDMATDetailsId INT,									
+CREATE PROCEDURE [dbo].[st_tra_GetSellAllDetails_OS] 
+	@inp_iTransactionMasterId BIGINT,
+	--@inp_iForUserInfoId BIGINT,
+	--@inp_iTransactionDetalisId BIGINT,	
+	--@inp_bSellAllFlag BIT,									--1=SellAll,0=Not SellAll
+	--@inp_iForUserInfoId		INT,
+	--@inp_iCompanyId INT,
+	--@inp_iDMATDetailsId INT,	
+	--@out_nSellAllID BIGINT = 0 OUTPUT,									
 	@out_nReturnValue			INT = 0 OUTPUT
 	,@out_nSQLErrCode			INT = 0 OUTPUT				-- Output SQL Error Number, if error occurred.
 	,@out_sSQLErrMessage		NVARCHAR(500) = '' OUTPUT	-- Output SQL Error Message, if error occurred.
@@ -44,35 +47,19 @@ BEGIN
 		IF @out_sSQLErrMessage IS NULL
 			SET @out_sSQLErrMessage = ''
 
-			
-			IF NOT EXISTS(SELECT 1 FROM tra_SellAllValues_OS WHERE TransactionMasterId = @inp_iTransactionMasterId and 
-					 ForUserInfoId=@inp_iForUserInfoId and CompanyId=@inp_iCompanyId and DMATDetailsId= @inp_iDMATDetailsId)
-				BEGIN
-				
-					INSERT INTO tra_SellAllValues_OS(TransactionMasterId,SellAllFlag,ForUserInfoId,CompanyId,DMATDetailsId,CreatedOn,ModifiedOn)
-							VALUES(@inp_iTransactionMasterId , @inp_bSellAllFlag , @inp_iForUserInfoId,@inp_iCompanyId,@inp_iDMATDetailsId,dbo.uf_com_GetServerDate(),dbo.uf_com_GetServerDate())
-							
-				END
-			ELSE
-			BEGIN
-				UPDATE tra_SellAllValues_OS SET SellAllFlag= @inp_bSellAllFlag WHERE TransactionMasterId = @inp_iTransactionMasterId and 
-					 ForUserInfoId=@inp_iForUserInfoId and CompanyId=@inp_iCompanyId and DMATDetailsId= @inp_iDMATDetailsId
-			END
-			
-			
-
-		
+					
 		SELECT 
 		SellAllDetailsId,
 		TransactionMasterId,
 		ForUserInfoId,
 		SellAllFlag,
-		SA.CompanyId,
+		CompanyId,
 		DMATDetailsId
 		
-		FROM tra_SellAllValues_OS SA
+		FROM tra_SellAllValues_OS 
 		
-		WHERE TransactionMasterId = @inp_iTransactionMasterId
+		WHERE TransactionMasterId=@inp_iTransactionMasterId --and ForUserInfoId=@inp_iForUserInfoId 
+		--and CompanyId= and DMATDetailsId=
 	
 		--select *    from tra_SellAllValues_OS	where SellAllDetailsId=12	
 		--SET @out_nReturnValue = 0

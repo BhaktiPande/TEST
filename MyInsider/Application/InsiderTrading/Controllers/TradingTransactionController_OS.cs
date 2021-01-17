@@ -183,6 +183,14 @@ namespace InsiderTrading.Controllers
                         ViewBag.PendingQuantity = Convert.ToInt64(objTradingTransactionSummaryDTO_OS.PendingQuantity).ToString("#,##0"); ;
                     }
 
+                    
+                    using (TradingTransactionSL_OS objTradingTransactionSL_OSModule = new TradingTransactionSL_OS())
+                    {
+                        TradingTransactionMasterDTO_OS objTradingTransactionMasterDTO_OSModule = null;
+                        objTradingTransactionMasterDTO_OSModule = objTradingTransactionSL_OSModule.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
+                        ViewBag.EnableDisableQuantityValue = objTradingTransactionMasterDTO_OSModule.EnableDisableQuantityValue;
+                    }
+
                     string panNumber = string.Empty;
                     string DateOfAcquisition = string.Empty;
                     string DateOfIntimation = string.Empty;
@@ -754,7 +762,21 @@ namespace InsiderTrading.Controllers
                         objTransactionModel_OS.CompanyId = (Int32)objRestrictedListDTO.RLCompanyId;
                     }
                 }
-                //
+                TradingTransactionDTO_OS TradingTransactionDTO_OS_SellAll = null;
+                using (TradingTransactionSL_OS objTradingTransactionSL_OS = new TradingTransactionSL_OS())
+                {
+                    TradingTransactionDTO_OS_SellAll = objTradingTransactionSL_OS.GetSellAllDetails(objLoginUserDetails.CompanyDBConnectionString,Convert.ToInt32(objTransactionModel_OS.TransactionMasterId));
+                }
+                if (TradingTransactionDTO_OS_SellAll == null)
+                {
+                    objTransactionModel_OS.SellAllFlag = false;
+                    ViewBag.SellAllFlag = false;
+                }
+                else
+                {
+                    objTransactionModel_OS.SellAllFlag = TradingTransactionDTO_OS_SellAll.SellAllFlag;
+                    ViewBag.SellAllFlag = TradingTransactionDTO_OS_SellAll.SellAllFlag;
+                }
                 return View("Create_OS", objTransactionModel_OS);
             }
             catch (Exception exp)
