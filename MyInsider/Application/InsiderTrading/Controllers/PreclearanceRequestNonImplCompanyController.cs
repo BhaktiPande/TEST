@@ -1012,6 +1012,15 @@ namespace InsiderTrading.Controllers
             {
                 objLoginUserDetails = (LoginUserDetails)Common.Common.GetSessionValue(ConstEnum.SessionValue.UserDetails);
                 objPreclearanceRequestNonImplCompanyList = new List<PreclearanceRequestNonImplCompanyModel>();
+                using (TradingTransactionSL_OS objTradingTransactionSL_OSModule = new TradingTransactionSL_OS())
+                {
+                    TradingTransactionMasterDTO_OS objTradingTransactionMasterDTO_OSModule = null;
+                    objTradingTransactionMasterDTO_OSModule = objTradingTransactionSL_OSModule.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
+                    ViewBag.EnableDisableQuantityValue = objTradingTransactionMasterDTO_OSModule.EnableDisableQuantityValue;
+                    ViewBag.SecuritiesToBeTradedQty = Convert.ToInt32(objPreclearanceRequestNonImplCompanyModel.SecuritiesToBeTradedQty);
+                    ViewBag.SecuritiesToBeTradedValue = Convert.ToInt32(objPreclearanceRequestNonImplCompanyModel.SecuritiesToBeTradedValue);
+                    ViewBag.Fromedit = "FromEdit";
+                }
                 using (var objTemplateMasterSL = new TemplateMasterSL())
                 {
                     objTemplateMasterDTO = objTemplateMasterSL.GetFormETemplate(objLoginUserDetails.CompanyDBConnectionString);
