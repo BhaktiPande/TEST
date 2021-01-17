@@ -822,7 +822,25 @@ namespace InsiderTrading.Controllers
                 ViewBag.IsNegative = true;
                 ViewBag.UserTypeCode = objLoginUserDetails.UserTypeCodeId;
                 ViewBag.postAcqNeMsg = Common.Common.getResource("tra_msg_16443");
-               
+                
+                using (TradingTransactionSL_OS objTradingTransactionSL_OSModule = new TradingTransactionSL_OS())
+                {
+                    TradingTransactionMasterDTO_OS objTradingTransactionMasterDTO_OSModule = null;
+                    objTradingTransactionMasterDTO_OSModule = objTradingTransactionSL_OSModule.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
+                    ViewBag.EnableDisableQuantityValue = Convert.ToInt32(objTradingTransactionMasterDTO_OSModule.EnableDisableQuantityValue);
+
+                    if (ViewBag.EnableDisableQuantityValue == 400002 || ViewBag.EnableDisableQuantityValue == 400003)
+                    {
+                        objTradingTransactionMasterDTO_OSModule = null;
+                        objTradingTransactionMasterDTO_OSModule = objTradingTransactionSL_OSModule.GetQuantity(objLoginUserDetails.CompanyDBConnectionString, Convert.ToInt32(DisclosureType), Convert.ToInt32(UserInfoId));
+                        ViewBag.Quantity = objTradingTransactionMasterDTO_OSModule.Quantity;
+                        ViewBag.Value = objTradingTransactionMasterDTO_OSModule.Value;
+                        ViewBag.LotSize = objTradingTransactionMasterDTO_OSModule.LotSize;
+                        ViewBag.ContractSpecification = objTradingTransactionMasterDTO_OSModule.ContractSpecification;
+                    }
+                }
+
+
                 ////Tushar
                 //if (objTransactionModel_OS.TransactionMasterId != 0 && !Common.Common.CheckUserTypeAccess(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.Code.DisclosureTransaction, Convert.ToInt64(objTransactionModel_OS.TransactionMasterId), objLoginUserDetails.LoggedInUserID))
                 //{
@@ -966,9 +984,9 @@ namespace InsiderTrading.Controllers
                                 ModelState.AddModelError("DupliTransaction", Common.Common.getResource("tra_msg_52067"));
                             }
                         }
-
-                        #endregion Validation Checks
-                        if (DisclosureType == ConstEnum.Code.DisclosureTypeInitial)
+                                                   
+                            #endregion Validation Checks
+                            if (DisclosureType == ConstEnum.Code.DisclosureTypeInitial)
                         {
                             objTransactionModel_OS.TransactionTypeCodeId = ConstEnum.Code.TransactionTypeBuy;
                             objTransactionModel_OS.ExchangeCodeId = ConstEnum.Code.StockExchange_NSE;
