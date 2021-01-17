@@ -251,6 +251,27 @@ namespace InsiderTrading.SL
         }
         #endregion InsertUpdateTradingTransactionDetails
 
+        #region InsertUpdateSellAllDetails
+       
+        public TradingTransactionDTO_OS InsertUpdateSellAllDetails(string i_sConnectionString, TradingTransactionDTO_OS i_objTradingTransactionDTO_OS, int i_nLoggedInUserID)
+        {
+            TradingTransactionDTO_OS objTradingTransactionDTO_OS = null;
+            try
+            {
+                //InsiderTradingDAL.TradingTransactionDAL objTradingTransactionDAL = new InsiderTradingDAL.TradingTransactionDAL();
+                using (var objTradingTransactionDAL_OS = new InsiderTradingDAL.TradingTransactionDAL_OS())
+                {
+                    objTradingTransactionDTO_OS = objTradingTransactionDAL_OS.InsertUpdateSellAllDetails(i_sConnectionString, i_objTradingTransactionDTO_OS, i_nLoggedInUserID);
+                }
+            }
+            catch (Exception exp)
+            {
+                throw exp;
+            }
+
+            return objTradingTransactionDTO_OS;
+        }
+        #endregion InsertUpdateSellAllDetails
 
         #region InsertUpdateIDTradingTransactionDetails
         /// <summary>
