@@ -294,21 +294,30 @@ function ShowHideSecurityPool() {
 
     if (show_pool_flag != "1") return;
 
-    if (transaction && security) {
+    var EnableDisableQuantityValuehd = $("#EnableDisableQuantityValuehd").val();
+    if (EnableDisableQuantityValuehd == 400002 || EnableDisableQuantityValuehd == 400003) {
 
-        $('#securityPool').show();
-
-        if (transaction_type == 143002 || transaction_type == 143008) { //type sell && Pledge Invoke
-            $('#ESOPExcerciseOptionQtyFlag').show();
-            $('#OtherESOPExcerciseOptionQtyFlag').show();
-        } else {
-            $('#ESOPExcerciseOptionQtyFlag').hide();
-            $('#OtherESOPExcerciseOptionQtyFlag').hide();
-        }
-    } else {
         $('#securityPool').hide();
         $('#ESOPExcerciseOptionQtyFlag').hide();
         $('#OtherESOPExcerciseOptionQtyFlag').hide();
+    }
+    else {
+        if (transaction && security) {
+
+            $('#securityPool').show();
+
+            if (transaction_type == 143002 || transaction_type == 143008) { //type sell && Pledge Invoke
+                $('#ESOPExcerciseOptionQtyFlag').show();
+                $('#OtherESOPExcerciseOptionQtyFlag').show();
+            } else {
+                $('#ESOPExcerciseOptionQtyFlag').hide();
+                $('#OtherESOPExcerciseOptionQtyFlag').hide();
+            }
+        } else {
+            $('#securityPool').hide();
+            $('#ESOPExcerciseOptionQtyFlag').hide();
+            $('#OtherESOPExcerciseOptionQtyFlag').hide();
+        }
     }
 }
 
