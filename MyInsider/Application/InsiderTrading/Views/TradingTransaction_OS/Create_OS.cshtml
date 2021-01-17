@@ -923,9 +923,18 @@
 
                                 if ((ViewBag.DisclosureType != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial && ViewBag.PreclearenceID == 0))
                                 {
-                                    <div id="divDMAtwisebalance">
-                                        @Html.Partial("~/Views/TradingTransaction_OS/_DMATwiseBalance.cshtml")
-                                    </div>
+                                    if (ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.EnableQunatityValue)
+                                    {
+                                        <div id="divDMAtwisebalance">
+                                            @Html.Partial("~/Views/TradingTransaction_OS/_DMATwiseBalance.cshtml")
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div id="divDMAtwisebalance" style="display:none">
+                                            @Html.Partial("~/Views/TradingTransaction_OS/_DMATwiseBalance.cshtml")
+                                        </div>
+                                    }
                                 }
                             }
 
@@ -1223,7 +1232,7 @@
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.Quantity, new { name = "cash" })
                                                 @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control numericOnly", rows = "5" })
-                                                @Html.ValidationMessageFor(model => model.Quantity)                                                
+                                                @Html.ValidationMessageFor(model => model.Quantity)
 
                                                 @if (ViewBag.TransactionTypeCodeId == 143002)
                                                 {
@@ -1280,7 +1289,7 @@
 
 
                                 </div>
-                             }
+                            }
 
 
                             @Html.HiddenFor(model => model.CompanyId)
