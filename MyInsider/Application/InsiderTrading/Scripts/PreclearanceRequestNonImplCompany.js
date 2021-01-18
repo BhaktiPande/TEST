@@ -240,7 +240,9 @@ $(document).delegate('#SecurityTypeCodeId', 'change', function (event) {
 /////New Code
 var TransactionType_OS = {
     "143001": ["999"],
-    "143002": ["1"]
+    "143002": ["1"],
+    "143007": ["1"],
+    "143008": ["1"]
 };
 $(document).delegate('#TransactionTypeCodeId', 'change', function (event) {  
     var transaction_type = $('#TransactionTypeCodeId').val();   
@@ -249,33 +251,33 @@ $(document).delegate('#TransactionTypeCodeId', 'change', function (event) {
     var SecuritiesToBeTradedValuehd = $("#SecuritiesToBeTradedValuehd").val();
 
     if (EnableDisableQuantityValuehd == 400002 || EnableDisableQuantityValuehd == 400003) {           
-              if (transaction_type == 143001) {                 
+        if (transaction_type == 143001 || transaction_type == 143006) {                 
                   $('.Qtyclass').val(SecuritiesToBeTradedQtyhd);
                   $('.Valueclass').val(SecuritiesToBeTradedValuehd);
-                  $("#Qtyclass").attr('readonly', true);
-                  $("#Valueclass").attr('readonly', true);
+                  $('.Qtyclass').attr('readonly', true);
+                  $('.Valueclass').attr('readonly', true);
                     
                 }
-                else if (transaction_type == 143002) {
+              else if (transaction_type == 143002 || transaction_type == 143007 || transaction_type == 143008) {
                       var AllowedModeOfacquisition1 = TransactionType_OS[$(this).val()];                  
                       $('.Qtyclass').val(AllowedModeOfacquisition1);
                       $('.Valueclass').val(AllowedModeOfacquisition1);
-                      $("#Qtyclass").attr('readonly', true);
-                      $("#Valueclass").attr('readonly', true);       
+                      $('.Qtyclass').attr('readonly', true);
+                      $('.Valueclass').attr('readonly', true);       
                 }
                 else {
                     
                       $('.Qtyclass').val('');
                       $('.Valueclass').val('');                    
-                      $("#Qtyclass").attr('readonly', false);
-                      $("#Valueclass").attr('readonly', false);
+                      $('.Qtyclass').attr('readonly', false);
+                      $('.Valueclass').attr('readonly', false);
                  }
             }
     else if (EnableDisableQuantityValuehd == 400001) {          
-        $('.Qtyclass').val('');
-        $('.Valueclass').val('');
-        $("#Qtyclass").attr('readonly', false);
-        $("#Valueclass").attr('readonly', false);
+        //$('.Qtyclass').val('');
+        //$('.Valueclass').val('');
+        $('.Qtyclass').attr('readonly', false);
+        $('.Valueclass').attr('readonly', false);
            
       }
 });
@@ -292,21 +294,30 @@ function ShowHideSecurityPool() {
 
     if (show_pool_flag != "1") return;
 
-    if (transaction && security) {
+    var EnableDisableQuantityValuehd = $("#EnableDisableQuantityValuehd").val();
+    if (EnableDisableQuantityValuehd == 400002 || EnableDisableQuantityValuehd == 400003) {
 
-        $('#securityPool').show();
-
-        if (transaction_type == 143002 || transaction_type == 143008) { //type sell && Pledge Invoke
-            $('#ESOPExcerciseOptionQtyFlag').show();
-            $('#OtherESOPExcerciseOptionQtyFlag').show();
-        } else {
-            $('#ESOPExcerciseOptionQtyFlag').hide();
-            $('#OtherESOPExcerciseOptionQtyFlag').hide();
-        }
-    } else {
         $('#securityPool').hide();
         $('#ESOPExcerciseOptionQtyFlag').hide();
         $('#OtherESOPExcerciseOptionQtyFlag').hide();
+    }
+    else {
+        if (transaction && security) {
+
+            $('#securityPool').show();
+
+            if (transaction_type == 143002 || transaction_type == 143008) { //type sell && Pledge Invoke
+                $('#ESOPExcerciseOptionQtyFlag').show();
+                $('#OtherESOPExcerciseOptionQtyFlag').show();
+            } else {
+                $('#ESOPExcerciseOptionQtyFlag').hide();
+                $('#OtherESOPExcerciseOptionQtyFlag').hide();
+            }
+        } else {
+            $('#securityPool').hide();
+            $('#ESOPExcerciseOptionQtyFlag').hide();
+            $('#OtherESOPExcerciseOptionQtyFlag').hide();
+        }
     }
 }
 

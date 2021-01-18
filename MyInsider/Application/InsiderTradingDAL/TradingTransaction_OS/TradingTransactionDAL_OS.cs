@@ -808,6 +808,179 @@ namespace InsiderTradingDAL
         }
         #endregion InsertUpdateTradingTransactionDetails
 
+        #region InsertUpdateSellAllDetails
+        public TradingTransactionDTO_OS InsertUpdateSellAllDetails(string sConnectionString, TradingTransactionDTO_OS m_objTradingTransactionDTO_OS, int nLoggedInUserId)
+        {
+            #region Paramters
+            int out_nReturnValue;
+            int out_nSQLErrCode;
+            string out_sSQLErrMessage;
+            #endregion Paramters
+
+            try
+            {
+                #region Out Paramter
+                var nout_nReturnValue = new SqlParameter("@out_nReturnValue", System.Data.SqlDbType.Int);
+                nout_nReturnValue.Direction = System.Data.ParameterDirection.Output;
+                nout_nReturnValue.Value = 0;
+                var nout_nSQLErrCode = new SqlParameter("@out_nSQLErrCode", System.Data.SqlDbType.Int);
+                nout_nSQLErrCode.Direction = System.Data.ParameterDirection.Output;
+                nout_nSQLErrCode.Value = 0;
+                var sout_sSQLErrMessage = new SqlParameter("@out_sSQLErrMessage", System.Data.SqlDbType.NVarChar);
+                sout_sSQLErrMessage.Direction = System.Data.ParameterDirection.Output;
+                sout_sSQLErrMessage.Size = 1000;
+                sout_sSQLErrMessage.Value = string.Empty;
+                #endregion Out Paramter
+
+                using (var db = new PetaPoco.Database(sConnectionString, "System.Data.SqlClient") { EnableAutoSelect = false })
+                {
+                    using (var scope = db.GetTransaction())
+                    {
+                        var res = db.Query<TradingTransactionDTO_OS>("exec st_tra_SaveSellAllDetails_OS  @inp_iTransactionMasterId,@inp_bSellAllFlag, @inp_iForUserInfoId,@inp_iCompanyId,@inp_iDMATDetailsId, @out_nReturnValue OUTPUT, @out_nSQLErrCode OUTPUT, @out_sSQLErrMessage OUTPUT",
+
+                            new
+                            {
+                                //@inp_iSellAllDetailsId=m_objTradingTransactionDTO_OS.SellAllDetailsId,
+                                @inp_iTransactionMasterId = m_objTradingTransactionDTO_OS.TransactionMasterId,                                
+                                @inp_bSellAllFlag = m_objTradingTransactionDTO_OS.SellAllFlag,
+                                @inp_iForUserInfoId = m_objTradingTransactionDTO_OS.ForUserInfoId,
+                                inp_iCompanyId=m_objTradingTransactionDTO_OS.CompanyId,
+                                @inp_iDMATDetailsId=m_objTradingTransactionDTO_OS.DMATDetailsID,                                
+                                @out_nReturnValue = nout_nReturnValue,
+                                @out_nSQLErrCode = nout_nSQLErrCode,
+                                @out_sSQLErrMessage = sout_sSQLErrMessage,
+
+                            }).SingleOrDefault<TradingTransactionDTO_OS>();
+
+                        #region Error Values
+
+                        //if (!(nout_nReturnValue is DBNull))
+                        //    m_objTradingTransactionDTO_OS.SellAllDetailsId = Convert.ToInt64(nout_nReturnValue);
+                        if (Convert.ToInt32(nout_nReturnValue.Value) != 0)
+                        {
+                            Exception e = new Exception();
+                            out_nReturnValue = Convert.ToInt32(nout_nReturnValue.Value);
+                            string sReturnValue = sLookupPrefix + out_nReturnValue;
+                            e.Data[0] = sReturnValue;
+                            if (nout_nSQLErrCode.Value != System.DBNull.Value)
+                            {
+                                out_nSQLErrCode = Convert.ToInt32(nout_nSQLErrCode.Value);
+                                e.Data[1] = out_nSQLErrCode;
+                            }
+                            if (sout_sSQLErrMessage.Value != System.DBNull.Value)
+                            {
+                                out_sSQLErrMessage = Convert.ToString(sout_sSQLErrMessage.Value);
+                                e.Data[2] = out_sSQLErrMessage;
+                            }
+                            Exception ex = new Exception(db.LastCommand.ToString(), e);
+                            throw ex;
+                        }
+                        else
+                        {
+                            scope.Complete();
+                            return res;
+                        }
+                        #endregion Error Values
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                throw exp;
+            }
+            finally
+            {
+
+            }
+        }
+        #endregion InsertUpdateSellAllDetails
+
+        #region GetSellAllDetails
+        public TradingTransactionDTO_OS GetSellAllDetails(string sConnectionString, int TransactionmasterID)
+        {
+            #region Paramters
+            int out_nReturnValue;
+            int out_nSQLErrCode;
+            string out_sSQLErrMessage;
+            #endregion Paramters
+
+            try
+            {
+                #region Out Paramter
+                var nout_nReturnValue = new SqlParameter("@out_nReturnValue", System.Data.SqlDbType.Int);
+                nout_nReturnValue.Direction = System.Data.ParameterDirection.Output;
+                nout_nReturnValue.Value = 0;
+                var nout_nSQLErrCode = new SqlParameter("@out_nSQLErrCode", System.Data.SqlDbType.Int);
+                nout_nSQLErrCode.Direction = System.Data.ParameterDirection.Output;
+                nout_nSQLErrCode.Value = 0;
+                var sout_sSQLErrMessage = new SqlParameter("@out_sSQLErrMessage", System.Data.SqlDbType.NVarChar);
+                sout_sSQLErrMessage.Direction = System.Data.ParameterDirection.Output;
+                sout_sSQLErrMessage.Size = 1000;
+                sout_sSQLErrMessage.Value = string.Empty;
+                #endregion Out Paramter
+
+                using (var db = new PetaPoco.Database(sConnectionString, "System.Data.SqlClient") { EnableAutoSelect = false })
+                {
+                    using (var scope = db.GetTransaction())
+                    {
+                        var res = db.Query<TradingTransactionDTO_OS>("exec st_tra_GetSellAllDetails_OS  @inp_iTransactionMasterId, @out_nReturnValue OUTPUT, @out_nSQLErrCode OUTPUT, @out_sSQLErrMessage OUTPUT",
+
+                            new
+                            {
+                                //@inp_iSellAllDetailsId=m_objTradingTransactionDTO_OS.SellAllDetailsId,
+                                @inp_iTransactionMasterId = TransactionmasterID,
+                                
+
+
+                                @out_nReturnValue = nout_nReturnValue,
+                                @out_nSQLErrCode = nout_nSQLErrCode,
+                                @out_sSQLErrMessage = sout_sSQLErrMessage,
+
+                            }).SingleOrDefault<TradingTransactionDTO_OS>();
+
+                        #region Error Values
+
+                        //if (!(nout_nReturnValue is DBNull))
+                        //    m_objTradingTransactionDTO_OS.SellAllDetailsId = Convert.ToInt64(nout_nReturnValue);
+                        if (Convert.ToInt32(nout_nReturnValue.Value) != 0)
+                        {
+                            Exception e = new Exception();
+                            out_nReturnValue = Convert.ToInt32(nout_nReturnValue.Value);
+                            string sReturnValue = sLookupPrefix + out_nReturnValue;
+                            e.Data[0] = sReturnValue;
+                            if (nout_nSQLErrCode.Value != System.DBNull.Value)
+                            {
+                                out_nSQLErrCode = Convert.ToInt32(nout_nSQLErrCode.Value);
+                                e.Data[1] = out_nSQLErrCode;
+                            }
+                            if (sout_sSQLErrMessage.Value != System.DBNull.Value)
+                            {
+                                out_sSQLErrMessage = Convert.ToString(sout_sSQLErrMessage.Value);
+                                e.Data[2] = out_sSQLErrMessage;
+                            }
+                            Exception ex = new Exception(db.LastCommand.ToString(), e);
+                            throw ex;
+                        }
+                        else
+                        {
+                            scope.Complete();
+                            return res;
+                        }
+                        #endregion Error Values
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                throw exp;
+            }
+            finally
+            {
+
+            }
+        }
+        #endregion GetSellAllDetails
+
         #region GetTransactionMasterCreate
         public TradingTransactionMasterDTO_OS GetTransactionMasterCreate(string sConnectionString, TradingTransactionMasterDTO_OS objTradingTransactionMasterDTO_OS,
                 int nLoggedInUserId, out int o_iDisclosureCompletedFlag)

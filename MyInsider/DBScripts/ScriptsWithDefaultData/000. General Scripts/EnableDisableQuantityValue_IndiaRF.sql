@@ -38,3 +38,30 @@ END
 GO
 	Update mst_Company
 	Set EnableDisableQuantityValue=400001
+
+	--select * from com_Code where CodeGroupId=400
+	Update com_Code set CodeName='Enable Quantity and Value',Description='Enable Quantity and Value' where CodeID=400001
+	Update com_Code set CodeName='Disable and Show Quantity and Value',Description='Disable and Show Quantity and Value' where CodeID=400002
+	Update com_Code set CodeName='Disable and Hide Quantity and Value',Description='Disable and Hide Quantity and Value' where CodeID=400003
+
+
+
+	IF NOT EXISTS (SELECT * FROM tra_QuantityValueDetails_OS WHERE Quantity='999' AND TransactionType='143001')
+BEGIN
+
+	INSERT INTO tra_QuantityValueDetails_OS
+		(Quantity, Value, LotSize, ContractSpecification, TransactionType, DisclouserType,CreatedBy,CreatedOn, ModifiedBy, ModifiedOn)
+	VALUES
+		(999,999, 1, 1,'143001','147001', 1,GETDATE(), 1, GETDATE()),		
+		(999,999, 1, 1,'143001','147002', 1,GETDATE(), 1, GETDATE())
+		
+END
+
+
+
+IF NOT EXISTS (SELECT ResourceId from mst_Resource where ResourceId=55366)
+BEGIN
+    INSERT INTO mst_Resource(ResourceId,ResourceKey,ResourceValue,ResourceCulture,ModuleCodeId,CategoryCodeId,ScreenCodeId,OriginalResourceValue,ModifiedBy,ModifiedOn)
+	VALUES
+     (55366,'rul_lbl_55366','Manual','en-US','103006','104002','122114','Limited',1,GETDATE())
+END

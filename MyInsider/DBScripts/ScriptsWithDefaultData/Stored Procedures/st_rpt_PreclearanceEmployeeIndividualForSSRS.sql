@@ -105,7 +105,7 @@ BEGIN
 	TradeValue DECIMAL(25,4), ReasonForNotTradedCodeId INT, 
 	CommentId_Ok INT, CommentId_TrdAftPClDate INT, CommentId_TrdWithoutPcl INT, CommentId_PclNotRq INT, CommentId_TrdDuringBlckout INT,
 	CommentId_Pending INT, CommentId_QtyExceeds INT, CommentId_ValueExceeds INT, CommentId_QtyValueExceeds INT, CommentId_TradeDetailsNotSubmitted INT, CommentId_ContraTrade INT, 
-	CommentId_PartiallyTraded INT, CommentId_BalanceTradeDetailsPending INT, CommentText VARCHAR(MAX), ContraTradeQty DECIMAL(10,0),TradingPolicyId INT,PreclearanceDate DATETIME)
+	CommentId_PartiallyTraded INT, CommentId_BalanceTradeDetailsPending INT, CommentText VARCHAR(MAX), ContraTradeQty DECIMAL(10,0),TradingPolicyId INT,PreclearanceDate DATETIME, CurrencyId INT)
 
 	DECLARE @tmpPCLQty TABLE(PreclearanceId INT, TradeQty INT, TradeValue DECIMAL(25,4), CommentId INT, 
 			TradingPolicyId INT, SecurityTypeCodeId INT, MinAcqDate DATETIME, TradeQtyLimit INT, TradeValueLimit DECIMAL(20,4), PercentageLimit DECIMAL(10,4), ValueFromPerc DECIMAL(20,4), PaidUpCapital DECIMAL(20,4))
@@ -351,7 +351,7 @@ BEGIN
 			
 			INSERT INTO #tmpPreclearance(TransactionMasterId, TransactionMasterIdText, TransactionDetailsId, UserInfoId, PreclearanceId, RequestDate, ScripName, ISIN, TransactionTypeCodeId, SecurityTypeCodeId,
 					PreQuantity, PreValue, PreclearanceStatusId, PreStatusDate,
-					BuyQuantity, SellQuantity, DateOfAcquisition, TradeValue, ReasonForNotTradedCodeId,TradingPolicyId,PreclearanceDate)
+					BuyQuantity, SellQuantity, DateOfAcquisition, TradeValue, ReasonForNotTradedCodeId,TradingPolicyId,PreclearanceDate,CurrencyId)
 			SELECT DISTINCT TM.TransactionMasterId, 
 					CASE WHEN PR.PreclearanceRequestId IS NULL THEN @sPNT + CONVERT(VARCHAR(10), TM.DisplayRollingNumber) ELSE @sPCL + CONVERT(VARCHAR(10), TM.DisplayRollingNumber) END,
 					TD.TransactionDetailsId, TM.UserInfoId, TM.PreclearanceRequestId, PR.CreatedOn/*ELPreReq.EventDate*/, C.CompanyName, C.ISINNumber,
@@ -373,7 +373,8 @@ BEGIN
 						END
 				END,
 				TD.DateOfAcquisition, CASE WHEN TD.Value IS NULL THEN NULL ELSE TD.Value + TD.Value2 END, PR.ReasonForNotTradingCodeId,
-				TM.TradingPolicyId, PR.CreatedOn
+				TM.TradingPolicyId, PR.CreatedOn,
+				ISNULL( TD.CurrencyId,PR.CurrencyId) as currency
 			FROM #tmpTransactionIds tmpTM JOIN tra_TransactionMaster TM ON tmpTM.TransactionMasterId = TM.TransactionMasterId
 				JOIN usr_UserInfo UF ON TM.UserInfoId = UF.UserInfoId
 				JOIN mst_Company C ON UF.CompanyId = C.CompanyId
@@ -724,8 +725,8 @@ BEGIN
 			print @sSQL
 			EXEC (@sSQL)
 			
-			CREATE TABLE ##TempDetails(UserInfoId int,rpt_grd_19206 VARCHAR(500),rpt_grd_19207 VARCHAR(500),rpt_grd_19208 VARCHAR(500),rpt_grd_19209 VARCHAR(500),rpt_grd_19210 VARCHAR(500),rpt_grd_19211 VARCHAR(500),rpt_grd_19212 VARCHAR(500),rpt_grd_19213 VARCHAR(500),rpt_grd_19214 VARCHAR(500),rpt_grd_19215 VARCHAR(500),rpt_grd_19216 VARCHAR(500),rpt_grd_19218 VARCHAR(500),rpt_grd_19219 VARCHAR(500),rpt_grd_19220 VARCHAR(500),rpt_grd_19221 VARCHAR(500),rpt_grd_19222 VARCHAR(500),rpt_grd_19223 VARCHAR(500),PreclearanceId VARCHAR(100),TransactionStatusCodeId VARCHAR(100),TransactionTypeCodeId VARCHAR(100),PreclearanceStatusId VARCHAR(100),TransactionDetailsId VARCHAR(100),PreclearanceDate VARCHAR(100))
-			INSERT INTO ##TempDetails(UserInfoId,rpt_grd_19206,rpt_grd_19207,rpt_grd_19208,rpt_grd_19209,rpt_grd_19210,rpt_grd_19211,rpt_grd_19212,rpt_grd_19213,rpt_grd_19214,rpt_grd_19215,rpt_grd_19216,rpt_grd_19218,rpt_grd_19219,rpt_grd_19220,rpt_grd_19221,rpt_grd_19222,rpt_grd_19223,PreclearanceId,TransactionStatusCodeId,TransactionTypeCodeId,PreclearanceStatusId,TransactionDetailsId,PreclearanceDate)
+			CREATE TABLE ##TempDetails(UserInfoId int,rpt_grd_19206 VARCHAR(500),rpt_grd_19207 VARCHAR(500),rpt_grd_19208 VARCHAR(500),rpt_grd_19209 VARCHAR(500),rpt_grd_19210 VARCHAR(500),rpt_grd_19211 VARCHAR(500),rpt_grd_19212 VARCHAR(500),rpt_grd_19213 VARCHAR(500),rpt_grd_19214 VARCHAR(500),rpt_grd_19215 VARCHAR(500),rpt_grd_19216 VARCHAR(500),rpt_grd_19218 VARCHAR(500),rpt_grd_19219 VARCHAR(500),rpt_grd_19220 VARCHAR(500),rpt_grd_19221 VARCHAR(500),rpt_grd_19222 VARCHAR(500),rpt_grd_19223 VARCHAR(500),PreclearanceId VARCHAR(100),TransactionStatusCodeId VARCHAR(100),TransactionTypeCodeId VARCHAR(100),PreclearanceStatusId VARCHAR(100),TransactionDetailsId VARCHAR(100),PreclearanceDate VARCHAR(100),rpt_grd_54229 NVARCHAR(50))
+			INSERT INTO ##TempDetails(UserInfoId,rpt_grd_19206,rpt_grd_19207,rpt_grd_19208,rpt_grd_19209,rpt_grd_19210,rpt_grd_19211,rpt_grd_19212,rpt_grd_19213,rpt_grd_19214,rpt_grd_19215,rpt_grd_19216,rpt_grd_19218,rpt_grd_19219,rpt_grd_19220,rpt_grd_19221,rpt_grd_19222,rpt_grd_19223,PreclearanceId,TransactionStatusCodeId,TransactionTypeCodeId,PreclearanceStatusId,TransactionDetailsId,PreclearanceDate,rpt_grd_54229)
 			
 			SELECT 
 				tmpData.UserInfoId,
@@ -758,13 +759,15 @@ BEGIN
 				--tmpData.commentt,
 				PreclearanceStatusId,
 				TransactionDetailsId,				
-				dbo.uf_rpt_FormatDateValue(PreclearanceDate,0) AS PreclearanceDate
+				dbo.uf_rpt_FormatDateValue(PreclearanceDate,0) AS PreclearanceDate,
+				Currency.DisplayCode  as rpt_grd_54229
 			FROM #tmpList t JOIN #tmpPreclearance tmpData ON t.EntityID = tmpData.Id
 				JOIN com_Code CTransaction ON tmpData.TransactionTypeCodeId = CTransaction.CodeID
 				JOIN com_Code CSecurity ON tmpData.SecurityTypeCodeId = CSecurity.CodeID
 				LEFT JOIN tra_TransactionMaster TM ON tmpData.TransactionMasterId = TM.TransactionMasterId
 				LEFT JOIN com_Code CPreStatus ON tmpData.PreclearanceStatusId = CPreStatus.CodeID
 				LEFT JOIN com_Code CRsnNotTrd ON tmpData.ReasonForNotTradedCodeId = CRsnNotTrd.CodeID
+				LEFT JOIN com_Code Currency ON Currency.CodeID = tmpData.CurrencyId
 				--LEFT JOIN #tmpComments tComment ON tmpData.CommentId = tComment.CodeId
 			WHERE ((@inp_iPageSize = 0)
 						OR (T.RowNumber BETWEEN ((@inp_iPageNo - 1) * @inp_iPageSize + 1) AND (@inp_iPageNo * @inp_iPageSize)))
