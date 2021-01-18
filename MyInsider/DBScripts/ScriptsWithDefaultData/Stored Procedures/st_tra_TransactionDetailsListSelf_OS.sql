@@ -121,13 +121,16 @@ BEGIN
 				UF.PAN tra_grd_53058,
 				CASE WHEN TM.UserInfoId = TD.ForUserInfoId THEN 'Self' ELSE CRelation.CodeName END AS tra_grd_53059,
 				DD.DEMATAccountNumber AS tra_grd_53060,
-				comp.CompanyName AS tra_grd_53061,
+				comp.CompanyName +' '+'-'+'('+ comp.ISINCode + ')' AS tra_grd_53061,
 				TD.CompanyId AS CompanyID,
 				TD.DateOfAcquisition AS tra_grd_53064,	
 				CASE WHEN TD.DateOfInitimationToCompany IS NULL THEN GETDATE() ELSE TD.DateOfInitimationToCompany END AS tra_grd_53065,	
 				CModeOfAcq.CodeName AS tra_grd_53066,
 				CExchange.CodeName AS tra_grd_53067,
-				CASE WHEN DisclosureTypeCodeId = @nDisclosureType_Initial THEN '-' ELSE CTransactionType.CodeName END AS tra_grd_53068,
+				CASE WHEN TSO.SellAllFlag = 1 THEN 'SellAll'
+				ELSE
+				CASE WHEN DisclosureTypeCodeId = @nDisclosureType_Initial THEN '-' ELSE CTransactionType.CodeName END 
+				END AS tra_grd_53068,
 				CSecurityType.CodeName AS tra_grd_53089,
 				TD.Quantity AS tra_grd_53069,
 				TD.Value AS tra_grd_53070,
@@ -165,6 +168,7 @@ BEGIN
 				LEFT JOIN com_Code CRelation ON UR.RelationTypeCodeId = CRelation.CodeID
 				LEFT JOIN mst_Company CO ON CO.CompanyId = UF.CompanyId
 				LEFT JOIN rl_CompanyMasterList comp ON comp.RlCompanyId = TD.CompanyId
+				LEFT JOIN tra_SellAllValues_OS TSO on TSO.TransactionMasterId = TM.TransactionMasterId
 		WHERE	TD.TransactionDetailsId IS NOT NULL AND ((@inp_iPageSize = 0) OR (T.RowNumber BETWEEN ((@inp_iPageNo - 1) * @inp_iPageSize + 1) AND (@inp_iPageNo * @inp_iPageSize)))
 		ORDER BY TD.SecurityTypeCodeId,TD.TransactionDetailsId,T.RowNumber
 
