@@ -107,6 +107,7 @@ namespace InsiderTrading.Common
             public const int ListofAnswerType = 39;
             public const int ListOfEmployeeID = 41;
             public const int ListOfResidentialStatus = 42;
+            public const int TradingPolicySecuitywiseLimitsOS = 43;
         }
 
         #endregion ComboType
@@ -238,6 +239,7 @@ namespace InsiderTrading.Common
             public const int Applicability_Search_EmployeeInsider = 114023;
             public const int TradingPolicyList = 114024;
             public const int TradingPolicyHistoryList = 114025;
+            public const int TradingPolicyHistoryList_OS = 114130;
             public const int Applicability_Association_EmployeeInsider = 114026;
             public const int Applicability_Search_Non_Employee = 114027;
             public const int Applicability_Association_Non_Employee = 114028;
@@ -291,6 +293,9 @@ namespace InsiderTrading.Common
             public const int TradingTransaction_InitialDisclosure_Insider_OptionContract = 114105;
             public const int TradingTransaction_InitialDisclosure_Relative_OptionContract = 114106;
             public const int PeriodEndDisclosure_OS_UsersStatusList = 114128;
+
+
+            public const int TradingPolicyOtherSecurityList = 114129;
 
             //GridType for Initial disclosure for Other Securities
             public const int TradingTransaction_InitialDisclosure_for_Other_Securities_Self = 114109;
@@ -356,6 +361,23 @@ namespace InsiderTrading.Common
             public const int Report_EULAAcceptanceReport = 114125;
             public const int PeriodEndDisclosurePeriodStatusList_OS = 114126;
             public const int PeriodEndDisclosureSummaryList_OS = 114127;
+
+
+
+            public const int TradingPolicySecuritywiseValueList_OS = 114131;
+            public const int Applicability_Search_EmployeeInsider_OS = 114132;
+            public const int Applicability_Association_EmployeeInsider_OS = 114133;
+            public const int Applicability_Filter_EmployeeInsider_OS = 114139;
+            public const int Applicability_Search_Non_Employee_OS = 114135;
+            public const int Applicability_Association_Non_Employee_OS = 114136;
+            public const int Applicability_Search_Corporate_OS = 114137;
+            public const int Applicability_Association_Corporate_OS = 114138;
+            public const int Applicability_Search_COInsider_OS = 114143;
+            public const int Applicability_Association_COInsider_OS = 114144;
+            public const int Applicability_Search_Employee_OS = 114145;
+            public const int Applicability_Filter_Employee_OS = 114146;
+            public const int Applicability_Association_Employee_OS = 114147;
+            public const int OverlappingTradingPolicyList_OS = 114150;
         }
         #endregion GridType
 
@@ -381,6 +403,20 @@ namespace InsiderTrading.Common
             //DMATAccount Holder ype
             public const int Single = 121001;
             public const int Joint = 121002;
+
+
+            public const int TradingPolicy_OS = 132022;
+            public const int PreclearanceRequest_OS = 132023;
+            public const int DisclosureTransaction_OS = 132024;
+
+            //Restricted List setting - Pre-clearance Approval
+            public const int RestrictedList_Search_Perpetual_OS = 528001;
+            public const int RestrictedList_Search_Limited_OS = 528002;
+
+            public const int RestrictedList_Type_Auto_OS = 535001;
+            public const int RestrictedList_Type_Manual_OS = 535002;
+
+
 
             // This code is used as configuration values
             public const int PeriodType = 128002;
@@ -645,6 +681,11 @@ namespace InsiderTrading.Common
             public const int RequiredModuleOtherSecurity = 513002;
             public const int RequiredModuleBoth = 513003;
 
+            //Company Settings
+            public const int EnableQunatityValue = 400001;
+            public const int DisabaleShowQuantityValue = 400002;
+            public const int DisabaleHideQuantityValue = 400003;
+
             //Company configuraiton - EULAReconfirmation Setting
             public const int CompanyConfig_EULAReconfirmation_All = 523001;
             public const int CompanyConfig_EULAReconfirmation_NotAccepted = 523002;
@@ -693,6 +734,7 @@ namespace InsiderTrading.Common
             public const int UPSIReqiured_Yes = 528001;
             public const int UPSIReqiured_No = 528002;
             public const int IsPreClearanceEditable = 524002;
+            public const int CurrentRecordCodeID = 134001;
 
         }
         #endregion Code
@@ -844,6 +886,12 @@ namespace InsiderTrading.Common
             public const int VIEW_DETAILS_PERMISSION_FOR_EMPLOYEE_INSIDER = 81;
             public const int VIEW_DETAILS_PERMISSION_FOR_CORPORATE_USER = 82;
             public const int VIEW_DETAILS_PERMISSION_FOR_NON_EMPLOYEE_USER = 83;
+
+            public const int TRADING_POLICY_OTHER_SECURITY_VIEW = 337;
+            public const int TRADING_POLICY_OTHER_SECURITY_CREATE = 338;
+            public const int TRADING_POLICY_OTHER_SECURITY_EDIT = 339;
+            public const int TRADING_POLICY_OTHER_SECURITY_DELETE = 340;
+
 
             //Change Password
             public const int CHANGE_PASSWORD = 84;

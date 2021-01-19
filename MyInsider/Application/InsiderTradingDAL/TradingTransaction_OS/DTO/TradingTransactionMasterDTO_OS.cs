@@ -59,6 +59,18 @@ namespace InsiderTradingDAL
         public bool InsiderIDFlag { get; set; }
 
         public string PAN { get; set; }
+        public string Quantity { get; set; }
+
+        public string LotSize { get; set; }
+
+        public string ContractSpecification { get; set; }
+
+        public string Value { get; set; }
+
+        public int EnableDisableQuantityValue { get; set; }
+
+        //public string SecuritiesToBeTradedValue { get; set; }
+
         public string DateOfAcquisition { get; set; }
         public string DateOfIntimation { get; set; }
         [PetaPoco.Column("DeclarationFromInsiderAtTheTimeOfContinuousDisclosures")]
@@ -67,8 +79,9 @@ namespace InsiderTradingDAL
         [PetaPoco.Column("DeclarationToBeMandatoryFlag")]
         public bool DeclarationToBeMandatoryFlag { get; set; }
 
-        //[PetaPoco.Column("DisplayDeclarationPostSubmissionOfContinuouseDisclosureFlag")]
-        //public bool DisplayDeclarationPostSubmissionOfContinuouseDisclosureFlag { get; set; }
+        [PetaPoco.Column("DisplayDeclarationPostSubmissionOfContinuouseDisclosureFlag")]
+        public bool DisplayDeclarationPostSubmissionOfContinuouseDisclosureFlag { get; set; }
+        public bool PreClrReasonForNonTradeReqFlag { get; set; }
         ////End column added on 2-Jun-2016
 
         //[PetaPoco.Column("ConfirmCompanyHoldingsFor")]

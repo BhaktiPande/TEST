@@ -8,7 +8,7 @@ using iTextSharp.text.pdf;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Linq; 
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
@@ -27,6 +27,7 @@ namespace InsiderTrading.Controllers
         public TradingTransactionMasterDTO_OS MasterDetials(LoginUserDetails objLoginUserDetails, int nDisclosureTypeCodeId, int nUserInfoId, int nYearCode = 0, int nPeriodCode = 0, int nPeriodType = 0, string frm = "", int nUserTypeCodeId = 0)
         {
             TradingTransactionMasterDTO_OS objTradingTransactionMasterDTO_OS = null;
+            
             Dictionary<String, Object> objList = null;
 
             try
@@ -82,6 +83,7 @@ namespace InsiderTrading.Controllers
             TradingTransactionModel_OS objTransactionModel_OS = null;
 
             TradingTransactionMasterDTO_OS objTradingTransactionMasterDTO_OS = null;
+            TradingTransactionMasterDTO_OS objTradingTransactionMasterDTO_OS_forTPSetting = null;
             LoginUserDetails objLoginUserDetails = null;
             CompanySettingConfigurationDTO objCompanySettingConfigurationDTO = null;
             ViewBag.NoHolding = false;
@@ -126,6 +128,14 @@ namespace InsiderTrading.Controllers
                             objTradingTransactionMasterDTO_OS.TransactionStatusCodeId = ConstEnum.Code.DisclosureStatusForNotConfirmed;
                             objTradingTransactionMasterDTO_OS.NoHoldingFlag = false;
                             objTradingTransactionMasterDTO_OS = objTradingTransactionSL_OS.GetTradingTransactionMasterCreate(objLoginUserDetails.CompanyDBConnectionString, objTradingTransactionMasterDTO_OS, objLoginUserDetails.LoggedInUserID, out nDisclosureCompletedFlag);
+
+                            objTradingTransactionMasterDTO_OS_forTPSetting = objTradingTransactionSL_OS.GetTradingTransactionMasterDetails(objLoginUserDetails.CompanyDBConnectionString, Convert.ToInt32(objTradingTransactionMasterDTO_OS.TransactionMasterId));
+
+                            ViewBag.DeclarationFromInsiderAtTheTimeOfContinuousDisclosures = objTradingTransactionMasterDTO_OS_forTPSetting.DeclarationFromInsiderAtTheTimeOfContinuousDisclosures;
+                            ViewBag.DeclarationToBeMandatoryFlag = objTradingTransactionMasterDTO_OS_forTPSetting.DeclarationToBeMandatoryFlag;
+                            ViewBag.DisplayDeclarationPostSubmissionOfContinuouseDisclosureFlag = objTradingTransactionMasterDTO_OS_forTPSetting.DisplayDeclarationPostSubmissionOfContinuouseDisclosureFlag;
+                            ViewBag.SeekDeclarationFromEmpRegPossessionOfUPSIFlag = objTradingTransactionMasterDTO_OS_forTPSetting.SeekDeclarationFromEmpRegPossessionOfUPSIFlag;
+                            ViewBag.ReasonForNotTradedRequired = objTradingTransactionMasterDTO_OS_forTPSetting.PreClrReasonForNonTradeReqFlag;
                         }
                         else
                         {
@@ -138,8 +148,9 @@ namespace InsiderTrading.Controllers
 
                         ViewBag.DeclarationFromInsiderAtTheTimeOfContinuousDisclosures = objTradingTransactionMasterDTO_OS.DeclarationFromInsiderAtTheTimeOfContinuousDisclosures;
                         ViewBag.DeclarationToBeMandatoryFlag = objTradingTransactionMasterDTO_OS.DeclarationToBeMandatoryFlag;
-                        //ViewBag.DisplayDeclarationPostSubmissionOfContinuouseDisclosureFlag = objTradingTransactionMasterDTO_OS.DisplayDeclarationPostSubmissionOfContinuouseDisclosureFlag;
+                        ViewBag.DisplayDeclarationPostSubmissionOfContinuouseDisclosureFlag = objTradingTransactionMasterDTO_OS.DisplayDeclarationPostSubmissionOfContinuouseDisclosureFlag;
                         ViewBag.SeekDeclarationFromEmpRegPossessionOfUPSIFlag = objTradingTransactionMasterDTO_OS.SeekDeclarationFromEmpRegPossessionOfUPSIFlag;
+                        ViewBag.ReasonForNotTradedRequired = objTradingTransactionMasterDTO_OS.PreClrReasonForNonTradeReqFlag;
                     }
 
                     objTransactionModel_OS.TradingTransactionUpload = Common.Common.GenerateDocumentList(ConstEnum.Code.DisclosureTransaction, Convert.ToInt32(objTradingTransactionMasterDTO_OS.TransactionMasterId), 0, null, ConstEnum.Code.TransactionDetailsUpload, false, 0, 10, true);
@@ -170,6 +181,14 @@ namespace InsiderTrading.Controllers
                         ViewBag.ApprovedQuantity = Convert.ToInt64(objTradingTransactionSummaryDTO_OS.ApprovedQuantity).ToString("#,##0");
                         ViewBag.TradedQuantity = Convert.ToInt64(objTradingTransactionSummaryDTO_OS.TradedQuantity).ToString("#,##0"); ;
                         ViewBag.PendingQuantity = Convert.ToInt64(objTradingTransactionSummaryDTO_OS.PendingQuantity).ToString("#,##0"); ;
+                    }
+
+                    
+                    using (TradingTransactionSL_OS objTradingTransactionSL_OSModule = new TradingTransactionSL_OS())
+                    {
+                        TradingTransactionMasterDTO_OS objTradingTransactionMasterDTO_OSModule = null;
+                        objTradingTransactionMasterDTO_OSModule = objTradingTransactionSL_OSModule.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
+                        ViewBag.EnableDisableQuantityValue = objTradingTransactionMasterDTO_OSModule.EnableDisableQuantityValue;
                     }
 
                     string panNumber = string.Empty;
@@ -287,6 +306,7 @@ namespace InsiderTrading.Controllers
             {
                 objLoginUserDetails = null;
                 objTradingTransactionMasterDTO_OS = null;
+                objTradingTransactionMasterDTO_OS_forTPSetting = null;
             }
 
 
@@ -323,7 +343,7 @@ namespace InsiderTrading.Controllers
             }
         }
         #endregion Insider initial disclosure For Add Other Securities  (Other Securities)
-
+        
 
         #region TradingTransaction Submit Status
         [HttpPost]
@@ -439,7 +459,7 @@ namespace InsiderTrading.Controllers
                     softCopReq = Convert.ToBoolean(objTradingTransactionMasterDTOhardcopyReq.SoftCopyReq);
                     UserTypeCodeId = Convert.ToString(objLoginUserDetails.UserTypeCodeId);
                 }
-                TempData.Remove("SearchArray");
+                TempData.Remove("SearchArray");              
                 if (nDisclosureTypecodeId == 147001)
                 {
                     FormId = 114;
@@ -472,7 +492,7 @@ namespace InsiderTrading.Controllers
                 using (var objUserInfoSL = new UserInfoSL())
                 {
                     objUserInfoSL.DeleteFormToken(objLoginUserDetails.CompanyDBConnectionString, Convert.ToInt32(objLoginUserDetails.LoggedInUserID), formId);
-                }
+                }                
             }
             finally
             {
@@ -482,7 +502,7 @@ namespace InsiderTrading.Controllers
             return Json(new
             {
                 //public ActionResult SubmitSoftCopy(int acid, Int64 TransactionMasterId, int DisclosureTypeCodeId, long TransactionLetterId, int year = 0, int period = 0)
-                UserTypeCodeId = UserTypeCodeId,
+                UserTypeCodeId = UserTypeCodeId,                
                 redirectTo = Url.Action("SubmitSoftCopy", "TradingTransaction_OS") + "?acid=" + acid +
                             "&TransactionMasterId=" + nTradingTransactionMasterId + "&DisclosureTypeCodeId=" + nDisclosureTypecodeId +
                             "&TransactionLetterId=0" + InsiderTrading.Common.ConstEnum.Code.DisclosureLetterUserInsider + "&year=" + year + "&period=" + period + "&uid=" + uid + "&__RequestVerificationToken=" + verify + "&formId" + FormId + "&ParentId=" + ParentId,
@@ -561,6 +581,7 @@ namespace InsiderTrading.Controllers
             TradingPolicyDTO_OS objTradingPolicyDTO_OS = null;
             TradingTransactionDTO_OS objTradingTransactionDTO_OS = null;
             PreclearanceRequestNonImplCompanyDTO objPreclearanceRequestNonImplCompanyDTO = null;
+            
             ApplicableTradingPolicyDetailsDTO_OS objApplicableTradingPolicyDetailsDTO_OS = null;
             RestrictedListDTO objRestrictedListDTO = null;
             //ViewBag.ShowPopup = true;
@@ -568,13 +589,14 @@ namespace InsiderTrading.Controllers
             {
                 objLoginUserDetails = (LoginUserDetails)Common.Common.GetSessionValue(ConstEnum.SessionValue.UserDetails);
 
+                
                 ViewBag.UserTypeCode = objLoginUserDetails.UserTypeCodeId;
                 ViewBag.IsNegative = true;
                 ViewBag.ShowTradeNote = false;
 
                 ViewBag.UserTypeId = UserTypeCodeId;
                 ViewBag.Frm = frm;
-                ViewBag.ShowSaveAddMore_btn = true;
+                ViewBag.ShowSaveAddMore_btn = true;          
 
                 ViewBag.TypeOfSecurityList = FillComboValues(ConstEnum.ComboType.ListOfCode, InsiderTrading.Common.ConstEnum.CodeGroup.SecurityType, null, null, null, null, true);
 
@@ -586,14 +608,31 @@ namespace InsiderTrading.Controllers
 
                 using (TradingTransactionSL_OS objTradingTransactionSL_OS = new TradingTransactionSL_OS())
                 {
-                    objTradingTransactionMasterDTO_OS = objTradingTransactionSL_OS.GetTradingTransactionMasterDetails(objLoginUserDetails.CompanyDBConnectionString, TransactionMasterId);
 
+                    //Add New Code
+
+                    var EnableDisableQuantityValue = 0;
+
+                    // objTradingTransactionMasterDTO_OS objInsiderInitialDisclosureDTO = null;
+                    objTradingTransactionMasterDTO_OS = objTradingTransactionSL_OS.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
+                    //RequiredModuleID = objInsiderInitialDisclosureDTO.RequiredModule;
+                    EnableDisableQuantityValue = objTradingTransactionMasterDTO_OS.EnableDisableQuantityValue;
+                    ViewBag.EnableDisableQuantityValue = objTradingTransactionMasterDTO_OS.EnableDisableQuantityValue;
+                 
+
+
+                    ////End OF New code
+
+                    objTradingTransactionMasterDTO_OS = objTradingTransactionSL_OS.GetTradingTransactionMasterDetails(objLoginUserDetails.CompanyDBConnectionString, TransactionMasterId);
+                    
                     ViewBag.DisclosureTypeId = objTradingTransactionMasterDTO_OS.DisclosureTypeCodeId;
 
                     if (objTradingTransactionMasterDTO_OS.DisclosureTypeCodeId != ConstEnum.Code.DisclosureTypeInitial)
                     {
                         ViewBag.ShowSaveAddMore_btn = false;
                     }
+
+                   
 
                     using (TradingPolicySL_OS objTradingPolicySL_OS = new TradingPolicySL_OS())
                     {
@@ -698,7 +737,18 @@ namespace InsiderTrading.Controllers
                             //}
                         }
                     }
+
+                    if (EnableDisableQuantityValue == 400002 || EnableDisableQuantityValue == 400003)
+                    {
+                        objTradingTransactionMasterDTO_OS = objTradingTransactionSL_OS.GetQuantity(objLoginUserDetails.CompanyDBConnectionString, Convert.ToInt32(objTradingTransactionMasterDTO_OS.DisclosureTypeCodeId), Convert.ToInt32(objTradingTransactionMasterDTO_OS.UserInfoId));
+                        ViewBag.Quantity = objTradingTransactionMasterDTO_OS.Quantity;
+                        ViewBag.Value = objTradingTransactionMasterDTO_OS.Value;
+                        ViewBag.LotSize = objTradingTransactionMasterDTO_OS.LotSize;
+                        ViewBag.ContractSpecification = objTradingTransactionMasterDTO_OS.ContractSpecification;
+                    }
+
                 }
+
 
                 ViewBag.ShowPopup = true;
                 //get company name from RL_companymasterList table
@@ -712,7 +762,29 @@ namespace InsiderTrading.Controllers
                         objTransactionModel_OS.CompanyId = (Int32)objRestrictedListDTO.RLCompanyId;
                     }
                 }
-                //
+                if (objTransactionModel_OS.DisclosureTypeCodeId != 147001)
+                {
+                    TradingTransactionDTO_OS TradingTransactionDTO_OS_SellAll = null;
+                    using (TradingTransactionSL_OS objTradingTransactionSL_OS = new TradingTransactionSL_OS())
+                    {
+                        TradingTransactionDTO_OS_SellAll = objTradingTransactionSL_OS.GetSellAllDetails(objLoginUserDetails.CompanyDBConnectionString, Convert.ToInt32(objTransactionModel_OS.TransactionMasterId));
+                    }
+                    if (TradingTransactionDTO_OS_SellAll == null)
+                    {
+                        objTransactionModel_OS.SellAllFlag = false;
+                        ViewBag.SellAllFlag = false;
+                    }
+                    else
+                    {
+                        objTransactionModel_OS.SellAllFlag = TradingTransactionDTO_OS_SellAll.SellAllFlag;
+                        ViewBag.SellAllFlag = TradingTransactionDTO_OS_SellAll.SellAllFlag;
+                    }
+                }
+                else
+                {
+                    objTransactionModel_OS.SellAllFlag = false;
+                    ViewBag.SellAllFlag = false;
+                }
                 return View("Create_OS", objTransactionModel_OS);
             }
             catch (Exception exp)
@@ -780,6 +852,23 @@ namespace InsiderTrading.Controllers
                 ViewBag.IsNegative = true;
                 ViewBag.UserTypeCode = objLoginUserDetails.UserTypeCodeId;
                 ViewBag.postAcqNeMsg = Common.Common.getResource("tra_msg_16443");
+                
+                using (TradingTransactionSL_OS objTradingTransactionSL_OSModule = new TradingTransactionSL_OS())
+                {
+                    TradingTransactionMasterDTO_OS objTradingTransactionMasterDTO_OSModule = null;
+                    objTradingTransactionMasterDTO_OSModule = objTradingTransactionSL_OSModule.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
+                    ViewBag.EnableDisableQuantityValue = Convert.ToInt32(objTradingTransactionMasterDTO_OSModule.EnableDisableQuantityValue);
+
+                    if (ViewBag.EnableDisableQuantityValue == 400002 || ViewBag.EnableDisableQuantityValue == 400003)
+                    {
+                        objTradingTransactionMasterDTO_OSModule = null;
+                        objTradingTransactionMasterDTO_OSModule = objTradingTransactionSL_OSModule.GetQuantity(objLoginUserDetails.CompanyDBConnectionString, Convert.ToInt32(DisclosureType), Convert.ToInt32(UserInfoId));
+                        ViewBag.Quantity = objTradingTransactionMasterDTO_OSModule.Quantity;
+                        ViewBag.Value = objTradingTransactionMasterDTO_OSModule.Value;
+                        ViewBag.LotSize = objTradingTransactionMasterDTO_OSModule.LotSize;
+                        ViewBag.ContractSpecification = objTradingTransactionMasterDTO_OSModule.ContractSpecification;
+                    }
+                }
 
 
                 ////Tushar
@@ -974,8 +1063,17 @@ namespace InsiderTrading.Controllers
 
                     objTradingTransactionDTO_OS.TransactionMasterId = Convert.ToInt32(objTradingTransactionMasterDTO_OS.TransactionMasterId);
                     objTradingTransactionDTO_OS.LoggedInUserId = Convert.ToInt32(objLoginUserDetails.LoggedInUserID);
-                    objTradingTransactionDTO_OS.OtherExcerciseOptionQty = objTransactionModel_OS.Quantity;
+                    objTradingTransactionDTO_OS.OtherExcerciseOptionQty = objTransactionModel_OS.Quantity;  
                     objTradingTransactionDTO_OS = objTradingTransactionSL_OS.InsertUpdateTradingTransactionDetails(objLoginUserDetails.CompanyDBConnectionString, objTradingTransactionDTO_OS, UserInfoId);
+                    
+                    objTradingTransactionDTO_OS.SellAllFlag = objTransactionModel_OS.SellAllFlag;
+                    if (DisclosureType != ConstEnum.Code.DisclosureTypeInitial)
+                    {
+                        objTradingTransactionDTO_OS = objTradingTransactionSL_OS.InsertUpdateSellAllDetails(objLoginUserDetails.CompanyDBConnectionString, objTradingTransactionDTO_OS, UserInfoId);
+                    }
+                        
+                    
+
                 }
                 if (DisclosureType != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
                     ViewBag.UserTypeId = objTradingTransactionDTO_OS.UserTypeCodeId;
@@ -1863,7 +1961,7 @@ namespace InsiderTrading.Controllers
                                 return RedirectToAction("PeriodStatusOS", "PeriodEndDisclosure_OS", new { acid = ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_PERIOD_END_DISCLOSURE_OS, year = year, uid = uid }).Success(Common.Common.getResource("dis_msg_17345"));
                             else
                             {
-                                return RedirectToAction("UserStatusOS", "PeriodEndDisclosure_OS", new { acid = ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_PERIOD_END_DISCLOSURE_OS, year = year }).Success(Common.Common.getResource("dis_msg_17345"));
+                            return RedirectToAction("UserStatusOS", "PeriodEndDisclosure_OS", new { acid = ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_PERIOD_END_DISCLOSURE_OS, year = year }).Success(Common.Common.getResource("dis_msg_17345"));
                             }
                         else
                             return RedirectToAction("PeriodStatusOS", "PeriodEndDisclosure_OS", new { acid = ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_PERIOD_END_DISCLOSURE_OS }).Success(Common.Common.getResource("dis_msg_17345"));
@@ -1953,6 +2051,8 @@ namespace InsiderTrading.Controllers
 
                     if (DisclosureTypeCodeId == ConstEnum.Code.DisclosureTypeInitial)
                     {
+                        //ParentId
+                        //UserInfoId = objLoginUserDetails.LoggedInUserID,
                         int acid_init = (objLoginUserDetails.UserTypeCodeId == ConstEnum.Code.Admin || objLoginUserDetails.UserTypeCodeId == ConstEnum.Code.CorporateUserType) ? ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_INITIAL_DISCLOSURE : ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_INITIAL_DISCLOSURE;
                         return RedirectToAction("Index", "InsiderInitialDisclosure", new { acid = acid_init, UserInfoId = ParentId, ReqModuleId = InsiderTrading.Common.ConstEnum.Code.RequiredModuleOtherSecurity }).Success(Common.Common.getResource("dis_msg_52072"));
 

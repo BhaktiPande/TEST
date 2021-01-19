@@ -2,4 +2,20 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/MyInsider/Application/.vs/InsiderTrading/v16/Server/sqlite3/db.lock
+/.vs/MyInsider_Dev/v16
+/MyInsider/Application/InsiderTradingDAL/obj/Debug
+/MyInsider/Application/InsiderTradingDAL/obj/Release
+/MyInsider/Application/InsiderTradingEncryption/obj/Debug
+/MyInsider/Application/InsiderTradingEncryption/obj/Release/.NETFramework,Version=v4.5.AssemblyAttributes.cs
+/MyInsider/Application/InsiderTradingEncryption/obj/Release
+/MyInsider/Application/INSIDERTRADINGEXCELWRITER/obj/Debug/.NETFramework,Version=v4.5.AssemblyAttributes.cs
+/MyInsider/Application/INSIDERTRADINGEXCELWRITER/obj/Release/.NETFramework,Version=v4.5.AssemblyAttributes.cs
+/MyInsider/Application/INSIDERTRADINGMASSUPLOAD/obj/Debug
+/MyInsider/Application/INSIDERTRADINGMASSUPLOAD/obj/Release/.NETFramework,Version=v4.5.AssemblyAttributes.cs
+/MyInsider/Application/InsiderTradingSSO/obj/Debug
+/MyInsider/Application/InsiderTradingSSO/obj/Release/.NETFramework,Version=v4.5.1.AssemblyAttributes.cs
+/MyInsider/InsiderTrading_NotificationService/InsiderTrading_NotificationService/obj/Debug
+/MyInsider/InsiderTrading_NotificationService/InsiderTrading_NotificationService/obj/Release/.NETFramework,Version=v4.5.AssemblyAttributes.cs
+/MyInsider/Application/InsiderTrading/obj
+/MyInsider/Application/DataUploadUtility/obj/Debug
+/MyInsider/Application/DataUploadUtility/obj/Release

@@ -14,14 +14,14 @@ namespace InsiderTrading.SL
         /// This method is used for the save Trading policy details
         /// </summary>
         /// <param name="i_sConnectionString">DB Connection string</param>
-        /// <param name="m_objTradingPolicyDTO">object TradingPolicyDTO</param>
+        /// <param name="m_objTradingPolicyDTOOS">object TradingPolicyDTO</param>
         /// <returns></returns>
-        public TradingPolicyDTO Save(string i_sConnectionString, TradingPolicyDTO m_objTradingPolicyDTO, DataTable i_tblPreclearanceSecuritywise, 
+        public TradingPolicyDTO_OS Save(string i_sConnectionString, TradingPolicyDTO_OS m_objTradingPolicyDTO, DataTable i_tblPreclearanceSecuritywise, 
             DataTable i_tblContinousSecuritywise,DataTable i_tblPreclearanceTransactionSecurityMap)
         {
             try
             {
-                using (var objTradingPolicyDAL = new TradingPolicyDAL())
+                using (var objTradingPolicyDAL = new TradingPolicyDAL_OS())
                 {
                     return objTradingPolicyDAL.Save(i_sConnectionString, m_objTradingPolicyDTO, i_tblPreclearanceSecuritywise, i_tblContinousSecuritywise, i_tblPreclearanceTransactionSecurityMap);
                 }
@@ -68,9 +68,9 @@ namespace InsiderTrading.SL
         {
             try
             {
-                using (var objTradingPolicyDAL = new TradingPolicyDAL())
+                using (var objTradingPolicyDALOS = new TradingPolicyDAL_OS())
                 {
-                    return objTradingPolicyDAL.Delete(i_sConnectionString, i_nTradingPolicyId, inp_nUserId);
+                    return objTradingPolicyDALOS.Delete(i_sConnectionString, i_nTradingPolicyId, inp_nUserId);
                 }
             }
             catch (Exception exp)
@@ -110,11 +110,11 @@ namespace InsiderTrading.SL
        /// <param name="i_sConnectionString">DB COnnection string</param>
        /// <param name="i_nTradingPolicyId">Trading Policy ID</param>
        /// <returns></returns>
-        public InsiderTradingDAL.TradingPolicyDTO GetUserwiseOverlapTradingPolicyCount(string i_sConnectionString, int i_nTradingPolicyId, out int out_nCountUserAndOverlapTradingPolicy)
+        public InsiderTradingDAL.TradingPolicyDTO_OS GetUserwiseOverlapTradingPolicyCount(string i_sConnectionString, int i_nTradingPolicyId, out int out_nCountUserAndOverlapTradingPolicy)
         {
             try
             {
-                using (var objTradingPolicyDAL = new TradingPolicyDAL())
+                using (var objTradingPolicyDAL = new TradingPolicyDAL_OS())
                 {
                     return objTradingPolicyDAL.GetUserwiseOverlapTradingPolicyCount(i_sConnectionString, i_nTradingPolicyId, out out_nCountUserAndOverlapTradingPolicy);
                 }
@@ -133,13 +133,13 @@ namespace InsiderTrading.SL
          /// <param name="i_sConnectionString">DB Connection string</param>
          /// <param name="i_nTransactionTypeCodeId">Transaction Type Code ID</param>
          /// <returns></returns>
-        public IEnumerable<TransactionSecurityMapConfigDTO> TransactionSecurityMapConfigList(string i_sConnectionString, int? i_nTransactionTypeCodeId)
+        public IEnumerable<TransactionSecurityMapConfigDTO_OS> TransactionSecurityMapConfigList(string i_sConnectionString, int? i_nTransactionTypeCodeId)
         {
             try
             {
-                using (var objTradingPolicyDAL = new TradingPolicyDAL())
+                using (var objTradingPolicyDALOS = new TradingPolicyDAL_OS())
                 {
-                    return objTradingPolicyDAL.TransactionSecurityMapConfigList(i_sConnectionString, i_nTransactionTypeCodeId);
+                    return objTradingPolicyDALOS.TransactionSecurityMapConfigList(i_sConnectionString, i_nTransactionTypeCodeId);
                 }
             }
             catch (Exception exp)
@@ -157,12 +157,12 @@ namespace InsiderTrading.SL
      /// <param name="i_nTradingPolicyId">Trading Policy ID</param>
      /// <param name="i_nMapToTypeCodeId">Map To Type code ID</param>
      /// <returns></returns>
-        public IEnumerable<TradingPolicyForTransactionSecurityDTO> TradingPolicyForTransactionSecurityList(string i_sConnectionString,
+        public IEnumerable<TradingPolicyForTransactionSecurityDTO_OS> TradingPolicyForTransactionSecurityList(string i_sConnectionString,
             int? i_nTradingPolicyId, int i_nMapToTypeCodeId)
         {
             try
             {
-                using (var objTradingPolicyDAL = new TradingPolicyDAL())
+                using (var objTradingPolicyDAL = new TradingPolicyDAL_OS())
                 {
                     return objTradingPolicyDAL.TradingPolicyForTransactionSecurityList(i_sConnectionString, i_nTradingPolicyId, i_nMapToTypeCodeId);
                 }
@@ -173,6 +173,38 @@ namespace InsiderTrading.SL
             }
         }
          #endregion TradingPolicyForTransactionSecurityList
+
+       
+        public InsiderTradingDAL.TradingPolicyDTO_OS GetTradingPolicySettingConfigurationDetails(string i_sConnectionString,int i_nUserInfoID)
+        {
+            try
+            {
+                using (var objTradingPolicyDAL_OS = new TradingPolicyDAL_OS())
+                {
+                    return objTradingPolicyDAL_OS.GetTradingPolicySettingConfiguration(i_sConnectionString,i_nUserInfoID);
+                }
+            }
+            catch (Exception exp)
+            {
+                throw exp;
+            }
+        }
+
+        //public PreClrSettingForTradingPolicyDTO_OS GetTradingPolicySettingConfigurationDetails(string i_sConnectionString)
+        //{
+        //    List<PreClrSettingForTradingPolicyDTO_OS> lstCompanySettingConfigurationDTO = null;
+        //    try
+        //    {
+        //        using (var objTradingPolicyDAL_OS = new InsiderTradingDAL.TradingPolicyDAL_OS())
+        //        {
+        //            return objTradingPolicyDAL_OS.GetTradingPolicySettingConfiguration(i_sConnectionString);
+        //        }
+        //    }
+        //    catch (Exception exp)
+        //    {
+        //        throw exp;
+        //    }
+        //}
 
         #region IDisposable Members
         /// <summary>

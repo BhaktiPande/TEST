@@ -69,7 +69,7 @@ namespace InsiderTrading.Models
 
         [Required]
         [System.Web.Mvc.AllowHtml]
-        [StringLength(400, ErrorMessage = "tra_lbl_16164")]
+       // [StringLength(400, ErrorMessage = "tra_lbl_16164")]
         [DisplayName("tra_lbl_16164")]
         //[RegularExpression(ConstEnum.DataValidation.DescriptionType, ErrorMessage = "tra_msg_50531")]
         public string Signature { get; set; }

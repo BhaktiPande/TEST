@@ -3,20 +3,19 @@ using InsiderTrading.Filters;
 using InsiderTrading.Models;
 using InsiderTrading.SL;
 using InsiderTradingDAL;
+using InsiderTradingDAL.InsiderInitialDisclosure.DTO;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
-using System.Linq.Expressions;
-using System.Data;
-using System.Text.RegularExpressions;
-using InsiderTradingDAL.InsiderInitialDisclosure.DTO;
-using System.Collections;
-using Newtonsoft.Json;
 
 namespace InsiderTrading.Controllers
 {
@@ -72,7 +71,7 @@ namespace InsiderTrading.Controllers
         #region DownloadFormE
         [ValidateInput(false)]
         [AuthorizationPrivilegeFilter]
-        public ActionResult DownloadFormE(int acid,long PreclearanceRequestId, string DisplayCode)
+        public ActionResult DownloadFormE(int acid, long PreclearanceRequestId, string DisplayCode)
         {
             LoginUserDetails objLoginUserDetails = null;
             PreclearanceRequestSL objPreclearanceRequestSL = new PreclearanceRequestSL();
@@ -309,7 +308,8 @@ namespace InsiderTrading.Controllers
                         TempData.Keep();
                     }
                 }
-                else {
+                else
+                {
                     TempData["List"] = null;
                     TempData.Keep();
                     return RedirectToAction("RestrictedListSearch", "RestrictedList");
@@ -454,6 +454,7 @@ namespace InsiderTrading.Controllers
             PreclearanceRequestNonImplCompanyModel objPreclearanceRequestNonImplCompanyModel = null;
             PreclearanceRequestNonImplCompanyDTO objPreclearanceRequestNonImplCompanyDTO = null;
             LoginUserDetails objLoginUserDetails = null;
+            ApplicableTradingPolicyDetailsDTO_OS objApplicableTradingPolicyDetailsDTO = new ApplicableTradingPolicyDetailsDTO_OS();
 
             try
             {
@@ -496,16 +497,42 @@ namespace InsiderTrading.Controllers
                 ViewBag.Page = "View";
                 ViewBag.Show_Exercise_Pool = 0;
                 ViewBag.show_exercise_pool_quantity = false;
+                
                 int RequiredModuleID = 0;
+                
                 using (var objInsiderInitialDisclosureSL = new InsiderInitialDisclosureSL())
                 {
                     InsiderInitialDisclosureDTO objInsiderInitialDisclosureDTO = null;
                     objInsiderInitialDisclosureDTO = objInsiderInitialDisclosureSL.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
                     RequiredModuleID = objInsiderInitialDisclosureDTO.RequiredModule;
+                    TempData["EnableDisableQuantityValue"] = objInsiderInitialDisclosureDTO.EnableDisableQuantityValue;
                 }
                 ViewBag.RequiredModuleID = RequiredModuleID;
+                
+
+                //var EnableDisableQuantityValue = 0;
+                //TradingTransactionMasterDTO_OS objTradingTransactionMasterDTO_OS = null;
+                //using (TradingTransactionSL_OS objTradingTransactionSL_OS = new TradingTransactionSL_OS())
+                //{                  
+                //    // objTradingTransactionMasterDTO_OS objInsiderInitialDisclosureDTO = null;
+                //    objTradingTransactionMasterDTO_OS = objTradingTransactionSL_OS.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
+                //    //RequiredModuleID = objInsiderInitialDisclosureDTO.RequiredModule;
+                //    EnableDisableQuantityValue = objTradingTransactionMasterDTO_OS.EnableDisableQuantityValue;
+
+                //}
+
+                ViewBag.Fromedit = "FromEdit";
+                TempData["SecuritiesToBeTradedQty"] = Convert.ToInt32(objPreclearanceRequestNonImplCompanyDTO.SecuritiesToBeTradedQty);
+                TempData["SecuritiesToBeTradedValue"] = Convert.ToInt32(objPreclearanceRequestNonImplCompanyDTO.SecuritiesToBeTradedValue);
+                
                 if (RequiredModuleID == ConstEnum.Code.RequiredModuleOtherSecurity || RequiredModuleID == ConstEnum.Code.RequiredModuleBoth)
                 {
+                    using (TradingPolicySL_OS objTradingPolicySL_OS = new TradingPolicySL_OS())
+                    {
+                        objApplicableTradingPolicyDetailsDTO = objTradingPolicySL_OS.GetApplicableTradingPolicyDetails(objLoginUserDetails.CompanyDBConnectionString,Convert.ToInt32(objPreclearanceRequestNonImplCompanyModel.UserInfoId));
+                        ViewBag.UPSISeekDeclarationRequiredFlag = objApplicableTradingPolicyDetailsDTO.PreClrSeekDeclarationForUPSIFlag;
+                        ViewBag.UPSISeekDeclaration = objApplicableTradingPolicyDetailsDTO.PreClrUPSIDeclaration;
+                    }
                     return View("CreatePreclearanceOS", objPreclearanceRequestNonImplCompanyModel);
                 }
                 else
@@ -521,6 +548,7 @@ namespace InsiderTrading.Controllers
             {
                 objLoginUserDetails = null;
                 objPreclearanceRequestNonImplCompanyDTO = null;
+                objApplicableTradingPolicyDetailsDTO = null;
             }
 
             return View("Create", objPreclearanceRequestNonImplCompanyModel);
@@ -532,7 +560,7 @@ namespace InsiderTrading.Controllers
         {
             PopulateComboDTO objPopulateComboDTO = null;
             List<PopulateComboDTO> lstPopulateComboDTO = null;
-            
+
             string sParam3 = null;
             string sParam4 = null;
             bool bIsDefaultValue = true;
@@ -662,7 +690,8 @@ namespace InsiderTrading.Controllers
                 }
                 ViewBag.IsFormEtemplateMsgShow = formEAllowed;
             }
-            catch{
+            catch
+            {
                 throw;
             }
             var urlBuilder = new UrlHelper(Request.RequestContext);
@@ -707,7 +736,7 @@ namespace InsiderTrading.Controllers
                     dt_PreClearanceList.Columns.Add(new DataColumn("RlSearchAuditId", typeof(int)));
                     dt_PreClearanceList.Columns.Add(new DataColumn("PreclearanceRequestForCodeId", typeof(int)));
                     dt_PreClearanceList.Columns.Add(new DataColumn("UserInfoId", typeof(int)));
-                    dt_PreClearanceList.Columns.Add(new DataColumn("UserInfoIdRelative", typeof(int)){ AllowDBNull = true });
+                    dt_PreClearanceList.Columns.Add(new DataColumn("UserInfoIdRelative", typeof(int)) { AllowDBNull = true });
                     dt_PreClearanceList.Columns.Add(new DataColumn("TransactionTypeCodeId", typeof(int)));
                     dt_PreClearanceList.Columns.Add(new DataColumn("SecurityTypeCodeId", typeof(int)));
                     dt_PreClearanceList.Columns.Add(new DataColumn("SecuritiesToBeTradedQty", typeof(decimal)));
@@ -886,7 +915,7 @@ namespace InsiderTrading.Controllers
 
 
                 objApplicableTradingPolicyDetailsDTO = objTradingPolicySL_OS.GetApplicableTradingPolicyDetails(objLoginUserDetails.CompanyDBConnectionString, objLoginUserDetails.LoggedInUserID);
-               
+
                 //check for contra trade, if user has to select or not, wheather to use security pool or do not use security pool 
 
                 // set flag to show quantity from pool 
@@ -927,6 +956,9 @@ namespace InsiderTrading.Controllers
                 ViewBag.UserInfoIdPassDMAT = objLoginUserDetails.LoggedInUserID;
                 ViewBag.UserInfoId = objLoginUserDetails.LoggedInUserID;
                 ViewBag.UserTypeCodeId = objLoginUserDetails.UserTypeCodeId;
+                ViewBag.UPSISeekDeclarationRequiredFlag = objApplicableTradingPolicyDetailsDTO.PreClrSeekDeclarationForUPSIFlag;
+                ViewBag.UPSISeekDeclaration = objApplicableTradingPolicyDetailsDTO.PreClrUPSIDeclaration;
+                
             }
             catch (Exception ex)
             {
@@ -939,6 +971,7 @@ namespace InsiderTrading.Controllers
                 return RedirectToAction("RestrictedListSearch", "RestrictedList");
                 //return RedirectToAction("RestrictedListSearch", "RestrictedList", new { acid = Convert.ToString(Common.ConstEnum.UserActions.INSIDER_RESTRICTED_LIST_SEARCH) }).Error(sErrMessage);
                 //return PartialView("~/Views/RestrictedList/RestrictedListSearch.cshtml", new RestrictedListModel());
+
             }
             finally
             {
@@ -979,6 +1012,15 @@ namespace InsiderTrading.Controllers
             {
                 objLoginUserDetails = (LoginUserDetails)Common.Common.GetSessionValue(ConstEnum.SessionValue.UserDetails);
                 objPreclearanceRequestNonImplCompanyList = new List<PreclearanceRequestNonImplCompanyModel>();
+                using (TradingTransactionSL_OS objTradingTransactionSL_OSModule = new TradingTransactionSL_OS())
+                {
+                    TradingTransactionMasterDTO_OS objTradingTransactionMasterDTO_OSModule = null;
+                    objTradingTransactionMasterDTO_OSModule = objTradingTransactionSL_OSModule.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
+                    ViewBag.EnableDisableQuantityValue = objTradingTransactionMasterDTO_OSModule.EnableDisableQuantityValue;
+                    ViewBag.SecuritiesToBeTradedQty = Convert.ToInt32(objPreclearanceRequestNonImplCompanyModel.SecuritiesToBeTradedQty);
+                    ViewBag.SecuritiesToBeTradedValue = Convert.ToInt32(objPreclearanceRequestNonImplCompanyModel.SecuritiesToBeTradedValue);
+                    ViewBag.Fromedit = "FromEdit";
+                }
                 using (var objTemplateMasterSL = new TemplateMasterSL())
                 {
                     objTemplateMasterDTO = objTemplateMasterSL.GetFormETemplate(objLoginUserDetails.CompanyDBConnectionString);
@@ -994,21 +1036,22 @@ namespace InsiderTrading.Controllers
                 }
                 //Check Validations
                 int preclearanceRequestId = 0;
-                 objApplicableTradingPolicyDetailsDTO = objTradingPolicySL_OS.GetApplicableTradingPolicyDetails(objLoginUserDetails.CompanyDBConnectionString, objLoginUserDetails.LoggedInUserID);
+                objApplicableTradingPolicyDetailsDTO = objTradingPolicySL_OS.GetApplicableTradingPolicyDetails(objLoginUserDetails.CompanyDBConnectionString, objLoginUserDetails.LoggedInUserID);
+
                 int tradingPolicyID = objApplicableTradingPolicyDetailsDTO.TradingPolicyId;
                 using (PreclearanceRequestNonImplCompanySL objPreclearanceRequestNonImplCompanySL = new PreclearanceRequestNonImplCompanySL())
                 {
-                    int retunVal = objPreclearanceRequestNonImplCompanySL.ValidatePreclearanceRequest(objLoginUserDetails.CompanyDBConnectionString, preclearanceRequestId, tradingPolicyID, objPreclearanceRequestNonImplCompanyModel.UserInfoId,objPreclearanceRequestNonImplCompanyModel.UserInfoIdRelative,
-                        objPreclearanceRequestNonImplCompanyModel.TransactionTypeCodeId, objPreclearanceRequestNonImplCompanyModel.SecurityTypeCodeId, objPreclearanceRequestNonImplCompanyModel.SecuritiesToBeTradedQty,objPreclearanceRequestNonImplCompanyModel.SecuritiesToBeTradedValue, objPreclearanceRequestNonImplCompanyModel.CompanyId,
+                    int retunVal = objPreclearanceRequestNonImplCompanySL.ValidatePreclearanceRequest(objLoginUserDetails.CompanyDBConnectionString, preclearanceRequestId, tradingPolicyID, objPreclearanceRequestNonImplCompanyModel.UserInfoId, objPreclearanceRequestNonImplCompanyModel.UserInfoIdRelative,
+                        objPreclearanceRequestNonImplCompanyModel.TransactionTypeCodeId, objPreclearanceRequestNonImplCompanyModel.SecurityTypeCodeId, objPreclearanceRequestNonImplCompanyModel.SecuritiesToBeTradedQty, objPreclearanceRequestNonImplCompanyModel.SecuritiesToBeTradedValue, objPreclearanceRequestNonImplCompanyModel.CompanyId,
                         objPreclearanceRequestNonImplCompanyModel.ModeOfAcquisitionCodeId, objPreclearanceRequestNonImplCompanyModel.DMATDetailsID, out out_bIsContraTrade, out sContraTradeDate, out iIsAutoApproved);
 
-                    if(iIsAutoApproved == true)
+                    if (iIsAutoApproved == true)
                     {
                         objPreclearanceRequestNonImplCompanyModel.IsAutoApproved = true;
                     }
                 }
 
-                
+
                 if (!ViewBag.IsFormEtemplateMsgShow)
                 {
                     if (TempData["PreClrList"] != null)
@@ -1131,13 +1174,14 @@ namespace InsiderTrading.Controllers
                 {
                     ViewBag.DematAccountNumberList = FillComboValues(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.ComboType.UserDMATList, objLoginUserDetails.LoggedInUserID.ToString(), ConstEnum.Code.PreClearanceType_NonImplementingCompany.ToString());
                 }
+
                 ViewBag.UserAction = acid;
                 ViewBag.BackURLACID = backacid;
                 ViewBag.Show_Exercise_Pool = 1;
                 ViewBag.UserInfoIdPassDMAT = objLoginUserDetails.LoggedInUserID;
                 ViewBag.UserInfoId = objLoginUserDetails.LoggedInUserID;
                 ViewBag.IsPreClearanceAllow = true;
-                if (TempData["PreClrList"]!=null)
+                if (TempData["PreClrList"] != null)
                 {
                     ViewBag.GridAllow = true;
                     TempData["GridAllow"] = true;
@@ -1289,7 +1333,7 @@ namespace InsiderTrading.Controllers
                         });
                     foreach (var request in checkDuplicRecord)
                     {
-                        string sErrMessage = Common.Common.getResource("dis_msg_53146").Replace("$1", request.CompanyName).Replace("$2",request.DEMATAccountNumber).Replace("$3",request.SecurityType);
+                        string sErrMessage = Common.Common.getResource("dis_msg_53146").Replace("$1", request.CompanyName).Replace("$2", request.DEMATAccountNumber).Replace("$3", request.SecurityType);
                         ModelState.AddModelError("error", sErrMessage);
                     }
 
@@ -1305,9 +1349,9 @@ namespace InsiderTrading.Controllers
                         });
                     foreach (var request in tempSell)
                     {
-                        if(request.CompanyId != 0 && request.DMATDetailsID != 0)
+                        if (request.CompanyId != 0 && request.DMATDetailsID != 0)
                         {
-                            objBalancePoolDTO = objPreclearanceRequestNonImplCompanySL.GetSecurityBalanceDetailsFromPool(objLoginUserDetails.CompanyDBConnectionString, objLoginUserDetails.LoggedInUserID,request.SecurityTypeCodeId, request.DMATDetailsID, request.CompanyId);
+                            objBalancePoolDTO = objPreclearanceRequestNonImplCompanySL.GetSecurityBalanceDetailsFromPool(objLoginUserDetails.CompanyDBConnectionString, objLoginUserDetails.LoggedInUserID, request.SecurityTypeCodeId, request.DMATDetailsID, request.CompanyId);
                             if (objBalancePoolDTO != null)
                             {
                                 if (objBalancePoolDTO.VirtualQuantity < request.SecuritiesToBeTradedQty)
@@ -1319,7 +1363,7 @@ namespace InsiderTrading.Controllers
                         }
                     }
 
-                    var tempPledge = preclearanceRequestList.Where(p => p.TransactionTypeCodeId == Common.ConstEnum.Code.TransactionTypePledge || p.TransactionTypeCodeId== Common.ConstEnum.Code.TransactionTypePledgeInvoke)
+                    var tempPledge = preclearanceRequestList.Where(p => p.TransactionTypeCodeId == Common.ConstEnum.Code.TransactionTypePledge || p.TransactionTypeCodeId == Common.ConstEnum.Code.TransactionTypePledgeInvoke)
                         .GroupBy(x => new { x.CompanyId, x.SecurityTypeCodeId, x.DMATDetailsID, x.CompanyName })
                         .Select(y => new PreclearanceRequestNonImplCompanyModel()
                         {
@@ -1607,6 +1651,7 @@ namespace InsiderTrading.Controllers
         public ViewResult Edit_OS(int sequenceNo, bool formEAllowed, int acid)
         {
             PreclearanceRequestNonImplCompanyModel objPreclearanceRequestNonImplCompanyModel = null;
+            ApplicableTradingPolicyDetailsDTO_OS objApplicableTradingPolicyDetailsDTO = new ApplicableTradingPolicyDetailsDTO_OS();
             List<PreclearanceRequestNonImplCompanyModel> preclearanceRequestList = null;
             LoginUserDetails objLoginUserDetails = null;
             BalancePoolOSDTO objBalancePoolDTO = null;
@@ -1626,11 +1671,11 @@ namespace InsiderTrading.Controllers
                 objPreclearanceRequestNonImplCompanyModel.PreclearanceStatusCodeId = null;
                 objLoginUserDetails = (LoginUserDetails)Common.Common.GetSessionValue(ConstEnum.SessionValue.UserDetails);
                 ViewBag.RelativeDropDown = FillComboValues(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.ComboType.UserRelativeList, objLoginUserDetails.LoggedInUserID.ToString());
-                
+
                 InsiderInitialDisclosureDTO objInsiderInitialDisclosureDTO = null;
-               
-                    objApplicableTradingPolicyDetailsDTO_OS = objTradingPolicySL_OS.GetApplicableTradingPolicyDetails(objLoginUserDetails.CompanyDBConnectionString, objLoginUserDetails.LoggedInUserID);
-             
+
+                objApplicableTradingPolicyDetailsDTO_OS = objTradingPolicySL_OS.GetApplicableTradingPolicyDetails(objLoginUserDetails.CompanyDBConnectionString, objLoginUserDetails.LoggedInUserID);
+
                 List<PopulateComboDTO> TransactionList = FillComboValues(ConstEnum.ComboType.TransactionTypeByTradingPolicy_OS, objApplicableTradingPolicyDetailsDTO_OS.TradingPolicyId.ToString(), InsiderTrading.Common.ConstEnum.Code.PreclearanceRequestNonImplementingCompany.ToString(), null, null, null, true);
                 if (TransactionList == null)
                     ViewBag.TransactionDropDown = FillComboValues(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.ComboType.ListOfCode, Common.ConstEnum.CodeGroup.TransactionType);
@@ -1640,7 +1685,7 @@ namespace InsiderTrading.Controllers
                 ViewBag.SecurityDropDown = FillComboValues(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.ComboType.ListOfCode, Common.ConstEnum.CodeGroup.SecurityType);
 
                 ViewBag.ModeOfAcquisition = FillComboValues(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.ComboType.ListOfCode, Common.ConstEnum.CodeGroup.ModeOfAcquisition);
-                
+
                 if (objPreclearanceRequestNonImplCompanyModel.UserInfoIdRelative != null)
                 {
                     ViewBag.DematAccountNumberList = FillComboValues(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.ComboType.UserDMATList, objPreclearanceRequestNonImplCompanyModel.UserInfoIdRelative.ToString(), ConstEnum.Code.PreClearanceType_NonImplementingCompany.ToString());
@@ -1649,7 +1694,7 @@ namespace InsiderTrading.Controllers
                 {
                     ViewBag.DematAccountNumberList = FillComboValues(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.ComboType.UserDMATList, objLoginUserDetails.LoggedInUserID.ToString(), ConstEnum.Code.PreClearanceType_NonImplementingCompany.ToString());
                 }
-                
+
                 ViewBag.UserAction = acid;
                 ViewBag.BackURLACID = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_RESTRICTED_LIST_SEARCH;
                 ViewBag.IsPreClearanceAllow = true;
@@ -1658,7 +1703,7 @@ namespace InsiderTrading.Controllers
                 int RequiredModuleID = 0;
                 objInsiderInitialDisclosureDTO = null;
                 using (var objInsiderInitialDisclosureSL = new InsiderInitialDisclosureSL())
-                {                   
+                {
                     objInsiderInitialDisclosureDTO = objInsiderInitialDisclosureSL.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
                     RequiredModuleID = objInsiderInitialDisclosureDTO.RequiredModule;
                 }
@@ -1670,8 +1715,19 @@ namespace InsiderTrading.Controllers
                 {
                     ViewBag.RequiredModule = false;
                 }
-                
+
                 //check for contra trade, if user has to select or not, wheather to use security pool or do not use security pool 
+                if(ViewBag.RequiredModule == true)
+                {
+                    using (TradingPolicySL_OS objTradingPolicySL_OSTP = new TradingPolicySL_OS())
+                    {
+                        objApplicableTradingPolicyDetailsDTO = objTradingPolicySL_OSTP.GetApplicableTradingPolicyDetails(objLoginUserDetails.CompanyDBConnectionString, Convert.ToInt32(objPreclearanceRequestNonImplCompanyModel.UserInfoId));
+                        ViewBag.UPSISeekDeclarationRequiredFlag = objApplicableTradingPolicyDetailsDTO.PreClrSeekDeclarationForUPSIFlag;
+                        ViewBag.UPSISeekDeclaration = objApplicableTradingPolicyDetailsDTO.PreClrUPSIDeclaration;
+                    }
+                }
+
+
 
                 // set flag to show quantity from pool 
                 show_exercise_pool_quantity = true;
@@ -1693,6 +1749,19 @@ namespace InsiderTrading.Controllers
 
                 ViewBag.Show_Exercise_Pool = 1;
                 ViewBag.UserAction = acid;
+                var EnableDisableQuantityValue = 0;
+                using (TradingTransactionSL_OS objTradingTransactionSL_OS = new TradingTransactionSL_OS())
+                {
+                    TradingTransactionMasterDTO_OS objTradingTransactionMasterDTO_OS = null;
+                    // objTradingTransactionMasterDTO_OS objInsiderInitialDisclosureDTO = null;
+                    objTradingTransactionMasterDTO_OS = objTradingTransactionSL_OS.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
+                    //RequiredModuleID = objInsiderInitialDisclosureDTO.RequiredModule;
+                    EnableDisableQuantityValue = objTradingTransactionMasterDTO_OS.EnableDisableQuantityValue;
+                    ViewBag.EnableDisableQuantityValue = objTradingTransactionMasterDTO_OS.EnableDisableQuantityValue;
+                }
+                ViewBag.SecuritiesToBeTradedQty = Convert.ToInt32(objPreclearanceRequestNonImplCompanyModel.SecuritiesToBeTradedQty);
+                ViewBag.SecuritiesToBeTradedValue =Convert.ToInt32(objPreclearanceRequestNonImplCompanyModel.SecuritiesToBeTradedValue);
+                ViewBag.Fromedit = "FromEdit";
             }
             catch
             {
@@ -1773,12 +1842,12 @@ namespace InsiderTrading.Controllers
                 {
                     objInsiderInitialDisclosureDTO = objInsiderInitialDisclosureSL.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
                 }
-                if(objInsiderInitialDisclosureDTO.RequiredModule==InsiderTrading.Common.ConstEnum.Code.RequiredModuleBoth && objInsiderInitialDisclosureDTO.RequiredModule==InsiderTrading.Common.ConstEnum.Code.RequiredModuleOwnSecurity)
+                if (objInsiderInitialDisclosureDTO.RequiredModule == InsiderTrading.Common.ConstEnum.Code.RequiredModuleBoth && objInsiderInitialDisclosureDTO.RequiredModule == InsiderTrading.Common.ConstEnum.Code.RequiredModuleOwnSecurity)
                 {
-                     objApplicableTradingPolicyDetailsDTO = objTradingPolicySL.GetApplicableTradingPolicyDetails(objLoginUserDetails.CompanyDBConnectionString, objPreclearanceRequestNonImplCompanyModel.UserInfoId);
+                    objApplicableTradingPolicyDetailsDTO = objTradingPolicySL.GetApplicableTradingPolicyDetails(objLoginUserDetails.CompanyDBConnectionString, objPreclearanceRequestNonImplCompanyModel.UserInfoId);
                 }
                 ImplementedCompanyDTO objImplementedCompanyDTO = objCompaniesSL.GetDetails(objLoginUserDetails.CompanyDBConnectionString, 0, 1);
-               
+
                 //check for contra trade, if user has to select or not, wheather to use security pool or do not use security pool 
 
                 // set flag to show quantity from pool 
@@ -1839,9 +1908,9 @@ namespace InsiderTrading.Controllers
             TradingPolicySL_OS objTradingPolicySL_OS = new TradingPolicySL_OS();
             TradingPolicySL objTradingPolicySL = new TradingPolicySL();
             ApplicableTradingPolicyDetailsDTO_OS objApplicableTradingPolicyDetailsDTO_OS = null;
-            ApplicableTradingPolicyDetailsDTO objApplicableTradingPolicyDetailsDTO = null;          
+            ApplicableTradingPolicyDetailsDTO objApplicableTradingPolicyDetailsDTO = null;
             InsiderInitialDisclosureDTO objInsiderInitialDisclosureDTO = null;
-           
+
             int TradingPolicyID = 0;
             using (var objInsiderInitialDisclosureSL = new InsiderInitialDisclosureSL())
             {
@@ -1849,17 +1918,17 @@ namespace InsiderTrading.Controllers
             }
             if (objInsiderInitialDisclosureDTO.RequiredModule == InsiderTrading.Common.ConstEnum.Code.RequiredModuleBoth && objInsiderInitialDisclosureDTO.RequiredModule == InsiderTrading.Common.ConstEnum.Code.RequiredModuleOwnSecurity)
             {
-                objApplicableTradingPolicyDetailsDTO = objTradingPolicySL.GetApplicableTradingPolicyDetails(objLoginUserDetails.CompanyDBConnectionString, objLoginUserDetails.LoggedInUserID);
+                objApplicableTradingPolicyDetailsDTO = objTradingPolicySL.GetApplicableTradingPolicyDetails(objLoginUserDetails.CompanyDBConnectionString, Convert.ToInt32(objPreclearanceRequestModel.UserInfoId));
                 TradingPolicyID = Convert.ToInt32(objApplicableTradingPolicyDetailsDTO.TradingPolicyId);
             }
             else
             {
-                objApplicableTradingPolicyDetailsDTO_OS = objTradingPolicySL_OS.GetApplicableTradingPolicyDetails(objLoginUserDetails.CompanyDBConnectionString, objLoginUserDetails.LoggedInUserID);
+                objApplicableTradingPolicyDetailsDTO_OS = objTradingPolicySL_OS.GetApplicableTradingPolicyDetails(objLoginUserDetails.CompanyDBConnectionString, Convert.ToInt32(objPreclearanceRequestModel.UserInfoId));
                 TradingPolicyID = Convert.ToInt32(objApplicableTradingPolicyDetailsDTO_OS.TradingPolicyId);
-            }            
+            }
             try
             {
-                if (objPreclearanceRequestModel.TransactionTypeCodeId!=0)
+                if (objPreclearanceRequestModel.TransactionTypeCodeId != 0)
                     ViewBag.SecurityDropDown = FillComboValues(InsiderTrading.Common.ConstEnum.ComboType.ListofSecurityTypeapplicableTradingPolicyOS, Convert.ToString(TradingPolicyID), objPreclearanceRequestModel.TransactionTypeCodeId.ToString(), null, null, null, true);
                 else
                     ViewBag.SecurityDropDown = FillComboValues(ConstEnum.ComboType.ListOfCode, InsiderTrading.Common.ConstEnum.CodeGroup.SecurityType, null, null, null, null, true);
@@ -1888,23 +1957,23 @@ namespace InsiderTrading.Controllers
             TradingPolicySL objTradingPolicySL = new TradingPolicySL();
             TradingPolicySL_OS objTradingPolicySL_OS = new TradingPolicySL_OS();
             InsiderInitialDisclosureDTO objInsiderInitialDisclosureDTO = null;
-            ApplicableTradingPolicyDetailsDTO objApplicableTradingPolicyDetailsDTO=null;
+            ApplicableTradingPolicyDetailsDTO objApplicableTradingPolicyDetailsDTO = null;
             ApplicableTradingPolicyDetailsDTO_OS objApplicableTradingPolicyDetailsDTO_OS = null;
-            int TradingPolicyID = 0; 
+            int TradingPolicyID = 0;
             using (var objInsiderInitialDisclosureSL = new InsiderInitialDisclosureSL())
-                {
-                    objInsiderInitialDisclosureDTO = objInsiderInitialDisclosureSL.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
-                }
-                if (objInsiderInitialDisclosureDTO.RequiredModule == InsiderTrading.Common.ConstEnum.Code.RequiredModuleBoth && objInsiderInitialDisclosureDTO.RequiredModule == InsiderTrading.Common.ConstEnum.Code.RequiredModuleOwnSecurity)
-                {
-                    objApplicableTradingPolicyDetailsDTO = objTradingPolicySL.GetApplicableTradingPolicyDetails(objLoginUserDetails.CompanyDBConnectionString, objLoginUserDetails.LoggedInUserID);
-                    TradingPolicyID =Convert.ToInt32(objApplicableTradingPolicyDetailsDTO.TradingPolicyId);
-                }
-                else
-                {
-                    objApplicableTradingPolicyDetailsDTO_OS = objTradingPolicySL_OS.GetApplicableTradingPolicyDetails(objLoginUserDetails.CompanyDBConnectionString, objLoginUserDetails.LoggedInUserID);
-                    TradingPolicyID = Convert.ToInt32(objApplicableTradingPolicyDetailsDTO_OS.TradingPolicyId);
-                }
+            {
+                objInsiderInitialDisclosureDTO = objInsiderInitialDisclosureSL.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
+            }
+            if (objInsiderInitialDisclosureDTO.RequiredModule == InsiderTrading.Common.ConstEnum.Code.RequiredModuleBoth && objInsiderInitialDisclosureDTO.RequiredModule == InsiderTrading.Common.ConstEnum.Code.RequiredModuleOwnSecurity)
+            {
+                objApplicableTradingPolicyDetailsDTO = objTradingPolicySL.GetApplicableTradingPolicyDetails(objLoginUserDetails.CompanyDBConnectionString, Convert.ToInt32(objPreclearanceRequestNonImplCompanyModel.UserInfoId));
+                TradingPolicyID = Convert.ToInt32(objApplicableTradingPolicyDetailsDTO.TradingPolicyId);
+            }
+            else
+            {
+                objApplicableTradingPolicyDetailsDTO_OS = objTradingPolicySL_OS.GetApplicableTradingPolicyDetails(objLoginUserDetails.CompanyDBConnectionString, Convert.ToInt32(objPreclearanceRequestNonImplCompanyModel.UserInfoId));
+                TradingPolicyID = Convert.ToInt32(objApplicableTradingPolicyDetailsDTO_OS.TradingPolicyId);
+            }
 
             try
             {
@@ -1914,7 +1983,7 @@ namespace InsiderTrading.Controllers
                 }
                 else
                 {
-                    ViewBag.ModeOfAcquisition = FillComboValues(InsiderTrading.Common.ConstEnum.ComboType.ListofModeOfAcquisitionapplicableTradingPolicyOS,Convert.ToString(TradingPolicyID), objPreclearanceRequestNonImplCompanyModel.TransactionTypeCodeId.ToString(), objPreclearanceRequestNonImplCompanyModel.SecurityTypeCodeId.ToString(), null, null, true);
+                    ViewBag.ModeOfAcquisition = FillComboValues(InsiderTrading.Common.ConstEnum.ComboType.ListofModeOfAcquisitionapplicableTradingPolicyOS, Convert.ToString(TradingPolicyID), objPreclearanceRequestNonImplCompanyModel.TransactionTypeCodeId.ToString(), objPreclearanceRequestNonImplCompanyModel.SecurityTypeCodeId.ToString(), null, null, true);
                 }
                 if (ModelState.ContainsKey("ModeOfAcquisitionCodeId"))
                     ModelState["ModeOfAcquisitionCodeId"].Errors.Clear();
@@ -2196,7 +2265,7 @@ namespace InsiderTrading.Controllers
                         row = null;
                     }
                 }
-                
+
                 bool bReturn = true;
                 bReturn = objPreclearanceRequestNonImplCompanySL.PreclearanceRequestApproveRejectSave_OS(objLoginUserDetails.CompanyDBConnectionString, dt_PreClearanceList, dt_preclearanceRequestId, preclearanceNotTakenFlag, reasonForNotTradingCodeId,
                     reasonForNotTradingText, userID, preclearanceStatusCodeId, reasonForRejection, ReasonForApproval, int.Parse(ReasonForApprovalCodeId));
@@ -2296,11 +2365,11 @@ namespace InsiderTrading.Controllers
                 if (bReturn)
                 {
                     statusFlag = true;
-                    ErrorDictionary.Add("success", "Preclearance approved successfully");
+                    ErrorDictionary.Add("success", "Preclearance rejected successfully");
                 }
                 else
                 {
-                    ErrorDictionary.Add("error", "Preclearance approval failed");
+                    ErrorDictionary.Add("error", "Preclearance rejection failed");
                 }
                 return Json(new { status = statusFlag, Message = ErrorDictionary }, JsonRequestBehavior.AllowGet);
             }
@@ -2343,6 +2412,6 @@ namespace InsiderTrading.Controllers
             return View("CoIndex_OS");
         }
         #endregion Pre-clearances CO Dashboard
-        
+
     }
 }

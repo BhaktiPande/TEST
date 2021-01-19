@@ -175,18 +175,20 @@ BEGIN
 						JOIN usr_UserRelation UR ON UR.UserInfoId = UI.UserInfoId
 						WHERE UR.UserInfoId = @inp_iUserInfoId  
 						AND UR.RelationTypeCodeId = @inp_nRelationCodeId
-						AND LOWER(ISNULL(UI.FirstName,'') + ISNULL(UI.LastName,'')) = LOWER(REPLACE(@inp_sFirstLastName,' ',''))
+						--AND LOWER(ISNULL(UI.FirstName,'')+' ' + ISNULL(UI.LastName,'')) = LOWER(REPLACE(@inp_sFirstLastName,' ',''))
 						) AS RelativesList
-					join usr_UserInfo UI ON UI.UserInfoid = RelativesList.UserInfoIdRelative)
+					join usr_UserInfo UI ON UI.UserInfoid = RelativesList.UserInfoIdRelative
+					WHERE LOWER(ISNULL(UI.FirstName,'') + ISNULL(UI.LastName,'')) = LOWER(REPLACE(@inp_sFirstLastName,' ','')))
 				BEGIN
 					SELECT @inp_iForUserInfoId = RelativesList.UserInfoIdRelative from (
 						SELECT UR.UserInfoIdRelative FROM usr_UserInfo UI 
 						JOIN usr_UserRelation UR ON UR.UserInfoId = UI.UserInfoId
 						WHERE UR.UserInfoId = @inp_iUserInfoId  
 						AND UR.RelationTypeCodeId = @inp_nRelationCodeId
-						AND LOWER(ISNULL(UI.FirstName,'') + ISNULL(UI.LastName,'')) = LOWER(REPLACE(@inp_sFirstLastName,' ',''))
+						--AND LOWER(ISNULL(UI.FirstName,'')+' ' + ISNULL(UI.LastName,'')) = LOWER(REPLACE(@inp_sFirstLastName,' ',''))
 						) AS RelativesList
-					join usr_UserInfo UI ON UI.UserInfoid = RelativesList.UserInfoIdRelative					
+					join usr_UserInfo UI ON UI.UserInfoid = RelativesList.UserInfoIdRelative	
+					WHERE LOWER(ISNULL(UI.FirstName,'') + ISNULL(UI.LastName,'')) = LOWER(REPLACE(@inp_sFirstLastName,' ',''))
 				END
 				ELSE
 				BEGIN
@@ -264,7 +266,7 @@ BEGIN
 			WHERE TransactionMasterId = (SELECT TransactionMasterId FROM tra_TransactionMaster WHERE UserInfoId = @inp_iUserInfoId AND DisclosureTypeCodeId = @inp_iDisclosureTypeCodeId)
 			 AND SecurityTypeCodeId = @inp_iSecurityTypeCodeId AND DMATDetailsId = @inp_iDMATDetailsID AND ForUserInfoId = @inp_iForUserInfoId
 		END
-		 
+		
 		EXEC @nRC = dbo.st_tra_TradingTransactionMasterCreate_Override 0,@inp_sPreclearanceRequestId,@inp_iUserInfoId,@inp_iDisclosureTypeCodeId,@inp_iTransactionStatusCodeId	,@inp_sNoHoldingFlag,@inp_iTradingPolicyId,@inp_dtPeriodEndDate,@inp_bPartiallyTradedFlag,@inp_bSoftCopyReq,@inp_bHardCopyReq,@inp_dtHCpByCOSubmission,@inp_iLoggedInUserId,'MASSUPLOAD',NULL,0,0,@out_nSavedTransactionMasterID out, @out_nDisclosureCompletedFlag out,@out_nReturnValue out, @out_nSQLErrCode out, @out_sSQLErrMessage out
 		IF (@out_nReturnValue = 0)
 		BEGIN

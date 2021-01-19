@@ -983,7 +983,8 @@ BEGIN
 				dbo.uf_rpt_ReplaceSpecialChar(Temp.PreclearanceBlankComment) AS PreclearanceBlankComment,
 				dbo.uf_rpt_ReplaceSpecialChar(Temp.AddOtherDetails) AS AddOtherDetails,
 				dbo.uf_rpt_ReplaceSpecialChar(Temp.ISParentPreclearance) As ISParentPreclearance,
-				Temp.IsShowRecord As IsShowRecord
+				Temp.IsShowRecord As IsShowRecord,
+				DRO.Reason AS rpt_grd_61009
 		FROM	#tmpList T 
 		JOIN #tmpReport  Temp ON T.EntityID = Temp.Id
 		LEFT JOIN rpt_DefaulterReportOverride DRO ON Temp.DefaulterReportID = DRO.DefaulterReportID

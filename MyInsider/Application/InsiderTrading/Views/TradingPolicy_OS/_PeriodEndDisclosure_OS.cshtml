@@ -1,0 +1,58 @@
+﻿@model InsiderTrading.Models.TradingPolicyModel_OS
+@{
+    ViewBag.Title = "_PeriodEndDisclosure_OS";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    @Html.AntiForgeryToken()
+</section>
+
+<div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @Html.LabelFor(m => m.DiscloPeriodEndFreq, new { @class = "normalLable" })
+
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @Html.DropDownListFor(m => m.DiscloPeriodEndFreq, new SelectList(ViewBag.DiscloPeriodEndFreqLIst, "Key", "Value", ""), @InsiderTrading.Common.Common.IsTradingPolicyEdit("Text", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId))
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @Html.ValidationMessageFor(m => m.DiscloPeriodEndFreq)
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+        <div class="form-group">
+            @Html.LabelFor(m => m.DiscloPeriodEndToCOByInsdrLimit, new { @class = "normalLable" })
+        </div>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
+        <div class="form-group">
+            @Html.TextBoxFor(m => m.DiscloPeriodEndToCOByInsdrLimit, @InsiderTrading.Common.Common.IsTradingPolicyEdit("TextNumber", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId))
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="form-group">
+            <label class="normalLable">@InsiderTrading.Common.Common.getResource("rul_lbl_55283")</label>
+            @Html.ValidationMessageFor(m => m.DiscloPeriodEndToCOByInsdrLimit)
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(document).ready(function () {        
+        $(':checkbox[name="DiscloPeriodEndSubmitToStExByCOHardcopyFlag"]').change(function () {
+
+            if ($(this).is(":checked")) {
+                $(':checkbox[name="DiscloPeriodEndSubmitToStExByCOSoftcopyFlag"]').prop("checked", true);
+            }
+        });
+
+    });
+</script>

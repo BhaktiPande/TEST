@@ -150,37 +150,107 @@
                         </div>
 
                         <!-- form field row 3 -->
-                        <div class="row">
-                            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.SecuritiesToBeTradedQty)
-                                    @Html.TextBoxFor(m => m.SecuritiesToBeTradedQty, "{0:N0}", quty_html_attr)
-                                    @Html.ValidationMessageFor(m => m.SecuritiesToBeTradedQty)
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.SecuritiesToBeTradedValue)
-                                    @Html.TextBoxFor(m => m.SecuritiesToBeTradedValue, "{0:N0}", quty_html_attr)
-                                    @Html.ValidationMessageFor(m => m.SecuritiesToBeTradedValue)
-                                </div>
-                            </div>
-                            <div id="DivModeOfAcquisition" style="margin: -15px 0px 0px 0px;">
-                                @{
-                                            @Html.Partial("~/Views/PreclearanceRequestNonImplCompany/_modeOfAcqisition.cshtml")
-                                }
-                                </div>
-                                </div>
+                <div class="row">
+                    @{
+                        var EnableDisableValue = @TempData["EnableDisableQuantityValue"];
+                        ViewBag.EnableDisableQuantityValue = EnableDisableValue;
+                        var SecuritiesTradedQty = @TempData["SecuritiesToBeTradedQty"];
+                        ViewBag.SecuritiesToBeTradedQty = SecuritiesTradedQty;
+                        var SecuritiesTradedVal = @TempData["SecuritiesToBeTradedValue"];
+                        ViewBag.SecuritiesToBeTradedValue = SecuritiesTradedVal;
+                    }
+                    <input type="hidden" id="EnableDisableQuantityValuehd" value="@ViewBag.EnableDisableQuantityValue" />
 
+                    @if (@ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.EnableQunatityValue)
+                    {
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.SecuritiesToBeTradedQty)
+                                @Html.TextBoxFor(m => m.SecuritiesToBeTradedQty, "{0:N0}", new { @class = "form-control numericOnly Qtyclass", quty_html_attr })
+                                @Html.ValidationMessageFor(m => m.SecuritiesToBeTradedQty)
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.SecuritiesToBeTradedValue)
+                                @Html.TextBoxFor(m => m.SecuritiesToBeTradedValue, "{0:N0}", new { @class = "form-control numericOnly Valueclass", quty_html_attr })
+                                @Html.ValidationMessageFor(m => m.SecuritiesToBeTradedValue)
+                            </div>
+                        </div>
+                    }
+                    @if (@ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.DisabaleShowQuantityValue)
+                    {
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <div class="form-group">
+
+                                <input type="hidden" id="SecuritiesToBeTradedQtyhd" value="@ViewBag.SecuritiesToBeTradedQty" />
+                                @Html.LabelFor(m => m.SecuritiesToBeTradedQty)
+                                @Html.TextBoxFor(m => m.SecuritiesToBeTradedQty, "{0:N0}", new { @class = "form-control numericOnly Qtyclass", quty_html_attr, rows = "5", id = "SecuritiesToBeTradedQty", Value = "" })
+                                @Html.ValidationMessageFor(m => m.SecuritiesToBeTradedQty)
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <input type="hidden" id="SecuritiesToBeTradedValuehd" value="@ViewBag.SecuritiesToBeTradedValue" />
+                                @Html.LabelFor(m => m.SecuritiesToBeTradedValue)
+                                @Html.TextBoxFor(m => m.SecuritiesToBeTradedValue, "{0:N0}", new { @class = "form-control numericOnly Valueclass", quty_html_attr, rows = "5", id = "SecuritiesToBeTradedValue", Value = "" })
+                                @Html.ValidationMessageFor(m => m.SecuritiesToBeTradedValue)
+                            </div>
+                        </div>
+
+                    }
+                    @if (@ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue)
+                    {
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" style="display:none">
+                            <div class="form-group">
+
+                                <input type="hidden" id="SecuritiesToBeTradedQtyhd" value="@ViewBag.SecuritiesToBeTradedQty" />
+                                @Html.LabelFor(m => m.SecuritiesToBeTradedQty)
+                                @Html.TextBoxFor(m => m.SecuritiesToBeTradedQty, "{0:N0}", new { @class = "form-control numericOnly Qtyclass", quty_html_attr, rows = "5", id = "SecuritiesToBeTradedQty", Value = "" })
+                                @Html.ValidationMessageFor(m => m.SecuritiesToBeTradedQty)
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" style="display:none">
+                            <div class="form-group">
+                                <input type="hidden" id="SecuritiesToBeTradedValuehd" value="@ViewBag.SecuritiesToBeTradedValue" />
+                                @Html.LabelFor(m => m.SecuritiesToBeTradedValue)
+                                @Html.TextBoxFor(m => m.SecuritiesToBeTradedValue, "{0:N0}", new { @class = "form-control numericOnly Valueclass", quty_html_attr, rows = "5", id = "SecuritiesToBeTradedValue", Value = "" })
+                                @Html.ValidationMessageFor(m => m.SecuritiesToBeTradedValue)
+                            </div>
+                        </div>
+                        <div id="DivModeOfAcquisition" style="margin: -15px 0px 0px 0px;">
+                            @{
+                                @Html.Partial("~/Views/PreclearanceRequestNonImplCompany/_modeOfAcqisition.cshtml")
+                            }
+                        </div>
+                        <div id="divDMAT">
+                            @Html.Partial("~/Views/PreclearanceRequestNonImplCompany/_DEMATList.cshtml")
+                        </div>
+
+                    }
+
+                    @if (@ViewBag.EnableDisableQuantityValue != InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue)
+                    {
+                        <div id="DivModeOfAcquisition" style="margin: -15px 0px 0px 0px;">
+                            @{
+                                @Html.Partial("~/Views/PreclearanceRequestNonImplCompany/_modeOfAcqisition.cshtml")
+                            }
+                        </div>
+                    }
+
+                </div>
+                            if (@ViewBag.EnableDisableQuantityValue != InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue)
+                            {
                          <div class="row">
                             <div id="divDMAT" >
                                 @Html.Partial("~/Views/PreclearanceRequestNonImplCompany/_DEMATList.cshtml")
                             </div>
                         </div>
-                        if (ViewBag.RequiredModuleID == InsiderTrading.Common.ConstEnum.Code.RequiredModuleBoth || ViewBag.RequiredModuleID == InsiderTrading.Common.ConstEnum.Code.RequiredModuleOtherSecurity)
-                        { 
-                            if (Model.PreclearanceStatusCodeId == InsiderTrading.Common.ConstEnum.Code.PreclearanceRequestStatusApproved)
+                            }
+                            if (ViewBag.RequiredModuleID == InsiderTrading.Common.ConstEnum.Code.RequiredModuleBoth || ViewBag.RequiredModuleID == InsiderTrading.Common.ConstEnum.Code.RequiredModuleOtherSecurity)
                             {
+                                if (Model.PreclearanceStatusCodeId == InsiderTrading.Common.ConstEnum.Code.PreclearanceRequestStatusApproved)
+                                {
                                 <div class="row">
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group">
@@ -207,7 +277,7 @@
                             }
                         }
                         <!-- form field row 5 -->
-                        if (Model.PreclearanceStatusCodeId == null)
+                        @*if (Model.PreclearanceStatusCodeId == null)
                         {
                         <div class="row">
                             <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
@@ -218,7 +288,46 @@
                             </div>
                         </div>
                         <br>
-                        }
+                        }*@
+                        
+                        
+                        
+                        if (ViewBag.RequiredModuleID == 513001)
+                            {
+                                <div class="row">
+                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                                        @Html.CheckBox("declare", false, new { @class = "cr-check" })
+                                    </div>
+                                    <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+                                        @InsiderTrading.Common.Common.getResource("dis_lbl_17479")
+                                    </div>
+                                </div>
+                                <br>
+                            }
+                            else
+                            {
+                                if (ViewBag.UPSISeekDeclarationRequiredFlag == true)
+                                {
+                                    <div class="row">
+                                        @if (Model.PreclearanceStatusCodeId==null)
+                                        {
+                                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                                            @Html.CheckBox("declare", false, new { @class = "cr-check" })
+                                        </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                                                @Html.CheckBox("declare", true, new { @disabled = "disabled" })
+                                            </div>
+                                        }
+                                        <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+                                            @ViewBag.UPSISeekDeclaration
+                                        </div>
+                                    </div>
+                                    <br>
+                                }
+                            }
 
                         <!-- form buttons -->
                         <div class="row">
@@ -245,6 +354,7 @@
                         </div>
                         @Html.HiddenFor(m => m.SequenceNo)
                         }
+                    
                         @Html.Hidden("DematListURL", Url.Action("DematList", "PreclearanceRequestNonImplCompany"))
                         @Html.Hidden("AgreeTermsMsg", InsiderTrading.Common.Common.getResource("dis_lbl_17481"))
 
@@ -260,6 +370,19 @@
                         @Html.Hidden("LoadSecurityType", Url.Action("LoadSecurityType", "PreclearanceRequestNonImplCompany"))
                         <input type="hidden" name="UserInfoIdPassDMAT" id="UserInfoIdPassDMAT" value="@ViewBag.UserInfoIdPassDMAT" />
                         <input type="hidden" name="UserInfoId11" id="UserInfoId1" value="@ViewBag.UserInfoId" />
+                    
+                    
+                    <input type="hidden" name="RequiredModule" id="RequiredModule" value="@ViewBag.RequiredModuleID" />
+                    @if (ViewBag.UPSISeekDeclarationRequiredFlag==true)
+                    {
+                    <input type="hidden" name="UPSISeekDecReq11" id="UPSISeekDecReq11" value="1" />
+                    }
+                    else
+                    {
+                        <input type="hidden" name="UPSISeekDecReq11" id="UPSISeekDecReq11" value="0" />
+                    }
+                    
+                   
                     </div>
                 </div>
                     </div>
@@ -267,5 +390,18 @@
 </section>
 
 <div id="divDMATDetailsModal" style="display:none;"></div>
+<script>
+     $(window).load(function () {
+         var GetSessionValue = "@ViewBag.Fromedit";
+         var EnableDisableQuantityValue = "@ViewBag.EnableDisableQuantityValue";
+         if (EnableDisableQuantityValue == 400002) {
+             if (GetSessionValue == "FromEdit") {
+                 setTimeout(function () { $('#TransactionTypeCodeId').trigger('change') }, 20);
+             }
+         }
+    });
+</script>
 
 @Scripts.Render("~/bundles/PreclearanceRequestNonImplCompany")
+
+
