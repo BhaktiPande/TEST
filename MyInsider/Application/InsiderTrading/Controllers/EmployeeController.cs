@@ -232,6 +232,14 @@ namespace InsiderTrading.Controllers
                 Session["EmployeeType"] = isEmployee;
                 Session["NonEmployeeType"] = false;
 
+                WorkandEducationDetailsConfigurationDTO objWorkandEducationDetailsConfigurationDTO = new WorkandEducationDetailsConfigurationDTO();
+                using (var objCompaniesSL = new CompaniesSL())
+                {
+                    objWorkandEducationDetailsConfigurationDTO = objCompaniesSL.GetWorkandeducationDetailsConfiguration(objLoginUserDetails.CompanyDBConnectionString, 1);
+                }
+                ViewBag.WorkandEducationDetailsConfiguration = objWorkandEducationDetailsConfigurationDTO.WorkandEducationDetailsConfigurationId;
+                Session["WorkandEducationConfiguration"] = ViewBag.WorkandEducationDetailsConfiguration;
+
                 if (isPPD_Details_Saved)
                 {
                     ViewBag.UserDetailsSaved = true;

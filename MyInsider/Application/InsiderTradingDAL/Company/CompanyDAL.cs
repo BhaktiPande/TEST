@@ -2307,6 +2307,129 @@ namespace InsiderTradingDAL
         }
         #endregion SavePersonalDetailsConfirmation
 
+        #region SaveWorkandEducationDetailsConfiguration
+        /// <summary>
+        /// This method is used for the save Personal Details Confirmation details.
+        /// </summary>
+        /// <returns></returns>
+        public bool SaveWorkandEducationDetailsConfiguration(string i_sConnectionString, WorkandEducationDetailsConfigurationDTO m_objWorkandEducationDetailsConfigurationDTO)
+        {
+            #region Paramters
+            bool bReturn = false;
+            int out_nReturnValue;
+            int out_nSQLErrCode;
+            string out_sSQLErrMessage;
+            WorkandEducationDetailsConfigurationDTO res = null;
+            PetaPoco.Database db = null;
+            #endregion Paramters
+
+            try
+            {
+                #region Out Paramter
+                var nReturnValue = new SqlParameter("@out_nReturnValue", System.Data.SqlDbType.Int);
+                nReturnValue.Direction = System.Data.ParameterDirection.Output;
+                nReturnValue.Value = 0;
+                var nSQLErrCode = new SqlParameter("@out_nSQLErrCode", System.Data.SqlDbType.Int);
+                nSQLErrCode.Direction = System.Data.ParameterDirection.Output;
+                nSQLErrCode.Value = 0;
+                var sSQLErrMessage = new SqlParameter("@out_sSQLErrMessage", System.Data.SqlDbType.VarChar);
+                sSQLErrMessage.Direction = System.Data.ParameterDirection.Output;
+                sSQLErrMessage.Value = "";
+                #endregion Out Paramter
+
+                using (db = new PetaPoco.Database(i_sConnectionString, "System.Data.SqlClient") { EnableAutoSelect = false })
+                {
+
+                    using (var scope = db.GetTransaction())
+                    {
+                        res = db.Query<WorkandEducationDetailsConfigurationDTO>("exec st_usr_WorkandEducationDetailsConfiguration @inp_iCompanyID, @inp_iWorkandEducationDetailsConfigurationId, @inp_iLoggedInUserId, @out_nReturnValue OUTPUT,@out_nSQLErrCode OUTPUT,@out_sSQLErrMessage OUTPUT",
+                           new
+                           {
+                               inp_iCompanyID = m_objWorkandEducationDetailsConfigurationDTO.CompanyId,
+                               @inp_iWorkandEducationDetailsConfigurationId = m_objWorkandEducationDetailsConfigurationDTO.WorkandEducationDetailsConfigurationId,
+                               inp_iLoggedInUserId = m_objWorkandEducationDetailsConfigurationDTO.LoggedInUserId,
+                               out_nReturnValue = nReturnValue,
+                               out_nSQLErrCode = nSQLErrCode,
+                               out_sSQLErrMessage = sSQLErrMessage
+
+                           }).SingleOrDefault<WorkandEducationDetailsConfigurationDTO>();
+
+                        #region Error Values
+                        if (Convert.ToInt32(nReturnValue.Value) != 0)
+                        {
+                            Exception e = new Exception();
+                            out_nReturnValue = Convert.ToInt32(nReturnValue.Value);
+                            string sReturnValue = sLookupPrefix + out_nReturnValue;
+                            e.Data[0] = sReturnValue;
+                            if (nSQLErrCode.Value != System.DBNull.Value)
+                            {
+                                out_nSQLErrCode = Convert.ToInt32(nSQLErrCode.Value);
+                                e.Data[1] = out_nSQLErrCode;
+                            }
+                            if (sSQLErrMessage.Value != System.DBNull.Value)
+                            {
+                                out_sSQLErrMessage = Convert.ToString(sSQLErrMessage.Value);
+                                e.Data[2] = out_sSQLErrMessage;
+                            }
+                            bReturn = false;
+                            Exception ex = new Exception(db.LastSQL.ToString(), e);
+                            throw ex;
+                        }
+                        else
+                        {
+                            scope.Complete();
+                            bReturn = true;
+                        }
+                        #endregion Error Values
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                return bReturn;
+                throw exp;
+            }
+            finally
+            {
+
+            }
+            return bReturn;
+        }
+        #endregion SaveWorkandEducationDetailsConfiguration
+
+        #region GetWorkandeducationDetailsConfiguration
+        /// <summary>
+        /// This function will Get work and education details configuration
+        /// </summary>
+        /// <returns></returns>
+        public InsiderTradingDAL.WorkandEducationDetailsConfigurationDTO GetWorkandeducationDetailsConfiguration(string inp_sConnectionString, int inp_iCompanyId)
+        {
+            PetaPoco.Database db = null;
+            InsiderTradingDAL.WorkandEducationDetailsConfigurationDTO objCompanyDAL = new InsiderTradingDAL.WorkandEducationDetailsConfigurationDTO();
+            try
+            {
+                using (db = new PetaPoco.Database(inp_sConnectionString, "System.Data.SqlClient") { EnableAutoSelect = false })
+                {
+
+                    using (var scope = db.GetTransaction())
+                    {
+                        objCompanyDAL = db.Query<InsiderTradingDAL.WorkandEducationDetailsConfigurationDTO>("exec st_usr_GetworkandEducationDetailsConfiguration @inp_iCompanyId",
+                             new
+                             {
+                                 inp_iCompanyId = inp_iCompanyId
+                             }).Single<InsiderTradingDAL.WorkandEducationDetailsConfigurationDTO>();
+                        scope.Complete();
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                throw exp;
+            }
+            return objCompanyDAL;
+        }
+        #endregion GetWorkandeducationDetailsConfiguration
+
         #region GetPersonal_Details_Confirmation_Frequency
         /// <summary>
         /// This function will Get Personal Details Confirmation Frequency
