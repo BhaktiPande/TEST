@@ -166,6 +166,7 @@ namespace InsiderTrading.Common
             public const string DisclosureType = "147";
             public const string DisclosureStatus = "148";
             public const string ModeOfAcquisition = "149";
+            public const string WorkandEducationDetailsConfiguration = "539";
 
             public const string DisclosureLetterForUserType = "151";
 
