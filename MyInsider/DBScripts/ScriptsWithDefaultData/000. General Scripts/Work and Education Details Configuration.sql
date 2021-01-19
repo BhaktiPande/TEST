@@ -58,6 +58,15 @@ BEGIN
 END
 
 
+IF NOT EXISTS (SELECT * FROM com_WorkandEducationDetailsConfiguration where CompanyId = 1)
+BEGIN
+		INSERT INTO com_WorkandEducationDetailsConfiguration(CompanyId, WorkandEducationDetailsConfigurationId, CreatedBy, CreatedOn, ModifiedBy, ModifiedOn)
+		VALUES(1, 539001, 1, dbo.uf_com_GetServerDate(), 1, dbo.uf_com_GetServerDate())
+END
+
+
+
+
 
 
 
