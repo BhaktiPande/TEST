@@ -1,0 +1,55 @@
+﻿@model InsiderTrading.Models.WorkandEducationModel
+
+@{
+    var html_attr = new Dictionary<string, object> { };
+
+    html_attr.Add("class", "");
+    if (ViewBag.CalledFrom == "View")
+    {
+        html_attr.Add("disabled", "disabled");
+    }
+}
+@using (Html.BeginForm("", "", new { ReturnUrl = ViewBag.ReturnUrl}, FormMethod.Post, new { @class = "", role = "", @autocomplete = "off", id = "frmWorkandEducationDetails" }))
+{
+    <div class="panel-body">
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+        <br />
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.WorkandEducationMandatoryId)
+                    @Html.DropDownListFor(m => m.WorkandEducationMandatoryId, new SelectList(ViewBag.PPD_WorkandeducationList, "Key", "Value", ""), new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.WorkandEducationMandatoryId)
+                </div>
+            </div>
+        </div>
+        <br />
+
+    <div class="row">
+       <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        @{
+          if (ViewBag.CalledFrom == "Edit")
+          {
+            <button type="button" class="btn btn-success" data-loading-text="Saving" id="btnSaveWorkandEducationDetails" name="btnSaveWorkandEducationDetails" autocomplete="off">
+            <i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("com_btn_59002")
+            </button>
+          }
+         }
+             <a class="btn btn-success cancel" href='@Url.Action("Index", "Company", new {acid = @InsiderTrading.Common.ConstEnum.UserActions.COMPANY_VIEW})' role="button">
+             @InsiderTrading.Common.Common.getResource("com_btn_59003")
+             </a>
+        </div>
+     </div>
+</div>
+}
+@Html.Hidden("SaveEducationandWorkDetails", Url.Action("SaveEducationandWorkDetailsConfiguration", "Company"))
+@Scripts.Render("~/bundles/Company")
+@Scripts.Render("~/bundles/jqueryval")
+
+@*<script type="text/javascript">
+    if ('@ViewBag.ConfirmationFrequency' != 0)
+    {
+        $("#WorkandEducationdetailsId").val('@ViewBag.ConfirmationFrequency');
+    }
+</script>*@
