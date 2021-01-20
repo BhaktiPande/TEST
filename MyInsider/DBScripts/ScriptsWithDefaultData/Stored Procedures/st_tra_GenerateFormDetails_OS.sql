@@ -34,7 +34,7 @@ BEGIN
 	
 	DECLARE @nCommunicationModeCodeId_FormBForSelf INT = 156008 --Form B is applicable for preclearance of implementing and nonimplementing company (template is same)
 	DECLARE @nCommunicationModeCodeId_FormBForRelative INT = 156008 --Form B is applicable for preclearance of implementing and nonimplementing company (template is same)
-	
+	DECLARE @nCommunicationModeCodeId_FormBHideQuantity INT = 156016
 	
 	DECLARE @dtLastInitialDisclosuresBuyDate	DATETIME = NULL
 	DECLARE @nLastInitialDisclosuresBuyId	INT = NULL
@@ -74,6 +74,7 @@ BEGIN
     DECLARE @RecordCount INT=0;
     DECLARE @TableHeaders NVARCHAR(MAX)='';
     DECLARE @TableFooters NVARCHAR(MAX)='';
+	DECLARE @EnableDisableQuantity int;
    
     DECLARE @PreReqId VARCHAR(MAX)
 
@@ -99,6 +100,8 @@ BEGIN
 
 		SELECT @sImplementingCompanyName = CompanyName FROM mst_Company WHERE IsImplementing = 1 --Fetch the CompanyName of implementing company
 
+		select @EnableDisableQuantity=EnableDisableQuantityValue from mst_Company where IsImplementing=1
+
 		INSERT INTO #tblPlaceholders(Placeholder, PlaceholderDisplayName)
 		SELECT PlaceholderTag, PlaceholderDisplayName  FROM com_PlaceholderMaster WHERE PlaceholderGroupId = 156008 --and PlaceholderTag in('[USROS_DEMATACCOUNT]','[USROS_FIRSTNAME]','[USROS_MIDDLENAME]','[USROS_LASTNAME]','[USROS_RELATIONWITHINSIDER]','[USROS_PAN]','[USROS_SCRIP_NAME]','[USROS_ISIN]','[USROS_SECURITYTYPE]','[USROS_HOLDINGS]','[USROS_DEPT]')
 		
@@ -109,9 +112,14 @@ BEGIN
 		IF(@inp_nMapToTypeCodeId = @nMapTypePreclearance_NonImplementingCompany) --Perform processing for generation of formatted Form B
 		BEGIN
 	
-			
+			IF(@EnableDisableQuantity <> 400003)	
+			BEGIN
 				SELECT @sGeneratedFormContents_FormB = Contents, @nTemplateMasterId = TemplateMasterId FROM tra_TemplateMaster WHERE CommunicationModeCodeId = @nCommunicationModeCodeId_FormBForRelative
-			
+			END
+			ELSE
+			BEGIN
+				SELECT @sGeneratedFormContents_FormB = Contents, @nTemplateMasterId = TemplateMasterId FROM tra_TemplateMaster WHERE CommunicationModeCodeId = @nCommunicationModeCodeId_FormBHideQuantity
+			END
 			--print @sGeneratedFormContents_FormB
            ----------------- For Multiple Preclearance Request -------------
            IF CHARINDEX('<table', @sGeneratedFormContents_FormB ) > 0 
@@ -180,7 +188,8 @@ BEGIN
             
 				
 				SELECT @sPlaceholder = Placeholder FROM #tblPlaceholders WHERE ID = @nCounter				
-				
+				IF(@EnableDisableQuantity <> 400003)
+				BEGIN
 				SELECT  @TableRow =CASE 
 										WHEN (LOWER(@sPlaceholder) = LOWER('[USROS_DEMATACCOUNT]')) THEN REPLACE(@TableRow, @sPlaceholder, ISNULL(UDMAT.DEMATAccountNumber,'-')) 
 										
@@ -213,7 +222,42 @@ BEGIN
 				 LEFT JOIN usr_DMATDetails AS UDMATRelative ON UR.UserInfoIdRelative=UDMATRelative.UserInfoId
 				 LEFT JOIN COM_CODE AS RELATION_WITH_INSIDER ON RELATION_WITH_INSIDER.CODEID=ur.RelationTypeCodeId
 			     where  TD.TransactionDetailsId= @TransactionDetailsId
-				
+				 END
+				 ELSE
+				 BEGIN
+				 SELECT  @TableRow =CASE 
+										WHEN (LOWER(@sPlaceholder) = LOWER('[USROS_DEMATACCOUNT]')) THEN REPLACE(@TableRow, @sPlaceholder, ISNULL(UDMAT.DEMATAccountNumber,'-')) 
+										
+										WHEN (LOWER(@sPlaceholder) = LOWER('[USROS_FIRSTNAME]')) THEN REPLACE(@TableRow, @sPlaceholder, ISNULL(U.FIRSTNAME,'')) 
+										WHEN (LOWER(@sPlaceholder) = LOWER('[USROS_MIDDLENAME]')) THEN REPLACE(@TableRow, @sPlaceholder, ISNULL(U.MIDDLENAME,'')) 
+										WHEN (LOWER(@sPlaceholder) = LOWER('[USROS_LASTNAME]')) THEN REPLACE(@TableRow, @sPlaceholder, ISNULL(U.LASTNAME,'')) 
+										
+										WHEN (LOWER(@sPlaceholder) = LOWER('[USROS_RELATIONWITHINSIDER]')) THEN REPLACE(@TableRow, @sPlaceholder, ISNULL(RELATION_WITH_INSIDER.CODENAME,'Self')) 
+										WHEN (LOWER(@sPlaceholder) = LOWER('[USROS_PAN]')) THEN REPLACE(@TableRow, @sPlaceholder, ISNULL(U.PAN,'-')) 
+										WHEN (LOWER(@sPlaceholder) = LOWER('[USROS_SCRIP_NAME]')) THEN REPLACE(@TableRow, @sPlaceholder,ISNULL(rlCML.CompanyName,'-')) 
+										WHEN (LOWER(@sPlaceholder) = LOWER('[USROS_ISIN]')) THEN REPLACE(@TableRow, @sPlaceholder,ISNULL(rlCML.ISINCode,'-')) 
+										WHEN (LOWER(@sPlaceholder) = LOWER('[USROS_SECURITYTYPE]')) THEN REPLACE(@TableRow, @sPlaceholder,ISNULL(OS_SECURITYTYPE.CODENAME,'-')) 
+										--WHEN (LOWER(@sPlaceholder) = LOWER('[USROS_HOLDINGS]')) THEN REPLACE(@TableRow, @sPlaceholder,CASE WHEN TD.SecurityTypeCodeId = 139004 OR TD.SecurityTypeCodeId = 139005 THEN ISNULL(TD.Quantity * TD.LotSize,'0') ELSE ISNULL(TD.Quantity,'0') END) 
+										WHEN (LOWER(@sPlaceholder) = LOWER('[USROS_DEPT]')) THEN REPLACE(@TableRow, @sPlaceholder,ISNULL(DeptCode.CODENAME,'-'))
+										else @TableRow 
+					 			  END
+						
+						
+				 FROM tra_TransactionMaster_OS AS TM INNER JOIN 
+				 tra_TransactionDetails_OS AS TD ON TM.TransactionMasterId =TD.TransactionMasterId
+				 LEFT JOIN COM_CODE AS OS_SECURITYTYPE ON TD.SecurityTypeCodeId=OS_SECURITYTYPE.CODEID
+				 LEFT JOIN  USR_USERINFO AS U ON TD.ForUserInfoId = U.UserInfoId 
+				 LEFT JOIN com_Code DeptCode ON U.DepartmentId = DeptCode.CodeID
+				 LEFT JOIN mst_Company AS MC ON U.COMPANYID=MC.COMPANYID
+				 LEFT JOIN usr_DMATDetails AS UDMAT ON U.UserInfoId=UDMAT.UserInfoId AND UDMAT.DMATDetailsID = TD.DMATDetailsID
+				 LEFT JOIN usr_UserRelation AS  UR ON  TD.ForUserinfoid=UR.UserInfoIdRelative
+				 LEFT JOIN usr_UserInfo AS  URelative ON URelative.UserInfoId = UR.UserInfoId
+				 LEFT JOIN mst_Company AS MCRELATIVE ON case when  URelative.COMPANYID is null then u.COMPANYID else  URelative.COMPANYID end =MCRELATIVE.COMPANYID
+				 LEFT JOIN rl_CompanyMasterList AS rlCML ON TD.companyID =rlCML.RlCOMPANYID
+				 LEFT JOIN usr_DMATDetails AS UDMATRelative ON UR.UserInfoIdRelative=UDMATRelative.UserInfoId
+				 LEFT JOIN COM_CODE AS RELATION_WITH_INSIDER ON RELATION_WITH_INSIDER.CODEID=ur.RelationTypeCodeId
+			     where  TD.TransactionDetailsId= @TransactionDetailsId
+				 END
 				 set @nCounter = @nCounter +1					
 			END 	
 			
