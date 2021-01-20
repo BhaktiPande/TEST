@@ -30,7 +30,14 @@
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group">
-                            <a class="btn btn-success pull-left" id="btn_User_Demat" style="display:none" href='@Url.Action("EducationDetails", "Employee", new { acid = acid, nUserInfoID = Model.userInfoModel.UserInfoId, UEW_id = 0, Falg = "DEFAULT", nUserDematSaved = true, nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] })' role="button"> @InsiderTrading.Common.Common.getResource("usr_btn_50765") </a>
+                            @if (ViewBag.WorkandEducationDetailsConfiguration == 539001)
+                            {
+                                <a class="btn btn-success pull-left" id="btn_User_Demat" style="display:none" href='@Url.Action("EducationDetails", "Employee", new { acid = acid, nUserInfoID = Model.userInfoModel.UserInfoId, UEW_id = 0, Falg = "DEFAULT", nUserDematSaved = true, nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] })' role="button"> @InsiderTrading.Common.Common.getResource("usr_btn_50765") </a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-success pull-left" id="btn_User_Demat" style="display:none" href='@Url.Action("CreateRelative", "Employee", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_RELATIVEUSER_CREATE, nParentID = Model.userInfoModel.UserInfoId, nUserDematSaved = true, nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] })' role="button"> @InsiderTrading.Common.Common.getResource("usr_btn_50765") </a>
+                            }
                         </div>
                     </div>
                 </div>
@@ -56,8 +63,15 @@
                     @InsiderTrading.Common.Common.getResource("usr_lbl_50770")
                 </div>
                 <div class="modal-footer">
-                    @*<a class="btn btn-success" href='@Url.Action("CreateRelative", "Employee", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_RELATIVEUSER_CREATE, nParentID = Model.userInfoModel.UserInfoId, nUserDematSaved = true, nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] })' role="button">Yes</a>*@
-                    <a class="btn btn-success" href='@Url.Action("EducationDetails", "Employee", new { acid =  acid, nUserInfoID = Model.userInfoModel.UserInfoId, UEW_id = 0, Falg = "DEFAULT", nUserDematSaved = true, nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] })' role="button">Yes</a>
+                    @if (ViewBag.WorkandEducationDetailsConfiguration == 539001)
+                    {
+                    <a class="btn btn-success" href='@Url.Action("EducationDetails", "Employee", new { acid = acid, nUserInfoID = Model.userInfoModel.UserInfoId, UEW_id = 0, Falg = "DEFAULT", nUserDematSaved = true, nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] })' role="button">Yes</a>
+                    }
+                    else
+                    {
+                    <a class="btn btn-success" href='@Url.Action("CreateRelative", "Employee", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_RELATIVEUSER_CREATE, nParentID = Model.userInfoModel.UserInfoId, nUserDematSaved = true, nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] })' role="button">Yes</a>
+                    }
+
                     <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
                 </div>
             </div>
@@ -73,14 +87,18 @@
         if ('@Session["Confirm_PersonalDetails_Required"]' != 'True') {
             $("#btn_GetUserDetails").removeClass("btn-warning").addClass("btn-success");
             $("#btn_GetUserDematDetails").removeClass("btn-danger").addClass("btn-success");
-            $("#btn_GetUserEducationDetails").removeClass("btn-danger").addClass("btn-success");
+            if ('@ViewBag.WorkandEducationDetailsConfiguration' == 539001) {
+                $("#btn_GetUserEducationDetails").removeClass("btn-danger").addClass("btn-success");
+            }
             $("#btn_GetUserRelativeDetails").removeClass("btn-danger").addClass("btn-success");
             $("#btn_ConfirmDetails").removeClass("btn-danger").addClass("btn-success");
         }
         else if ('@Session["Confirm_PersonalDetails_Required"]' == 'True' && '@ViewBag.UserDetailsSaved' != 'True') {
             $("#btn_GetUserDetails").removeClass("btn-warning").addClass("btn-warning");
             $("#btn_GetUserDematDetails").removeClass("btn-danger").addClass("btn-danger");
-            $("#btn_GetUserEducationDetails").removeClass("btn-danger").addClass("btn-danger");
+            if ('@ViewBag.WorkandEducationDetailsConfiguration' == 539001) {
+                $("#btn_GetUserEducationDetails").removeClass("btn-danger").addClass("btn-danger");
+            }
             $("#btn_GetUserRelativeDetails").removeClass("btn-danger").addClass("btn-danger");
             $("#btn_ConfirmDetails").removeClass("btn-danger").addClass("btn-danger");
         }
@@ -90,12 +108,16 @@
         }
 
         if ($("#btn_GetUserRelativeDetails").hasClass("btn-danger")) {
-            $('#btn_GetUserEducationDetails').attr("disabled", "disabled");
+            if ('@ViewBag.WorkandEducationDetailsConfiguration' == 539001) {
+                $('#btn_GetUserEducationDetails').attr("disabled", "disabled");
+            }
             $('#btn_GetUserRelativeDetails').attr("disabled", "disabled");
             $('#btn_ConfirmDetails').attr("disabled", "disabled");
         }
         else {
-            $('#btn_GetUserEducationDetails').removeAttr("disabled", "disabled");
+            if ('@ViewBag.WorkandEducationDetailsConfiguration' == 539001) {
+                $('#btn_GetUserEducationDetails').removeAttr("disabled", "disabled");
+            }
             $('#btn_GetUserRelativeDetails').removeAttr("disabled", "disabled");
             $('#btn_ConfirmDetails').removeAttr("disabled", "disabled");
         }

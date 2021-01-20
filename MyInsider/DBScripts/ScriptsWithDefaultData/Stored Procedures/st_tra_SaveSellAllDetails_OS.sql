@@ -13,7 +13,10 @@ CREATE PROCEDURE [dbo].[st_tra_SaveSellAllDetails_OS]
 	@inp_bSellAllFlag BIT,									--1=SellAll,0=Not SellAll
 	@inp_iForUserInfoId		INT,
 	@inp_iCompanyId INT,
-	@inp_iDMATDetailsId INT,									
+	@inp_iDMATDetailsId INT,	
+	@inp_iSecurityTypecodeId INT,
+	@inp_Quanity DECIMAL(10,2),									
+	@inp_Value DECIMAL(10,2),
 	@out_nReturnValue			INT = 0 OUTPUT
 	,@out_nSQLErrCode			INT = 0 OUTPUT				-- Output SQL Error Number, if error occurred.
 	,@out_sSQLErrMessage		NVARCHAR(500) = '' OUTPUT	-- Output SQL Error Message, if error occurred.
@@ -46,21 +49,39 @@ BEGIN
 
 			
 			IF NOT EXISTS(SELECT 1 FROM tra_SellAllValues_OS WHERE TransactionMasterId = @inp_iTransactionMasterId and 
-					 ForUserInfoId=@inp_iForUserInfoId and CompanyId=@inp_iCompanyId and DMATDetailsId= @inp_iDMATDetailsId)
+					  CompanyId=@inp_iCompanyId and DMATDetailsId= @inp_iDMATDetailsId and SecurityTypeCodeId=@inp_iSecurityTypecodeId)
 				BEGIN
 				
-					INSERT INTO tra_SellAllValues_OS(TransactionMasterId,SellAllFlag,ForUserInfoId,CompanyId,DMATDetailsId,CreatedOn,ModifiedOn)
-							VALUES(@inp_iTransactionMasterId , @inp_bSellAllFlag , @inp_iForUserInfoId,@inp_iCompanyId,@inp_iDMATDetailsId,dbo.uf_com_GetServerDate(),dbo.uf_com_GetServerDate())
+					INSERT INTO tra_SellAllValues_OS(TransactionMasterId,SellAllFlag,ForUserInfoId,CompanyId,DMATDetailsId,CreatedOn,ModifiedOn,SecurityTypeCodeId)
+							VALUES(@inp_iTransactionMasterId , @inp_bSellAllFlag , @inp_iForUserInfoId,@inp_iCompanyId,@inp_iDMATDetailsId,dbo.uf_com_GetServerDate(),dbo.uf_com_GetServerDate(),@inp_iSecurityTypecodeId)
 							
 				END
 			ELSE
 			BEGIN
 				UPDATE tra_SellAllValues_OS SET SellAllFlag= @inp_bSellAllFlag WHERE TransactionMasterId = @inp_iTransactionMasterId and 
-					 ForUserInfoId=@inp_iForUserInfoId and CompanyId=@inp_iCompanyId and DMATDetailsId= @inp_iDMATDetailsId
+					 ForUserInfoId=@inp_iForUserInfoId and CompanyId=@inp_iCompanyId and DMATDetailsId= @inp_iDMATDetailsId and SecurityTypeCodeId=@inp_iSecurityTypecodeId
 			END
 			
-			
+			DECLARE @nSellAllFlag INT=0
+			DECLARE @nClosingBalance INT=0			
+			DECLARE @nYearcodeID INT=0
+		
+		SELECT 		
+		@nSellAllFlag=SellAllFlag		
+		FROM tra_SellAllValues_OS SA	
+		join usr_UserInfo UI on UI.UserInfoId = SA.ForUserInfoId
+		WHERE TransactionMasterId = @inp_iTransactionMasterId and ForUserInfoId=@inp_iForUserInfoId and SA.CompanyId=@inp_iCompanyId and DMATDetailsId= @inp_iDMATDetailsId and SecurityTypeCodeId=@inp_iSecurityTypecodeId
 
+		IF(@nSellAllFlag=1)
+		BEGIN
+			SELECT @nYearcodeID=MAX(YearCodeId) FROM tra_TransactionSummaryDMATWise_OS WHERE UserInfoIdRelative=@inp_iForUserInfoId and CompanyId=@inp_iCompanyId and DMATDetailsId= @inp_iDMATDetailsId and SecurityTypeCodeId=@inp_iSecurityTypecodeId
+			SELECT @nClosingBalance=ClosingBalance FROM tra_TransactionSummaryDMATWise_OS WHERE YearCodeId=@nYearcodeID AND PeriodCodeId=124001 AND UserInfoIdRelative=@inp_iForUserInfoId and CompanyId=@inp_iCompanyId and DMATDetailsId= @inp_iDMATDetailsId and SecurityTypeCodeId=@inp_iSecurityTypecodeId
+			UPDATE tra_TransactionDetails_OS SET Quantity=@nClosingBalance,Value=@inp_Quanity where TransactionMasterId=@inp_iTransactionMasterId
+		END
+		ELSE
+		BEGIN
+			UPDATE tra_TransactionDetails_OS SET Quantity=@inp_Quanity,Value=@inp_Value where TransactionMasterId=@inp_iTransactionMasterId
+		END
 		
 		SELECT 
 		SellAllDetailsId,
@@ -68,11 +89,12 @@ BEGIN
 		ForUserInfoId,
 		SellAllFlag,
 		SA.CompanyId,
-		DMATDetailsId
-		
-		FROM tra_SellAllValues_OS SA
-		
-		WHERE TransactionMasterId = @inp_iTransactionMasterId
+		DMATDetailsId,
+		UI.UserTypeCodeId
+		FROM tra_SellAllValues_OS SA	
+		join usr_UserInfo UI on UI.UserInfoId = SA.ForUserInfoId
+		WHERE TransactionMasterId = @inp_iTransactionMasterId and ForUserInfoId=@inp_iForUserInfoId and SA.CompanyId=@inp_iCompanyId and DMATDetailsId= @inp_iDMATDetailsId and SecurityTypeCodeId=@inp_iSecurityTypecodeId
+	
 	
 		--select *    from tra_SellAllValues_OS	where SellAllDetailsId=12	
 		--SET @out_nReturnValue = 0
