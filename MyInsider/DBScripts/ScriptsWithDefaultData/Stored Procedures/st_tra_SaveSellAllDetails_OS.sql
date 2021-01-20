@@ -63,8 +63,7 @@ BEGIN
 			END
 			
 			DECLARE @nSellAllFlag INT=0
-			DECLARE @nClosingBalance INT=0
-			DECLARE @nClosingValue INT=0
+			DECLARE @nClosingBalance INT=0			
 			DECLARE @nYearcodeID INT=0
 		
 		SELECT 		
@@ -76,8 +75,8 @@ BEGIN
 		IF(@nSellAllFlag=1)
 		BEGIN
 			SELECT @nYearcodeID=MAX(YearCodeId) FROM tra_TransactionSummaryDMATWise_OS WHERE UserInfoIdRelative=@inp_iForUserInfoId and CompanyId=@inp_iCompanyId and DMATDetailsId= @inp_iDMATDetailsId and SecurityTypeCodeId=@inp_iSecurityTypecodeId
-			SELECT @nClosingBalance=ClosingBalance,@nClosingValue=[Value] FROM tra_TransactionSummaryDMATWise_OS WHERE YearCodeId=@nYearcodeID AND PeriodCodeId=124001 AND UserInfoIdRelative=@inp_iForUserInfoId and CompanyId=@inp_iCompanyId and DMATDetailsId= @inp_iDMATDetailsId and SecurityTypeCodeId=@inp_iSecurityTypecodeId
-			UPDATE tra_TransactionDetails_OS SET Quantity=@nClosingBalance,Value=@nClosingValue where TransactionMasterId=@inp_iTransactionMasterId
+			SELECT @nClosingBalance=ClosingBalance FROM tra_TransactionSummaryDMATWise_OS WHERE YearCodeId=@nYearcodeID AND PeriodCodeId=124001 AND UserInfoIdRelative=@inp_iForUserInfoId and CompanyId=@inp_iCompanyId and DMATDetailsId= @inp_iDMATDetailsId and SecurityTypeCodeId=@inp_iSecurityTypecodeId
+			UPDATE tra_TransactionDetails_OS SET Quantity=@nClosingBalance,Value=@inp_Quanity where TransactionMasterId=@inp_iTransactionMasterId
 		END
 		ELSE
 		BEGIN
