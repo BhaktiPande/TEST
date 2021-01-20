@@ -39,7 +39,37 @@
         "143007": ["1"],
         "143008":["1"]
     };
+
+    var Securitytype_TransactionType = {
+        "143001": ["139001", "139002", "139003", "139004", "139005"],
+        "143002": ["139001", "139002", "139003", "139004", "139005"],
+        "143006": ["139001"],
+        "143007": ["139001"],
+        "143008": ["139001"],
+    };
+
+    var SecurityTypeBuy_ModeOfAcquisitionMapping = {
+        "139001": ["149005", "149006", "149004", "149007", "149003", "149001", "149002", "149009", "149008", "149011", "143009", "149019", "149020", "149021", "149022", "149023"],
+        "139002": ["149005", "149006", "149004", "149007", "149002", "149003", "149001", "149008", "149011"],
+        "139003": ["149005", "149006", "149007", "149002", "149003", "149001", "149008", "149011"],
+        "139004": ["149005", "149006", "149004", "149007", "149002", "149003", "149001", "149008", "149011"],
+        "139005": ["149005", "149006", "149004", "149007", "149002", "149003", "149001", "149008", "149011"],
+    };
+
+    var SecurityTypeSell_ModeOfAcquisitionMapping = {
+        "139001": ["149005", "149006", "149004", "149007", "149003", "149002", "149008", "149010", "149016", "149017", "149018"],
+        "139002": ["149005", "149006", "149004", "149007", "149002", "149003", "149008", "149010"],
+        "139003": ["149005", "149006", "149004", "149007", "149002", "149003", "149008", "149010"],
+        "139004": ["149005", "149006", "149004", "149007", "149002", "149003", "149008", "149010"],
+        "139005": ["149005", "149006", "149004", "149007", "149002", "149003", "149008", "149010"],
+    };
+
+
+
+
+
     var ModeOfAcquisitionOptions = '';
+    var TransactionType = '';
     var CashLessAll = "@InsiderTrading.Common.ConstEnum.Code.TransactionTypeCashlessAll";
     var CashLessPartial = "@InsiderTrading.Common.ConstEnum.Code.TransactionTypeCashlessPartial";
     var Sell = "@InsiderTrading.Common.ConstEnum.Code.TransactionTypeSell";
@@ -49,12 +79,13 @@
     var PledgeRevoke = "@InsiderTrading.Common.ConstEnum.Code.TransactionTypePledgeRevoke";
     var PledgeInvoke = "@InsiderTrading.Common.ConstEnum.Code.TransactionTypePledgeInvoke";
 
+
     $(document).ready(function () {
         var flag = '@ViewBag.TransactionTypeCodeFlag';
         var nMultiplier = 100;
 
         ModeOfAcquisitionOptions = $("#ModeOfAcquisitionCodeId").html();
-
+        TransactionType = $("#SecurityTypeCodeId").html();
         if ($("#ModeOfAcquisitionCodeId").val() == "0" && $("#ModeOfAcquisitionCodeId").is(":visible")) {
             $("#ModeOfAcquisitionCodeId").attr("disabled", "disabled");
         }
@@ -227,6 +258,31 @@
 
                 }
             }
+
+            if ($(this).val() != "0") {
+                var TransactionType_OS = Securitytype_TransactionType[$(this).val()];
+                $("#SecurityTypeCodeId").removeAttr("disabled");
+                $("#SecurityTypeCodeId").html(TransactionType);
+                var toRemove = [];
+                $("#SecurityTypeCodeId option").each(function () {
+                    if ($(this).val() != "0" && $.inArray($(this).val(), TransactionType_OS) == -1) {
+                        toRemove.push($(this).val());
+                    }
+                });
+                $(toRemove).each(function () {
+                    $("#SecurityTypeCodeId option[value='" + this + "']").remove();
+                });
+            } else {
+                $("#SecurityTypeCodeId option").each(function () {
+                    if ($(this).val() != "0") {
+                        $("#SecurityTypeCodeId option[value='" + $(this).val() + "']").remove();
+                    }
+                });
+
+            } 
+
+
+
             //if ($(this).val() != "0" && $("#ModeOfAcquisitionCodeId").is(":visible")) {
             if ($(this).val() != "0") {
                 var AllowedModeOfacquisition = SecurityType_ModeOfAcquisitionMapping[$(this).val()];
@@ -310,6 +366,60 @@
             ValueForSecuritiesHeldPriorAcquisiton();
             CalculateValueForSecuritiesPostAcquisiton();
         }).change();
+
+        $('#SecurityTypeCodeId').change(function () {
+
+            if ($("#TransactionTypeCodeId").val() == "143001") {
+                debugger;
+                if ($(this).val() != "0") {
+                    var AllowedModeOfacquisition1 = SecurityTypeBuy_ModeOfAcquisitionMapping[$(this).val()];
+                    $("#ModeOfAcquisitionCodeId").removeAttr("disabled");
+                    $("#ModeOfAcquisitionCodeId").html(ModeOfAcquisitionOptions);
+                    var toRemove = [];
+
+                    $("#ModeOfAcquisitionCodeId option").each(function () {
+                        if ($(this).val() != "0" && $.inArray($(this).val(), AllowedModeOfacquisition1) == -1) {
+                            toRemove.push($(this).val());
+                        }
+                    });
+                    $(toRemove).each(function () {
+                        $("#ModeOfAcquisitionCodeId option[value='" + this + "']").remove();
+                    });
+                } else {
+                    $("#ModeOfAcquisitionCodeId option").each(function () {
+                        if ($(this).val() != "0") {
+                            $("#ModeOfAcquisitionCodeId option[value='" + $(this).val() + "']").remove();
+                        }
+                    });
+                    $("#ModeOfAcquisitionCodeId").attr("disabled", "disabled");
+                }
+            }
+            else if ($("#TransactionTypeCodeId").val() == "143002") {
+
+                if ($(this).val() != "0") {
+                    var AllowedModeOfacquisition1 = SecurityTypeSell_ModeOfAcquisitionMapping[$(this).val()];
+                    $("#ModeOfAcquisitionCodeId").removeAttr("disabled");
+                    $("#ModeOfAcquisitionCodeId").html(ModeOfAcquisitionOptions);
+                    var toRemove = [];
+
+                    $("#ModeOfAcquisitionCodeId option").each(function () {
+                        if ($(this).val() != "0" && $.inArray($(this).val(), AllowedModeOfacquisition1) == -1) {
+                            toRemove.push($(this).val());
+                        }
+                    });
+                    $(toRemove).each(function () {
+                        $("#ModeOfAcquisitionCodeId option[value='" + this + "']").remove();
+                    });
+                } else {
+                    $("#ModeOfAcquisitionCodeId option").each(function () {
+                        if ($(this).val() != "0") {
+                            $("#ModeOfAcquisitionCodeId option[value='" + $(this).val() + "']").remove();
+                        }
+                    });
+                    $("#ModeOfAcquisitionCodeId").attr("disabled", "disabled");
+                }
+            }
+        });
 
         $('#ModeOfAcquisitionCodeId').change(function () {
             ValueForSecuritiesHeldPriorAcquisiton();
@@ -1333,6 +1443,8 @@
                                 </div>
                 </div>
             </div>
+            @Html.Hidden("LoadModeOfAquisition", Url.Action("LoadModeOfAquisition", "TradingTransaction_OS"))
+            @Html.Hidden("LoadSecurityType", Url.Action("LoadSecurityType", "PreclearanceRequestNonImplCompany"))
         </section>
 
     }
