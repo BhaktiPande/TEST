@@ -836,7 +836,7 @@ namespace InsiderTradingDAL
                 {
                     using (var scope = db.GetTransaction())
                     {
-                        var res = db.Query<TradingTransactionDTO_OS>("exec st_tra_SaveSellAllDetails_OS  @inp_iTransactionMasterId,@inp_bSellAllFlag, @inp_iForUserInfoId,@inp_iCompanyId,@inp_iDMATDetailsId, @out_nReturnValue OUTPUT, @out_nSQLErrCode OUTPUT, @out_sSQLErrMessage OUTPUT",
+                        var res = db.Query<TradingTransactionDTO_OS>("exec st_tra_SaveSellAllDetails_OS  @inp_iTransactionMasterId,@inp_bSellAllFlag, @inp_iForUserInfoId,@inp_iCompanyId,@inp_iDMATDetailsId,@inp_iSecurityTypecodeId,@inp_Quanity,@inp_Value, @out_nReturnValue OUTPUT, @out_nSQLErrCode OUTPUT, @out_sSQLErrMessage OUTPUT",
 
                             new
                             {
@@ -845,7 +845,10 @@ namespace InsiderTradingDAL
                                 @inp_bSellAllFlag = m_objTradingTransactionDTO_OS.SellAllFlag,
                                 @inp_iForUserInfoId = m_objTradingTransactionDTO_OS.ForUserInfoId,
                                 inp_iCompanyId=m_objTradingTransactionDTO_OS.CompanyId,
-                                @inp_iDMATDetailsId=m_objTradingTransactionDTO_OS.DMATDetailsID,                                
+                                @inp_iDMATDetailsId=m_objTradingTransactionDTO_OS.DMATDetailsID,
+                                @inp_iSecurityTypecodeId=m_objTradingTransactionDTO_OS.SecurityTypeCodeId,
+                                @inp_Quanity=m_objTradingTransactionDTO_OS.Quantity,
+                                @inp_Value= m_objTradingTransactionDTO_OS.Value,
                                 @out_nReturnValue = nout_nReturnValue,
                                 @out_nSQLErrCode = nout_nSQLErrCode,
                                 @out_sSQLErrMessage = sout_sSQLErrMessage,
