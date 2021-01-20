@@ -1169,6 +1169,48 @@ namespace InsiderTrading.SL
         }
         #endregion SavePersonalDetailsConfirmation
 
+        #region SaveWorkandEducationDetailsConfiguration
+        /// <summary>
+        /// This method is used for the Save Work and Education Details Configuration details.
+        /// </summary>
+        /// <returns></returns>
+        public bool SaveWorkandEducationDetailsConfiguration(string i_sConnectionString, WorkandEducationDetailsConfigurationDTO m_objWorkandEducationDetailsConfigurationDTO)
+        {
+            try
+            {
+                using (var objCompanyDAL = new InsiderTradingDAL.CompanyDAL())
+                {
+                    return objCompanyDAL.SaveWorkandEducationDetailsConfiguration(i_sConnectionString, m_objWorkandEducationDetailsConfigurationDTO);
+                }
+            }
+            catch (Exception exp)
+            {
+                throw exp;
+            }
+        }
+        #endregion SaveWorkandEducationDetailsConfiguration
+
+        #region GetWorkandeducationDetailsConfiguration
+        /// <summary>
+        /// This method is used for the Get work and education details configuration.
+        /// </summary>
+        /// <returns></returns>
+        public WorkandEducationDetailsConfigurationDTO GetWorkandeducationDetailsConfiguration(string i_sConnectionString, int i_nCompanyId)
+        {
+            try
+            {
+                using (var objCompanyDAL = new CompanyDAL())
+                {
+                    return objCompanyDAL.GetWorkandeducationDetailsConfiguration(i_sConnectionString, i_nCompanyId);
+                }
+            }
+            catch (Exception exp)
+            {
+                throw exp;
+            }
+        }
+        #endregion GetWorkandeducationDetailsConfiguration
+
         #region GetPersonal_Details_Confirmation_Frequency
         /// <summary>
         /// This method is used for the Get Personal Details Confirmation Frequency Details.
