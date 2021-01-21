@@ -163,6 +163,28 @@ namespace InsiderTrading.Controllers
             UpsiSharingData objdata1 = new UpsiSharingData();
             List<UpsiSharingData> objdata = new List<UpsiSharingData>();
 
+            PopulateComboDTO objPopulateComboDTO = new PopulateComboDTO();
+            objPopulateComboDTO.Key = "";
+            objPopulateComboDTO.Value = "Select";
+
+            List<PopulateComboDTO> lstCategoryList = new List<PopulateComboDTO>();
+            lstCategoryList.Add(objPopulateComboDTO);
+            lstCategoryList.AddRange(Common.Common.GetPopulateCombo(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.ComboType.ListOfCode,
+            Convert.ToInt32(ConstEnum.CodeGroup.CategoryOffinancial).ToString(), null, null, null, null, "usr_msg_").ToList<PopulateComboDTO>());
+            ViewBag.CategoryDropDown = lstCategoryList;
+
+            List<PopulateComboDTO> lstReasonList = new List<PopulateComboDTO>();
+            lstReasonList.Add(objPopulateComboDTO);
+            lstReasonList.AddRange(Common.Common.GetPopulateCombo(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.ComboType.ListOfCode,
+            Convert.ToInt32(ConstEnum.CodeGroup.ReasonforSharing).ToString(), null, null, null, null, "usr_msg_").ToList<PopulateComboDTO>());
+            ViewBag.ReasonDropDown = lstReasonList;
+
+            List<PopulateComboDTO> lstModeOfSharingList = new List<PopulateComboDTO>();
+            lstModeOfSharingList.Add(objPopulateComboDTO);
+            lstModeOfSharingList.AddRange(Common.Common.GetPopulateCombo(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.ComboType.ListOfCode,
+            Convert.ToInt32(ConstEnum.CodeGroup.ModeOfSharing).ToString(), null, null, null, null, "usr_msg_").ToList<PopulateComboDTO>());
+            ViewBag.ModeOfSharing = lstModeOfSharingList;
+
             try
             {
                 if (objUpsiSharingData.SharingDate != null)
@@ -287,6 +309,37 @@ namespace InsiderTrading.Controllers
                                             objUpsiSharingDataTable.UserInfoId = objLoginUserDetails.LoggedInUserID;
                                             objUpsiSharingDataTable.PublishDate = objUpsiSharingData.PublishDate;
                                             objUpsiSharingDataTable.CHKUserAndOther = objUpsiSharingData.CHKUserAndOther;
+                                            objUpsiSharingDataTable.UPSIRecipient = objUpsiSharingData.CHKUserAndOther == "True" ? "Register User" : "Unregister User";
+                                            foreach (var type in lstCategoryList)
+                                            {
+                                                if (type.Key == objUpsiSharingData.Category_Shared.ToString())
+                                                {
+                                                    objUpsiSharingData.Category_Shared1 = type.Value;
+                                                    objUpsiSharingDataTable.Category_Shared1 = type.Value;
+                                                }
+                                            }
+
+                                            foreach (var type in lstReasonList)
+                                            {
+                                                if (type.Key == objUpsiSharingData.Reason_sharing.ToString())
+                                                {
+                                                    objUpsiSharingData.Reason_sharingdata = type.Value;
+                                                    objUpsiSharingDataTable.Reason_sharingdata = type.Value;
+                                                }
+                                            }
+
+                                            foreach (var type in lstModeOfSharingList)
+                                            {
+                                                SelectedIndex = SelectedIndex + 1;
+                                                if (type.Key == objUpsiSharingData.ModeOfSharing.ToString())
+                                                {
+                                                    objUpsiSharingData.ModeOfSharingdata = type.Value;
+                                                    objUpsiSharingDataTable.ModeOfSharingdata = type.Value;
+                                                    ViewBag.ModeofSharingIndex = SelectedIndex;
+                                                    break;
+                                                }
+                                            }
+
                                             objdata.Add(objUpsiSharingDataTable);
                                         }
                                     }
@@ -296,6 +349,34 @@ namespace InsiderTrading.Controllers
                         }
                         else
                         {
+                            objUpsiSharingData.UPSIRecipient = objUpsiSharingData.CHKUserAndOther == "True" ? "Register User" : "Unregister User";
+                            foreach (var type in lstCategoryList)
+                            {
+                                if (type.Key == objUpsiSharingData.Category_Shared.ToString())
+                                {
+                                    objUpsiSharingData.Category_Shared1 = type.Value;
+                                }
+                            }
+
+                            foreach (var type in lstReasonList)
+                            {
+                                if (type.Key == objUpsiSharingData.Reason_sharing.ToString())
+                                {
+                                    objUpsiSharingData.Reason_sharingdata = type.Value;
+                                }
+                            }
+
+                            foreach (var type in lstModeOfSharingList)
+                            {
+                                SelectedIndex = SelectedIndex + 1;
+                                if (type.Key == objUpsiSharingData.ModeOfSharing.ToString())
+                                {
+                                    objUpsiSharingData.ModeOfSharingdata = type.Value;
+                                    ViewBag.ModeofSharingIndex = SelectedIndex;
+                                    break;
+                                }
+                            }
+
                             objdata.Add(objUpsiSharingData);
 
                             if (objUpsiSharingData.Sharedby == "True")
@@ -340,49 +421,6 @@ namespace InsiderTrading.Controllers
                 sequenceNo = Convert.ToInt32(TempData["SequenceNo"]);
                 objUpsiSharingData.SequenceNo = (sequenceNo == 0) ? 1 : sequenceNo + 1;
                 TempData["SequenceNo"] = objUpsiSharingData.SequenceNo;
-                PopulateComboDTO objPopulateComboDTO = new PopulateComboDTO();
-                objPopulateComboDTO.Key = "";
-                objPopulateComboDTO.Value = "Select";
-                List<PopulateComboDTO> lstCategoryList = new List<PopulateComboDTO>();
-                lstCategoryList.Add(objPopulateComboDTO);
-                lstCategoryList.AddRange(Common.Common.GetPopulateCombo(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.ComboType.ListOfCode,
-                Convert.ToInt32(ConstEnum.CodeGroup.CategoryOffinancial).ToString(), null, null, null, null, "usr_msg_").ToList<PopulateComboDTO>());
-                ViewBag.CategoryDropDown = lstCategoryList;
-                foreach (var type in lstCategoryList)
-                {
-                    if (type.Key == objUpsiSharingData.Category_Shared.ToString())
-                    {
-                        objUpsiSharingData.Category_Shared1 = type.Value;
-                    }
-                }
-                List<PopulateComboDTO> lstReasonList = new List<PopulateComboDTO>();
-                lstReasonList.Add(objPopulateComboDTO);
-                lstReasonList.AddRange(Common.Common.GetPopulateCombo(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.ComboType.ListOfCode,
-                Convert.ToInt32(ConstEnum.CodeGroup.ReasonforSharing).ToString(), null, null, null, null, "usr_msg_").ToList<PopulateComboDTO>());
-                ViewBag.ReasonDropDown = lstReasonList;
-                foreach (var type in lstReasonList)
-                {
-                    if (type.Key == objUpsiSharingData.Reason_sharing.ToString())
-                    {
-                        objUpsiSharingData.Reason_sharingdata = type.Value;
-                    }
-                }
-                List<PopulateComboDTO> lstModeOfSharingList = new List<PopulateComboDTO>();
-                lstModeOfSharingList.Add(objPopulateComboDTO);
-                lstModeOfSharingList.AddRange(Common.Common.GetPopulateCombo(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.ComboType.ListOfCode,
-                Convert.ToInt32(ConstEnum.CodeGroup.ModeOfSharing).ToString(), null, null, null, null, "usr_msg_").ToList<PopulateComboDTO>());
-                ViewBag.ModeOfSharing = lstModeOfSharingList;
-                foreach (var type in lstModeOfSharingList)
-                {
-                    SelectedIndex = SelectedIndex + 1;
-                    if (type.Key == objUpsiSharingData.ModeOfSharing.ToString())
-                    {
-                        objUpsiSharingData.ModeOfSharingdata = type.Value;
-                        ViewBag.ModeofSharingIndex = SelectedIndex;
-                        break;
-                    }
-                }
-
 
                 List<PopulateComboDTO> lstMultipleList = new List<PopulateComboDTO>();
                 lstMultipleList.AddRange(Common.Common.GetPopulateCombo(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.ComboType.Listofmultipleuser,

@@ -976,25 +976,35 @@ DatatableGrid.prototype.format = {
         'dis_grd_55011': function (obj, type) {
             return dateTimeFormat(obj.aData['dis_grd_55011']);
         },
+        
+        //'dis_grd_55001': function (obj, type) {
 
-        'dis_grd_55001': function (obj, type) {
+        //    //    var str = '';
+        //    //    var strnull = '';
+        //    //    if (obj.aData['dis_grd_55011'] == null)
+        //    //    {
+        //    //        obj.aData['dis_grd_55011'] = strnull;
+        //    //    }
 
-            //    var str = '';
-            //    var strnull = '';
-            //    if (obj.aData['dis_grd_55011'] == null)
-            //    {
-            //        obj.aData['dis_grd_55011'] = strnull;
-            //    }
+        //    //     str = '<div class="form-group" id="sandbox-container" style="margin-left: 5px; margin-right: 5px;"> \
+        //    //                    <div class="input-group date"> \
+        //    //                        <input type="text" value="' + dateTimeFormat(obj.aData['dis_grd_55011']) + '" name="" onchange="UpdateUpsi(' + obj.aData['UserInfoId'] + ',' + obj.aData['Upsi_id'] + ')" id="Upsidate" class=" form-control valid" style="width:150px;"/> \
+        //    //                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span> \
+        //    //                    </div> \
+        //    //                </div>';
+        //    //var str = '<a onclick="UpdateUpsi(' + obj.aData['UserInfoId'] + ',' + obj.aData['UPSIDocumentId'] + ')" style="color:Blue;cursor:pointer;text-decoration:underline" title="Please click here to update Publish Date">' + obj.aData['dis_grd_55001'] + '</a>'
+        //    //return str;
+        //},
 
-            //     str = '<div class="form-group" id="sandbox-container" style="margin-left: 5px; margin-right: 5px;"> \
-            //                    <div class="input-group date"> \
-            //                        <input type="text" value="' + dateTimeFormat(obj.aData['dis_grd_55011']) + '" name="" onchange="UpdateUpsi(' + obj.aData['UserInfoId'] + ',' + obj.aData['Upsi_id'] + ')" id="Upsidate" class=" form-control valid" style="width:150px;"/> \
-            //                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span> \
-            //                    </div> \
-            //                </div>';
-            var str = '<a onclick="UpdateUpsi(' + obj.aData['UserInfoId'] + ',' + obj.aData['UPSIDocumentId'] + ')" style="color:Blue;cursor:pointer;text-decoration:underline" title="Please click here to update Publish Date">' + obj.aData['dis_grd_55001'] + '</a>'
+        'dis_grd_55011': function (obj, type) {
+            var str;
+            if (obj.aData['dis_grd_55011'] == null) {
+                str = '<a onclick="UpdateUpsi(' + obj.aData['UserInfoId'] + ',' + obj.aData['UPSIDocumentId'] + ')" style="color:Blue;cursor:pointer;text-decoration:underline" title="Please click here to update Publish Date">' + 'Add date' + '</a>'
+            } else {
+                str = '<a onclick="UpdateUpsi(' + obj.aData['UserInfoId'] + ',' + obj.aData['UPSIDocumentId'] + ')" style="color:Blue;cursor:pointer;text-decoration:underline" title="Please click here to update Publish Date">' + dateTimeFormat(obj.aData['dis_grd_55011']) + '</a>'
+            }
             return str;
-        },
+        }
 
     },
 
