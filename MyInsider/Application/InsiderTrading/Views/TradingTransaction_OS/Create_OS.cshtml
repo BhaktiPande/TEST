@@ -1205,44 +1205,63 @@
                             }
                             else
                             {
-                                <div class="row">
-                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                        <div class="form-group">
-                                            @Html.LabelFor(model => model.ForUserInfoId)
-                                            @if (@ViewBag.TransactionTypeCodeFlag)
-                                            {
-                                                @Html.DropDownListFor(model => model.ForUserInfoId, new SelectList(ViewBag.UserPan, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
-                                                @Html.HiddenFor(model => model.ForUserInfoId)
-                                            }
-                                            else
-                                            {
-                                                @Html.DropDownListFor(model => model.ForUserInfoId, new SelectList(ViewBag.UserPan, "Key", "Value", ""), new { @class = "form-control" })
-                                            }
-                                            @Html.ValidationMessageFor(model => model.ForUserInfoId)
-                                        </div>
-                                    </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.ForUserInfoId)
+                                    @if (@ViewBag.TransactionTypeCodeFlag)
+                                    {
+                                        @Html.DropDownListFor(model => model.ForUserInfoId, new SelectList(ViewBag.UserPan, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
+                                        @Html.HiddenFor(model => model.ForUserInfoId)
+                                    }
+                                    else
+                                    {
+                                        @Html.DropDownListFor(model => model.ForUserInfoId, new SelectList(ViewBag.UserPan, "Key", "Value", ""), new { @class = "form-control" })
+                                    }
+                                    @Html.ValidationMessageFor(model => model.ForUserInfoId)
+                                </div>
+                            </div>
 
 
-                                    <div id="UserDetails" style="display:none;">
-                                        @Html.HiddenFor(model => model.DMATDetailsID)
-                                    </div>
+                            <div id="UserDetails" style="display:none;">
+                                @Html.HiddenFor(model => model.DMATDetailsID)
+                            </div>
 
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            @Html.LabelFor(model => model.SecurityTypeCodeId)
-                                            @if (@ViewBag.TransactionTypeCodeFlag)
-                                            {
-                                                @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
-                                                @Html.HiddenFor(model => model.SecurityTypeCodeId)
-                                            }
-                                            else
-                                            {
-                                                @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control" })
-                                            }
-                                            @Html.ValidationMessageFor(model => model.SecurityTypeCodeId)
-                                        </div>
+                            @if (@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
+                            {
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.TransactionTypeCodeId)
+                                        @if (@ViewBag.TransactionTypeCodeFlag)
+                                        {
+                                            @Html.DropDownListFor(model => model.TransactionTypeCodeId, new SelectList(ViewBag.TransactionType, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
+                                            @Html.HiddenFor(model => model.TransactionTypeCodeId)
+                                        }
+                                        else
+                                        {
+                                            @Html.DropDownListFor(model => model.TransactionTypeCodeId, new SelectList(ViewBag.TransactionType, "Key", "Value", ""), new { @class = "form-control" })
+                                        }
+                                        @Html.ValidationMessageFor(model => model.TransactionTypeCodeId)
                                     </div>
                                 </div>
+                            }
+
+                            @*<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.SecurityTypeCodeId)
+                @if (@ViewBag.TransactionTypeCodeFlag)
+                {
+                    @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
+                    @Html.HiddenFor(model => model.SecurityTypeCodeId)
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control" })
+                }
+                @Html.ValidationMessageFor(model => model.SecurityTypeCodeId)
+            </div>
+        </div>*@
+                        </div>
 
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -1287,7 +1306,7 @@
                                         </div>
                                     }
 
-                                    @if (@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
+                                    @*@if (@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
                                     {
                                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                             <div class="form-group">
@@ -1304,7 +1323,22 @@
                                                 @Html.ValidationMessageFor(model => model.TransactionTypeCodeId)
                                             </div>
                                         </div>
-                                    }
+                                    }*@
+                                                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.SecurityTypeCodeId)
+                @if (@ViewBag.TransactionTypeCodeFlag)
+                {
+                    @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
+                    @Html.HiddenFor(model => model.SecurityTypeCodeId)
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control" })
+                }
+                @Html.ValidationMessageFor(model => model.SecurityTypeCodeId)
+            </div>
+        </div>
                                 </div>
 
                                 <div class="row">
