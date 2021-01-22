@@ -71,6 +71,8 @@ namespace InsiderTrading.Models
         [DisplayName("tra_lbl_52106")]
         public int TransactionTypeCodeId { get; set; }
 
+        public int DisclosureTypeCodeId { get; set; }
+
         [DisplayName("tra_lbl_52052")]
         [Range(-9999999999.99, 9999999999.99, ErrorMessage = "tra_msg_16139")]
         public Decimal? Quantity { get; set; }
@@ -119,6 +121,8 @@ namespace InsiderTrading.Models
         public string ContractSpecification { get; set; }
 
         public bool b_IsInitialDisc { get; set; }
+
+        public bool SellAllFlag { get; set; }
 
         //New column added on 2-Jun-2016(YES BANK customization)
         [DisplayName("rul_lbl_50070")]

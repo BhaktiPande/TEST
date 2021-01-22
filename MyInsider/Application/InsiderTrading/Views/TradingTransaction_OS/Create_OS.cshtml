@@ -12,7 +12,6 @@
     {
         ViewBag.TwodigtClass = "form-control two-digits numericOnly";
     }
-
 }
 @{
     if (ViewBag.ShowPopup == true)
@@ -33,6 +32,12 @@
         "143006": ["149012"],
         "143007": ["149013"],
         "143008": ["149014"],
+    };
+    var TransactionType_OS = {
+        "143001": ["999"],
+        "143002": ["1"],
+        "143007": ["1"],
+        "143008":["1"]
     };
     var ModeOfAcquisitionOptions = '';
     var CashLessAll = "@InsiderTrading.Common.ConstEnum.Code.TransactionTypeCashlessAll";
@@ -113,7 +118,8 @@
                         },
                         error: function (data) {
                             $('#SecuritiesPriorToAcquisition').val(0);
-                            DisplayErrors(data.error);
+                            DisplayErrors(data.error
+                            );
                         }
                     });
                 }
@@ -124,7 +130,72 @@
             return false;
 
         }).change();
+      ///////New Code
+        $(document).delegate('#TransactionTypeCodeId', 'change', function (event) {
+            debugger
+            var transaction_type = $('#TransactionTypeCodeId').val();
+            if ('@ViewBag.EnableDisableQuantityValue' == 400002 || '@ViewBag.EnableDisableQuantityValue' == 400003) {
 
+                if (transaction_type == 143002) {
+                    if ('@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue'|| '@ViewBag.EnableDisableQuantityValue'==400002) {
+                        $("#SellAll").show();
+                    }
+                    else {
+                        $("#SellAll").hide();
+                    }
+                }
+                    else {
+                        $("#SellAll").hide();
+                    }
+
+                if (transaction_type == 143001 || transaction_type == 143006) {
+
+                        $('#Quantity').val(@ViewBag.Quantity);
+                        $('#Value').val(@ViewBag.Value);
+                        $('#LotSize').val(@ViewBag.LotSize);
+                        $('#ContractSpecification').val(@ViewBag.ContractSpecification);
+                        $("#Quantity").attr('readonly', true);
+                        $("#Value").attr('readonly', true);
+                        $("#LotSize").attr('readonly', true);
+                        $("#ContractSpecification").attr('readonly', true);
+                }
+                else if (transaction_type == 143002 || transaction_type == 143007 || transaction_type == 143008) {
+                    var AllowedModeOfacquisition1 = TransactionType_OS[$(this).val()];
+                    debugger;
+                        $("#Quantity").val(AllowedModeOfacquisition1);
+                        $("#Value").val(AllowedModeOfacquisition1);
+                        $('#LotSize').val(@ViewBag.LotSize);
+                        $('#ContractSpecification').val(@ViewBag.ContractSpecification);
+                        $("#Quantity").attr('readonly', true);
+                        $("#Value").attr('readonly', true);
+                        $("#LotSize").attr('readonly', true);
+                        $("#ContractSpecification").attr('readonly', true);
+                }
+                else {
+                    debugger;
+                    Quantity.value = '';
+                    Value.value = '';
+                    LotSize.value = '';
+                    ContractSpecification.value = '';
+                    $("#Quantity").attr('readonly', false);
+                    $("#Value").attr('readonly', false);
+                    $("#LotSize").attr('readonly', false);
+                    $("#ContractSpecification").attr('readonly', false);
+                }
+            }
+             else if ('@ViewBag.EnableDisableQuantityValue'== 400001) {
+                debugger;
+                //Quantity.value = '';
+                //Value.value = '';
+                //LotSize.value = '';
+                //ContractSpecification.value = '';
+                $("#Quantity").attr('readonly', false);
+                $("#Value").attr('readonly', false);
+                $("#LotSize").attr('readonly', false);
+                $("#ContractSpecification").attr('readonly', false);
+            }
+        });
+          ///////Close New Code
         $(document).delegate("#DMATDetailsID", "change", function () {
             $('#divTMID input[type=text]').css('display', 'none');
             if ($(this).val() != "0") {
@@ -145,6 +216,17 @@
         $('#TransactionTypeCodeId').change(function () {
             //cursor: not-allowed;
             //
+            if ($("#TransactionTypeCodeId").val() == 143002) {
+                debugger;
+                if ('@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue' || '@ViewBag.EnableDisableQuantityValue'==400002) {
+                    $("#SellAll").show();
+
+                }
+                else {
+                    $("#SellAll").hide();
+
+                }
+            }
             //if ($(this).val() != "0" && $("#ModeOfAcquisitionCodeId").is(":visible")) {
             if ($(this).val() != "0") {
                 var AllowedModeOfacquisition = SecurityType_ModeOfAcquisitionMapping[$(this).val()];
@@ -862,103 +944,26 @@
                             @{
 
 
-        if ((ViewBag.DisclosureType != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial && ViewBag.PreclearenceID == 0))
-        {
-            <div id="divDMAtwisebalance">
-                @Html.Partial("~/Views/TradingTransaction_OS/_DMATwiseBalance.cshtml")
-            </div>
-        }
+                                if ((ViewBag.DisclosureType != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial && ViewBag.PreclearenceID == 0))
+                                {
+                                    if (ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.EnableQunatityValue)
+                                    {
+                                        <div id="divDMAtwisebalance">
+                                            @Html.Partial("~/Views/TradingTransaction_OS/_DMATwiseBalance.cshtml")
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div id="divDMAtwisebalance" style="display:none">
+                                            @Html.Partial("~/Views/TradingTransaction_OS/_DMATwiseBalance.cshtml")
+                                        </div>
+                                    }
+                                }
                             }
 
                             @if (ViewBag.DisclosureTypeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
                             {
-                            <div class="row">
-                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.ForUserInfoId)
-                                        @if (@ViewBag.TransactionTypeCodeFlag)
-                                        {
-                                            @Html.DropDownListFor(model => model.ForUserInfoId, new SelectList(ViewBag.UserPan, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
-                                            @Html.HiddenFor(model => model.ForUserInfoId)
-                                        }
-                                        else
-                                        {
-                                            @Html.DropDownListFor(model => model.ForUserInfoId, new SelectList(ViewBag.UserPan, "Key", "Value", ""), new { @class = "form-control" })
-                                        }
-                                        @Html.ValidationMessageFor(model => model.ForUserInfoId)
-                                    </div>
-                                </div>
-
-
-                                <div id="UserDetails" style="display:none;">
-                                    @Html.HiddenFor(model => model.DMATDetailsID)
-                                </div>
-
-                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.SecurityTypeCodeId)
-                                        @if (@ViewBag.TransactionTypeCodeFlag)
-                                        {
-                                            @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
-                                            @Html.HiddenFor(model => model.SecurityTypeCodeId)
-                                        }
-                                        else
-                                        {
-                                            @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control" })
-                                        }
-                                        @Html.ValidationMessageFor(model => model.SecurityTypeCodeId)
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.CompanyName)
-                                        @if (@ViewBag.TransactionTypeCodeFlag)
-                                        {
-                                            @Html.TextBoxFor(model => model.CompanyName, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "txtCompany", data_url = Url.Action("GetList", "RestrictedList"), disabled = "disabled" })
-                                            @Html.HiddenFor(model => model.CompanyId, new { id = "CompanyId" })
-                                            @Html.HiddenFor(model => model.CompanyName)
-                                        }
-                                        else
-                                        {
-                                            @Html.TextBoxFor(model => model.CompanyName, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "txtCompany", data_url = Url.Action("GetList", "RestrictedList") })
-                                            @Html.HiddenFor(model => model.CompanyId, new { id = "CompanyId" })
-                                        }
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.Quantity, new { name = "cash" })
-                                        @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control numericOnly", rows = "5" })
-                                        @Html.ValidationMessageFor(model => model.Quantity)
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="txtLotSize" style="display:none">
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.LotSize)
-                                        @Html.TextBoxFor(model => model.LotSize, new { @class = "form-control numericOnly", rows = "5" })
-                                        @Html.ValidationMessageFor(model => model.LotSize)
-                                    </div>
-                                </div>
-
-                            </div>
-                                
-                            <div class="row">
-                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="txtContractSpecification" style="display:none">
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.ContractSpecification)
-                                        @Html.TextBoxFor(model => model.ContractSpecification, new { @class = "form-control", rows = "5" })
-                                        @Html.ValidationMessageFor(model => model.ContractSpecification)
-                                    </div>
-                                </div>
-                            </div>
-                            }
-                            else
-                            {
-                            <div class="row">
+                                <div class="row">
                                     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                         <div class="form-group">
                                             @Html.LabelFor(model => model.ForUserInfoId)
@@ -974,154 +979,336 @@
                                             @Html.ValidationMessageFor(model => model.ForUserInfoId)
                                         </div>
                                     </div>
-                           
 
-                                <div id="UserDetails" style="display:none;">
-                                    @Html.HiddenFor(model => model.DMATDetailsID)
-                                </div>
 
-                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.SecurityTypeCodeId)
-                                        @if (@ViewBag.TransactionTypeCodeFlag)
-                                        {
-                                          @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
-                                          @Html.HiddenFor(model => model.SecurityTypeCodeId)
-                                        }
-                                        else
-                                        {
-                                            @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control" })
-                                        }
-                                        @Html.ValidationMessageFor(model => model.SecurityTypeCodeId)
+                                    <div id="UserDetails" style="display:none;">
+                                        @Html.HiddenFor(model => model.DMATDetailsID)
                                     </div>
-                                </div>
-                             </div>
 
-                            <div class="row">
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.CompanyName)
-                                        @if (@ViewBag.TransactionTypeCodeFlag)
-                                        {
-                                            @Html.TextBoxFor(model => model.CompanyName, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "txtCompany", data_url = Url.Action("GetList", "RestrictedList"), disabled = "disabled" })
-                                            @Html.HiddenFor(model => model.CompanyId, new { id = "CompanyId" })
-                                            @Html.HiddenFor(model => model.CompanyName)
-                                        }
-                                        else
-                                        {
-                                            @Html.TextBoxFor(model => model.CompanyName, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "txtCompany", data_url = Url.Action("GetList", "RestrictedList") })
-                                            @Html.HiddenFor(model => model.CompanyId, new { id = "CompanyId" })
-                                        }
-                                    </div>
-                                </div>
-
-                                @if (@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
-                                {
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                        <div id="sandbox-container" class="form-group">
-                                            @Html.LabelFor(model => model.DateOfAcquisition)
-                                            <div class="input-group date">
-                                                @{
-                                    string DateOfAcquisition = "";
-                                    if (Model != null)
-                                    {
-
-                                        DateOfAcquisition = InsiderTrading.Common.Common.ApplyFormatting(Model.DateOfAcquisition, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
-                                    }
-                                    @Html.TextBox("DateOfAcquisition", DateOfAcquisition, new { @class = "form-control" })
-
-                                                    <span class="input-group-addon"><i class="icon icon-calender"></i></span>
-
-                                                }
-                                            </div>
-                                            @Html.ValidationMessageFor(model => model.DateOfAcquisition)
-                                        </div>
-
-                                    </div>
-                                }
-
-                                @if (@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
-                                {
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div class="form-group">
-                                            @Html.LabelFor(model => model.TransactionTypeCodeId)
+                                            @Html.LabelFor(model => model.SecurityTypeCodeId)
                                             @if (@ViewBag.TransactionTypeCodeFlag)
                                             {
-                                                @Html.DropDownListFor(model => model.TransactionTypeCodeId, new SelectList(ViewBag.TransactionType, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
-                                                @Html.HiddenFor(model => model.TransactionTypeCodeId)
+                                                @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
+                                                @Html.HiddenFor(model => model.SecurityTypeCodeId)
                                             }
                                             else
                                             {
-                                                @Html.DropDownListFor(model => model.TransactionTypeCodeId, new SelectList(ViewBag.TransactionType, "Key", "Value", ""), new { @class = "form-control" })
+                                                @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control" })
                                             }
-                                            @Html.ValidationMessageFor(model => model.TransactionTypeCodeId)
+                                            @Html.ValidationMessageFor(model => model.SecurityTypeCodeId)
                                         </div>
-                                    </div>
-                                }
-                             </div>
-
-                            <div class="row">
-                                @if (@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
-                                {
-                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                        <div class="form-group">
-                                            @Html.LabelFor(model => model.ModeOfAcquisitionCodeId)
-                                            @Html.DropDownListFor(model => model.ModeOfAcquisitionCodeId, new SelectList(ViewBag.ModeOfAcquisition, "Key", "Value", ""), new { @class = "form-control" })
-                                            @Html.HiddenFor(model => model.ModeOfAcquisitionCodeId)
-                                            @Html.ValidationMessageFor(model => model.ModeOfAcquisitionCodeId)
-                                        </div>
-                                    </div>
-                                }
-
-                                @if (@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
-                                {
-                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                        <div class="form-group">
-                                            @Html.LabelFor(model => model.ExchangeCodeId)
-                                            @Html.DropDownListFor(model => model.ExchangeCodeId, new SelectList(ViewBag.ExchangeTypeCode, "Key", "Value", ""), new { @class = "form-control" })
-                                            @Html.ValidationMessageFor(model => model.ExchangeCodeId)
-                                        </div>
-                                    </div>
-                                }
-                           </div>
-
-                            <div class="row">
-                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.Quantity, new { name = "cash" })
-                                        @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control numericOnly", rows = "5" })
-                                        @Html.ValidationMessageFor(model => model.Quantity)
                                     </div>
                                 </div>
-                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="txtLotSize" style="display:none">
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.LotSize)
-                                        @Html.TextBoxFor(model => model.LotSize, new { @class = "form-control numericOnly", rows = "5" })
-                                        @Html.ValidationMessageFor(model => model.LotSize)
+
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.CompanyName)
+                                            @if (@ViewBag.TransactionTypeCodeFlag)
+                                            {
+                                                @Html.TextBoxFor(model => model.CompanyName, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "txtCompany", data_url = Url.Action("GetList", "RestrictedList"), disabled = "disabled" })
+                                                @Html.HiddenFor(model => model.CompanyId, new { id = "CompanyId" })
+                                                @Html.HiddenFor(model => model.CompanyName)
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(model => model.CompanyName, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "txtCompany", data_url = Url.Action("GetList", "RestrictedList") })
+                                                @Html.HiddenFor(model => model.CompanyId, new { id = "CompanyId" })
+                                            }
+                                        </div>
+                                    </div>
+                                    @if (ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.EnableQunatityValue)
+                                    {
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Quantity, new { name = "cash" })
+                                                @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control numericOnly", rows = "5" })
+                                                @Html.ValidationMessageFor(model => model.Quantity)
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="txtLotSize" style="display:none">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.LotSize)
+                                                @Html.TextBoxFor(model => model.LotSize, new { @class = "form-control numericOnly", rows = "5" })
+                                                @Html.ValidationMessageFor(model => model.LotSize)
+                                            </div>
+                                        </div>
+                                    }
+                                    else if (ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.DisabaleShowQuantityValue)
+                                    {
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Quantity, new { name = "cash" })
+                                                @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control numericOnly", @readonly = "readonly", rows = "5", id = "Quantity", Value = @ViewBag.Quantity })
+                                                @Html.ValidationMessageFor(model => model.Quantity)
+                                            </div>
+
+
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="txtLotSize" style="display:none">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.LotSize)
+                                                @Html.TextBoxFor(model => model.LotSize, new { @class = "form-control numericOnly", @readonly = "readonly", rows = "5", id = "LotSize", Value = @ViewBag.LotSize })
+                                                @Html.ValidationMessageFor(model => model.LotSize)
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="display:none">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Quantity, new { name = "cash" })
+                                                @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control numericOnly", @readonly = "readonly", rows = "5", id = "Quantity", Value = @ViewBag.Quantity })
+                                                @Html.ValidationMessageFor(model => model.Quantity)
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="txtLotSize" style="display:none">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.LotSize)
+                                                @Html.TextBoxFor(model => model.LotSize, new { @class = "form-control numericOnly", @readonly = "readonly", rows = "5", id = "LotSize", Value = @ViewBag.LotSize })
+                                                @Html.ValidationMessageFor(model => model.LotSize)
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="txtContractSpecification" style="display:none">
+                                        <div class="form-group">
+                                            @if (ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.EnableQunatityValue)
+                                            {
+                                                @Html.LabelFor(model => model.ContractSpecification)
+                                                @Html.TextBoxFor(model => model.ContractSpecification, new { @class = "form-control", rows = "5" })
+                                                @Html.ValidationMessageFor(model => model.ContractSpecification)
+                                            }
+                                            else if (ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.DisabaleShowQuantityValue || ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue)
+                                            {
+                                                @Html.LabelFor(model => model.ContractSpecification)
+                                                @Html.TextBoxFor(model => model.ContractSpecification, new { @class = "form-control", @readonly = "readonly", rows = "5", id = "ContractSpecification", Value = @ViewBag.ContractSpecification })
+                                                @Html.ValidationMessageFor(model => model.ContractSpecification)
+                                            }
+                                        </div>
                                     </div>
                                 </div>
-                                @if (@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
-                                {
+                            }
+                            else
+                            {
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.ForUserInfoId)
+                                            @if (@ViewBag.TransactionTypeCodeFlag)
+                                            {
+                                                @Html.DropDownListFor(model => model.ForUserInfoId, new SelectList(ViewBag.UserPan, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
+                                                @Html.HiddenFor(model => model.ForUserInfoId)
+                                            }
+                                            else
+                                            {
+                                                @Html.DropDownListFor(model => model.ForUserInfoId, new SelectList(ViewBag.UserPan, "Key", "Value", ""), new { @class = "form-control" })
+                                            }
+                                            @Html.ValidationMessageFor(model => model.ForUserInfoId)
+                                        </div>
+                                    </div>
+
+
+                                    <div id="UserDetails" style="display:none;">
+                                        @Html.HiddenFor(model => model.DMATDetailsID)
+                                    </div>
+
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div class="form-group">
-                                            @Html.LabelFor(model => model.Value, new { name = "cash" })
-                                            @Html.TextBoxFor(model => model.Value, new { @class = "form-control two-digits", rows = "5" })
-                                            @Html.ValidationMessageFor(model => model.Value)
+                                            @Html.LabelFor(model => model.SecurityTypeCodeId)
+                                            @if (@ViewBag.TransactionTypeCodeFlag)
+                                            {
+                                                @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
+                                                @Html.HiddenFor(model => model.SecurityTypeCodeId)
+                                            }
+                                            else
+                                            {
+                                                @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control" })
+                                            }
+                                            @Html.ValidationMessageFor(model => model.SecurityTypeCodeId)
                                         </div>
-                                    </div>
-                                }
-                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="txtContractSpecification" style="display:none">
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.ContractSpecification)
-                                        @Html.TextBoxFor(model => model.ContractSpecification, new { @class = "form-control", rows = "5" })
-                                        @Html.ValidationMessageFor(model => model.ContractSpecification)
                                     </div>
                                 </div>
 
-                            </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.CompanyName)
+                                            @if (@ViewBag.TransactionTypeCodeFlag)
+                                            {
+                                                @Html.TextBoxFor(model => model.CompanyName, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "txtCompany", data_url = Url.Action("GetList", "RestrictedList"), disabled = "disabled" })
+                                                @Html.HiddenFor(model => model.CompanyId, new { id = "CompanyId" })
+                                                @Html.HiddenFor(model => model.CompanyName)
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(model => model.CompanyName, new { @class = "form-control", gridtype = @ViewBag.GridType, id = "txtCompany", data_url = Url.Action("GetList", "RestrictedList") })
+                                                @Html.HiddenFor(model => model.CompanyId, new { id = "CompanyId" })
+                                            }
+                                        </div>
+                                    </div>
+
+                                    @if (@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
+                                    {
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                            <div id="sandbox-container" class="form-group">
+                                                @Html.LabelFor(model => model.DateOfAcquisition)
+                                                <div class="input-group date">
+                                                    @{
+                                                        string DateOfAcquisition = "";
+                                                        if (Model != null)
+                                                        {
+
+                                                            DateOfAcquisition = InsiderTrading.Common.Common.ApplyFormatting(Model.DateOfAcquisition, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+                                                        }
+                                                        @Html.TextBox("DateOfAcquisition", DateOfAcquisition, new { @class = "form-control" })
+
+                                                        <span class="input-group-addon"><i class="icon icon-calender"></i></span>
+
+                                                    }
+                                                </div>
+                                                @Html.ValidationMessageFor(model => model.DateOfAcquisition)
+                                            </div>
+
+                                        </div>
+                                    }
+
+                                    @if (@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
+                                    {
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.TransactionTypeCodeId)
+                                                @if (@ViewBag.TransactionTypeCodeFlag)
+                                                {
+                                                    @Html.DropDownListFor(model => model.TransactionTypeCodeId, new SelectList(ViewBag.TransactionType, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
+                                                    @Html.HiddenFor(model => model.TransactionTypeCodeId)
+                                                }
+                                                else
+                                                {
+                                                    @Html.DropDownListFor(model => model.TransactionTypeCodeId, new SelectList(ViewBag.TransactionType, "Key", "Value", ""), new { @class = "form-control" })
+                                                }
+                                                @Html.ValidationMessageFor(model => model.TransactionTypeCodeId)
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+
+                                <div class="row">
+                                    @if (@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
+                                    {
+                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.ModeOfAcquisitionCodeId)
+                                                @Html.DropDownListFor(model => model.ModeOfAcquisitionCodeId, new SelectList(ViewBag.ModeOfAcquisition, "Key", "Value", ""), new { @class = "form-control" })
+                                                @Html.HiddenFor(model => model.ModeOfAcquisitionCodeId)
+                                                @Html.ValidationMessageFor(model => model.ModeOfAcquisitionCodeId)
+                                            </div>
+                                        </div>
+                                    }
+
+                                    @if (@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
+                                    {
+                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.ExchangeCodeId)
+                                                @Html.DropDownListFor(model => model.ExchangeCodeId, new SelectList(ViewBag.ExchangeTypeCode, "Key", "Value", ""), new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.ExchangeCodeId)
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                @*if (@ViewBag.TransactionTypeCodeId == 143001)
+            {
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            @Html.CheckBoxFor(m => m.SellAllFlag, new { id = "b_SellAllFlag" })
+                            <label style="font-style:italic" class="normalLable">
+                                SellAll
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            }*@
+                                <div class="row">
+                                    @if (ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue)
+                                    {
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="display:none">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Quantity, new { name = "cash" })
+                                                @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control numericOnly", rows = "5" })
+                                                @Html.ValidationMessageFor(model => model.Quantity)
+
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Quantity, new { name = "cash" })
+                                                @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control numericOnly", rows = "5" })
+                                                @Html.ValidationMessageFor(model => model.Quantity)
+
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="txtLotSize" style="display:none">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.LotSize)
+                                            @Html.TextBoxFor(model => model.LotSize, new { @class = "form-control numericOnly", rows = "5" })
+                                            @Html.ValidationMessageFor(model => model.LotSize)
+                                        </div>
+                                    </div>
+                                    @if (@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
+                                    {
+                                        if (ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue)
+                                        {
+                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="display:none">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Value, new { name = "cash" })
+                                                    @Html.TextBoxFor(model => model.Value, new { @class = "form-control two-digits", rows = "5" })
+                                                    @Html.ValidationMessageFor(model => model.Value)
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Value, new { name = "cash" })
+                                                    @Html.TextBoxFor(model => model.Value, new { @class = "form-control two-digits", rows = "5" })
+                                                    @Html.ValidationMessageFor(model => model.Value)
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="txtContractSpecification" style="display:none">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.ContractSpecification)
+                                            @Html.TextBoxFor(model => model.ContractSpecification, new { @class = "form-control", rows = "5" })
+                                            @Html.ValidationMessageFor(model => model.ContractSpecification)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="display:none" id="SellAll">
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            @Html.CheckBoxFor(m => m.SellAllFlag, new { id = "b_SellAllFlag" })
+                                            <label style="font-style:italic" class="normalLable">
+                                                SellAll
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
                             }
 
-  
+
                             @Html.HiddenFor(model => model.CompanyId)
                             @Html.HiddenFor(model => model.SecurityTypeCodeId)
                             @Html.HiddenFor(model => model.DMATDetailsID)
@@ -1131,9 +1318,9 @@
 
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <button id="SaveDetails" type="submit" class="btn btn-success " name="Create"><i class=" fa fa-save"></i> @InsiderTrading.Common.Common.getResource("tra_btn_52063")</button>
-                                    @if((bool)ViewBag.ShowSaveAddMore_btn)
-                                    { 
-                                      <button id="Save_AddMoreDetails" type="submit" class="btn btn-success " name="Create"><i class=" fa fa-save"></i> @InsiderTrading.Common.Common.getResource("tra_btn_52064")</button>
+                                    @if ((bool)ViewBag.ShowSaveAddMore_btn)
+                                    {
+                                        <button id="Save_AddMoreDetails" type="submit" class="btn btn-success " name="Create"><i class=" fa fa-save"></i> @InsiderTrading.Common.Common.getResource("tra_btn_52064")</button>
                                     }
                                     <input type="hidden" name="Hdn_UserTypeCodeId" id="Hdn_UserTypeCodeId" value="false" />
                                     <input type="hidden" name="Hdn_From" id="Hdn_From" value="false" />
@@ -1143,7 +1330,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                                </div>
                 </div>
             </div>
         </section>
@@ -1289,9 +1476,18 @@ else
     $(function () {
         $("#SecurityTypeCodeId").change(function () {
             var Selected_Entry = $("#SecurityTypeCodeId option:selected").val();
+
             if (Selected_Entry == 139004 || Selected_Entry == 139005) {
-                $("#txtLotSize").show();
-                $("#txtContractSpecification").show();
+                if ('@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue') {
+                    $("#txtLotSize").hide();
+                    $("#txtContractSpecification").hide();
+
+                }
+                else {
+                    $("#txtLotSize").show();
+                    $("#txtContractSpecification").show();
+
+                }
             }
             else {
                 $("#txtLotSize").hide();
@@ -1300,19 +1496,45 @@ else
         });
     });
 
+                    var transaction_type = $('#TransactionTypeCodeId').val();
+                    if (transaction_type == 143002) {
+                    if ('@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue' || '@ViewBag.EnableDisableQuantityValue'==400002) {
+                        if ('@ViewBag.SellAllFlag' == 'true') {
+
+                            $('#b_SellAllFlag').prop("checked") == true;
+                        }
+                        else {
+                            $('#b_SellAllFlag').prop("checked") == false;
+                        }
+                        $("#SellAll").show();
+                    }
+                    else {
+                        $("#SellAll").hide();
+                    }
+                    }
+
     //$("#SecurityTypeCodeId").val(139001);
 
-    if($("#SecurityTypeCodeId").val() == 139004 || $("#SecurityTypeCodeId").val() == 139005)
-    {
-        $("#txtLotSize").show();
-        $("#txtContractSpecification").show();
+    if ($("#SecurityTypeCodeId").val() == 139004 || $("#SecurityTypeCodeId").val() == 139005) {
+        if ('@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue') {
+                    $("#txtLotSize").hide();
+                    $("#txtContractSpecification").hide();
+
+                }
+                else {
+                    $("#txtLotSize").show();
+                    $("#txtContractSpecification").show();
+
+                }
     }
+
 </script>
 
 <script type="text/javascript">
+    debugger;
     function OnSuccess(response) {
              if ($(".validation-summary-errors li:visible").length === 0) {
-           
+
                 if ('@ViewBag.SaveAndAddMore' == 'true') {
                     $('#TransactionDetailsId').val('0');
                      window.location.reload();
@@ -1321,13 +1543,22 @@ else
                 {
                     window.location = $('#Initial_OS_Index').val();
                 }
-               
+
             }
             else {
-            $("body").removeClass("loading");
+                 $("body").removeClass("loading");
+                 
             if ($("#SecurityTypeCodeId").val() == 139004 || $("#SecurityTypeCodeId").val() == 139005) {
-                $("#txtLotSize").show();
-                $("#txtContractSpecification").show();
+                if ('@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue') {
+                    $("#txtLotSize").hide();
+                    $("#txtContractSpecification").hide();
+
+                }
+                else {
+                    $("#txtLotSize").show();
+                    $("#txtContractSpecification").show();
+
+                }
                 if ($("#LotSize").val() == 0) {
                     $("#LotSize").val(null);
                 }

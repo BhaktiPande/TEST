@@ -45,9 +45,9 @@ BEGIN
 		IF @out_sSQLErrMessage IS NULL
 			SET @out_sSQLErrMessage = ''			
 		
-		IF EXISTS(SELECT RlCompanyId FROM rl_CompanyMasterList WHERE CompanyName = @inp_CompanyName)
+		IF EXISTS(SELECT RlCompanyId FROM rl_CompanyMasterList WHERE CompanyName = @inp_CompanyName AND ISINCode=@inp_ISIN)
 		BEGIN
-			SET @CompanyId = (SELECT RlCompanyId FROM rl_CompanyMasterList WHERE CompanyName = @inp_CompanyName)
+			SET @CompanyId = (SELECT RlCompanyId FROM rl_CompanyMasterList WHERE CompanyName = @inp_CompanyName AND ISINCode=@inp_ISIN)
 			IF EXISTS (SELECT EmployeeId FROM usr_UserInfo WHERE EmployeeId = @inp_EmployeeID)
 			BEGIN	
 				print @inp_EmployeeID
