@@ -278,7 +278,7 @@
                         $("#SecurityTypeCodeId option[value='" + $(this).val() + "']").remove();
                     }
                 });
-
+                $("#SecurityTypeCodeId").attr("disabled", "disabled");
             } 
 
 
@@ -550,9 +550,11 @@
 
             if ('@ViewBag.PreclearenceID' > 0) {
                 $("#ModeOfAcquisitionCodeId").attr("disabled", "disabled");
+                $("#SecurityTypeCodeId").attr("disabled", "disabled");
             }
             else {
                 $("#ModeOfAcquisitionCodeId").attr("disabled", false);
+                $("#SecurityTypeCodeId").attr("disabled", false);
             }
 
         });
