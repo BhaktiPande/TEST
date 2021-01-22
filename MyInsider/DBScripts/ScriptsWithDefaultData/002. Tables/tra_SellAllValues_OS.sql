@@ -15,6 +15,7 @@ CREATE TABLE [dbo].[tra_SellAllValues_OS](
 	[DMATDetailsId] int null,
 	[CreatedOn] [datetime]  NULL,	
 	[ModifiedOn] [datetime]  NULL,
+	SecurityTypeCodeId INT NULL
  CONSTRAINT [PK_tra_SellAllValues_OS] PRIMARY KEY CLUSTERED 
 (
 	[SellAllDetailsId] ASC
