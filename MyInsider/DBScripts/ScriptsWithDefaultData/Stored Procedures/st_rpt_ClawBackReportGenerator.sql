@@ -267,7 +267,7 @@ BEGIN
         UserAddress NVARCHAR(500), PinCode NVARCHAR(50), Country NVARCHAR(50), MobileNumber NVARCHAR(50), Email NVARCHAR(100), CompanyName NVARCHAR(100), 
         TypeOfInsider NVARCHAR(50), Category NVARCHAR(100), Subcategory NVARCHAR(100), CINDIN NVARCHAR(100), Designation NVARCHAR(100), Grade NVARCHAR(50),
         Location NVARCHAR(100), Department NVARCHAR(100), DmatAccount NVARCHAR(100), AccountHolderName NVARCHAR(255), PreclearanceID NVARCHAR(100), 
-        RequestDate DATETIME, SecurityType NVARCHAR(50), TransactionType NVARCHAR(50), TransactionDate DATETIME, Quantity DECIMAL(10,0), Value DECIMAL(10,0),Currency NVARCHAR(50))
+        RequestDate DATETIME, SecurityType NVARCHAR(50), TransactionType NVARCHAR(50), TransactionDate DATETIME, Quantity DECIMAL(10,0), Value DECIMAL(10,0))
 
 		CREATE TABLE #tmpContraTradeReport(Id INT IDENTITY(1,1), UserInfoID BIGINT, TransactionMasterID BIGINT, SecurityTypeCodeId INT, TransactionTypeCodeId INT)
 
@@ -299,17 +299,16 @@ BEGIN
              UserAddress NVARCHAR(500), PinCode NVARCHAR(50), Country NVARCHAR(50), MobileNumber NVARCHAR(50), Email NVARCHAR(100), CompanyName NVARCHAR(100), 
              TypeOfInsider NVARCHAR(50), Category NVARCHAR(100), Subcategory NVARCHAR(100), CINDIN NVARCHAR(100), Designation NVARCHAR(100), Grade NVARCHAR(50),
              Location NVARCHAR(100), Department NVARCHAR(100), DmatAccount NVARCHAR(100), AccountHolderName NVARCHAR(255), PreclearanceID NVARCHAR(100), 
-             RequestDate DATETIME, SecurityType NVARCHAR(50), TransactionType NVARCHAR(50), TransactionDate DATETIME, Quantity DECIMAL(10,0), Value DECIMAL(10,0),CurrencyId INT)
+             RequestDate DATETIME, SecurityType NVARCHAR(50), TransactionType NVARCHAR(50), TransactionDate DATETIME, Quantity DECIMAL(10,0), Value DECIMAL(10,0))
 
              INSERT INTO #tblClawBack_Report(UserInfoID, TransactionMasterId, EmployeeID, InsiderName, PAN, UserAddress, PinCode, Country, MobileNumber, Email, CompanyName, TypeOfInsider, 
              Category, Subcategory, CINDIN, Designation, Grade, Location, Department, DmatAccount, AccountHolderName, PreclearanceID, RequestDate, SecurityType, TransactionType, 
-             TransactionDate, Quantity, Value, CurrencyId)
+             TransactionDate, Quantity, Value)
              SELECT TD.ForUserInfoId, TD.TransactionMasterId, UI.EmployeeId, UI.FirstName + ' ' + UI.LastName, UI.PAN, UI.AddressLine1, UI.PinCode, UI.CountryId, UI.MobileNumber, UI.EmailId, UI.CompanyId,
              UI.UserTypeCodeId, UI.Category, UI.SubCategory, UI.CIN, UI.DesignationId, UI.GradeId, UI.Location, UI.DepartmentId, DD.DEMATAccountNumber, UI.FirstName + ' ' + UI.LastName, '-', NULL, 
-             TD.SecurityTypeCodeId, TD.TransactionTypeCodeId, TD.DateOfAcquisition, TD.Quantity, TD.Value ,TD.CurrencyId
+             TD.SecurityTypeCodeId, TD.TransactionTypeCodeId, TD.DateOfAcquisition, TD.Quantity, TD.Value 
              FROM tra_TransactionDetails TD
              JOIN usr_UserInfo UI ON UI.UserInfoId = TD.ForUserInfoId
-
 			 JOIN tra_TransactionMaster TM ON TM.TransactionMasterId = TD.TransactionMasterId 
 			 JOIN usr_DMATDetails DD ON DD.DMATDetailsID = TD.DMATDetailsID
              WHERE TD.TransactionMasterId = @nTransactionMasterId AND TM.DisclosureTypeCodeId = @nContinuousDisclosure AND TM.TransactionStatusCodeId NOT IN (@nDocument_Uploaded, @nNot_Confirmed)
@@ -319,10 +318,10 @@ BEGIN
 
 			 INSERT INTO #tblClawBack_Report(UserInfoID, TransactionMasterId, EmployeeID, InsiderName, PAN, UserAddress, PinCode, Country, MobileNumber, Email, CompanyName, TypeOfInsider, 
              Category, Subcategory, CINDIN, Designation, Grade, Location, Department, DmatAccount, AccountHolderName, PreclearanceID, RequestDate, SecurityType, TransactionType, 
-             TransactionDate, Quantity, Value, CurrencyId )
+             TransactionDate, Quantity, Value)
              SELECT TD.ForUserInfoId, TD.TransactionMasterId, UI.EmployeeId, UI.FirstName + ' ' + UI.LastName, UI.PAN, UI.AddressLine1, UI.PinCode, UI.CountryId, UI.MobileNumber, UI.EmailId, UI.CompanyId,
              UI.UserTypeCodeId, UI.Category, UI.SubCategory, UI.CIN, UI.DesignationId, UI.GradeId, UI.Location, UI.DepartmentId, DD.DEMATAccountNumber, UI.FirstName + ' ' + UI.LastName, '-', NULL, 
-             TD.SecurityTypeCodeId, TD.TransactionTypeCodeId, TD.DateOfAcquisition, TD.Quantity, TD.Value ,TD.CurrencyId
+             TD.SecurityTypeCodeId, TD.TransactionTypeCodeId, TD.DateOfAcquisition, TD.Quantity, TD.Value 
              FROM tra_TransactionDetails TD
              JOIN usr_UserInfo UI ON UI.UserInfoId = TD.ForUserInfoId
 			 JOIN tra_TransactionMaster TM ON TM.TransactionMasterId = TD.TransactionMasterId 
@@ -338,10 +337,10 @@ BEGIN
                BEGIN
 			     INSERT INTO #tblClawBack_Report(UserInfoID, TransactionMasterId, EmployeeID, InsiderName, PAN, UserAddress, PinCode, Country, MobileNumber, Email, CompanyName, TypeOfInsider, 
                  Category, Subcategory, CINDIN, Designation, Grade, Location, Department, DmatAccount, AccountHolderName, PreclearanceID, RequestDate, SecurityType, TransactionType, 
-                 TransactionDate, Quantity, Value,CurrencyId)
+                 TransactionDate, Quantity, Value)
                  SELECT TD.ForUserInfoId, TD.TransactionMasterId, UI.EmployeeId, UI.FirstName + ' ' + UI.LastName, UI.PAN, UI.AddressLine1, UI.PinCode, UI.CountryId, UI.MobileNumber, UI.EmailId, UI.CompanyId,
                  UI.UserTypeCodeId, UI.Category, UI.SubCategory, UI.CIN, UI.DesignationId, UI.GradeId, UI.Location, UI.DepartmentId, DD.DEMATAccountNumber, UI.FirstName + ' ' + UI.LastName, '-', NULL, 
-                 TD.SecurityTypeCodeId, TD.TransactionTypeCodeId, TD.DateOfAcquisition, TD.Quantity, TD.Value ,TD.CurrencyId
+                 TD.SecurityTypeCodeId, TD.TransactionTypeCodeId, TD.DateOfAcquisition, TD.Quantity, TD.Value 
                  FROM tra_TransactionDetails TD
                  JOIN usr_UserInfo UI ON UI.UserInfoId = TD.ForUserInfoId
 				 JOIN tra_TransactionMaster TM ON TM.TransactionMasterId = TD.TransactionMasterId 
@@ -354,12 +353,12 @@ BEGIN
 
 			 INSERT INTO #tmpClawBack_Excel(UserInfoID, TransactionMasterId, EmployeeID, InsiderName, PAN, UserAddress, PinCode, Country, MobileNumber, Email, CompanyName, TypeOfInsider, 
              Category, Subcategory, CINDIN, Designation, Grade, Location, Department, DmatAccount, AccountHolderName, PreclearanceID, RequestDate, SecurityType, TransactionType, 
-             TransactionDate, Quantity, Value, Currency )		  
+             TransactionDate, Quantity, Value)		  
              SELECT Temp.UserInfoID, Temp.TransactionMasterId, Temp.EmployeeID, Temp.InsiderName, Temp.PAN,Temp.UserAddress, Temp.PinCode, sCountryCodeID.CodeName,
 			 Temp.MobileNumber, Temp.Email, sCompanyID.CompanyName, sTypeOfInsiderCodeID.CodeName, ISNULL(sCategoryCodeID.CodeName, UI.CategoryText),
              ISNULL(sSubcategoryCodeID.CodeName, UI.SubCategoryText), Temp.CINDIN, ISNULL(sDesignationCodeID.CodeName, UI.DesignationText), ISNULL(sGradeCodeID.CodeName, UI.GradeText),
 			 Temp.Location, ISNULL(sDepartmentID.CodeName, UI.DepartmentText), Temp.DmatAccount, Temp.AccountHolderName, Temp.PreclearanceID, Temp.RequestDate,
-			 sSecurityTypeID.CodeName, sTransactionTypeID.CodeName, Temp.TransactionDate, Temp.Quantity, Temp.Value,Currency.DisplayCode as Currency
+			 sSecurityTypeID.CodeName, sTransactionTypeID.CodeName, Temp.TransactionDate, Temp.Quantity, Temp.Value
 	         FROM #tblClawBack_Report Temp
 			  LEFT JOIN com_Code sCountryCodeID ON sCountryCodeID.CodeID = Temp.Country
 			  LEFT JOIN mst_Company sCompanyID ON sCompanyID.CompanyId = Temp.CompanyName
@@ -372,8 +371,7 @@ BEGIN
 			  LEFT JOIN com_Code sGradeCodeID ON sGradeCodeID.CodeID = Temp.Grade
 			  LEFT JOIN com_Code sDepartmentID ON sDepartmentID.CodeID = Temp.Department
 			  LEFT JOIN usr_UserInfo UI ON UI.UserInfoId = Temp.UserInfoID
-			  LEFT JOIN com_Code Currency ON Currency.CodeID = Temp.CurrencyId
-			  
+
 
 		   DROP TABLE #tblClawBack_Report
 		   SET @nCounter = @nCounter + 1	 
@@ -412,7 +410,7 @@ BEGIN
 
 	INSERT INTO rpt_ClawBackReport(UserInfoID, TransactionMasterId, EmployeeID, InsiderName, PAN, UserAddress, PinCode, Country, MobileNumber,
 	Email, CompanyName, TypeOfInsider, Category, Subcategory, CINDIN, Designation, Grade, Location, Department, DmatAccount, AccountHolderName,
-	PreclearanceID, RequestDate, SecurityType, TransactionType, TransactionDate, Quantity, Value,Currency)
+	PreclearanceID, RequestDate, SecurityType, TransactionType, TransactionDate, Quantity, Value)
 	SELECT DISTINCT
 	         Temp.UserInfoID,
 	         Temp.TransactionMasterId,
@@ -441,8 +439,7 @@ BEGIN
 			 Temp.TransactionType,
 			 Temp.TransactionDate,
 		     Temp.Quantity,
-			 Temp.Value,
-			 Temp.Currency
+			 Temp.Value
 	         FROM #tmpClawBack_Excel Temp 
 			 ORDER BY InsiderName 
 		

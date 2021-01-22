@@ -89,7 +89,6 @@ BEGIN
 	
 	DECLARE @nPreviousPeriodHolding INT
 	DECLARE @nCurrentPeriodHolding INT
-	DECLARE @nCurrency NVARCHAR(50)
 	
 	DECLARE @nPreviousPeriodValue DECIMAL(25,4)
 	DECLARE @nCurrentPeriodValue DECIMAL(25,4)
@@ -108,7 +107,7 @@ BEGIN
 	DECLARE @tmpUserDetails TABLE(Id INT IDENTITY(1,1), RKey VARCHAR(20), Value VARCHAR(50), DataType INT)
 	DECLARE @tmpUserTable TABLE(Id INT IDENTITY(1,1), UserInfoId INT, UserInfoIdRelative INT, SecurityTypeCodeId INT, DMATDetailsID INT, Relation VARCHAR(100), Holdings Decimal(20), Value Decimal(25,4))
 	DECLARE @tmpFinal TABLE(Id INT IDENTITY(1,1), ScriptName NVARCHAR(200), ISIN VARCHAR(100), SecurityType VARCHAR(100), TransactionType VARCHAR(100),
-							PreviousHoldings INT, BuyQuantity INT, SellQuantity INT, Value DECIMAL(25,4), DateOfAcquisition DATETIME, Currency NVARCHAR(50) )
+							PreviousHoldings INT, BuyQuantity INT, SellQuantity INT, Value DECIMAL(25,4), DateOfAcquisition DATETIME)
 	
 	DECLARE @nPeriodTypeCodeId INT
 	
@@ -270,9 +269,8 @@ BEGIN
 					SELECT @nPreviousPeriodHolding = 0, @nPreviousPeriodValue = 0
 				END
 				
-				SELECT top(1) @nCurrentPeriodHolding = ClosingBalance, @nCurrentPeriodValue = Value, @nCurrency=currency.DisplayCode
+				SELECT top(1) @nCurrentPeriodHolding = ClosingBalance, @nCurrentPeriodValue = Value
 				FROM tra_TransactionSummaryDMATWise
-					LEFT JOIN com_Code currency ON currency.CodeID = CurrencyID
 				WHERE UserInfoId = @inp_iUserInfoId
 					AND UserInfoIdRelative = ISNULL(@inp_iUserInfoIdRelative, @inp_iUserInfoId)
 					AND SecurityTypeCodeId = @inp_iSecurityTypeCodeId
@@ -289,10 +287,10 @@ BEGIN
 
 				--INSERT INTO @tmpFinal (ScriptName, ISIN) VALUES (@sScriptName, @sISIN)
 
-				INSERT INTO @tmpFinal (ScriptName, ISIN, TransactionType, PreviousHoldings, Value, Currency ) VALUES (@sScriptName, @sISIN, @sPreviousHolding, @nPreviousPeriodHolding, @nPreviousPeriodValue, @nCurrency)
+				INSERT INTO @tmpFinal (ScriptName, ISIN, TransactionType, PreviousHoldings, Value) VALUES (@sScriptName, @sISIN, @sPreviousHolding, @nPreviousPeriodHolding, @nPreviousPeriodValue)
 
 				INSERT INTO @tmpFinal (SecurityType, TransactionType,
-							PreviousHoldings, BuyQuantity, SellQuantity, Value, DateOfAcquisition,Currency)			
+							PreviousHoldings, BuyQuantity, SellQuantity, Value, DateOfAcquisition)			
 				SELECT CSecurity.CodeName SecurityType, CTransactionType.CodeName AS TransactionType, NULL,
 					CASE WHEN TD.TransactionTypeCodeId = @nTransactionType_Buy OR TD.TransactionTypeCodeId = @nTransactionType_CashExercise THEN TD.Quantity 
 						WHEN TD.TransactionTypeCodeId = @nTransactionType_Sell THEN 0
@@ -309,13 +307,11 @@ BEGIN
 						WHEN TD.TransactionTypeCodeId = @nTransactionType_CashlessAll THEN TD.Value + TD.Value2
 						WHEN TD.TransactionTypeCodeId = @nTransactionType_CashlessPartial THEN TD.Value + TD.Value2
 						ELSE 0 END AS Value,
-						TD.DateOfAcquisition,
-						currency.DisplayCode as Currency
+						TD.DateOfAcquisition
 					--,TD.* 
 				From tra_TransactionDetails TD JOIN tra_TransactionMaster TM ON TM.TransactionMasterId = TD.TransactionMasterId
 					JOIN com_Code CSecurity ON TD.SecurityTypeCodeId = CSecurity.CodeID
 					JOIN com_Code CTransactionType ON TransactionTypeCodeId = CTransactionType.CodeID
-					LEFT JOIN com_Code currency ON currency.CodeID = TD.CurrencyID
 				WHERE UserInfoId = @inp_iUserInfoId
 					AND TD.ForUserInfoId = ISNULL(@inp_iUserInfoIdRelative, @inp_iUserInfoId)
 					AND TD.SecurityTypeCodeId = @inp_iSecurityTypeCodeId
@@ -328,7 +324,7 @@ BEGIN
 					SELECT SUM(BuyQuantity), SUM(SellQuantity) FROM @tmpFinal
 				END
 				
-				INSERT INTO @tmpFinal (TransactionType, PreviousHoldings, Value, Currency) VALUES (@sCurrentHolding, @nCurrentPeriodHolding, @nCurrentPeriodValue, @nCurrency) 
+				INSERT INTO @tmpFinal (TransactionType, PreviousHoldings, Value) VALUES (@sCurrentHolding, @nCurrentPeriodHolding, @nCurrentPeriodValue)
 
 				SELECT ScriptName AS rpt_grd_19062,
 					 ISIN AS rpt_grd_19063,
@@ -338,8 +334,7 @@ BEGIN
 					 BuyQuantity AS rpt_grd_19068,
 					 SellQuantity AS rpt_grd_19069,
 					 Value AS rpt_grd_19070,
-					 dbo.uf_rpt_FormatDateValue(DateOfAcquisition,0) AS rpt_grd_19071,
-					 Currency as rpt_grd_54229
+					 dbo.uf_rpt_FormatDateValue(DateOfAcquisition,0) AS rpt_grd_19071
 				FROM @tmpFinal t
 				ORDER BY t.Id
 			END
