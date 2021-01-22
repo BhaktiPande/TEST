@@ -3799,8 +3799,7 @@ namespace InsiderTrading.Controllers
                         {
                             dt.Rows[rowCount]["ESOPQty"] = 0;
                             dt.Rows[rowCount]["OtherthanESOPQty"] = Convert.ToDecimal(UsrRec.tra_grd_16195);
-                        }
-                        dt.Rows[rowCount]["Currency"] = Convert.ToDecimal(UsrRec.rpt_grd_54229);
+                        }                        
                         dt.Rows[rowCount]["SecuritiesToBeTradedValue"] = Convert.ToDecimal(UsrRec.tra_grd_16198);
                         dt.Rows[rowCount]["LotSize"] = Convert.ToInt32(UsrRec.tra_grd_16199);
                         dt.Rows[rowCount]["ContractSpecification"] = Convert.ToString(UsrRec.tra_grd_16200);
@@ -3832,7 +3831,6 @@ namespace InsiderTrading.Controllers
                         dt.Rows[rowCount]["SecuritiesToBeTradedQty"] = Convert.ToDecimal(UsrRelRec.tra_grd_50749);
                         dt.Rows[rowCount]["ESOPQty"] = 0;
                         dt.Rows[rowCount]["OtherthanESOPQty"] = Convert.ToDecimal(UsrRelRec.tra_grd_50749);
-                        dt.Rows[rowCount]["Currency"] = Convert.ToDecimal(UsrRelRec.rpt_grd_54229);
                         dt.Rows[rowCount]["SecuritiesToBeTradedValue"] = Convert.ToDecimal(UsrRelRec.tra_grd_50750);
                         dt.Rows[rowCount]["LotSize"] = Convert.ToInt32(UsrRelRec.tra_grd_50783);
                         dt.Rows[rowCount]["ContractSpecification"] = Convert.ToString(UsrRelRec.tra_grd_50784);

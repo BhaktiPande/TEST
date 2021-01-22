@@ -85,7 +85,7 @@ BEGIN
  (
 	GridTypeCodeId,	ResourceKey,	IsVisible,	SequenceNumber,	ColumnWidth,	ColumnAlignment,	OverrideGridTypeCodeId,	OverrideResourceKey
  )
- SELECT 114071,'rpt_grd_54229',1,8,0,155001,NULL,NULL
+ SELECT 114071,'rpt_grd_54229',1,9,0,155001,NULL,NULL
 
 END
 
