@@ -205,6 +205,12 @@ namespace InsiderTrading.Controllers
             ViewBag.YearTypeCode = GetYearCodeTypeDropDown(objLoginUserDetails);
             ViewBag.FinancialPeriods = GetFinancialPeriodCodeDropDown(objLoginUserDetails);
             sConnectionString = objLoginUserDetails.CompanyDBConnectionString;
+
+            var objInsiderInitialDisclosureSL = new InsiderInitialDisclosureSL();
+            InsiderInitialDisclosureDTO objInsiderInitialDisclosureDTO = null;
+            objInsiderInitialDisclosureDTO = objInsiderInitialDisclosureSL.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
+          
+
             SqlConnection con = new SqlConnection(sConnectionString);
             SqlCommand cmd = new SqlCommand();
             SqlCommand cmd1 = new SqlCommand();
@@ -233,6 +239,11 @@ namespace InsiderTrading.Controllers
                 SqlDataAdapter adp1 = new SqlDataAdapter(cmd1);
                 adp.Fill(dt);
                 adp1.Fill(dt1);
+
+                if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue==400003) 
+                    {
+                        dt1.Columns.Remove("Holdings");
+                    }
             }
 
             if (ReportType == "4")
@@ -263,7 +274,13 @@ namespace InsiderTrading.Controllers
                 SqlDataAdapter adp1 = new SqlDataAdapter(cmd1);
                 adp.Fill(dt);
                 adp1.Fill(dt1);
+
+                if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue==400003) 
+                {
+                        dt1.Columns.Remove("Holdings");
+                 }
             }
+
             else if (ReportType == "2")
             {
                 spName = "st_rpt_PreclearanceEmployeeWise_OS";
@@ -279,7 +296,14 @@ namespace InsiderTrading.Controllers
                 cmd.Parameters.Add("@inp_dtDateOfTransactionTo", ToDate);
                 SqlDataAdapter adp = new SqlDataAdapter(cmd);
                 adp.Fill(dt);
+
+                    if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue==400003)
+                   {
+                        dt.Columns.Remove("Number of Securities");
+                        dt.Columns.Remove("Value");
+                    }
             }
+
             else if (ReportType == "3")
             {
                 spName = "st_rpt_ContinuousDisclosureEmployeeWise_OS";
@@ -295,6 +319,12 @@ namespace InsiderTrading.Controllers
                 cmd.Parameters.Add("@inp_dtDateOfTransactionTo", ToDate);
                 SqlDataAdapter adp = new SqlDataAdapter(cmd);
                 adp.Fill(dt);
+
+                if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue==400003) 
+                {
+                        dt.Columns.Remove("Trades");
+                        dt.Columns.Remove("Value");
+                 }
             }
 
             if ((dt == null) || (dt.Rows.Count == 0))
