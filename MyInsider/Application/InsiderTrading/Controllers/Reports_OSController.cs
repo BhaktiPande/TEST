@@ -324,6 +324,7 @@ namespace InsiderTrading.Controllers
                 {
                         dt.Columns.Remove("Trades");
                         dt.Columns.Remove("Value");
+
                  }
             }
 
