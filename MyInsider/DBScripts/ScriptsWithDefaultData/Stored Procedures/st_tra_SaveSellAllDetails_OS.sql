@@ -48,19 +48,18 @@ BEGIN
 			SET @out_sSQLErrMessage = ''
 
 			
-			IF NOT EXISTS(SELECT 1 FROM tra_SellAllValues_OS WHERE TransactionMasterId = @inp_iTransactionMasterId and 
-					  CompanyId=@inp_iCompanyId and DMATDetailsId= @inp_iDMATDetailsId and SecurityTypeCodeId=@inp_iSecurityTypecodeId)
-				BEGIN
-				
+			IF NOT EXISTS(SELECT 1 FROM tra_SellAllValues_OS WHERE TransactionMasterId = @inp_iTransactionMasterId)
+				BEGIN				
 					INSERT INTO tra_SellAllValues_OS(TransactionMasterId,SellAllFlag,ForUserInfoId,CompanyId,DMATDetailsId,CreatedOn,ModifiedOn,SecurityTypeCodeId)
-							VALUES(@inp_iTransactionMasterId , @inp_bSellAllFlag , @inp_iForUserInfoId,@inp_iCompanyId,@inp_iDMATDetailsId,dbo.uf_com_GetServerDate(),dbo.uf_com_GetServerDate(),@inp_iSecurityTypecodeId)
-							
+					VALUES(@inp_iTransactionMasterId , @inp_bSellAllFlag , @inp_iForUserInfoId,@inp_iCompanyId,@inp_iDMATDetailsId,dbo.uf_com_GetServerDate(),dbo.uf_com_GetServerDate(),@inp_iSecurityTypecodeId)
 				END
 			ELSE
 			BEGIN
-				UPDATE tra_SellAllValues_OS SET SellAllFlag= @inp_bSellAllFlag WHERE TransactionMasterId = @inp_iTransactionMasterId and 
-					 ForUserInfoId=@inp_iForUserInfoId and CompanyId=@inp_iCompanyId and DMATDetailsId= @inp_iDMATDetailsId and SecurityTypeCodeId=@inp_iSecurityTypecodeId
-			END
+				UPDATE tra_SellAllValues_OS SET SellAllFlag= @inp_bSellAllFlag,ForUserInfoId=@inp_iForUserInfoId, CompanyId=@inp_iCompanyId,
+				DMATDetailsId= @inp_iDMATDetailsId,SecurityTypeCodeId=@inp_iSecurityTypecodeId			
+				WHERE TransactionMasterId = @inp_iTransactionMasterId 
+			END		
+			
 			
 			DECLARE @nSellAllFlag INT=0
 			DECLARE @nClosingBalance INT=0			
