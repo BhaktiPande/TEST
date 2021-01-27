@@ -363,6 +363,14 @@ BEGIN
 				
 			IF(@inp_iTransactionTypeCodeId = @nTransactionType_Pledge OR @inp_iTransactionTypeCodeId = @nTransactionType_PledgeRevoke OR @inp_iTransactionTypeCodeId = @nTransactionType_PledgeInvoke)
 			BEGIN
+			    DECLARE @UserTypeCodeId INT=0
+
+				SELECT @UserTypeCodeId=UserTypeCodeId FROM usr_userinfo WHERE userinfoid=@inp_iForUserInfoId
+				IF(@UserTypeCodeId=101007)
+				BEGIN
+					SELECT @inp_iForUserInfoId=UserInfoId FROM usr_UserRelation WHERE UserInfoIdRelative=@inp_iForUserInfoId
+				END
+				 	
 			   SELECT @nImptPostShareQtyCodeId = impt_post_share_qty_code_id, @nActionCodeID = action_code_id FROM tra_TransactionTypeSettings_OS WHERE trans_type_code_id = @inp_iTransactionTypeCodeId AND mode_of_acquis_code_id = @inp_iModeOfAcquisitionCodeId AND security_type_code_id = @inp_iSecurityTypeCodeId		
 			   IF(@nImptPostShareQtyCodeId = @nNo)						     
 			   BEGIN
