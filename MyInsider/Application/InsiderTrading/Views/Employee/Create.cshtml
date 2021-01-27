@@ -656,7 +656,9 @@
         if ('@Session["Confirm_PersonalDetails_Required"]' != 'True' && '@Session["UserInfoId"]' != 0) {
             $("#btn_GetUserDetails").removeClass("btn-warning").addClass("btn-success");
             $("#btn_GetUserDematDetails").removeClass("btn-danger").addClass("btn-success");
-            $("#btn_GetUserEducationDetails").removeClass("btn-danger").addClass("btn-success");
+            if ('@ViewBag.WorkandEducationDetailsConfiguration' == 539001) {
+                $("#btn_GetUserEducationDetails").removeClass("btn-danger").addClass("btn-success");
+            }
             $("#btn_GetUserRelativeDetails").removeClass("btn-danger").addClass("btn-success");
             $("#btn_ConfirmDetails").removeClass("btn-danger").addClass("btn-success");
 
@@ -664,21 +666,27 @@
         else {
             $("#btn_GetUserDetails").removeClass("btn-warning").addClass("btn-warning");
             $("#btn_GetUserDematDetails").removeClass("btn-danger").addClass("btn-danger");
-            $("#btn_GetUserEducationDetails").removeClass("btn-danger").addClass("btn-danger");
+            if ('@ViewBag.WorkandEducationDetailsConfiguration' == 539001) {
+                $("#btn_GetUserEducationDetails").removeClass("btn-danger").addClass("btn-danger");
+            }
             $("#btn_GetUserRelativeDetails").removeClass("btn-danger").addClass("btn-danger");
             $("#btn_ConfirmDetails").removeClass("btn-danger").addClass("btn-danger");
         }
 
         if ($("#btn_GetUserDematDetails").hasClass("btn-danger")) {
             $('#btn_GetUserDematDetails').attr("disabled", "disabled");
-            $('#btn_GetUserEducationDetails').attr("disabled", "disabled");
+            if ('@ViewBag.WorkandEducationDetailsConfiguration' == 539001) {
+                $('#btn_GetUserEducationDetails').attr("disabled", "disabled");
+            }
             $('#btn_GetUserRelativeDetails').attr("disabled", "disabled");
             $('#btn_ConfirmDetails').attr("disabled", "disabled");
 
         }
         else {
             $('#btn_GetUserDematDetails').removeAttr("disabled", "disabled");
-            $('#btn_GetUserEducationDetails').removeAttr("disabled", "disabled");
+            if ('@ViewBag.WorkandEducationDetailsConfiguration' == 539001) {
+                $('#btn_GetUserEducationDetails').removeAttr("disabled", "disabled");
+            }
             $('#btn_GetUserRelativeDetails').removeAttr("disabled", "disabled");
             $('#btn_ConfirmDetails').removeAttr("disabled", "disabled");
         }
