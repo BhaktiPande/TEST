@@ -376,7 +376,7 @@ BEGIN
 						EXEC st_tra_PreclearanceRequestNonImplCompanySaveValidations 
 						0,@nTradingPolicyID,@nUserInfoId,	@nUserInfoIdRelative,@nTransactionTypeCodeId,						
 						@nSecurityTypeCodeId,@nSecuritiesToBeTradedQty,	@nSecuritiesToBeTradedValue	,@nCompanyId,@nModeOfAcquisitionCodeId ,
-						@nDMATDetailsID,@out_bIsContraTrade	OUTPUT,	@out_sContraTradeTillDate OUTPUT,@bIsAutoApprove OUTPUT,@out_nReturnValue OUTPUT,
+						@nDMATDetailsID,@DisplaySequenceNo,@out_bIsContraTrade	OUTPUT,	@out_sContraTradeTillDate OUTPUT,@bIsAutoApprove OUTPUT,@out_nReturnValue OUTPUT,
 						@out_nSQLErrCode OUTPUT,@out_sSQLErrMessage	OUTPUT				
 																				
 					IF @out_nReturnValue <> 0

@@ -423,7 +423,7 @@ namespace InsiderTradingDAL
         /// <returns></returns>
         public int ValidatePreclearanceRequest(string sConnectionString, int preclearanceRequestId, int tradingPolicyID, int userInfoId, int? userInfoIdRelative,
                         int transactionTypeCodeId, int securityTypeCodeId, decimal? securitiesToBeTradedQty, decimal? securitiesToBeTradedValue, int companyId,
-                        int modeOfAcquisitionCodeId, int DMATDetailsID, out bool bIsContraTrade, out string sContraTradeDate, out bool iIsAutoApproved)
+                        int modeOfAcquisitionCodeId, int DMATDetailsID, int DisplaySequenceNo, out bool bIsContraTrade, out string sContraTradeDate, out bool iIsAutoApproved)
         {
             #region Paramters
 
@@ -464,7 +464,7 @@ namespace InsiderTradingDAL
                 {
                     using (var scope = db.GetTransaction())
                     {
-                        res = db.Query<int>("exec st_tra_PreclearanceRequestNonImplCompanySaveValidations @inp_nPreclearanceRequestId,@inp_iTradingPolicyId,@inp_iUserInfoId,@inp_iUserInfoIdRelative,@inp_iTransactionTypeCodeId,@inp_iSecurityTypeCodeId,@inp_dSecuritiesToBeTradedQty,@inp_dSecuritiesToBeTradedValue,@inp_iCompanyId,@inp_iModeOfAcquisitionCodeId,@inp_iDMATDetailsID,@out_bIsContraTrade OUTPUT,@out_sContraTradeTillDate OUTPUT, @out_iIsAutoApproved OUTPUT, @out_nReturnValue OUTPUT, @out_nSQLErrCode OUTPUT, @out_sSQLErrMessage OUTPUT",
+                        res = db.Query<int>("exec st_tra_PreclearanceRequestNonImplCompanySaveValidations @inp_nPreclearanceRequestId,@inp_iTradingPolicyId,@inp_iUserInfoId,@inp_iUserInfoIdRelative,@inp_iTransactionTypeCodeId,@inp_iSecurityTypeCodeId,@inp_dSecuritiesToBeTradedQty,@inp_dSecuritiesToBeTradedValue,@inp_iCompanyId,@inp_iModeOfAcquisitionCodeId,@inp_iDMATDetailsID, @inp_DisplaySequenceNo,@out_bIsContraTrade OUTPUT,@out_sContraTradeTillDate OUTPUT, @out_iIsAutoApproved OUTPUT, @out_nReturnValue OUTPUT, @out_nSQLErrCode OUTPUT, @out_sSQLErrMessage OUTPUT",
                            new
                            {
                                @inp_nPreclearanceRequestId = preclearanceRequestId,
@@ -478,6 +478,7 @@ namespace InsiderTradingDAL
                                @inp_iCompanyId = companyId,
                                @inp_iModeOfAcquisitionCodeId = modeOfAcquisitionCodeId,
                                @inp_iDMATDetailsID = DMATDetailsID,
+                               @inp_DisplaySequenceNo= DisplaySequenceNo,
                                @out_bIsContraTrade = bIsContraTrade,
                                @out_sContraTradeTillDate = sContraTradeTillDate,
                                @out_iIsAutoApproved = isAutoApproved,
