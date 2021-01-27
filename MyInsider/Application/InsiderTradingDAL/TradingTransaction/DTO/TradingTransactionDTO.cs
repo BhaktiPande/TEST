@@ -21,7 +21,7 @@ namespace InsiderTradingDAL
 
         [PetaPoco.Column("ForUserInfoId")]
         public int ForUserInfoId { get; set; }
-
+        
         [PetaPoco.Column("DMATDetailsID")]
         public int DMATDetailsID { get; set; }
 
@@ -91,7 +91,7 @@ namespace InsiderTradingDAL
         [PetaPoco.Column("ContractSpecification")]
         public string ContractSpecification { get; set; }
     }
-
+   
     public class ApprovedPCLDTO
     {
         public int ApprovedPCLCnt { get; set; }
@@ -112,7 +112,6 @@ namespace InsiderTradingDAL
         public string tra_grd_16200 { get; set; }
         public string dmatId { get; set; }
         public string UserInfoId { get; set; }
-        public int rpt_grd_54229 { get; set; }
     }
 
     public class DataItemForRelative
@@ -131,8 +130,7 @@ namespace InsiderTradingDAL
         public string tra_grd_50784 { get; set; }
         public string relDmatId { get; set; }
         public string RelUserInfoId { get; set; }
-        public int rpt_grd_54229 { get; set; }
     }
-
-
+   
+    
 }

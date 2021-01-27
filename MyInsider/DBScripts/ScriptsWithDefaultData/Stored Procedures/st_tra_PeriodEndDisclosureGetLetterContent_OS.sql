@@ -47,6 +47,7 @@ BEGIN
 		DECLARE @nMapToTypeId INT = 132020	--MapToTypeId 
 
 		DECLARE @nCommunicationModeCodeId_FormG  INT = 156010 --Form G  
+		DECLARE @nCommunicationModeCodeId_FormGHideQuantity  INT = 156019
 	
 
 		DECLARE @dtCurrentServerDate DATETIME =  dbo.uf_com_GetServerDate()
@@ -77,6 +78,7 @@ BEGIN
 		DECLARE @TableHeaders NVARCHAR(MAX)='';
 		DECLARE @TableFooters NVARCHAR(MAX)='';
 		DECLARE @FormGContents NVARCHAR(MAX) = ''
+		DECLARE @EnableDisableQuantity int;
 		DECLARE  @tblPlaceholders AS TABLE
 		(
 			ID INT IDENTITY(1,1), 
@@ -149,6 +151,8 @@ BEGIN
 		
 		SELECT @nPeriodTypeText = CodeName FROM com_Code WHERE CodeID = @inp_iPeriodType
 		SELECT @nImpementCompany= CompanyName, @nISINNo = ISINNumber FROM mst_Company WHERE IsImplementing = 1
+
+		select @EnableDisableQuantity=EnableDisableQuantityValue from mst_Company where IsImplementing=1
 		
 	--insert constant data of from into table variable for replacement purpose 
 		INSERT INTO @tblConstantDataContent
@@ -199,14 +203,20 @@ BEGIN
 
 			IF(@inp_nMapToTypeCodeId = @nMapToTypeId) --Perform processing for generation of formatted Form G
 			BEGIN
+			
+			IF(@EnableDisableQuantity <> 400003)	
+			BEGIN
 				SELECT @sGeneratedFormContents_FormG = Contents, @nTemplateMasterId = TemplateMasterId FROM tra_TemplateMaster WHERE CommunicationModeCodeId = @nCommunicationModeCodeId_FormG
-		
+			END
+			ELSE
+			BEGIN
+				SELECT @sGeneratedFormContents_FormG = Contents, @nTemplateMasterId = TemplateMasterId FROM tra_TemplateMaster WHERE CommunicationModeCodeId = @nCommunicationModeCodeId_FormGHideQuantity
+			END
 				IF CHARINDEX('<table', @sGeneratedFormContents_FormG ) > 0 
 				BEGIN 
 				   DECLARE @FindParaBeforeTable NVARCHAR(MAX)
 				   SELECT @FindParaBeforeTable= SUBSTRING(@sGeneratedFormContents_FormG,1,CHARINDEX('<table',@sGeneratedFormContents_FormG))  
-				  
-		   
+			
 				   SELECT @BeforeTableContents= CHARINDEX('<p',@FindParaBeforeTable,CHARINDEX('<table', @sGeneratedFormContents_FormG))
 				   SELECT @BeforeTableContents=(CHARINDEX('<p',@FindParaBeforeTable))          
 		       
@@ -281,8 +291,8 @@ BEGIN
           --PRINT @TableRow
                       
            SELECT @TableHeaders = SUBSTRING(@TableContents,CHARINDEX('<table',@TableContents),CHARINDEX('</tr',@TableContents)+ 4)
-          --PRINT @TableHeaders
-                      
+           --PRINT @TableHeaders
+                    
            SELECT @TableFooters = SUBSTRING(@TableContents,CHARINDEX('</tbody',@TableContents),CHARINDEX('</table',@TableContents))
 		--Get user transaction details
 			INSERT INTO @tblPeriodEndDisclosureSummary
@@ -331,6 +341,8 @@ BEGIN
 							WHILE(@nCounter <= @nPlaceholderCount)
 							BEGIN		
             					SELECT @sPlaceholder = Placeholder FROM @tblPlaceholders WHERE ID = @nCounter
+										IF(@EnableDisableQuantity <> 400003)
+										BEGIN
 										SELECT 
 												@TableRow = CASE 
 															WHEN (LOWER(@sPlaceholder) = LOWER('[NAME]')) THEN REPLACE(@TableRow, @sPlaceholder, ISNULL(Name,'-')) 
@@ -351,7 +363,31 @@ BEGIN
 															WHEN (LOWER(@sPlaceholder) = LOWER('[SECURITIES_PLEDGED_AT_THE_END_OFTHE_PERIOD]')) THEN REPLACE(@TableRow, @sPlaceholder,ISNULL(TotalPledge,'-'))
 															else @TableRow 
 					 					END FROM  @tblPeriodEndDisclosureSummary WHERE Id=@ID
+										END
+										ELSE
+										BEGIN
 										
+											SELECT 
+												@TableRow = CASE 
+															WHEN (LOWER(@sPlaceholder) = LOWER('[NAME]')) THEN REPLACE(@TableRow, @sPlaceholder, ISNULL(Name,'-')) 
+															WHEN (LOWER(@sPlaceholder) = LOWER('[PAN]')) THEN REPLACE(@TableRow, @sPlaceholder, ISNULL(PAN,' ')) 
+															WHEN (LOWER(@sPlaceholder) = LOWER('[CIN]')) THEN REPLACE(@TableRow, @sPlaceholder, ISNULL(CIN,' ')) 
+															WHEN (LOWER(@sPlaceholder) = LOWER('[DIN]')) THEN REPLACE(@TableRow, @sPlaceholder, ISNULL(DIN,' ')) 
+															WHEN (LOWER(@sPlaceholder) = LOWER('[ADDRESS]')) THEN REPLACE(@TableRow, @sPlaceholder, ISNULL(ADDRESS,'Self')) 
+															WHEN (LOWER(@sPlaceholder) = LOWER('[SUB_CATEGORYOF_PERSONS]')) THEN REPLACE(@TableRow, @sPlaceholder, ISNULL(Relation,'-')) 
+															WHEN (LOWER(@sPlaceholder) = LOWER('[DEMAT_ACCOUNT_NUMBER]')) THEN REPLACE(@TableRow, @sPlaceholder,ISNULL(DematAccountNo,'-')) 
+															WHEN (LOWER(@sPlaceholder) = LOWER('[SECURITY_TYPE]')) THEN REPLACE(@TableRow, @sPlaceholder,ISNULL(SecurityType,'-')) 
+															WHEN (LOWER(@sPlaceholder) = LOWER('[NAMEOF_TRADING_COMPANY]')) THEN REPLACE(@TableRow, @sPlaceholder,ISNULL(CompanyName,'-')) 
+															--WHEN (LOWER(@sPlaceholder) = LOWER('[HOLDINGON_FROM_DATE]')) THEN REPLACE(@TableRow, @sPlaceholder,ISNULL( OpeningStock,'0')) 
+															--WHEN (LOWER(@sPlaceholder) = LOWER('[BOUGHT_DURING_PERIOD]')) THEN REPLACE(@TableRow, @sPlaceholder,ISNULL(Bought,'-'))
+															--WHEN (LOWER(@sPlaceholder) = LOWER('[SOLD_DURING_PERIOD]')) THEN REPLACE(@TableRow, @sPlaceholder,ISNULL(Sold,'-')) 
+															--WHEN (LOWER(@sPlaceholder) = LOWER('[HOLDINGON_TO_DATE]')) THEN REPLACE(@TableRow, @sPlaceholder,ISNULL(PeriodEndHolding,'-')) 
+															--WHEN (LOWER(@sPlaceholder) = LOWER('[SECURITIES_PLEDGED_DURINGTHE_PERIOD]')) THEN REPLACE(@TableRow, @sPlaceholder,ISNULL(Pledge,'-')) 
+															--WHEN (LOWER(@sPlaceholder) = LOWER('[SECURITIES_UNPLEDGED_DURINGTHE_PERIOD]')) THEN REPLACE(@TableRow, @sPlaceholder,ISNULL(Unpledge,'-')) 
+															--WHEN (LOWER(@sPlaceholder) = LOWER('[SECURITIES_PLEDGED_AT_THE_END_OFTHE_PERIOD]')) THEN REPLACE(@TableRow, @sPlaceholder,ISNULL(TotalPledge,'-'))
+															else @TableRow 
+					 					END FROM  @tblPeriodEndDisclosureSummary WHERE Id=@ID
+										END
 								 set @nCounter = @nCounter +1					
 							END 	
 			
@@ -361,6 +397,9 @@ BEGIN
 			END	
 		
 			IF(@RowCounter=1)-- if record not found 
+			BEGIN
+			
+			IF(@EnableDisableQuantity <> 400003)
 			BEGIN
 			SET @TableContents='<table border="1" cellspacing="0" cellpadding="6" style="max-width: 600px;font-family:inherit;font-size:inherit;">
 									<tbody>
@@ -383,6 +422,25 @@ BEGIN
 										 </tr>
 									</tbody>
 								</table>'
+			END
+			ELSE
+			BEGIN
+			SET @TableContents='<table border="1" cellspacing="0" cellpadding="6" style="max-width: 600px;font-family:inherit;font-size:inherit;">
+									<tbody>
+										<tr height="100">
+											<td   style="word-wrap: break-word;width=80;valign:top"><b>Name, PAN,<br /> CIN/DIN, Address  </b></td>
+											<td   style="word-wrap: break-word;width=50;valign:top"><b>Category of Person<br /> (Promoter/ KMP/Director/<br /> Immediate relative to etc) </b></td>
+											<td   style="word-wrap: break-word;width=50;valign:top"><b>Demat<br /> Account<br /> Number </b></td>
+											<td   style="word-wrap: break-word;width=50;valign:top"><b>Type of Security </b></td>
+											<td   style="word-wrap: break-word;width=50;valign:top"><b>Name of company </b></td>
+											
+										</tr>
+										<tr height="50">
+											 <td colspan="12" style="word-wrap: break-word;width=25;valign:middle;text-align:center"> [Message] </td>
+										 </tr>
+									</tbody>
+								</table>'
+						END
 			 		  SELECT @TableHeaders = SUBSTRING(@TableContents,CHARINDEX('<table',@TableContents),CHARINDEX('</tr',@TableContents)+ 4)
 				      SELECT @TableRow = SUBSTRING(@TableContents,CHARINDEX('<tr',@TableContents,(CHARINDEX('<tr',@TableContents)+1)),CHARINDEX('</tr',@TableContents,(CHARINDEX('</tr',@TableContents)+1)) - CHARINDEX('<tr',@TableContents,(CHARINDEX('<tr',@TableContents)+1))+5)
             		  SET @TableRow= REPLACE(@TableRow, '[Message]',(SELECT ResourceValue FROM mst_Resource WHERE ResourceKey='dis_msg_54175')) 

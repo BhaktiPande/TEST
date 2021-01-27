@@ -414,15 +414,13 @@ BEGIN
 									END) 
 							ELSE '-' 
 						END as dis_grd_17142,
-						CASE WHEN td.SecurityTypeCodeId = @SecuriyType_Options THEN CONVERT(VARCHAR(MAX),Value) ELSE '-' END as dis_grd_17143,
-						currency.DisplayCode as rpt_grd_54229
+						CASE WHEN td.SecurityTypeCodeId = @SecuriyType_Options THEN CONVERT(VARCHAR(MAX),Value) ELSE '-' END as dis_grd_17143
 				from	tra_TransactionDetails td
 						JOIN @temp t ON t.UserInfoId = td.ForUserInfoId
 						JOIN usr_UserInfo u on u.UserInfoId = t.UserInfoId 
 						LEFT JOIN mst_Company co ON u.CompanyId = co.CompanyId
 						JOIN com_Code C ON C.CodeID = td.SecurityTypeCodeId
 						JOIN tra_TransactionMaster tm ON tm.TransactionMasterId = td.TransactionMasterId
-						LEFT JOIN com_Code currency ON currency.CodeID = TD.CurrencyID
 				where	td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb,@SecuriyType_Futures,@SecuriyType_Options) 
 					and tm.DisclosureTypeCodeId = @Discclosureype_Initial AND td.TransactionMasterId = @inp_iTransactionMasterId /*and
 					td.SecurityTypeCodeId in( @SecuriyType_Futures,@SecuriyType_Options)*/

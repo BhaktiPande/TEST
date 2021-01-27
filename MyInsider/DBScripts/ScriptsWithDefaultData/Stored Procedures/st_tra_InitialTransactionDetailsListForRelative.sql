@@ -213,8 +213,7 @@ BEGIN
 		TD.SecurityTypeCodeId AS SecurityTypeCodeId,
 		--TD.TransactionMasterId AS TransId,
 		TD.ForUserInfoId AS RelUserInfoId,
-		TM.TransactionStatusCodeId 	AS TransStatusCodeId,
-		currency.DisplayCode AS rpt_grd_54229
+		TM.TransactionStatusCodeId 	AS TransStatusCodeId			
 		FROM	tra_TransactionDetails TD
 		LEFT JOIN #tmpEvaluatePercentagePrePostTransaction tmp ON TD.TransactionDetailsId=tmp.TransactionDetailsId
 		JOIN tra_TransactionMaster TM ON TD.TransactionMasterId = TM.TransactionMasterId
@@ -222,7 +221,6 @@ BEGIN
 		JOIN usr_DMATDetails DD ON TD.DMATDetailsID = DD.DMATDetailsID
 		LEFT JOIN usr_UserRelation UR ON  TD.ForUserInfoId = UR.UserInfoIdRelative
 		LEFT JOIN com_Code CRelation ON UR.RelationTypeCodeId = CRelation.CodeID
-		LEFT JOIN com_Code currency ON currency.CodeID = TD.CurrencyID
 		WHERE TD.TransactionMasterId in(
 		
 				SELECT TM.TransactionMasterId FROM tra_TransactionMaster TM JOIN tra_TransactionDetails TD
@@ -363,8 +361,7 @@ BEGIN
 		TransLotSize decimal(10,2),
 		TransContractSpecification nvarchar(max),
 		TransSecurityTypeCodeId int,
-		TransUserId INT,
-		Currency NVARCHAR(50)
+		TransUserId INT
 		
 		)
 			INSERT INTO #tmpTransRelDmat
@@ -384,8 +381,7 @@ BEGIN
 			TD.LotSize,
 			TD.ContractSpecification,
 			TD.SecurityTypeCodeId,
-			TD.ForUserInfoId,
-			currency.DisplayCode AS rpt_grd_54229
+			TD.ForUserInfoId							
 			FROM	tra_TransactionDetails TD
 			LEFT JOIN #tmpEvaluatePercentagePrePostTransaction tmp ON TD.TransactionDetailsId=tmp.TransactionDetailsId
 			JOIN tra_TransactionMaster TM ON TD.TransactionMasterId = TM.TransactionMasterId
@@ -393,7 +389,6 @@ BEGIN
 			LEFT JOIN usr_DMATDetails DD ON TD.DMATDetailsID = DD.DMATDetailsID	
 			LEFT JOIN usr_UserRelation UR ON TM.UserInfoId = UR.UserInfoId AND TD.ForUserInfoId = UR.UserInfoIdRelative
 			LEFT JOIN com_Code CRelation ON UR.RelationTypeCodeId = CRelation.CodeID
-			LEFT JOIN com_Code currency ON currency.CodeID = TD.CurrencyID
 			WHERE TD.TransactionMasterId=@inp_iTransactionMasterId AND TM.UserInfoId=@inp_nUserInfoId AND TD.SecurityTypeCodeId=@inp_nSecurityTypeCodeId	
 						
 			DECLARE @nCheckConfirmTransID INT=0			
@@ -441,8 +436,7 @@ BEGIN
 				SELECT TUD.RelativeName AS 'tra_grd_50741',TUD.RelativeType AS 'tra_grd_50742',TUD.PAN AS 'tra_grd_50743',
 				TTD.TransId, TUD.DmatId AS relDmatId,ISNULL(TUD.DmatAccNo,'NA') AS tra_grd_50744,ISNULL(TUD.DPBank,'NA') tra_grd_50745,ISNULL(TUD.DPID,'NA') AS tra_grd_50746,ISNULL(TUD.TMID,'NA') AS tra_grd_50747 ,
 				ISNULL(TTD.TransPerHolding,'0') AS tra_grd_50748,ISNULL(TTD.TransQuantity,0) AS tra_grd_50749,ISNULL(TTD.TransValue,0) AS tra_grd_50750,TUD.RelUserInfoId,ISNULL(TTD.TransLotSize,0) AS tra_grd_50783,ISNULL(TTD.TransContractSpecification,'') AS tra_grd_50784,
-				TTD.TransSecurityTypeCodeId AS SecurityTypeCodeId,@nTransactionStatus AS TransStatusCodeId,
-				TTD.Currency as rpt_grd_54229
+				TTD.TransSecurityTypeCodeId AS SecurityTypeCodeId,@nTransactionStatus AS TransStatusCodeId
 				FROM #tmpUserRelDmat TUD
 				LEFT JOIN #tmpTransRelDmat TTD ON TTD.TransDmatId=TUD.DmatId 
 				
@@ -455,7 +449,7 @@ BEGIN
 				SELECT TUD.RelativeName AS 'tra_grd_50741',TUD.RelativeType AS 'tra_grd_50742',TUD.PAN AS 'tra_grd_50743',
 				TTD.TransId, TUD.DmatId AS relDmatId,ISNULL(TUD.DmatAccNo,'NA') AS tra_grd_50744,ISNULL(TUD.DPBank,'NA') tra_grd_50745,ISNULL(TUD.DPID,'NA') AS tra_grd_50746,ISNULL(TUD.TMID,'NA') AS tra_grd_50747 ,
 				TTD.TransPerHolding AS tra_grd_50748,ISNULL(TTD.TransQuantity,0) AS tra_grd_50749,ISNULL(TTD.TransValue,0) AS tra_grd_50750,TUD.RelUserInfoId,ISNULL(TTD.TransLotSize,0) AS tra_grd_50783,ISNULL(TTD.TransContractSpecification,'') AS tra_grd_50784,
-				TTD.TransSecurityTypeCodeId AS SecurityTypeCodeId,@nTransactionStatus AS TransStatusCodeId,TTD.Currency as rpt_grd_54229
+				TTD.TransSecurityTypeCodeId AS SecurityTypeCodeId,@nTransactionStatus AS TransStatusCodeId
 				FROM #tmpUserRelDmat TUD
 				JOIN #tmpTransRelDmat TTD ON TTD.TransId=TUD.RelTransID AND TTD.TransDmatId IS NULL
 
@@ -464,7 +458,7 @@ BEGIN
 				SELECT TUD.RelativeName AS 'tra_grd_50741',TUD.RelativeType AS 'tra_grd_50742',TUD.PAN AS 'tra_grd_50743',
 				TTD.TransId, TUD.DmatId AS relDmatId,ISNULL(TUD.DmatAccNo,'NULL') AS tra_grd_50744,ISNULL(TUD.DPBank,'NA') tra_grd_50745,ISNULL(TUD.DPID,'NA') AS tra_grd_50746,ISNULL(TUD.TMID,'NA') AS tra_grd_50747 ,
 				ISNULL(TTD.TransPerHolding,'0') AS tra_grd_50748,ISNULL(TTD.TransQuantity,0) AS tra_grd_50749,ISNULL(TTD.TransValue,0) AS tra_grd_50750,TUD.RelUserInfoId,ISNULL(TTD.TransLotSize,0) AS tra_grd_50783,ISNULL(TTD.TransContractSpecification,'') AS tra_grd_50784,
-				TTD.TransSecurityTypeCodeId AS SecurityTypeCodeId,@nTransactionStatus AS TransStatusCodeId,TTD.Currency as rpt_grd_54229
+				TTD.TransSecurityTypeCodeId AS SecurityTypeCodeId,@nTransactionStatus AS TransStatusCodeId
 				FROM #tmpUserRelDmat TUD
 				JOIN #tmpTransRelDmat TTD ON TTD.TransDmatId=TUD.DmatId 
 				AND TTD.TransDmatId IS NOT NULL

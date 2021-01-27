@@ -102,8 +102,7 @@ CREATE PROCEDURE [dbo].[st_tra_PreclearanceRequestSave]
 	@out_sApproveddate							NVARCHAR(500) OUTPUT,
 	@out_sPreValiditydate						NVARCHAR(500) OUTPUT,
 	@out_sProhibitOnPer							NVARCHAR(500) OUTPUT,
-	@out_sProhibitOnQuantity					NVARCHAR(500) OUTPUT,
-	@inp_Currency INT=0
+	@out_sProhibitOnQuantity					NVARCHAR(500) OUTPUT
 AS
 BEGIN
 
@@ -994,13 +993,13 @@ INSERT INTO tra_PreclearanceRequest(PreclearanceRequestForCodeId,UserInfoId,User
 		SecurityTypeCodeId,SecuritiesToBeTradedQty,PreclearanceStatusCodeId,CompanyId,ProposedTradeRateRangeFrom,
 		ProposedTradeRateRangeTo,DMATDetailsID,ReasonForNotTradingCodeId,ReasonForNotTradingText,SecuritiesToBeTradedValue, IsAutoApproved,
 		CreatedBy,CreatedOn,ModifiedBy,ModifiedOn, ESOPExcerciseOptionQtyFlag, OtherESOPExcerciseOptionQtyFlag, 
-		ESOPExcerciseOptionQty, OtherExcerciseOptionQty, PledgeOptionQty, ModeOfAcquisitionCodeId,PreclearanceApprovedBy,PreclearanceApprovedOn,SecuritiesToBeTradedQtyOld,CurrencyID)
+		ESOPExcerciseOptionQty, OtherExcerciseOptionQty, PledgeOptionQty, ModeOfAcquisitionCodeId,PreclearanceApprovedBy,PreclearanceApprovedOn,SecuritiesToBeTradedQtyOld)
 VALUES (
 		@inp_iPreclearanceRequestForCodeId,@inp_iUserInfoId,@inp_iUserInfoIdRelative,@inp_iTransactionTypeCodeId,
 		@inp_iSecurityTypeCodeId,@inp_dSecuritiesToBeTradedQty,@inp_iPreclearanceStatusCodeId,@inp_iCompanyId,@inp_dProposedTradeRateRangeFrom,
 		@inp_dProposedTradeRateRangeTo,@inp_iDMATDetailsID,@inp_iReasonForNotTradingCodeId,@inp_sReasonForNotTradingText,@inp_dSecuritiesToBeTradedValue, @bIsAutoApprove,
 		@inp_nUserId, dbo.uf_com_GetServerDate(), @inp_nUserId, dbo.uf_com_GetServerDate(), @inp_bESOPExcerciseOptionQtyFlag, @inp_bOtherESOPExcerciseOptionQtyFlag,
-		@nESOPExcerciseOptionQty, @nOtherExcerciseOptionQty, @nPledgeOptionQty, @inp_iModeOfAcquisitionCodeId,@nPreclearanceApprovedBy,@dtPreclearanceApprovedOn,@inp_dSecuritiesToBeTradedQty,@inp_Currency)
+		@nESOPExcerciseOptionQty, @nOtherExcerciseOptionQty, @nPledgeOptionQty, @inp_iModeOfAcquisitionCodeId,@nPreclearanceApprovedBy,@dtPreclearanceApprovedOn,@inp_dSecuritiesToBeTradedQty)
 						
 					SET @inp_nPreclearanceRequestId = SCOPE_IDENTITY()
 				
