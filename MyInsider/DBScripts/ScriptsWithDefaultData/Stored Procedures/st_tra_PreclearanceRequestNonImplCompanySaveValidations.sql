@@ -31,6 +31,7 @@ CREATE PROCEDURE [dbo].[st_tra_PreclearanceRequestNonImplCompanySaveValidations]
 	@inp_iCompanyId								INT,
 	@inp_iModeOfAcquisitionCodeId               INT,
 	@inp_iDMATDetailsID							INT,
+	@inp_DisplaySequenceNo						INT=0,
 	@out_bIsContraTrade							BIT = 0 OUTPUT,
 	@out_sContraTradeTillDate				    NVARCHAR(500) OUTPUT,
 	@out_iIsAutoApproved                        BIT = 0 OUTPUT,
@@ -225,13 +226,16 @@ BEGIN
 		IF @nTP_PreClrAllowNewForOpenPreclearFlag = 0
 		BEGIN
 			----print 'Checking....'
+			IF(@inp_DisplaySequenceNo<>0)
+			BEGIN
 			-- Check that preclearance in requested state exists
 			IF EXISTS (SELECT PreclearanceRequestId FROM tra_PreclearanceRequest_NonImplementationCompany
 							WHERE UserInfoId = @inp_iUserInfoId
-								AND PreclearanceStatusCodeId = @nPCLStatusCode_Requested)
+								AND PreclearanceStatusCodeId = @nPCLStatusCode_Requested AND DisplaySequenceNo<>@inp_DisplaySequenceNo)
 			BEGIN
 				SET @out_nReturnValue = @ERR_PRECLEARANCE_REQUESTED
 				RETURN @out_nReturnValue				
+			END
 			END
 			
 			----print '@ERR_PRECLEARANCE_OPEN - Check if non-closed preclearance exists'

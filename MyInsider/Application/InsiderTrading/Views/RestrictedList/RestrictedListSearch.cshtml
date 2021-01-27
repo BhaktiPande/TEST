@@ -367,17 +367,17 @@
                 <div class="modal-footer">
                     @if ((bool)ViewBag.RequiredModule)
                     {
-                        using (Html.BeginForm("SaveAll_OS", "PreclearanceRequestNonImplCompany", new { acid = InsiderTrading.Common.ConstEnum.UserActions.PRECLEARANCEREQUESTNONIMPLEMENTINGCOMPANY_SAVEALL, formId =66}, FormMethod.Post))
-                        {
+                        //using (Html.BeginForm("SaveAll_OS", "PreclearanceRequestNonImplCompany", new { acid = InsiderTrading.Common.ConstEnum.UserActions.PRECLEARANCEREQUESTNONIMPLEMENTINGCOMPANY_SAVEALL, formId =66}, FormMethod.Post))
+                        //{
                             @Html.AntiForgeryToken()
                         <input type="hidden" name="SPName" id="SPName" />
-                        <button type="submit" id="btnYes" class="btn btn-success">@InsiderTrading.Common.Common.getResource("tra_btn_16459")</button>
+                        <button type="submit" id="btnYesOS" class="btn btn-success">@InsiderTrading.Common.Common.getResource("tra_btn_16459")</button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">@InsiderTrading.Common.Common.getResource("com_lbl_14022")</button>
+                            //}
                         }
-                    }
                     else{
-                        using (Html.BeginForm("SaveAll", "PreclearanceRequestNonImplCompany", new { acid = InsiderTrading.Common.ConstEnum.UserActions.PRECLEARANCEREQUESTNONIMPLEMENTINGCOMPANY_SAVEALL, formId=67 }, FormMethod.Post))
-                        {
+                            using (Html.BeginForm("SaveAll", "PreclearanceRequestNonImplCompany", new { acid = InsiderTrading.Common.ConstEnum.UserActions.PRECLEARANCEREQUESTNONIMPLEMENTINGCOMPANY_SAVEALL, formId=67 }, FormMethod.Post))
+                            {
                             @Html.AntiForgeryToken()
                         <input type="hidden" name="SPName" id="SPName" />
                         <button type="submit" id="btnYes" class="btn btn-success">@InsiderTrading.Common.Common.getResource("tra_btn_16459")</button>
@@ -395,6 +395,40 @@
         $('#myModal').modal('hide');
         $("body").addClass("loading");
     });
+</script>
+
+<script>
+    $('#btnYesOS').click(function () {
+        $('#myModal').modal('hide');
+        $("body").addClass("loading");
+    });
+
+
+
+    $('#btnYesOS').click(function () {
+                
+            var data = { 'acid': '@InsiderTrading.Common.ConstEnum.UserActions.PRECLEARANCEREQUESTNONIMPLEMENTINGCOMPANY_SAVEALL'};
+
+                $.ajax({
+                    url: '@Url.Action("SaveAll_OS", "PreclearanceRequestNonImplCompany")',
+                    method: 'POST',
+                    headers: getRVToken(),
+                    data: data,
+                    datatype: 'json',
+                    success: function (data) {                       
+                        if (data.status) {
+                            showMessage(data.Message, true);
+                            
+                        }
+                        else {
+                            showMessage(data.Message, false);
+                        }
+                        window.location.href = data.redirectTo;
+                    }
+                });
+
+            });
+
 </script>
 
 <!--Use for Create Restricted List Delete All Confirmation PopUp-->
