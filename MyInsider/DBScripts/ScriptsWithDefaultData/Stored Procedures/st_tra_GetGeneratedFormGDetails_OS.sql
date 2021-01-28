@@ -43,6 +43,7 @@ BEGIN
 		IF @out_sSQLErrMessage IS NULL
 			SET @out_sSQLErrMessage = ''
 		
+		DECLARE @EnableDisableQuantity int;
 
 		--Check if the DMAT whose details are being fetched exists
 		IF (NOT EXISTS(select GeneratedFormDetailsId from tra_GeneratedFormDetails WHERE MapToTypeCodeId = @inp_iMapToTypeCodeId AND MapToId = @inp_iMapToId ))
@@ -51,11 +52,21 @@ BEGIN
 				RETURN (@out_nReturnValue)
 		END
 		
+		select @EnableDisableQuantity=EnableDisableQuantityValue from mst_Company where IsImplementing=1
 	
+		IF(@EnableDisableQuantity <> 400003)	
+		BEGIN
+			SELECT * 
+			FROM tra_GeneratedFormDetails GFD
+			WHERE MapToTypeCodeId = @inp_iMapToTypeCodeId AND MapToId = @inp_iMapToId  and TemplateMasterId=(SELECT TemplateMasterId FROM tra_TemplateMaster WHERE CommunicationModeCodeId = 156010)
+		END
+		ELSE
+		BEGIN
+			SELECT * 
+			FROM tra_GeneratedFormDetails GFD
+			WHERE MapToTypeCodeId = @inp_iMapToTypeCodeId AND MapToId = @inp_iMapToId  and TemplateMasterId=(SELECT TemplateMasterId FROM tra_TemplateMaster WHERE CommunicationModeCodeId = 156019)
+		END
 		
-		SELECT * 
-		FROM tra_GeneratedFormDetails GFD
-		WHERE MapToTypeCodeId = @inp_iMapToTypeCodeId AND MapToId = @inp_iMapToId  and TemplateMasterId=(SELECT TemplateMasterId FROM tra_TemplateMaster WHERE CommunicationModeCodeId = 156010)
 		SET @out_nReturnValue = 0
 		RETURN @out_nReturnValue
 		

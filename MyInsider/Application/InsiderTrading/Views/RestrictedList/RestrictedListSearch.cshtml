@@ -159,14 +159,12 @@
                         <div>
                             <div class="row">
                                 <div class="col-xs-12" style="margin: -15px 0px 0px 0px;">
-                                    @if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.PRECLEARANCEREQUESTNONIMPLEMENTINGCOMPANY_SAVEALL))
-                                    {
+                                    
                                         <button type="button" class="btn btn-success" id="SaveAllBtn" data-toggle="modal" data-target="#myModal">@InsiderTrading.Common.Common.getResource("rl_btn_50585")</button>
-                                    }
-                                    @if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.PRECLEARANCEREQUESTNONIMPLEMENTINGCOMPANY_DELETEALL))
-                                    {
+                                    
+                                   
                                         <button type="button" class="btn btn-success" id="DeleteAllBtn" data-toggle="modal" data-target="#myModalforDelete">@InsiderTrading.Common.Common.getResource("rl_btn_50586")</button>
-                                    }
+                                    
                                 </div>
                             </div>
                         </div>
@@ -177,19 +175,17 @@
     }
 }
 
-@if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.PRECLEARANCEREQUESTNONIMPLEMENTINGCOMPANY_EDIT))
-{
-    if ((bool)ViewBag.RequiredModule)
+
+    @if ((bool)ViewBag.RequiredModule)
     {
         @Html.Hidden("EditPreclearance", Url.Action("Edit_OS", "PreclearanceRequestNonImplCompany", new { acid = InsiderTrading.Common.ConstEnum.UserActions.PreclearanceRequestOtherSecurities, formEAllowed = ViewBag.IsFormEtemplateMsgShow }), new { @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = InsiderTrading.Common.ConstEnum.GridType.RestrictedListMultiplePreClearanceRequestDetails + "_usr_grd_11073", param = "{'text':'','href':'" + Url.Action("Edit", "PreclearanceRequestNonImplCompany", new { acid = InsiderTrading.Common.ConstEnum.UserActions.PRECLEARANCEREQUESTNONIMPLEMENTINGCOMPANY_EDIT, formEAllowed = ViewBag.IsFormEtemplateMsgShow }) + "&sequenceNo=<SequenceNo>','class':'display-icon icon icon-edit'}" })
     }
     else{
         @Html.Hidden("EditPreclearance", Url.Action("Edit", "PreclearanceRequestNonImplCompany", new { acid = InsiderTrading.Common.ConstEnum.UserActions.PRECLEARANCEREQUESTNONIMPLEMENTINGCOMPANY_EDIT, formEAllowed = ViewBag.IsFormEtemplateMsgShow }), new { @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = InsiderTrading.Common.ConstEnum.GridType.RestrictedListMultiplePreClearanceRequestDetails + "_usr_grd_11073", param = "{'text':'','href':'" + Url.Action("Edit", "PreclearanceRequestNonImplCompany", new { acid = InsiderTrading.Common.ConstEnum.UserActions.PRECLEARANCEREQUESTNONIMPLEMENTINGCOMPANY_EDIT, formEAllowed = ViewBag.IsFormEtemplateMsgShow }) + "&sequenceNo=<SequenceNo>','class':'display-icon icon icon-edit'}" })
     }
-}
-@if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.PRECLEARANCEREQUESTNONIMPLEMENTINGCOMPANY_DELETE))
-{
-    if ((bool)ViewBag.RequiredModule)
+
+
+    @if ((bool)ViewBag.RequiredModule)
     {
         @Html.Hidden("deleteRowURL", Url.Action("Delete_OS", "PreclearanceRequestNonImplCompany", new { acid = InsiderTrading.Common.ConstEnum.UserActions.PreclearanceRequestOtherSecurities, formEAllowed = ViewBag.IsFormEtemplateMsgShow }), new { name = "deleteRowURL", gridtype = @ViewBag.GridType, @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = InsiderTrading.Common.ConstEnum.GridType.RestrictedListMultiplePreClearanceRequestDetails + "_usr_grd_11073", param = "{'name': 'deleteRow','ID':'sequenceNo','key':'<SequenceNo>','formEAllowed':'" + ViewBag.IsFormEtemplateMsgShow + "','text':'','href':'javascript:void(0);','class':'display-icon icon icon-delete'}" })
     }
@@ -197,7 +193,7 @@
     {
         @Html.Hidden("deleteRowURL", Url.Action("Delete", "PreclearanceRequestNonImplCompany", new { acid = InsiderTrading.Common.ConstEnum.UserActions.PRECLEARANCEREQUESTNONIMPLEMENTINGCOMPANY_DELETE, formEAllowed = ViewBag.IsFormEtemplateMsgShow }), new { name = "deleteRowURL", gridtype = @ViewBag.GridType, @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = InsiderTrading.Common.ConstEnum.GridType.RestrictedListMultiplePreClearanceRequestDetails + "_usr_grd_11073", param = "{'name': 'deleteRow','ID':'sequenceNo','key':'<SequenceNo>','formEAllowed':'" + ViewBag.IsFormEtemplateMsgShow + "','text':'','href':'javascript:void(0);','class':'display-icon icon icon-delete'}" })
     }
-}
+
 
 <script type="text/javascript">
     function SearchCompany(cmpname) {

@@ -532,6 +532,37 @@
         }
     });
 
+    $("#btnSaveWorkandEducationDetails").click(function () {
+        var values = $("#frmWorkandEducationDetails").serializeArray();
+        values.push(
+            {
+                name: "acid", value: $("#UserAction").val()
+            },
+            {
+                name: "compid", value: $('#CompanyId').val()
+            },
+            {
+                name: "formId", value: 26
+            }
+        );
+        if ($("#frmWorkandEducationDetails").valid()) {
+            $.ajax({
+                url: $("#SaveEducationandWorkDetails").val(),
+                type: 'post',
+                headers: getRVToken(),
+                cache: false,
+                data: values,
+                success: function (result) {
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+
+                }
+            });
+            showMessage($("#WorkandEducationConfirmationSucceess").val(), true);
+        }
+    });
+
 });
 
 function setDmatAccountlst() {

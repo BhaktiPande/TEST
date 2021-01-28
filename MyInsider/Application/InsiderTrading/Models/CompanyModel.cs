@@ -472,4 +472,12 @@ namespace InsiderTrading.Models
         public int? ReconfirmationFrequencyId { get; set; }
     }
 
+    public class WorkandEducationModel
+    {
+        public int? CompanyId { get; set; }
+
+        [DisplayName("cmp_ttl_59004")]
+        public int? WorkandEducationMandatoryId { get; set; }
+    }
+
 }
