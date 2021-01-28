@@ -22,7 +22,7 @@ namespace InsiderTrading.Models
         [DisplayName("usr_lbl_55051")]
         public string Company_Address { get; set; }
         [Required]
-        [DisplayName("usr_lbl_55040")]
+        [DisplayName("dis_grd_55005")]
         public int? Category_Shared { get; set; }
         public string Category_Shared1 { get; set; }
         [Required]

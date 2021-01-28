@@ -283,13 +283,17 @@
 
     $(document).ready(function () {
         var gridAllow = '@ViewBag.GridAllow'
+        var hours = 0; var minutes = 0;
         if (gridAllow == 'True') {
             for (var i = 0; i < preClrList1.length; i++) {
                 var datatable1 = $('table[name="DatatableGrid"][gridtype=@InsiderTrading.Common.ConstEnum.GridType.UpsiSharing_dataTemp]').dataTable();
-
+                hours = preClrList1[i].Time.Hours;
+                minutes = preClrList1[i].Time.Minutes;
+                hours = hours.toString().length == 2 ? hours : '0' + hours;
+                minutes = minutes.toString().length == 2 ? minutes : '0' + minutes;
                 datatable1.fnAddData({
-                    //'SequenceNo': preClrList1[i]['SequenceNo'], 'dis_grd_55015': preClrList1[i]['Company_Name'], 'dis_grd_55016': preClrList1[i]['Company_Address'], 'dis_grd_55017': preClrList1[i]['Sharedby'], 'dis_grd_55020': preClrList1[i]['PAN'], 'dis_grd_55021': preClrList1[i]['Name'], 'dis_grd_55022': preClrList1[i]['Phone'], 'dis_grd_55023': preClrList1[i]['E_mail'], 'dis_grd_55005': preClrList1[i]['Category_Shared1'], 'dis_grd_55006': preClrList1[i]['Reason_sharingdata'], 'usr_lbl_55042': preClrList1[i]['Comments'], 'dis_grd_55010': preClrList1[i]['ModeOfSharingdata'], 'dis_grd_55009': dateTimeFormat(preClrList1[i]['SharingDate']), 'dis_grd_71001': preClrList1[i]['UPSIRecipient'], 'usr_lbl_53155': preClrList1[i]['SharingDate']
-                    'SequenceNo': preClrList1[i]['SequenceNo'], 'dis_grd_55015': preClrList1[i]['Company_Name'], 'dis_grd_55016': preClrList1[i]['Company_Address'], 'dis_grd_55017': preClrList1[i]['Sharedby'], 'dis_grd_55020': preClrList1[i]['PAN'], 'dis_grd_55021': preClrList1[i]['Name'], 'dis_grd_55022': preClrList1[i]['Phone'], 'dis_grd_55023': preClrList1[i]['E_mail'], 'dis_grd_55005': preClrList1[i]['Category_Shared1'], 'dis_grd_55006': preClrList1[i]['Reason_sharingdata'], 'usr_lbl_55042': preClrList1[i]['Comments'], 'dis_grd_55010': preClrList1[i]['ModeOfSharingdata'], 'dis_grd_55009': dateTimeFormat(preClrList1[i]['SharingDate']), 'dis_grd_71001': preClrList1[i]['UPSIRecipient'], 'usr_lbl_53155': ''
+                    //'SequenceNo': preClrList1[i]['SequenceNo'], 'dis_grd_55015': preClrList1[i]['Company_Name'], 'dis_grd_55016': preClrList1[i]['Company_Address'], 'dis_grd_55017': preClrList1[i]['Sharedby'], 'dis_grd_55020': preClrList1[i]['PAN'], 'dis_grd_55021': preClrList1[i]['Name'], 'dis_grd_55022': preClrList1[i]['Phone'], 'dis_grd_55023': preClrList1[i]['E_mail'], 'dis_grd_55005': preClrList1[i]['Category_Shared1'], 'dis_grd_55006': preClrList1[i]['Reason_sharingdata'], 'usr_lbl_55042': preClrList1[i]['Comments'], 'dis_grd_55010': preClrList1[i]['ModeOfSharingdata'], 'dis_grd_55009': dateTimeFormat(preClrList1[i]['SharingDate']), 'dis_grd_71001': preClrList1[i]['UPSIRecipient'], 'usr_lbl_53155': ''
+                    'SequenceNo': preClrList1[i]['SequenceNo'], 'dis_grd_55015': preClrList1[i]['Company_Name'], 'dis_grd_55016': preClrList1[i]['Company_Address'], 'dis_grd_55017': preClrList1[i]['Sharedby'], 'dis_grd_55020': preClrList1[i]['PAN'], 'dis_grd_55021': preClrList1[i]['Name'], 'dis_grd_55022': preClrList1[i]['Phone'], 'dis_grd_55023': preClrList1[i]['E_mail'], 'dis_grd_55005': preClrList1[i]['Category_Shared1'], 'dis_grd_55006': preClrList1[i]['Reason_sharingdata'], 'usr_lbl_55042': preClrList1[i]['Comments'], 'dis_grd_55010': preClrList1[i]['ModeOfSharingdata'], 'dis_grd_55009': dateTimeFormat(preClrList1[i]['SharingDate']) + ' ' + (hours) + ':' + (minutes), 'dis_grd_71001': preClrList1[i]['UPSIRecipient'], 'usr_lbl_53155': ''
                 });
             }
         }
