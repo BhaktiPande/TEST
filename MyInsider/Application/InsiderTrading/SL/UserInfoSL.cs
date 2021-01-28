@@ -928,5 +928,35 @@ namespace InsiderTrading.SL
 
             return bReturn;
         }
+
+
+        #region GetOtherUserDetailsList
+
+        /// <summary>
+        /// This method is used for the get other user Details
+        /// </summary>
+        /// <param name="i_sConnectionString">DB Connection string</param>
+        /// <param name="LoggedInId">LoggedInId</param>
+        /// <param name="term"></param>
+        /// <returns>Object Authentication DTO</returns>
+
+        public List<OtherUsersDetails> GetOtherUserDetailsList(string i_sConnectionString, int LoggedInId, string term)
+        {
+            List<OtherUsersDetails> lstUserLoginDetails = new List<OtherUsersDetails>();
+
+            try
+            {
+                using (var objUserInfoDAL = new UserInfoDAL())
+                {
+                    lstUserLoginDetails = objUserInfoDAL.GetOtherUserDetailsList(i_sConnectionString, LoggedInId, term).ToList();
+                }
+            }
+            catch (Exception exp)
+            {
+                throw exp;
+            }
+            return lstUserLoginDetails;
+        }
+        #endregion GetOtherUserDetailsList
     }
 }

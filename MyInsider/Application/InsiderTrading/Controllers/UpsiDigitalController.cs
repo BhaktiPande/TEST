@@ -109,6 +109,20 @@ namespace InsiderTrading.Controllers
                 nUpsiSharingData.DocumentNumber = Convert.ToString(objUpsiTempAutoId.DocumentNo);
             }
 
+            List<OtherUsersDetails> OtherUsersDetailsList = new List<OtherUsersDetails>();
+            using (var objUserInfoSL = new UserInfoSL())
+            {
+                OtherUsersDetailsList = objUserInfoSL.GetOtherUserDetailsList(objLoginUserDetails.CompanyDBConnectionString, objLoginUserDetails.LoggedInUserID, "");
+            }
+
+            var list = new List<SelectListItem>();
+            foreach (var item in OtherUsersDetailsList)
+            {
+                list.Add(new SelectListItem { Text = item.Email, Value = item.Email });
+            }
+            ViewBag.OtherUsersDetailsList = list;
+
+
             ViewBag.UPSISetting = GetUPSISetting();
 
 
@@ -272,6 +286,7 @@ namespace InsiderTrading.Controllers
                                             objUpsiSharingDataTable.DocumentNumber = objUpsiSharingData.DocumentNumber;
                                             objUpsiSharingDataTable.UserInfoId = objLoginUserDetails.LoggedInUserID;
                                             objUpsiSharingDataTable.PublishDate = objUpsiSharingData.PublishDate;
+                                            objUpsiSharingDataTable.CHKUserAndOther = objUpsiSharingData.CHKUserAndOther;
                                             objdata.Add(objUpsiSharingDataTable);
                                         }
                                     }
@@ -450,7 +465,7 @@ namespace InsiderTrading.Controllers
                 dt.Columns.Add(new DataColumn("UserInfoId", typeof(int)));
                 dt.Columns.Add(new DataColumn("ModeOfSharing", typeof(int)));
                 dt.Columns.Add(new DataColumn("Time", typeof(TimeSpan)));
-                dt.Columns.Add(new DataColumn("Temp1", typeof(string)));
+                dt.Columns.Add(new DataColumn("IsRegisteredUser", typeof(string)));
                 dt.Columns.Add(new DataColumn("Temp2", typeof(string)));
                 dt.Columns.Add(new DataColumn("Temp3", typeof(string)));
                 dt.Columns.Add(new DataColumn("Temp4", typeof(string)));
@@ -479,7 +494,7 @@ namespace InsiderTrading.Controllers
                         dt.Rows[rowCount]["UserInfoId"] = Convert.ToInt32(UsrContact.UserInfoId);
                         dt.Rows[rowCount]["ModeOfSharing"] = UsrContact.ModeOfSharing;
                         dt.Rows[rowCount]["Time"] = UsrContact.Time;
-                        dt.Rows[rowCount]["Temp1"] = UsrContact.Temp1;
+                        dt.Rows[rowCount]["IsRegisteredUser"] = UsrContact.CHKUserAndOther;
                         dt.Rows[rowCount]["Temp2"] = UsrContact.Temp2;
                         dt.Rows[rowCount]["Temp3"] = UsrContact.Temp3;
                         dt.Rows[rowCount]["Temp4"] = UsrContact.Temp4;
@@ -926,6 +941,44 @@ namespace InsiderTrading.Controllers
 
         }
         #endregion Export UPSI Sharing Data
+
+        #region GetEmail
+        /// <summary>
+        /// This Method Auto Serch email
+        /// </summary>
+        /// <param name="term"></param>
+        /// <returns></returns>
+
+        public JsonResult GetEmail(string term = "")
+        {
+            try
+            {
+                LoginUserDetails objLoginUserDetails = (LoginUserDetails)Common.Common.GetSessionValue(ConstEnum.SessionValue.UserDetails);
+                objLoginUserDetails = (LoginUserDetails)Common.Common.GetSessionValue(ConstEnum.SessionValue.UserDetails);
+                List<OtherUsersDetails> OtherUsersDetailsList = new List<OtherUsersDetails>();
+                using (var objUserInfoSL = new UserInfoSL())
+                {
+                    OtherUsersDetailsList = objUserInfoSL.GetOtherUserDetailsList(objLoginUserDetails.CompanyDBConnectionString, objLoginUserDetails.LoggedInUserID, term);
+                }
+                return Json(OtherUsersDetailsList.Select(m => new
+                {
+                    E_mail = m.Email,
+                    m.Name,
+                    m.PAN,
+                    m.CompanyAddress,
+                    m.CompanyName,
+                    m.Phone
+
+                }), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception exp)
+            {
+                string sErrMessage = Common.Common.getResource(exp.InnerException.Data[0].ToString());
+                ModelState.AddModelError("Error", sErrMessage);
+                return null;
+            }
+        }
+        #endregion
 
         #region Dispose
         protected override void Dispose(bool disposing)

@@ -1,6 +1,8 @@
 @model InsiderTrading.Models.TradingTransactionModel
 
+
 @{
+    var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
     ViewBag.Title = "";
     var IsEmployeeOrInsider = 0;
     if (ViewBag.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.EmployeeType || ViewBag.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.CorporateUserType
@@ -8,6 +10,8 @@
     {
         IsEmployeeOrInsider = 1;
     }
+
+
 }
 <!-- Content Header (Page header) -->
 <section class="content-header">
@@ -283,10 +287,10 @@
             var form = $('#__AjaxAntiForgeryForm');
             var token = $('input[name="__RequestVerificationToken"]', form).val();
 
-           
+
             var DisclosurertypeNottradedformId = 53;
 
-           
+
                 if ($('#lstReasonsForNotTrading').val() != "0") {
                     debugger;
                     $('#lstReasonsForNotTrading').parent().find("field-validation-error").html();
@@ -556,26 +560,26 @@
         }
 
         @{
-        var apply = "hold-div";
-        var applyDocument = "hold-div";
-        if ((ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial && ViewBag.NoHolding == false)
-            || (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeContinuous)
-            || (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypePeriodEnd))
-        {
-            apply = "";
-        }
-        var isInsiderEnterDetails = "";
-        var isInsiderUploadDetails = "";
-        if (IsEmployeeOrInsider == 1 && ViewBag.nConfigurationValueCodeId == InsiderTrading.Common.ConstEnum.Code.EnterUploadSetting_UploadDetails)
-        {
-            isInsiderEnterDetails = "style=display:none;";
-            applyDocument = "";
-        }
-        //  if (IsEmployeeOrInsider != 1 || ViewBag.nConfigurationValueCodeId != InsiderTrading.Common.ConstEnum.Code.EnterUploadSetting_EnterDetails)
-        if (IsEmployeeOrInsider == 1 && ViewBag.nConfigurationValueCodeId == InsiderTrading.Common.ConstEnum.Code.EnterUploadSetting_EnterDetails)
-        {
-            isInsiderUploadDetails = "style=display:none;";
-        }
+            var apply = "hold-div";
+            var applyDocument = "hold-div";
+            if ((ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial && ViewBag.NoHolding == false)
+                || (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeContinuous)
+                || (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypePeriodEnd))
+            {
+                apply = "";
+            }
+            var isInsiderEnterDetails = "";
+            var isInsiderUploadDetails = "";
+            if (IsEmployeeOrInsider == 1 && ViewBag.nConfigurationValueCodeId == InsiderTrading.Common.ConstEnum.Code.EnterUploadSetting_UploadDetails)
+            {
+                isInsiderEnterDetails = "style=display:none;";
+                applyDocument = "";
+            }
+            //  if (IsEmployeeOrInsider != 1 || ViewBag.nConfigurationValueCodeId != InsiderTrading.Common.ConstEnum.Code.EnterUploadSetting_EnterDetails)
+            if (IsEmployeeOrInsider == 1 && ViewBag.nConfigurationValueCodeId == InsiderTrading.Common.ConstEnum.Code.EnterUploadSetting_EnterDetails)
+            {
+                isInsiderUploadDetails = "style=display:none;";
+            }
         }
 
         @if (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
@@ -590,18 +594,18 @@
                                         <td>
                                         <td>
                                             @{ foreach (var objSecurityType in ViewBag.SecurityType)
-                                             {
-                                            <td id="some_id1">
-                                                @if (Convert.ToString(@ViewBag.SecurityTypeCodeId) == @objSecurityType.Key)
                                                 {
-                                                    <a href="#" id="BtnInitialBreadCrumsID1" style="margin: 0px 18px 0px 0px;"><button type="reset" class="btn btn-shape btn-arrow btn-md btn-warning BtnInitialBreadCrumsID">@objSecurityType.Value</button></a>
-                                                }
-                                                else
-                                                {
-                                                    <a href="#" id="BtnInitialBreadCrumsID1" style="margin: 0px 18px 0px 0px;"><button type="reset" class="btn btn-shape btn-arrow btn-md btn-success BtnInitialBreadCrumsID">@objSecurityType.Value</button></a>
-                                                }
-                                            </td>
-                                             }
+                                                <td id="some_id1">
+                                                    @if (Convert.ToString(@ViewBag.SecurityTypeCodeId) == @objSecurityType.Key)
+                                                    {
+                                                        <a href="#" id="BtnInitialBreadCrumsID1" style="margin: 0px 18px 0px 0px;"><button type="reset" class="btn btn-shape btn-arrow btn-md btn-warning BtnInitialBreadCrumsID">@objSecurityType.Value</button></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="#" id="BtnInitialBreadCrumsID1" style="margin: 0px 18px 0px 0px;"><button type="reset" class="btn btn-shape btn-arrow btn-md btn-success BtnInitialBreadCrumsID">@objSecurityType.Value</button></a>
+                                                    }
+                                                </td>
+                                            }
 
                                             }
 
@@ -634,7 +638,7 @@
                         <div class="panel-body">
                             <div class="row" style="margin: 0px 0px 0px 0px;">
                                 @if ((bool)ViewBag.ShowOwnSecuritiesDeclaration && ViewBag.TranactionMasterStatus == InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed)
-                                {   <br /><br />
+                                {<br /><br />
                                     @Html.Partial("~/Views/TradingTransaction/SubmitOwnSecurities.cshtml")
                                 }
                                 else
@@ -656,11 +660,11 @@
 
 
                                                 @{
-                                    var bFlag = false;
-                                    if (ViewBag.TranactionMasterStatus <= InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed)
-                                    {
-                                        bFlag = true;
-                                    }
+                                                    var bFlag = false;
+                                                    if (ViewBag.TranactionMasterStatus <= InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed)
+                                                    {
+                                                        bFlag = true;
+                                                    }
                                                 }
                                                 @{Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "", sSortCol = "0", sGridTagName = "DatatableGrid_" + @ViewBag.SecurityTypeCodeId, bIsActionCol = @bFlag, sNoRecordsfoundMessage = @ViewBag.NoRecordsfoundMessage, OverrideGridType = @ViewBag.OverrideGridType });}
 
@@ -677,10 +681,10 @@
                                                 <input type="hidden" value="@ViewBag.nUserTypeCodeId" id="6" name="" gridtype="@ViewBag.RGridType" />
                                                 <input type="hidden" value="@ViewBag.SecurityTypeCodeId" id="2" name="" gridtype="@ViewBag.RGridType" />
                                                 @{
-                                    if (ViewBag.TranactionMasterStatus <= InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed)
-                                    {
-                                        bFlag = true;
-                                    }
+                                                    if (ViewBag.TranactionMasterStatus <= InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed)
+                                                    {
+                                                        bFlag = true;
+                                                    }
                                                 }
                                                 @{Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.RGridType, btnSearch = "", sSortCol = "0", sGridTagName = "DatatableGrid_" + @ViewBag.SecurityTypeCodeId, bIsActionCol = @bFlag, sNoRecordsfoundMessage = @ViewBag.NoRecordsfoundMessage, OverrideGridType = @ViewBag.OverrideGridRelativeType });}
                                             </div>
@@ -696,103 +700,103 @@
                         </div>
                     </div>
                 </div>
-        }
-        else
-        {
-            <div id="hold-div-2" class="row @apply " @isInsiderEnterDetails>
-                <div class="col-lg-12">
-                    @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
-                    @*ViewBag.SecurityType :- Shares, Warrants, Convertible Debentures, Future Contracts, Option Contracts*@
-                    @{ foreach (var objSecurityType in ViewBag.SecurityType)
-                     {
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <div id="div">
-                                            <div class="row">
-                                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                                    <p>@InsiderTrading.Common.Common.getResource("tra_lbl_16102"): @objSecurityType.Value</p>
-                                                </div>
-                                                @if (ViewBag.PreclearenceId != null)
-                                                {
-                                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                                        <div class="col-xs-6">
-                                                            @Html.Label(InsiderTrading.Common.Common.getResource("tra_lbl_16286"))
+            }
+            else
+            {
+                <div id="hold-div-2" class="row @apply " @isInsiderEnterDetails>
+                    <div class="col-lg-12">
+                        @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+                        @*ViewBag.SecurityType :- Shares, Warrants, Convertible Debentures, Future Contracts, Option Contracts*@
+                        @{ foreach (var objSecurityType in ViewBag.SecurityType)
+                            {
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div id="div">
+                                                    <div class="row">
+                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                            <p>@InsiderTrading.Common.Common.getResource("tra_lbl_16102"): @objSecurityType.Value</p>
                                                         </div>
-                                                        <div class="col-xs-6">
-                                                            @ViewBag.ApprovedQuantity
-                                                        </div>
+                                                        @if (ViewBag.PreclearenceId != null)
+                                                        {
+                                                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                                <div class="col-xs-6">
+                                                                    @Html.Label(InsiderTrading.Common.Common.getResource("tra_lbl_16286"))
+                                                                </div>
+                                                                <div class="col-xs-6">
+                                                                    @ViewBag.ApprovedQuantity
+                                                                </div>
+                                                            </div>
+                                                        }
                                                     </div>
-                                                }
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                                    <p></p>
-                                                </div>
-                                                @if (ViewBag.PreclearenceId != null)
-                                                {
-                                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                                        <div class="col-xs-6">
-                                                            @Html.Label(InsiderTrading.Common.Common.getResource("tra_lbl_16287"))
+                                                    <div class="row">
+                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                            <p></p>
                                                         </div>
-                                                        <div class="col-xs-6">
-                                                            @ViewBag.TradedQuantity
-                                                        </div>
+                                                        @if (ViewBag.PreclearenceId != null)
+                                                        {
+                                                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                                <div class="col-xs-6">
+                                                                    @Html.Label(InsiderTrading.Common.Common.getResource("tra_lbl_16287"))
+                                                                </div>
+                                                                <div class="col-xs-6">
+                                                                    @ViewBag.TradedQuantity
+                                                                </div>
+                                                            </div>
+                                                        }
                                                     </div>
-                                                }
-                                            </div>
 
-                                            <div class="row">
-                                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                                    @if (ViewBag.TranactionMasterStatus <= InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed)
-                                                    {
-                                                        <a href='@Url.Action("Create", "TradingTransaction", new { TransactionDetailsId = 0, TransactionMasterId = @ViewBag.TransactionMasterId, SecurityTypeCodeId = objSecurityType.Key, acid = ViewBag.acid, period = ViewBag.nPeriodCode, year = ViewBag.nYearCode, periodType = ViewBag.nPeriodType })' class="btn btn-success"><i class="fa fa-plus"></i>Add @objSecurityType.Value</a>
-                                                    }
-                                                </div>
-                                                @if (ViewBag.PreclearenceId != null)
-                                                {
-                                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                                        <div class="col-xs-6">
-                                                            @Html.Label(InsiderTrading.Common.Common.getResource("tra_lbl_16288"))
+                                                    <div class="row">
+                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                            @if (ViewBag.TranactionMasterStatus <= InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed)
+                                                            {
+                                                                <a href='@Url.Action("Create", "TradingTransaction", new { TransactionDetailsId = 0, TransactionMasterId = @ViewBag.TransactionMasterId, SecurityTypeCodeId = objSecurityType.Key, acid = ViewBag.acid, period = ViewBag.nPeriodCode, year = ViewBag.nYearCode, periodType = ViewBag.nPeriodType })' class="btn btn-success"><i class="fa fa-plus"></i>Add @objSecurityType.Value</a>
+                                                            }
                                                         </div>
-                                                        <div class="col-xs-6">
-                                                            @ViewBag.PendingQuantity
-                                                        </div>
+                                                        @if (ViewBag.PreclearenceId != null)
+                                                        {
+                                                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                                <div class="col-xs-6">
+                                                                    @Html.Label(InsiderTrading.Common.Common.getResource("tra_lbl_16288"))
+                                                                </div>
+                                                                <div class="col-xs-6">
+                                                                    @ViewBag.PendingQuantity
+                                                                </div>
+                                                            </div>
+                                                        }
                                                     </div>
-                                                }
-                                            </div>
-                                            <br>
+                                                    <br>
 
-                                            <div class="search" gridtype="@ViewBag.GridType">
+                                                    <div class="search" gridtype="@ViewBag.GridType">
 
-                                                <input type="hidden" value="@ViewBag.TransactionMasterId" id="1" name="" gridtype="@ViewBag.GridType" />
-                                                <input type="hidden" value="@objSecurityType.Key" id="2" name="" gridtype="@ViewBag.GridType" />
-                                                <input type="hidden" value="@ViewBag.IsfromView" id="4" name="" gridtype="@ViewBag.GridType" />
-                                                <input type="hidden" value="@ViewBag.UserinfoId" id="5" name="" gridtype="@ViewBag.GridType" />
-                                                <input type="hidden" value="@ViewBag.nUserTypeCodeId" id="6" name="" gridtype="@ViewBag.GridType" />
-                                                @{
-                                                var bFlag = false;
-                                                if (ViewBag.TranactionMasterStatus <= InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed)
-                                                {
-                                                    bFlag = true;
-                                                }
-                                                }
-                                                @{Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "", sSortCol = "0", sGridTagName = "DatatableGrid_" + objSecurityType.Key, bIsActionCol = @bFlag, sNoRecordsfoundMessage = @ViewBag.NoRecordsfoundMessage, OverrideGridType = @ViewBag.OverrideGridType });}
+                                                        <input type="hidden" value="@ViewBag.TransactionMasterId" id="1" name="" gridtype="@ViewBag.GridType" />
+                                                        <input type="hidden" value="@objSecurityType.Key" id="2" name="" gridtype="@ViewBag.GridType" />
+                                                        <input type="hidden" value="@ViewBag.IsfromView" id="4" name="" gridtype="@ViewBag.GridType" />
+                                                        <input type="hidden" value="@ViewBag.UserinfoId" id="5" name="" gridtype="@ViewBag.GridType" />
+                                                        <input type="hidden" value="@ViewBag.nUserTypeCodeId" id="6" name="" gridtype="@ViewBag.GridType" />
+                                                        @{
+                                                            var bFlag = false;
+                                                            if (ViewBag.TranactionMasterStatus <= InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed)
+                                                            {
+                                                                bFlag = true;
+                                                            }
+                                                        }
+                                                        @{Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "", sSortCol = "0", sGridTagName = "DatatableGrid_" + objSecurityType.Key, bIsActionCol = @bFlag, sNoRecordsfoundMessage = @ViewBag.NoRecordsfoundMessage, OverrideGridType = @ViewBag.OverrideGridType });}
 
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <hr />
-                     }
-                    }
+                                <hr />
+                            }
+                        }
 
+                    </div>
                 </div>
-            </div>
-        }
+            }
 
         @Html.Hidden("HardCopyReq", (ViewBag.HardCopyReq == false && ViewBag.CDDuringPE == true) ? 1 : 0)
         <a href="@sPESubRedirURLFromCD" id="lnkPERedirFromCD" class="btn btn-success hide"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14010")</a>
@@ -1006,14 +1010,16 @@ else
     </div>
 </div>
 <button type="button" id="btnSubmitTransaction" style="display:none;"> </button>
+<input type="hidden" id="hdCurrencyList" name="Currency" value='@serializer.Serialize(@ViewBag.CurrencyList)'>
+
 
 <script type="text/javascript">
 
     $('#btnSave').click(function () {
-        
-        
+
+
         var SecuritytypeformId=0;
-        
+
 
        if ('@ViewBag.SecurityTypeCodeId' == 139001)
         {
@@ -1059,7 +1065,7 @@ else
                 tra_grd_16197: $(tds).find("#txttra_grd_16197").val(),
                 tra_grd_16199: $(tds).find("#txttra_grd_16199").val(),
                 tra_grd_16200: $(tds).find("#txttra_grd_16200").val(),
-                tra_grd_16198: $(tds).find("#txttra_grd_16198").val(),
+                tra_grd_16198: $(tds).find("#txttra_grd_16198").val(),                
                 dmatId: $(tds[0]).find("#DmatId").val(),
                 UserInfoId: $(tds[0]).find("#UserInfoId").val(),
             }

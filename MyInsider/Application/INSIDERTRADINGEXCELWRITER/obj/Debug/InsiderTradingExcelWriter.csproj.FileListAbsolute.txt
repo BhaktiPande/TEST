@@ -10,3 +10,13 @@ D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\INSIDERTRADINGEXCELWRIT
 D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\INSIDERTRADINGEXCELWRITER\obj\Debug\InsiderTradingExcelWriter.csproj.CopyComplete
 D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\INSIDERTRADINGEXCELWRITER\obj\Debug\InsiderTradingExcelWriter.dll
 D:\Vrushali\Azure Dev\SVN-Codebase\MyInsider\Application\INSIDERTRADINGEXCELWRITER\obj\Debug\InsiderTradingExcelWriter.pdb
+D:\Deployments\MyInsiderCode\MyInsider\Application\INSIDERTRADING\bin\InsiderTradingExcelWriter.dll
+D:\Deployments\MyInsiderCode\MyInsider\Application\INSIDERTRADING\bin\InsiderTradingExcelWriter.pdb
+D:\Deployments\MyInsiderCode\MyInsider\Application\INSIDERTRADINGEXCELWRITER\obj\Debug\InsiderTradingExcelWriter.dll
+D:\Deployments\MyInsiderCode\MyInsider\Application\INSIDERTRADINGEXCELWRITER\obj\Debug\InsiderTradingExcelWriter.pdb
+D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\INSIDERTRADING\bin\InsiderTradingExcelWriter.dll
+D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\INSIDERTRADING\bin\InsiderTradingExcelWriter.pdb
+D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\INSIDERTRADINGEXCELWRITER\obj\Debug\InsiderTradingExcelWriter.csproj.CopyComplete
+D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\INSIDERTRADINGEXCELWRITER\obj\Debug\InsiderTradingExcelWriter.dll
+D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\INSIDERTRADINGEXCELWRITER\obj\Debug\InsiderTradingExcelWriter.pdb
+D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\INSIDERTRADINGEXCELWRITER\obj\Debug\InsiderTradingExcelWriter.csprojAssemblyReference.cache

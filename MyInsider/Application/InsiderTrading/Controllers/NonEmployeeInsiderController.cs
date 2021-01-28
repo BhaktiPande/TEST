@@ -146,7 +146,13 @@ namespace InsiderTrading.Controllers
                 Session["show_confirm_personal_details_btn"] = ViewBag.show_confirm_personal_details_btn;
                 Session["NonEmployeeType"] = isNonEmployee;
                 Session["EmployeeType"] = false;
-
+                WorkandEducationDetailsConfigurationDTO objWorkandEducationDetailsConfigurationDTO = new WorkandEducationDetailsConfigurationDTO();
+                using(var objCompaniesSL = new CompaniesSL())                
+                {
+                    objWorkandEducationDetailsConfigurationDTO = objCompaniesSL.GetWorkandeducationDetailsConfiguration(objLoginUserDetails.CompanyDBConnectionString, 1);
+                }
+                ViewBag.WorkandEducationDetailsConfiguration = objWorkandEducationDetailsConfigurationDTO.WorkandEducationDetailsConfigurationId;
+                Session["WorkandEducationConfiguration"] = ViewBag.WorkandEducationDetailsConfiguration;
                 if (isPPD_Details_Saved)
                 {
                     ViewBag.UserDetailsSaved = true;
@@ -307,7 +313,7 @@ namespace InsiderTrading.Controllers
                     objUserInfoDTO.StatusCodeId = Common.Common.ConvertToInt32(ConstEnum.UserStatus.Active);
                     objUserInfoDTO.LoggedInUserId = objLoginUserDetails.LoggedInUserID;
                     objUserInfoDTO.AllowUpsiUser = objUserInfoModel.AllowUpsiUser;
-
+                    
                     if (objUserInfoDTO.StateId == 0)
                         objUserInfoDTO.StateId = null;
                     if (objUserInfoDTO.CountryId == 0)

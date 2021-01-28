@@ -372,4 +372,16 @@ namespace InsiderTradingDAL
         public int LoggedInUserId { get; set; }
 
     }
+    [PetaPoco.TableName("com_WorkandEducationDetailsConfiguration")]
+    public class WorkandEducationDetailsConfigurationDTO
+    {
+        [PetaPoco.Column("CompanyId")]
+        public int? CompanyId { get; set; }
+
+        [PetaPoco.Column("WorkandEducationDetailsConfigurationId")]
+        public int? WorkandEducationDetailsConfigurationId { get; set; }
+
+        public int LoggedInUserId { get; set; }
+
+    }
 }
