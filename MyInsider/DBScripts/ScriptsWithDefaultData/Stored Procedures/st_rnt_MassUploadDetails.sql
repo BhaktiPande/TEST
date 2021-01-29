@@ -22,7 +22,7 @@ CREATE PROCEDURE [dbo].[st_rnt_MassUploadDetails]
 	,@ClientId			VARCHAR(50)
 	,@DematAccount		VARCHAR(50)
 	,@UserInfoId		VARCHAR(50)
-	,@EmployeeName		NVARCHAR(200) 
+	,@EmployeeName		VARCHAR(200) 
 	,@Shares			VARCHAR(50)
 	,@out_nReturnValue		INT = 0 OUTPUT
 	,@out_nSQLErrCode		INT = 0 OUTPUT			  -- Output SQL Error Number, if error occurred.

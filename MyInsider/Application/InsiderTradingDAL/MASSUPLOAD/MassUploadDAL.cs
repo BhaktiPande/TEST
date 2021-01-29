@@ -411,14 +411,28 @@ namespace InsiderTradingDAL
                 }
 
 
-                var inp_tblBulkInitialDisclosureDetailsImport_OtherSecurities = new SqlParameter();
-                inp_tblBulkInitialDisclosureDetailsImport_OtherSecurities.DbType = DbType.Object;
-                inp_tblBulkInitialDisclosureDetailsImport_OtherSecurities.ParameterName = "@inp_tblBulkInitialDisclosure_OtherSecuritiesDetailsImport";
-                inp_tblBulkInitialDisclosureDetailsImport_OtherSecurities.TypeName = "dbo.MassInitialDisclosure_OtherSecuritiesDataTable";
-                inp_tblBulkInitialDisclosureDetailsImport_OtherSecurities.SqlDbType = SqlDbType.Structured;
+                var inp_tblBulkInitialDisclosureDetailsImport_OtherSecurities = new SqlParameter
+                {
+                    DbType = DbType.Object,
+                    ParameterName = "@inp_tblBulkInitialDisclosure_OtherSecuritiesDetailsImport",
+                    TypeName = "dbo.MassInitialDisclosure_OtherSecuritiesDataTable",
+                    SqlDbType = SqlDbType.Structured
+                };
                 if (i_nMassUploadSheetId == 58)
                 {
                     inp_tblBulkInitialDisclosureDetailsImport_OtherSecurities.SqlValue = i_objMassUploadDataTable;
+                }
+
+                var inp_tblBulkTransactionImport_OtherSecuritiesDataTable = new SqlParameter
+                {
+                    DbType = DbType.Object,
+                    ParameterName = "@inp_tblBulkTransactionImport_OtherSecuritiesDataTable",
+                    TypeName = "dbo.MassTransactionImport_OtherSecuritiesDataTable",
+                    SqlDbType = SqlDbType.Structured
+                };
+                if (i_nMassUploadSheetId == 59)
+                {
+                    inp_tblBulkTransactionImport_OtherSecuritiesDataTable.SqlValue = i_objMassUploadDataTable;
                 }
 
                 #endregion Out Paramter
@@ -435,7 +449,7 @@ namespace InsiderTradingDAL
                             + " ,@inp_tblBulkInitialDisclosureDetailsImport,@inp_tblBulkRegisterTransferDetailsImport,@inp_tblBulkHistoryPreclearanceRequestImportDataTable"
                             + " ,@inp_tblBulkHistoryTransactionImportDataTable, @inp_tblBulkTransactionImportDataTable ,@inp_tblBulkNonTradingDaysDetailsImport ,@inp_tblBulkSeparationDataTableImport"
                             + " ,@inp_tblBulkRestrictedListAppliDetailsDataTableImport, @inp_tblBulkRestrictedLiMasterCompanyDataTableImport, @inp_tblBulkMassDepartmentWiseRLDataTableImport, @inp_tblBulkMassDepartmentWiseRLAppliDataTableImport"
-                            + " ,@inp_tblBulkMassEmployeePeriodEndDataTable, @inp_tblBulkInitialDisclosure_OtherSecuritiesDetailsImport"
+                            + " ,@inp_tblBulkMassEmployeePeriodEndDataTable, @inp_tblBulkInitialDisclosure_OtherSecuritiesDetailsImport, @inp_tblBulkTransactionImport_OtherSecuritiesDataTable"
                             + " ,@out_nReturnValue OUTPUT,@out_nSQLErrCode OUTPUT,@out_sSQLErrMessage OUTPUT",
                         new
                         {
@@ -463,6 +477,7 @@ namespace InsiderTradingDAL
                             @inp_tblBulkMassDepartmentWiseRLAppliDataTableImport = inp_tblBulkMassDepartmentWiseRLAppliDataTableImport,
                             @inp_tblBulkMassEmployeePeriodEndDataTable = inp_tblBulkMassEmployeePeriodEndDataTable,
                             @inp_tblBulkInitialDisclosure_OtherSecuritiesDetailsImport = inp_tblBulkInitialDisclosureDetailsImport_OtherSecurities,
+                            @inp_tblBulkTransactionImport_OtherSecuritiesDataTable = inp_tblBulkTransactionImport_OtherSecuritiesDataTable,
                             @out_nReturnValue = nout_nReturnValue,
                             @out_nSQLErrCode = nout_nSQLErrCode,
                             @out_sSQLErrMessage = sout_sSQLErrMessage,
@@ -787,7 +802,6 @@ namespace InsiderTradingDAL
             }
         }
         #endregion  Add Update Log Entry
-
 
         #region GetAllMassUploads
         /// <summary>

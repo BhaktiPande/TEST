@@ -60,7 +60,7 @@ BEGIN
 		
 		-- Define temporary table and add user details for summary 
 		CREATE TABLE #tmpPeriodEndDisclosureSummary (Id INT IDENTITY(1,1), CompanyName NVARCHAR(200) DEFAULT '',
-			UserId INT, Name NVARCHAR(500), UserRelativeCode INT, Relation VARCHAR(500), SecurityTypeCode INT, SecurityType VARCHAR(500), 
+			UserId INT, Name VARCHAR(500), UserRelativeCode INT, Relation VARCHAR(500), SecurityTypeCode INT, SecurityType VARCHAR(500), 
 			OpeningStock INT, Bought INT, Sold INT, PeriodEndHolding INT)
 		
 		
