@@ -672,6 +672,7 @@ namespace InsiderTrading.Models
     public class CommonConstant
     {
         #region Common Constants
+        public const string s_AttributeEmployeeId = "EmployeeId";
         public const string s_AttributeEmail = "EmailId";
         public const string s_AttributeComapnyName = "CompanyName";
         public const string s_SSOComapnyNameTGBL = "TGBL";

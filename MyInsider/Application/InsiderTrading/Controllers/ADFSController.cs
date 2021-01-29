@@ -39,11 +39,20 @@ namespace InsiderTrading.Controllers
         private ActionResult ReadADFSClaimAndLogin()
         {
             var userClaims = User.Identity as System.Security.Claims.ClaimsIdentity;
+            var employeeId = userClaims?.FindFirst("name")?.Value;
             var emailAddress = userClaims?.FindFirst("preferred_username")?.Value;
             string companyName = ConfigurationManager.AppSettings["CompanyName"].ToString();
 
             Hashtable hashtable = new Hashtable();
-            hashtable.Add(CommonConstant.s_AttributeEmail, emailAddress);
+            if (ConfigurationManager.AppSettings["ADFSLoginBasedOn"].ToString().ToLower() == "employeeid")
+            {
+                hashtable.Add(CommonConstant.s_AttributeEmployeeId, employeeId);
+            }
+            else
+            {
+                hashtable.Add(CommonConstant.s_AttributeEmail, emailAddress);
+            }
+
             hashtable.Add(CommonConstant.s_AttributeComapnyName, companyName);
             ViewBag.IsRequestValid = false;
 
