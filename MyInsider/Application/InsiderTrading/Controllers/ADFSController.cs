@@ -20,35 +20,49 @@ namespace InsiderTrading.Controllers
         {
             if (!Request.IsAuthenticated)
             {
-                HttpContext.GetOwinContext().Authentication.Challenge(
-                    new AuthenticationProperties { RedirectUri = "/" },
-                    OpenIdConnectAuthenticationDefaults.AuthenticationType);
-
+                ADFSAuthentication();
                 return View();
             }
             else
             {
-                var userClaims = User.Identity as System.Security.Claims.ClaimsIdentity;
-                var emailAddress = userClaims?.FindFirst("preferred_username")?.Value;
-                string companyName = ConfigurationManager.AppSettings["CompanyName"].ToString();
-                Hashtable ht_Parmeters = new Hashtable();
-
-                ht_Parmeters.Add(CommonConstant.s_AttributeEmail, emailAddress);
-                ht_Parmeters.Add(CommonConstant.s_AttributeComapnyName, companyName);
-
-                ViewBag.IsRequestValid = false;
-                using (SSOModel SSOModel = new SSOModel())
-                {
-                    SSOModel.SetupLoginDetails(ht_Parmeters);
-                    ViewBag.IsRequestValid = true;
-                    Session["loginStatus"] = 1;
-                    HttpContext.Session.Add("UserCaptchaText", string.Empty);
-                    HttpContext.Session.Add(ConstEnum.SessionValue.CookiesValidationKey, "");
-                    HttpContext.Session.Add("formField", "130");
-                    return RedirectToAction("Index", "Home", new { acid = Convert.ToString(0) });
-                }
+               return ReadADFSClaimAndLogin();
             }
         } 
+
+        private void ADFSAuthentication()
+        {
+            HttpContext.GetOwinContext().Authentication.Challenge(
+                    new AuthenticationProperties { RedirectUri = "/" },
+                    OpenIdConnectAuthenticationDefaults.AuthenticationType);
+        }
+
+        private ActionResult ReadADFSClaimAndLogin()
+        {
+            var userClaims = User.Identity as System.Security.Claims.ClaimsIdentity;
+            var emailAddress = userClaims?.FindFirst("preferred_username")?.Value;
+            string companyName = ConfigurationManager.AppSettings["CompanyName"].ToString();
+
+            Hashtable hashtable = new Hashtable();
+            hashtable.Add(CommonConstant.s_AttributeEmail, emailAddress);
+            hashtable.Add(CommonConstant.s_AttributeComapnyName, companyName);
+            ViewBag.IsRequestValid = false;
+
+            return ADFSLogin(hashtable);
+        }
+
+        private ActionResult ADFSLogin(Hashtable parameter)
+        {
+            using (SSOModel SSOModel = new SSOModel())
+            {
+                SSOModel.SetupLoginDetails(parameter);
+                ViewBag.IsRequestValid = true;
+                Session["loginStatus"] = 1;
+                HttpContext.Session.Add("UserCaptchaText", string.Empty);
+                HttpContext.Session.Add(ConstEnum.SessionValue.CookiesValidationKey, "");
+                HttpContext.Session.Add("formField", "130");
+                return RedirectToAction("Index", "Home", new { acid = Convert.ToString(0) });
+            }
+        }
 
         /// <summary>
         /// Send an OpenID Connect sign-out request.
