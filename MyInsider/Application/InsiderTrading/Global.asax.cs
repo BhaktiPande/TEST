@@ -39,11 +39,11 @@ namespace InsiderTrading
             CompaniesSL objCompaniesSL = new CompaniesSL();
             List<InsiderTradingDAL.CompanyDTO> lstCompaniesDTO = objCompaniesSL.getAllCompanies(Common.Common.getSystemConnectionString());
 
-            //foreach (InsiderTradingDAL.CompanyDTO objCompanyDTO in lstCompaniesDTO)
-            //{
-            //    Common.Common.UpdateCompanyResources(objCompanyDTO.CompanyConnectionString, objCompanyDTO.sCompanyDatabaseName);
-            //}
-            // ModelBinders.Binders.DefaultBinder = new DecimalModelBinder();
+            foreach (InsiderTradingDAL.CompanyDTO objCompanyDTO in lstCompaniesDTO)
+            {
+                Common.Common.UpdateCompanyResources(objCompanyDTO.CompanyConnectionString, objCompanyDTO.sCompanyDatabaseName);
+            }
+            ModelBinders.Binders.DefaultBinder = new DecimalModelBinder();
 
             ModelBinders.Binders.Add(typeof(int), new DecimalModelBinder());
             ModelBinders.Binders.Add(typeof(long), new DecimalModelBinder());

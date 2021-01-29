@@ -25,7 +25,8 @@ namespace InsiderTrading.Controllers
             }
             else
             {
-               return ReadADFSClaimAndLogin();
+                Hashtable hashtable = ReadADFSClaim();
+                return ADFSLogin(hashtable);
             }
         } 
 
@@ -36,7 +37,7 @@ namespace InsiderTrading.Controllers
                     OpenIdConnectAuthenticationDefaults.AuthenticationType);
         }
 
-        private ActionResult ReadADFSClaimAndLogin()
+        private Hashtable ReadADFSClaim()
         {
             var userClaims = User.Identity as System.Security.Claims.ClaimsIdentity;
             var employeeId = userClaims?.FindFirst("name")?.Value;
@@ -54,13 +55,14 @@ namespace InsiderTrading.Controllers
             }
 
             hashtable.Add(CommonConstant.s_AttributeComapnyName, companyName);
-            ViewBag.IsRequestValid = false;
 
-            return ADFSLogin(hashtable);
+            return hashtable;
         }
 
         private ActionResult ADFSLogin(Hashtable parameter)
         {
+            ViewBag.IsRequestValid = false;
+
             using (SSOModel SSOModel = new SSOModel())
             {
                 SSOModel.SetupLoginDetails(parameter);
