@@ -131,3 +131,41 @@ D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTradin
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTrading\bin\InsiderTradingEncryption.pdb
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTrading\bin\InsiderTradingExcelWriter.pdb
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTrading\bin\InsiderTradingMassUpload.pdb
+D:\MyInsider\MyInsider\Application\InsiderTrading\obj\Debug\InsiderTrading.csprojAssemblyReference.cache
+D:\MyInsider\MyInsider\Application\InsiderTrading\obj\Debug\InsiderTrading.csproj.CoreCompileInputs.cache
+D:\MyInsider\MyInsider\Application\InsiderTrading\obj\Debug\InsiderTrading.dll
+D:\MyInsider\MyInsider\Application\InsiderTrading\obj\Debug\InsiderTrading.pdb
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\InsiderTrading.dll.config
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\InsiderTrading.dll
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\InsiderTrading.pdb
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\office.dll
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\stdole.dll
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\office.xml
+D:\MyInsider\MyInsider\Application\InsiderTrading\obj\Debug\InsiderTrading.csproj.CopyComplete
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\Microsoft.Owin.Security.OpenIdConnect.dll
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\Microsoft.Owin.Security.OpenIdConnect.xml
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\Microsoft.IdentityModel.Logging.dll
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\Microsoft.IdentityModel.Protocols.dll
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\Microsoft.IdentityModel.Tokens.dll
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\System.IdentityModel.Tokens.Jwt.dll
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\Microsoft.IdentityModel.JsonWebTokens.pdb
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\Microsoft.IdentityModel.JsonWebTokens.xml
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\Microsoft.IdentityModel.Logging.pdb
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\Microsoft.IdentityModel.Logging.xml
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\Microsoft.IdentityModel.Protocols.pdb
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\Microsoft.IdentityModel.Protocols.xml
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.pdb
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.xml
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\Microsoft.IdentityModel.Tokens.pdb
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\Microsoft.IdentityModel.Tokens.xml
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\System.IdentityModel.Tokens.Jwt.pdb
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\System.IdentityModel.Tokens.Jwt.xml
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\Microsoft.IdentityModel.Protocol.Extensions.dll
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\Microsoft.IdentityModel.Protocol.Extensions.xml
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\DocumentFormat.OpenXml.xml
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\InsiderTradingDAL.pdb
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\InsiderTradingEncryption.pdb
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\InsiderTradingExcelWriter.pdb
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\InsiderTradingMassUpload.pdb

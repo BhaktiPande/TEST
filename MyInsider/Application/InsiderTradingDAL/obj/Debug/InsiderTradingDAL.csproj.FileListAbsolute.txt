@@ -18,3 +18,10 @@ D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTradin
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTrading\bin\InsiderTradingDAL.pdb
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTradingDAL\obj\Debug\InsiderTradingDAL.dll
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTradingDAL\obj\Debug\InsiderTradingDAL.pdb
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\InsiderTradingDAL.dll
+D:\MyInsider\MyInsider\Application\InsiderTrading\bin\InsiderTradingDAL.pdb
+D:\MyInsider\MyInsider\Application\InsiderTradingDAL\obj\Debug\InsiderTradingDAL.csprojAssemblyReference.cache
+D:\MyInsider\MyInsider\Application\InsiderTradingDAL\obj\Debug\InsiderTradingDAL.csproj.CoreCompileInputs.cache
+D:\MyInsider\MyInsider\Application\InsiderTradingDAL\obj\Debug\InsiderTradingDAL.csproj.CopyComplete
+D:\MyInsider\MyInsider\Application\InsiderTradingDAL\obj\Debug\InsiderTradingDAL.dll
+D:\MyInsider\MyInsider\Application\InsiderTradingDAL\obj\Debug\InsiderTradingDAL.pdb

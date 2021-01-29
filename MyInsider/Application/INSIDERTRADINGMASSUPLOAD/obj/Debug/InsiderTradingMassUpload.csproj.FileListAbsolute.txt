@@ -21,3 +21,10 @@ D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\INSIDERTRADIN
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.csproj.CopyComplete
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.dll
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.pdb
+D:\MyInsider\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.csprojAssemblyReference.cache
+D:\MyInsider\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.csproj.CoreCompileInputs.cache
+D:\MyInsider\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.dll
+D:\MyInsider\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.pdb
+D:\MyInsider\MyInsider\Application\INSIDERTRADING\bin\InsiderTradingMassUpload.dll
+D:\MyInsider\MyInsider\Application\INSIDERTRADING\bin\InsiderTradingMassUpload.pdb
+D:\MyInsider\MyInsider\Application\INSIDERTRADINGMASSUPLOAD\obj\Debug\InsiderTradingMassUpload.csproj.CopyComplete

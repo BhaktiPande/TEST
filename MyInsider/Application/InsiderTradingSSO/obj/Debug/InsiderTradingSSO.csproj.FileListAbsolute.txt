@@ -95,3 +95,37 @@ D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTradin
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTradingSSO\obj\Debug\InsiderTradingSSO.csprojAssemblyReference.cache
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTradingSSO\obj\Debug\InsiderTradingSSO.csproj.CopyComplete
 D:\Vrushali\Azure Dev\Repositories\MyInsider\MyInsider\Application\InsiderTradingSSO\obj\Debug\InsiderTradingSSO.dll
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\InsiderTradingSSO.dll.config
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\InsiderTradingSSO.dll
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\Antlr3.Runtime.dll
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\Fluentx.dll
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\Fluentx.Mvc.dll
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\InsiderTradingDAL.dll
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\InsiderTradingEncryption.dll
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\Microsoft.Web.Infrastructure.dll
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\Newtonsoft.Json.dll
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\System.Web.Helpers.dll
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\System.Web.Mvc.dll
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\System.Web.Optimization.dll
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\System.Web.Razor.dll
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\System.Web.WebPages.Deployment.dll
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\System.Web.WebPages.dll
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\System.Web.WebPages.Razor.dll
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\WebGrease.dll
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\Fluentx.xml
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\Fluentx.Mvc.xml
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\InsiderTradingDAL.pdb
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\InsiderTradingEncryption.pdb
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\System.Web.Helpers.xml
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\System.Web.Mvc.xml
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\System.Web.Razor.xml
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\System.Web.WebPages.xml
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\System.Web.WebPages.Deployment.xml
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\System.Web.WebPages.Razor.xml
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\System.Web.Optimization.xml
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\Newtonsoft.Json.xml
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\bin\Antlr3.Runtime.pdb
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\obj\Debug\InsiderTradingSSO.csprojAssemblyReference.cache
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\obj\Debug\InsiderTradingSSO.csproj.CoreCompileInputs.cache
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\obj\Debug\InsiderTradingSSO.csproj.CopyComplete
+D:\MyInsider\MyInsider\Application\InsiderTradingSSO\obj\Debug\InsiderTradingSSO.dll

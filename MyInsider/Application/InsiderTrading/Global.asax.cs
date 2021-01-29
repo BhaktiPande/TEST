@@ -6,8 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Configuration;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
@@ -37,10 +39,10 @@ namespace InsiderTrading
             CompaniesSL objCompaniesSL = new CompaniesSL();
             List<InsiderTradingDAL.CompanyDTO> lstCompaniesDTO = objCompaniesSL.getAllCompanies(Common.Common.getSystemConnectionString());
 
-            foreach (InsiderTradingDAL.CompanyDTO objCompanyDTO in lstCompaniesDTO)
-            {
-                Common.Common.UpdateCompanyResources(objCompanyDTO.CompanyConnectionString, objCompanyDTO.sCompanyDatabaseName);
-            }
+            //foreach (InsiderTradingDAL.CompanyDTO objCompanyDTO in lstCompaniesDTO)
+            //{
+            //    Common.Common.UpdateCompanyResources(objCompanyDTO.CompanyConnectionString, objCompanyDTO.sCompanyDatabaseName);
+            //}
             // ModelBinders.Binders.DefaultBinder = new DecimalModelBinder();
 
             ModelBinders.Binders.Add(typeof(int), new DecimalModelBinder());
@@ -49,6 +51,10 @@ namespace InsiderTrading
             ModelBinders.Binders.Add(typeof(long?), new DecimalModelBinder());
             ModelBinders.Binders.Add(typeof(decimal), new DecimalModelBinderNew());
             ModelBinders.Binders.Add(typeof(decimal?), new DecimalModelBinderNew());
+
+            System.Web.Helpers.AntiForgeryConfig.UniqueClaimTypeIdentifier =
+                          System.Security.Claims.ClaimTypes.NameIdentifier;
+
 
         }
 
@@ -259,33 +265,33 @@ namespace InsiderTrading
 
         protected void Application_EndRequest()
         {
-            Common.Common.WriteLogToFile("Start Method", System.Reflection.MethodBase.GetCurrentMethod());
+            //Common.Common.WriteLogToFile("Start Method", System.Reflection.MethodBase.GetCurrentMethod());
 
-            var context = new HttpContextWrapper(Context);
+            //var context = new HttpContextWrapper(Context);
 
-            // If we're an ajax request, and doing a 302, then we actually need to do a 401                  
-            //This is to handle the ajax request when session time out occurs
-            if (Context.Response.StatusCode == 302 && context.Request.IsAjaxRequest())
-            {
-                Context.Response.Clear(); Context.Response.StatusCode = 401;
-            }
+            //// If we're an ajax request, and doing a 302, then we actually need to do a 401                  
+            ////This is to handle the ajax request when session time out occurs
+            //if (Context.Response.StatusCode == 302 && context.Request.IsAjaxRequest())
+            //{
+            //    Context.Response.Clear(); Context.Response.StatusCode = 401;
+            //}
 
-            // for the cookies created/modified during request, set path for other cookies, if any
-            if (Response.Cookies.Count > 0)
-            {
-                foreach (string cookies_name in Response.Cookies.AllKeys)
-                {
-                    if (cookies_name != ConstEnum.CookiesValue.ValidationCookies)
-                    {
-                        Response.Cookies[cookies_name].Path = Request.ApplicationPath;
-                        Response.Cookies[cookies_name].Secure = ((HttpCookiesSection)System.Configuration.ConfigurationManager.GetSection(@"system.web/httpCookies")).RequireSSL;
-                    }
-                }
+            //// for the cookies created/modified during request, set path for other cookies, if any
+            //if (Response.Cookies.Count > 0)
+            //{
+            //    foreach (string cookies_name in Response.Cookies.AllKeys)
+            //    {
+            //        if (cookies_name != ConstEnum.CookiesValue.ValidationCookies)
+            //        {
+            //            Response.Cookies[cookies_name].Path = Request.ApplicationPath;
+            //            Response.Cookies[cookies_name].Secure = ((HttpCookiesSection)System.Configuration.ConfigurationManager.GetSection(@"system.web/httpCookies")).RequireSSL;
+            //        }
+            //    }
 
-                Common.Common.WriteLogToFile("Application path set for cookies ", System.Reflection.MethodBase.GetCurrentMethod());
-            }
+            //    Common.Common.WriteLogToFile("Application path set for cookies ", System.Reflection.MethodBase.GetCurrentMethod());
+            //}
 
-            Common.Common.WriteLogToFile("End Method", System.Reflection.MethodBase.GetCurrentMethod());
+            //Common.Common.WriteLogToFile("End Method", System.Reflection.MethodBase.GetCurrentMethod());
 
             //Clear browser cache
             //Response.Cache.SetNoStore();
