@@ -59,6 +59,18 @@ namespace InsiderTradingDAL
         public bool InsiderIDFlag { get; set; }
 
         public string PAN { get; set; }
+        public string Quantity { get; set; }
+
+        public string LotSize { get; set; }
+
+        public string ContractSpecification { get; set; }
+
+        public string Value { get; set; }
+
+        public int EnableDisableQuantityValue { get; set; }
+
+        //public string SecuritiesToBeTradedValue { get; set; }
+
         public string DateOfAcquisition { get; set; }
         public string DateOfIntimation { get; set; }
         [PetaPoco.Column("DeclarationFromInsiderAtTheTimeOfContinuousDisclosures")]

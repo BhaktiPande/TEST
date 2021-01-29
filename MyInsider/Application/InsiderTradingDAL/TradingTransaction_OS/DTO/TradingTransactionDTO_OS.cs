@@ -60,6 +60,10 @@ namespace InsiderTradingDAL
 
         public string CompanyName { get; set; }
 
+        public bool SellAllFlag { get; set; }
+
+       
+
         public string PAN { get; set; }
 
         [PetaPoco.Column("OtherExcerciseOptionQty")]

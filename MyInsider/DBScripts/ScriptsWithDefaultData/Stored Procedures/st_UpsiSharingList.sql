@@ -36,8 +36,10 @@ AS
 BEGIN
 	DECLARE @sSQL NVARCHAR(MAX) = ''
 	DECLARE @ERR_COMPANY_LIST INT = 13005 -- Error occurred while fetching list of documents for user.
+	DECLARE @UserType VARCHAR(20)
 	SET @inp_sSortField ='dis_grd_55004'
 	SET @inp_sSortOrder='DESC'
+	
 	BEGIN TRY
 		
 		SET NOCOUNT ON;
@@ -48,6 +50,7 @@ BEGIN
 			SET @out_nSQLErrCode = 0
 		IF @out_sSQLErrMessage IS NULL
 			SET @out_sSQLErrMessage = ''
+         
 
 			-- Based on search parameters, insert only the Primary Index Field in the temporary table.
 		SELECT @sSQL = @sSQL + 'INSERT INTO #tmpList (RowNumber, EntityID)'
@@ -166,7 +169,12 @@ BEGIN
 				UPPER(REPLACE(CONVERT(NVARCHAR, C.SharingDate, 106),' ','/') + ' ' + convert(varchar(5), C.SharingTime)) As dis_grd_55009,				
 				MS.CodeName  AS dis_grd_55010,
 				C.PublishDate AS dis_grd_55011,
-				C.UserInfoId
+				C.UserInfoId, --@UserType as dis_grd_55024
+				--CASE WHEN EXISTS(SELECT 1 FROM  usr_UserInfo WHERE EmailId = UD.Email) THEN 'Registered User' ELSE 'Unregistered User' END AS dis_grd_71001
+				CASE WHEN (UD.IsRegisteredUser = 'True') THEN 'Registered User' ELSE 'Unregistered User' END AS dis_grd_71001,
+				UD.CompanyAddress AS usr_lbl_55051, C.Comments AS usr_lbl_55042, UD.Email AS usr_lbl_55053, UD.Phone AS usr_lbl_55052,
+				CASE WHEN (UD.ResidentialStatus = 531001) THEN 'Resident' WHEN (UD.ResidentialStatus = 531002) THEN 'Non Resident' 
+				WHEN (UD.ResidentialStatus = 531003) THEN 'Other' WHEN (UD.ResidentialStatus = 0) THEN '' END AS usr_lbl_53155
 				
 		FROM	#tmpList T INNER JOIN
 		        usr_UPSIDocumentDetail UD ON UD.UPSIDocumentDtsId= T.EntityID 

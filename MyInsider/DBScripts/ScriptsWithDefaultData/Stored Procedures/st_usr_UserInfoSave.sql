@@ -96,7 +96,6 @@ CREATE PROCEDURE [dbo].[st_usr_UserInfoSave]
 	,@inp_sUIDAI_IdentificationNo	varchar(50)= null
 	,@inp_sIdentificationTypeId		INT=0
 	,@inp_sAllowUpsiUser			BIT 
-	,@inp_sPersonalAddress  		VARCHAR(50)= null
 	,@out_nReturnValue				INT = 0 OUTPUT
 	,@out_nSQLErrCode				INT = 0 OUTPUT				-- Output SQL Error Number, if error occurred.
 	,@out_sSQLErrMessage			VARCHAR(500) = '' OUTPUT  -- Output SQL Error Message, if error occurred.	
@@ -289,7 +288,7 @@ BEGIN
 						@inp_iUserInfoId OUTPUT, @inp_iUserTypeCodeID, @inp_sEmailId, @inp_sFirstName, @inp_sMiddleName, @inp_sLastName, @inp_sEmployeeId, @inp_sMobileNumber, @inp_iCompanyId,
 						@inp_sAddressLine1, @inp_sAddressLine2, @inp_iCountryId, @inp_iStateId, @inp_sCity, @inp_sPinCode, @inp_dtDateOfJoining, @inp_dtDateOfBecomingInsider,
 						@inp_sPAN, @inp_iCategory, @inp_iSubCategory, @inp_iGradeId, @inp_iDesignationId, @inp_iSubDesignationId, @inp_sLocation, @inp_iDepartmentId, @inp_iStatusCodeId, 
-						@inp_iLoggedInUserId, @inp_sLoginID, @inp_sPassword, @inp_iIsInsider,@inp_sDIN,@inp_sResidentTypeId,@inp_sUIDAI_IdentificationNo,@inp_sIdentificationTypeId,@inp_sAllowUpsiUser,@inp_sPersonalAddress, @out_nReturnValue OUTPUT, @out_nSQLErrCode OUTPUT, @out_sSQLErrMessage OUTPUT
+						@inp_iLoggedInUserId, @inp_sLoginID, @inp_sPassword, @inp_iIsInsider,@inp_sDIN,@inp_sResidentTypeId,@inp_sUIDAI_IdentificationNo,@inp_sIdentificationTypeId,@inp_sAllowUpsiUser, @out_nReturnValue OUTPUT, @out_nSQLErrCode OUTPUT, @out_sSQLErrMessage OUTPUT
 			
 			END
 			ELSE IF @inp_iUserTypeCodeID = @nUserType_CorporateUser
@@ -311,7 +310,7 @@ BEGIN
 						@inp_iStateId, @inp_sCity, @inp_sPinCode, @inp_sMobileNumber, @inp_sEmailId, @inp_sPAN, @inp_dtDateOfJoining,
 						@inp_dtDateOfBecomingInsider, @inp_sCategoryText, @inp_sSubCategoryText, @inp_sGradeText, @inp_sDesignationText,
 						@inp_sSubDesignationText, @inp_sLocation, @inp_sDepartmentText, @inp_iStatusCodeId, @inp_iLoggedInUserId,
-						@inp_iIsInsider, @inp_sLoginID, @inp_sPassword,@inp_sDIN,@inp_sAllowUpsiUser,@inp_sPersonalAddress,
+						@inp_iIsInsider, @inp_sLoginID, @inp_sPassword,@inp_sDIN,@inp_sAllowUpsiUser,
 						@out_nReturnValue OUTPUT, @out_nSQLErrCode OUTPUT, @out_sSQLErrMessage OUTPUT
 	
 			END

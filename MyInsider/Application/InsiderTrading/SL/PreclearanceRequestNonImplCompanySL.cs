@@ -153,7 +153,7 @@ namespace InsiderTrading.SL
         #region ValidatePreclearanceRequest
         public int ValidatePreclearanceRequest(string i_sConnectionString, int preclearanceRequestId, int tradingPolicyID, int userInfoId,int? userInfoIdRelative,
                         int transactionTypeCodeId,int securityTypeCodeId,decimal? securitiesToBeTradedQty,decimal? securitiesToBeTradedValue, int companyId,
-                        int modeOfAcquisitionCodeId, int DMATDetailsID, out bool out_bIsContraTrade, out string sContraTradeDate, out bool iIsAutoApproved)
+                        int modeOfAcquisitionCodeId, int DMATDetailsID,int DisplaySequenceNo, out bool out_bIsContraTrade, out string sContraTradeDate, out bool iIsAutoApproved)
         {
             int returnVal = 0;
             try
@@ -161,7 +161,7 @@ namespace InsiderTrading.SL
                 using (PreclearanceRequestNonImplCompanyDAL objPreclearanceRequestNonImplCompanyDAL = new PreclearanceRequestNonImplCompanyDAL())
                 {
                     returnVal = objPreclearanceRequestNonImplCompanyDAL.ValidatePreclearanceRequest(i_sConnectionString, preclearanceRequestId, tradingPolicyID, userInfoId,userInfoIdRelative,
-                        transactionTypeCodeId, securityTypeCodeId, securitiesToBeTradedQty,securitiesToBeTradedValue, companyId, modeOfAcquisitionCodeId, DMATDetailsID, out out_bIsContraTrade, out sContraTradeDate, out iIsAutoApproved);
+                        transactionTypeCodeId, securityTypeCodeId, securitiesToBeTradedQty,securitiesToBeTradedValue, companyId, modeOfAcquisitionCodeId, DMATDetailsID, DisplaySequenceNo, out out_bIsContraTrade, out sContraTradeDate, out iIsAutoApproved);
                 }
             }
             catch (Exception ex)

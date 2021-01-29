@@ -132,15 +132,15 @@ CREATE PROCEDURE [dbo].[st_rpt_DefaulterList]
 	,@inp_sSortOrder								VARCHAR(5)
 	,@inp_iUserInfoId								INT
 	,@inp_sEmployeeID								NVARCHAR(50)-- = 'GS1234'
-	,@inp_sInsiderName								NVARCHAR(MAX) --= 's'
-	,@inp_sDesignation								NVARCHAR(MAX) --= 's'
+	,@inp_sInsiderName								NVARCHAR(100) --= 's'
+	,@inp_sDesignation								NVARCHAR(100) --= 's'
 	,@inp_sGrade									NVARCHAR(100) --= 'a'
 	,@inp_sLocation									NVARCHAR(50) --= 'pune'
 	,@inp_sDepartment								NVARCHAR(100) --= 'a'
-	,@inp_sCompanyName								NVARCHAR(MAX) --= 'k'
+	,@inp_sCompanyName								NVARCHAR(200) --= 'k'
 	,@inp_sTypeOfInsider							NVARCHAR(200) --= 101003,101002
 	,@inp_sDematAccountNumber						NVARCHAR(50)
-	,@inp_sAccountHolder							NVARCHAR(MAX)
+	,@inp_sAccountHolder							NVARCHAR(100)
 	,@inp_sPreClearanceID							NVARCHAR(100)
 	,@inp_sRequestStatus							NVARCHAR(500)
 	,@inp_sTransactionType							NVARCHAR(500)
@@ -222,9 +222,9 @@ BEGIN
 	DECLARE @sPrceclearanceNotRequiredPrefixText VARCHAR(200) = (SELECT CodeName FROM com_Code Where CodeId = @nNonInsiderNotPreclearanceTakenCase)
 	DECLARE @sPPeriodEndRecordPrefixText VARCHAR(200) = (SELECT CodeName FROM com_Code Where CodeId = @nPeriodEndCase)
 
-	CREATE TABLE #TempTransactionDetailsForDefaulterReport(PreclearanceRequestId INT, RequestDate DATETIME, RequestedQty DECIMAL(15,4), RequestedValue DECIMAL(15,4),
-	PreclearanceApplicabletill DATETIME,PreclearanceStatusDate DATETIME, PreclearanceStatusCodeId INT, PreclearanceStatus VARCHAR(200),SecurityTypeCodeId INT,SecurityType VARCHAR(600),
-	TransactionTypeCodeId INT, TransactionType VARCHAR(500),TransactionMasterId INT,DMATDetailsID INT,DEMATAccountNumber VARCHAR(1000),AccountHolderName NVARCHAR(1000),IsPartiallyTraded BIT,ShowAddButton BIT,DisplayRollingNumber INT)
+	CREATE TABLE #TempTransactionDetailsForDefaulterReport(PreclearanceRequestId INT, RequestDate DATETIME, RequestedQty DECIMAL(10,0), RequestedValue DECIMAL(10,0),
+	PreclearanceApplicabletill DATETIME,PreclearanceStatusDate DATETIME, PreclearanceStatusCodeId INT, PreclearanceStatus VARCHAR(20),SecurityTypeCodeId INT,SecurityType VARCHAR(20),
+	TransactionTypeCodeId INT, TransactionType VARCHAR(20),TransactionMasterId INT,DMATDetailsID INT,DEMATAccountNumber VARCHAR(100),AccountHolderName VARCHAR(50),IsPartiallyTraded BIT,ShowAddButton BIT,DisplayRollingNumber INT)
 	-- Create Temp Table fpr Insert Unquie Preclearance Request ID
 	
 	CREATE TABLE #tmpPreclearanceID(PreclearanceID NVARCHAR(MAX))
@@ -253,17 +253,10 @@ BEGIN
 		BEGIN
 			SET @inp_sSortOrder = 'ASC'
 		END
-		
-			INSERT INTO #TempTransactionDetailsForDefaulterReport(PreclearanceRequestId, RequestDate ,
-			RequestedQty, RequestedValue,
-			PreclearanceApplicabletill,PreclearanceStatusDate,
-			PreclearanceStatusCodeId, 
-			PreclearanceStatus,
-			SecurityTypeCodeId, 
-			SecurityType,
-			TransactionTypeCodeId, 
-			TransactionType,TransactionMasterId,DMATDetailsID,DEMATAccountNumber,AccountHolderName,IsPartiallyTraded, ShowAddButton, DisplayRollingNumber
-			)
+			
+			INSERT INTO #TempTransactionDetailsForDefaulterReport(PreclearanceRequestId, RequestDate, RequestedQty, RequestedValue,
+			PreclearanceApplicabletill,PreclearanceStatusDate, PreclearanceStatusCodeId, PreclearanceStatus,SecurityTypeCodeId, SecurityType,
+			TransactionTypeCodeId, TransactionType,TransactionMasterId,DMATDetailsID,DEMATAccountNumber,AccountHolderName,IsPartiallyTraded, ShowAddButton, DisplayRollingNumber)
 			SELECT
 			PR.PreclearanceRequestId,
 			PR.CreatedOn AS RequestDate,
@@ -312,8 +305,6 @@ BEGIN
 			PR.IsPartiallyTraded,
 			PR.ShowAddButton,
 			TM.DisplayRollingNumber
-
-		
 						
 			DECLARE @tmpPCLIds TABLE(PreclearanceRequestId BIGINT)
 			DECLARE @tmpTransactionDetailsIds TABLE(TransactionDetailsID BIGINT)
@@ -656,12 +647,12 @@ BEGIN
 		
 		IF (@inp_sInsiderName IS NOT NULL AND @inp_sInsiderName <> '')
 		BEGIN
-			SELECT @sSQL = @sSQL +  ' AND Temp.InsiderName like N''%' + @inp_sInsiderName + '%'''
+			SELECT @sSQL = @sSQL +  ' AND Temp.InsiderName like ''%' + @inp_sInsiderName + '%'''
 		END
 		
 		IF (@inp_sDesignation IS NOT NULL AND @inp_sDesignation <> '')
 		BEGIN
-			SELECT @sSQL = @sSQL + ' AND Temp.Designation like N''%' + @inp_sDesignation + '%'''
+			SELECT @sSQL = @sSQL + ' AND Temp.Designation ''%' + @inp_sDesignation + '%'')'
 		
 		END
 		IF (@inp_sGrade IS NOT NULL AND @inp_sGrade <> '')
@@ -695,7 +686,7 @@ BEGIN
 		
 		IF (@inp_sAccountHolder IS NOT NULL AND @inp_sAccountHolder <> '')
 		BEGIN
-			SELECT @sSQL = @sSQL + ' AND Temp.AccountHolder like N''%' + @inp_sAccountHolder + '%'''
+			SELECT @sSQL = @sSQL + ' AND Temp.AccountHolder like ''%' + @inp_sAccountHolder + '%'''
 		END
 		
 		IF (@inp_sPreClearanceID IS NOT NULL AND @inp_sPreClearanceID <> '')
@@ -992,7 +983,8 @@ BEGIN
 				dbo.uf_rpt_ReplaceSpecialChar(Temp.PreclearanceBlankComment) AS PreclearanceBlankComment,
 				dbo.uf_rpt_ReplaceSpecialChar(Temp.AddOtherDetails) AS AddOtherDetails,
 				dbo.uf_rpt_ReplaceSpecialChar(Temp.ISParentPreclearance) As ISParentPreclearance,
-				Temp.IsShowRecord As IsShowRecord
+				Temp.IsShowRecord As IsShowRecord,
+				DRO.Reason AS rpt_grd_61009
 		FROM	#tmpList T 
 		JOIN #tmpReport  Temp ON T.EntityID = Temp.Id
 		LEFT JOIN rpt_DefaulterReportOverride DRO ON Temp.DefaulterReportID = DRO.DefaulterReportID
