@@ -30,10 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="InsiderTradingEncryption, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\InsiderTrading\bin\InsiderTradingEncryption.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -170,7 +166,12 @@
   <ItemGroup>
     <None Include="MASSUPLOAD\MassUploadDAL.cs.bak" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\InsiderTradingEncryption\InsiderTradingEncryption.csproj">
+      <Project>{dea2125d-63b6-4c7a-adb7-9b44334f4277}</Project>
+      <Name>InsiderTradingEncryption</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
