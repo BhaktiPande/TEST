@@ -394,8 +394,9 @@
      $(window).load(function () {
          var GetSessionValue = "@ViewBag.Fromedit";
          var EnableDisableQuantityValue = "@ViewBag.EnableDisableQuantityValue";
-         if (EnableDisableQuantityValue == 400002) {
+         if (EnableDisableQuantityValue == 400002 || EnableDisableQuantityValue == 400003) {
              if (GetSessionValue == "FromEdit") {
+                 debugger;
                  setTimeout(function () { $('#TransactionTypeCodeId').trigger('change') }, 20);
              }
          }
