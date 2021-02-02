@@ -155,7 +155,7 @@ BEGIN
 		TextSoftCopyDate VARCHAR(max),SoftCopyDate DATETIME ,SoftCopyStatus INT, 
 		TextHardCopyDate VARCHAR(max),HardCopyDate DATETIME,HardCopyStatus INT,
 		TextSubmitToStockExchange VARCHAR(max),SubmitToStockExchange DATETIME,SubmitToStockExchangeStatus INT,UserPanNumber NVARCHAR(50),EmpStatus INT,EmployeeID NVARCHAR(50),
-		IsEnterAndUploadEvent INT DEFAULT 0, category INT)
+		IsEnterAndUploadEvent INT DEFAULT 0, category INT, EmailId nvarchar(500))
 
 		INSERT INTO #tUserData
 		SELECT 		u.UserInfoId														AS USerInfoId,
@@ -170,8 +170,8 @@ BEGIN
 					CASE WHEN u.UserTypeCodeId = 101004 THEN company.CompanyName ELSE ISNULL(u.FirstName,'') + ' ' + isnull(u.LastName,'') END AS Name,
 					CASE WHEN u.UserTypeCodeId = 101004 THEN u.DesignationText ELSE
 					  	 CASE WHEN c.DisplayCode IS NULL OR c.DisplayCode = '' 
-							THEN CodeName 
-							ELSE DisplayCode END END										AS Designation,
+							THEN c.CodeName 
+							ELSE c.DisplayCode END END										AS Designation,
 					CASE	WHEN t1.DateOfEvent IS NULL THEN @PendingStatus
 							WHEN t1.DateOfEvent IS NULL AND t6.DateOfEvent IS NULL 
 								 THEN @PendingStatus							 												
@@ -265,7 +265,8 @@ BEGIN
 				            END AS EmpStatus,
 					u.EmployeeId,
 					0,
-					u.Category
+					u.Category, u.EmailId
+					
 		FROM		usr_UserInfo u 
 					LEFT JOIN @TempEventLog t1 ON t1.UserInfoId = u.UserInfoId and t1.EventType = 153006
 					LEFT JOIN @TempEventLog t2 ON t2.UserInfoId = u.UserInfoId and t2.EventType = 153007 -- Initial Disclosure details entered
@@ -553,11 +554,14 @@ BEGIN
 			tc.TransPendingFlag,
 			tc.SoftcopyPendingFlag,
 			tc.HardcopyPendingFlag,
-			CCatagary.CodeName AS dis_grd_54061
+			CCatagary.CodeName AS dis_grd_54061,
+			tu.EmailId as dis_grd_71003
+
 		FROM #tmpList t
 		JOIN #tUserData tu ON tu.UserInfoId  =  t.EntityID
 		LEFT JOIN #tmpPendingTrans tc on tc.UserInfoId= tu.UserInfoId
 		LEFT JOIN com_Code CCatagary on tu.category=CCatagary.CodeID
+		
 		WHERE 1 =1 '
 		+ @WHERE_CLAUSE +
 		'AND (('+@inp_iPageSize+' = 0) OR (T.RowNumber BETWEEN (('+@inp_iPageNo+' - 1) * '+@inp_iPageSize+' + 1) AND ('+@inp_iPageNo+' * '+@inp_iPageSize+')))

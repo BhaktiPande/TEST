@@ -151,7 +151,7 @@ BEGIN
 			SubmissionDaysRemaining INT DEFAULT -1, SubmissionDaysRemainingByCO INT DEFAULT -1,
 			YearCodeId INT, PeriodTypeId INT,PeriodType varchar(50), PeriodCodeId INT, PeriodEndDate DATETIME, IsThisCurrentPeriodEnd INT DEFAULT 0, 
 			InitialDisclosureDate DATETIME,IsUploadAndEnterEventGenerate INT DEFAULT 0,
-			category INT
+			category INT, EmailId nvarchar(500)
 			)
 		
 		-- Get button text
@@ -169,7 +169,7 @@ BEGIN
 		-- Get list of user who are insider between start and end of period and also apply filter if defined
 		INSERT INTO #tmpPeriodEndDisclosureUserList 
 			(UserInfoId, EmployeeId, InsiderName, CompanyId, CompanyName, UserType, DesignationId, Designation, UserPanNumber, EmpStatus,DateOfBecomingInsider, 
-			DateOfSeparation, PeriodEndDate,category)
+			DateOfSeparation, PeriodEndDate,category, EmailId)
 		SELECT 
 			UI.UserInfoId, UI.EmployeeId, 
 			CASE WHEN UI.UserTypeCodeId = 101004 THEN Com.CompanyName ELSE UI.FirstName + ISNULL(' ' + UI.LastName, '') END as InsiderName, 
@@ -182,7 +182,7 @@ BEGIN
 				            WHEN UI.StatusCodeId = @nEmployeeInActive THEN @nEmpStatusInactiveCode
 				            END AS EmpStatus,
 			UI.DateOfBecomingInsider, UI.DateOfSeparation, LastPeriodEndUser.PeriodEndDate,
-			UI.Category
+			UI.Category, UI.EmailId
 		From 
 			(
 				SELECT UserInfoId, MAX(PeriodEndDate) as PeriodEndDate FROM vw_PeriodEndDisclosureStatus vwPEDS
@@ -596,7 +596,8 @@ BEGIN
 			IsThisCurrentPeriodEnd,
 			InitialDisclosureDate,
 			IsUploadAndEnterEventGenerate,
-			CCatagary.CodeName As dis_grd_54062
+			CCatagary.CodeName As dis_grd_54062,
+			EmailId as dis_grd_71007
 		FROM #tmpList t INNER JOIN #tmpPeriodEndDisclosureUserList tPE ON t.EntityID = tPE.Id 
 		LEFT JOIN com_Code CCatagary on tPE.category=CCatagary.CodeID
 		WHERE	1=1 AND ((@inp_iPageSize = 0) OR (T.RowNumber BETWEEN ((@inp_iPageNo - 1) * @inp_iPageSize + 1) AND (@inp_iPageNo * @inp_iPageSize)))

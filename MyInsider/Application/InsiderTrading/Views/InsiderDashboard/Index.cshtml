@@ -206,7 +206,7 @@
                                             <div class="box-body">
                                                 <div class="row dashboardDisclosureBox">
                                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                                        <a href="javascript:void(0);" id="disc-btn-1">
+                                                        <a href="@Url.Action("Index","InsiderInitialDisclosure",new { acid = 155 })" id="disc-btn-1">
                                                             <img src="~/images/icons/icon-init-disc.png" class="img img-responsive center-block">
                                                             <p class="text-center dashboardDisclosureTextPadding">@InsiderTrading.Common.Common.getResource("dis_lbl_17436")</p>
                                                             @if (Model.InitialDisclosureFlag == 2)
@@ -220,14 +220,14 @@
                                                         </a>
                                                     </div>
                                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                                        <a href="javascript:void(0);" id="disc-btn-2">
+                                                        <a href="@Url.Action("Index","PreclearanceRequest",new { acid = 157 })" id="disc-btn-2">
                                                             <img src="~/images/icons/icon-cont-disc.png" class="img img-responsive center-block">
                                                             <p class="text-center dashboardDisclosureTextPadding">@InsiderTrading.Common.Common.getResource("dis_lbl_17437")</p>
                                                             <button class="btn btn-dark center-block"><span class="success"> @Model.ContinuousDisclosureSoftCopyPendingCount </span></button>
                                                         </a>
                                                     </div>
                                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                                        <a href="javascript:void(0);" id="disc-btn-3">
+                                                        <a href="@Url.Action("PeriodStatus","PeriodEndDisclosure",new { acid = 159 })" id="disc-btn-3">
                                                             <img src="~/images/icons/icon-period-end.png" class="img img-responsive center-block">
                                                             <p class="text-center dashboardDisclosureTextPadding">@InsiderTrading.Common.Common.getResource("dis_lbl_17438")</p>
                                                             @if (Model.PeriodEndDisclosureFlag == 1)
@@ -495,9 +495,9 @@
                                 <div class="row">
                                     <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 Mail">
                                         @*@if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.NOTIFICATION_LIST_RIGHT))
-                                        {
-                                            Html.RenderAction("DashboardNotification_OS", "Notification", new { });
-                                        }*@
+                                            {
+                                                Html.RenderAction("DashboardNotification_OS", "Notification", new { });
+                                            }*@
                                     </div>
 
                                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">

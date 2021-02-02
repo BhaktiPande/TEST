@@ -672,7 +672,7 @@ END
 		[IsPreclearanceFormForImplementingCompany] AS IsPreclearanceFormForImplementingCompany,
 		[IsFORMEGenrated] AS IsFORMEGenrated,[IsEnterAndUploadEvent] AS IsEnterAndUploadEvent,[Name] AS Name,
 		[Individual_Traded_Value] AS dis_grd_50646, Row_Number() OVER (ORDER BY (SELECT T.RowNumber) Desc)  AS RowNum,  
-		CCategory.CodeName AS dis_grd_54063
+		CCategory.CodeName AS dis_grd_54063, UT.EmailId as dis_grd_71005, CASE WHEN UT.UserTypeCodeId = 101003 THEN 'Self' ELSE relation.CodeName END AS dis_grd_71006
 		
 		FROM 
 		#tmpList T 
@@ -680,6 +680,8 @@ END
 		JOIN #tmp_tra_ContinuousDisc TC ON TC.ID=TempSort.TransID
 		INNER JOIN usr_UserInfo UT ON TC.UserInfoID=UT.UserInfoId
 		LEFT JOIN com_Code CCategory ON CCategory.CodeID=UT.Category
+		LEFT JOIN usr_UserRelation UR ON UT.UserInfoId  = UR.UserInfoId
+		LEFT JOIN com_Code relation ON UR.RelationTypeCodeId  = relation.CodeID
 		WHERE   
 		TC.TransactionMasterId IS NOT NULL 		
 		AND ((@inp_iPageSize = 0) OR (T.RowNumber BETWEEN ((@inp_iPageNo - 1) * @inp_iPageSize + 1) AND (@inp_iPageNo * @inp_iPageSize)))
