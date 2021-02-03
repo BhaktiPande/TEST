@@ -1191,7 +1191,7 @@ namespace InsiderTrading.Common
             objCompanyDetailsForNotificationDTO = objNotificationSL.GetCompanyDetailsForNotification(Common.getSystemConnectionString(), 0, sUserCompanyName);
             SmtpClient client = new SmtpClient(objCompanyDetailsForNotificationDTO.SmtpServer);
             //Set the port for the SMTP client if available otherwise the default will be considered.
-            if (sUserCompanyName.Contains("Kotak") || sUserCompanyName.Contains("Exide") || sUserCompanyName.Contains("TataCommunications") || sUserCompanyName.Contains("DCBBank") || sUserCompanyName.Contains("HIL") || sUserCompanyName.Contains("Accelya") || sUserCompanyName.Contains("Piramal") || sUserCompanyName.Contains("BCML") || sUserCompanyName.Contains("Titan"))
+            if (sUserCompanyName.Contains("Kotak") || sUserCompanyName.Contains("Exide") || sUserCompanyName.Contains("TataCommunications") || sUserCompanyName.Contains("DCBBank") || sUserCompanyName.Contains("HIL") || sUserCompanyName.Contains("Accelya") || sUserCompanyName.Contains("Piramal") || sUserCompanyName.Contains("BCML") || sUserCompanyName.Contains("Titan") || sUserCompanyName.Contains("Hitech"))
             {
                 client.EnableSsl = false;
             }
@@ -1262,7 +1262,7 @@ namespace InsiderTrading.Common
             objCompanyDetailsForNotificationDTO = objNotificationSL.GetCompanyDetailsForNotification(Common.getSystemConnectionString(), 0, sUserCompanyName);
             SmtpClient client = new SmtpClient(objCompanyDetailsForNotificationDTO.SmtpServer);
             //Set the port for the SMTP client if available otherwise the default will be considered.
-            if (sUserCompanyName.Contains("Kotak") || sUserCompanyName.Contains("Exide") || sUserCompanyName.Contains("TataCommunications") || sUserCompanyName.Contains("DCBBank") || sUserCompanyName.Contains("HIL") || sUserCompanyName.Contains("Accelya") || sUserCompanyName.Contains("Piramal") || sUserCompanyName.Contains("BCML"))
+            if (sUserCompanyName.Contains("Kotak") || sUserCompanyName.Contains("Exide") || sUserCompanyName.Contains("TataCommunications") || sUserCompanyName.Contains("DCBBank") || sUserCompanyName.Contains("HIL") || sUserCompanyName.Contains("Accelya") || sUserCompanyName.Contains("Piramal") || sUserCompanyName.Contains("BCML") || sUserCompanyName.Contains("Hitech"))
             {
                 client.EnableSsl = false;
             }
@@ -1445,9 +1445,9 @@ namespace InsiderTrading.Common
             {
                 WSC_html_attr.Add("Checked", "checked");
             }
-            else if (sControl == "RadioNull")
+            else if (sControl == "RadioNull1")
             {
-                // WSC_html_attr.Add("Checked", "");
+                WSC_html_attr.Add("Checked", "checked");
             }
             else if (sControl == "CheckBox")
             {

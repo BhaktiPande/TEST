@@ -3060,7 +3060,7 @@ namespace InsiderTrading.Controllers
                                     {
                                         using (var msHtml = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(LetterHTMLContent)))
                                         {
-                                            iTextSharp.tool.xml.XMLWorkerHelper.GetInstance().ParseXHtml(writer, doc, msHtml, msCss , System.Text.Encoding.UTF8, new ApplyArebicFont(System.Web.HttpContext.Current.Server.MapPath("~/fonts") + ConfigurationManager.AppSettings["ArebicFontName"].ToString()));
+                                            iTextSharp.tool.xml.XMLWorkerHelper.GetInstance().ParseXHtml(writer, doc, msHtml, msCss);
                                         }
                                     }
                                 }
@@ -3071,7 +3071,7 @@ namespace InsiderTrading.Controllers
                                 {
                                     using (var msHtml = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(FormHTMLContent)))
                                     {
-                                        iTextSharp.tool.xml.XMLWorkerHelper.GetInstance().ParseXHtml(writer, doc, msHtml, msCss, System.Text.Encoding.UTF8, new ApplyArebicFont(System.Web.HttpContext.Current.Server.MapPath("~/fonts") + ConfigurationManager.AppSettings["ArebicFontName"].ToString()));
+                                        iTextSharp.tool.xml.XMLWorkerHelper.GetInstance().ParseXHtml(writer, doc, msHtml, msCss);
                                     }
                                 }
 
@@ -3155,7 +3155,7 @@ namespace InsiderTrading.Controllers
                                 {
                                     using (var msHtml = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(LetterHTMLContent)))
                                     {
-                                        iTextSharp.tool.xml.XMLWorkerHelper.GetInstance().ParseXHtml(writer, doc, msHtml, msCss, System.Text.Encoding.UTF8, new ApplyArebicFont(System.Web.HttpContext.Current.Server.MapPath("~/fonts") + ConfigurationManager.AppSettings["ArebicFontName"].ToString()));
+                                        iTextSharp.tool.xml.XMLWorkerHelper.GetInstance().ParseXHtml(writer, doc, msHtml, msCss);
                                     }
                                 }
                             }
@@ -3166,7 +3166,7 @@ namespace InsiderTrading.Controllers
                             {
                                 using (var msHtml = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(FormHTMLContent)))
                                 {
-                                    iTextSharp.tool.xml.XMLWorkerHelper.GetInstance().ParseXHtml(writer, doc, msHtml, msCss, System.Text.Encoding.UTF8, new ApplyArebicFont(System.Web.HttpContext.Current.Server.MapPath("~/fonts") + ConfigurationManager.AppSettings["ArebicFontName"].ToString()));
+                                    iTextSharp.tool.xml.XMLWorkerHelper.GetInstance().ParseXHtml(writer, doc, msHtml, msCss);
                                 }
                             }
 

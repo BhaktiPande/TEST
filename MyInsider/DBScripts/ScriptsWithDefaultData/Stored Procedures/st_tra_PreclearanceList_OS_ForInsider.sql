@@ -431,12 +431,15 @@ BEGIN
 		CASE WHEN PRNIC.PreclearanceRequestId IS NULL 
 			     THEN (SELECT TOP 1 SecurityTypeCodeId FROM tra_TransactionDetails_OS WHERE TransactionMasterId = TM.TransactionMasterId) 
 			     ELSE CPRNICSecurityType.CodeID END AS SecurityType, --'Securities',
+		CASE WHEN TSO.SellAllFlag = 1 THEN 'SellAll'
+		ELSE
 		CASE WHEN PRNIC.PreclearanceRequestId IS NULL 
 				THEN 
 				 CASE WHEN (SELECT COUNT(TransactionDetailsId) FROM tra_TransactionDetails_OS WHERE TransactionMasterId = TM.TransactionMasterId) >= 1  
 					THEN (SELECT CodeName FROM com_Code WHERE CodeID IN(SELECT TransactionTypeCodeId FROM tra_TransactionDetails_OS WHERE TransactionMasterId = TM.TransactionMasterId)) 
 					ELSE '-' END
-				ELSE CPRNICTransactnType.CodeName END AS dis_grd_53017, --'Transaction Type',
+				ELSE CPRNICTransactnType.CodeName END 
+		END AS dis_grd_53017, --'Transaction Type',
 		CASE WHEN DisplayNumber = 1  THEN PRNIC.SecuritiesToBeTradedQty ELSE null END AS dis_grd_53019,--'Preclearance Qty'
 		TempTbl.TradedQty AS dis_grd_53020,--'Trade Qty',
 		TempTbl.IndividualTradedValue AS dis_grd_53012,--Trade Value
@@ -486,6 +489,7 @@ BEGIN
 		LEFT JOIN com_Code CPRNICSecurityType ON PRNIC.SecurityTypeCodeId = CPRNICSecurityType.CodeID
 		JOIN rul_TradingPolicy_OS TP ON TempTbl.TradingPolicyId = TP.TradingPolicyId
 		LEFT JOIN tra_GeneratedFormDetails GFD ON PRNIC.DisplaySequenceNo = GFD.MapToId AND GFD.MapToTypeCodeId = 132015
+		LEFT JOIN tra_SellAllValues_OS TSO on TSO.TransactionMasterId = TM.TransactionMasterId
 		WHERE ((@inp_iPageSize = 0) OR (T.RowNumber BETWEEN ((@inp_iPageNo - 1) * @inp_iPageSize + 1) AND (@inp_iPageNo * @inp_iPageSize)))
 		ORDER BY T.RowNumber
 		

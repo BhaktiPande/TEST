@@ -38,9 +38,14 @@
                     }
                 }
             </td>
-            <td>
-                <a class="btn btn-danger btn-shape btn-arrow btn-md center-block" id="btn_GetUserEducationDetails" style="margin:10px 10px" href='@Url.Action("EducationDetails", "Employee", new { acid = acid, nUserInfoID = Session["UserInfoId"],nUserDematSaved=true, nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] })' role="button">@InsiderTrading.Common.Common.getResource("usr_btn_54001")</a>
-            </td>
+            @if ((int)Session["WorkandEducationConfiguration"] == 539001)
+            {
+                <td>
+
+                    <a class="btn btn-danger btn-shape btn-arrow btn-md center-block" id="btn_GetUserEducationDetails" style="margin:10px 10px" href='@Url.Action("EducationDetails", "Employee", new { acid = acid, nUserInfoID = Session["UserInfoId"],nUserDematSaved=true, nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] })' role="button">@InsiderTrading.Common.Common.getResource("usr_btn_54001")</a>
+
+                </td>
+            }
             <td>
                 <a class="btn btn-danger btn-shape btn-arrow btn-md center-block" id="btn_GetUserRelativeDetails" style="margin:10px 10px" href='@Url.Action("CreateRelative", "Employee", new { acid = acid, nParentID = Session["UserInfoId"], nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] })' role="button">@InsiderTrading.Common.Common.getResource("usr_btn_50768")</a>
             </td>

@@ -15,7 +15,8 @@ Raghvendra	07-Sep-2016	Changed the GETDATE() call with function dbo.uf_com_GetSe
 CREATE PROCEDURE [dbo].[st_DepartmentWiseRL_MassUpload]
 (
 	
-	@inp_CompanyName			VARCHAR(200),
+	@inp_CompanyName			NVARCHAR(500),
+	@inp_ISINCode				NVARCHAR(500),
 	@inp_ApplicableFrom			DATETIME,
 	@inp_ApplicableTo			DATETIME,	
 	@Inp_MassCounter			INT,
@@ -40,13 +41,15 @@ BEGIN
 		IF @out_sSQLErrMessage IS NULL
 			SET @out_sSQLErrMessage = ''
 			print @inp_CompanyName
-		IF EXISTS(SELECT RlCompanyId FROM rl_CompanyMasterList WHERE CompanyName = @inp_CompanyName)
+	
+
+		IF EXISTS(SELECT RlCompanyId FROM rl_CompanyMasterList WHERE ISINCode=@inp_ISINCode)
 		BEGIN		
-			SET @CompanyId = (SELECT RlCompanyId FROM rl_CompanyMasterList WHERE CompanyName = @inp_CompanyName)
+			SET @CompanyId = (SELECT RlCompanyId FROM rl_CompanyMasterList WHERE ISINCode=@inp_ISINCode)
 			PRINT 'B'
 			PRINT @inp_ApplicableFrom
 			PRINT @inp_ApplicableTo
-			IF NOT EXISTS(SELECT RlMasterId FROM rl_RistrictedMasterList WHERE CONVERT(DATE,ApplicableFromDate) = CONVERT(DATE,@inp_ApplicableFrom) AND CONVERT(DATE,ApplicableToDate) = CONVERT(DATE,@inp_ApplicableTo) AND RlCompanyId = @CompanyId)	
+			IF NOT EXISTS(SELECT RlMasterId FROM rl_RistrictedMasterList WHERE CONVERT(DATE,ApplicableFromDate) = CONVERT(DATE,@inp_ApplicableFrom) AND CONVERT(DATE,ApplicableToDate) = CONVERT(DATE,@inp_ApplicableTo) AND RlCompanyId = @CompanyId AND MassCounter=@Inp_MassCounter)	
 			BEGIN
 				PRINT 'C'
 				IF((CONVERT(DATE,@inp_ApplicableFrom)) >= CONVERT(DATE,dbo.uf_com_GetServerDate()))	

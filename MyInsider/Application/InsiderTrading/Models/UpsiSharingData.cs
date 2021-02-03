@@ -81,7 +81,7 @@ namespace InsiderTrading.Models
         [DisplayName("usr_lbl_55054")]
         public String Sharedby { get; set; } 
 
-        public string Temp1 { get; set; }
+        public string IsRegisteredUser { get; set; }
 
         public string Temp2 { get; set; }
 
@@ -107,12 +107,7 @@ namespace InsiderTrading.Models
 
         public string FirstName { get; set; }
 
-       
-
         public string EmailId { get; set; }
-
-
-
 
         public string CompanyName { get; set; }
 
@@ -152,5 +147,6 @@ namespace InsiderTrading.Models
 
         [DisplayName("usr_lbl_55044")]
         public DateTime? SharingDateT { get; set; }
+        public string UPSIRecipient { get; set; }
     }
 }

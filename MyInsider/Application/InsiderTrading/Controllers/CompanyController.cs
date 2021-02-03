@@ -1375,6 +1375,46 @@ namespace InsiderTrading.Controllers
         }
         #endregion SavePersonalDetailsConfirmation
 
+        #region SaveEducationandWorkDetailsConfiguration
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [TokenVerification]
+        [AuthorizationPrivilegeFilter]
+        public ActionResult SaveEducationandWorkDetailsConfiguration(WorkandEducationModel objWorkandEducationConfigurationModel, int acid, int compid)
+        {
+            ViewBag.CalledFrom = "Edit";
+            ViewBag.PPD_WorkandeducationList = TempData.Peek("Workanducationlist");
+
+            CompaniesSL objCompaniesSL = new CompaniesSL();
+            LoginUserDetails objLoginUserDetails = (LoginUserDetails)InsiderTrading.Common.Common.GetSessionValue((string)ConstEnum.SessionValue.UserDetails);
+            InsiderTradingDAL.WorkandEducationDetailsConfigurationDTO objWorkandEducationDetailsConfigurationDTO = new InsiderTradingDAL.WorkandEducationDetailsConfigurationDTO();
+            try
+            {
+                InsiderTrading.Common.Common.CopyObjectPropertyByName(objWorkandEducationConfigurationModel, objWorkandEducationDetailsConfigurationDTO);
+                objWorkandEducationDetailsConfigurationDTO.CompanyId = compid;
+                objWorkandEducationDetailsConfigurationDTO.LoggedInUserId = objLoginUserDetails.LoggedInUserID;
+                objWorkandEducationDetailsConfigurationDTO.WorkandEducationDetailsConfigurationId = objWorkandEducationConfigurationModel.WorkandEducationMandatoryId;
+                objCompaniesSL.SaveWorkandEducationDetailsConfiguration(objLoginUserDetails.CompanyDBConnectionString, objWorkandEducationDetailsConfigurationDTO);
+
+                return PartialView("WorkandEducationDetails", objWorkandEducationConfigurationModel);
+
+            }
+            catch (Exception exp)
+            {
+                string sErrMessage = Common.Common.getResource(exp.InnerException.Data[0].ToString());
+                ModelState.AddModelError("Error", sErrMessage);
+                return PartialView("WorkandEducationDetails", objWorkandEducationConfigurationModel);
+            }
+            finally
+            {
+                objCompaniesSL = null;
+                objLoginUserDetails = null;
+                objWorkandEducationDetailsConfigurationDTO = null;
+            }
+
+        }
+        #endregion SaveEducationandWorkDetailsConfiguration
+
         #region getAjaxTab
         /// <summary>
         /// 
@@ -1405,12 +1445,14 @@ namespace InsiderTrading.Controllers
             List<PopulateComboDTO> lstStatusList = null;
             List<PopulateComboDTO> lstDesignationList = null;
             List<PopulateComboDTO> PPD_ReconfirmationList = null;
+            
 
             CompanyConfigurationModel objCompanyConfigurationModel = null;
             CompanyConfigurationDTO objCompanyConfigurationDTO = null;
 
             PersonalDetailsConfirmationModel objPersonalDetailsConfirmationModel = null;
             PersonalDetailsConfirmationDTO objPersonalDetailsConfirmationDTO = null;
+            
 
             #region CompanyInfo
             if (id == 1)
@@ -1587,6 +1629,40 @@ namespace InsiderTrading.Controllers
                 return PartialView("PersonalDetailsConfirmation", objPersonalDetailsConfirmationModel);
             }
             #endregion Personal Details Confirmation
+
+            #region Work and Education Details Configuration
+            else if (id == 9)
+            {
+                List<PopulateComboDTO> PPD_WorkandeducationList  = new List<PopulateComboDTO>();
+
+                PopulateComboDTO objPopulateComboDTO = new PopulateComboDTO();
+                objPopulateComboDTO.Key = "0";
+                objPopulateComboDTO.Value = "Select";
+
+                PPD_WorkandeducationList.Add(objPopulateComboDTO);
+                PPD_WorkandeducationList.AddRange(Common.Common.GetPopulateCombo(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.ComboType.ListOfCode,
+                Convert.ToInt32(ConstEnum.CodeGroup.WorkandEducationDetailsConfiguration).ToString(), null, null, null, null, "cmp_msg_").ToList<PopulateComboDTO>());
+
+                ViewBag.PPD_WorkandeducationList = PPD_WorkandeducationList;
+                TempData["Workanducationlist"] = PPD_WorkandeducationList;
+                
+
+                ViewBag.CalledFrom = CalledFrom;
+                ViewBag.CompanyId = CompanyId;
+                WorkandEducationModel objWorkandEducationModel = new WorkandEducationModel();
+                WorkandEducationDetailsConfigurationDTO objWorkandEducationDetailsConfigurationDTO = new WorkandEducationDetailsConfigurationDTO();
+                using (var objCompaniesSL = new CompaniesSL())
+                {
+                    objWorkandEducationDetailsConfigurationDTO = objCompaniesSL.GetWorkandeducationDetailsConfiguration(objLoginUserDetails.CompanyDBConnectionString, 1);
+                }
+                if(objWorkandEducationDetailsConfigurationDTO!=null)
+                {
+                    objWorkandEducationModel.WorkandEducationMandatoryId = objWorkandEducationDetailsConfigurationDTO.WorkandEducationDetailsConfigurationId;
+                }
+
+                return PartialView("WorkandEducationDetails", objWorkandEducationModel);
+            }
+            #endregion Work and Education Details Configuration
 
             #region Configuration
             else

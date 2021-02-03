@@ -129,7 +129,7 @@ BEGIN
 			PRINT @PESCSubmited
 			
 			-- Define temporary table and add user details for summary 
-			CREATE TABLE #tmpPeriodEndDisclosureSummary (Id INT IDENTITY(1,1),UserId INT, Name NVARCHAR(500), UserRelativeCode INT, Relation VARCHAR(500), 
+			CREATE TABLE #tmpPeriodEndDisclosureSummary (Id INT IDENTITY(1,1),UserId INT, Name VARCHAR(500), UserRelativeCode INT, Relation VARCHAR(500), 
 			BSecurityTypeCode INT, BSecurityType VARCHAR(500), OpeningStock varchar(max), Bought INT, Sold INT,ESecurityTypeCode INT, ESecurityType VARCHAR(500), 
 			PeriodEndHolding varchar(max),DateOfIntimation DATE,TotalPledge INT,Pledge INT,Unpledge INT)
 
@@ -164,11 +164,11 @@ BEGIN
 			INSERT INTO #tmpPeriodEndDisclosureSummary (UserId, Name, UserRelativeCode, Relation, BSecurityTypeCode, BSecurityType,ESecurityTypeCode,ESecurityType,DateOfIntimation)
 			SELECT 
 				UI.UserInfoId as UserId, 
-				ISNULL(UI.FirstName+N' ',N' ') + ISNULL(UI.MiddleName+ N' ',N' ') + ISNULL(UI.LastName,N' ') + N'##' + ISNULL(UI.PAN,N'') 
-							+ '##' + CASE WHEN UI.UserTypeCodeId = 101004 THEN ISNULL(UI.CIN,' ') ELSE ISNULL(UI.DIN,' ') END + N'##' 
-							+ ISNULL(UI.AddressLine1,N'')+ N' ' + ISNULL(N', ' + UI.PinCode,N'')  
-							+ CASE WHEN ISNULL(CCountry.DisplayCode,'') = '' THEN ISNULL(', ' + CCountry.CodeName,N'') ELSE ISNULL(', ' + CCountry.DisplayCode,N'') END  
-							+ N'##' + ISNULL(UI.MobileNumber,'') as Name,
+				ISNULL(UI.FirstName+' ',' ') + ISNULL(UI.MiddleName+ ' ',' ') + ISNULL(UI.LastName,' ') + '##' + ISNULL(UI.PAN,'') 
+							+ '##' + CASE WHEN UI.UserTypeCodeId = 101004 THEN ISNULL(UI.CIN,' ') ELSE ISNULL(UI.DIN,' ') END + '##' 
+							+ ISNULL(UI.AddressLine1,'')+ ' ' + ISNULL(', ' + UI.PinCode,'')  
+							+ CASE WHEN ISNULL(CCountry.DisplayCode,'') = '' THEN ISNULL(', ' + CCountry.CodeName,'') ELSE ISNULL(', ' + CCountry.DisplayCode,'') END  
+							+ '##' + ISNULL(UI.MobileNumber,'') as Name,
 							 t.UserInfoId as UserRelativeCode, 
 				case when t.relationType = '' Then t.relationType ELSE t.relationType END AS dis_grd_17188,--CDURelation.CodeName as Relation,
 				CDSecurity.CodeID as BSecurityTypeCode, 

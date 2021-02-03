@@ -166,6 +166,7 @@ namespace InsiderTrading.Common
             public const string DisclosureType = "147";
             public const string DisclosureStatus = "148";
             public const string ModeOfAcquisition = "149";
+            public const string WorkandEducationDetailsConfiguration = "539";
 
             public const string DisclosureLetterForUserType = "151";
 
@@ -680,6 +681,11 @@ namespace InsiderTrading.Common
             public const int RequiredModuleOwnSecurity = 513001;
             public const int RequiredModuleOtherSecurity = 513002;
             public const int RequiredModuleBoth = 513003;
+
+            //Company Settings
+            public const int EnableQunatityValue = 400001;
+            public const int DisabaleShowQuantityValue = 400002;
+            public const int DisabaleHideQuantityValue = 400003;
 
             //Company configuraiton - EULAReconfirmation Setting
             public const int CompanyConfig_EULAReconfirmation_All = 523001;

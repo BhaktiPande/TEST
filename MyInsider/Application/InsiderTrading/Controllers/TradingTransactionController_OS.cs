@@ -183,6 +183,14 @@ namespace InsiderTrading.Controllers
                         ViewBag.PendingQuantity = Convert.ToInt64(objTradingTransactionSummaryDTO_OS.PendingQuantity).ToString("#,##0"); ;
                     }
 
+                    
+                    using (TradingTransactionSL_OS objTradingTransactionSL_OSModule = new TradingTransactionSL_OS())
+                    {
+                        TradingTransactionMasterDTO_OS objTradingTransactionMasterDTO_OSModule = null;
+                        objTradingTransactionMasterDTO_OSModule = objTradingTransactionSL_OSModule.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
+                        ViewBag.EnableDisableQuantityValue = objTradingTransactionMasterDTO_OSModule.EnableDisableQuantityValue;
+                    }
+
                     string panNumber = string.Empty;
                     string DateOfAcquisition = string.Empty;
                     string DateOfIntimation = string.Empty;
@@ -573,6 +581,7 @@ namespace InsiderTrading.Controllers
             TradingPolicyDTO_OS objTradingPolicyDTO_OS = null;
             TradingTransactionDTO_OS objTradingTransactionDTO_OS = null;
             PreclearanceRequestNonImplCompanyDTO objPreclearanceRequestNonImplCompanyDTO = null;
+            
             ApplicableTradingPolicyDetailsDTO_OS objApplicableTradingPolicyDetailsDTO_OS = null;
             RestrictedListDTO objRestrictedListDTO = null;
             //ViewBag.ShowPopup = true;
@@ -580,6 +589,7 @@ namespace InsiderTrading.Controllers
             {
                 objLoginUserDetails = (LoginUserDetails)Common.Common.GetSessionValue(ConstEnum.SessionValue.UserDetails);
 
+                
                 ViewBag.UserTypeCode = objLoginUserDetails.UserTypeCodeId;
                 ViewBag.IsNegative = true;
                 ViewBag.ShowTradeNote = false;
@@ -598,14 +608,31 @@ namespace InsiderTrading.Controllers
 
                 using (TradingTransactionSL_OS objTradingTransactionSL_OS = new TradingTransactionSL_OS())
                 {
-                    objTradingTransactionMasterDTO_OS = objTradingTransactionSL_OS.GetTradingTransactionMasterDetails(objLoginUserDetails.CompanyDBConnectionString, TransactionMasterId);
 
+                    //Add New Code
+
+                    var EnableDisableQuantityValue = 0;
+
+                    // objTradingTransactionMasterDTO_OS objInsiderInitialDisclosureDTO = null;
+                    objTradingTransactionMasterDTO_OS = objTradingTransactionSL_OS.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
+                    //RequiredModuleID = objInsiderInitialDisclosureDTO.RequiredModule;
+                    EnableDisableQuantityValue = objTradingTransactionMasterDTO_OS.EnableDisableQuantityValue;
+                    ViewBag.EnableDisableQuantityValue = objTradingTransactionMasterDTO_OS.EnableDisableQuantityValue;
+                 
+
+
+                    ////End OF New code
+
+                    objTradingTransactionMasterDTO_OS = objTradingTransactionSL_OS.GetTradingTransactionMasterDetails(objLoginUserDetails.CompanyDBConnectionString, TransactionMasterId);
+                    
                     ViewBag.DisclosureTypeId = objTradingTransactionMasterDTO_OS.DisclosureTypeCodeId;
 
                     if (objTradingTransactionMasterDTO_OS.DisclosureTypeCodeId != ConstEnum.Code.DisclosureTypeInitial)
                     {
                         ViewBag.ShowSaveAddMore_btn = false;
                     }
+
+                   
 
                     using (TradingPolicySL_OS objTradingPolicySL_OS = new TradingPolicySL_OS())
                     {
@@ -710,7 +737,18 @@ namespace InsiderTrading.Controllers
                             //}
                         }
                     }
+
+                    if (EnableDisableQuantityValue == 400002 || EnableDisableQuantityValue == 400003)
+                    {
+                        objTradingTransactionMasterDTO_OS = objTradingTransactionSL_OS.GetQuantity(objLoginUserDetails.CompanyDBConnectionString, Convert.ToInt32(objTradingTransactionMasterDTO_OS.DisclosureTypeCodeId), Convert.ToInt32(objTradingTransactionMasterDTO_OS.UserInfoId));
+                        ViewBag.Quantity = objTradingTransactionMasterDTO_OS.Quantity;
+                        ViewBag.Value = objTradingTransactionMasterDTO_OS.Value;
+                        ViewBag.LotSize = objTradingTransactionMasterDTO_OS.LotSize;
+                        ViewBag.ContractSpecification = objTradingTransactionMasterDTO_OS.ContractSpecification;
+                    }
+
                 }
+
 
                 ViewBag.ShowPopup = true;
                 //get company name from RL_companymasterList table
@@ -724,7 +762,29 @@ namespace InsiderTrading.Controllers
                         objTransactionModel_OS.CompanyId = (Int32)objRestrictedListDTO.RLCompanyId;
                     }
                 }
-                //
+                if (objTransactionModel_OS.DisclosureTypeCodeId != 147001)
+                {
+                    TradingTransactionDTO_OS TradingTransactionDTO_OS_SellAll = null;
+                    using (TradingTransactionSL_OS objTradingTransactionSL_OS = new TradingTransactionSL_OS())
+                    {
+                        TradingTransactionDTO_OS_SellAll = objTradingTransactionSL_OS.GetSellAllDetails(objLoginUserDetails.CompanyDBConnectionString, Convert.ToInt32(objTransactionModel_OS.TransactionMasterId));
+                    }
+                    if (TradingTransactionDTO_OS_SellAll == null)
+                    {
+                        objTransactionModel_OS.SellAllFlag = false;
+                        ViewBag.SellAllFlag = false;
+                    }
+                    else
+                    {
+                        objTransactionModel_OS.SellAllFlag = TradingTransactionDTO_OS_SellAll.SellAllFlag;
+                        ViewBag.SellAllFlag = TradingTransactionDTO_OS_SellAll.SellAllFlag;
+                    }
+                }
+                else
+                {
+                    objTransactionModel_OS.SellAllFlag = false;
+                    ViewBag.SellAllFlag = false;
+                }
                 return View("Create_OS", objTransactionModel_OS);
             }
             catch (Exception exp)
@@ -792,6 +852,23 @@ namespace InsiderTrading.Controllers
                 ViewBag.IsNegative = true;
                 ViewBag.UserTypeCode = objLoginUserDetails.UserTypeCodeId;
                 ViewBag.postAcqNeMsg = Common.Common.getResource("tra_msg_16443");
+                
+                using (TradingTransactionSL_OS objTradingTransactionSL_OSModule = new TradingTransactionSL_OS())
+                {
+                    TradingTransactionMasterDTO_OS objTradingTransactionMasterDTO_OSModule = null;
+                    objTradingTransactionMasterDTO_OSModule = objTradingTransactionSL_OSModule.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
+                    ViewBag.EnableDisableQuantityValue = Convert.ToInt32(objTradingTransactionMasterDTO_OSModule.EnableDisableQuantityValue);
+
+                    if (ViewBag.EnableDisableQuantityValue == 400002 || ViewBag.EnableDisableQuantityValue == 400003)
+                    {
+                        objTradingTransactionMasterDTO_OSModule = null;
+                        objTradingTransactionMasterDTO_OSModule = objTradingTransactionSL_OSModule.GetQuantity(objLoginUserDetails.CompanyDBConnectionString, Convert.ToInt32(DisclosureType), Convert.ToInt32(UserInfoId));
+                        ViewBag.Quantity = objTradingTransactionMasterDTO_OSModule.Quantity;
+                        ViewBag.Value = objTradingTransactionMasterDTO_OSModule.Value;
+                        ViewBag.LotSize = objTradingTransactionMasterDTO_OSModule.LotSize;
+                        ViewBag.ContractSpecification = objTradingTransactionMasterDTO_OSModule.ContractSpecification;
+                    }
+                }
 
 
                 ////Tushar
@@ -986,8 +1063,17 @@ namespace InsiderTrading.Controllers
 
                     objTradingTransactionDTO_OS.TransactionMasterId = Convert.ToInt32(objTradingTransactionMasterDTO_OS.TransactionMasterId);
                     objTradingTransactionDTO_OS.LoggedInUserId = Convert.ToInt32(objLoginUserDetails.LoggedInUserID);
-                    objTradingTransactionDTO_OS.OtherExcerciseOptionQty = objTransactionModel_OS.Quantity;
+                    objTradingTransactionDTO_OS.OtherExcerciseOptionQty = objTransactionModel_OS.Quantity;  
                     objTradingTransactionDTO_OS = objTradingTransactionSL_OS.InsertUpdateTradingTransactionDetails(objLoginUserDetails.CompanyDBConnectionString, objTradingTransactionDTO_OS, UserInfoId);
+                    
+                    objTradingTransactionDTO_OS.SellAllFlag = objTransactionModel_OS.SellAllFlag;
+                    if (DisclosureType != ConstEnum.Code.DisclosureTypeInitial)
+                    {
+                        objTradingTransactionDTO_OS = objTradingTransactionSL_OS.InsertUpdateSellAllDetails(objLoginUserDetails.CompanyDBConnectionString, objTradingTransactionDTO_OS, UserInfoId);
+                    }
+                        
+                    
+
                 }
                 if (DisclosureType != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
                     ViewBag.UserTypeId = objTradingTransactionDTO_OS.UserTypeCodeId;

@@ -89,7 +89,11 @@ BEGIN
 				UPPER(REPLACE(CONVERT(NVARCHAR, C.SharingDate, 106),' ','/') + ' ' + convert(varchar(5), C.SharingTime)) As 'Date And Time Of Sharing',
 				MS.CodeName  AS 'Mode Of Communication',
 				UPPER(REPLACE(CONVERT(NVARCHAR, C.PublishDate, 106),' ','/')) AS 'Date Of Publishing',
-				CASE WHEN EXISTS(SELECT 1 FROM  usr_UserInfo WHERE EmailId = UD.Email) THEN 'Registered User' ELSE 'Unregistered User' END AS 'UPSI Recipient'
+				--CASE WHEN EXISTS(SELECT 1 FROM  usr_UserInfo WHERE EmailId = UD.Email) THEN 'Registered User' ELSE 'Unregistered User' END AS 'UPSI Recipient'
+				CASE WHEN (UD.IsRegisteredUser = 'True') THEN 'Registered User' ELSE 'Unregistered User' END AS 'UPSI Recipient',
+				UD.CompanyAddress AS 'Company Address', C.Comments AS 'Comments', UD.Email AS 'Email', UD.Phone AS 'Phone',
+				CASE WHEN (UD.ResidentialStatus = 531001) THEN 'Resident' WHEN (UD.ResidentialStatus = 531002) THEN 'Non Resident' 
+				WHEN (UD.ResidentialStatus = 531003) THEN 'Other' WHEN (UD.ResidentialStatus = 0) THEN '' END AS 'Residential Status'
 							
 				
 		FROM	#tmpList T INNER JOIN
