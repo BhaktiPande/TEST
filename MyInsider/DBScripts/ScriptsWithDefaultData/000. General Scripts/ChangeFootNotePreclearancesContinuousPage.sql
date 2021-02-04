@@ -1,7 +1,7 @@
 
 DECLARE @DBNAME VARCHAR(100) = UPPER((SELECT DB_NAME()))
 
-If (@DBNAME='myinsider_indiarf')
+If (@DBNAME='MYInsider_IndiaRF')
 BEGIN 
 	IF NOT EXISTS(SELECT ResourceId FROM mst_Resource WHERE ResourceId = 55400)
 	BEGIN
