@@ -1220,7 +1220,20 @@ namespace InsiderTrading.Common
                 FromEmaild = Common.getAppSetting("AuthEID");
             }
 
-            mailMessage.From = new MailAddress((sUserCompanyName.ToString().ToUpper().Contains("PIRAMAL") && (objCompanyDetailsForNotificationDTO.FromMailID != null || objCompanyDetailsForNotificationDTO.FromMailID != "")) ? objCompanyDetailsForNotificationDTO.FromMailID : objCompanyDetailsForNotificationDTO.SmtpUserName);
+            //mailMessage.From = new MailAddress((sUserCompanyName.ToString().ToUpper().Contains("PIRAMAL") && (objCompanyDetailsForNotificationDTO.FromMailID != null || objCompanyDetailsForNotificationDTO.FromMailID != "")) ? objCompanyDetailsForNotificationDTO.FromMailID : objCompanyDetailsForNotificationDTO.SmtpUserName);
+
+            //If company = PIRAMAL && FromMailId has Proper value then take FromMailId 
+            //Else (for any company) If FromMailId has Proper value then take FromMailId 
+            //Else take SmtpUserName
+
+            mailMessage.From = new MailAddress(
+                        (sUserCompanyName.ToString().ToUpper().Contains("PIRAMAL") &&
+                        string.IsNullOrEmpty(objCompanyDetailsForNotificationDTO.FromMailID)) ?
+                        objCompanyDetailsForNotificationDTO.FromMailID :
+                        (string.IsNullOrEmpty(objCompanyDetailsForNotificationDTO.FromMailID)) ?
+                        objCompanyDetailsForNotificationDTO.FromMailID :
+                        objCompanyDetailsForNotificationDTO.SmtpUserName);
+
             mailMessage.To.Add(objPwdMgmtDTO.EmailID);
             //Fetch the subject and the email body from selected company resources.
             string subject = Common.getResourceForGivenCompany("usr_msg_11282", sUserCompanyName);
