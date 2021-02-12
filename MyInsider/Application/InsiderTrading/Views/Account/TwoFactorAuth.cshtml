@@ -84,13 +84,13 @@ else
             }
         }
         <div class="row">
-            <div class="center-block login-block">
-                <div class="login-panel panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title text-center">@InsiderTrading.Common.Common.getResource("tfa_msg_61002")</h3>
+            <div class="mx-auto login-block">
+                <div class="login-panel card panel-default">
+                    <div class="card-header">
+                        <h3 class="card-title text-center">@InsiderTrading.Common.Common.getResource("tfa_msg_61002")</h3>
                         <input type="hidden" id="hdnSessionOTP" value="@Request.RequestContext.HttpContext.Session["OTPDownTime"]" />
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body">
                         @using (Html.BeginForm("OTPAuthentication", "TwoFactorAuth", new { }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                         {
                             @Html.AntiForgeryToken()

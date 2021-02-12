@@ -23,13 +23,13 @@
                             <div class="card panel-accordion">
                                 <div class="card-header active">
                                     <h4 class="card-title">
-                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                        <a class="accordion-toggle" data-toggle="collapse" href="#collapseOne">
                                             <span class="fa fa-minus pull-right"></span>
                                             @InsiderTrading.Common.Common.getResource("usr_lbl_11304")
                                         </a>
                                     </h4>
                                 </div>
-                                <div id="collapseOne" class="panel-collapse collapse in">
+                                <div id="collapseOne" data-parent="#accordion" class="panel-collapse collapse in">
                                     <div class="card-body">
                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                             <div class="form-group">
@@ -172,13 +172,13 @@
                             <div class="card panel-accordion">
                                 <div class="card-header active">
                                     <h4 class="card-title">
-                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                        <a class="accordion-toggle" data-toggle="collapse" href="#collapseTwo">
                                             <span class="fa fa-plus pull-right"></span>
                                             @InsiderTrading.Common.Common.getResource("usr_lbl_11305")
                                         </a>
                                     </h4>
                                 </div>
-                                <div id="collapseTwo" class="panel-collapse collapse">
+                                <div id="collapseTwo" data-parent="#accordion" class="panel-collapse collapse">
                                     <div class="card-body">
                                         @Html.Partial("~/Views/CorporateUser/ViewDMATDetails.cshtml", Model.dmatDetailsModel)
                                     </div>

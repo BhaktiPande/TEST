@@ -2342,8 +2342,8 @@ table.table-contact {
 }
 
     .navbar-nav > .notifications-menu.alerts a {
-        padding: 10px 15px !important;
-        margin-top: 5px;
+        padding: 13px 15px !important;
+      /*  margin-top: 5px*/;
     }
 
         .navbar-nav > .notifications-menu.alerts a p {
@@ -2528,11 +2528,11 @@ text {
     padding: 0 0;
 }
 
-.skin-green .main-header .navbar .nav > li > a {
+/*.skin-green .main-header .navbar .nav > li > a {
     padding: 0 !important;
     margin: 0;
 }
-
+*/
 .card {
     background-color: white;
     margin-bottom: 25px;
@@ -4909,7 +4909,7 @@ table {
     }
 }
 
-/*body*/
+/*Bootstrap 3 to 4 migration changes*/
 body{
 font-size: 14px;
 }
@@ -4979,23 +4979,21 @@ label {
     width: 100%;
 }
 
+.datepicker.datepicker-dropdown {
+    z-index: 99999 !important;
+}
+
 /*navbar*/
 .navbar-nav {
     flex-direction: row;
 }
 
-.navbar-nav > .notifications-menu.alerts{
-    margin: 0px !important;
-    margin-top: 5px !important;
-    padding: 10px 15px;
-}
+    .navbar-nav > .notifications-menu.alerts {
+        margin: 0px !important;
+    }
 
 .navbar-nav > .notifications-menu > .dropdown-menu > li.footer > a {
     display: block;
-}
-
-.navbar-custom-menu > .navbar-nav > li {
-    padding: 5px 10px;
 }
 
 .navbar-custom-menu.ml-auto {
@@ -5052,7 +5050,6 @@ form {
 .content form div div.container .card-body {
     padding: 0px;
   }
-
 
 .content .row {
     margin-right: 0px;
@@ -5306,7 +5303,6 @@ section[gridtype="114119"] > div > form {
     display: inline-flex !important;
 }
 
-
 /*employee insider*/
 .add-insider div .row a .col-lg-4.col-md-4.col-sm-4.col-xs-4 {
     display: contents;
@@ -5394,7 +5390,7 @@ section[gridtype="114119"] > div > form {
     border-radius: 4px;
 }
 
-.login-panel .header {
+.login-panel .card-header {
     padding: 10px 15px;
     padding-bottom: 0px;
     background: transparent;
@@ -5402,7 +5398,7 @@ section[gridtype="114119"] > div > form {
     border: none;
 }
 
-.login-panel .header .card-title {
+.login-panel .card-header .card-title {
      font-size: 30pt;
      font-weight: 300;
  }

@@ -409,15 +409,15 @@ $(document).ready(function () {
 
     /*accordion color hide other element*/
     $('.accordion-toggle').on('click', function () {
-
         $(this).closest('.panel-group').children().each(function () {
             $(this).find('>.card-header').removeClass('active');
-            $(this).find('>.panel-collapse').collapse('hide');
         });
         $(this).closest('.card-header').toggleClass('active');
+    });
 
+    $('#companyInfoAccordion  .accordion-toggle').on('click', function () {
         var hrefAttr = $(this).attr('href');
-        $(hrefAttr).collapse('show');
+        $(hrefAttr).collapse('toggle');
     });
 
      /*nav tabs add active class*/

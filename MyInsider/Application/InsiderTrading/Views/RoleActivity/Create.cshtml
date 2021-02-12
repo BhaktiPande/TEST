@@ -238,13 +238,13 @@
                                             <label for="chkModule_@count"></label>
                                         </div>
 
-                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_RoleActivity" href="#ActivityMaster_RoleActivity_@count">
+                                        <a class="accordion-toggle" data-toggle="collapse" href="#ActivityMaster_RoleActivity_@count">
                                             <span class="fa fa-plus pull-right"></span>
                                             @objRoleModuleActivityDictionary.Key
                                         </a>
                                     </h4>
                                 </div>
-                                <div id="ActivityMaster_RoleActivity_@count" class="panel-collapse collapse">
+                                <div id="ActivityMaster_RoleActivity_@count" class="panel-collapse collapse" data-parent="#accordion_RoleActivity">
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <table class="table table-bordered table-striped">
