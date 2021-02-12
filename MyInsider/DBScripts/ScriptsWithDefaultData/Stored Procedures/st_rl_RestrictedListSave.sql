@@ -130,7 +130,9 @@ BEGIN
 					SELECT	ComapnyId,@ModuleCodeId,CONVERT(DATE,ApplicableFromDate),CONVERT(DATE,ApplicableToDate),@StatusCodeId,
 						@inp_iLoggedInUserId,dbo.uf_com_GetServerDate(),@inp_iLoggedInUserId,dbo.uf_com_GetServerDate(),@OldRlMasterVersionNumber 
 					FROM @inp_tblRLMasterType
-					
+
+				
+					UPDATE rl_RistrictedMasterList set StatusCodeId = 105002 where RlMasterId = @inp_iRlMasterId					
 
 					IF EXISTS(SELECT UserCount,ApplicabilityId FROM rul_ApplicabilityMaster WHERE MapToId=@iRlMasterId AND VersionNumber=(SELECT Max(VersionNumber) from rul_ApplicabilityMaster where MapToId=@iRlMasterId))
 					BEGIN 
