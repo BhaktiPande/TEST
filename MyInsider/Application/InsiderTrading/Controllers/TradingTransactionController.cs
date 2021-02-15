@@ -3761,8 +3761,7 @@ namespace InsiderTrading.Controllers
                 dt.Columns.Add(new DataColumn("TransactionTypeCodeId", typeof(int)));
                 dt.Columns.Add(new DataColumn("SecuritiesToBeTradedQty", typeof(decimal)));
                 dt.Columns.Add(new DataColumn("ESOPQty", typeof(decimal)));
-                dt.Columns.Add(new DataColumn("OtherthanESOPQty", typeof(decimal)));
-                dt.Columns.Add(new DataColumn("Currency", typeof(int)));
+                dt.Columns.Add(new DataColumn("OtherthanESOPQty", typeof(decimal)));               
                 dt.Columns.Add(new DataColumn("SecuritiesToBeTradedValue", typeof(decimal)));
                 dt.Columns.Add(new DataColumn("LotSize", typeof(int)));
                 dt.Columns.Add(new DataColumn("ContractSpecification", typeof(string)));
