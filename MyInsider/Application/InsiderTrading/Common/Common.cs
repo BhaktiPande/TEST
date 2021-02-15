@@ -1226,13 +1226,15 @@ namespace InsiderTrading.Common
             //Else (for any company) If FromMailId has Proper value then take FromMailId 
             //Else take SmtpUserName
 
-            mailMessage.From = new MailAddress(
-                        (sUserCompanyName.ToString().ToUpper().Contains("PIRAMAL") &&
-                        string.IsNullOrEmpty(objCompanyDetailsForNotificationDTO.FromMailID)) ?
-                        objCompanyDetailsForNotificationDTO.FromMailID :
-                        (string.IsNullOrEmpty(objCompanyDetailsForNotificationDTO.FromMailID)) ?
-                        objCompanyDetailsForNotificationDTO.FromMailID :
-                        objCompanyDetailsForNotificationDTO.SmtpUserName);
+            Regex regexValidEmailID = new Regex("^[a-zA-Z]+[a-zA-Z0-9]+[[a-zA-Z0-9-_.!#$%'*+/=?^]{1,20}@[a-zA-Z0-9]{1,20}.[a-zA-Z]{2,3}$");
+            
+                mailMessage.From = new MailAddress(
+                       (sUserCompanyName.ToString().ToUpper().Contains("PIRAMAL") &&
+                       string.IsNullOrEmpty(objCompanyDetailsForNotificationDTO.FromMailID)) ?
+                       objCompanyDetailsForNotificationDTO.FromMailID :
+                       (string.IsNullOrEmpty(objCompanyDetailsForNotificationDTO.SmtpUserName) || regexValidEmailID.IsMatch(objCompanyDetailsForNotificationDTO.SmtpUserName)) ?
+                       objCompanyDetailsForNotificationDTO.SmtpUserName :
+                       objCompanyDetailsForNotificationDTO.FromMailID);
 
             mailMessage.To.Add(objPwdMgmtDTO.EmailID);
             //Fetch the subject and the email body from selected company resources.
