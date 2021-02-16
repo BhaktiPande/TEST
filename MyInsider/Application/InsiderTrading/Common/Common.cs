@@ -1258,10 +1258,17 @@ namespace InsiderTrading.Common
             mailMessage.IsBodyHtml = true;
             try
             {
+                WriteLogToFile("Mail for forgot Password is From: " + mailMessage.From.ToString(), System.Reflection.MethodBase.GetCurrentMethod(), null);
+                WriteLogToFile("Mail for forgot Password is To: " + objPwdMgmtDTO.EmailID, System.Reflection.MethodBase.GetCurrentMethod(), null);
+                WriteLogToFile("Mail for forgot Password is with smtp port no: " + objCompanyDetailsForNotificationDTO.SmtpPortNumber, System.Reflection.MethodBase.GetCurrentMethod(), null);
+                WriteLogToFile("Mail for forgot Password is with smtp Server: " + objCompanyDetailsForNotificationDTO.SmtpServer, System.Reflection.MethodBase.GetCurrentMethod(), null);
+
+
                 client.Send(mailMessage);
             }
             catch (Exception ex)
             {
+                WriteLogToFile("Exception occurred ", System.Reflection.MethodBase.GetCurrentMethod(), ex);
                 throw ex;
             }
 
