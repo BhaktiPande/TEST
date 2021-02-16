@@ -28,7 +28,7 @@
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         @if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_EDUCATION_VIEW))
         {
-            <div class="panel-body search" gridtype="@InsiderTrading.Common.ConstEnum.GridType.Education_List">
+            <div class="card-body search" gridtype="@InsiderTrading.Common.ConstEnum.GridType.Education_List">
 
                 <b>  @InsiderTrading.Common.Common.getResource("usr_lbl_54002")</b>
                 <input type="hidden" value="@Model.userEducationModel.UserInfoID" id="1" name="" gridtype="@InsiderTrading.Common.ConstEnum.GridType.Education_List" />
@@ -62,7 +62,7 @@
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         @if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.INSIDER_WORK_VIEW))
         {
-            <div class="panel-body search" gridtype="@InsiderTrading.Common.ConstEnum.GridType.Work_List">
+            <div class="card-body search" gridtype="@InsiderTrading.Common.ConstEnum.GridType.Work_List">
                 <b> @InsiderTrading.Common.Common.getResource("usr_lbl_54007")</b>
                 <input type="hidden" value="@Model.userEducationModel.UserInfoID" id="1" name="" gridtype="@InsiderTrading.Common.ConstEnum.GridType.Work_List" />
                 <input type="hidden" value="0" id="3" name="" gridtype="@InsiderTrading.Common.ConstEnum.GridType.Work_List" />

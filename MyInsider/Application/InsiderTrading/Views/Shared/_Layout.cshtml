@@ -127,7 +127,7 @@
 
                         $("#NotificationAlertClick").attr("aria-expanded", "true");
                         $("#NotificationAlerts").removeClass();
-                        $("#NotificationAlerts").addClass("dropdown notifications-menu alerts open");
+                        $("#NotificationAlerts").addClass("dropdown notifications-menu alerts show");
                     }
                 })
             });
@@ -256,15 +256,17 @@
         <header class="main-header">
             <!-- Logo -->
             <!-- Header Navbar -->
-            <nav class="navbar navbar-static-top" role="navigation">
+            <nav class="navbar navbar-static-top navbar-expand-md " role="navigation">
                 <!-- Sidebar toggle button-->
                 <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+
                     <span class="sr-only">Toggle navigation</span>
+
                 </a>
-                <a href="@Url.Action("Index", "Home", new { acid= 0})" class="logo"><img src="~/images/MyInsider_Logo.png" style="max-height:51px;" class="img img-responsive"></a>
-                <div class="navbar-custom-menu">
+                <a href="@Url.Action("Index", "Home", new { acid= 0})" class="logo"><img src="~/images/MyInsider_Logo.png" style="max-height:51px;" class="img img-fluid"></a>
+                <div class="navbar-custom-menu ml-auto">
                     <ul class="nav navbar-nav">
-                        <li class="notifications-menu alerts" style="margin:0px">
+                        <li class="notifications-menu alerts" style="margin:15px">
                             <a href="@Url.Action("Index", "Home", new { acid = 0 })">
                                 <p><i class="fa fa-home fa-4"></i></p>
                             </a>

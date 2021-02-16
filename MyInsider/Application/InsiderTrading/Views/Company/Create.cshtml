@@ -7,147 +7,147 @@
     <input type="hidden" name="CompanyId" value="@ViewBag.CompanyId" />
     <div class="row">
         <div class="col-lg-12">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="row">
+            <div class="card panel-default">
+                <div class="card-body">
+                    <div class="row" id="companyInfoAccordion">
                         @*   <a href="#" class="btn btn-default openall">open all</a> <a href="#" class="btn btn-default closeall">close all</a>*@
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <div class="panel-group" id="accordion">
-                                <div class="panel panel-accordion">
-                                    <div class="panel-heading active">
-                                        <h4 class="panel-title">
-                                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#1_BasicInfo">
+                                <div class="card panel-accordion">
+                                    <div class="card-header active">
+                                        <h4 class="card-title">
+                                            <a class="accordion-toggle" data-toggle="collapse" href="#1_BasicInfo">
                                                 <span class="fa fa-plus pull-right"></span>
                                                 @InsiderTrading.Common.Common.getResource("cmp_ttl_13086")
                                             </a>
                                         </h4>
                                     </div>
-                                    <div id="1_BasicInfo" class="panel-collapse in">
+                                    <div id="1_BasicInfo" data-parent="#accordion" class="panel-collapse collapse show">
 
                                     </div>
                                 </div>
 
-                                <div class="panel panel-accordion">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#2_FaceValue">
+                                <div class="card panel-accordion">
+                                    <div class="card-header">
+                                        <h4 class="card-title">
+                                            <a class="accordion-toggle" data-toggle="collapse" href="#2_FaceValue">
                                                 <span class="fa fa-plus pull-right"></span>
                                                 @InsiderTrading.Common.Common.getResource("cmp_ttl_13087")
                                             </a>
                                         </h4>
                                     </div>
-                                    <div id="2_FaceValue" class="panel-collapse collapse">
+                                    <div id="2_FaceValue" data-parent="#accordion" class="panel-collapse collapse">
 
                                     </div>
                                 </div>
 
-                                <div class="panel panel-accordion">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#3_AuthorisedCapital">
+                                <div class="card panel-accordion">
+                                    <div class="card-header">
+                                        <h4 class="card-title">
+                                            <a class="accordion-toggle" data-toggle="collapse" href="#3_AuthorisedCapital">
                                                 <span class="fa fa-plus pull-right"></span>
                                                 @InsiderTrading.Common.Common.getResource("cmp_ttl_13088")
                                             </a>
                                         </h4>
                                     </div>
-                                    <div id="3_AuthorisedCapital" class="panel-collapse collapse">
-                                        <div class="panel-body">
+                                    <div id="3_AuthorisedCapital" data-parent="#accordion" class="panel-collapse collapse">
+                                        <div class="card-body">
 
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="panel panel-accordion">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#4_ShareCapital">
+                                <div class="card panel-accordion">
+                                    <div class="card-header">
+                                        <h4 class="card-title">
+                                            <a class="accordion-toggle" data-toggle="collapse" href="#4_ShareCapital">
                                                 <span class="fa fa-plus pull-right"></span>
                                                 @InsiderTrading.Common.Common.getResource("cmp_ttl_13089")
                                             </a>
                                         </h4>
                                     </div>
-                                    <div id="4_ShareCapital" class="panel-collapse collapse">
-                                        <div class="panel-body">
+                                    <div id="4_ShareCapital" data-parent="#accordion" class="panel-collapse collapse">
+                                        <div class="card-body">
 
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="panel panel-accordion">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#5_ListingDetails">
+                                <div class="card panel-accordion">
+                                    <div class="card-header">
+                                        <h4 class="card-title">
+                                            <a class="accordion-toggle" data-toggle="collapse" href="#5_ListingDetails">
                                                 <span class="fa fa-plus pull-right"></span>
                                                 @InsiderTrading.Common.Common.getResource("cmp_ttl_13090")
                                             </a>
                                         </h4>
                                     </div>
-                                    <div id="5_ListingDetails" class="panel-collapse collapse">
-                                        <div class="panel-body">
+                                    <div id="5_ListingDetails" data-parent="#accordion" class="panel-collapse collapse">
+                                        <div class="card-body">
 
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="panel panel-accordion">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#6_ComplianceOfficer">
+                                <div class="card panel-accordion">
+                                    <div class="card-header">
+                                        <h4 class="card-title">
+                                            <a class="accordion-toggle" data-toggle="collapse" href="#6_ComplianceOfficer">
                                                 <span class="fa fa-plus pull-right"></span>
                                                 @InsiderTrading.Common.Common.getResource("cmp_ttl_13091")
                                             </a>
                                         </h4>
                                     </div>
-                                    <div id="6_ComplianceOfficer" class="panel-collapse collapse">
-                                        <div class="panel-body">
+                                    <div id="6_ComplianceOfficer" data-parent="#accordion" class="panel-collapse collapse">
+                                        <div class="card-body">
 
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="panel panel-accordion">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#7_Configuration">
+                                <div class="card panel-accordion">
+                                    <div class="card-header">
+                                        <h4 class="card-title">
+                                            <a class="accordion-toggle" data-toggle="collapse" href="#7_Configuration">
                                                 <span class="fa fa-plus pull-right"></span>
                                                 @InsiderTrading.Common.Common.getResource("cmp_ttl_13123")
                                             </a>
                                         </h4>
                                     </div>
-                                    <div id="7_Configuration" class="panel-collapse collapse">
-                                        <div class="panel-body">
+                                    <div id="7_Configuration" data-parent="#accordion" class="panel-collapse collapse">
+                                        <div class="card-body">
 
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="panel panel-accordion">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#8_PersonalDetailsConfirmation">
+                                <div class="card panel-accordion">
+                                    <div class="card-header">
+                                        <h4 class="card-title">
+                                            <a class="accordion-toggle" data-toggle="collapse" href="#8_PersonalDetailsConfirmation">
                                                 <span class="fa fa-plus pull-right"></span>
                                                 @InsiderTrading.Common.Common.getResource("cmp_ttl_50732")
                                             </a>
                                         </h4>
                                     </div>
-                                    <div id="8_PersonalDetailsConfirmation" class="panel-collapse collapse">
-                                        <div class="panel-body">
+                                    <div id="8_PersonalDetailsConfirmation" data-parent="#accordion" class="panel-collapse collapse">
+                                        <div class="card-body">
 
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="panel panel-accordion">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#9_WorkandEducationdetails">
+                                <div class="card panel-accordion">
+                                    <div class="card-header">
+                                        <h4 class="card-title">
+                                            <a class="accordion-toggle" data-toggle="collapse"  href="#9_WorkandEducationdetails">
                                                 <span class="fa fa-plus pull-right"></span>
                                                 @InsiderTrading.Common.Common.getResource("cmp_ttl_59001")
                                             </a>
                                         </h4>
                                     </div>
-                                    <div id="9_WorkandEducationdetails" class="panel-collapse collapse">
-                                        <div class="panel-body">
+                                    <div id="9_WorkandEducationdetails" data-parent="#accordion" class="panel-collapse collapse">
+                                        <div class="card-body">
 
                                         </div>
                                     </div>

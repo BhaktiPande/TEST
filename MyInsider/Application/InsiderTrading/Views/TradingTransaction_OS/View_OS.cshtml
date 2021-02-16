@@ -482,8 +482,8 @@
         @if ((ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeContinuous && (ViewBag.TranactionMasterStatus < InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForConfirmed))
         || (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypePeriodEnd) && (ViewBag.TranactionMasterStatus < InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForConfirmed || ViewBag.NoHolding == true))
         {
-            <div class="panel panel-default">
-                <div class="panel-body">
+            <div class="card panel-default">
+                <div class="card-body">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <p>
@@ -540,8 +540,8 @@
         }
         else if (!ViewBag.NoHolding && ViewBag.Showenterbutton == true && ViewBag.nDisclosureTypeCodeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
         {
-            <div class="panel panel-default">
-                <div class="panel-body">
+            <div class="card panel-default">
+                <div class="card-body">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <p>
@@ -566,8 +566,8 @@
         {
             <div id="hold-div-1" class="row hold-div">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
+                    <div class="card panel-default">
+                        <div class="card-body">
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
                                     <div role="form">
@@ -630,8 +630,8 @@
         @if (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
         {
             <div id="hold-div-2" class="row @apply " @isInsiderEnterDetails style="margin: 0px 0px 0px 0px;">
-                <div class="panel panel-default">
-                    <div class="panel-body">
+                <div class="card panel-default">
+                    <div class="card-body">
                         <div class="row" style="margin: 0px -1px 0px -1px;">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 abc">
                                 @if (ViewBag.TranactionMasterStatus == InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed)
@@ -702,9 +702,9 @@
                 <div class="col-lg-12" style="margin: -15px 0px 0px 0px;">
                     @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
                     @*ViewBag.SecurityType :- Shares, Warrants, Convertible Debentures, Future Contracts, Option Contracts*@
-                    @{
-                        <div class="panel panel-default">
-                            <div class="panel-body">
+                    @{ 
+                        <div class="card panel-default">
+                            <div class="card-body">
                                 <div class="row">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <div id="Wrn_Msg" style="display:none">
@@ -884,8 +884,8 @@
                 @if (ViewBag.TranactionMasterStatus <= InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed)
                 {
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
+                        <div class="card panel-default">
+                            <div class="card-body">
                                 <div class="row">
                                     <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
                                         <div role="form">
@@ -910,8 +910,8 @@
                 else
                 {
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
+                        <div class="card panel-default">
+                            <div class="card-body">
                                 <div class="row">
                                     @* Grid to display the documents uploaded by user for a transaction *@
                                     <div class="search" gridtype="@ViewBag.GridTypeUploadedDocs">
@@ -930,8 +930,8 @@
                 {
                     if (ViewBag.TranactionMasterStatus >= InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForConfirmed && ViewBag.NoHolding == true)
                     {
-                        <div class="panel panel-default">
-                            <div class="panel-body">
+                        <div class="card panel-default">
+                            <div class="card-body">
                                 <div class="row">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <a href="@sURL" id="lnkCancel" class="btn btn-success"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14010")</a>
@@ -951,8 +951,8 @@
             <div id="hold-div-6" class="row ">
                 <div class="col-lg-12" style="margin: -15px 0px 0px 0px;">
 
-                    <div class="panel panel-default">
-                        <div class="panel-body">
+                    <div class="card panel-default">
+                        <div class="card-body">
                             @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
                             <div class="row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
