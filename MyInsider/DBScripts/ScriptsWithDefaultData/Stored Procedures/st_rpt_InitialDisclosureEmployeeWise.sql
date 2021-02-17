@@ -111,7 +111,7 @@ BEGIN
 	Department NVARCHAR(100), CompanyName NVARCHAR(200), TypeOfInsider NVARCHAR(50), SubmissionDate DATETIME, LastSubmissionDate DATETIME,
 	SoftCopySubmissionDate DATETIME, HardCopySubmissionDate DATETIME, CommentId INT DEFAULT 162003, TransactionMasterId INT,
 	DateOfInactivation DATETIME, Category VARCHAR(500), SubCategory  VARCHAR(500), CodeName VARCHAR(500),
-	SoftCopySubmissionDisplayText NVARCHAR(500),HardCopySubmissionDisplayText NVARCHAR(500))
+	SoftCopySubmissionDisplayText NVARCHAR(500),HardCopySubmissionDisplayText NVARCHAR(500), EmailId NVARCHAR(200), PAN NVARCHAR(50))
 
 	DECLARE @tmpTransactionIds TABLE (TransactionMasterId INT, UserInfoId INT)
 
@@ -380,6 +380,8 @@ BEGIN
 		UPDATE tmpDisc 
 			SET
 			EmployeeId = UF.EmployeeId,
+			EmailId = UF.EmailId, 
+			PAN = UF.PAN, 
 			InsiderName = CASE WHEN UserTypeCodeId = 101004 THEN C.CompanyName ELSE ISNULL(FirstName, '') + ' ' + ISNULL(LastName, '') END,
 			JoiningDate = DateOfBecomingInsider,
 			CINNumber = CASE WHEN UserTypeCodeId = 101004 THEN CIN ELSE DIN END,
@@ -532,6 +534,8 @@ BEGIN
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(TypeOfInsider) AS rpt_grd_19013, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_FormatDateValue(LastSubmissionDate,0) AS rpt_grd_19072, '--'LastSubmissionDate AS rpt_grd_19072, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_FormatDateValue(SubmissionDate,1) AS rpt_grd_19073, '--'SubmissionDate AS rpt_grd_19073, '
+		SELECT @sSQL = @sSQL + 'EmailId AS rpt_grd_81001, ' --'add email id AS rpt_grd_81001'
+		SELECT @sSQL = @sSQL + 'PAN AS rpt_grd_81001, ' --'add pan AS rpt_grd_81002'
 		
 		--SELECT @sSQL = @sSQL + 'dbo.uf_rpt_FormatDateValue(SoftCopySubmissionDate,1) AS rpt_grd_19015, '--'SoftCopySubmissionDate AS rpt_grd_19015, '
 		--SELECT @sSQL = @sSQL + 'dbo.uf_rpt_FormatDateValue(HardCopySubmissionDate,1) AS rpt_grd_19016, '--'HardCopySubmissionDate AS rpt_grd_19016, '
