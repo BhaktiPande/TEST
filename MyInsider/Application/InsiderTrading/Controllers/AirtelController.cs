@@ -12,7 +12,7 @@ using System.Web.Mvc;
 
 namespace InsiderTrading.Controllers
 {
-    public class AirtelControllerController : Controller
+    public class AirtelController : Controller
     {
         // GET: AirtelController
         public ActionResult Index()
@@ -33,7 +33,7 @@ namespace InsiderTrading.Controllers
                 string Emplist = string.Empty;
                 //string empEmail = "anand.kulkarni@esopdirect.com";
                 //string empId = empployeeId = "Halt1";
-                WriteToFileLog.Instance(ConfigurationManager.AppSettings["Airtel"].ToString()).Write("Called AssertionConsumerAirtel Method.");
+                WriteToFileLog.Instance(Convert.ToString(Cryptography.DecryptData(ConfigurationManager.AppSettings["Airtel"].ToString()))).Write("Called AssertionConsumerAirtel Method.");
                 ClaimsIdentity principal = HttpContext.User.Identity as ClaimsIdentity;
                 if (null != principal)
                 {
@@ -60,7 +60,7 @@ namespace InsiderTrading.Controllers
                     }
                 }
                 //WriteToFileLog.Instance(ConfigurationManager.AppSettings["Airtel"].ToString()).Write(Emplist);
-                WriteToFileLog.Instance(ConfigurationManager.AppSettings["Airtel"].ToString()).Write("Claims: " + "Employee Id- " + employeeId + "Email Id- " + emailId + "Airtel Windows Account Name- " + windowsAccountName);
+                WriteToFileLog.Instance(Convert.ToString(Cryptography.DecryptData(ConfigurationManager.AppSettings["Airtel"].ToString()))).Write("Claims: " + "Employee Id- " + employeeId + " Email Id- " + emailId + " Airtel Windows Account Name- " + windowsAccountName);
                 Hashtable ht_Parmeters = new Hashtable();
                 //employeeId = "Halt1";
                 // companyName = ConfigurationManager.AppSettings["Airtel"].ToString();
@@ -72,14 +72,13 @@ namespace InsiderTrading.Controllers
                 ViewBag.IsRequestValid = false;
                 using (SSOModel SSOModel = new SSOModel())
                 {
-
                     SSOModel.SetupLoginDetails(ht_Parmeters);
                     ViewBag.IsRequestValid = true;
                     Session["loginStatus"] = 1;
                     HttpContext.Session.Add("UserCaptchaText", string.Empty);
                     HttpContext.Session.Add(ConstEnum.SessionValue.CookiesValidationKey, "");
                     HttpContext.Session.Add("formField", "130");
-                    WriteToFileLog.Instance(ConfigurationManager.AppSettings["Airtel"].ToString()).Write("Before Redirect.");
+                    WriteToFileLog.Instance(Convert.ToString(Cryptography.DecryptData(ConfigurationManager.AppSettings["Airtel"].ToString()))).Write("Before Redirect.");
                     return RedirectToAction("Index", "Home", new { acid = Convert.ToString(0) });
                 }
             }

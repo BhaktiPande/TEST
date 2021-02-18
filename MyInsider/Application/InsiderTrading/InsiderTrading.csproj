@@ -323,7 +323,7 @@
     <Compile Include="Common\WriteToFileLog.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ADAssertionConsumerController.cs" />
-    <Compile Include="Controllers\AirtelControllerController.cs" />
+    <Compile Include="Controllers\AirtelController.cs" />
     <Compile Include="Controllers\ApplicabilityController.cs" />
     <Compile Include="Controllers\Applicability_OSController.cs" />
     <Compile Include="Controllers\ClawBackReportController.cs" />
@@ -3225,7 +3225,7 @@
     <Content Include="Views\ADAssertionConsumer\Index.cshtml" />
     <Content Include="Views\APPLICABILITY_OS\Index.cshtml" />
     <Content Include="Views\ADAssertionConsumer\AssertionConsumer.cshtml" />
-    <Content Include="Views\AirtelController\AssertionConsumerAirtel.cshtml" />
+    <Content Include="Views\Airtel\AssertionConsumerAirtel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Elmah\" />

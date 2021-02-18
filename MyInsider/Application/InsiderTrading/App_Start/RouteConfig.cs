@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -16,7 +17,10 @@ namespace InsiderTrading
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Account", action = "Login", id = UrlParameter.Optional }
+                 defaults: ConfigurationManager.AppSettings["IsADFSEnabled"].ToString() == "1" ?
+                             new { controller = "ADAssertionConsumer", action = "Index", id = UrlParameter.Optional } :
+                             new { controller = "Account", action = "Login", id = UrlParameter.Optional }
+              //defaults: new { controller = "ADAssertionConsumer", action = "Index", id = UrlParameter.Optional }
             );
         }
     }
