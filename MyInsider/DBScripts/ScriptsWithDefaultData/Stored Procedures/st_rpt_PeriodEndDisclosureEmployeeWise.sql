@@ -100,7 +100,7 @@ print 'st_rpt_PeriodEndDisclosureEmployeeWise'
 	JoiningDate DATETIME, DateOfInactivation DATETIME, CINNumber NVARCHAR(100), Designation NVARCHAR(100), Grade NVARCHAR(100), Location NVARCHAR(50),
 	Department NVARCHAR(100), Category VARCHAR(50), SubCategory VARCHAR(50), StatusCodeId VARCHAR(50), CompanyName NVARCHAR(200), TypeOfInsider NVARCHAR(50), SubmissionDate DATETIME,
 	SoftCopySubmissionDate DATETIME, HardCopySubmissionDate DATETIME, CommentId INT DEFAULT 162003, TransactionMasterId INT, 
-	LastSubmissionDate DATETIME, PEndDate DATETIME, YearCodeId INT, PeriodCodeId INT,PeriodTypeId INT,PeriodType varchar(50))
+	LastSubmissionDate DATETIME, PEndDate DATETIME, YearCodeId INT, PeriodCodeId INT,PeriodTypeId INT,PeriodType varchar(50), EmailId varchar(200))
 
 	DECLARE @tmpTransactionIds TABLE (TransactionMasterId INT, UserInfoId INT)
 
@@ -421,6 +421,7 @@ print 'st_rpt_PeriodEndDisclosureEmployeeWise'
 
 		UPDATE tmpDisc
 			SET EmployeeId = UF.EmployeeId,
+			EmailId = UF.EmailId,
 			InsiderName = CASE WHEN UserTypeCodeId = 101004 THEN C.CompanyName ELSE ISNULL(FirstName, '') + ' ' + ISNULL(LastName, '') END,
 			JoiningDate = DateOfBecomingInsider,
 			DateOfInactivation = UF.DateOfInactivation,
@@ -530,6 +531,7 @@ print 'st_rpt_PeriodEndDisclosureEmployeeWise'
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(PeriodCodeId) AS PeriodCodeId, UserInfoID , TransactionMasterId, '
 		SELECT @sSQL = @sSQL + 'PeriodTypeId AS PeriodTypeId, '
 		SELECT @sSQL = @sSQL + 'PeriodType AS PeriodType '
+		SELECT @sSQL = @sSQL + 'EmailId AS rpt_grd_81004, ' --'add email id AS rpt_grd_81004'
 		SELECT @sSQL = @sSQL + 'FROM #tmpList t JOIN #tmpPEDisclosure ID ON t.EntityID = ID.UserInfoId '
 		SELECT @sSQL = @sSQL + 'JOIN com_Code CComment ON ID.CommentId = CComment.CodeID '
 		SELECT @sSQL = @sSQL + 'JOIN mst_Resource RComment ON CComment.CodeName = RComment.ResourceKey '

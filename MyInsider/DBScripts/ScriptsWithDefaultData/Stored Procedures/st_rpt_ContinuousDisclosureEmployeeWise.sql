@@ -93,7 +93,7 @@ BEGIN
 	Department NVARCHAR(100), CompanyName NVARCHAR(200), TypeOfInsider NVARCHAR(50), SecurityType VARCHAR(100), TransactionType VARCHAR(100),
 	BuyQuantity INT DEFAULT 0, SellQuantity INT DEFAULT 0, Value DECIMAL(25,4) DEFAULT 0,
 	SecurityTypeCodeId INT, TransactionTypeCodeId INT,
-	DateOfInactivation DATETIME, Category VARCHAR(500), SubCategory  VARCHAR(500), CodeName VARCHAR(500))
+	DateOfInactivation DATETIME, Category VARCHAR(500), SubCategory  VARCHAR(500), CodeName VARCHAR(500), EmailId VARCHAR(200))
 
 	DECLARE @tmpTransactionDetails TABLE (TransactionDetailsId INT, UserInfoId INT)
 
@@ -352,6 +352,7 @@ BEGIN
 
 		UPDATE tmpDisc
 			SET EmployeeId = UF.EmployeeId,
+			EmailId = UF.EmailId,
 			InsiderName = CASE WHEN UserTypeCodeId = 101004 THEN C.CompanyName ELSE ISNULL(FirstName, '') + ' ' + ISNULL(LastName, '') END,
 			JoiningDate = DateOfBecomingInsider,
 			CINNumber = CASE WHEN UserTypeCodeId = 101004 THEN CIN ELSE DIN END,
@@ -442,6 +443,7 @@ BEGIN
 		SELECT @sSQL = @sSQL + 'OR (T.RowNumber BETWEEN ((' + CONVERT(VARCHAR(10), @inp_iPageNo) + ' - 1) * ' + CONVERT(VARCHAR(10), @inp_iPageSize) + ' + 1) '
 		SELECT @sSQL = @sSQL + 'AND (' + CONVERT(VARCHAR(10), @inp_iPageNo) +  ' * ' + CONVERT(VARCHAR(10), @inp_iPageSize) + '))) '
 		SELECT @sSQL = @sSQL + 'ORDER BY T.RowNumber '
+		SELECT @sSQL = @sSQL + 'EmailId AS rpt_grd_81003, ' --'add EmailId AS rpt_grd_81003'
 		
 		print @sSQL
 		EXEC (@sSQL)

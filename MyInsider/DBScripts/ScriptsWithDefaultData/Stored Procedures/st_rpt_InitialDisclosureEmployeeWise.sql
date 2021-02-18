@@ -535,7 +535,7 @@ BEGIN
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_FormatDateValue(LastSubmissionDate,0) AS rpt_grd_19072, '--'LastSubmissionDate AS rpt_grd_19072, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_FormatDateValue(SubmissionDate,1) AS rpt_grd_19073, '--'SubmissionDate AS rpt_grd_19073, '
 		SELECT @sSQL = @sSQL + 'EmailId AS rpt_grd_81001, ' --'add email id AS rpt_grd_81001'
-		SELECT @sSQL = @sSQL + 'PAN AS rpt_grd_81001, ' --'add pan AS rpt_grd_81002'
+		SELECT @sSQL = @sSQL + 'PAN AS rpt_grd_81002, ' --'add pan AS rpt_grd_81002'
 		
 		--SELECT @sSQL = @sSQL + 'dbo.uf_rpt_FormatDateValue(SoftCopySubmissionDate,1) AS rpt_grd_19015, '--'SoftCopySubmissionDate AS rpt_grd_19015, '
 		--SELECT @sSQL = @sSQL + 'dbo.uf_rpt_FormatDateValue(HardCopySubmissionDate,1) AS rpt_grd_19016, '--'HardCopySubmissionDate AS rpt_grd_19016, '
