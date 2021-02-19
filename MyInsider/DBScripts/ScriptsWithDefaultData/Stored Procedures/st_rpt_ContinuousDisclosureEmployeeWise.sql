@@ -435,6 +435,7 @@ BEGIN
 		SELECT @sSQL = @sSQL + 'BuyQuantity AS rpt_grd_19087, '
 		SELECT @sSQL = @sSQL + 'SellQuantity AS rpt_grd_19088, '
 		SELECT @sSQL = @sSQL + 'Value AS rpt_grd_19089, '
+		SELECT @sSQL = @sSQL + 'EmailId AS rpt_grd_81003, ' --'add EmailId AS rpt_grd_81003'
 		SELECT @sSQL = @sSQL + 'UserInfoId, SecurityTypeCodeId, TransactionTypeCodeId,  dbo.uf_rpt_FormatDateValue(ID.DateOfInactivation,0) AS DateOfInactivation , ID.Category , ID.SubCategory , ID.CodeName '
 		SELECT @sSQL = @sSQL + 'FROM #tmpInitialDisclosure ID JOIN #tmpList t ON t.EntityID = ID.Id '
 		--SELECT @sSQL = @sSQL + 'ORDER BY EmployeeId, InsiderName, SecurityTypeCodeId, TransactionTypeCodeId '
@@ -443,7 +444,7 @@ BEGIN
 		SELECT @sSQL = @sSQL + 'OR (T.RowNumber BETWEEN ((' + CONVERT(VARCHAR(10), @inp_iPageNo) + ' - 1) * ' + CONVERT(VARCHAR(10), @inp_iPageSize) + ' + 1) '
 		SELECT @sSQL = @sSQL + 'AND (' + CONVERT(VARCHAR(10), @inp_iPageNo) +  ' * ' + CONVERT(VARCHAR(10), @inp_iPageSize) + '))) '
 		SELECT @sSQL = @sSQL + 'ORDER BY T.RowNumber '
-		SELECT @sSQL = @sSQL + 'EmailId AS rpt_grd_81003, ' --'add EmailId AS rpt_grd_81003'
+		
 		
 		print @sSQL
 		EXEC (@sSQL)
