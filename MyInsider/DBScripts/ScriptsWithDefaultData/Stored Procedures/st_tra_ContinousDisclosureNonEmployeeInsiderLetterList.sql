@@ -375,7 +375,13 @@ BEGIN
 						case 
 							when td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN CAcquisitionType.CodeName 
 							ELSE '-' 
-						END as dis_grd_17427
+						END as dis_grd_17427,
+						case 
+							when td.SecurityTypeCodeId not in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN '-' 
+							ELSE TUD.StockExchange 
+						END AS dis_grd_55502
+
+						--TUD.StockExchange as dis_grd_55502						
 					from tra_TransactionDetails td
 					join com_Code C on C.CodeID = td.SecurityTypeCodeId
 					join tra_TransactionMaster tm on tm.TransactionMasterId = td.TransactionMasterId
@@ -387,7 +393,7 @@ BEGIN
 				    )as Temp_Table
 					update #Temp_Table set dis_grd_17426 = (select MAX(dis_grd_17426) from #Temp_Table where dis_grd_17426 is not null)
 					where UserSecurityTypeCode in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb)
-					select dis_grd_17209,dis_grd_17210,dis_grd_17211,dis_grd_17212,dis_grd_17213,dis_grd_17214,dis_grd_17215,dis_grd_17216,dis_grd_17217,dis_grd_17218,dis_grd_17219,dis_grd_17220,dis_grd_17221,dis_grd_17222,dis_grd_17223,dis_grd_17224,dis_grd_17426,dis_grd_17427 from #Temp_Table
+					select dis_grd_17209,dis_grd_17210,dis_grd_17211,dis_grd_17212,dis_grd_17213,dis_grd_17214,dis_grd_17215,dis_grd_17216,dis_grd_17217,dis_grd_17218,dis_grd_17219,dis_grd_17220,dis_grd_17221,dis_grd_17222,dis_grd_17223,dis_grd_17224,dis_grd_17426,dis_grd_17427,dis_grd_55502 from #Temp_Table
 				END
 			END
 		END
@@ -465,7 +471,12 @@ BEGIN
 							when td.SecurityTypeCodeId in (@SecuriyType_Futures,@SecuriyType_Options)  AND td.TransactionTypeCodeID = @TRANSACTION_TYPE_SELL THEN CONVERT(VARCHAR(MAX),(Quantity * LotSize)) 
 							ELSE '-' 
 						END as dis_grd_17422,
-						TUD.StockExchange as dis_grd_17230
+						case 
+							when td.SecurityTypeCodeId not in (@SecuriyType_Futures,@SecuriyType_Options) THEN '-' 
+							ELSE TUD.StockExchange 
+						END AS dis_grd_17230
+
+						--TUD.StockExchange as dis_grd_17230
 					from tra_TransactionDetails td
 					--join @temp t on t.UserInfoId = td.ForUserInfoId
 					--join usr_UserInfo u on u.UserInfoId = t.UserInfoId
