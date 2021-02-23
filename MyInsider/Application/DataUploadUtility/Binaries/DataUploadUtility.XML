@@ -1,0 +1,422 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DataUploadUtility</name>
+    </assembly>
+    <members>
+        <member name="M:DataUploadUtility.Generic.CommonModel.GetCompanyDetials(System.String)">
+            <summary>
+            This method is used to get single company connection string
+            </summary>
+            <param name="s_CompanyName">string: Name of the company</param>
+            <returns>CompanyDTO</returns>
+        </member>
+        <member name="M:DataUploadUtility.Generic.CommonModel.getSystemConnectionString">
+            <summary>
+            This function will return the Connection string for the system database which is mentioned in the Web.config file
+            </summary>
+            <returns>string</returns>
+        </member>
+        <member name="M:DataUploadUtility.Generic.CommonModel.getResource(System.String,System.Collections.Generic.Dictionary{System.String,System.String}@)">
+            <summary>
+            This method is used to get all Resource
+            </summary>
+            <param name="s_sConnectionString">string: connection string</param>
+            <param name="o_lstResources">out Dictionary: Resources list</param>
+        </member>
+        <member name="M:DataUploadUtility.Generic.CommonModel.GetConnectionString(System.String)">
+            <summary>
+            This method is used to get connection string object
+            </summary>
+            <param name="s_FilePath">string: Source File path</param>
+            <returns>string: ConnectionString</returns>
+        </member>
+        <member name="M:DataUploadUtility.Generic.CommonModel.EncryptedKey(SFTPFileDownload.AppData.SFTPFileProperties,System.Int32)">
+            <summary>
+            This method is used for check SSO login hash matching or not.
+            </summary>
+            <param name="o_SFTPFileProperties">SFTPFileProperties</param>
+            <param name="n_case">Encryption algorithum selection 1: SHA 1 Encryption algorithum</param>
+            <returns>string</returns>
+        </member>
+        <member name="T:DataUploadUtility.ExtensionClass">
+            <summary>
+            This class is used to create Extension method
+            </summary>
+        </member>
+        <member name="M:DataUploadUtility.ExtensionClass.ToDataTable``1(System.Collections.Generic.IList{``0})">
+            <summary>
+            This method is used to convert list to datatble
+            </summary>
+            <typeparam name="T">T is any generic type</typeparam>
+            <param name="listCollection">List</param>
+            <returns>DataTable</returns>
+        </member>
+        <member name="F:DataUploadUtility.Facade._instance">
+            <summary>
+            This is a singleton Pattern used for Facade
+            </summary>
+        </member>
+        <member name="M:DataUploadUtility.Facade.#ctor">
+            <summary>
+            Constructors of Facade class
+            </summary>
+        </member>
+        <member name="M:DataUploadUtility.Facade.Finalize">
+            <summary>
+            Destructors of Facade class
+            </summary>
+        </member>
+        <member name="M:DataUploadUtility.Facade.Instance">
+            <summary>
+            Creating a instance of a DBUtility class
+            </summary>
+            <returns>returning the instance of an object</returns>
+        </member>
+        <member name="M:DataUploadUtility.Facade.UploadData">
+            <summary>
+            This method is used to Upload Data
+            </summary>
+        </member>
+        <member name="M:DataUploadUtility.Facade.Dispose">
+            <summary>
+            Dispose Method for dispose object
+            </summary>
+        </member>
+        <member name="M:DataUploadUtility.Facade.System#IDisposable#Dispose">
+            <summary>
+            Interface for dispose class
+            </summary>
+        </member>
+        <member name="M:DataUploadUtility.Facade.Dispose(System.Boolean)">
+            <summary>
+            virtual dispoase method
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="F:DataUploadUtility.Generic.Generic._instance">
+            <summary>
+            This is a singleton Pattern used for Facade
+            </summary>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.#ctor">
+            <summary>
+            Constructors of Facade class
+            </summary>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.Finalize">
+            <summary>
+            Destructors of Facade class
+            </summary>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.Instance">
+            <summary>
+            Creating a instance of a DBUtility class
+            </summary>
+            <returns>returning the instance of an object</returns>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.CreateLogFile">
+            <summary>
+            This method is used to create Log file on local machine
+            </summary>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.GetCompanyList">
+            <summary>
+            This method is used to get companies form web.config and create DataTable
+            </summary>
+            <returns>DataTable</returns>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.DefaultTextForLogFile(System.String)">
+            <summary>
+            Method is used to set starting default text for LogFile
+            </summary>
+            <param name="s_CompanyName">string: Company Name</param>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.GetAllCompanyInfo(System.String,InsiderTradingDAL.CompanyDTO@)">
+            <summary>
+            This method is used to get Company Information
+            </summary>
+            <param name="s_CompanyName">string: Company Name</param>
+            <param name="objSelectedCompany">object of CompanyDTO</param>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.FetchAllCodes(InsiderTradingDAL.CompanyDTO@,System.Collections.Generic.List{InsiderTradingDAL.CodesDTO}@,System.Collections.Generic.Dictionary{System.String,System.Int32}@)">
+            <summary>
+            This method will be used for fetching all the codes from com_code table and maintain the list of CodesDTO and a dictionary containing the collection
+            of CodeDisplayCode+"_"+CodeGroupid or  Codename+"_"+CodeGroupid if CodeDisplayCode is null, against the CodeNo. This will be used for cnverting the 
+            code values as added in the excel to code as to be saved in the table.
+            </summary>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.CreateMappingAndUpload(System.Data.DataSet,System.Collections.Generic.List{InsiderTradingDAL.DataUploadUtilityDTO},System.Collections.Generic.List{InsiderTradingDAL.MappingFieldsDTO},System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.String,System.Collections.Generic.Dictionary{System.String,System.Int32})">
+            <summary>
+            This method is used to create mappings and upload data
+            </summary>
+            <param name="ds_DataFromExcelFile">DataSet: Data from excel file</param>
+            <param name="objDataUploadUtilityDTO">List: DataUploadUtilityDTO</param>
+            <param name="objMappingFieldsDTO">List: MappingFieldsDTO</param>
+            <param name="s_CompanyName">string: Company Name</param>
+            <param name="o_lstResources">Dictionary: collection of resources</param>
+            <param name="s_ConnectionStringFromDB">string: connection string</param>
+            <param name="m_objCodesNameWiseDisct">Dictionary: CodesNameWise Disct</param>
+            <returns>DataSet</returns>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.GetMappingData(System.Collections.Generic.List{InsiderTradingDAL.DataUploadUtilityDTO})">
+            <summary>
+            This method is used to get mapping data
+            </summary>
+            <param name="objaDataUploadUtilityDTO">DataUploadUtilityDTO: DTO object</param>
+            <returns>DataTable</returns>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.DownloadExcelFileOrFromQuery(InsiderTradingDAL.DataUploadUtilityDTO,System.String,System.String)">
+            <summary>
+            This method is used to download excel file
+            </summary>
+            <param name="objDataUploadUtilityDTO">DataUploadUtilityDTO: per company details</param>
+            <param name="s_QueryConnectionString">string: Connection String if it is query based</param>
+            <param name="s_Query">string: Query to get records if it is query based</param>
+            <returns>DataTable</returns>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.SetColumnsOrder(System.Data.DataTable,System.String[])">
+            <summary>
+            This method is used to re-order Datatable columns.
+            </summary>
+            <param name="dataTable">orignal datatable</param>
+            <param name="columnNames">array of column names</param>
+            <returns>DataTable</returns>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.ReadMappedDataBasedOnSettings(System.Data.DataTable,System.String,System.String,System.String)">
+            <summary>
+            This method is used to get data based on settings
+            </summary>
+            <param name="dt_ActualData">Datatable: Actual data from query</param>
+            <param name="s_StoredProcedure">string: stored procedure name</param>
+            <param name="s_TypeName">string: type name</param>
+            <param name="s_DataTableName">string: DataTableName</param>
+            <returns>DataTable</returns>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.GetMappingDetails(System.String)">
+            <summary>
+            This method is used to get mapping details
+            </summary>
+            <param name="s_CompanyName">string: Company Name</param>
+            <returns>List: DataUploadUtilityDTO</returns>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.GetMappingFieldsDetails(System.String)">
+            <summary>
+            This method is used to get mapping fields details
+            </summary>
+            <param name="s_CompanyName">string: Company Name</param>
+            <returns>List: MappingFieldsDTO</returns>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.CreateFinalDataTableAndUpload(System.Collections.Generic.List{InsiderTradingDAL.MappingFieldsDTO},System.Data.DataSet,System.Data.DataTable,System.String,System.Collections.Generic.Dictionary{System.String,System.Int32})">
+            <summary>
+            This method is used to create final DataTable
+            </summary>
+            <param name="objMappingFieldsDTO">List:List of MappingFieldsDTO</param>
+            <param name="ds_DataFromExcelFile">DataSet: DataFromExcelFile</param>
+            <param name="dt_FinalOutputTable">DataTable: FinalOutputTable</param>
+            <param name="s_CompanyName">string: CompanyName</param>
+            <param name="m_objCodesNameWiseDisct">Dictionary: CodesNameWiseDisct</param>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.WriteToCSV(System.Data.DataTable)">
+            <summary>
+            This method is used to export datatable to csv
+            </summary>
+            <param name="table"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.GetSeperationDetailsForEmployeeUpload(System.Data.DataSet,System.Data.DataTable,System.Int32,System.Int32)">
+            <summary>
+            This method is used to get seperation details of employee
+            </summary>
+            <param name="ds_DataFromExcelFile">Data from Excel sheet</param>
+            <param name="dt_FinalOutputTable">Final output datatable</param>
+            <param name="n_Counter">counter to select datatable</param>
+            <param name="perMassUploadExcelSheetId">MassUploadExcelSheetId</param>
+            <returns>DataTable</returns>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.AddKeyToComCode(System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.Int32})">
+            <summary>
+            This method is used to add values in ComCode table
+            </summary>
+            <param name="s_FieldName">string: actual field name</param>
+            <param name="s_FieldValue">string: field value</param>
+            <param name="m_objCodesNameWiseDisct">Dictionary: CodesNameWiseDisct</param>
+            <returns>com code</returns>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.CheckFieldIsRequired(System.Data.DataRow,InsiderTradingDAL.MappingFieldsDTO,System.Collections.Generic.Dictionary{System.String,System.String}@,System.Data.DataTable)">
+            <summary>
+            This method is used to check field is required or not
+            </summary>
+            <param name="perRow">DataRow: actula datatable row(from excel)</param>
+            <param name="perMappingFieldsDTO">Mapping details list</param>
+            <param name="d_ReqFieldDetails">Dictionary collection for Missing Fields</param>
+            <param name="dt_ActualTable">DataTable: Actual datatable</param>
+            <returns>bool</returns>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.CreateColumns(System.Collections.Generic.List{InsiderTradingDAL.MappingFieldsDTO},System.Data.DataTable,System.Data.DataTable)">
+            <summary>
+            This method is used to create columns for DataTable
+            </summary>
+            <param name="objMappingFieldsDTO">List: List of MappingFieldsDTO</param>
+            <param name="dt_FinalOutputTable">DataTable: FinalOutputTable</param>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.GetImplementingCompany(System.String)">
+            <summary>
+            This method will be used for fetching Implementing company Name
+            </summary>
+            <returns>string</returns>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.FetchAllRoleNames(System.String)">
+            <summary>
+            This method will be used for fetching all the Role names from usr_RoleMaster table and maintain the list of RolesDTO and a dictionary containing the collection
+            of RoleName against the RoleId. This will be used for converting the role name values as added in the excel to role id as to be saved in the table.
+            </summary>
+            
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.FetchAllCompanyNames(System.String)">
+            <summary>
+            This method will be used for fetching all the company names from mst_company table and maintain the list of CompanynameDTO and a dictionary containing the collection
+            of CompanyName against the CompanyId. This will be used for cnverting the company name values as added in the excel to company id as to be saved in the table.
+            </summary>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.SendEmail(System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            This method is used to send email
+            </summary>
+            <param name="s_CompanyName">string: CompanyName</param>
+            <param name="s_Attachment">List: AttachmentFilePath</param>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.ReplaceParameters(System.String,System.String)">
+            <summary>
+            This method is used to replace email parameters in email body
+            </summary>
+            <param name="s_MailBody">string: mail body</param>
+            <param name="s_CompanyName">string: company name</param>
+            <returns>string</returns>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.GetAttachmentPath(System.Collections.Generic.List{System.String}@)">
+            <summary>
+            This method is used to get attachment path in list
+            </summary>
+            <param name="s_Attachment">List: Attachment path</param>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.WriteToConsole(System.String,System.String)">
+            <summary>
+            This method is used to write log to console as well as to log file
+            </summary>
+            <param name="s_Message">string: message</param>
+            <param name="s_CompanyName">string Company Name</param>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.Dispose">
+            <summary>
+            Dispose Method for dispose object
+            </summary>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.System#IDisposable#Dispose">
+            <summary>
+            Interface for dispose class
+            </summary>
+        </member>
+        <member name="M:DataUploadUtility.Generic.Generic.Dispose(System.Boolean)">
+            <summary>
+            virtual dispoase method
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="T:DataUploadUtility.EmailProperties">
+            <summary>
+            This class is used to set email properties
+            </summary>
+        </member>
+        <member name="M:DataUploadUtility.EmailProperties.Dispose">
+            <summary>
+            Dispose Method for dispose object
+            </summary>
+        </member>
+        <member name="M:DataUploadUtility.EmailProperties.System#IDisposable#Dispose">
+            <summary>
+            Interface for dispose class
+            </summary>
+        </member>
+        <member name="M:DataUploadUtility.EmailProperties.Dispose(System.Boolean)">
+            <summary>
+            virtual dispoase method
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="P:DataUploadUtility.EmailProperties.s_MailFrom">
+            <summary>
+            Email From
+            </summary>
+        </member>
+        <member name="P:DataUploadUtility.EmailProperties.b_IsBodyHtml">
+            <summary>
+            Email body IsHTML
+            </summary>
+        </member>
+        <member name="P:DataUploadUtility.EmailProperties.s_MailTo">
+            <summary>
+            Mait send to
+            </summary>
+        </member>
+        <member name="P:DataUploadUtility.EmailProperties.s_MailCC">
+            <summary>
+            Email cc
+            </summary>
+        </member>
+        <member name="P:DataUploadUtility.EmailProperties.s_MailBCC">
+            <summary>
+            Email bcc
+            </summary>
+        </member>
+        <member name="P:DataUploadUtility.EmailProperties.s_MailSubject">
+            <summary>
+            Email subject
+            </summary>
+        </member>
+        <member name="P:DataUploadUtility.EmailProperties.s_MailBody">
+            <summary>
+            Email body
+            </summary>
+        </member>
+        <member name="P:DataUploadUtility.EmailProperties.Attachments">
+            <summary>
+            List of attachment
+            </summary>
+        </member>
+        <member name="F:DataUploadUtility.SendMail._instance">
+            <summary>
+            This is a singleton Pattern used for MailAlerts
+            </summary>
+        </member>
+        <member name="M:DataUploadUtility.SendMail.#ctor">
+            <summary>
+            Constructors of MailAlerts class
+            </summary>        
+        </member>
+        <member name="M:DataUploadUtility.SendMail.Finalize">
+            <summary>
+            Destructors of MailAlerts class
+            </summary>        
+        </member>
+        <member name="M:DataUploadUtility.SendMail.Instance">
+            <summary>
+            Creating a instance of a MailAlerts class
+            </summary>
+            <returns>returning the instance of an object</returns>
+        </member>
+        <member name="M:DataUploadUtility.SendMail.SendMailAlerts(System.String,DataUploadUtility.EmailProperties)">
+            <summary>
+            This method is used to send email
+            </summary>
+            <param name="s_CompanyName">string: company name</param>
+            <param name="objEmailProperties">EmailProperties object with all details</param>
+            <returns>is mail send or not</returns>
+        </member>
+        <member name="M:DataUploadUtility.SendMail.Dispose">
+            <summary>
+            Method to Dispose the class
+            </summary>        
+        </member>
+    </members>
+</doc>

@@ -407,7 +407,7 @@ namespace InsiderTrading.Filters
 
                     string strImagePath = string.Empty;
                     strImagePath = strServerPath;
-                    strImagePath = HttpRuntime.AppDomainAppVirtualPath.ToString().ToUpper() + "" + strImagePath.Substring(strImagePath.IndexOf("Document")).Replace("\\", "/");
+                    strImagePath = HttpRuntime.AppDomainAppVirtualPath.ToString().ToUpper() + "/" + strImagePath.Substring(strImagePath.IndexOf("Document")).Replace("\\", "/");
                     string ImagePath = strImagePath + captchaImage;
 
                     //string ImagePath = strServerPath + captchaImage;
