@@ -375,7 +375,12 @@ BEGIN
 							when td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN CAcquisitionType.CodeName 
 							ELSE '-' 
 						END as dis_grd_17425,
-						TD.TransactionDetailsId AS TransactionDetailsId
+						TD.TransactionDetailsId AS TransactionDetailsId,
+						case 
+							when td.SecurityTypeCodeId not in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN '-' 
+							ELSE TUD.StockExchange 
+						END AS dis_grd_55501
+						--TUD.StockExchange as dis_grd_55501	
 					from tra_TransactionDetails td
 					join com_Code C on C.CodeID = td.SecurityTypeCodeId
 					join tra_TransactionMaster tm on tm.TransactionMasterId = td.TransactionMasterId
@@ -387,7 +392,7 @@ BEGIN
 					)as Temp_Table
 					update #Temp_Table set dis_grd_17424 = (select MAX(dis_grd_17424) from #Temp_Table where dis_grd_17424 is not null)
 					where UserSecurityTypeCode in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb)
-					select dis_grd_17187,dis_grd_17188,dis_grd_17189,dis_grd_17190,dis_grd_17191,dis_grd_17192,dis_grd_17193,dis_grd_17194,dis_grd_17195,dis_grd_17196,dis_grd_17197,dis_grd_17198,dis_grd_17199,dis_grd_17200,dis_grd_17201,dis_grd_17202,dis_grd_17424,dis_grd_17425 from #Temp_Table
+					select dis_grd_17187,dis_grd_17188,dis_grd_17189,dis_grd_17190,dis_grd_17191,dis_grd_17192,dis_grd_17193,dis_grd_17194,dis_grd_17195,dis_grd_17196,dis_grd_17197,dis_grd_17198,dis_grd_17199,dis_grd_17200,dis_grd_17201,dis_grd_17202,dis_grd_17424,dis_grd_17425,dis_grd_55501 from #Temp_Table
 					ORDER BY dis_grd_17190,TransactionDetailsId,dis_grd_17201
 					
 				END
@@ -439,6 +444,7 @@ BEGIN
 				END
 				ELSE 
 				BEGIN
+				
 					SELECT 
 					null as dis_grd_17203,
 					case 
@@ -466,8 +472,11 @@ BEGIN
 					case 
 						when td.SecurityTypeCodeId in (@SecuriyType_Futures,@SecuriyType_Options) AND td.TransactionTypeCodeID = @TRANSACTION_TYPE_SELL THEN CONVERT(VARCHAR(MAX),(Quantity * LotSize)) 
 						ELSE '-' 
-					END  AS dis_grd_17418,
-					TUD.StockExchange as dis_grd_17208
+					END  AS dis_grd_17418,					
+					case 
+						when td.SecurityTypeCodeId not in (@SecuriyType_Futures,@SecuriyType_Options) THEN '-' 
+						ELSE TUD.StockExchange 
+					END AS dis_grd_17208				
 					
 					from tra_TransactionDetails td
 					--join @temp t on t.UserInfoId = td.ForUserInfoId

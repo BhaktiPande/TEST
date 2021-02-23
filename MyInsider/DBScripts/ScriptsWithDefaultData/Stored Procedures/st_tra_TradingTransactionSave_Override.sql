@@ -89,8 +89,7 @@ CREATE PROCEDURE [dbo].[st_tra_TradingTransactionSave_Override]
 	@out_nTransactionDetailsID BIGINT = 0 OUTPUT,
 	@out_nReturnValue		INT = 0 OUTPUT,
 	@out_nSQLErrCode		INT = 0 OUTPUT,				-- Output SQL Error Number, if error occurred.
-	@out_sSQLErrMessage		NVARCHAR(500) = '' OUTPUT,	-- Output SQL Error Message, if error occurred.
-	@inp_CurrencyId int=0
+	@out_sSQLErrMessage		NVARCHAR(500) = '' OUTPUT	-- Output SQL Error Message, if error occurred.
 AS
 BEGIN
 
@@ -319,7 +318,7 @@ BEGIN
 					  ,OtherExcerciseOptionQty
 					  ,ESOPExcerseOptionQtyFlag
 					  ,OtherESOPExcerseOptionFlag
-					  ,CreatedBy, CreatedOn, ModifiedBy, ModifiedOn,CurrencyId )
+					  ,CreatedBy, CreatedOn, ModifiedBy, ModifiedOn )
 			Values (
 					@inp_iTransactionMasterId ,
 					@inp_iSecurityTypeCodeId ,
@@ -346,7 +345,7 @@ BEGIN
 					@inp_dOtherExcerciseOptionQty,
 					@inp_bESOPExcerseOptionQtyFlag,
 					@inp_bOtherESOPExcerseOptionFlag,
-					@inp_iLoggedInUserId, dbo.uf_com_GetServerDate(), @inp_iLoggedInUserId, dbo.uf_com_GetServerDate(),@inp_CurrencyId )
+					@inp_iLoggedInUserId, dbo.uf_com_GetServerDate(), @inp_iLoggedInUserId, dbo.uf_com_GetServerDate() )
 					SELECT @inp_iTransactionDetailsId = SCOPE_IDENTITY()
 		END
 		ELSE
@@ -385,7 +384,6 @@ BEGIN
 					,OtherESOPExcerseOptionFlag = @inp_bOtherESOPExcerseOptionFlag
 					,ModifiedBy	= @inp_iLoggedInUserId
 					,ModifiedOn = dbo.uf_com_GetServerDate()
-					,CurrencyId=@inp_CurrencyId
 			Where TransactionDetailsId = @inp_iTransactionDetailsId	
 			
 		END
@@ -420,7 +418,6 @@ BEGIN
 				,OtherExcerciseOptionQty
 				,ESOPExcerseOptionQtyFlag
 				,OtherESOPExcerseOptionFlag
-				,CurrencyId
 				From tra_TransactionDetails
 				Where TransactionDetailsId = @inp_iTransactionDetailsId	
 		END

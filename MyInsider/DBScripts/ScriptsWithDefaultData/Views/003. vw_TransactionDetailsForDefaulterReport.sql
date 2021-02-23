@@ -16,13 +16,10 @@ Quantity + Quantity2 AS Qty,
 Value + Value2 AS Value,
 TD.DMATDetailsID AS DMATDetailsID,
 DMATD.DEMATAccountNumber AS DEMATAccountNumber,
-UI.UserFullName AS AccountHolderName,
-currency.DisplayCode as Currency
-
+UI.UserFullName AS AccountHolderName
 FROM tra_TransactionDetails TD JOIN com_Code CSecurityType ON TD.SecurityTypeCodeId = CSecurityType.CodeID
 	JOIN com_Code CTransaction ON TransactionTypeCodeId = CTransaction.CodeID
 	JOIN tra_TransactionMaster TM ON TD.TransactionMasterId = TM.TransactionMasterId
 	JOIN usr_DMATDetails DMATD ON TD.DMATDetailsID = DMATD.DMATDetailsID
 	JOIN vw_UserInformation UI ON DMATD.UserInfoID = UI.UserInfoId
-	LEFT JOIN com_Code currency ON currency.CodeID = TD.CurrencyID
 WHERE TransactionStatusCodeId > 148002

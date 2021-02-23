@@ -62,11 +62,9 @@ CREATE PROCEDURE [dbo].[st_tra_TradingTransactionSave]
 	@inp_bOtherESOPExcerseOptionFlag BIT,	
 	@inp_sContractSpecification VARCHAR(50),	
 	@inp_iLoggedInUserId	INT,
-	@inp_CurrencyId int=0,
 	@out_nReturnValue		INT = 0 OUTPUT,
 	@out_nSQLErrCode		INT = 0 OUTPUT,				-- Output SQL Error Number, if error occurred.
 	@out_sSQLErrMessage		NVARCHAR(500) = '' OUTPUT	-- Output SQL Error Message, if error occurred.
-	
 AS
 BEGIN
 
@@ -90,7 +88,7 @@ BEGIN
 					@inp_iTransactionLetterId ,@inp_iLotSize ,@inp_dDateOfBecomingInsider ,@inp_iLoggedInUserId,'',
 					@inp_bSegregateESOPAndOtherExcerciseOptionQtyFalg,@inp_dESOPExcerciseOptionQty,	@inp_dOtherExcerciseOptionQty ,
 					@inp_bESOPExcerseOptionQtyFlag ,@inp_bOtherESOPExcerseOptionFlag ,	@inp_sContractSpecification,
-					@out_nSavedTransactionDetailsId OUTPUT, @out_nReturnValue OUTPUT,@out_nSQLErrCode  OUTPUT,@out_sSQLErrMessage  OUTPUT,@inp_CurrencyId
+					@out_nSavedTransactionDetailsId OUTPUT, @out_nReturnValue OUTPUT,@out_nSQLErrCode  OUTPUT,@out_sSQLErrMessage  OUTPUT
 	
 	--	-- SET NOCOUNT ON added to prevent extra result sets from
 	--	-- interfering with SELECT statements.

@@ -70,24 +70,22 @@ BEGIN
 
     SELECT @nContraTradeTransactionTypeID = TransactionTypeCodeId FROM tra_TransactionDetails WHERE  SecurityTypeCodeId = @inp_sSecurityTypeCodeID AND TransactionTypeCodeId = @inp_sTransactionTypeCodeID AND TransactionMasterId = @nTransactionMasterId 
 
-    CREATE TABLE #tblClawBackReport(Id INT IDENTITY(1,1), UserInfoID INT, TransactionMasterId INT, SecurityTypeID INT, TransactionTypeID INT, DmatID VARCHAR(100), TransactionDate VARCHAR(100), Qty VARCHAR(100), Value VARCHAR(100), CurrencyId INT, Currency NVARCHAR(50))
-    INSERT INTO #tblClawBackReport(UserInfoID, TransactionMasterId, SecurityTypeID, TransactionTypeID, DmatID, TransactionDate, Qty, Value, CurrencyID,Currency)
-    SELECT ForUserInfoId, TD.TransactionMasterId, TD.SecurityTypeCodeId, TransactionTypeCodeId, DD.DEMATAccountNumber, DateOfAcquisition, Quantity, Value, CurrencyID, Currency.DisplayCode 
+    CREATE TABLE #tblClawBackReport(Id INT IDENTITY(1,1), UserInfoID INT, TransactionMasterId INT, SecurityTypeID INT, TransactionTypeID INT, DmatID VARCHAR(100), TransactionDate VARCHAR(100), Qty VARCHAR(100), Value VARCHAR(100))
+    INSERT INTO #tblClawBackReport(UserInfoID, TransactionMasterId, SecurityTypeID, TransactionTypeID, DmatID, TransactionDate, Qty, Value)
+    SELECT ForUserInfoId, TD.TransactionMasterId, TD.SecurityTypeCodeId, TransactionTypeCodeId, DD.DEMATAccountNumber, DateOfAcquisition, Quantity, Value 
 	FROM tra_TransactionDetails TD 
 	JOIN tra_TransactionMaster TM ON TM.TransactionMasterId = TD.TransactionMasterId 
 	JOIN usr_DMATDetails DD ON DD.DMATDetailsID = TD.DMATDetailsID
-	LEFT JOIN  com_Code currency ON currency.CodeID = TD.CurrencyID
 	WHERE TD.TransactionMasterId = @nTransactionMasterId AND TM.DisclosureTypeCodeId = @nContinuousDisclosure AND TM.TransactionStatusCodeId NOT IN (@nDocument_Uploaded, @nNot_Confirmed)
 
     SELECT @nTransactionMasterId = MAX(TransactionMasterId) FROM tra_TransactionDetails WHERE SecurityTypeCodeId = @inp_sSecurityTypeCodeID AND TransactionMasterId < @nTransactionMasterId 
     SELECT @nNoContraTradeTransactionTypeID = TransactionTypeCodeId FROM tra_TransactionDetails WHERE SecurityTypeCodeId = @inp_sSecurityTypeCodeID AND TransactionMasterId = @nTransactionMasterId 
 
-	INSERT INTO #tblClawBackReport(UserInfoID, TransactionMasterId, SecurityTypeID, TransactionTypeID, DmatID, TransactionDate, Qty, Value, CurrencyID, Currency )
-    SELECT ForUserInfoId, TD.TransactionMasterId, TD.SecurityTypeCodeId, TransactionTypeCodeId, DD.DEMATAccountNumber, DateOfAcquisition, Quantity, Value, CurrencyID, currency.DisplayCode 
+	INSERT INTO #tblClawBackReport(UserInfoID, TransactionMasterId, SecurityTypeID, TransactionTypeID, DmatID, TransactionDate, Qty, Value)
+    SELECT ForUserInfoId, TD.TransactionMasterId, TD.SecurityTypeCodeId, TransactionTypeCodeId, DD.DEMATAccountNumber, DateOfAcquisition, Quantity, Value 
 	FROM tra_TransactionDetails TD
 	JOIN tra_TransactionMaster TM ON TM.TransactionMasterId = TD.TransactionMasterId  
 	JOIN usr_DMATDetails DD ON DD.DMATDetailsID = TD.DMATDetailsID
-	LEFT JOIN com_Code currency ON currency.CodeID = TD.CurrencyID
 	WHERE TD.TransactionMasterId = @nTransactionMasterId AND TM.DisclosureTypeCodeId = @nContinuousDisclosure AND TM.TransactionStatusCodeId NOT IN (@nDocument_Uploaded, @nNot_Confirmed)
 	
     START: 
@@ -97,12 +95,11 @@ BEGIN
 		 SELECT @nTransactionTypeID = TransactionTypeCodeId FROM tra_TransactionDetails WHERE SecurityTypeCodeId = @inp_sSecurityTypeCodeID AND TransactionMasterId = @nTransactionMasterId AND (ForUserInfoId = @inp_iUserInfoId OR ForUserInfoId IN (SELECT UserInfoIdRelative FROM usr_UserRelation WHERE UserInfoId = @inp_iUserInfoId))
 		 IF NOT (@nTransactionTypeID <> @nNoContraTradeTransactionTypeID)
          BEGIN
-           INSERT INTO #tblClawBackReport(UserInfoID,TransactionMasterId, SecurityTypeID, TransactionTypeID, DmatID, TransactionDate, Qty, Value, CurrencyID, Currency)
-           SELECT ForUserInfoId, TD.TransactionMasterId, TD.SecurityTypeCodeId, TransactionTypeCodeId, DD.DEMATAccountNumber, DateOfAcquisition, Quantity, Value, CurrencyID, currency.DisplayCode 
+           INSERT INTO #tblClawBackReport(UserInfoID,TransactionMasterId, SecurityTypeID, TransactionTypeID, DmatID, TransactionDate, Qty, Value)
+           SELECT ForUserInfoId, TD.TransactionMasterId, TD.SecurityTypeCodeId, TransactionTypeCodeId, DD.DEMATAccountNumber, DateOfAcquisition, Quantity, Value 
 		   FROM tra_TransactionDetails TD
 		   JOIN tra_TransactionMaster TM ON TM.TransactionMasterId = TD.TransactionMasterId
 		   JOIN usr_DMATDetails DD ON DD.DMATDetailsID = TD.DMATDetailsID 
-		   LEFT JOIN com_Code currency ON currency.CodeID = TD.CurrencyID
 		   WHERE TD.TransactionMasterId = @nTransactionMasterId AND TM.DisclosureTypeCodeId = @nContinuousDisclosure AND TM.TransactionStatusCodeId NOT IN (@nDocument_Uploaded, @nNot_Confirmed)
            GOTO START;
          END
@@ -120,8 +117,7 @@ BEGIN
 	sTransactionTypeID.CodeName AS rpt_grd_50695, 
 	dbo.uf_rpt_FormatDateValue(Temp.TransactionDate,0) AS rpt_grd_50696,
 	Temp.Qty AS rpt_grd_50697,
-	Temp.Value AS rpt_grd_50699,
-	Temp.Currency as rpt_grd_54229
+	Temp.Value AS rpt_grd_50699
 	FROM	#tmpList T 
 	JOIN #tblClawBackReport  Temp ON T.EntityID = Temp.Id
 	JOIN tra_TransactionMaster TM ON TM.TransactionMasterId = Temp.TransactionMasterId
@@ -129,7 +125,6 @@ BEGIN
 	LEFT JOIN com_Code sTransactionTypeID ON sTransactionTypeID.CodeID = Temp.TransactionTypeID
 	LEFT JOIN usr_UserRelation UR ON UI.UserInfoId = UR.UserInfoIdRelative
 	LEFT JOIN com_Code codeRelation ON UR.RelationTypeCodeId = codeRelation.CodeID
-	LEFT JOIN com_Code Currency ON Currency.CodeID = Temp.CurrencyID
 	WHERE ((@inp_iPageSize = 0) OR (T.RowNumber BETWEEN ((@inp_iPageNo - 1) * @inp_iPageSize + 1) AND (@inp_iPageNo * @inp_iPageSize)))
 
  END TRY
