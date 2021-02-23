@@ -2038,7 +2038,7 @@ namespace InsiderTradingMassUpload
                 UserInfoDTO objUserInfoDTO = objUserInfoSL.GetUserDetails(connectionString, userInfoID);
                 List<string> panList = new List<string>();
                 List<string> userList = new List<string>();
-                if (objUserInfoDTO != null && userTypeCodeId != 101002)
+                if (objUserInfoDTO != null)
                 {
                     panList = massUploadDAL.GetAllRelativePAN(connectionString, userInfoID);
                     panList.Add(objUserInfoDTO.PAN);

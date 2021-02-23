@@ -419,29 +419,27 @@
     <div id="Grid1Footer">
         <table width="100%">
             <tr>
-                                <td align="left" colspan="2" id="Grid1Footer">
-                                    <!--Footer for the Grid1 for different Forms B,C and D-->
-                                    @{
-                                        if (@ViewBag.GridType == InsiderTrading.Common.ConstEnum.GridType.InitialDisclosureLetterList)
-                                        {
-                                            <label style="font-weight: normal; font-style: italic">@Html.Raw(InsiderTrading.Common.Common.getResource("dis_lbl_17126"))</label>
-                                        }
-                                        else if (ViewBag.GridType == InsiderTrading.Common.ConstEnum.GridType.ContinuousDisclosureDataForLetterForEmployeeInsider)
-                                        {
-                                            <label style="font-weight: normal; font-style: italic">@Html.Raw(InsiderTrading.Common.Common.getResource("dis_lbl_17181"))</label>
-                                            <label style="font-weight: normal; font-style: italic">@Html.Raw(InsiderTrading.Common.Common.getResource("dis_lbl_55500"))</label>
-                                        }
-                                        else if (ViewBag.GridType == InsiderTrading.Common.ConstEnum.GridType.ContinuousDisclosureDataForLetterForNonEmployeeInsider)
-                                        {
-                                            <label style="font-weight: normal; font-style: italic">@Html.Raw(InsiderTrading.Common.Common.getResource("dis_lbl_17185"))</label>
-                                            <label style="font-weight: normal; font-style: italic">@Html.Raw(InsiderTrading.Common.Common.getResource("dis_lbl_55503"))</label>
-                                        }
-                                        else if (ViewBag.GridType == InsiderTrading.Common.ConstEnum.GridType.PeriodEndDisclosureDataForLetterForEmployeeInsiderGrid1)
-                                        {
-                                            <label style="font-weight: 500;">@Html.Raw(InsiderTrading.Common.Common.getResource("dis_lbl_50414"))</label>
-                                        }
-                                    }
-                                </td>
+                <td align="left" colspan="2" id="Grid1Footer">
+                    <!--Footer for the Grid1 for different Forms B,C and D-->
+                    @{
+    if (@ViewBag.GridType == InsiderTrading.Common.ConstEnum.GridType.InitialDisclosureLetterList)
+    {
+		<label style="font-weight: normal; font-style: italic">@Html.Raw(InsiderTrading.Common.Common.getResource("dis_lbl_17126"))</label>
+    }
+    else if (ViewBag.GridType == InsiderTrading.Common.ConstEnum.GridType.ContinuousDisclosureDataForLetterForEmployeeInsider)
+    {
+		<label style="font-weight: normal; font-style: italic">@Html.Raw(InsiderTrading.Common.Common.getResource("dis_lbl_17181"))</label>
+    }
+    else if (ViewBag.GridType == InsiderTrading.Common.ConstEnum.GridType.ContinuousDisclosureDataForLetterForNonEmployeeInsider)
+    {
+		<label style="font-weight: normal; font-style: italic">@Html.Raw(InsiderTrading.Common.Common.getResource("dis_lbl_17185"))</label>
+    }
+    else if (ViewBag.GridType == InsiderTrading.Common.ConstEnum.GridType.PeriodEndDisclosureDataForLetterForEmployeeInsiderGrid1)
+    {
+		<label style="font-weight: 500;">@Html.Raw(InsiderTrading.Common.Common.getResource("dis_lbl_50414"))</label>
+    }
+                    }
+                </td>
             </tr>
         </table>
     </div>

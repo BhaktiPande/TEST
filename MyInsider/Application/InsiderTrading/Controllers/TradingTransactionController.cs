@@ -93,11 +93,6 @@ namespace InsiderTrading.Controllers
             ViewBag.ShowOwnSecuritiesDeclaration = false;
             try
             {
-                List<PopulateComboDTO> lstCurrency = null;
-                lstCurrency = new List<PopulateComboDTO>();
-                lstCurrency = FillComboValues(ConstEnum.ComboType.ListOfCode, "117", null, null, null, null, false);
-                ViewBag.CurrencyList = lstCurrency;
-
                 objLoginUserDetails = (LoginUserDetails)Common.Common.GetSessionValue(ConstEnum.SessionValue.UserDetails);
                 if (TransactionMasterId != 0 && !Common.Common.CheckUserTypeAccess(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.Code.DisclosureTransaction, Convert.ToInt64(TransactionMasterId), objLoginUserDetails.LoggedInUserID))
                 {
@@ -3761,7 +3756,7 @@ namespace InsiderTrading.Controllers
                 dt.Columns.Add(new DataColumn("TransactionTypeCodeId", typeof(int)));
                 dt.Columns.Add(new DataColumn("SecuritiesToBeTradedQty", typeof(decimal)));
                 dt.Columns.Add(new DataColumn("ESOPQty", typeof(decimal)));
-                dt.Columns.Add(new DataColumn("OtherthanESOPQty", typeof(decimal)));               
+                dt.Columns.Add(new DataColumn("OtherthanESOPQty", typeof(decimal)));
                 dt.Columns.Add(new DataColumn("SecuritiesToBeTradedValue", typeof(decimal)));
                 dt.Columns.Add(new DataColumn("LotSize", typeof(int)));
                 dt.Columns.Add(new DataColumn("ContractSpecification", typeof(string)));
@@ -3798,7 +3793,7 @@ namespace InsiderTrading.Controllers
                         {
                             dt.Rows[rowCount]["ESOPQty"] = 0;
                             dt.Rows[rowCount]["OtherthanESOPQty"] = Convert.ToDecimal(UsrRec.tra_grd_16195);
-                        }                        
+                        }
                         dt.Rows[rowCount]["SecuritiesToBeTradedValue"] = Convert.ToDecimal(UsrRec.tra_grd_16198);
                         dt.Rows[rowCount]["LotSize"] = Convert.ToInt32(UsrRec.tra_grd_16199);
                         dt.Rows[rowCount]["ContractSpecification"] = Convert.ToString(UsrRec.tra_grd_16200);
