@@ -402,6 +402,8 @@ namespace InsiderTrading.Controllers
                     objUserInfoDTO.UIDAI_IdentificationNo = objEmployeeModel.userInfoModel.UIDAI_IdentificationNo;
                     objUserInfoDTO.IdentificationTypeId = objEmployeeModel.userInfoModel.IdentificationTypeId;
                     objUserInfoDTO.AllowUpsiUser = objEmployeeModel.userInfoModel.AllowUpsiUser;
+
+                    
                     if (objUserInfoDTO.StateId == 0)
                         objUserInfoDTO.StateId = null;
 

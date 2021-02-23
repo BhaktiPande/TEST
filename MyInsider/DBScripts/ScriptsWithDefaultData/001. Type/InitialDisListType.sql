@@ -1,8 +1,13 @@
+
 IF EXISTS (SELECT NAME FROM SYS.types WHERE NAME = 'InitialDisListType')
 BEGIN
+	IF EXISTS(SELECT NAME FROM SYS.PROCEDURES WHERE NAME = 'st_tra_SaveInitialDisclosureList')
+		DROP PROCEDURE st_tra_SaveInitialDisclosureList
+		
 	DROP TYPE InitialDisListType
 END
 GO
+
 
 CREATE TYPE [InitialDisListType] AS TABLE(
 [TransactionMasterId] [INT]  NULL,

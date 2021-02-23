@@ -26,21 +26,41 @@ BEGIN
 	
 	SET NOCOUNT ON;
 		
+		CREATE TABLE #tempVersionNo
+        (
+        ID INT identity(1,1),
+        CompId INT,
+        versionNo INT,
+        RlMasterId INT,
+        MapToId INT,
+        statusCodeID INT,
+        )
+        INSERT INTO #tempVersionNo (CompId,versionNo,RlMasterId,MapToId,statusCodeID)
+        select RlCompanyId,MAX(VersionNumber) VersionNo,RlMasterId,MapToId,StatusCodeId FROM rul_ApplicabilityMaster RM
+        JOIN  RL_RISTRICTEDMASTERLIST RL
+        ON RM.MapToId=RL.RlMasterId
+        GROUP BY RlCompanyId,RlMasterId,MapToId,StatusCodeId 
+
 		TRUNCATE TABLE rpt_RestrictedListDetails
 		
-		INSERT INTO rpt_RestrictedListDetails
+		INSERT INTO rpt_RestrictedListDetails		
+
+        SELECT DISTINCT RCL.CompanyName,CCDEP.CodeName AS Department, RCL.BSECode, RCL.NSECode, RCL.ISINCode,
+        CONVERT(VARCHAR(50), RML.ApplicableFromDate, 106) AS 'Applicable From Date', CONVERT(VARCHAR(50), RML.ApplicableToDate, 106) AS 'Applicable To Date'        
+        FROM  #tempVersionNo tmp  
+
+        LEFT JOIN rul_ApplicabilityMaster rAM on tmp.RlMasterId = rAM.MapToId and rAM.VersionNumber=tmp.versionNo
+        LEFT JOIN rul_ApplicabilityDetails rAD on rAD.ApplicabilityMstId = rAM.ApplicabilityId        
+        left JOIN usr_UserInfo UM ON UM.UserInfoId = rAD.UserId
+        LEFT JOIN rl_CompanyMasterList RCL ON RCL.RlCompanyId = tmp.CompId
+        LEFT JOIN rl_RistrictedMasterList RML ON RML.RlMasterId = tmp.RlMasterId
+        LEFT JOIN com_Code CCDEP ON CCDEP.CodeID = rAD.DepartmentCodeId
+        WHERE rAD.IncludeExcludeCodeId =150001 AND tmp.statusCodeID=105001 
+        AND rAM.MapToTypeCodeId = 132012 AND rAD.DepartmentCodeId IS NOT NULL    
+
+        --SELECT * FROM #tempVersionNo
+       DROP TABLE #tempVersionNo
 		
-		SELECT DISTINCT RCL.CompanyName,CCDEP.CodeName AS Department, RCL.BSECode, RCL.NSECode, RCL.ISINCode,
-		CONVERT(VARCHAR(50), RML.ApplicableFromDate, 106) AS 'Applicable From Date', CONVERT(VARCHAR(50), RML.ApplicableToDate, 106) AS 'Applicable To Date'		
-		FROM RL_RISTRICTEDMASTERLIST RL
-		LEFT JOIN rul_ApplicabilityMaster rAM on RL.RlMasterId = rAM.MapToId 
-		LEFT JOIN rul_ApplicabilityDetails rAD on rAD.ApplicabilityMstId = rAM.ApplicabilityId		
-		LEFT JOIN usr_UserInfo UM ON UM.UserInfoId = rAD.UserId
-		LEFT JOIN rl_CompanyMasterList RCL ON RCL.RlCompanyId = RL.RlCompanyId
-		LEFT JOIN rl_RistrictedMasterList RML ON RML.RlMasterId = RL.RlMasterId
-		LEFT JOIN com_Code CCDEP ON CCDEP.CodeID = UM.DepartmentId	
-		WHERE rAD.IncludeExcludeCodeId =150001 AND RL.StatusCodeId=105001 
-		AND rAM.MapToTypeCodeId = @RestrictedListType		
 	
 	END	 TRY
 	

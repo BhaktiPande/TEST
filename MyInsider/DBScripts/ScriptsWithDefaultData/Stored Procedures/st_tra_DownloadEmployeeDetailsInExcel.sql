@@ -246,7 +246,7 @@ DECLARE     @nEmployeeStatusLive                                                
 					    ELSE et.TotalHoldingsSelfRelatives
 					    END END AS 'Total Holdings (Self & Relatives)',
 						u.EmployeeId as 'Employee ID'
-						u.PersonalAddress
+						
 					    
 			         from usr_UserInfo u 
 					 left join com_Code codeCountry on u.CountryId = codeCountry.CodeID

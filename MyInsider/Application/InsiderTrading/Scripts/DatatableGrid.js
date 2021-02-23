@@ -1741,9 +1741,10 @@ DatatableGrid.prototype.format = {
                 str = '<input type="text" id="txttra_grd_16200" class="form-control"  value="' + obj.aData['tra_grd_16200'] + '" readonly="readonly" data-toggle="tooltip" title="' + DematMsg.value + '"/>'
             }
             return str;
-        }
-         ,
+        },
+
         'tra_grd_16198': function (obj, type) {
+           
             var str = "";
             if (obj.aData['DmatId'] != '' && obj.aData['DmatId'] != null && (obj.aData['TransStatusCodeId'] == 148002 || obj.aData['TransStatusCodeId'] == 148001)) {
                 str = '<input type="text" id="txttra_grd_16198" class="form-control" onKeyPress="return onlyNumbers(this)" maxlength="10" value="' + obj.aData['tra_grd_16198'] + '"/>'
@@ -1757,6 +1758,8 @@ DatatableGrid.prototype.format = {
             }
             return str;
         }
+      
+        
     },
     //Relative Initial Disclosure List For share   //BYSA
     'GridType_114102': {
