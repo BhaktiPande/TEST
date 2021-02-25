@@ -25,7 +25,7 @@ namespace InsiderTrading.Controllers
         /// Dropdown Load Data And Gridview Data
         /// </summary>
         /// <returns></returns>
-        public ActionResult Index()
+        public ActionResult Index(int acid)
         {
             TempData.Remove("ListUpsi");
             LoginUserDetails objLoginUserDetails = (LoginUserDetails)Common.Common.GetSessionValue(ConstEnum.SessionValue.UserDetails);

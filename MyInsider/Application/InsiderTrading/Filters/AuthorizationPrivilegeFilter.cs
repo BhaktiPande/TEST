@@ -463,8 +463,17 @@ namespace InsiderTrading.Filters
 
             //Load the action permissions in the session object for to be used when checking authorization
             objUserAunthentication = objUserInfoSL.GetUserAuthencticationDetails(objLoginUserDetails.CompanyDBConnectionString, objLoginUserDetails.UserName);
+            if (filterContext.HttpContext.Session["GUIDSessionID"] == null)
+            {
+                filterContext.HttpContext.Session["GUIDSessionID"] = HttpContext.Current.Request.Cookies.Get("v_au").Value + objUserAunthentication.UserInfoId;
+                var cookie = new System.Web.HttpCookie("ValCookie");
+                cookie.Values["ValOnPage"] =Convert.ToString(filterContext.HttpContext.Session["GUIDSessionID"]);
+                cookie.Expires = DateTime.Now.AddDays(1000);
+                
+                cookie.Secure = true;
+               HttpContext.Current.Response.Cookies.Add(cookie);
 
-            filterContext.HttpContext.Session["GUIDSessionID"] = HttpContext.Current.Request.Cookies.Get("v_au").Value + objUserAunthentication.UserInfoId;
+            }
             objLoginUserDetails.LoggedInUserID = objUserAunthentication.UserInfoId;
             objLoginUserDetails.EmailID = objUserAunthentication.EmailId;
             objLoginUserDetails.FirstName = objUserAunthentication.FirstName;
