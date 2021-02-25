@@ -1953,6 +1953,10 @@ namespace InsiderTrading.Controllers
 
                     using (UserInfoSL objUserInfoSL = new UserInfoSL())
                     {
+                        if (ViewBag.UserId == null || ViewBag.UserId == 0)
+                        {
+                            ViewBag.UserId = (int)objTradingTransactionMasterDTO.UserInfoId;
+                        }
                         objUserInfoDTO = objUserInfoSL.GetUserDetails(objLoginUserDetails.CompanyDBConnectionString, (int)objTradingTransactionMasterDTO.UserInfoId);
                         ViewBag.CompanyName = objUserInfoDTO.CompanyName;
                         ViewBag.CompanyISINNumber = objUserInfoDTO.ISINNumber;
