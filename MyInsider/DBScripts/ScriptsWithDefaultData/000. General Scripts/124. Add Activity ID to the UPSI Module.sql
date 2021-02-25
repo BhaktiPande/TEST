@@ -1,7 +1,7 @@
 
 
 BEGIN		
-	IF NOT EXISTS (SELECT ActivityID FROM usr_Activity WHERE UPPER(ScreenName) ='UPSI Submission' and UPPER(ActivityName)='VIEW')
+	IF NOT EXISTS (SELECT ActivityID FROM usr_Activity WHERE UPPER(ScreenName) ='UPSI Submission' and UPPER(ActivityName)='VIEW' and ActivityID=361)
 	BEGIN
 		INSERT INTO usr_Activity(ActivityID,ScreenName,ActivityName,ModuleCodeID,ControlName,
 				[Description],StatusCodeID,DisplayOrder,CreatedBy,CreatedOn,ModifiedBy,ModifiedOn)
@@ -13,7 +13,7 @@ END
 
 BEGIN
 		
-	IF NOT EXISTS (SELECT ActivityID FROM usr_Activity WHERE UPPER(ScreenName) ='UPSI Submission' and UPPER(ActivityName)='VIEW')
+	IF NOT EXISTS (SELECT ActivityID FROM usr_Activity WHERE UPPER(ScreenName) ='UPSI Submission' and UPPER(ActivityName)='VIEW' and ActivityID=362)
 	BEGIN	
 		INSERT INTO usr_Activity(ActivityID,ScreenName,ActivityName,ModuleCodeID,ControlName,
 				[Description],StatusCodeID,DisplayOrder,CreatedBy,CreatedOn,ModifiedBy,ModifiedOn)
@@ -43,8 +43,6 @@ BEGIN
 	INSERT INTO usr_ActivityURLMapping(ActivityID,ControllerName,ActionName,ActionButtonName,CreatedBy,CreatedOn,ModifiedBy,ModifiedOn)
 	VALUES	(362,'UpsiDigital','Index',NULL,1,getdate(),1,getdate())		
 END
-
-SELECT * FROM usr_ActivityURLMapping
 
 CREATE TABLE #RolesByUserType1(ID INT IDENTITY(1,1),RoleID INT)
 INSERT INTO #RolesByUserType1
