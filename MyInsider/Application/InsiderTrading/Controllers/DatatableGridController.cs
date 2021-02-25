@@ -52,6 +52,10 @@ namespace InsiderTrading.Controllers
                     if (arr[i] == "" || arr[i] == "0")
                         arr[i] = null;
                 }
+                if (gridtype == "114122" && objLoginUserDetails.LoggedInUserID.ToString() != arr[0])
+                {
+                    return RedirectToAction("Unauthorised", "Home");
+                }
                 if (!IsNullOrEmpty(arr) &&
                     (gridtype == InsiderTrading.Common.ConstEnum.GridType.ContinuousDisclosureListForCO.ToString()
                     || gridtype == InsiderTrading.Common.ConstEnum.GridType.ContinousDisclosureStatusList.ToString()
