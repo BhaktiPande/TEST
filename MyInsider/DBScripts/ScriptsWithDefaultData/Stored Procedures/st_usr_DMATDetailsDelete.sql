@@ -53,7 +53,7 @@ BEGIN
 			RETURN (@out_nReturnValue)
 		END
 		
-		DELETE FROM usr_DMATDetails WHERE DMATDetailsID = @inp_iDMATDetailsID
+		DELETE FROM usr_DMATDetails WHERE DMATDetailsID = @inp_iDMATDetailsID and UserInfoID=@inp_iUserId
 
 		IF (NOT EXISTS(SELECT UserInfoId FROM usr_DMATDetails WHERE UserInfoId = @Stored_UserInfoId))
 		BEGIN

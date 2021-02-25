@@ -124,7 +124,20 @@
     <div>
         @if (@ViewBag.GridType == @InsiderTrading.Common.ConstEnum.GridType.UpsiSharing_data)
         {
-            Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "btnSearch", sSortCol = "0", ID = "example" });
+             if (objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.Admin || objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.COUserType)
+               {
+                   if (InsiderTrading.Common.Common.CanPerform(361))
+                   {
+                       Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "btnSearch", sSortCol = "0", ID = "example" });
+                   }
+             }
+             else
+             {
+                 if (InsiderTrading.Common.Common.CanPerform(362))
+                 {
+                     Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "btnSearch", sSortCol = "0", ID = "example" });
+                 }
+             }
         }
         
     </div>

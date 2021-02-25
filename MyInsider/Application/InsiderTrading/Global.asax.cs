@@ -354,6 +354,12 @@ namespace InsiderTrading
                             {
                                 if (Session["GUIDSessionID"] != null)
                                 {
+                                    var a = context.Request.Cookies.Get("ValCookie").Values;
+                                    if (Convert.ToString(a) != Convert.ToString("ValOnPage=" + Session["GUIDSessionID"]))
+                                    {
+                                        Session.RemoveAll();
+                                        Session.Abandon();
+                                    }
                                     if (Session["IsOTPAuthPage"] == null)
                                         sessionManagement.CheckCookiesSessions((LoginUserDetails)HttpContext.Current.Session[ConstEnum.SessionValue.UserDetails], false, Request, Response, string.Empty);
                                 }
