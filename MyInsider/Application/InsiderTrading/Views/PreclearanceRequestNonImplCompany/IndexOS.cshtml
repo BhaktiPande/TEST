@@ -141,12 +141,12 @@
     <input type="hidden" value="@ViewBag.IsFromDashboard" id="7" gridtype="@ViewBag.GridType" />
     @{Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "btnSearch", sSortCol = "" });}
 
-<section class="content-header">
-    <h5>PLEASE NOTE:</h5>
-    <h5>
-        @InsiderTrading.Common.Common.getResource("dis_msg_55400")
-    </h5>
-</section>
+    <section class="content-header">
+        <h5>PLEASE NOTE:</h5>
+        <h5>
+            @InsiderTrading.Common.Common.getResource("dis_msg_55400")
+        </h5>
+    </section>
     <br />
     <input type="hidden" name="InsiderTypeUser" id="InsiderTypeUser" value="@ViewBag.InsiderTypeUser" />
 
@@ -155,10 +155,11 @@
 @Html.Hidden("DownloadFormE", Url.Action("DownloadFormE", "PreclearanceRequestNonImplCompany", new { acid = InsiderTrading.Common.ConstEnum.UserActions.PreclearanceRequestOtherSecurities }))
 @Html.Hidden("TradingDetailsPending", Url.Action("Index", "TradingTransaction_OS"))
 @Html.Hidden("NotTradedView", Url.Action("ViewNotTraded", "PreclearanceRequestNonImplCompany"))
-@Html.Hidden("SoftcopyView", Url.Action("DownloadFormBOS", "InsiderInitialDisclosure", null))
+@Html.Hidden("SoftcopyView", Url.Action("DownloadFormBOS", "InsiderInitialDisclosure", new { acid = InsiderTrading.Common.ConstEnum.UserActions.PreclearanceRequestOtherSecurities }))
+@Html.Hidden("SoftcopyPending", Url.Action("DownloadFormBOS", "InsiderInitialDisclosure", new { acid = InsiderTrading.Common.ConstEnum.UserActions.PreclearanceRequestOtherSecurities, nDisclosureTypeCodeId = InsiderTrading.Common.ConstEnum.Code.DisclosureTypeContinuous }))
 @*@Html.Hidden("HardcopyPending", Url.Action("UploadHardDocument", "TradingTransaction_OS", new { acid = InsiderTrading.Common.ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE_LETTER_SUBMISSION, nDisclosureTypeCodeId = InsiderTrading.Common.ConstEnum.Code.DisclosureTypeContinuous}))*@
 @Html.Hidden("HardcopyPending", Url.Action("UploadHardDocument", "TradingTransaction_OS", new { acid = InsiderTrading.Common.ConstEnum.UserActions.PreclearanceRequestOtherSecurities, nDisclosureTypeCodeId = InsiderTrading.Common.ConstEnum.Code.DisclosureTypeContinuous }))
-@Html.Hidden("HardcopyView", Url.Action("ViewHardCopy", "TradingTransaction_OS", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE, nDisclosureTypeCodeId = InsiderTrading.Common.ConstEnum.Code.DisclosureTypeContinuous}))
+@Html.Hidden("HardcopyView", Url.Action("ViewHardCopy", "TradingTransaction_OS", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE, nDisclosureTypeCodeId = InsiderTrading.Common.ConstEnum.Code.DisclosureTypeContinuous }))
 
 <script type="text/javascript">
     function SearchCompany(cmpname) {

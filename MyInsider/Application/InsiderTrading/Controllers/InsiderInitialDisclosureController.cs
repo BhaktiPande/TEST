@@ -865,18 +865,59 @@ namespace InsiderTrading.Controllers
         #region DownloadFormBOS
         [ValidateInput(false)]
         [AuthorizationPrivilegeFilter]
-        public ActionResult DownloadFormBOS(int acid, int MapToTypeCodeId = 0, int nTransactionMasterId = 0, string DisplayCode = "")
+        public ActionResult DownloadFormBOS(int acid, int MapToTypeCodeId = 0, int nTransactionMasterId = 0, string DisplayCode = "", int UserInfoId = 0, int DisclosuretypecodeId = 147002)
         {
 
             LoginUserDetails objLoginUserDetails = null;
             InsiderInitialDisclosureSL objInsiderInitialDisclosureSL = new InsiderInitialDisclosureSL();
+            TradingTransactionSL_OS objTradingTransactionSL = new TradingTransactionSL_OS();
             FormBDetails_OSDTO objFormBDetails_OSDTO = null;
+            bool IsSave = false;
+
             try
             {
 
+
                 objLoginUserDetails = (LoginUserDetails)Common.Common.GetSessionValue(ConstEnum.SessionValue.UserDetails);
+
+
+                ////transaction ahe asel tr download kar nasel tr save kar nd download kar              
+                GenrateFormDetailsDTO objGerateFormDetails_OS = new GenrateFormDetailsDTO();
+
+                objGerateFormDetails_OS = objTradingTransactionSL.GetTransactionDetails(objLoginUserDetails.CompanyDBConnectionString, Common.ConstEnum.Code.DisclosureTransactionforOS, Convert.ToInt32(nTransactionMasterId));
+                TransactionLetterDTO_OS objTransactionLetterDTO_OS = new TransactionLetterDTO_OS();
+                TradingTransactionMasterDTO_OS objTradingTransactionMasterDTO_OS = null;
+                objTradingTransactionMasterDTO_OS = new TradingTransactionMasterDTO_OS();
+                int nDisclosureCompletedFlag = 0;
+                if (objGerateFormDetails_OS != null)
+                {
+
+                }
+                else
+                {
+                    using (TradingTransactionSL_OS objTradingTransactionSL_OS = new TradingTransactionSL_OS())
+                    {
+                        objTransactionLetterDTO_OS.MapToTypeCodeId = InsiderTrading.Common.ConstEnum.Code.DisclosureTransactionforOS;
+                        objTransactionLetterDTO_OS.MapToId = Convert.ToInt32(nTransactionMasterId);
+                        objTransactionLetterDTO_OS.inp_iYearCodeId = 0;
+                        objTransactionLetterDTO_OS.inp_iPeriodCodeID = 0;
+                        objTransactionLetterDTO_OS.LoggedInUserId = Convert.ToInt32(objLoginUserDetails.LoggedInUserID);
+                        //DisclosuretypecodeId = InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial;
+                        if (DisclosuretypecodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
+                            IsSave = objTradingTransactionSL_OS.InsertTransactionFormDetails(objLoginUserDetails.CompanyDBConnectionString, objTransactionLetterDTO_OS);
+                        else if (DisclosuretypecodeId == ConstEnum.Code.DisclosureTypeContinuous)
+                            IsSave = objTradingTransactionSL_OS.InsertTransactionFormDetails_ForTrade(objLoginUserDetails.CompanyDBConnectionString, objTransactionLetterDTO_OS);
+                        else
+                            IsSave = objTradingTransactionSL_OS.InsertTransactionFormDetails_ForPeriodEnd(objLoginUserDetails.CompanyDBConnectionString, objTransactionLetterDTO_OS);
+
+
+                        objTradingTransactionMasterDTO_OS.TransactionMasterId = Convert.ToInt32(nTransactionMasterId);
+                        objTradingTransactionMasterDTO_OS.TransactionStatusCodeId = ConstEnum.Code.DisclosureStatusForSoftCopySubmitted;
+                        objTradingTransactionMasterDTO_OS = objTradingTransactionSL_OS.GetTradingTransactionMasterCreate(objLoginUserDetails.CompanyDBConnectionString, objTradingTransactionMasterDTO_OS, objLoginUserDetails.LoggedInUserID, out nDisclosureCompletedFlag);
+                    }
+                }
+
                 objFormBDetails_OSDTO = objInsiderInitialDisclosureSL.GetFormBDetails_OS(objLoginUserDetails.CompanyDBConnectionString, Common.ConstEnum.Code.DisclosureTransactionforOS, Convert.ToInt32(nTransactionMasterId));
-              
 
                 Response.Clear();
                 Response.ClearContent();
@@ -892,7 +933,6 @@ namespace InsiderTrading.Controllers
                 string LetterHTMLContent = objFormBDetails_OSDTO.GeneratedFormContents;
                 System.Text.RegularExpressions.Regex rReplaceScript = new System.Text.RegularExpressions.Regex(@"<br>");
                 LetterHTMLContent = rReplaceScript.Replace(LetterHTMLContent, "<br />");
-
 
                 using (var ms = new MemoryStream())
                 {
