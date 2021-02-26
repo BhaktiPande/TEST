@@ -410,6 +410,8 @@ namespace InsiderTrading.Common
             public const int PreclearanceRequest_OS = 132023;
             public const int DisclosureTransaction_OS = 132024;
 
+            public const int PeriodEndDisclosure_OS = 132026;
+
             //Restricted List setting - Pre-clearance Approval
             public const int RestrictedList_Search_Perpetual_OS = 528001;
             public const int RestrictedList_Search_Limited_OS = 528002;
@@ -1136,6 +1138,7 @@ namespace InsiderTrading.Common
             public const int PolicyDocumentEmailAttachment = 5;
             public const int TradingPolicyFile = 5;
             public const int NSEUploadFile = 10;
+            public const int PeriodEndDocumentUpload = 2;
         }
         #endregion Multiple File Upload control count
 

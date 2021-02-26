@@ -1,4 +1,4 @@
-﻿
+﻿@model InsiderTrading.Models.PeriodEndDisclosureModel_OS
 @{
     ViewBag.Title = "SummaryOS";
     String ViewName = "";
@@ -17,16 +17,44 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 @if (ViewBag.showAddTransactionBtn)
                 {
-                @*<a class="btn btn-success" data-toggle="modal" href='#' role="button"> @InsiderTrading.Common.Common.getResource("dis_btn_53127")</a>*@
-                <button id="btnInsiderSubmit" class="btn btn-success" disabled><i class="fa fa-check"></i>@InsiderTrading.Common.Common.getResource("dis_btn_53128")</button>
+                    @*<a class="btn btn-success" data-toggle="modal" href='#' role="button"> @InsiderTrading.Common.Common.getResource("dis_btn_53127")</a>*@
+                    <button id="btnInsiderSubmit" class="btn btn-success" disabled><i class="fa fa-check"></i>@InsiderTrading.Common.Common.getResource("dis_btn_53128")</button>
                 }
                 <a id="DownloadBtn" href="@Url.Action("DownloadDetails", "PeriodEndDisclosure_OS", new { acid = ViewBag.activity_id, period = ViewBag.PeriodCode, year = ViewBag.YearCode, pdtype = ViewBag.PeriodType, uid = ViewBag.UserId, tmid = ViewBag.TransactionMasterId })" class="btn btn-success" title="@InsiderTrading.Common.Common.getResource("dis_ttl_53131")"><i class="fa fa-download"></i>@InsiderTrading.Common.Common.getResource("dis_btn_53130")</a>
+                <button id="uplaodDocument" class="btn btn-success">@InsiderTrading.Common.Common.getResource("rpt_lbl_19270")</button>
             </div>
         </div>
         <div class="div-spacer"></div>
         <hr>
 
     }
+    <!-- upload document div -->
+    @using (Html.BeginForm("SummaryOS", "PeriodEndDisclosure", new { ReturnUrl = ViewBag.ReturnUrl, formId = InsiderTrading.Common.ConstEnum.Code.frmSavePolicyDocument, acid = InsiderTrading.Common.ConstEnum.UserActions.POLICY_DOCUMENT_CREATE }, FormMethod.Post, new { @class = "", role = "", @autocomplete = "off" }))
+    {
+        <div class="row" id="uploadDocDiv">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            @{
+                                if (ViewBag.isAllEdit)
+                                {
+                                    @Html.Label(@InsiderTrading.Common.Common.getResource("rul_lbl_15246"))
+                                    @Html.Partial("~/Views/Common/ViewMultiUploadedDocument.cshtml", Model.PeriodEndDocumentFile, new ViewDataDictionary() { { "user_action", ViewBag.UserAction } })
+                                }
+                                else
+                                {
+                                    @Html.Label(@InsiderTrading.Common.Common.getResource("rul_lbl_15245"))
+                                    @Html.Partial("~/Views/Common/MultiDocumentUpload.cshtml", Model.PeriodEndDocumentFile, new ViewDataDictionary() { { "user_action", ViewBag.UserAction } })
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <!-- upload document div end -->
     <!-- Search form content -->
     <div class="row">
         <div class="col-lg-12">
@@ -66,7 +94,7 @@
                         @Html.Hidden("2", (Int32)@ViewBag.YearCode, new { id = "2", gridtype = @ViewBag.YearCode });
                         @Html.Hidden("3", (Int32)@ViewBag.PeriodCode, new { id = "3", gridtype = @ViewBag.PeriodCode });
 
-                                                                                                                       Html.RenderAction("Index", "DatatableGrid", new { type = InsiderTrading.Common.ConstEnum.GridType.PeriodEndDisclosureSummaryList_OS, btnSearch = "", sSortCol = "0", acid = ViewBag.activity_id });
+                        Html.RenderAction("Index", "DatatableGrid", new { type = InsiderTrading.Common.ConstEnum.GridType.PeriodEndDisclosureSummaryList_OS, btnSearch = "", sSortCol = "0", acid = ViewBag.activity_id });
                     }
 
                 </div>
@@ -114,9 +142,9 @@
 <input type="hidden" value="@ViewBag.TransactionMasterId" id="TransactionMasterId" />
 <a href='@Url.Action("PeriodStatusOS", "PeriodEndDisclosure_OS", new { acid = ViewBag.activity_id, year = ViewBag.YearCode, Uid = ViewBag.UserId })' id="lnkCancel"></a>
 
-<script>
-    $(document).ready(function ()
-    {
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#uploadDocDiv').hide();
         $('#btnInsiderSubmit').click(function () {
             var userId = '@ViewBag.UserId';
             var TransactionMasterId = '@ViewBag.TransactionMasterId';
@@ -164,7 +192,12 @@
             });
 
         });
+
+        $('#uplaodDocument').click(function () {
+            $('#uploadDocDiv').show();
+        });
     });
+
 
     $('#DownloadBtn').click(function () {
         $('#btnInsiderSubmit').removeAttr("disabled");
@@ -175,7 +208,7 @@
     {
         $('#btnInsiderSubmit').removeAttr("disabled");
     }
-    
+
 </script>
 <script type="text/javascript">
     setTimeout(function () { $('.validation-summary-errors').remove() }, 10000);
