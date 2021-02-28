@@ -6,7 +6,7 @@
 @{
     if (Model != null && Model.IsImplementing == true)
     {
-        <div class="panel-body">
+        <div class="card-body">
             @using (Html.BeginForm("SaveCompany", "Company", new { ReturnUrl = ViewBag.ReturnUrl, formId = 63 }, FormMethod.Post, new { @class = "", role = "form", @autocomplete = "off", id = "frmBasicInfo" }))
             {
             @Html.AntiForgeryToken()
@@ -75,8 +75,8 @@
             <section class="content">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
+                        <div class="card panel-default">
+                            <div class="card-body">
 
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">

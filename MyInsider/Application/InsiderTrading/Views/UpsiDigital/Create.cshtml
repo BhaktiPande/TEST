@@ -17,9 +17,9 @@
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="panel-group" id="accordion">
-                <div class="panel panel-accordion">
+                <div class="card panel-accordion">
                     <div id="collapseOne" class="panel-collapse collapse in">
-                        <div class="panel-body">
+                        <div class="card-body">
                             @using (Html.BeginForm("Add", "UpsiDigital", new { ReturnUrl = ViewBag.ReturnUrl, formId = 69 }, FormMethod.Post, new { role = "form", autocomplete = "off" }))
                             {
                                 @Html.AntiForgeryToken()
@@ -256,7 +256,7 @@
                 </div>
             </div>
         </div>
-        <section class="content">
+        <section class="content inner-section">
             @{
                 Html.RenderAction("Index", "DatatableGrid", new { type = InsiderTrading.Common.ConstEnum.GridType.UpsiSharing_dataTemp, btnSearch = "btnSearch", sSortCol = "1", acid = 0, bIsPagination = false, bIsServerSide = false, sDom = "lrt" });
             }

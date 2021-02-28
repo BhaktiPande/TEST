@@ -19,8 +19,8 @@
             }
             @using (Html.BeginForm("Create", "RestrictedList", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "form", @autocomplete = "off", id = "frmBasicInfo" }))
             {
-                <div class="panel panel-default">
-                    <div class="panel-body">
+                <div class="card panel-default">
+                    <div class="card-body">
                         @Html.AntiForgeryToken()
                         @Html.ValidationSummary(true)
                         <!-- form field row 1 -->

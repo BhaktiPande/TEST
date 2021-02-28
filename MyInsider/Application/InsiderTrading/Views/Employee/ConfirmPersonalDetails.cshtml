@@ -9,20 +9,20 @@
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="panel-group" id="accordion">
-                <div class="panel panel-accordion">
-                    <div class="panel-heading active">
-                        <h4 class="panel-title">
+                <div class="card panel-accordion">
+                    <div class="card-header active">
+                        <h4 class="card-title">
                             @InsiderTrading.Common.Common.getResource("usr_btn_50775")
                         </h4>
                     </div>
 
-                    <div class="row" style="padding-left:5px">
+                    <div class="row" style="padding-left:5px; padding-top:20px;">
                         <br />
                         <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" style="width:3% !important">
                             @*@Html.CheckBoxFor(m => m.Chk_DeclarationFromInsiderAtTheTimeOfContinuousDisclosures, new { id = "Chk_DeclaFrmInsContDis" })*@
                             @Html.CheckBox("Chk_DeclaFrmPersonalDetails", new { @Name = "IsChecked", @value = "true" })
                         </div>
-                        <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11" style="padding-bottom:20px; width:97% !important">
+                        <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11" style="padding-bottom:20px; width:97% !important; margin-left:-60px;">
                             <p>
                                 @InsiderTrading.Common.Common.getResource("usr_msg_50781")
                             </p>

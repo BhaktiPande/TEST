@@ -3,7 +3,7 @@
     var acid = (objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.Admin || objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.CorporateUserType) ? InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_CREATE : InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_EDIT;
 }
 <div>
-    <table style="position:relative;z-index:10;">
+    <table style="position:relative;z-index:10;" id="personalDetailsTable">
         <tr>
             <td>
                 @if ((bool)Session["EmployeeType"])

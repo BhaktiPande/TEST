@@ -57,13 +57,13 @@ else
             }
         }
         <div class="row">
-            <div class="center-block login-block">
-                <div class="login-panel panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title text-center">Login</h3>
+            <div class="center-block login-block mx-auto">
+                <div class="login-panel">
+                    <div class="card-header">
+                        <h3 class="card-title text-center">Login</h3>
                           <input type="hidden" id="hdnSession" value="@Request.RequestContext.HttpContext.Session["RandomNumber"]" />
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body">
                         @using (Html.BeginForm("Login", "Account", new { }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                         {
                             @Html.AntiForgeryToken()

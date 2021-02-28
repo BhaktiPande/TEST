@@ -1220,7 +1220,22 @@ namespace InsiderTrading.Common
                 FromEmaild = Common.getAppSetting("AuthEID");
             }
 
-            mailMessage.From = new MailAddress((sUserCompanyName.ToString().ToUpper().Contains("PIRAMAL") && (objCompanyDetailsForNotificationDTO.FromMailID != null || objCompanyDetailsForNotificationDTO.FromMailID != "")) ? objCompanyDetailsForNotificationDTO.FromMailID : objCompanyDetailsForNotificationDTO.SmtpUserName);
+            //mailMessage.From = new MailAddress((sUserCompanyName.ToString().ToUpper().Contains("PIRAMAL") && (objCompanyDetailsForNotificationDTO.FromMailID != null || objCompanyDetailsForNotificationDTO.FromMailID != "")) ? objCompanyDetailsForNotificationDTO.FromMailID : objCompanyDetailsForNotificationDTO.SmtpUserName);
+
+            //If company = PIRAMAL && FromMailId has Proper value then take FromMailId 
+            //Else (for any company) If FromMailId has Proper value then take FromMailId 
+            //Else take SmtpUserName
+
+            Regex regexValidEmailID = new Regex("^[a-zA-Z]+[a-zA-Z0-9]+[[a-zA-Z0-9-_.!#$%'*+/=?^]{1,20}@[a-zA-Z0-9]{1,20}.[a-zA-Z]{2,3}$");
+            
+                mailMessage.From = new MailAddress(
+                       (sUserCompanyName.ToString().ToUpper().Contains("PIRAMAL") &&
+                       string.IsNullOrEmpty(objCompanyDetailsForNotificationDTO.FromMailID)) ?
+                       objCompanyDetailsForNotificationDTO.FromMailID :
+                       (string.IsNullOrEmpty(objCompanyDetailsForNotificationDTO.SmtpUserName) || regexValidEmailID.IsMatch(objCompanyDetailsForNotificationDTO.SmtpUserName)) ?
+                       objCompanyDetailsForNotificationDTO.SmtpUserName :
+                       objCompanyDetailsForNotificationDTO.FromMailID);
+
             mailMessage.To.Add(objPwdMgmtDTO.EmailID);
             //Fetch the subject and the email body from selected company resources.
             string subject = Common.getResourceForGivenCompany("usr_msg_11282", sUserCompanyName);
@@ -1243,10 +1258,17 @@ namespace InsiderTrading.Common
             mailMessage.IsBodyHtml = true;
             try
             {
+                WriteLogToFile("Mail for forgot Password is From: " + mailMessage.From.ToString(), System.Reflection.MethodBase.GetCurrentMethod(), null);
+                WriteLogToFile("Mail for forgot Password is To: " + objPwdMgmtDTO.EmailID, System.Reflection.MethodBase.GetCurrentMethod(), null);
+                WriteLogToFile("Mail for forgot Password is with smtp port no: " + objCompanyDetailsForNotificationDTO.SmtpPortNumber, System.Reflection.MethodBase.GetCurrentMethod(), null);
+                WriteLogToFile("Mail for forgot Password is with smtp Server: " + objCompanyDetailsForNotificationDTO.SmtpServer, System.Reflection.MethodBase.GetCurrentMethod(), null);
+
+
                 client.Send(mailMessage);
             }
             catch (Exception ex)
             {
+                WriteLogToFile("Exception occurred ", System.Reflection.MethodBase.GetCurrentMethod(), ex);
                 throw ex;
             }
 

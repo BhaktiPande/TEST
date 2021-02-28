@@ -11,7 +11,7 @@
 }
 @using (Html.BeginForm("", "", new { ReturnUrl = ViewBag.ReturnUrl}, FormMethod.Post, new { @class = "", role = "", @autocomplete = "off", id = "frmPersonalDetailsConfirmation" }))
 {
-    <div class="panel-body">
+    <div class="card-body">
         @Html.AntiForgeryToken()
         @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
         <br />
