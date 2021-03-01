@@ -111,7 +111,7 @@ BEGIN
 	Department NVARCHAR(100), CompanyName NVARCHAR(200), TypeOfInsider NVARCHAR(50), SubmissionDate DATETIME, LastSubmissionDate DATETIME,
 	SoftCopySubmissionDate DATETIME, HardCopySubmissionDate DATETIME, CommentId INT DEFAULT 162003, TransactionMasterId INT,
 	DateOfInactivation DATETIME, Category VARCHAR(500), SubCategory  VARCHAR(500), CodeName VARCHAR(500),
-	SoftCopySubmissionDisplayText NVARCHAR(500),HardCopySubmissionDisplayText NVARCHAR(500), EmailId NVARCHAR(200), PAN NVARCHAR(50), EmployeeStatus NVARCHAR(200))
+	SoftCopySubmissionDisplayText NVARCHAR(500),HardCopySubmissionDisplayText NVARCHAR(500), EmailId NVARCHAR(200), PAN NVARCHAR(50), EmployeeStatus NVARCHAR(200), RelationWithInsider  NVARCHAR(100))
 
 	DECLARE @tmpTransactionIds TABLE (TransactionMasterId INT, UserInfoId INT)
 
@@ -382,7 +382,8 @@ BEGIN
 			EmployeeId = UF.EmployeeId,
 			EmailId = UF.EmailId, 
 			PAN = UF.PAN,
-			EmployeeStatus = CASE WHEN UF.DateOfSeparation IS NULL THEN 'Live' ELSE 'Separated not available' END,
+			EmployeeStatus = CASE WHEN UF.DateOfSeparation IS NULL THEN 'Live' ELSE 'Separated' END,
+			RelationWithInsider = CASE WHEN CCode.CodeName IS NULL THEN 'Self' ELSE CCode.CodeName END,
 			InsiderName = CASE WHEN UserTypeCodeId = 101004 THEN C.CompanyName ELSE ISNULL(FirstName, '') + ' ' + ISNULL(LastName, '') END,
 			JoiningDate = DateOfBecomingInsider,
 			CINNumber = CASE WHEN UserTypeCodeId = 101004 THEN CIN ELSE DIN END,
@@ -415,9 +416,11 @@ BEGIN
 		LEFT JOIN com_Code CGrade ON UF.GradeId = CGrade.CodeID
 		LEFT JOIN com_Code CDepartment ON UF.DepartmentId = CDepartment.CodeID
 		LEFT JOIN com_Code CCategory ON CCategory.CodeID = UF.Category
-		LEFT JOIN com_Code CSubCategory ON CSubCategory.CodeID = UF.SubCategory
-		LEFT JOIN com_Code CCode ON CCode.CodeID = UF.StatusCodeId
-		
+		LEFT JOIN com_Code CSubCategory ON CSubCategory.CodeID = UF.SubCategory	
+		LEFT JOIN usr_UserRelation UR ON UR.UserInfoId = UF.UserInfoId
+		LEFT JOIN com_Code CCode ON CCode.CodeID = UR.RelationTypeCodeId
+	
+
 		--DiscloInitLimit
 		--DiscloInitDateLimit
 		UPDATE tmpTrans
@@ -537,7 +540,8 @@ BEGIN
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_FormatDateValue(SubmissionDate,1) AS rpt_grd_19073, '--'SubmissionDate AS rpt_grd_19073, '
 		SELECT @sSQL = @sSQL + 'EmailId AS rpt_grd_81001, ' --'add email id AS rpt_grd_81001'
 		SELECT @sSQL = @sSQL + 'PAN AS rpt_grd_81002, ' --'add pan AS rpt_grd_81002'
-		SELECT @sSQL = @sSQL + 'EmployeeStatus AS rpt_grd_81006, ' --'add pan AS rpt_grd_81006'
+		SELECT @sSQL = @sSQL + 'EmployeeStatus AS rpt_grd_81006, ' --'add EmployeeStatus AS rpt_grd_81006'
+		SELECT @sSQL = @sSQL + 'RelationWithInsider AS rpt_grd_81007, ' --'add RelationWithInsider AS rpt_grd_81007'
 		
 		--SELECT @sSQL = @sSQL + 'dbo.uf_rpt_FormatDateValue(SoftCopySubmissionDate,1) AS rpt_grd_19015, '--'SoftCopySubmissionDate AS rpt_grd_19015, '
 		--SELECT @sSQL = @sSQL + 'dbo.uf_rpt_FormatDateValue(HardCopySubmissionDate,1) AS rpt_grd_19016, '--'HardCopySubmissionDate AS rpt_grd_19016, '
