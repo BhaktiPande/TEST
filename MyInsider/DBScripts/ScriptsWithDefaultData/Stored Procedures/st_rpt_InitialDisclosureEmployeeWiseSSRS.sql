@@ -78,7 +78,7 @@ BEGIN
 	Department NVARCHAR(100), CompanyName NVARCHAR(200), TypeOfInsider NVARCHAR(50), SubmissionDate DATETIME, LastSubmissionDate DATETIME,
 	SoftCopySubmissionDate DATETIME, HardCopySubmissionDate DATETIME, CommentId INT DEFAULT 162003, TransactionMasterId INT,
 	DateOfInactivation DATETIME, Category VARCHAR(MAX), SubCategory  VARCHAR(500), CodeName VARCHAR(MAX), LiveSeperated VARCHAR(MAX),
-	SoftCopySubmissionDisplayText NVARCHAR(500),HardCopySubmissionDisplayText NVARCHAR(500))
+	SoftCopySubmissionDisplayText NVARCHAR(500),HardCopySubmissionDisplayText NVARCHAR(500), EmailId NVARCHAR(200))
 
 	DECLARE @tmpTransactionIds TABLE (TransactionMasterId INT, UserInfoId INT)
 
@@ -222,6 +222,7 @@ BEGIN
 		UPDATE tmpDisc 
 			SET
 			EmployeeId = UF.EmployeeId,
+			EmailId = UF.EmailId,
 			InsiderName = CASE WHEN UserTypeCodeId = 101004 THEN C.CompanyName ELSE ISNULL(FirstName, '') + ' ' + ISNULL(LastName, '') END,
 			UserPAN = UF.pan,
 			SeperationDate = UF.DateOfSeparation,
@@ -344,6 +345,7 @@ BEGIN
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_FormatDateValue(LastSubmissionDate,0) AS rpt_grd_19072, '--'LastSubmissionDate AS rpt_grd_19072, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_FormatDateValue(SubmissionDate,1) AS rpt_grd_19073, '--'SubmissionDate AS rpt_grd_19073, '
 		
+		
 		--SELECT @sSQL = @sSQL + 'dbo.uf_rpt_FormatDateValue(SoftCopySubmissionDate,1) AS rpt_grd_19015, '--'SoftCopySubmissionDate AS rpt_grd_19015, '
 		--SELECT @sSQL = @sSQL + 'dbo.uf_rpt_FormatDateValue(HardCopySubmissionDate,1) AS rpt_grd_19016, '--'HardCopySubmissionDate AS rpt_grd_19016, '
 		
@@ -352,7 +354,8 @@ BEGIN
 		
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(RComment.ResourceValue) AS rpt_grd_19017, '
 		SELECT @sSQL = @sSQL + 'ID.UserInfoID As UserInfoID , ''151001'' AS LetterForCodeId,ID.TransactionMasterId AS TransactionMasterId, ID.UserInfoID AS EmployeeId,''0'' AS TransactionLetterId,''147001'' AS DisclosureTypeCodeId,''166'' AS Acid, dbo.uf_rpt_FormatDateValue(ID.DateOfInactivation,0) AS DateOfInactivation , dbo.uf_rpt_ReplaceSpecialChar(ID.Category) as Category  , dbo.uf_rpt_ReplaceSpecialChar(ID.SubCategory) As SubCategory , dbo.uf_rpt_ReplaceSpecialChar(ID.CodeName) As CodeName, '	
-		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(LiveSeperated) AS LiveOrSeperated '		
+		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(LiveSeperated) AS LiveOrSeperated, '
+		SELECT @sSQL = @sSQL + 'EmailId AS EmailId '--'EmailId AS EmailId, '
 				
 		SELECT @sSQL = @sSQL + 'FROM #tmpList t JOIN #tmpInitialDisclosure ID ON t.EntityID = ID.UserInfoId '
 		SELECT @sSQL = @sSQL + 'JOIN com_Code CComment ON ID.CommentId = CComment.CodeID '
@@ -380,14 +383,14 @@ BEGIN
 		rpt_grd_19008 NVARCHAR(200),rpt_grd_19009 NVARCHAR(200),rpt_grd_19010 NVARCHAR(200),rpt_grd_19011 NVARCHAR(200),rpt_grd_19012 NVARCHAR(200),
 		rpt_grd_19013 NVARCHAR(200),rpt_grd_19072 NVARCHAR(200),rpt_grd_19073 NVARCHAR(200),rpt_grd_19015  NVARCHAR(200),rpt_grd_19016  NVARCHAR(200),rpt_grd_19017  NVARCHAR(200),
 		UserInfoID INT,LetterForCodeId NVARCHAR(100),TransactionMasterId NVARCHAR(100),EmployeeId  NVARCHAR(100),TransactionLetterId NVARCHAR(100),	DisclosureTypeCodeId NVARCHAR(100),	Acid int,	DateOfInactivation	 NVARCHAR(200),	Category NVARCHAR(MAX),	SubCategory NVARCHAR(500),CodeName NVARCHAR(MAX),LiveOrSeperated NVARCHAR(MAX),
-		)
+		EmailId NVARCHAR(200))
 		INSERT INTO ##TempMaster
 		(
 		rpt_grd_19004,rpt_grd_19005,UserPANNumber,DateOfSeperation,rpt_grd_19006 ,rpt_grd_19007 ,
 		rpt_grd_19008 ,rpt_grd_19009 ,rpt_grd_19010 ,rpt_grd_19011 ,rpt_grd_19012 ,
 		rpt_grd_19013,rpt_grd_19072 ,rpt_grd_19073 ,rpt_grd_19015,rpt_grd_19016,rpt_grd_19017,
 		UserInfoID,LetterForCodeId,TransactionMasterId,EmployeeId,TransactionLetterId,DisclosureTypeCodeId,Acid,DateOfInactivation,Category,SubCategory,CodeName,LiveOrSeperated
-		)
+		,EmailId)
 		EXEC (@sSQL)
 	
 		DROP TABLE #tmpInitialDisclosure
