@@ -89,7 +89,7 @@ print 'st_rpt_PeriodEndDisclosureEmployeeWise'
 	JoiningDate DATETIME, DateOfInactivation DATETIME, CINNumber NVARCHAR(100), Designation NVARCHAR(512), Grade NVARCHAR(512), Location NVARCHAR(512),
 	Department NVARCHAR(512), Category VARCHAR(512), SubCategory VARCHAR(512), StatusCodeId VARCHAR(50), CompanyName NVARCHAR(200),ISINNumber NVARCHAR(200), TypeOfInsider NVARCHAR(50), SubmissionDate DATETIME,
 	SoftCopySubmissionDate VARCHAR(512), HardCopySubmissionDate VARCHAR(512), CommentId INT DEFAULT 162003, TransactionMasterId INT, 
-	LastSubmissionDate DATETIME, PEndDate DATETIME, YearCodeId INT, PeriodCodeId INT,PeriodTypeId INT,PeriodType varchar(50),softCopyReq INT,HardCopyReq INT)
+	LastSubmissionDate DATETIME, PEndDate DATETIME, YearCodeId INT, PeriodCodeId INT,PeriodTypeId INT,PeriodType varchar(50),softCopyReq INT,HardCopyReq INT, EmailId varchar(200))
 
 	DECLARE @tmpTransactionIds TABLE (TransactionMasterId INT, UserInfoId INT)
 
@@ -299,6 +299,7 @@ print 'st_rpt_PeriodEndDisclosureEmployeeWise'
 
 		UPDATE tmpDisc
 			SET EmployeeId = UF.EmployeeId,
+			EmailId = UF.EmailId,
 			InsiderName = CASE WHEN UserTypeCodeId = 101004 THEN C.CompanyName ELSE ISNULL(FirstName, '') + ' ' + ISNULL(LastName, '') END,
 			UserPAN = UF.pan,
 			SeperationDate = UF.DateOfSeparation,
@@ -450,7 +451,8 @@ print 'st_rpt_PeriodEndDisclosureEmployeeWise'
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(YearCodeId) AS YearCodeId, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(PeriodCodeId) AS PeriodCodeId, UserInfoID , TransactionMasterId, '
 		SELECT @sSQL = @sSQL + 'PeriodTypeId AS PeriodTypeId, '
-		SELECT @sSQL = @sSQL + 'PeriodType AS PeriodType '
+		SELECT @sSQL = @sSQL + 'PeriodType AS PeriodType, '
+		SELECT @sSQL = @sSQL + 'EmailId AS EmailId '--'EmailId AS EmailId '
 		SELECT @sSQL = @sSQL + 'FROM #tmpList t JOIN #tmpPEDisclosure ID ON t.EntityID = ID.UserInfoId '
 		SELECT @sSQL = @sSQL + 'JOIN com_Code CComment ON ID.CommentId = CComment.CodeID '
 		SELECT @sSQL = @sSQL + 'JOIN mst_Resource RComment ON CComment.CodeName = RComment.ResourceKey '
@@ -471,6 +473,7 @@ print 'st_rpt_PeriodEndDisclosureEmployeeWise'
 	    rpt_grd_19041 NVARCHAR(100), DateOfInactivation NVARCHAR(100), rpt_grd_19042 NVARCHAR(100), rpt_grd_19043 NVARCHAR(100), rpt_grd_19044 NVARCHAR(100), rpt_grd_19045 NVARCHAR(50),
 	    rpt_grd_19046 NVARCHAR(100), Category VARCHAR(50), SubCategory VARCHAR(50), StatusCodeId VARCHAR(50), rpt_grd_19047 NVARCHAR(200),ISINNumber NVARCHAR(100), rpt_grd_19048 NVARCHAR(50), rpt_grd_19049 NVARCHAR(100),
 	    rpt_grd_19073 NVARCHAR(100), rpt_grd_19051 NVARCHAR(100), rpt_grd_19052 NVARCHAR(100),rpt_grd_19053 NVARCHAR(100), YearCodeId INT,PeriodCodeId INT,UserInfoID INT,TransactionMasterId INT,PeriodTypeId INT,PeriodType VARCHAR(50)
+		,EmailId NVARCHAR(200)
 		)
 		INSERT INTO #TempMaster
 		(
@@ -478,6 +481,7 @@ print 'st_rpt_PeriodEndDisclosureEmployeeWise'
 	    rpt_grd_19041, DateOfInactivation, rpt_grd_19042, rpt_grd_19043, rpt_grd_19044, rpt_grd_19045,
 	    rpt_grd_19046, Category, SubCategory, StatusCodeId, rpt_grd_19047,ISINNumber, rpt_grd_19048, rpt_grd_19049,
 	    rpt_grd_19073, rpt_grd_19051, rpt_grd_19052,rpt_grd_19053, YearCodeId,PeriodCodeId,UserInfoID,TransactionMasterId,PeriodTypeId,PeriodType
+		,EmailId
 		)
 		
 		EXEC (@sSQL)
