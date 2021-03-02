@@ -295,6 +295,23 @@ namespace InsiderTrading.SL
         }
         #endregion GetSellAllDetails
 
+        #region GetTransactionDetails
+        public GenrateFormDetailsDTO GetTransactionDetails(string sConnectionString, int MapToTypeCodeId, int MapToId)
+        {
+            try
+            {
+                using (var objTradingTransactionDAL = new InsiderTradingDAL.TradingTransactionDAL_OS())
+                {
+                    return objTradingTransactionDAL.GetTransactionDetails(sConnectionString, MapToTypeCodeId, MapToId);
+                }
+            }
+            catch (Exception exp)
+            {
+                throw exp;
+            }
+        }
+        #endregion GetTransactionSummary
+
         #region InsertUpdateIDTradingTransactionDetails
         /// <summary>
         /// This method is used to save Initial Disclosure List
