@@ -61,7 +61,7 @@
                                                         <a href="@Url.Action("RedirectToDisclosureLetter", "Reports", new { acid = @objReportHeaderKeyValueDTO.Acid, nTransactionLetterId = 0, nDisclosureTypeCodeId = @objReportHeaderKeyValueDTO.DisclosureTypeCodeId, nLetterForCodeId = @objReportHeaderKeyValueDTO.LetterForCodeId, nTransactionMasterId = @objReportHeaderKeyValueDTO.TransactionMasterId, EmployeeId = ViewBag.EmployeeId, LetterType = @objReportHeaderKeyValueDTO.LetterType,GridType = ViewBag.GridType,YearCode=0,PeriodCode=0,PeriodTypeId=ViewBag.PeriodTypeId,PeriodType=ViewBag.PeriodType })">( View )</a>
                                                     }
                                                 }
-                                                else if (@objReportHeaderKeyValueDTO.Value != null && @objReportHeaderKeyValueDTO.Value != "" && @objReportHeaderKeyValueDTO.Value != "Pending" && @objReportHeaderKeyValueDTO.Value != "-" && ViewBag.GridType == @InsiderTrading.Common.ConstEnum.GridType.Report_PeriodEndDisclosureEmployeeIndividual)
+                                                else if (@objReportHeaderKeyValueDTO.Value != null && @objReportHeaderKeyValueDTO.Value != "" && @objReportHeaderKeyValueDTO.Value != "Pending" && @objReportHeaderKeyValueDTO.Value != "-" && @objReportHeaderKeyValueDTO.Value != "Not Required" && ViewBag.GridType == @InsiderTrading.Common.ConstEnum.GridType.Report_PeriodEndDisclosureEmployeeIndividual)
                                                 {
                                                     if (InsiderTrading.Common.Common.CanPerform(@objReportHeaderKeyValueDTO.Acid))
                                                     {
