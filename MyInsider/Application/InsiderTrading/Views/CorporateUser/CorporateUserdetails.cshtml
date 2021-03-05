@@ -105,14 +105,14 @@
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                         <div class="row">
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0">
                                                 <div class="form-group">
                                                     @Html.LabelFor(m => m.DesignationId)
                                                     @Html.TextBoxFor(m => m.DesignationName, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.DesignationName).ToString(), Html.ActivityResourceKeyFor(m => m.DesignationName).ToString(), new { @class = "form-control ui-autocomplete" }))
                                                     @Html.ValidationMessageFor(m => m.DesignationName)
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0">
                                                 <div class="form-group">
                                                     @Html.LabelFor(m => m.EmailId)
                                                     @Html.TextBoxFor(m => m.EmailId, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.EmailId).ToString(), Html.ActivityResourceKeyFor(m => m.EmailId).ToString(), new { @class = "form-control" }))
@@ -123,14 +123,14 @@
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                         <div class="row">
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0">
                                                 <div class="form-group">
                                                     @Html.LabelFor(m => m.LandLine1)
                                                     @Html.TextBoxFor(m => m.LandLine1, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.LandLine1).ToString(), Html.ActivityResourceKeyFor(m => m.LandLine1).ToString(), new { @class = "form-control" }))
                                                     @Html.ValidationMessageFor(m => m.LandLine1)
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0">
                                                 <div class="form-group">
                                                     @Html.LabelFor(m => m.LandLine2)
                                                     @Html.TextBoxFor(m => m.LandLine2, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.LandLine2).ToString(), Html.ActivityResourceKeyFor(m => m.LandLine2).ToString(), new { @class = "form-control" }))
@@ -139,8 +139,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <div class="row">
+@*                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="row">*@
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <div role="form">
                                                     <div class="form-group">
@@ -168,8 +168,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
+@*                                        </div>
+                                    </div>*@
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                         <div class="form-group">
                                             @Html.LabelFor(m => m.Website)
@@ -179,14 +179,14 @@
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                         <div class="row">
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0">
                                                 <div class="form-group">
                                                     @Html.LabelFor(m => m.TAN)
                                                     @Html.TextBoxFor(m => m.TAN, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.TAN).ToString(), Html.ActivityResourceKeyFor(m => m.TAN).ToString(), new { @class = "form-control" }))
                                                     @Html.ValidationMessageFor(m => m.TAN)
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0">
                                                 <div class="form-group">
                                                     @Html.LabelFor(m => m.PAN)
                                                     @Html.TextBoxFor(m => m.PAN, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.PAN).ToString(), Html.ActivityResourceKeyFor(m => m.PAN).ToString(), new { @class = "form-control" }))
@@ -196,8 +196,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <div class="row">
+                @*                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="row">*@
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <div class="form-group">
                                                     @Html.LabelFor(m => m.Description)
@@ -240,10 +240,10 @@
                 }
             }
                                             }
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <div class="row">
+                                       @* </div>
+                                    </div>*@
+                                @*    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="row">*@
                                             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                 <div class="form-group">
                                                     @Html.LabelFor(m => m.CategoryName)
@@ -271,9 +271,9 @@
                                                     @Html.HiddenFor(m => m.AllowUpsiUser)
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="">
+                                      @*  </div>
+                                    </div>*@
+                                    @*<div class="">*@
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
                                             @Html.Hidden("confirm_role", ((bool)ViewBag.show_create_role_link))
                                             <button type="submit" class="btn btn-success" name="Create" id="corp_detail_save"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("com_btn_14017")</button>
@@ -299,7 +299,7 @@
                                             }
 
                                         </div>
-                                    </div>
+                                    @*</div>*@
                                     <!-- /.row (nested) -->
                                     @Html.HiddenFor(m => m.UserInfoId)
                                     @Html.HiddenFor(m => m.IsConfirmPersonalDetails)
