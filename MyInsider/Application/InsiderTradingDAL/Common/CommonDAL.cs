@@ -10,6 +10,7 @@ namespace InsiderTradingDAL
 {
     public class CommonDAL : IDisposable
     {
+        //Common Code is placed here
         // const String sLookupPrefix = "usr_com_";
 
         #region GetPopulateCombo
