@@ -353,7 +353,9 @@ BEGIN
 		UPDATE tmpDisc
 			SET EmployeeId = UF.EmployeeId,
 			EmailId = UF.EmailId,
-			RelationWithInsider = CASE WHEN CRelation.CodeName IS NULL THEN 'Self' ELSE CRelation.CodeName END,
+			--RelationWithInsider = CASE WHEN CRelation.CodeName IS NULL THEN 'Self' ELSE CRelation.CodeName END,
+			RelationWithInsider = CASE WHEN UF.UserTypeCodeId IN (101001,101002,101003,101004,101005,101006)  THEN 'Self' 
+			WHEN CCode.CodeName IS NULL THEN '-' ELSE CCode.CodeName   END,
 			EmployeeStatus = CASE WHEN UF.DateOfSeparation IS NULL THEN 'Live' ELSE 'Separated' END,
 			InsiderName = CASE WHEN UserTypeCodeId = 101004 THEN C.CompanyName ELSE ISNULL(FirstName, '') + ' ' + ISNULL(LastName, '') END,
 			JoiningDate = DateOfBecomingInsider,

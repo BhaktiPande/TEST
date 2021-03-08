@@ -383,7 +383,8 @@ BEGIN
 			EmailId = UF.EmailId, 
 			PAN = UF.PAN,
 			EmployeeStatus = CASE WHEN UF.DateOfSeparation IS NULL THEN 'Live' ELSE 'Separated' END,
-			RelationWithInsider = CASE WHEN CCode.CodeName IS NULL THEN 'Self' ELSE CCode.CodeName END,
+			RelationWithInsider = CASE WHEN UF.UserTypeCodeId IN (101001,101002,101003,101004,101005,101006)  THEN 'Self' 
+			WHEN CCode.CodeName IS NULL THEN '-' ELSE CCode.CodeName   END,
 			InsiderName = CASE WHEN UserTypeCodeId = 101004 THEN C.CompanyName ELSE ISNULL(FirstName, '') + ' ' + ISNULL(LastName, '') END,
 			JoiningDate = DateOfBecomingInsider,
 			CINNumber = CASE WHEN UserTypeCodeId = 101004 THEN CIN ELSE DIN END,
@@ -418,7 +419,7 @@ BEGIN
 		LEFT JOIN com_Code CCategory ON CCategory.CodeID = UF.Category
 		LEFT JOIN com_Code CSubCategory ON CSubCategory.CodeID = UF.SubCategory	
 		LEFT JOIN usr_UserRelation UR ON UR.UserInfoId = UF.UserInfoId
-		LEFT JOIN com_Code CCode ON CCode.CodeID = UR.RelationTypeCodeId
+		LEFT JOIN com_Code CCode ON UR.RelationTypeCodeId=CCode.CodeID 
 	
 
 		--DiscloInitLimit
