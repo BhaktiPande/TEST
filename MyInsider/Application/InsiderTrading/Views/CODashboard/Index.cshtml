@@ -185,7 +185,7 @@
                                                                 </a>
                                                             </td>
                                                         </tr>
-                                                        <tr>
+                                                        @*<tr>
                                                             <td>@InsiderTrading.Common.Common.getResource("tra_lbl_16307")</td>
                                                             @if (@Model.IsChangedTradingPolicydueforExpiryCount == 0)
                                                             {
@@ -206,7 +206,7 @@
                                                             {
                                                                 <td><a href='@Url.Action("PendingCount", "CODashboard", new { acid = InsiderTrading.Common.ConstEnum.UserActions.RULES_POLICY_DOCUMENT_LIST, DashboardId = 16, count = Model.PolicyDocumentdueforExpiryCount, NotificationQueueId = 0, inp_sParam = 0 })'><button class="btn btn-gray btn-sm showSelectedMenus" parentmenuid="1-MENU" childmenuid="3-1">@Model.PolicyDocumentdueforExpiryCount </button></a></td>
                                                             }
-                                                        </tr>
+                                                        </tr>*@
                                                         <tr>
                                                             <td style="vertical-align:middle;">@InsiderTrading.Common.Common.getResource("tra_lbl_16309")</td>
                                                             <td>
@@ -468,7 +468,7 @@
                                                                 </a>
                                                             </td>
                                                         </tr>
-                                                        <tr>
+                                                        @*<tr>
                                                             <td>@InsiderTrading.Common.Common.getResource("tra_lbl_54220")</td>
                                                             @if (@Model.IsChangedTradingPolicydueforExpiryCount == 0)
                                                             {
@@ -489,7 +489,7 @@
                                                             {
                                                                 <td><a href='@Url.Action("PendingCount", "CODashboard", new { acid = InsiderTrading.Common.ConstEnum.UserActions.RULES_POLICY_DOCUMENT_LIST, DashboardId = 16, count = Model.PolicyDocumentdueforExpiryCount, NotificationQueueId = 0, inp_sParam = 0 })'><button class="btn btn-gray btn-sm showSelectedMenus" parentmenuid="1-MENU" childmenuid="3-1">@Model.PolicyDocumentdueforExpiryCount </button></a></td>
                                                             }
-                                                        </tr>
+                                                        </tr>*@
                                                         <tr style="background-color:#e3e5e2;">
                                                             <td colspan="2">
                                                                 <div>

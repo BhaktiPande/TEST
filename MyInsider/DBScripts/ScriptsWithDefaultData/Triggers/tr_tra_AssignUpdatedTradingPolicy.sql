@@ -32,6 +32,11 @@ UserInfoId not in(
 SELECT UserInfoId FROM tra_TransactionMaster 
 WHERE DisclosureTypeCodeId=147001 ) 
 
+CREATE TABLE #tempVWTradingPolicyForUser(ID INT IDENTITY(1,1), ApplicabilityMstId INT,UserInfoId INT,MapToId INT)
+
+INSERT INTO #tempVWTradingPolicyForUser(ApplicabilityMstId, UserInfoId, MapToId)
+SELECT ApplicabilityMstId, UserInfoId, MapToId FROM vw_ApplicableTradingPolicyForUser
+
 SELECT @nTotCount=Count(ID) FROM #tmpUpdatePolicyId
 WHILE @nCount<=@nTotCount
 BEGIN
@@ -43,7 +48,7 @@ BEGIN
 		DECLARE @nTransactionMasterId INT
 		SELECT @inp_iUserInfoId=UserInfoID,@OldTradingPolicyId=OldTradingPolicyID,@nTransactionMasterId=TransactionMasterID FROM #tmpUpdatePolicyId WHERE ID=@nCount
 			
-			SELECT @NewTradingPolicyId=MAX(MapToId)  FROM vw_ApplicableTradingPolicyForUser WHERE UserInfoId=@inp_iUserInfoId
+			SELECT @NewTradingPolicyId=MAX(MapToId)  FROM #tempVWTradingPolicyForUser WHERE UserInfoId=@inp_iUserInfoId
 			
 			SELECT @TradingPolicyApplicableFromDate=ApplicableFromDate FROM rul_TradingPolicy WHERE TradingPolicyId=@NewTradingPolicyId
 			IF(@OldTradingPolicyId !=@NewTradingPolicyId and @TradingPolicyApplicableFromDate <= @dtCurrentDate)
@@ -73,7 +78,7 @@ BEGIN
 			SET @nCount=@nCount+1
 
 END
-
+DROP TABLE #tempVWTradingPolicyForUser
 DROP TABLE #tmpUpdatePolicyId
 
 END
