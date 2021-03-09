@@ -43,7 +43,7 @@
                 @using (Html.BeginForm("Create", "Employee", new { ReturnUrl = ViewBag.ReturnUrl, formId = InsiderTrading.Common.ConstEnum.Code.frmCreateEmployee }, FormMethod.Post, new { role = "form", autocomplete = "off" }))
                 {
                     @Html.AntiForgeryToken()
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-0">
                         <div class="card panel-default">
                             <div class="card-body">
                                 <div class="row">
@@ -291,7 +291,7 @@
                                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                                         <div class="box box-chart box-disclosure">
                                             <div class="box-header with-border">
-                                                <h3 class="box-title">Identity</h3>
+                                                <h3 class="box-title">Personal Details</h3>
                                             </div>
                                             <div class="box-body no-padding">
                                                 <div class="table-responsive pending-activ">
@@ -363,7 +363,7 @@
                                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                                         <div class="box box-chart box-disclosure">
                                             <div class="box-header with-border">
-                                                <h3 class="box-title">Work A</h3>
+                                                <h3 class="box-title">Identity</h3>
                                             </div>
                                             <div class="box-body no-padding">
                                                 <div class="table-responsive pending-activ">
@@ -427,7 +427,7 @@
                                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                                         <div class="box box-chart box-disclosure">
                                             <div class="box-header with-border">
-                                                <h3 class="box-title">Work B</h3>
+                                                <h3 class="box-title">Organisation Details</h3>
                                             </div>
                                             <div class="box-body no-padding">
                                                 <div class="table-responsive pending-activ">
@@ -488,6 +488,18 @@
                                                                 </td>
                                                             </tr>
 
+                                                            <tr>
+                                                                <td>
+                                                                    <div role="form">
+                                                                        <div class="form-group">
+                                                                            @Html.LabelFor(m => m.userInfoModel.DepartmentId)
+                                                                            @Html.DropDownListFor(m => m.userInfoModel.DepartmentId, new SelectList(ViewBag.DepartmentDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.DepartmentId).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.DepartmentId).ToString(), new { @class = "form-control" }))
+                                                                            @Html.ValidationMessageFor(m => m.userInfoModel.DepartmentId)
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+
 
                                                         </tbody>
                                                     </table>
@@ -501,25 +513,12 @@
                                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                                         <div class="box box-chart box-disclosure">
                                             <div class="box-header with-border">
-                                                <h3 class="box-title">Work C</h3>
+                                                <h3 class="box-title">Designation Details</h3>
                                             </div>
                                             <div class="box-body no-padding">
                                                 <div class="table-responsive pending-activ">
                                                     <table class="table table-hover">
-                                                        <tbody>
-
-
-                                                            <tr>
-                                                                <td>
-                                                                    <div role="form">
-                                                                        <div class="form-group">
-                                                                            @Html.LabelFor(m => m.userInfoModel.DepartmentId)
-                                                                            @Html.DropDownListFor(m => m.userInfoModel.DepartmentId, new SelectList(ViewBag.DepartmentDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.DepartmentId).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.DepartmentId).ToString(), new { @class = "form-control" }))
-                                                                            @Html.ValidationMessageFor(m => m.userInfoModel.DepartmentId)
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
+                                                        <tbody>           
 
                                                             <tr>
                                                                 <td>
@@ -533,8 +532,8 @@
                                                                 </td>
                                                             </tr>
 
-                                                            <tr id="divSubDesignation">
-                                                                <td>
+                                                            <tr>
+                                                                <td id="divSubDesignation">
                                                                     <div role="form">
                                                                         <div class="form-group">
                                                                             @Html.LabelFor(m => m.userInfoModel.SubDesignationId)
@@ -573,7 +572,7 @@
                                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                                         <div class="box box-chart box-disclosure">
                                             <div class="box-header with-border">
-                                                <h3 class="box-title">Work D</h3>
+                                                <h3 class="box-title">Category Information</h3>
                                             </div>
                                             <div class="box-body no-padding">
                                                 <div class="table-responsive pending-activ">
@@ -592,8 +591,8 @@
                                                                 </td>
                                                             </tr>
 
-                                                            <tr id="divSubCategories">
-                                                                <td>
+                                                            <tr>
+                                                                <td id="divSubCategories">
                                                                     <div role="form">
                                                                         <div class="form-group">
                                                                             @Html.LabelFor(m => m.userInfoModel.SubCategory)
@@ -862,11 +861,11 @@
         if ($("#btn_GetUserDematDetails").hasClass("btn-danger")) {
             $('#btn_GetUserDematDetails').attr("disabled", "disabled");
             if ('@ViewBag.WorkandEducationDetailsConfiguration' == 539001) {
-                $('#btn_GetUserEducationDetails').attr("disabled", "disabled");
+               $('#btn_GetUserEducationDetails').attr("disabled", "disabled");
+   
             }
             $('#btn_GetUserRelativeDetails').attr("disabled", "disabled");
             $('#btn_ConfirmDetails').attr("disabled", "disabled");
-
         }
         else {
             $('#btn_GetUserDematDetails').removeAttr("disabled", "disabled");
