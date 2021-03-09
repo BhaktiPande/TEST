@@ -65,7 +65,7 @@
                                                 {
                                                     if (InsiderTrading.Common.Common.CanPerform(@objReportHeaderKeyValueDTO.Acid))
                                                     {
-                                                        <a href="@Url.Action("RedirectToDisclosureLetter", "Reports", new { acid = @objReportHeaderKeyValueDTO.Acid, nTransactionLetterId = 0, nDisclosureTypeCodeId = @objReportHeaderKeyValueDTO.DisclosureTypeCodeId, nLetterForCodeId = @objReportHeaderKeyValueDTO.LetterForCodeId, nTransactionMasterId = @objReportHeaderKeyValueDTO.TransactionMasterId, EmployeeId = ViewBag.EmployeeId, LetterType = @objReportHeaderKeyValueDTO.LetterType, GridType = ViewBag.GridType, YearCode = ViewBag.YearCode, PeriodCode = ViewBag.PeriodCode, PeriodTypeId = ViewBag.PeriodTypeId, PeriodType = ViewBag.PeriodType })">( View )</a>
+                                                        <a href="@Url.Action("RedirectToDisclosureLetter", "Reports", new { acid = @objReportHeaderKeyValueDTO.Acid, nTransactionLetterId = 0, nDisclosureTypeCodeId = @objReportHeaderKeyValueDTO.DisclosureTypeCodeId, nLetterForCodeId = @objReportHeaderKeyValueDTO.LetterForCodeId, nTransactionMasterId = @objReportHeaderKeyValueDTO.TransactionMasterId, EmployeeId = ViewBag.EmployeeId, LetterType = @objReportHeaderKeyValueDTO.LetterType, GridType = ViewBag.GridType, YearCode = ViewBag.YearCode, PeriodCode = ViewBag.PeriodCode, PeriodTypeId = ViewBag.PeriodTypeId, PeriodType = ViewBag.PeriodType ,CalledFrom = "PeriodEndInsider"})">( View )</a>
                                                     }
                                                 }
                                             }
