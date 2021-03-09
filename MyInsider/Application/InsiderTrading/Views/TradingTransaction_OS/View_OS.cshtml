@@ -460,17 +460,17 @@
 {
     if (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
     {
-        <div class="row" style="margin: -20px 0px 0px -18px;">
+        <div class="row" style="margin: -20px 0px 0px -4px;">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 @if (ViewBag.TranactionMasterStatus == InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed)
                 {
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="width:6%;">
-                        <a class="btn btn-success" href='@Url.Action("Create", "TradingTransaction_OS", new { acid = ViewBag.acid, TransactionMasterId = @ViewBag.TransactionMasterId, UserTypeCodeId = @ViewBag.UserTypeId, frm = @ViewBag.Frm, UserInfoId = ViewBag.UserInfoId })' role="button"> @InsiderTrading.Common.Common.getResource("tra_btn_52062") </a>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    @*<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="width:6%;">*@
+                        <a class="btn btn-success mr-3" href='@Url.Action("Create", "TradingTransaction_OS", new { acid = ViewBag.acid, TransactionMasterId = @ViewBag.TransactionMasterId, UserTypeCodeId = @ViewBag.UserTypeId, frm = @ViewBag.Frm, UserInfoId = ViewBag.UserInfoId })' role="button"> @InsiderTrading.Common.Common.getResource("tra_btn_52062") </a>
+                    @*</div>*@
+                    @*<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">*@
                         <button id="btnInsiderSubmit" class="btn btn-shape btn-md btn-success" style="position: initial;"> @InsiderTrading.Common.Common.getResource("com_btn_14025")</button>
                         <button id="btnSubmitInsider" style="display:none;" data-toggle='modal' data-target='#popupAlert'></button>
-                    </div>
+                    @*</div>*@
                 }
                 @*<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="float:right">
                         <h5 style="float:right">Date of Acquisition: @ViewBag.DateOfAcquisition</h5>
@@ -630,7 +630,7 @@
         @if (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
         {
             <div id="hold-div-2" class="row @apply " @isInsiderEnterDetails style="margin: 0px 0px 0px 0px;">
-                <div class="card panel-default">
+                <div class="card panel-default" style="width:100%">
                     <div class="card-body">
                         <div class="row" style="margin: 0px -1px 0px -1px;">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 abc">
@@ -640,11 +640,10 @@
 
                                 }
                             </div>
-
-                            <div>
+                            <div style="width:100%">
                                 <div id="Grd_User_OtherSecurities" style="display:none">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                        <h5 style="margin: -5px 0px 10px -13px; ">@InsiderTrading.Common.Common.getResource("tra_lbl_50778"): @InsiderTrading.Common.Common.getResource("tra_lbl_50779") : @ViewBag.panNumber  </h5>
+                                        <h5 style="margin: -5px 0px 10px 0px; ">@InsiderTrading.Common.Common.getResource("tra_lbl_50778"): @InsiderTrading.Common.Common.getResource("tra_lbl_50779") : @ViewBag.panNumber  </h5>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                         @*<h5>@InsiderTrading.Common.Common.getResource("tra_lbl_50778"): @InsiderTrading.Common.Common.getResource("tra_lbl_50779") : @ViewBag.panNumber  </h5>
@@ -672,7 +671,7 @@
 
                                 <div id="Grd_Relative_OtherSecurities" style="display:none">
                                     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="margin: -17px 0px 0px 0px;">
-                                        <h5 style="margin: 10px 0px 9px -13px;">@InsiderTrading.Common.Common.getResource("tra_lbl_50778"): @InsiderTrading.Common.Common.getResource("tra_lbl_50780") </h5>
+                                        <h5 style="margin: 10px 0px 9px 0px;">@InsiderTrading.Common.Common.getResource("tra_lbl_50778"): @InsiderTrading.Common.Common.getResource("tra_lbl_50780") </h5>
                                     </div>
                                     <div class="search" gridtype="@ViewBag.RGridType">
                                         <input type="hidden" value="@ViewBag.TransactionMasterId" id="1" name="" gridtype="@ViewBag.RGridType" />
