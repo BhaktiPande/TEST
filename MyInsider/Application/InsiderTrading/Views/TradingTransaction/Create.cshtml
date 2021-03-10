@@ -64,7 +64,7 @@
         }
 
         $('#ForUserInfoId').change(function (event) {
-            $('#UserDetails').empty();
+            $('#UserDetails').empty().hide();
             if ($(this).val() != 0) {
                 var URL = $('#PopulateComboOnChange').val();
                 var arrData = $('#frmTradingTransactionDetails').serialize();
@@ -119,7 +119,7 @@
                 }
             }
             else {
-                $('#UserDetails').empty();
+                $('#UserDetails').empty().hide();        
             }
             return false;
 
@@ -989,7 +989,7 @@
                                     </div>
                                 }
 
-                                <div id="UserDetails" style="display:none;">
+                                <div id="UserDetails" style="display:contents;">
                                     @Html.HiddenFor(model => model.DMATDetailsID)
                                 </div>
                             </div>

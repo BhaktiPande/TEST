@@ -97,7 +97,7 @@ namespace InsiderTrading.Controllers
         //[AuthorizationPrivilegeFilter]
         //Authorization filter will not be required at this place as there are redirections handled internally and each of the individual redirection will have Authorization set on it.
         public ActionResult RedirectToDisclosureLetter(int acid, int nTransactionLetterId, int nDisclosureTypeCodeId, int nLetterForCodeId,
-            int nTransactionMasterId, int EmployeeId, string LetterType, int GridType, string YearCode = "", string PeriodCode = "", string StockExchange = "",int PeriodTypeId=0,string PeriodType=null)
+            int nTransactionMasterId, int EmployeeId, string LetterType, int GridType, string YearCode = "", string PeriodCode = "", string StockExchange = "",int PeriodTypeId=0,string PeriodType=null, string CalledFrom = "")
         {
 
             LoginUserDetails objLoginUserDetails = (LoginUserDetails)Common.Common.GetSessionValue(ConstEnum.SessionValue.UserDetails);
@@ -140,7 +140,7 @@ namespace InsiderTrading.Controllers
                 else if (GridType == ConstEnum.GridType.Report_InitialDisclosureEmployeeWise)
                     return RedirectToAction("ViewHardCopy", "TradingTransaction", new { acid = acid, nDisclosureTypeCodeId = nDisclosureTypeCodeId, nTransactionMasterId = nTransactionMasterId });
                 else if (GridType == ConstEnum.GridType.Report_PeriodEndDisclosureEmployeeIndividual)
-                    return RedirectToAction("ViewHardCopy", "TradingTransaction", new { acid = acid, nTransactionLetterId = nTransactionLetterId, nDisclosureTypeCodeId = nDisclosureTypeCodeId, nLetterForCodeId = nLetterForCodeId, nTransactionMasterId = nTransactionMasterId, year = YearCode, Period = PeriodCode });
+                    return RedirectToAction("ViewHardCopy", "TradingTransaction", new { acid = acid, nTransactionLetterId = nTransactionLetterId, nDisclosureTypeCodeId = nDisclosureTypeCodeId, nLetterForCodeId = nLetterForCodeId, nTransactionMasterId = nTransactionMasterId, year = YearCode, Period = PeriodCode ,CalledFrom = "PeriodEndInsider" });
                 else if (GridType == ConstEnum.GridType.Report_ContinuousReportEmployeeIndividual)
                     return RedirectToAction("ViewHardCopy", "TradingTransaction", new { acid = acid, nTransactionLetterId = nTransactionLetterId, nDisclosureTypeCodeId = nDisclosureTypeCodeId, nLetterForCodeId = nLetterForCodeId, nTransactionMasterId = nTransactionMasterId});
             }

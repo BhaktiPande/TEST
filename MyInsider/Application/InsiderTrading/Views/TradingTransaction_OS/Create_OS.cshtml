@@ -100,7 +100,7 @@
         }
 
         $('#ForUserInfoId').change(function (event) {
-            $('#UserDetails').empty();
+            $('#UserDetails').empty().hide();
             if ($(this).val() != 0) {
                 var URL = $('#PopulateComboOnChange').val();
                 var arrData = $('#frmTradingTransactionDetails').serialize();
@@ -156,7 +156,8 @@
                 }
             }
             else {
-                $('#UserDetails').empty();
+                $('#UserDetails').empty().hide();
+            
             }
             return false;
 
@@ -1051,8 +1052,8 @@
             @Html.ValidationSummary(true)
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
+                    <div class="card panel-default">
+                        <div class="card-body">
                             @{
 
 
@@ -1093,7 +1094,7 @@
                                     </div>
 
 
-                                    <div id="UserDetails" style="display:none;">
+                                    <div id="UserDetails" class="col-lg-3 col-md-3 col-sm-6 col-xs-12"  style="display:none;" >
                                         @Html.HiddenFor(model => model.DMATDetailsID)
                                     </div>
 
