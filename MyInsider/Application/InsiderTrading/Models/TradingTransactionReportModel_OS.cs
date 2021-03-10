@@ -27,6 +27,8 @@ namespace InsiderTrading.Models
         [RegularExpression(ConstEnum.DataValidation.SearchValidation, ErrorMessage = "rpt_msg_50521")]
         public string PAN { get; set; }
 
+        public string Designation { get; set; }
+
         public DateTime? TransactionFromDate { get; set; }
 
         public DateTime? TransactionToDate { get; set; }
