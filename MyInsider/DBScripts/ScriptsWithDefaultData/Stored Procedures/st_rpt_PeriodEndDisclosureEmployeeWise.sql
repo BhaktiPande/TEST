@@ -99,8 +99,10 @@ print 'st_rpt_PeriodEndDisclosureEmployeeWise'
 	CREATE TABLE #tmpPEDisclosure(UserInfoId INT, EmployeeId NVARCHAR(50), InsiderName  NVARCHAR(100),
 	JoiningDate DATETIME, DateOfInactivation DATETIME, CINNumber NVARCHAR(100), Designation NVARCHAR(100), Grade NVARCHAR(100), Location NVARCHAR(50),
 	Department NVARCHAR(100), Category VARCHAR(50), SubCategory VARCHAR(50), StatusCodeId VARCHAR(50), CompanyName NVARCHAR(200), TypeOfInsider NVARCHAR(50), SubmissionDate DATETIME,
-	SoftCopySubmissionDate DATETIME, HardCopySubmissionDate DATETIME, CommentId INT DEFAULT 162003, TransactionMasterId INT, 
-	LastSubmissionDate DATETIME, PEndDate DATETIME, YearCodeId INT, PeriodCodeId INT,PeriodTypeId INT,PeriodType varchar(50))
+
+	SoftCopySubmissionDate VARCHAR(512), HardCopySubmissionDate VARCHAR(512), CommentId INT DEFAULT 162003, TransactionMasterId INT, 
+	LastSubmissionDate DATETIME, PEndDate DATETIME, YearCodeId INT, PeriodCodeId INT,PeriodTypeId INT,PeriodType varchar(50),softCopyReq INT,HardCopyReq INT)
+
 
 	DECLARE @tmpTransactionIds TABLE (TransactionMasterId INT, UserInfoId INT)
 
@@ -421,6 +423,7 @@ print 'st_rpt_PeriodEndDisclosureEmployeeWise'
 
 		UPDATE tmpDisc
 			SET EmployeeId = UF.EmployeeId,
+			EmailId = UF.EmailId,
 			InsiderName = CASE WHEN UserTypeCodeId = 101004 THEN C.CompanyName ELSE ISNULL(FirstName, '') + ' ' + ISNULL(LastName, '') END,
 			JoiningDate = DateOfBecomingInsider,
 			DateOfInactivation = UF.DateOfInactivation,
@@ -435,8 +438,39 @@ print 'st_rpt_PeriodEndDisclosureEmployeeWise'
 			CompanyName = C.CompanyName,
 			TypeOfInsider = CUserType.CodeName + CASE WHEN DateOfBecomingInsider IS NOT NULL THEN @sInsider ELSE '' END,
 			SubmissionDate = vwIn.DetailsSubmitDate,
-			SoftCopySubmissionDate = vwIn.ScpSubmitDate,
-			HardCopySubmissionDate = vwIn.HcpSubmitDate,
+
+			SoftCopySubmissionDate = CASE 
+				WHEN vwIn.SoftCopyReq = 1 AND vwIn.DetailsSubmitStatus = 1 THEN -- if soft copy is required 
+					(CASE 
+						WHEN vwIn.ScpSubmitStatus = 0 THEN 'Pending'
+						WHEN vwIn.ScpSubmitStatus = 1 THEN CONVERT(VARCHAR(max), UPPER(REPLACE(CONVERT(NVARCHAR, vwIn.ScpSubmitDate, 106),' ','/')))
+						ELSE '-' END)
+				WHEN vwIn.SoftCopyReq = 0 AND vwIn.DetailsSubmitStatus = 1 THEN 'Not Required'  -- if soft copy is NOT required
+				ELSE '-' 
+			END,
+			HardCopySubmissionDate = 
+			CASE 
+				WHEN vwIn.HardCopyReq = 1 AND vwIn.DetailsSubmitStatus = 1 THEN -- if hard copy is required 
+					(CASE 
+						WHEN vwIn.SoftCopyReq = 1 THEN   -- if soft copy is required 
+							(CASE 
+								WHEN vwIn.ScpSubmitStatus = 0 THEN  ''
+								WHEN vwIn.ScpSubmitStatus = 1 AND vwIn.HcpSubmitStatus = 0 THEN  'Pending'
+								WHEN vwIn.ScpSubmitStatus = 1 AND vwIn.HcpSubmitStatus = 1 THEN  CONVERT(VARCHAR(max), UPPER(REPLACE(CONVERT(NVARCHAR, vwIn.HcpSubmitDate, 106),' ','/')))
+								ELSE '-' END)
+						ELSE    -- if soft copy is NOT required
+							(CASE 
+								WHEN vwIn.HcpSubmitStatus = 0 THEN 'Pending' 
+								WHEN vwIn.HcpSubmitStatus = 1 THEN CONVERT(VARCHAR(max), UPPER(REPLACE(CONVERT(NVARCHAR, vwIn.HcpSubmitDate, 106),' ','/'))) 
+								ELSE '-' END)
+						END) 
+				WHEN vwIn.HardCopyReq = 0 AND vwIn.DetailsSubmitStatus = 1 THEN		-- if hard copy is NOT required
+					(CASE
+						WHEN vwIn.SoftCopyReq = 1 AND vwIn.ScpSubmitStatus = 1 THEN 'Not Required'	-- if soft copy is required
+						WHEN vwIn.SoftCopyReq = 0 THEN 'Not Required'  -- if soft copy is NOT required
+						ELSE '-' END)
+				ELSE '-' 
+			END,
 			TransactionMasterId = vwIn.TransactionMasterId,
 			LastSubmissionDate = CONVERT(date, dbo.uf_tra_GetNextTradingDateOrNoOfDays(TM.PeriodEndDate, DiscloPeriodEndToCOByInsdrLimit, NULL, 0, 1, 0, @nExchangeTypeCodeId_NSE)), -- DATEADD(D, DiscloPeriodEndToCOByInsdrLimit, TM.PeriodEndDate),
 			YearCodeId = UPEMap.YearCodeId, 
@@ -444,7 +478,7 @@ print 'st_rpt_PeriodEndDisclosureEmployeeWise'
 			PeriodTypeId=CASE 
 							WHEN TP.DiscloPeriodEndFreq = 137001 THEN 123001 -- Yearly
 							WHEN TP.DiscloPeriodEndFreq = 137002 THEN 123003 -- Quarterly
-							WHEN TP.DiscloPeriodEndFreq = 137003 THEN 123004 -- Monthly
+							WHEN TP.DiscloPeriodEndFreq = 137003 THEN 123004 -- Monthlys
 							WHEN TP.DiscloPeriodEndFreq = 137004 THEN 123002 -- half yearly
 							ELSE TP.DiscloPeriodEndFreq 
 						END,
@@ -454,7 +488,9 @@ print 'st_rpt_PeriodEndDisclosureEmployeeWise'
 							WHEN TP.DiscloPeriodEndFreq = 137003 THEN (select CodeName from com_code where codeId='123004') -- Monthly
 							WHEN TP.DiscloPeriodEndFreq = 137004 THEN (select CodeName from com_code where codeId='123002') -- half yearly
 							ELSE (select CodeName from com_code where codeId=TP.DiscloPeriodEndFreq) 
-						END
+						END,
+			softCopyReq =vwIn.SoftCopyReq,
+			HardCopyReq =vwIn.HardCopyReq
 		FROM #tmpPEDisclosure tmpDisc JOIN usr_UserInfo UF ON tmpDisc.UserInfoId = UF.UserInfoId
 		JOIN mst_Company C ON UF.CompanyId = C.CompanyId
 		JOIN com_Code CUserType ON UF.UserTypeCodeId = CUserType.CodeID
@@ -523,12 +559,13 @@ print 'st_rpt_PeriodEndDisclosureEmployeeWise'
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(TypeOfInsider) AS rpt_grd_19048, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatDateValue(LastSubmissionDate,0)) AS rpt_grd_19049, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatDateValue(SubmissionDate,1)) AS rpt_grd_19073, '
-		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatDateValue(SoftCopySubmissionDate,1)) AS rpt_grd_19051, '
-		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(dbo.uf_rpt_FormatDateValue(HardCopySubmissionDate,1)) AS rpt_grd_19052, '
+		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(SoftCopySubmissionDate) AS rpt_grd_19051, '
+		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(HardCopySubmissionDate) AS rpt_grd_19052, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(RComment.ResourceValue) AS rpt_grd_19053, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(YearCodeId) AS YearCodeId, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(PeriodCodeId) AS PeriodCodeId, UserInfoID , TransactionMasterId, '
 		SELECT @sSQL = @sSQL + 'PeriodTypeId AS PeriodTypeId, '
+		SELECT @sSQL = @sSQL + 'EmailId AS rpt_grd_81004, ' --'add email id AS rpt_grd_81004'
 		SELECT @sSQL = @sSQL + 'PeriodType AS PeriodType '
 		SELECT @sSQL = @sSQL + 'FROM #tmpList t JOIN #tmpPEDisclosure ID ON t.EntityID = ID.UserInfoId '
 		SELECT @sSQL = @sSQL + 'JOIN com_Code CComment ON ID.CommentId = CComment.CodeID '

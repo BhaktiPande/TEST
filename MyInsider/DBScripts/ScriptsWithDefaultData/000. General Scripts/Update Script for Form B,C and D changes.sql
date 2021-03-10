@@ -37,6 +37,17 @@ BEGIN
 	update mst_Resource set ResourceValue='Open Interest of the Option Contracts held at the time of becoming Promoter/member of Promoter group/ appointment of Director/KMP', OriginalResourceValue='Open Interest of the Option Contracts held at the time of becoming Promoter/member of Promoter group/ appointment of Director/KMP' where ResourceKey ='dis_grd_17141'
 END
 
+IF EXISTS (SELECT * FROM mst_Resource WHERE ResourceKey ='dis_grd_17133')
+BEGIN
+	update mst_Resource set ResourceValue='Date of appointment of Director /KMP OR Date of becoming Promoter/member of Promoter group', OriginalResourceValue='Date of appointment of Director /KMP OR Date of becoming Promoter/member of Promoter group' where ResourceKey ='dis_grd_17133'
+END
+
+IF EXISTS (SELECT * FROM mst_Resource WHERE ResourceKey ='dis_grd_17134')
+BEGIN
+	update mst_Resource set ResourceValue='Securities held at the time of becoming Promoter / member of Promoter group /Appointment of Director/KMP', OriginalResourceValue='Securities held at the time of becoming Promoter / member of Promoter group /Appointment of Director/KMP' where ResourceKey ='dis_grd_17134'
+END
+
+
 --==========================================Form C=====================================================================
 
 IF EXISTS (SELECT * FROM mst_Resource WHERE ResourceKey ='dis_lbl_17180')
