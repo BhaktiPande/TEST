@@ -95,12 +95,22 @@ BEGIN
 	DECLARE @nBoth INT = 505003
 	DECLARE @nNo   INT = 505004 
 
+	DECLARE @inp_dtAuthorizedShareCapitalDate DATETIME  = GETDATE()
+	DECLARE @dPaidUpShare DECIMAL(30,0)
+	DECLARE @nMultiplier INT  = 100
+
 	Select @UserId = UserInfoId, @nNoPeriodEndHoldingFlag=NoHoldingFlag from tra_TransactionMaster where TransactionMasterId = @inp_iTransactionMasterId 
 	--AND DisclosureTypeCodeId = @inp_iDisclosureType
 
 	DECLARE @tmpTransactions TABLE(TransactionMasterId INT)
 	
 	BEGIN TRY
+		SELECT TOP 1 @dPaidUpShare =  PaidUpShare 
+		FROM com_CompanyPaidUpAndSubscribedShareCapital SC
+		INNER JOIN mst_Company C ON SC.CompanyID = C.CompanyId
+		WHERE C.IsImplementing = 1
+		AND PaidUpAndSubscribedShareCapitalDate <= @inp_dtAuthorizedShareCapitalDate
+		ORDER BY PaidUpAndSubscribedShareCapitalDate DESC
 	
 		DECLARE @temp TABLE(UserInfoId INT,relationType VARCHAR(512))
 		INSERT INTO @temp(UserInfoId,relationType)
@@ -216,6 +226,25 @@ BEGIN
 			BEGIN
 				IF (@bShowOriginalUserDetails = 1)
 				BEGIN
+					DECLARE @Temp_Table_ShowDetailsFromUserDetails AS TABLE 
+					(
+						dis_grd_17209	VARCHAR(MAX),dis_grd_17210	VARCHAR(250),dis_grd_17211	VARCHAR(50),dis_grd_17212	VARCHAR(50),
+						dis_grd_17213	VARCHAR(MAX),dis_grd_17214	VARCHAR(50),dis_grd_17215	VARCHAR(50),dis_grd_17216	VARCHAR(50),
+						dis_grd_17217	VARCHAR(50),dis_grd_17218	VARCHAR(50),TransactionType	VARCHAR(50),dis_grd_17219	VARCHAR(50),
+						dis_grd_17220	VARCHAR(50),dis_grd_17221	VARCHAR(MAX),dis_grd_17222	VARCHAR(50),dis_grd_17223	DATETIME,
+						dis_grd_17224	DATETIME,dis_grd_17426	DATETIME,dis_grd_17427 VARCHAR(50),UserSecurityTypeCode INT,
+						TransactionDetailsId INT,ForSort INT
+					)
+					DECLARE @Temp_TableCashlessTransUserDetails AS TABLE 
+					(
+						dis_grd_17209	VARCHAR(MAX),dis_grd_17210	VARCHAR(250),dis_grd_17211	VARCHAR(50),dis_grd_17212	VARCHAR(50),
+						dis_grd_17213	VARCHAR(MAX),dis_grd_17214	VARCHAR(50),dis_grd_17215	VARCHAR(50),dis_grd_17216	VARCHAR(50),
+						dis_grd_17217	VARCHAR(50),dis_grd_17218	VARCHAR(50),TransactionType	VARCHAR(50),dis_grd_17219	VARCHAR(50),
+						dis_grd_17220	VARCHAR(50),dis_grd_17221	VARCHAR(MAX),dis_grd_17222	VARCHAR(50),dis_grd_17223	DATETIME,
+						dis_grd_17224	DATETIME,dis_grd_17426	DATETIME,dis_grd_17427 VARCHAR(50),UserSecurityTypeCode INT,
+						TransactionDetailsId INT,ForSort INT
+					)
+					INSERT INTO @Temp_Table_ShowDetailsFromUserDetails
 					select 
 						CASE WHEN u.UserTypeCodeId = @UserTYpe_Corporate THEN ISNULL(co.CompanyName,' ') ELSE 
 						ISNULL(u.FirstName + ' ',' ') + ISNULL(u.MiddleName + ' ',' ') + ISNULL(u.LastName,' ') END + '##' + ISNULL(u.PAN,'') 
@@ -232,6 +261,7 @@ BEGIN
 						case when td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN CONVERT(VARCHAR(MAX),Quantity) ELSE '-' END as dis_grd_17216,
 						case when td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN CONVERT(VARCHAR(MAX),Value) ELSE '-' END as dis_grd_17217,
 						case when td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN CTransType.CodeName ELSE '-' END as dis_grd_17218,
+						case when td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN CTransType.CodeID ELSE '-' END as 'TransactionType',
 						null as dis_grd_17219,
 						case when td.SecurityTypeCodeId in(@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) then C.CodeName else '-' end as dis_grd_17220,
 						case 
@@ -244,8 +274,9 @@ BEGIN
 												 WHEN @nBoth = (SELECT dbo.uf_tra_GetImpactOnPostQuantity(td.TransactionTypeCodeId, td.ModeOfAcquisitionCodeId, td.SecurityTypeCodeId)) THEN 0
 												 WHEN @nNo = (SELECT dbo.uf_tra_GetImpactOnPostQuantity(td.TransactionTypeCodeId, td.ModeOfAcquisitionCodeId, td.SecurityTypeCodeId)) THEN 0
 												 ELSE Quantity END
-										END))),'') + '##' 
-								+ ISNULL(CONVERT(VARCHAR(MAX),PerOfSharesPostTransaction),'') 
+										END))),'') + '##'+ CASE WHEN td.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_PARTIAL THEN ISNULL(CONVERT(VARCHAR(MAX),CONVERT(DECIMAL(10,2),(((TD.SecuritiesPriorToAcquisition + Quantity)*@nMultiplier) / @dPaidUpShare))),'')
+										WHEN td.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_ALL THEN ISNULL(CONVERT(VARCHAR(MAX),CONVERT(DECIMAL(10,2),(((TD.SecuritiesPriorToAcquisition + Quantity)*@nMultiplier) / @dPaidUpShare))),'') 
+										ELSE ISNULL(CONVERT(VARCHAR(MAX),PerOfSharesPostTransaction),'') END 
 							when td.SecurityTypeCodeId in (@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN 
 								ISNULL(CONVERT(VARCHAR(MAX),(SecuritiesPriorToAcquisition + (
 										CASE 											
@@ -262,7 +293,10 @@ BEGIN
 						case when td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN td.DateOfAcquisition ELSE NULL END as dis_grd_17223,
 						case when td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN td.DateOfAcquisition ELSE NULL END as dis_grd_17224,
 						case when td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN GETDATE() ELSE NULL END as dis_grd_17426,
-						case when td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN CAcquisitionType.CodeName ELSE '-' END as dis_grd_17427
+						case when td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN CAcquisitionType.CodeName ELSE '-' END as dis_grd_17427,
+						td.SecurityTypeCodeId as UserSecurityTypeCode,
+						TD.TransactionDetailsId AS TransactionDetailsId,
+						1 as ForSort
 					from tra_TransactionDetails td
 					join @temp t on t.UserInfoId = td.ForUserInfoId
 					join usr_UserInfo u on u.UserInfoId = t.UserInfoId
@@ -274,12 +308,75 @@ BEGIN
 					join com_Code Cexchange on Cexchange.CodeID = td.ExchangeCodeId
 					LEFT JOIN com_Code CCountry ON CCountry.CodeID = u.CountryId and CCountry.CodeGroupId = @CountryCodeGroupID
 					JOIN @tmpTransactions tmIds ON tm.TransactionMasterId = tmIds.TransactionMasterId
+
+					INSERT INTO @Temp_TableCashlessTransUserDetails 
+					SELECT dis_grd_17209,dis_grd_17210,dis_grd_17211,dis_grd_17212,
+						dis_grd_17221 AS 'dis_grd_17213',dis_grd_17214,dis_grd_17215,dis_grd_17216,
+						dis_grd_17217,dis_grd_17218,TransactionType,dis_grd_17219,
+						dis_grd_17220,dis_grd_17221,dis_grd_17222,dis_grd_17223,
+						dis_grd_17224,dis_grd_17426,dis_grd_17427,UserSecurityTypeCode,
+						TransactionDetailsId, 2 AS ForSort
+					FROM @Temp_Table_ShowDetailsFromUserDetails T
+					WHERE T.TransactionType IN(143004,143005)
+					
+					UPDATE @Temp_TableCashlessTransUserDetails 
+						SET dis_grd_17216 = TD.Quantity2,
+							dis_grd_17217 = TD.Value2, 
+							dis_grd_17221 = CASE WHEN TD.SecurityTypeCodeId in (@SecuriyType_Share) THEN ISNULL(CONVERT(VARCHAR(MAX),(CONVERT(DECIMAL(10,0),SUBSTRING(dis_grd_17213, 0,CHARINDEX('#', dis_grd_17213))) - TD.Quantity2)),'')
+							+ '##' + CASE WHEN td.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_PARTIAL
+									 THEN ISNULL(CONVERT(VARCHAR(MAX),CONVERT(DECIMAL(10,2),(((TD.SecuritiesPriorToAcquisition - Quantity2)*@nMultiplier) / @dPaidUpShare))),'')
+									WHEN TD.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_ALL 
+									THEN ISNULL(CONVERT(VARCHAR(MAX),PerOfSharesPostTransaction),'') END
+							ELSE CASE WHEN TD.SecurityTypeCodeId in (@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN ISNULL(CONVERT(VARCHAR(MAX),(CONVERT(DECIMAL(10,0),SUBSTRING(dis_grd_17213, 0,CHARINDEX('#', dis_grd_17213))) - TD.Quantity2)),'')+ '##NA' END END
+					FROM @Temp_TableCashlessTransUserDetails Temp 
+					JOIN tra_TransactionDetails TD ON Temp.TransactionDetailsId = TD.TransactionDetailsId
+
+					UPDATE @Temp_TableCashlessTransUserDetails
+					SET dis_grd_17221 = CASE WHEN (SUBSTRING(dis_grd_17221, CHARINDEX('##', dis_grd_17221)+2,LEN(dis_grd_17221))) < 0 
+										THEN ISNULL(CONVERT(VARCHAR(MAX),CONVERT(DECIMAL(10,0),SUBSTRING(dis_grd_17221, 0,CHARINDEX('#', dis_grd_17221)))),'')+'##0.00'
+										ELSE dis_grd_17221 END
+					
+					INSERT INTO @Temp_Table_ShowDetailsFromUserDetails
+						SELECT dis_grd_17209,dis_grd_17210,dis_grd_17211,dis_grd_17212,
+						dis_grd_17213,dis_grd_17214,dis_grd_17215,dis_grd_17216,
+						dis_grd_17217,dis_grd_17218,TransactionType,dis_grd_17219,
+						dis_grd_17220,dis_grd_17221,dis_grd_17222,dis_grd_17223,
+						dis_grd_17224,dis_grd_17426,dis_grd_17427,UserSecurityTypeCode,
+						TransactionDetailsId, 2 AS ForSort
+					FROM @Temp_TableCashlessTransUserDetails
+					
+					SELECT dis_grd_17209,dis_grd_17210,dis_grd_17211,dis_grd_17212,
+						dis_grd_17213,dis_grd_17214,dis_grd_17215,dis_grd_17216,
+						dis_grd_17217,dis_grd_17218,TransactionType,dis_grd_17219,
+						dis_grd_17220,dis_grd_17221,dis_grd_17222,dis_grd_17223,
+						dis_grd_17224,dis_grd_17426,dis_grd_17427,TransactionDetailsId 
+					FROM @Temp_Table_ShowDetailsFromUserDetails
+					ORDER BY dis_grd_17212,TransactionDetailsId,dis_grd_17223,ForSort
 				END
 				ELSE
 				BEGIN
 				--Modified(added #Temp_Table) to handle the date of intimation of the transactions on form c having Soft Copy submission is “Not Required” till the threshold limit (as set in Trading Policy -> Continuous Disclosures Section).  
-					select * into #Temp_Table from 
+					DECLARE @Temp_Table AS TABLE 
 					(
+						dis_grd_17209	VARCHAR(MAX),dis_grd_17210	VARCHAR(250),dis_grd_17211	VARCHAR(50),dis_grd_17212	VARCHAR(50),
+						dis_grd_17213	VARCHAR(MAX),dis_grd_17214	VARCHAR(50),dis_grd_17215	VARCHAR(50),dis_grd_17216	VARCHAR(50),
+						dis_grd_17217	VARCHAR(50),dis_grd_17218	VARCHAR(50),TransactionType	VARCHAR(50),dis_grd_17219	VARCHAR(50),
+						dis_grd_17220	VARCHAR(50),dis_grd_17221	VARCHAR(MAX),dis_grd_17222	VARCHAR(50),dis_grd_17223	DATETIME,
+						dis_grd_17224	DATETIME,dis_grd_17426	DATETIME,dis_grd_17427 VARCHAR(50),UserSecurityTypeCode INT,
+						TransactionDetailsId INT,dis_grd_55502 VARCHAR(50)
+					)
+					DECLARE @Temp_TableCashless AS TABLE 
+					(
+						dis_grd_17209	VARCHAR(MAX),dis_grd_17210	VARCHAR(250),dis_grd_17211	VARCHAR(50),dis_grd_17212	VARCHAR(50),
+						dis_grd_17213	VARCHAR(MAX),dis_grd_17214	VARCHAR(50),dis_grd_17215	VARCHAR(50),dis_grd_17216	VARCHAR(50),
+						dis_grd_17217	VARCHAR(50),dis_grd_17218	VARCHAR(50),TransactionType	VARCHAR(50),dis_grd_17219	VARCHAR(50),
+						dis_grd_17220	VARCHAR(50),dis_grd_17221	VARCHAR(MAX),dis_grd_17222	VARCHAR(50),dis_grd_17223	DATETIME,
+						dis_grd_17224	DATETIME,dis_grd_17426	DATETIME,dis_grd_17427 VARCHAR(50),UserSecurityTypeCode INT,
+						TransactionDetailsId INT,dis_grd_55502 VARCHAR(50)--ForSort INT
+					)
+					INSERT INTO @Temp_Table
+					SELECT *  from 
+					( 
 					select 
 						CASE 
 							WHEN TUD.UserTypeCode = @UserTYpe_Corporate THEN ISNULL(TUD.CompanyName,' ') 
@@ -324,6 +421,7 @@ BEGIN
 							when td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN CTransType.CodeName 
 							ELSE '-'
 						END as dis_grd_17218,
+						case when td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN CTransType.CodeID ELSE '-' END as 'TransactionType',
 						null as dis_grd_17219,
 						case 
 							when td.SecurityTypeCodeId in(@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) then C.CodeName 
@@ -339,8 +437,9 @@ BEGIN
 												 WHEN @nBoth = (SELECT dbo.uf_tra_GetImpactOnPostQuantity(td.TransactionTypeCodeId, td.ModeOfAcquisitionCodeId, td.SecurityTypeCodeId)) THEN 0
 												 WHEN @nNo = (SELECT dbo.uf_tra_GetImpactOnPostQuantity(td.TransactionTypeCodeId, td.ModeOfAcquisitionCodeId, td.SecurityTypeCodeId)) THEN 0
 												 ELSE Quantity END
-										END))),'') + '##' 
-								+ ISNULL(CONVERT(VARCHAR(MAX),PerOfSharesPostTransaction),'') 
+										END))),'') + '##'+ CASE WHEN td.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_PARTIAL THEN ISNULL(CONVERT(VARCHAR(MAX),CONVERT(DECIMAL(10,2),(((TD.SecuritiesPriorToAcquisition + Quantity)*@nMultiplier) / @dPaidUpShare))),'')
+										WHEN td.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_ALL THEN ISNULL(CONVERT(VARCHAR(MAX),CONVERT(DECIMAL(10,2),(((TD.SecuritiesPriorToAcquisition + Quantity)*@nMultiplier) / @dPaidUpShare))),'') 
+										ELSE ISNULL(CONVERT(VARCHAR(MAX),PerOfSharesPostTransaction),'') END 
 							when td.SecurityTypeCodeId in (@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN 
 								ISNULL(CONVERT(VARCHAR(MAX),(SecuritiesPriorToAcquisition + (
 										CASE 											
@@ -371,11 +470,18 @@ BEGIN
 							ELSE NULL 
 						END as dis_grd_17426,
 						-- Added to update date of intimation on from c if securuty type is future contract or option contract
-						td.SecurityTypeCodeId as UserSecurityTypeCode,
 						case 
 							when td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN CAcquisitionType.CodeName 
 							ELSE '-' 
-						END as dis_grd_17427
+						END as dis_grd_17427,
+						td.SecurityTypeCodeId as UserSecurityTypeCode,
+						TD.TransactionDetailsId AS TransactionDetailsId,					
+						case 
+							when td.SecurityTypeCodeId not in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN '-' 
+							ELSE TUD.StockExchange 
+						END AS dis_grd_55502
+
+						--TUD.StockExchange as dis_grd_55502						
 					from tra_TransactionDetails td
 					join com_Code C on C.CodeID = td.SecurityTypeCodeId
 					join tra_TransactionMaster tm on tm.TransactionMasterId = td.TransactionMasterId
@@ -385,9 +491,52 @@ BEGIN
 					LEFT JOIN tra_TradingTransactionUserDetails TUD ON td.TransactionDetailsId = TUD.TransactionDetailsId 
 								AND TUD.FormDetails = 1 AND TUD.TransactionMasterId = tmIds.TransactionMasterId 
 				    )as Temp_Table
-					update #Temp_Table set dis_grd_17426 = (select MAX(dis_grd_17426) from #Temp_Table where dis_grd_17426 is not null)
+					update @Temp_Table set dis_grd_17426 = (select MAX(dis_grd_17426) from @Temp_Table where dis_grd_17426 is not null)
 					where UserSecurityTypeCode in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb)
-					select dis_grd_17209,dis_grd_17210,dis_grd_17211,dis_grd_17212,dis_grd_17213,dis_grd_17214,dis_grd_17215,dis_grd_17216,dis_grd_17217,dis_grd_17218,dis_grd_17219,dis_grd_17220,dis_grd_17221,dis_grd_17222,dis_grd_17223,dis_grd_17224,dis_grd_17426,dis_grd_17427 from #Temp_Table
+					
+					INSERT INTO @Temp_TableCashless 
+					SELECT dis_grd_17209,dis_grd_17210,dis_grd_17211,dis_grd_17212,
+						dis_grd_17221 AS 'dis_grd_17213',dis_grd_17214,dis_grd_17215,dis_grd_17216,
+						dis_grd_17217,dis_grd_17218,TransactionType,dis_grd_17219,
+						dis_grd_17220,dis_grd_17221,dis_grd_17222,dis_grd_17223,
+						dis_grd_17224,dis_grd_17426,dis_grd_17427,UserSecurityTypeCode,
+						TransactionDetailsId, dis_grd_55502 
+					FROM @Temp_Table T
+					WHERE T.TransactionType IN(143004,143005)
+					
+					UPDATE @Temp_TableCashless 
+						SET dis_grd_17216 = TD.Quantity2,
+							dis_grd_17217 = TD.Value2, 
+							dis_grd_17221 = CASE WHEN TD.SecurityTypeCodeId in (@SecuriyType_Share) THEN ISNULL(CONVERT(VARCHAR(MAX),(CONVERT(DECIMAL(10,0),SUBSTRING(dis_grd_17213, 0,CHARINDEX('#', dis_grd_17213))) - TD.Quantity2)),'')
+							+ '##' + CASE WHEN td.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_PARTIAL
+									 THEN ISNULL(CONVERT(VARCHAR(MAX),CONVERT(DECIMAL(10,2),(((TD.SecuritiesPriorToAcquisition - Quantity2)*@nMultiplier) / @dPaidUpShare))),'')
+									WHEN TD.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_ALL 
+									THEN ISNULL(CONVERT(VARCHAR(MAX),PerOfSharesPostTransaction),'') END
+							ELSE CASE WHEN TD.SecurityTypeCodeId in (@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN ISNULL(CONVERT(VARCHAR(MAX),(CONVERT(DECIMAL(10,0),SUBSTRING(dis_grd_17213, 0,CHARINDEX('#', dis_grd_17213))) - TD.Quantity2)),'')+ '##NA' END END
+					FROM @Temp_TableCashless Temp 
+					JOIN tra_TransactionDetails TD ON Temp.TransactionDetailsId = TD.TransactionDetailsId
+					
+					UPDATE @Temp_TableCashless
+					SET dis_grd_17221 = CASE WHEN CONVERT(DECIMAL(10,2),(SUBSTRING(dis_grd_17221, CHARINDEX('##', dis_grd_17221)+2,LEN(dis_grd_17221)))) < 0 
+										THEN ISNULL(CONVERT(VARCHAR(MAX),CONVERT(DECIMAL(10,0),SUBSTRING(dis_grd_17221, 0,CHARINDEX('#', dis_grd_17221)))),'')+'##0.00'
+										ELSE dis_grd_17221 END
+					
+					INSERT INTO @Temp_Table
+						SELECT dis_grd_17209,dis_grd_17210,dis_grd_17211,dis_grd_17212,
+						dis_grd_17213,dis_grd_17214,dis_grd_17215,dis_grd_17216,
+						dis_grd_17217,dis_grd_17218,TransactionType,dis_grd_17219,
+						dis_grd_17220,dis_grd_17221,dis_grd_17222,dis_grd_17223,
+						dis_grd_17224,dis_grd_17426,dis_grd_17427,UserSecurityTypeCode,
+						TransactionDetailsId,dis_grd_55502 
+					FROM @Temp_TableCashless
+					
+					SELECT dis_grd_17209,dis_grd_17210,dis_grd_17211,dis_grd_17212,
+						dis_grd_17213,dis_grd_17214,dis_grd_17215,dis_grd_17216,
+						dis_grd_17217,dis_grd_17218,TransactionType,dis_grd_17219,
+						dis_grd_17220,dis_grd_17221,dis_grd_17222,dis_grd_17223,
+						dis_grd_17224,dis_grd_17426,dis_grd_17427,TransactionDetailsId,dis_grd_55502 
+					FROM @Temp_Table
+					ORDER BY dis_grd_17212,TransactionDetailsId,dis_grd_17223
 				END
 			END
 		END
@@ -465,7 +614,12 @@ BEGIN
 							when td.SecurityTypeCodeId in (@SecuriyType_Futures,@SecuriyType_Options)  AND td.TransactionTypeCodeID = @TRANSACTION_TYPE_SELL THEN CONVERT(VARCHAR(MAX),(Quantity * LotSize)) 
 							ELSE '-' 
 						END as dis_grd_17422,
-						TUD.StockExchange as dis_grd_17230
+						case 
+							when td.SecurityTypeCodeId not in (@SecuriyType_Futures,@SecuriyType_Options) THEN '-' 
+							ELSE TUD.StockExchange 
+						END AS dis_grd_17230
+
+						--TUD.StockExchange as dis_grd_17230
 					from tra_TransactionDetails td
 					--join @temp t on t.UserInfoId = td.ForUserInfoId
 					--join usr_UserInfo u on u.UserInfoId = t.UserInfoId
