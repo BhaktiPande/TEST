@@ -700,7 +700,7 @@
         else
         {
             <div id="hold-div-2" class="row @apply " @isInsiderEnterDetails>
-                <div class="col-lg-12">
+               @* <div class="col-lg-12">*@
                     @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
                     @*ViewBag.SecurityType :- Shares, Warrants, Convertible Debentures, Future Contracts, Option Contracts*@
                     @{ foreach (var objSecurityType in ViewBag.SecurityType)
@@ -708,15 +708,15 @@
                         <div class="card panel-default">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-0">
                                         <div id="div">
                                             <div class="row">
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                                    <p>@InsiderTrading.Common.Common.getResource("tra_lbl_16102"): @objSecurityType.Value</p>
+                                                    <p class="mb-0">@InsiderTrading.Common.Common.getResource("tra_lbl_16102"): @objSecurityType.Value</p>
                                                 </div>
                                                 @if (ViewBag.PreclearenceId != null)
                                                 {
-                                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex">
                                                         <div class="col-xs-6">
                                                             @Html.Label(InsiderTrading.Common.Common.getResource("tra_lbl_16286"))
                                                         </div>
@@ -732,7 +732,7 @@
                                                 </div>
                                                 @if (ViewBag.PreclearenceId != null)
                                                 {
-                                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex">
                                                         <div class="col-xs-6">
                                                             @Html.Label(InsiderTrading.Common.Common.getResource("tra_lbl_16287"))
                                                         </div>
@@ -752,7 +752,7 @@
                                                 </div>
                                                 @if (ViewBag.PreclearenceId != null)
                                                 {
-                                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex">
                                                         <div class="col-xs-6">
                                                             @Html.Label(InsiderTrading.Common.Common.getResource("tra_lbl_16288"))
                                                         </div>
@@ -790,7 +790,7 @@
                      }
                     }
 
-                </div>
+                @*</div>*@
             </div>
         }
 
@@ -868,7 +868,7 @@
         @if (ViewBag.nDisclosureTypeCodeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
         {
             <div id="hold-div-6" class="row ">
-                <div class="col-lg-12">
+                <div class="col-lg-12 p-0">
 
                     <div class="card panel-default">
                         <div class="card-body">

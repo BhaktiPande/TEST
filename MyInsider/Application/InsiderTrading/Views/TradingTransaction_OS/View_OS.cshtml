@@ -698,7 +698,7 @@
         else
         {
             <div id="hold-div-2" class="row @apply " @isInsiderEnterDetails>
-                <div class="col-lg-12" style="margin: -15px 0px 0px 0px;">
+                <div class="col-lg-12 pl-0 pr-0" style="margin: -15px 0px 0px 0px;">
                     @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
                     @*ViewBag.SecurityType :- Shares, Warrants, Convertible Debentures, Future Contracts, Option Contracts*@
                     @{ 
@@ -810,7 +810,7 @@
                                                 </div>
                                                 <div style="width: 60%;">
                                                     <div class="row">
-                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="margin: 10px 0px 0px 0px;">
+                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 pl-0" style="margin: 10px 0px 0px 0px;">
                                                             @if (ViewBag.TranactionMasterStatus <= InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed)
                                                             {
                                                                 if (ViewBag.PreclearenceId != null)
@@ -948,7 +948,7 @@
         @if (ViewBag.nDisclosureTypeCodeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
         {
             <div id="hold-div-6" class="row ">
-                <div class="col-lg-12" style="margin: -15px 0px 0px 0px;">
+                <div class="col-lg-12 pl-0 pr-0" style="margin: -15px 0px 0px 0px;">
 
                     <div class="card panel-default">
                         <div class="card-body">
