@@ -1226,8 +1226,10 @@
                             </div>
 
 
-                            <div id="UserDetails" style="display:none;">
-                                @Html.HiddenFor(model => model.DMATDetailsID)
+                            <div id="UserDetails" class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="display:none;">
+                                <div class="form-group">
+                                    @Html.HiddenFor(model => model.DMATDetailsID)
+                                </div>
                             </div>
 
                             @if (@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)

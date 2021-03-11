@@ -612,7 +612,7 @@
                                                 @if ((ViewBag.TranactionMasterStatus == InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed) || (ViewBag.TranactionMasterStatus == InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForDocumentUploaded && (ViewBag.nUserTypeCodeId == 101001 || ViewBag.nUserTypeCodeId == 101002)) || (ViewBag.TranactionMasterStatus == InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForDocumentUploaded && (Convert.ToInt32(ViewBag.ConfigurationValueCodeId) == InsiderTrading.Common.ConstEnum.Code.EnterUploadSetting_EnterAndUploadDetails || Convert.ToInt32(ViewBag.ConfigurationValueCodeId) == InsiderTrading.Common.ConstEnum.Code.EnterUploadSetting_EnterAndOrDetails)))
                                                 {
                                                     @*<button id="btnInsiderSubmit" class="btn btn-success"><i class="fa fa-check"></i> @InsiderTrading.Common.Common.getResource("com_btn_14025")</button>*@
-                                                    <button id="btnInsiderSubmit" class="btn btn-shape btn-round btn-md center-block btn-success disabled"> @InsiderTrading.Common.Common.getResource("com_btn_14025")</button>
+                                                    <button id="btnInsiderSubmit" class="btn btn-shape btn-round btn-md center-block btn-success" disabled="disabled"> @InsiderTrading.Common.Common.getResource("com_btn_14025")</button>
                                                     <button id="btnSubmitInsider" style="display:none;" data-toggle='modal' data-target='#popupAlert'></button>
                                                 }
                                             </td>
@@ -630,9 +630,9 @@
                     <input type="hidden" value="@ViewBag.nDisclosureTypecodeId" id="DisclosureTypecodeId" />
                     <input type="hidden" value="@ViewBag.nConfigurationValueCodeId" id="ConfigurationValueCodeId" /> <!-- Enter /Upload Configuration •	Enter Details and/or Upload Details -->
                     <input type="hidden" value="@InsiderTrading.Common.Common.getResource("tra_lbl_52125")" id="DematMsg" />
-                    <div class="card panel-default" style="margin: -12px 0px 0px 0px;">
+                    <div class="card panel-default" style="margin: -12px 0px 0px 0px; width:100%">
                         <div class="card-body">
-                            <div class="row" style="margin: 0px 0px 0px 0px; display:block;">
+                            <div class="row" style="margin: 0px 0px 0px 0px;">
                                 @if ((bool)ViewBag.ShowOwnSecuritiesDeclaration && ViewBag.TranactionMasterStatus == InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed)
                                 {   <br /><br />
                                     @Html.Partial("~/Views/TradingTransaction/SubmitOwnSecurities.cshtml")
