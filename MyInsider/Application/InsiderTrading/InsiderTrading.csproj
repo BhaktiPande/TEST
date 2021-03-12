@@ -386,6 +386,7 @@
     <Compile Include="Models\NotificationModel.cs" />
     <Compile Include="Models\PasswordConfigModel.cs" />
     <Compile Include="Models\PDFGenerationModel.cs" />
+    <Compile Include="Models\PeriodEndDisclosureModel_OS.cs" />
     <Compile Include="Models\PolicyDocumentModel.cs" />
     <Compile Include="Models\PreclearanceRequestModel.cs" />
     <Compile Include="Models\PreclearanceRequestNonImplCompanyModel.cs" />
