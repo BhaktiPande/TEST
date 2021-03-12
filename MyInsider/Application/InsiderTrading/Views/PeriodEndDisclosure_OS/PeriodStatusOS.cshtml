@@ -51,7 +51,7 @@
         @Html.Hidden("uid", (Int32)@ViewBag.UserId, new { id = "1", gridtype = @ViewBag.GridType });
         @Html.Hidden("period_search", 1);
 
-        <button type="button" class="btn btn-success hidden" id="btnSearch"><i class="fa fa-search"> @InsiderTrading.Common.Common.getResource("com_btn_14005")</i></button>
+        <button type="button" class="btn btn-success" id="btnSearch" hidden><i class="fa fa-search"> @InsiderTrading.Common.Common.getResource("com_btn_14005")</i></button>
 
         Html.RenderAction("Index", "DatatableGrid", new { type = @ViewBag.GridType, btnSearch = "btnSearch", sSortCol = "0", acid = ViewBag.activity_id, bIsPagination = true, });
 

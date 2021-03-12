@@ -4925,7 +4925,7 @@ h5 {
 
 label {
     font-weight: 700;
-    margin-bottom: 0px;
+ /*   margin-bottom: 0px;*/
 }
 
 .checkbox label {
@@ -4941,9 +4941,13 @@ label {
     cursor: not-allowed;
 }
 
+.form-control {
+    height: 35px;
+}
+
 .btn {
     font: 14px Roboto, sans-serif;
-    line-height: 20px;
+    line-height: 1.428571;
     white-space: nowrap;
 }
 
@@ -4986,6 +4990,16 @@ label {
 
 .datepicker.datepicker-dropdown {
     z-index: 99999 !important;
+}
+
+#btnLogin {
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.3333333;
+}
+
+.pl-15 {
+    padding-left: 15px !important;
 }
 
 /*navbar*/
@@ -5083,12 +5097,17 @@ form {
 
 .card.panel-default .card-body .row .col-lg-3 ul.dropdown-menu.inner {
     display: block;
-    padding-left: 10px !important;
+    /*padding-left: 10px !important;*/
     overflow-y: hidden !important;
 }
 
 .card.panel-default .card-body .row .col-lg-3 .dropdown-toggle::after {
     display: inline-block;
+}
+
+.card.panel-default.panel_css .card-body {
+    padding-right: 15px !important;
+    padding-left: 15px !important;
 }
 
 /*datatable*/
@@ -5255,7 +5274,7 @@ section[gridtype="114119"] > div > form {
 }
 
 .card.panel-accordion .card-header {
-    padding: 10px 15px;
+    padding: 15px 15px;
     border: 0px;
     border-color: #ddd;
     background-color: #F2F4F1;
@@ -5278,6 +5297,9 @@ section[gridtype="114119"] > div > form {
     margin-bottom: 0px;
     border-color: #ddd;
 }
+    .card.panel-accordion .table td {
+        padding: 15px;
+    }
 
 #accordion_RoleActivity {
     padding: 0px;
@@ -5357,7 +5379,8 @@ section[gridtype="114119"] > div > form {
 
 .input-group .input-group-addon {
     background-color: #fff !important;
-    font-size: 16px;
+    font-size: 14px;
+    border-radius: 0px;
 }
 
 /*modal*/
@@ -5365,6 +5388,19 @@ section[gridtype="114119"] > div > form {
     z-index: 9999 !important;
     background: rgba( 255, 255, 255, 0 ) url('/images/Loading.gif') 50% 50% no-repeat !important;
 }
+
+@media (min-width: 992px) {
+    .modal-lg, .modal-xl {
+        max-width: 900px;
+    }
+}
+
+@media (min-width: 576px) {
+    .modal-dialog {
+        max-width: 640px;
+    }
+}
+
 
 .modal-header, .modal-footer {
     display: block;
@@ -5418,9 +5454,9 @@ section[gridtype="114119"] > div > form {
     }
 
 /*preclearance request*/
-#frmPreclearanceRequest .col-lg-4 {
+/*#frmPreclearanceRequest .col-lg-4 {
     display: table-cell;
-}
+}*/
 
 #DivRelativeDetails .col-lg-2 {
     display: table-cell;
@@ -5487,8 +5523,7 @@ label[for='Period:'], label[for='Period'] {
     height: 210px;
 }
 
-
-/*datetimepicker.css*/
+/*datetimepicker and select*/
 .bootstrap-datetimepicker-widget.dropdown-menu {
     width: 10em;
     padding: 0px;
@@ -5524,3 +5559,23 @@ label[for='Period:'], label[for='Period'] {
         .bootstrap-datetimepicker-widget table td span:hover, .bootstrap-datetimepicker-widget table td i:hover {
             background: #f8f9fa
         }
+
+.bootstrap-select > .dropdown-toggle.bs-placeholder {
+    color: #444 !important;
+    background-color: #f4f4f4;
+    border-color: #ddd;
+}
+
+.bootstrap-select .dropdown-menu .dropdown-item {
+    font-size: 0.875rem;
+    padding: .25rem 1.25rem
+}
+
+#UserDetails label label{
+    margin-bottom: 0px;
+}
+
+/*Insider Dashboard*/
+.dashboardPreclearenceRequest button.d-block, .dashboardTradingDetailsCount button.d-block {
+    width: 50px;
+}
