@@ -1,0 +1,89 @@
+﻿@model InsiderTrading.Models.EmployeeRelativeModel
+@{
+    ViewBag.Title = "ConfirmDetails";
+
+    InsiderTrading.Common.LoginUserDetails objLoginUserDetails = (InsiderTrading.Common.LoginUserDetails)InsiderTrading.Common.Common.GetSessionValue(InsiderTrading.Common.ConstEnum.SessionValue.UserDetails);
+    var acid = (objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.Admin || objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.CorporateUserType) ? InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_CREATE : InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_EDIT;
+}
+@Styles.Render("~/content/SW360")
+
+<section class="content">
+    <h1>@InsiderTrading.Common.Common.getResource("dis_ttl_53117")</h1>
+    @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+</section>
+
+<!-- Main content -->
+<section class="content search" gridtype="@ViewBag.GridType">
+    @{
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                @if (ViewBag.showAddTransactionBtn)
+                {
+                    @*<a class="btn btn-success" data-toggle="modal" href='#' role="button"> @InsiderTrading.Common.Common.getResource("dis_btn_53127")</a>*@
+                    <button id="btnInsiderSubmit" class="btn btn-success" disabled><i class="fa fa-check"></i>@InsiderTrading.Common.Common.getResource("dis_btn_53128")</button>
+                }
+                <a id="DownloadBtn" href="@Url.Action("DownloadDetails", "PeriodEndDisclosure_OS", new { acid = ViewBag.activity_id, period = ViewBag.PeriodCode, year = ViewBag.YearCode, pdtype = ViewBag.PeriodType, uid = ViewBag.UserId, tmid = ViewBag.TransactionMasterId })" class="btn btn-success" title="@InsiderTrading.Common.Common.getResource("dis_ttl_53131")"><i class="fa fa-download"></i>@InsiderTrading.Common.Common.getResource("dis_btn_53130")</a>
+
+                <a class="btn btn-success clsStartFileUpload" id="btn_UploadDetails"
+                   href='@Url.Action("UploadDocuments", "PeriodEndDisclosure_OS",
+                       new { acid = acid, nParentID = Session["UserInfoId"], nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"],
+                       nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] })'
+                   role="button">
+                    Upload Document
+                </a>
+
+            </div>
+        </div>
+        <div class="div-spacer"></div>
+        <hr>
+
+    }
+
+
+    <!-- Search form content -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form role="form">
+                        @{
+                            //check user activity id - if CO activity then show employee / insider name and employee id
+                            if (ViewBag.activity_id == InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_CREATE)
+                            {
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        @Html.Label(@InsiderTrading.Common.Common.getResource("dis_lbl_53119")) @ViewBag.EmployeeId
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                                        @Html.Label(@InsiderTrading.Common.Common.getResource("dis_lbl_53120")) @ViewBag.InsiderName
+                                    </div>
+                                </div>
+                            }
+                        }
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                @Html.Label(@InsiderTrading.Common.Common.getResource("dis_lbl_53129")) @ViewBag.Period
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+
+    <div class="div-spacer"></div>
+    @using (Html.BeginForm("UploadDocuments", "PeriodEndDisclosure_OS", new { ReturnUrl = ViewBag.ReturnUrl, formId = InsiderTrading.Common.ConstEnum.Code.frmSavePersonalDetailsConfirmation }, FormMethod.Post, new { role = "form", autocomplete = "off" }))
+    {
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+            @{
+                @Html.Label(@InsiderTrading.Common.Common.getResource("usr_lbl_61011"))
+                @Html.Partial("~/Views/Common/MultiDocumentUpload.cshtml", Model.DocumentUploadFile, new ViewDataDictionary() { { "user_action", ViewBag.UserAction } })
+            }
+            <div class="clearfix"></div>
+        </div>
+    }
+
+</section>
+

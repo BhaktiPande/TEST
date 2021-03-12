@@ -24,7 +24,7 @@ namespace InsiderTrading.Controllers
         //
         // GET: /PeriodEndDisclosure_OS/
         #region Period Status- Other Securities
-        public ActionResult PeriodStatusOS(int acid, int year = 0, int uid = 0, int PeriodEndDisCheck=0,int IsIDPending = 0)
+        public ActionResult PeriodStatusOS(int acid, int year = 0, int uid = 0, int PeriodEndDisCheck = 0, int IsIDPending = 0)
         {
             LoginUserDetails objLoginUserDetails = null;
             UserInfoDTO objUserInfoDTO = null;
@@ -264,12 +264,16 @@ namespace InsiderTrading.Controllers
         [AuthorizationPrivilegeFilter]
         public ActionResult SummaryOS(int acid, int period, int year, int pdtype, int uid = 0, int tmid = 0)
         {
+            List<DocumentDetailsModel> lstDocumentDetailsDTO = new List<DocumentDetailsModel>();
+            PeriodEndDisclosureModel_OS periodEndDisclosure = new PeriodEndDisclosureModel_OS();
             LoginUserDetails objLoginUserDetails = null;
             UserInfoDTO objUserInfoDTO = null;
             ViewBag.showAddTransactionBtn = false;
             DateTime dtEndDate = DateTime.Now;
+            ViewBag.isAllEdit = true;
 
             Dictionary<string, object> dicPeriodStartEnd = null;
+            ViewBag.UserAction = acid;
 
             try
             {
@@ -293,7 +297,6 @@ namespace InsiderTrading.Controllers
                 ViewBag.PeriodCode = period;
                 ViewBag.PeriodType = pdtype;
                 ViewBag.TransactionMasterId = (tmid == 0) ? "" : tmid.ToString();
-
 
                 //if activity id is for CO then fetch employee insider details 
                 if (acid == ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_PERIOD_END_DISCLOSURE_OS)
@@ -331,13 +334,20 @@ namespace InsiderTrading.Controllers
                     }
                     else
                     {
-                    TradingTransactionMasterDTO_OS objTradingTransactionMasterDTO_Details = objTradingTransactionSL_OS.GetTradingTransactionMasterDetails(objLoginUserDetails.CompanyDBConnectionString, tmid);
-                    if (objTradingTransactionMasterDTO_Details.TransactionStatusCodeId == 148002)
-                    {
-                        ViewBag.showAddTransactionBtn = true;
+                        TradingTransactionMasterDTO_OS objTradingTransactionMasterDTO_Details = objTradingTransactionSL_OS.GetTradingTransactionMasterDetails(objLoginUserDetails.CompanyDBConnectionString, tmid);
+                        if (objTradingTransactionMasterDTO_Details.TransactionStatusCodeId == 148002)
+                        {
+                            periodEndDisclosure.PeriodEndDocumentFile = Common.Common.GenerateDocumentList(ConstEnum.Code.PeriodEndDisclosure_OS, ViewBag.UserId, 0, null, 0, false, 0, ConstEnum.FileUploadControlCount.PeriodEndDocumentUpload);
+                            ViewBag.showAddTransactionBtn = true;
+                            ViewBag.isAllEdit = false;
+                        }
+                        else
+                        {
+                            periodEndDisclosure.PeriodEndDocumentFile = Common.Common.GenerateDocumentList(ConstEnum.Code.PeriodEndDisclosure_OS, ViewBag.UserId, 0, null, 0, false, 0, ConstEnum.FileUploadControlCount.PeriodEndDocumentUpload);
+                            ViewBag.isAllEdit = true;
+                        }
                     }
                 }
-            }
             }
             catch (Exception)
             {
@@ -350,7 +360,7 @@ namespace InsiderTrading.Controllers
                 objUserInfoDTO = null;
             }
 
-            return View();
+            return View(periodEndDisclosure);
         }
         #endregion Summary- Other Securities
 
@@ -387,6 +397,9 @@ namespace InsiderTrading.Controllers
             bool tempDematFlag = false;
             int tempSecurityCount = 0;
             bool tempSecurityFlag = false;
+            ViewBag.isAllEdit = true;
+            PeriodEndDisclosureModel_OS periodEndDisclosure = new PeriodEndDisclosureModel_OS();
+
             try
             {
                 exlFilename = "Period End Summary-Other Securities.xls";
@@ -434,13 +447,14 @@ namespace InsiderTrading.Controllers
                 ViewBag.PeriodType = pdtype;
                 ViewBag.TransactionMasterId = (tmid == 0) ? "" : tmid.ToString();
                 ViewBag.activity_id = acid;
+                ViewBag.UserAction = acid;
                 ViewBag.showAddTransactionBtn = true;
                 ViewBag.GridType = ConstEnum.GridType.PeriodEndDisclosureSummaryList_OS;
                 ViewBag.Period = periodStartEndDate;
 
                 if ((dtPeriodSummaryComapnyWise == null || dtPeriodSummaryComapnyWise.Rows.Count == 0) && (dtPeriodTransactionDetails == null || dtPeriodTransactionDetails.Rows.Count == 0))
                 {
-                    
+
                     ViewBag.ErrorFound = true;
                     using (TradingTransactionSL_OS objTradingTransactionSL_OS = new TradingTransactionSL_OS())
                     {
@@ -727,6 +741,8 @@ namespace InsiderTrading.Controllers
                         Response.End();
                     }
 
+                    periodEndDisclosure.PeriodEndDocumentFile = Common.Common.GenerateDocumentList(ConstEnum.Code.PeriodEndDisclosure_OS, ViewBag.UserId, 0, null, 0, false, 0, ConstEnum.FileUploadControlCount.PolicyDocumentFile);
+
                 }
             }
             catch (Exception ex)
@@ -744,7 +760,7 @@ namespace InsiderTrading.Controllers
                 dtSecurityTypeTotal = null;
                 dtPeriodTransactionDetails = null;
             }
-            return View("SummaryOS");
+            return View("SummaryOS", periodEndDisclosure);
         }
         #endregion DownloadDetails- Other Securities
         #region DownloadForm G Other Securities
@@ -910,5 +926,80 @@ namespace InsiderTrading.Controllers
             return View("UserStatusOS");
         }
         #endregion Period End Disclosures Insider
+
+        #region Upload Documents
+        public ActionResult UploadDocuments(int acid, int nParentID = 0, int uid = 0, int period = 0, int year = 0, int pdtype = 0, int tmid = 0)
+        {
+            LoginUserDetails objLoginUserDetails = null;
+            ViewBag.showAddTransactionBtn = false;
+            DateTime dtEndDate = DateTime.Now;
+            Dictionary<string, object> dicPeriodStartEnd = null;
+
+            objLoginUserDetails = (LoginUserDetails)Common.Common.GetSessionValue(ConstEnum.SessionValue.UserDetails);
+
+            ViewBag.UserAction = acid;
+            objLoginUserDetails = null;
+            EmployeeRelativeModel objEmployeeModel = new EmployeeRelativeModel();
+            UserInfoDTO objUserInfoDTO = null;
+
+            try
+            {
+                objLoginUserDetails = (LoginUserDetails)Common.Common.GetSessionValue(ConstEnum.SessionValue.UserDetails);
+                //set activity id for summary page as this page is access from both menu - insider and CO
+                ViewBag.activity_id = acid;
+
+                //using (PeriodEndDisclosureSL objPeriodEndDisclosure = new PeriodEndDisclosureSL())
+                //{
+                //    dicPeriodStartEnd = objPeriodEndDisclosure.GetPeriodStarEndDate(objLoginUserDetails.CompanyDBConnectionString, year, period, pdtype);
+
+                //    DateTime dtStartDate = Convert.ToDateTime(dicPeriodStartEnd["start_date"]);
+                //    dtEndDate = Convert.ToDateTime(dicPeriodStartEnd["end_date"]);
+                //    String dtFormat = "dd MMM yyyy";
+                //    ViewBag.Period = dtStartDate.ToString(dtFormat) + " - " + dtEndDate.ToString(dtFormat);
+                //}
+                ////set input vaules for period end summary grid
+                //ViewBag.UserId = (uid == 0) ? objLoginUserDetails.LoggedInUserID : uid;
+                //ViewBag.YearCode = year;
+                //ViewBag.PeriodCode = period;
+                //ViewBag.PeriodType = pdtype;
+                //ViewBag.TransactionMasterId = (tmid == 0) ? "" : tmid.ToString();
+
+                //if activity id is for CO then fetch employee insider details 
+                if (acid == ConstEnum.UserActions.INSIDER_INSIDERUSER_CREATE)
+                {
+                    using (UserInfoSL objUserInfoSL = new UserInfoSL())
+                    {
+                        ViewBag.UserId = (uid == 0) ? objLoginUserDetails.LoggedInUserID : uid;
+                        objUserInfoDTO = objUserInfoSL.GetUserDetails(objLoginUserDetails.CompanyDBConnectionString, uid);
+
+                        ViewBag.EmployeeId = objUserInfoDTO.EmployeeId;
+                        ViewBag.InsiderName = (objUserInfoDTO.UserTypeCodeId == ConstEnum.Code.CorporateUserType) ? objUserInfoDTO.CompanyName : objUserInfoDTO.FirstName + " " + objUserInfoDTO.LastName;
+                    }
+                }
+                ViewBag.GridType = ConstEnum.GridType.PeriodEndDisclosureSummaryList_OS;
+
+                if (nParentID != 0 && !Common.Common.CheckUserTypeAccess(objLoginUserDetails.CompanyDBConnectionString, ConstEnum.Code.UserDocument, Convert.ToInt64(nParentID), objLoginUserDetails.LoggedInUserID))
+                {
+                    objLoginUserDetails = null;
+                    return RedirectToAction("Unauthorised", "Home");
+                }
+                //objEmployeeModel.DocumentUploadFile = Common.Common.GenerateDocumentList(ConstEnum.Code.PersonalDocumentUpload, nParentID, 0, null, 0, false, 0, ConstEnum.FileUploadControlCount.PerDocumentFileUploadCount);
+
+                return View("UploadDocuments", objEmployeeModel);
+            }
+            catch (Exception exp)
+            {
+
+            }
+            finally
+            {
+                objLoginUserDetails = null;
+
+            }
+            return View("");
+
+
+        }
+        #endregion
     }
 }
