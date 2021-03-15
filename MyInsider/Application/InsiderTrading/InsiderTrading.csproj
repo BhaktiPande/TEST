@@ -517,8 +517,12 @@
     <Content Include="LoginScript\jquery.validate.unobtrusive-bl.min.js" />
     <Content Include="LoginScript\jQueryCurrencyFormat\jquery.formatCurrency-bl.js" />
     <Content Include="LoginScript\jQueryUI\jquery-ui-1.11.2-bl.min.js" />
+    <Content Include="LoginScript\jQueryUI\jquery-ui-1.12.1.js" />
+    <Content Include="LoginScript\jQueryUI\jquery-ui-1.12.1.min.js" />
     <Content Include="LoginScript\jQuery\jQuery-2.1.3-bl.min.js" />
     <Content Include="LoginScript\jQuery\jQuery-2.1.3.js" />
+    <Content Include="LoginScript\jQuery\jquery-3.5.0.js" />
+    <Content Include="LoginScript\jQuery\jquery-3.5.0.min.js" />
     <Content Include="LoginScript\Loginjs\Login-bl.js" />
     <Content Include="LoginScript\slimScroll\jquery.slimscroll-bl.min.js" />
     <Content Include="LoginScript\TimerForOTP\jquery.countdownTimer.js" />
@@ -3116,6 +3120,14 @@
     <Content Include="Views\Reports_OS\Index.cshtml" />
     <Content Include="Views\Shared\_MCQLayout.cshtml" />
     <Content Include="Views\APPLICABILITY_OS\Index.cshtml" />
+    <Content Include="Views\Account\TwoFactorAuth.cshtml" />
+    <Content Include="Views\Company\WorkandEducationDetails.cshtml" />
+    <Content Include="Views\Employee\UnblockUser.cshtml" />
+    <Content Include="Views\Error\HttpError404.cshtml" />
+    <Content Include="Views\Error\HttpError505.cshtml" />
+    <Content Include="Views\Notification\DashboardNotificationIndex_OS.cshtml" />
+    <Content Include="Views\Notification\ViewNofication_OS.cshtml" />
+    <Content Include="Views\Reports\_EULAAcceptanceReport.cshtml" />
     <Content Include="Views\TradingPolicy_OS\Create.cshtml" />
     <Content Include="Views\TradingPolicy_OS\Index.cshtml" />
     <Content Include="Views\TradingPolicy_OS\PreclearanceTransactionSecurityMapping_OS.cshtml" />
@@ -3140,7 +3152,10 @@
     <Content Include="Views\TradingPolicy_OS\_SeekDeclarationUPSI_OS.cshtml" />
     <Content Include="Views\TradingPolicy_OS\_SingleTransactionTrade_OS.cshtml" />
     <Content Include="Views\TradingPolicy_OS\_YearType_OS.cshtml" />
-    <Content Include="Views\Company\WorkandEducationDetails.cshtml" />
+    <Content Include="Views\TradingTransaction\SubmitOwnSecurities.cshtml" />
+    <Content Include="Views\TradingTransaction_OS\_SeekDeclarationUPSI_OS.cshtml" />
+    <Content Include="Views\UserDetails\_GenerateDocument.cshtml" />
+    <Content Include="Views\UserDetails\UserConsent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Elmah\" />
