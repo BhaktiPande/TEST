@@ -137,6 +137,10 @@ BEGIN
 		BEGIN
 			SET @inp_sSortField = 'RComment.ResourceValue'
 		END
+		ELSE IF @inp_sSortField = 'EmailId'
+		BEGIN
+			SET @inp_sSortField = 'EmailId'
+		END
 
 		IF EXISTS(SELECT CodeName FROM com_Code WHERE CodeId = 128003)
 		BEGIN
@@ -326,10 +330,10 @@ BEGIN
 		SELECT @sSQL = @sSQL + 'JOIN com_Code CComment ON ID.CommentId = CComment.CodeID '
 		SELECT @sSQL = @sSQL + 'JOIN mst_Resource RComment ON CComment.CodeName = RComment.ResourceKey '
 		
-		print @sSQL
+		--print @sSQL
 		EXEC (@sSQL)
 	
-		SELECT @sSQL = 'SELECT '
+		SELECT @sSQL = 'SELECT 'any
 		SELECT @sSQL = @sSQL + 'ISNULL(EmployeeId,''-'') AS rpt_grd_19004, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(InsiderName) AS rpt_grd_19005, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_FormatValue(CONVERT(VARCHAR(max),UserPAN),1) AS UserPANNumber, '	
@@ -355,7 +359,8 @@ BEGIN
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(RComment.ResourceValue) AS rpt_grd_19017, '
 		SELECT @sSQL = @sSQL + 'ID.UserInfoID As UserInfoID , ''151001'' AS LetterForCodeId,ID.TransactionMasterId AS TransactionMasterId, ID.UserInfoID AS EmployeeId,''0'' AS TransactionLetterId,''147001'' AS DisclosureTypeCodeId,''166'' AS Acid, dbo.uf_rpt_FormatDateValue(ID.DateOfInactivation,0) AS DateOfInactivation , dbo.uf_rpt_ReplaceSpecialChar(ID.Category) as Category  , dbo.uf_rpt_ReplaceSpecialChar(ID.SubCategory) As SubCategory , dbo.uf_rpt_ReplaceSpecialChar(ID.CodeName) As CodeName, '	
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(LiveSeperated) AS LiveOrSeperated, '
-		SELECT @sSQL = @sSQL + 'EmailId AS EmailId '--'EmailId AS EmailId, '
+		SELECT @sSQL = @sSQL + 'ID.EmailId AS EmailId '  --'EmailId AS EmailId, '
+		
 				
 		SELECT @sSQL = @sSQL + 'FROM #tmpList t JOIN #tmpInitialDisclosure ID ON t.EntityID = ID.UserInfoId '
 		SELECT @sSQL = @sSQL + 'JOIN com_Code CComment ON ID.CommentId = CComment.CodeID '
@@ -378,15 +383,16 @@ BEGIN
 		
 		--print @sSQL
 
-
-		CREATE TABLE ##TempMaster (	rpt_grd_19004 NVARCHAR(200),rpt_grd_19005 NVARCHAR(200), UserPANNumber NVARCHAR(MAX),DateOfSeperation VARCHAR(200),rpt_grd_19006 NVARCHAR(200),rpt_grd_19007 NVARCHAR(200),
+		CREATE TABLE ##TempMaster (	rpt_grd_19004 NVARCHAR(200),rpt_grd_19005 NVARCHAR(200),  UserPANNumber NVARCHAR(MAX),DateOfSeperation VARCHAR(200),rpt_grd_19006 NVARCHAR(200),rpt_grd_19007 NVARCHAR(200),
 		rpt_grd_19008 NVARCHAR(200),rpt_grd_19009 NVARCHAR(200),rpt_grd_19010 NVARCHAR(200),rpt_grd_19011 NVARCHAR(200),rpt_grd_19012 NVARCHAR(200),
 		rpt_grd_19013 NVARCHAR(200),rpt_grd_19072 NVARCHAR(200),rpt_grd_19073 NVARCHAR(200),rpt_grd_19015  NVARCHAR(200),rpt_grd_19016  NVARCHAR(200),rpt_grd_19017  NVARCHAR(200),
-		UserInfoID INT,LetterForCodeId NVARCHAR(100),TransactionMasterId NVARCHAR(100),EmployeeId  NVARCHAR(100),TransactionLetterId NVARCHAR(100),	DisclosureTypeCodeId NVARCHAR(100),	Acid int,	DateOfInactivation	 NVARCHAR(200),	Category NVARCHAR(MAX),	SubCategory NVARCHAR(500),CodeName NVARCHAR(MAX),LiveOrSeperated NVARCHAR(MAX),
+		UserInfoID INT,LetterForCodeId NVARCHAR(100),TransactionMasterId NVARCHAR(100),EmployeeId  NVARCHAR(100),TransactionLetterId NVARCHAR(100),	DisclosureTypeCodeId NVARCHAR(100),	Acid int,	DateOfInactivation	 NVARCHAR(200),	Category NVARCHAR(MAX),
+		SubCategory NVARCHAR(500),CodeName NVARCHAR(MAX),LiveOrSeperated NVARCHAR(MAX),
 		EmailId NVARCHAR(200))
+
 		INSERT INTO ##TempMaster
 		(
-		rpt_grd_19004,rpt_grd_19005,UserPANNumber,DateOfSeperation,rpt_grd_19006 ,rpt_grd_19007 ,
+		rpt_grd_19004,rpt_grd_19005, UserPANNumber,DateOfSeperation,rpt_grd_19006 ,rpt_grd_19007 ,
 		rpt_grd_19008 ,rpt_grd_19009 ,rpt_grd_19010 ,rpt_grd_19011 ,rpt_grd_19012 ,
 		rpt_grd_19013,rpt_grd_19072 ,rpt_grd_19073 ,rpt_grd_19015,rpt_grd_19016,rpt_grd_19017,
 		UserInfoID,LetterForCodeId,TransactionMasterId,EmployeeId,TransactionLetterId,DisclosureTypeCodeId,Acid,DateOfInactivation,Category,SubCategory,CodeName,LiveOrSeperated
