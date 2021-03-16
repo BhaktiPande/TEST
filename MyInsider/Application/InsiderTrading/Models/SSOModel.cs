@@ -296,7 +296,7 @@ namespace InsiderTrading.Models
             }
         }
 
-        internal string CreateNewAuthnRequest(ESOP.SSO.Library.SSO sSOFields)
+        internal string CreateNewAuthnRequest(ESOP.SSOandEncryption.SSO sSOFields)
         {
             WriteToFileLog.Instance(sSOFields.CompanyName).Write("CreateAuthnRequest Initiated");
             using (StringWriter sw = new StringWriter())
