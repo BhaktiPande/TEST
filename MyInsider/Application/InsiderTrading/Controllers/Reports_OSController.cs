@@ -191,6 +191,7 @@ namespace InsiderTrading.Controllers
             string EmpName = TradingTransactionReportModel_OS.InsiderName;
             string EmpPAN = TradingTransactionReportModel_OS.PAN;
             string CompanyName = TradingTransactionReportModel_OS.CompanyName;
+            string EmpDesignation = TradingTransactionReportModel_OS.Designation;
             DateTime? FromDate = TradingTransactionReportModel_OS.TransactionFromDate;
             DateTime? ToDate = TradingTransactionReportModel_OS.TransactionToDate;
             string YearCodeId = TradingTransactionReportModel_OS.YearCodeId;
@@ -326,6 +327,27 @@ namespace InsiderTrading.Controllers
                         dt.Columns.Remove("Value");
 
                  }
+            }
+            else if (ReportType == "5")
+            {
+                spName = "st_rpt_DefaulterReport_OS";
+                exlFilename = "Defaulter Report OS.xls";
+                workSheetName = "Defaulter Report OS";
+                cmd = new SqlCommand(spName, con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@inp_sEmployeeID", EmpID);
+                cmd.Parameters.Add("@inp_sInsiderName", EmpName);
+                cmd.Parameters.Add("@inp_sDesignation", EmpDesignation);
+                cmd.Parameters.Add("@inp_sCompanyName", CompanyName);                
+                SqlDataAdapter adp = new SqlDataAdapter(cmd);
+                adp.Fill(dt);
+
+                //if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue == 400003)
+                //{
+                //    dt.Columns.Remove("Trades");
+                //    dt.Columns.Remove("Value");
+
+                //}
             }
 
             if ((dt == null) || (dt.Rows.Count == 0))
@@ -482,6 +504,7 @@ namespace InsiderTrading.Controllers
                 }
                 return View("Index", TradingTransactionReportModel_OS);
             }
+
 
             if (ReportType == "1" && ((dt != null) || (dt.Rows.Count != 0)))
             {
@@ -649,6 +672,17 @@ namespace InsiderTrading.Controllers
                     workSheet.Cells["A1:AF1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
                     workSheet.Cells["A1:AF1"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.DarkGray);
                     cellRange = "A2:AF2";
+                }
+                if (ReportType == "5")
+                {
+                    workSheet.Cells["A1:AS1"].Merge = true;
+                    workSheet.Cells["A1:AS1"].Value = "Defaulter Report For Other Security";
+                    workSheet.Cells["A1:AS1"].Style.Border.Top.Style = workSheet.Cells["A1:AS1"].Style.Border.Bottom.Style = workSheet.Cells["A1:AS1"].Style.Border.Left.Style = workSheet.Cells["A1:AS1"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    workSheet.Cells["A1:AS1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    workSheet.Cells["A1:AS1"].Style.Font.Bold = true;
+                    workSheet.Cells["A1:AS1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    workSheet.Cells["A1:AS1"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.DarkGray);
+                    cellRange = "A2:AS2";
                 }
 
                 for (var col = 1; col <= totalCols; col++)

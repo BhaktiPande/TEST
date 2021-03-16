@@ -70,7 +70,7 @@ BEGIN
 	CREATE TABLE #tmpPreclearance(UserInfoId INT, EmployeeId NVARCHAR(50), InsiderName  NVARCHAR(100),
 	JoiningDate DATETIME, DateOfInactivation DATETIME, /*CINNumber NVARCHAR(100), */Designation NVARCHAR(512), Grade NVARCHAR(512), Location NVARCHAR(512),
 	Department NVARCHAR(512), Category VARCHAR(512), SubCategory VARCHAR(512), StatusCodeId VARCHAR(512), CompanyName NVARCHAR(200), TypeOfInsider NVARCHAR(512),
-	Request INT DEFAULT 0, Approved INT DEFAULT 0, Rejected INT DEFAULT 0, Pending INT DEFAULT 0, Traded INT DEFAULT 0)
+	Request INT DEFAULT 0, Approved INT DEFAULT 0, Rejected INT DEFAULT 0, Pending INT DEFAULT 0, Traded INT DEFAULT 0, EmailId NVARCHAR(200))
 
 	DECLARE @tmpTransactionIds TABLE (TransactionMasterId INT, UserInfoId INT)
 
@@ -242,6 +242,7 @@ BEGIN
 		-- Update user related information
 		UPDATE tmpDisc
 			SET EmployeeId = UF.EmployeeId,
+			EmailId = UF.EmailId,
 			DateOfInactivation = UF.DateOfInactivation,
 			Category = CCategory.CodeName,
 			SubCategory = CSubCategory.CodeName,
@@ -323,7 +324,8 @@ BEGIN
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(Approved) AS rpt_grd_19202, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(Rejected) AS rpt_grd_19203, '
 		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(Pending) AS rpt_grd_19204, '
-		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(Traded) AS rpt_grd_19205 '
+		SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(Traded) AS rpt_grd_19205, '
+		SELECT @sSQL = @sSQL + 'EmailId AS rpt_grd_81005 ' --'add email id AS rpt_grd_81005'
 		SELECT @sSQL = @sSQL + 'FROM #tmpList t JOIN #tmpPreclearance ID ON t.EntityID = ID.UserInfoId '
 		SELECT @sSQL = @sSQL + 'WHERE ID.UserInfoID IS NOT NULL '
 		SELECT @sSQL = @sSQL + 'AND ((' + CONVERT(VARCHAR(10), @inp_iPageSize) + ' = 0) '

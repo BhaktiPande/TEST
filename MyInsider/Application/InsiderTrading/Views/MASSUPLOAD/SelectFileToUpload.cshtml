@@ -6,13 +6,13 @@
 }
 
 <style>
-    .massuploadErrorReport{
+    .massuploadErrorReport {
         width: 100%;
     }
-        .massuploadErrorReport td, .massuploadErrorReport th{
+
+        .massuploadErrorReport td, .massuploadErrorReport th {
             border: 1px solid #000;
         }
-
 </style>
 
 <section class="content-header">
@@ -57,7 +57,8 @@
                                     }
                                     else
                                     {
-                                        if (objMassUploadExcelSheetErrors.sRowSequenceNumber == "") { 
+                                        if (objMassUploadExcelSheetErrors.sRowSequenceNumber == "")
+                                        {
                                             ViewBag.RowNumber = objMassUploadExcelSheetErrors.nRowNumber;
                                         }
                                         else
@@ -111,17 +112,19 @@
         <input type="hidden" name="acid" value="@ViewBag.acid" />
         <table style="width: 100%" cellpadding="10" cellspacing="10">
             <tr>
-                <td style="vertical-align: top;cursor:help" title="For selecting the file click on 'Slect file' button and then click 'Upload' button.">Step 1</td>
-                <td style="width: 95%;vertical-align:top;">
+                <td style="vertical-align: top;cursor:help; padding:0;" title="For selecting the file click on 'Slect file' button and then click 'Upload' button.">Step 1</td>
+                <td style="width: 95%;vertical-align:top; padding:0;">
                     @Html.Partial("~/Views/Common/SingleDocumentUpload.cshtml", Model.MassUploadFile)
                 </td>
             </tr>
             <tr>
-                <td colspan="2">&nbsp;</td>
+                <td colspan="2" class="p-0">&nbsp;</td>
             </tr>
             <tr>
-                <td style="vertical-align: top;cursor:help;" title="Click on the 'Start Mass Upload' button to start the mass upload.">Step 2</td>
-                <td style="padding-bottom:10px;">
+                <td style="vertical-align: top; cursor: help; padding: 0;" title="Click on the 'Start Mass Upload' button to start the mass upload.">
+                    Step 2
+                </td>
+                <td style="padding:0px; padding-bottom:10px;">
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
                         <input type="button" class="btn btn-success" id="btnStartMassUpload" value="Start Mass Upload">
                         <button type="submit" class="btn btn-success cancel" name="Cancel" id="btnCancel">Cancel</button>
@@ -141,7 +144,7 @@
         }
     </script>
 }
-    <script>
+<script>
         $(document).ready(function () {
             $("#btnStartMassUpload[type='button']").unbind("click");
             $("#btnStartMassUpload[type='button']").click(function () {
@@ -157,8 +160,8 @@
                 }
             });
 
-            
+
 
         });
 
-    </script>
+</script>

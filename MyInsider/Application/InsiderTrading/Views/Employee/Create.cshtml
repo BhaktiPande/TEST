@@ -37,424 +37,606 @@
     @Html.Partial("~/Views/Employee/PartialWarningInfoMsg.cshtml", new ViewDataDictionary() { { "PolicyDocument", ViewBag.IsShowMsgPDocNotApp }, { "TradingPolicy", ViewBag.IsShowMsgTPocNotApp }, { "ConfirmDetails", ViewBag.IsShowMsgConfirmDetails } })
 
 
-    <div class="row">
-        @using (Html.BeginForm("Create", "Employee", new { ReturnUrl = ViewBag.ReturnUrl, formId = InsiderTrading.Common.ConstEnum.Code.frmCreateEmployee }, FormMethod.Post, new { role = "form", autocomplete = "off" }))
-        {
-            @Html.AntiForgeryToken()
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="panel-group" id="accordion">
-                    <div class="card panel-accordion">
-                        <div class="card-header active">
-                            <h4 class="card-title">
-                                @InsiderTrading.Common.Common.getResource("usr_ttl_11239")  & @InsiderTrading.Common.Common.getResource("usr_ttl_11240")
-                            </h4>
-                        </div>
-                        <div id="collapseOne" class="panel-collapse collapse in">
-
-                            @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
-                            @Html.HiddenFor(m => m.userInfoModel.UserInfoId)
-                            @Html.HiddenFor(m => m.userInfoModel.IsRequiredConfirmPersonalDetails)
-                            @if (Model.userInfoModel.UserInfoId != 0 && Model.userInfoModel.UserInfoId != null)
-                            {
-                                @Html.Hidden("acid", InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_EDIT)
-                            }
-                            else
-                            {
-                                @Html.Hidden("acid", InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_CREATE)
-                            }
+    <div id="tabs">
+        <div class="tab-container">
+            <div class="row">
+                @using (Html.BeginForm("Create", "Employee", new { ReturnUrl = ViewBag.ReturnUrl, formId = InsiderTrading.Common.ConstEnum.Code.frmCreateEmployee }, FormMethod.Post, new { role = "form", autocomplete = "off" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-0">
+                        <div class="card panel-default">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <h4>@InsiderTrading.Common.Common.getResource("usr_ttl_11239")</h4>
+                                        <p class="text-left">
+                                            <label style="font-size: 20px;"> @InsiderTrading.Common.Common.getResource("usr_ttl_11239")  & @InsiderTrading.Common.Common.getResource("usr_ttl_11240")</label>
+                                        </p>
                                     </div>
                                 </div>
+                                @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+                                @Html.HiddenFor(m => m.userInfoModel.UserInfoId)
+                                @Html.HiddenFor(m => m.userInfoModel.IsRequiredConfirmPersonalDetails)
+                                @if (Model.userInfoModel.UserInfoId != 0 && Model.userInfoModel.UserInfoId != null)
+                                {
+                                    @Html.Hidden("acid", InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_EDIT)
+                                }
+                                else
+                                {
+                                    @Html.Hidden("acid", InsiderTrading.Common.ConstEnum.UserActions.INSIDER_INSIDERUSER_CREATE)
+                                }
                                 <div class="row">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <div class="row">
-                                            @{
-                            //check if to show following option to login user -- if do not show role then hide div
-                            if (!(bool)ViewBag.show_not_login_user_details)
-                            {
-                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                    <div role="form">
-                                        <div class="form-group">
-                                            @Html.LabelFor(m => m.userInfoModel.LoginID)
-                                            @Html.TextBoxFor(m => m.userInfoModel.LoginID, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.LoginID).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.LoginID).ToString(), new { @class = "form-control", id = "txtLoginID" }))
-                                            @Html.HiddenFor(m => m.userInfoModel.LoginID)
-                                            @Html.ValidationMessageFor(m => m.userInfoModel.LoginID)
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                                            }
-
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.EmployeeId)
-                                                        @Html.TextBoxFor(m => m.userInfoModel.EmployeeId, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.EmployeeId).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.EmployeeId).ToString(), new { @class = "form-control", id = "txtEmployeeId" }))
-                                                        @Html.HiddenFor(m => m.userInfoModel.EmployeeId)
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.EmployeeId)
-                                                    </div>
-                                                </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                        <div class="box box-chart box-disclosure">
+                                            <div class="box-header with-border">
+                                                <h3 class="box-title">Company & Role</h3>
                                             </div>
+                                            <div class="box-body no-padding">
+                                                <div class="table-responsive pending-activ">
+                                                    <table class="table table-hover">
+                                                        <tbody>
+                                                            @{
+                                                                //check if to show following option to login user -- if do not show role then hide div
+                                                                if (!(bool)ViewBag.show_not_login_user_details)
+                                                                {
+                                                                    <tr>
+                                                                        <td>
+                                                                            <div role="form">
+                                                                                <div class="form-group">
+                                                                                    @Html.LabelFor(m => m.userInfoModel.LoginID)
+                                                                                    @Html.TextBoxFor(m => m.userInfoModel.LoginID, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.LoginID).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.LoginID).ToString(), new { @class = "form-control", id = "txtLoginID" }))
+                                                                                    @Html.HiddenFor(m => m.userInfoModel.LoginID)
+                                                                                    @Html.ValidationMessageFor(m => m.userInfoModel.LoginID)
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
 
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.CompanyId)
-                                                        @Html.TextBoxFor(m => m.userInfoModel.CompanyName, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.CompanyId).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.CompanyId).ToString(), new { @class = "form-control", @disabled = "disabled" }))
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.CompanyId)
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            @if (objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.EmployeeType || objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.NonEmployeeType)
-                                            {
-                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.AssignedRole)
-                                                        @foreach (var item in Model.userInfoModel.AssignedRole)
-                                                        {
-                                                            <div><u>@item.Value</u></div>
-                                                        }
-                                                    </div>
-                                                </div>
-                                            }
-                                        </div>
+                                                                }
+                                                            }
 
-                                    </div>
-                                    @{
-                                            //check if to show following option to login user -- if do not show role then hide div
-                                            if ((bool)ViewBag.show_not_login_user_details)
-                                            {
-                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                    <div class="row">
-                                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                            <div role="form">
-                                                                <div class="form-group">
-                                                                    @Html.LabelFor(m => m.userInfoModel.LoginID)
-                                                                    @Html.TextBoxFor(m => m.userInfoModel.LoginID, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.LoginID).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.LoginID).ToString(), new { @class = "form-control" }))
-                                                                    @Html.ValidationMessageFor(m => m.userInfoModel.LoginID)
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                            <div role="form">
-                                                                <div class="form-group">
-                                                                    @Html.LabelFor(m => m.userInfoModel.AssignedRole)
-                                                                    @{
-                                                //check if user has permission to add role
-                                                if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.CRUSER_ROLEMASTER_CREATE))
-                                                {
-                                                    if ((bool)ViewBag.show_create_role_link)
-                                                    {
-                                                        @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+
+                                                            <tr>
+                                                                <td>
+                                                                    <div role="form">
                                                                         <div class="form-group">
-                                                                            <a href="javascript:void(0);" class="create-link" id="AT" type="button" data-toggle='modal' data-target='#addRoleMaster'>
-                                                                                @InsiderTrading.Common.Common.getResource("usr_lbl_11339")
-                                                                            </a>
+                                                                            @Html.LabelFor(m => m.userInfoModel.CompanyId)
+                                                                            @Html.TextBoxFor(m => m.userInfoModel.CompanyName, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.CompanyId).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.CompanyId).ToString(), new { @class = "form-control", @disabled = "disabled" }))
+                                                                            @Html.ValidationMessageFor(m => m.userInfoModel.CompanyId)
                                                                         </div>
-                                                    }
-                                                }
-                                                                    }
-                                                                    @Html.ListBoxFor(m => m.userInfoModel.SubmittedRole, new MultiSelectList(Model.userInfoModel.DefaultRole, "Key", "Value", Model.userInfoModel.AssignedRole.Select(m => m.Key)), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.AssignedRole).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.AssignedRole).ToString(), new { multiple = "multiple", @class = "form-control multiselect" }))
-                                                                    @Html.ValidationMessageFor(m => m.userInfoModel.SubmittedRole)
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                //set hidden variable for role which need to be pass for saving
-                                                @*@Html.HiddenFor(m => m.userInfoModel.SubmittedRole)*@
-                                            }
-                                    }
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
 
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.FirstName)
-                                                        @Html.TextBoxFor(m => m.userInfoModel.FirstName, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.FirstName).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.FirstName).ToString(), new { @class = "form-control" }))
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.FirstName)
-                                                    </div>
+
+                                                            @{
+                                                                //check if to show following option to login user -- if do not show role then hide div
+                                                                if ((bool)ViewBag.show_not_login_user_details)
+                                                                {
+                                                                    <tr>
+                                                                        <td>
+                                                                            <div role="form">
+                                                                                <div class="form-group">
+                                                                                    @{
+                                                                                        @Html.LabelFor(m => m.userInfoModel.AssignedRole)
+                                                                                        //check if user has permission to add role
+                                                                                        if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.CRUSER_ROLEMASTER_CREATE))
+                                                                                        {
+                                                                                            if ((bool)ViewBag.show_create_role_link)
+                                                                                            {
+                                                                                                @*
+                                                                                                    @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");*@
+
+                                                                                                <a href="javascript:void(0);" class="create-link pl-2 pb-2" id="AT" type="button" data-toggle='modal' data-target='#addRoleMaster'>
+                                                                                                    @InsiderTrading.Common.Common.getResource("usr_lbl_11339")
+                                                                                                </a>
+
+                                                                                            }
+                                                                                        }
+
+                                                                                    }
+                                                                                    @Html.ListBoxFor(m => m.userInfoModel.SubmittedRole, new MultiSelectList(Model.userInfoModel.DefaultRole, "Key", "Value", Model.userInfoModel.AssignedRole.Select(m => m.Key)), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.AssignedRole).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.AssignedRole).ToString(), new { multiple = "multiple", @class = "form-control multiselect" }))
+                                                                                    @Html.ValidationMessageFor(m => m.userInfoModel.SubmittedRole)
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                                else
+                                                                {
+                                                                    //set hidden variable for role which need to be pass for saving
+                                                                    @*@Html.HiddenFor(m => m.userInfoModel.SubmittedRole)*@
+                                                                }
+                                                            }
+
+
+
+                                                            @if (objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.EmployeeType || objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.NonEmployeeType)
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="form-group">
+                                                                            @Html.LabelFor(m => m.userInfoModel.AssignedRole)
+                                                                            @foreach (var item in Model.userInfoModel.AssignedRole)
+                                                                            {
+                                                                                <div><u>@item.Value</u></div>
+                                                                            }
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
                                                 </div>
+                                            </div><!-- /.box-body -->
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                        <div class="box box-chart box-disclosure">
+                                            <div class="box-header with-border">
+                                                <h3 class="box-title">Basic</h3>
                                             </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.MiddleName)
-                                                        @Html.TextBoxFor(m => m.userInfoModel.MiddleName, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.MiddleName).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.MiddleName).ToString(), new { @class = "form-control" }))
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.MiddleName)
-                                                    </div>
+                                            <div class="box-body no-padding">
+                                                <div class="table-responsive pending-activ">
+                                                    <table class="table table-hover">
+                                                        <tbody>
+                                                            @{
+
+                                                                <tr>
+                                                                    <td>
+                                                                        <div role="form">
+                                                                            <div class="form-group">
+                                                                                @Html.LabelFor(m => m.userInfoModel.EmployeeId)
+                                                                                @Html.TextBoxFor(m => m.userInfoModel.EmployeeId, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.EmployeeId).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.EmployeeId).ToString(), new { @class = "form-control", id = "txtEmployeeId" }))
+                                                                                @Html.HiddenFor(m => m.userInfoModel.EmployeeId)
+                                                                                @Html.ValidationMessageFor(m => m.userInfoModel.EmployeeId)
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+
+
+                                                                //check if to show following option to login user -- if do not show role then hide div
+                                                                if ((bool)ViewBag.show_not_login_user_details)
+                                                                {
+
+                                                                    <tr>
+                                                                        <td>
+                                                                            <div role="form">
+                                                                                <div class="form-group">
+                                                                                    @Html.LabelFor(m => m.userInfoModel.LoginID)
+                                                                                    @Html.TextBoxFor(m => m.userInfoModel.LoginID, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.LoginID).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.LoginID).ToString(), new { @class = "form-control" }))
+                                                                                    @Html.ValidationMessageFor(m => m.userInfoModel.LoginID)
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    //set hidden variable for role which need to be pass for saving
+                                                                    @*@Html.HiddenFor(m => m.userInfoModel.SubmittedRole)*@
+                                                                }
+                                                            }
+
+                                                        </tbody>
+                                                    </table>
                                                 </div>
+                                            </div><!-- /.box-body -->
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                        <div class="box box-chart box-disclosure">
+                                            <div class="box-header with-border">
+                                                <h3 class="box-title">Personal</h3>
                                             </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.LastName)
-                                                        @Html.TextBoxFor(m => m.userInfoModel.LastName, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.LastName).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.LastName).ToString(), new { @class = "form-control" }))
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.LastName)
-                                                    </div>
+                                            <div class="box-body no-padding">
+                                                <div class="table-responsive pending-activ">
+                                                    <table class="table table-hover">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <div role="form">
+                                                                        <div class="form-group">
+                                                                            @Html.LabelFor(m => m.userInfoModel.FirstName)
+                                                                            @Html.TextBoxFor(m => m.userInfoModel.FirstName, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.FirstName).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.FirstName).ToString(), new { @class = "form-control" }))
+                                                                            @Html.ValidationMessageFor(m => m.userInfoModel.FirstName)
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <div role="form">
+                                                                        <div class="form-group">
+                                                                            @Html.LabelFor(m => m.userInfoModel.MiddleName)
+                                                                            @Html.TextBoxFor(m => m.userInfoModel.MiddleName, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.MiddleName).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.MiddleName).ToString(), new { @class = "form-control" }))
+                                                                            @Html.ValidationMessageFor(m => m.userInfoModel.MiddleName)
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <div role="form">
+                                                                        <div class="form-group">
+                                                                            @Html.LabelFor(m => m.userInfoModel.LastName)
+                                                                            @Html.TextBoxFor(m => m.userInfoModel.LastName, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.LastName).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.LastName).ToString(), new { @class = "form-control" }))
+                                                                            @Html.ValidationMessageFor(m => m.userInfoModel.LastName)
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <div role="form">
+                                                                        <div class="form-group">
+                                                                            @Html.LabelFor(m => m.userInfoModel.EmailId)
+                                                                            @Html.TextBoxFor(m => m.userInfoModel.EmailId, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.EmailId).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.EmailId).ToString(), new { @class = "form-control" }))
+                                                                            @Html.ValidationMessageFor(m => m.userInfoModel.EmailId)
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
                                                 </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.EmailId)
-                                                        @Html.TextBoxFor(m => m.userInfoModel.EmailId, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.EmailId).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.EmailId).ToString(), new { @class = "form-control" }))
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.EmailId)
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            </div><!-- /.box-body -->
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.ResidentTypeId)
-                                                        @Html.DropDownListFor(m => m.userInfoModel.ResidentTypeId, new SelectList(ViewBag.ResidentTypeDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.ResidentTypeId).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.ResidentTypeId).ToString(), new { @class = "form-control" }))
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.ResidentTypeId)
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.PAN)
-                                                        @Html.TextBoxFor(m => m.userInfoModel.PAN, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.PAN).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.PAN).ToString(), new { @class = "form-control" }))
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.PAN)
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.IdentificationTypeId)
-                                                        @Html.DropDownListFor(m => m.userInfoModel.IdentificationTypeId, new SelectList(ViewBag.IdentificationTypeIdTypeDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.IdentificationTypeId).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.IdentificationTypeId).ToString(), new { @class = "form-control" }))
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.IdentificationTypeId)
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.UIDAI_IdentificationNo)
-                                                        @Html.TextBoxFor(m => m.userInfoModel.UIDAI_IdentificationNo, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.UIDAI_IdentificationNo).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.UIDAI_IdentificationNo).ToString(), new { @class = "form-control" }))
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.UIDAI_IdentificationNo)
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.MobileNumber)
-                                                        @Html.TextBoxFor(m => m.userInfoModel.MobileNumber, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.MobileNumber).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.MobileNumber).ToString(), new { @class = "form-control btnAddMobileDetails", id = "txt_EmpMobNo" }))
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.MobileNumber)
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.AddressLine1)
-                                                        @Html.TextAreaFor(m => m.userInfoModel.AddressLine1, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.AddressLine1).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.AddressLine1).ToString(), new { @class = "form-control", style = "height:34px" }))
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.AddressLine1)
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.PinCode)
-                                                        @Html.TextBoxFor(m => m.userInfoModel.PinCode, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.PinCode).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.PinCode).ToString(), new { @class = "form-control" }))
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.PinCode)
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.CountryId)
-                                                        @Html.DropDownListFor(m => m.userInfoModel.CountryId, new SelectList(ViewBag.CountryDropDown, "Key", "Value", ""), new { @class = "form-control" })
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.CountryId)
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div class="form-group" id="sandbox-container">
-                                                    @Html.LabelFor(m => m.userInfoModel.DateOfJoining)
-                                                    @{
-                                            string DOJ = "";
-                                            if (Model.userInfoModel.DateOfJoining != null)
-                                            {
-                                                DOJ = InsiderTrading.Common.Common.ApplyFormatting(Model.userInfoModel.DateOfJoining, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
-
-                                            }
-                                                    }
-                                                    <div class="input-group date">
-                                                        @Html.TextBox("userInfoModel.DateOfJoining", DOJ, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.DateOfJoining).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.DateOfJoining).ToString(), new { @class = "form-control" }))
-                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                                    </div>
-                                                    @Html.ValidationMessageFor(m => m.userInfoModel.DateOfJoining)
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div class="form-group" id="sandbox-container">
-                                                    @Html.LabelFor(m => m.userInfoModel.DateOfBecomingInsider)
-                                                    @{
-                                            string DOBI = "";
-                                            if (Model.userInfoModel.DateOfBecomingInsider != null)
-                                            {
-                                                DOBI = InsiderTrading.Common.Common.ApplyFormatting(Model.userInfoModel.DateOfBecomingInsider, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
-
-                                            }
-                                                    }
-                                                    <div class="input-group date">
-                                                        @Html.TextBox("userInfoModel.DateOfBecomingInsider", DOBI, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.DateOfBecomingInsider).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.DateOfBecomingInsider).ToString(), new { @class = "form-control" }))
-                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                                    </div>
-                                                    @Html.ValidationMessageFor(m => m.userInfoModel.DateOfBecomingInsider)
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.Location)
-                                                        @Html.TextBoxFor(m => m.userInfoModel.Location, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.Location).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.Location).ToString(), new { @class = "form-control" }))
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.Location)
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.DesignationId)
-                                                        @Html.DropDownListFor(m => m.userInfoModel.DesignationId, new SelectList(ViewBag.DesignationDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.DesignationId).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.DesignationId).ToString(), new { @class = "form-control" }))
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.DesignationId)
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="divSubDesignation">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.SubDesignationId)
-                                                        @if (ViewBag.SubDesignationDropDown.Count > 1)
-                                                        {
-                                                            @Html.DropDownListFor(m => m.userInfoModel.SubDesignationId, new SelectList(ViewBag.SubDesignationDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.SubDesignationId).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.SubDesignationId).ToString(), new { @class = "form-control" }))
-                                                        }
-                                                        else
-                                                        {
-                                                            @Html.DropDownListFor(m => m.userInfoModel.SubDesignationId, new SelectList(ViewBag.SubDesignationDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.SubDesignationId).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.SubDesignationId).ToString(), new { @class = "form-control", @disabled = "disabled" }))
-                                                        }
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.SubDesignationId)
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.DepartmentId)
-                                                        @Html.DropDownListFor(m => m.userInfoModel.DepartmentId, new SelectList(ViewBag.DepartmentDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.DepartmentId).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.DepartmentId).ToString(), new { @class = "form-control" }))
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.DepartmentId)
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.GradeId)
-                                                        @Html.DropDownListFor(m => m.userInfoModel.GradeId, new SelectList(ViewBag.GradeDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.GradeId).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.GradeId).ToString(), new { @class = "form-control" }))
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.GradeId)
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.Category)
-                                                        @Html.DropDownListFor(m => m.userInfoModel.Category, new SelectList(ViewBag.CategoryDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.Category).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.Category).ToString(), new { @class = "form-control" }))
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.Category)
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="divSubCategories">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.SubCategory)
-                                                        @if (ViewBag.SubCategoryDropDown.Count > 1)
-                                                        {
-                                                            @Html.DropDownListFor(m => m.userInfoModel.SubCategory, new SelectList(ViewBag.SubCategoryDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.SubCategory).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.SubCategory).ToString(), new { @class = "form-control" }))
-                                                        }
-                                                        else
-                                                        {
-                                                            @Html.DropDownListFor(m => m.userInfoModel.SubCategory, new SelectList(ViewBag.SubCategoryDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.SubCategory).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.SubCategory).ToString(), new { @class = "form-control" }))
-                                                        }
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.SubCategory)
-                                                    </div>
-                                                </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                        <div class="box box-chart box-disclosure">
+                                            <div class="box-header with-border">
+                                                <h3 class="box-title">Personal Details</h3>
                                             </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.userInfoModel.DIN)
-                                                        @Html.TextBoxFor(m => m.userInfoModel.DIN, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.DIN).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.DIN).ToString(), new { @class = "form-control" }))
-                                                        @Html.ValidationMessageFor(m => m.userInfoModel.DIN)
-                                                    </div>
+                                            <div class="box-body no-padding">
+                                                <div class="table-responsive pending-activ">
+                                                    <table class="table table-hover">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <div role="form">
+                                                                        <div class="form-group">
+                                                                            @Html.LabelFor(m => m.userInfoModel.ResidentTypeId)
+                                                                            @Html.DropDownListFor(m => m.userInfoModel.ResidentTypeId, new SelectList(ViewBag.ResidentTypeDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.ResidentTypeId).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.ResidentTypeId).ToString(), new { @class = "form-control" }))
+                                                                            @Html.ValidationMessageFor(m => m.userInfoModel.ResidentTypeId)
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+
+
+                                                            <tr>
+                                                                <td>
+                                                                    <div role="form">
+                                                                        <div class="form-group">
+                                                                            @Html.LabelFor(m => m.userInfoModel.MobileNumber)
+                                                                            @Html.TextBoxFor(m => m.userInfoModel.MobileNumber, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.MobileNumber).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.MobileNumber).ToString(), new { @class = "form-control btnAddMobileDetails", id = "txt_EmpMobNo" }))
+                                                                            @Html.ValidationMessageFor(m => m.userInfoModel.MobileNumber)
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td>
+                                                                    <div role="form">
+                                                                        <div class="form-group">
+                                                                            @Html.LabelFor(m => m.userInfoModel.AddressLine1)
+                                                                            @Html.TextAreaFor(m => m.userInfoModel.AddressLine1, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.AddressLine1).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.AddressLine1).ToString(), new { @class = "form-control", style = "height:40px" }))
+                                                                            @Html.ValidationMessageFor(m => m.userInfoModel.AddressLine1)
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td>
+                                                                    <div class="row">
+                                                                        <div class="col-lg-6 col-md-6 col-sm-12" role="form" id="empPinCode">
+                                                                            <div class="form-group">
+                                                                                @Html.LabelFor(m => m.userInfoModel.PinCode)
+                                                                                @Html.TextBoxFor(m => m.userInfoModel.PinCode, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.PinCode).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.PinCode).ToString(), new { @class = "form-control" }))
+                                                                                @Html.ValidationMessageFor(m => m.userInfoModel.PinCode)
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-6 col-md-6 col-sm-12" role="form" id="empCountryId">
+                                                                            <div class="form-group">
+                                                                                @Html.LabelFor(m => m.userInfoModel.CountryId)
+                                                                                @Html.DropDownListFor(m => m.userInfoModel.CountryId, new SelectList(ViewBag.CountryDropDown, "Key", "Value", ""), new { @class = "form-control" })
+                                                                                @Html.ValidationMessageFor(m => m.userInfoModel.CountryId)
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
                                                 </div>
+                                            </div><!-- /.box-body -->
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                        <div class="box box-chart box-disclosure">
+                                            <div class="box-header with-border">
+                                                <h3 class="box-title">Identity</h3>
                                             </div>
+                                            <div class="box-body no-padding">
+                                                <div class="table-responsive pending-activ">
+                                                    <table class="table table-hover">
+                                                        <tbody>
 
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                <div role="form">
-                                                    <div class="form-group">
-                                                        <label></label> <br />
-                                                        @if (objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.Admin || objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.COUserType)
-                                                        {
-                                                            @Html.CheckBoxFor(model => model.userInfoModel.AllowUpsiUser)<span>&nbsp;</span> @Html.LabelFor(m => m.userInfoModel.AllowUpsiUser) 
-                                                            @Html.ValidationMessageFor(m => m.userInfoModel.AllowUpsiUser)
-                                                        }
-                                                        @Html.HiddenFor(m => m.userInfoModel.AllowUpsiUser)
-                                                    </div>
+                                                            <tr>
+                                                                <td>
+                                                                    <div role="form">
+                                                                        <div class="form-group">
+                                                                            @Html.LabelFor(m => m.userInfoModel.PAN)
+                                                                            @Html.TextBoxFor(m => m.userInfoModel.PAN, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.PAN).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.PAN).ToString(), new { @class = "form-control" }))
+                                                                            @Html.ValidationMessageFor(m => m.userInfoModel.PAN)
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td>
+                                                                    <div role="form">
+                                                                        <div class="form-group">
+                                                                            @Html.LabelFor(m => m.userInfoModel.IdentificationTypeId)
+                                                                            @Html.DropDownListFor(m => m.userInfoModel.IdentificationTypeId, new SelectList(ViewBag.IdentificationTypeIdTypeDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.IdentificationTypeId).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.IdentificationTypeId).ToString(), new { @class = "form-control" }))
+                                                                            @Html.ValidationMessageFor(m => m.userInfoModel.IdentificationTypeId)
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td>
+                                                                    <div role="form">
+                                                                        <div class="form-group">
+                                                                            @Html.LabelFor(m => m.userInfoModel.UIDAI_IdentificationNo)
+                                                                            @Html.TextBoxFor(m => m.userInfoModel.UIDAI_IdentificationNo, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.UIDAI_IdentificationNo).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.UIDAI_IdentificationNo).ToString(), new { @class = "form-control" }))
+                                                                            @Html.ValidationMessageFor(m => m.userInfoModel.UIDAI_IdentificationNo)
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td>
+                                                                    <div role="form">
+                                                                        <div class="form-group">
+                                                                            @Html.LabelFor(m => m.userInfoModel.DIN)
+                                                                            @Html.TextBoxFor(m => m.userInfoModel.DIN, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.DIN).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.DIN).ToString(), new { @class = "form-control" }))
+                                                                            @Html.ValidationMessageFor(m => m.userInfoModel.DIN)
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+
+                                                        </tbody>
+                                                    </table>
                                                 </div>
+                                            </div><!-- /.box-body -->
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                        <div class="box box-chart box-disclosure">
+                                            <div class="box-header with-border">
+                                                <h3 class="box-title">Organisation Details</h3>
                                             </div>
+                                            <div class="box-body no-padding">
+                                                <div class="table-responsive pending-activ">
+                                                    <table class="table table-hover">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <div class="form-group" id="sandbox-container">
+                                                                        @Html.LabelFor(m => m.userInfoModel.DateOfJoining)
+                                                                        @{
+                                                                            string DOJ = "";
+                                                                            if (Model.userInfoModel.DateOfJoining != null)
+                                                                            {
+                                                                                DOJ = InsiderTrading.Common.Common.ApplyFormatting(Model.userInfoModel.DateOfJoining, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
 
-                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                                <div class="form-group">
+                                                                            }
+                                                                        }
+                                                                        <div class="input-group date">
+                                                                            @Html.TextBox("userInfoModel.DateOfJoining", DOJ, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.DateOfJoining).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.DateOfJoining).ToString(), new { @class = "form-control" }))
+                                                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                                        </div>
+                                                                        @Html.ValidationMessageFor(m => m.userInfoModel.DateOfJoining)
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
 
+                                                            <tr>
+                                                                <td>
+                                                                    <div class="form-group" id="sandbox-container">
+                                                                        @Html.LabelFor(m => m.userInfoModel.DateOfBecomingInsider)
+                                                                        @{
+                                                                            string DOBI = "";
+                                                                            if (Model.userInfoModel.DateOfBecomingInsider != null)
+                                                                            {
+                                                                                DOBI = InsiderTrading.Common.Common.ApplyFormatting(Model.userInfoModel.DateOfBecomingInsider, InsiderTrading.Common.ConstEnum.DataFormatType.Date);
+
+                                                                            }
+                                                                        }
+                                                                        <div class="input-group date">
+                                                                            @Html.TextBox("userInfoModel.DateOfBecomingInsider", DOBI, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.DateOfBecomingInsider).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.DateOfBecomingInsider).ToString(), new { @class = "form-control" }))
+                                                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                                        </div>
+                                                                        @Html.ValidationMessageFor(m => m.userInfoModel.DateOfBecomingInsider)
+                                                                    </div>
+
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td>
+                                                                    <div role="form">
+                                                                        <div class="form-group">
+                                                                            @Html.LabelFor(m => m.userInfoModel.Location)
+                                                                            @Html.TextBoxFor(m => m.userInfoModel.Location, InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.Location).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.Location).ToString(), new { @class = "form-control" }))
+                                                                            @Html.ValidationMessageFor(m => m.userInfoModel.Location)
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td>
+                                                                    <div role="form">
+                                                                        <div class="form-group">
+                                                                            @Html.LabelFor(m => m.userInfoModel.DepartmentId)
+                                                                            @Html.DropDownListFor(m => m.userInfoModel.DepartmentId, new SelectList(ViewBag.DepartmentDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.DepartmentId).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.DepartmentId).ToString(), new { @class = "form-control" }))
+                                                                            @Html.ValidationMessageFor(m => m.userInfoModel.DepartmentId)
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+
+
+                                                        </tbody>
+                                                    </table>
                                                 </div>
-                                            </div>
+                                            </div><!-- /.box-body -->
+                                        </div>
+                                    </div>
 
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                        <div class="box box-chart box-disclosure">
+                                            <div class="box-header with-border">
+                                                <h3 class="box-title">Designation Details</h3>
+                                            </div>
+                                            <div class="box-body no-padding">
+                                                <div class="table-responsive pending-activ">
+                                                    <table class="table table-hover">
+                                                        <tbody>           
+
+                                                            <tr>
+                                                                <td>
+                                                                    <div role="form">
+                                                                        <div class="form-group">
+                                                                            @Html.LabelFor(m => m.userInfoModel.DesignationId)
+                                                                            @Html.DropDownListFor(m => m.userInfoModel.DesignationId, new SelectList(ViewBag.DesignationDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.DesignationId).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.DesignationId).ToString(), new { @class = "form-control" }))
+                                                                            @Html.ValidationMessageFor(m => m.userInfoModel.DesignationId)
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td id="divSubDesignation">
+                                                                    <div role="form">
+                                                                        <div class="form-group">
+                                                                            @Html.LabelFor(m => m.userInfoModel.SubDesignationId)
+                                                                            @if (ViewBag.SubDesignationDropDown.Count > 1)
+                                                                            {
+                                                                                @Html.DropDownListFor(m => m.userInfoModel.SubDesignationId, new SelectList(ViewBag.SubDesignationDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.SubDesignationId).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.SubDesignationId).ToString(), new { @class = "form-control" }))
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                @Html.DropDownListFor(m => m.userInfoModel.SubDesignationId, new SelectList(ViewBag.SubDesignationDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.SubDesignationId).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.SubDesignationId).ToString(), new { @class = "form-control", @disabled = "disabled" }))
+                                                                            }
+                                                                            @Html.ValidationMessageFor(m => m.userInfoModel.SubDesignationId)
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td>
+                                                                    <div role="form">
+                                                                        <div class="form-group">
+                                                                            @Html.LabelFor(m => m.userInfoModel.GradeId)
+                                                                            @Html.DropDownListFor(m => m.userInfoModel.GradeId, new SelectList(ViewBag.GradeDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.GradeId).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.GradeId).ToString(), new { @class = "form-control" }))
+                                                                            @Html.ValidationMessageFor(m => m.userInfoModel.GradeId)
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div><!-- /.box-body -->
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                        <div class="box box-chart box-disclosure">
+                                            <div class="box-header with-border">
+                                                <h3 class="box-title">Category Information</h3>
+                                            </div>
+                                            <div class="box-body no-padding">
+                                                <div class="table-responsive pending-activ">
+                                                    <table class="table table-hover">
+                                                        <tbody>
+
+                                                            <tr class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                                <td>
+                                                                    <div role="form">
+                                                                        <div class="form-group">
+                                                                            @Html.LabelFor(m => m.userInfoModel.Category)
+                                                                            @Html.DropDownListFor(m => m.userInfoModel.Category, new SelectList(ViewBag.CategoryDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.Category).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.Category).ToString(), new { @class = "form-control" }))
+                                                                            @Html.ValidationMessageFor(m => m.userInfoModel.Category)
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td id="divSubCategories">
+                                                                    <div role="form">
+                                                                        <div class="form-group">
+                                                                            @Html.LabelFor(m => m.userInfoModel.SubCategory)
+                                                                            @if (ViewBag.SubCategoryDropDown.Count > 1)
+                                                                            {
+                                                                                @Html.DropDownListFor(m => m.userInfoModel.SubCategory, new SelectList(ViewBag.SubCategoryDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.SubCategory).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.SubCategory).ToString(), new { @class = "form-control" }))
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                @Html.DropDownListFor(m => m.userInfoModel.SubCategory, new SelectList(ViewBag.SubCategoryDropDown, "Key", "Value", ""), InsiderTrading.Common.Common.IsEditable(Html.ReourceKeyFor(m => m.userInfoModel.SubCategory).ToString(), Html.ActivityResourceKeyFor(m => m.userInfoModel.SubCategory).ToString(), new { @class = "form-control" }))
+                                                                            }
+                                                                            @Html.ValidationMessageFor(m => m.userInfoModel.SubCategory)
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td>
+                                                                    <div role="form">
+                                                                        <div class="form-group">
+                                                                            <label></label> <br />
+                                                                            @if (objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.Admin || objLoginUserDetails.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.COUserType)
+                                                                            {
+                                                                                @Html.CheckBoxFor(model => model.userInfoModel.AllowUpsiUser)<span>&nbsp;</span> @Html.LabelFor(m => m.userInfoModel.AllowUpsiUser)
+                                                                                @Html.ValidationMessageFor(m => m.userInfoModel.AllowUpsiUser)
+                                                                            }
+                                                                            @Html.HiddenFor(m => m.userInfoModel.AllowUpsiUser)
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td>
+                                                                    <div class="form-group">
+
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div><!-- /.box-body -->
                                         </div>
                                     </div>
                                 </div>
@@ -486,37 +668,40 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            if (Model.userInfoModel.UserInfoId != 0)
-            {
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    @*//check if to show confirm personal details button or not*@
-                    @*@if ((bool)ViewBag.show_confirm_personal_details_btn)
-                        {
-                            @Html.Hidden("confirm_msg", @InsiderTrading.Common.Common.getResource("usr_lbl_11493"))
-                            <button type="button" class="btn btn-success" name="ConfirmDetails" id="ConfirmDetails"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("usr_btn_11418")</button>
-                        }*@
-
-                    @*@if (ViewBag.CompanyName == false)
-                        {
-                            <a class="btn btn-success" href='@Url.Action("ViewDetails", "Employee", new { acid = ViewBag.user_action_ViewDetails, nUserInfoID = Model.userInfoModel.UserInfoId })' role="button">@InsiderTrading.Common.Common.getResource("com_btn_14018")</a>
-                        }*@
-
-
-
-                    @if ((bool)ViewBag.show_not_login_user_details)
+                    if (Model.userInfoModel.UserInfoId != 0)
                     {
-                        <a class="btn btn-success" href='@Url.Action("Index", "Employee", new { acid = ViewBag.user_action_ViewDetails })' role="button">@InsiderTrading.Common.Common.getResource("com_btn_14011")</a>
-                    }
-                </div>
-            }
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            @*//check if to show confirm personal details button or not*@
+                            @*@if ((bool)ViewBag.show_confirm_personal_details_btn)
+                                {
+                                    @Html.Hidden("confirm_msg", @InsiderTrading.Common.Common.getResource("usr_lbl_11493"))
+                                    <button type="button" class="btn btn-success" name="ConfirmDetails" id="ConfirmDetails"><i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("usr_btn_11418")</button>
+                                }*@
 
-        }
+                            @*@if (ViewBag.CompanyName == false)
+                                {
+                                    <a class="btn btn-success" href='@Url.Action("ViewDetails", "Employee", new { acid = ViewBag.user_action_ViewDetails, nUserInfoID = Model.userInfoModel.UserInfoId })' role="button">@InsiderTrading.Common.Common.getResource("com_btn_14018")</a>
+                                }*@
+
+
+
+                            @if ((bool)ViewBag.show_not_login_user_details)
+                            {
+                                <a class="btn btn-success" href='@Url.Action("Index", "Employee", new { acid = ViewBag.user_action_ViewDetails })' role="button">@InsiderTrading.Common.Common.getResource("com_btn_14011")</a>
+                            }
+                        </div>
+                    }
+
+                }
+            </div>
+        </div>
+
+
+
     </div>
 
 </section><!-- /.content -->
@@ -597,7 +782,7 @@
                                                 <td><input type="button" class="btn btn-success" id="btnAdd" value="+"  /></td>
                                                 <p id="demo"></p>
                                             </tr>*@
-                                                counter = counter + 1;
+                                        counter = counter + 1;
                                     }
 
                                 }
@@ -676,19 +861,25 @@
         if ($("#btn_GetUserDematDetails").hasClass("btn-danger")) {
             $('#btn_GetUserDematDetails').attr("disabled", "disabled");
             if ('@ViewBag.WorkandEducationDetailsConfiguration' == 539001) {
-                $('#btn_GetUserEducationDetails').attr("disabled", "disabled");
+                @*$('#btn_GetUserEducationDetails').attr("disabled", "disabled");*@
+                $('#btn_GetUserEducationDetails').addClass("disabled");
+   
             }
-            $('#btn_GetUserRelativeDetails').attr("disabled", "disabled");
-            $('#btn_ConfirmDetails').attr("disabled", "disabled");
-
+          @*  $('#btn_GetUserRelativeDetails').attr("disabled", "disabled");
+            $('#btn_ConfirmDetails').attr("disabled", "disabled");*@
+            $('#btn_GetUserRelativeDetails').addClass("disabled");
+            $('#btn_ConfirmDetails').addClass("disabled");
         }
         else {
             $('#btn_GetUserDematDetails').removeAttr("disabled", "disabled");
             if ('@ViewBag.WorkandEducationDetailsConfiguration' == 539001) {
-                $('#btn_GetUserEducationDetails').removeAttr("disabled", "disabled");
+                @*$('#btn_GetUserEducationDetails').removeAttr("disabled", "disabled");*@
+                $('#btn_GetUserEducationDetails').removeClass("disabled");
             }
-            $('#btn_GetUserRelativeDetails').removeAttr("disabled", "disabled");
-            $('#btn_ConfirmDetails').removeAttr("disabled", "disabled");
+@*            $('#btn_GetUserRelativeDetails').removeAttr("disabled", "disabled");
+            $('#btn_ConfirmDetails').removeAttr("disabled", "disabled");*@
+            $('#btn_GetUserRelativeDetails').removeClass("disabled");
+            $('#btn_ConfirmDetails').removeClass("disabled");
         }
     });
 </script>
@@ -827,20 +1018,18 @@
 
 
 <script type="text/javascript">
-    $(document).ready(function(){
+    $(document).ready(function () {
         var table = document.getElementById('tblCustomers');
-        var x =document.getElementsByTagName("tr");
-        for(var i=1;i <table.rows.length;i++)
-        {
+        var x = document.getElementsByTagName("tr");
+        for (var i = 1; i < table.rows.length; i++) {
 
-            table.rows[i].onfocusout =function()
-            {
+            table.rows[i].onfocusout = function () {
 
                 var row = $(this);
                 var rindex = $('input:text:eq(0)', row).val();
                 //document.getElementById("txtName").value=rindex;
                 var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-                if(rindex.match(phoneno)) {
+                if (rindex.match(phoneno)) {
                     return true;
                 }
                 else {
@@ -855,17 +1044,17 @@
 
     });
 
-    //function phonenumber(rindex) {
-    //   debugger
-    //    var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-    //    if(rindex.match(phoneno)) {
-    //        return true;
-    //    }
-    //    else {
-    //        document.getElementById(this).focus();
-    //        return false;
-    //    }
-    //}
+                                                                                    //function phonenumber(rindex) {
+                                                                                    //   debugger
+                                                                                    //    var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+                                                                                    //    if(rindex.match(phoneno)) {
+                                                                                    //        return true;
+                                                                                    //    }
+                                                                                    //    else {
+                                                                                    //        document.getElementById(this).focus();
+                                                                                    //        return false;
+                                                                                    //    }
+                                                                                    //}
 
 </script>
 @*<style>

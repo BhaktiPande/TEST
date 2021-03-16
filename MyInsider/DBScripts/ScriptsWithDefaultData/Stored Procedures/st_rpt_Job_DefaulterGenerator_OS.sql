@@ -32,7 +32,7 @@ BEGIN
 		
 		EXEC @RC = st_tra_Generate_PeriodEnd_OS @nReturnValue OUTPUT, @nSQLErrCode OUTPUT, @sSQLErrMessage OUTPUT
 		
-		--EXEC @RC = st_rpt_DefaulterGenerate @nReturnValue OUTPUT, @nSQLErrCode OUTPUT, @sSQLErrMessage OUTPUT
+		EXEC @RC = st_rpt_DefaulterGenerate_OS @nReturnValue OUTPUT, @nSQLErrCode OUTPUT, @sSQLErrMessage OUTPUT
 
 		RETURN 0
 	END	 TRY

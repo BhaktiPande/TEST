@@ -63,7 +63,7 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                        <div class="row">
+                                     @*   <div class="row">*@
                                             <div role="form">
                                                 <div class="form-group">
                                                     @Html.LabelFor(m => m.userEducationModel.PassingYear)
@@ -72,7 +72,7 @@
                                                     @Html.ValidationMessageFor(m => m.userEducationModel.PassingYear)
                                                 </div>
                                             </div>
-                                        </div>
+                                        @*</div>*@
                                     </div>
                                 </div>
                             </div>
@@ -567,13 +567,17 @@
         }
 
         if ($("#btn_GetUserEducationDetails").hasClass("btn-warning")) {
-            $('#btn_GetUserRelativeDetails').attr("disabled", "disabled");
-            $('#btn_ConfirmDetails').attr("disabled", "disabled");
+  @*          $('#btn_GetUserRelativeDetails').attr("disabled", "disabled");
+            $('#btn_ConfirmDetails').attr("disabled", "disabled");*@
+            $('#btn_GetUserRelativeDetails').addClass("disabled");
+            $('#btn_ConfirmDetails').addClass("disabled");
 
         }
         else {
-            $('#btn_GetUserRelativeDetails').removeAttr("disabled", "disabled");
-            $('#btn_ConfirmDetails').removeAttr("disabled", "disabled");
+        @*    $('#btn_GetUserRelativeDetails').removeAttr("disabled", "disabled");
+            $('#btn_ConfirmDetails').removeAttr("disabled", "disabled");*@
+            $('#btn_GetUserRelativeDetails').removeClass("disabled");
+            $('#btn_ConfirmDetails').removeClass("disabled");
         }
         if ('@ViewBag.FromEducationPost' == 'True') {
 

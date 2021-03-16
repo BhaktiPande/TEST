@@ -42,7 +42,7 @@
         {
             if (objDocumentDetailsModel.DocumentId != 0 && objDocumentDetailsModel.DocumentId != null)
             {
-                <div id="@objDocumentDetailsModel.Index@objDocumentDetailsModel.SubIndex">
+                <div id="@objDocumentDetailsModel.Index@objDocumentDetailsModel.SubIndex" style="display:contents;">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                         @Html.ActionLink(objDocumentDetailsModel.DocumentName, "Download", "Document", new { nDocumentDetailsID = objDocumentDetailsModel.DocumentId, GUID = objDocumentDetailsModel.GUID, sDocumentName = objDocumentDetailsModel.DocumentName, sFileType = objDocumentDetailsModel.FileType }, null)
                     </div>

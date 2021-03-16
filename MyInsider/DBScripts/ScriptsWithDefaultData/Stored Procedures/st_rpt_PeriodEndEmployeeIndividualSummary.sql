@@ -74,8 +74,8 @@ BEGIN
 	
 	DECLARE @dtDateOfBecomingInsider DATETIME
 	DECLARE @dtDetailsSubmitLastDate DATETIME
-	DECLARE @dtScpSubmitDate DATETIME
-	DECLARE @dtHcpSubmitDate DATETIME
+	DECLARE @dtScpSubmitDate VARCHAR(512)
+	DECLARE @dtHcpSubmitDate VARCHAR(512)
 	DECLARE @sStatusOfSubmission VARCHAR(100)
 
 	DECLARE @nDataType_String INT = 1
@@ -262,15 +262,52 @@ BEGIN
 				-- Output #2 : Transaction status details
 
 				SELECT @dtDateOfBecomingInsider = UF.DateOfBecomingInsider,
-					@dtScpSubmitDate = vwPE.ScpSubmitDate, @dtHcpSubmitDate = vwPE.HcpSubmitDate, @sStatusOfSubmission = @sComment
+					@dtScpSubmitDate = 
+					--vwPE.ScpSubmitDate,
+					CASE 
+							WHEN vwPE.SoftCopyReq = 1 AND vwPE.DetailsSubmitStatus = 1 THEN -- if soft copy is required 
+								(CASE 
+									WHEN vwPE.ScpSubmitStatus = 0 THEN 'Pending'
+									WHEN vwPE.ScpSubmitStatus = 1 THEN CONVERT(VARCHAR(max), UPPER(REPLACE(CONVERT(NVARCHAR, vwPE.ScpSubmitDate, 106),' ','/')))
+									ELSE '-' END)
+							WHEN vwPE.SoftCopyReq = 0 AND vwPE.DetailsSubmitStatus = 1 THEN 'Not Required'  -- if soft copy is NOT required
+							ELSE '-' 
+					END,
+
+					@dtHcpSubmitDate = 
+					--vwPE.HcpSubmitDate,
+					CASE 
+						WHEN vwPE.HardCopyReq = 1 AND vwPE.DetailsSubmitStatus = 1 THEN -- if hard copy is required 
+							(CASE 
+								WHEN vwPE.SoftCopyReq = 1 THEN   -- if soft copy is required 
+									(CASE 
+										WHEN vwPE.ScpSubmitStatus = 0 THEN  ''
+										WHEN vwPE.ScpSubmitStatus = 1 AND vwPE.HcpSubmitStatus = 0 THEN  'Pending'
+										WHEN vwPE.ScpSubmitStatus = 1 AND vwPE.HcpSubmitStatus = 1 THEN  CONVERT(VARCHAR(max), UPPER(REPLACE(CONVERT(NVARCHAR, vwPE.HcpSubmitDate, 106),' ','/')))
+										ELSE '-' END)
+								ELSE    -- if soft copy is NOT required
+									(CASE 
+										WHEN vwPE.HcpSubmitStatus = 0 THEN 'Pending' 
+										WHEN vwPE.HcpSubmitStatus = 1 THEN CONVERT(VARCHAR(max), UPPER(REPLACE(CONVERT(NVARCHAR, vwPE.HcpSubmitDate, 106),' ','/'))) 
+										ELSE '-' END)
+								END) 
+							WHEN vwPE.HardCopyReq = 0 AND vwPE.DetailsSubmitStatus = 1 THEN		-- if hard copy is NOT required
+								(CASE
+									WHEN vwPE.SoftCopyReq = 1 AND vwPE.ScpSubmitStatus = 1 THEN 'Not Required'	-- if soft copy is required
+									WHEN vwPE.SoftCopyReq = 0 THEN 'Not Required'  -- if soft copy is NOT required
+									ELSE '-' END)
+							ELSE '-' 
+					END,
+
+					@sStatusOfSubmission = @sComment
 				FROM usr_UserInfo UF LEFT JOIN vw_PeriodEndDisclosureStatus vwPE ON UF.UserInfoId = vwPE.UserInfoId AND PeriodEndDate = @dtPEEnd
 				WHERE UF.UserInfoId IN (SELECT * FROM FN_VIGILANTE_SPLIT (@inp_iUserInfoId, ','))
-				
+				--SELECT @sSQL = @sSQL + 'dbo.uf_rpt_ReplaceSpecialChar(SoftCopySubmissionDate) AS rpt_grd_19051,'
 				INSERT INTO @tmpUserDetails(RKey, Value, DataType, TransactionMasterId , DisclosureTypeCodeId , LetterForCodeId, Acid, LetterType)
 				VALUES 	('rpt_lbl_19148', dbo.uf_rpt_FormatDateValue(@dtPEStart,0), @nDataType_String,0,0,0,0,''),
 						('rpt_lbl_19160', dbo.uf_rpt_FormatDateValue(@dtPEEnd,0), @nDataType_String,0,0,0,0,''),
-						('rpt_lbl_19149', dbo.uf_rpt_FormatDateValue(@dtScpSubmitDate,0), @nDataType_String,@nTransactionMasterId,147003,151001,170,'S'),
-						('rpt_lbl_19150', dbo.uf_rpt_FormatDateValue(@dtHcpSubmitDate,0), @nDataType_String,@nTransactionMasterId,147003,151001,170,'H'),
+						('rpt_lbl_19149', dbo.uf_rpt_ReplaceSpecialChar(@dtScpSubmitDate), @nDataType_String,@nTransactionMasterId,147003,151001,170,'S'),
+						('rpt_lbl_19150', dbo.uf_rpt_ReplaceSpecialChar(@dtHcpSubmitDate), @nDataType_String,@nTransactionMasterId,147003,151001,170,'H'),
 						('rpt_lbl_19151', @sStatusOfSubmission, @nDataType_String,0,0,0,0,''),
 						('rpt_lbl_19152', dbo.uf_rpt_FormatDateValue(@dtDetailsSubmitLastDate,0), @nDataType_String,0,0,0,0,'')
 

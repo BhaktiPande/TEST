@@ -16,7 +16,7 @@
 
         @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-12 pl-0 pr-0">
                 <div class="card panel-default">
                     <div class="card-body">
                         @{
@@ -64,7 +64,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="DivRelativeDetails">
+                            <div id="DivRelativeDetails" style="display: contents;">
                                 @{
     if (Model.PreclearanceRequestForCodeId == InsiderTrading.Common.ConstEnum.Code.PreclearanceRequestForRelative)
     {
@@ -100,7 +100,7 @@
 
                                 }
                             </div>
-                            <div id="divDMATwiseBalance"></div>
+                            <div id="divDMATwiseBalance" style="display:contents;"></div>
                             @*@if (Model.PreclearanceStatusCodeId == InsiderTrading.Common.ConstEnum.Code.PreclearanceRequestStatusApproved || Model.PreclearanceStatusCodeId == InsiderTrading.Common.ConstEnum.Code.PreclearanceRequestStatusRejected) {
                                 <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                                 <div class="form-group">
@@ -141,14 +141,14 @@
 
                         </div>
                         <div class="row">
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div class="col-lg-4 col-md-3 col-sm-6 col-xs-12">
                                 <div class="form-group">
                                     @Html.LabelFor(m => m.SecuritiesToBeTradedQty)
                                     @Html.TextBoxFor(m => m.SecuritiesToBeTradedQty, "{0:N0}", new { @class = "form-control numericOnly" })
                                     @Html.ValidationMessageFor(m => m.SecuritiesToBeTradedQty)
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div class="col-lg-4 col-md-3 col-sm-6 col-xs-12">
                                 <div class="form-group">
                                     @Html.LabelFor(m => m.SecuritiesToBeTradedValue)
                                     @Html.TextBoxFor(m => m.SecuritiesToBeTradedValue, "{0:N0}", new { @class = "form-control numericOnly" })
@@ -170,7 +170,7 @@
                                 </div>
                             </div>
 
-                            <div id="DivModeOfAcquisition">
+                            <div id="DivModeOfAcquisition" style="display: contents;">
                                 @{
                                 if (Model.TransactionTypeCodeId != null && Model.TransactionTypeCodeId > 0)
                                 {

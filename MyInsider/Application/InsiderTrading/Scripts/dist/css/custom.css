@@ -1514,8 +1514,13 @@ table[gridtype="114037"] tr td a p.status-gray:before, table[gridtype="114037"] 
     border: 2px solid #9EA0A4;
 }
 
-table[gridtype="114037"]  tr td a p.status-green-orange:before{ border: 2px solid #86c457;}
-table[gridtype="114037"]  tr td a p.status-green-orange:after{border: 2px solid #F39C12;}
+table[gridtype="114037"] tr td a p.status-green-orange:before {
+    border: 2px solid #86c457;
+}
+
+table[gridtype="114037"] tr td a p.status-green-orange:after {
+    border: 2px solid #F39C12;
+}
 
 table[gridtype="114037"] tr td a p.status-red-green:before {
     border: 2px solid #DD4B39;
@@ -2343,7 +2348,7 @@ table.table-contact {
 
     .navbar-nav > .notifications-menu.alerts a {
         padding: 13px 15px !important;
-      /*  margin-top: 5px*/;
+        /*  margin-top: 5px*/;
     }
 
         .navbar-nav > .notifications-menu.alerts a p {
@@ -2620,7 +2625,7 @@ text {
 }
 
 .pull-right {
-    float: right; 
+    float: right;
 }
 
 .pull-left {
@@ -4827,7 +4832,7 @@ table {
 
 
 .dataTables_scrollBody .row {
-    display:contents;
+    display: contents;
 }
 
 .dataTables_scroll {
@@ -4910,20 +4915,39 @@ table {
 }
 
 /*Bootstrap 3 to 4 migration changes*/
-body{
-font-size: 14px;
+body {
+    font-size: 14px;
 }
 
-h5{
-    font-size: 14px;
+.h1, h1 {
+    font-size: 36px
+}
+
+.h2, h2 {
+    font-size: 30px
+}
+
+.h3, h3 {
+    font-size: 24px
+}
+
+.h4, h4 {
+    font-size: 18px
+}
+
+.h5, h5 {
+    font-size: 14px
+}
+
+.h6, h6 {
+    font-size: 12px
 }
 
 label {
     font-weight: 700;
-    margin-bottom: 0px;
 }
 
-.checkbox label{
+.checkbox label {
     font-weight: 400;
 }
 
@@ -4936,9 +4960,13 @@ label {
     cursor: not-allowed;
 }
 
+.form-control {
+    height: 35px;
+}
+
 .btn {
     font: 14px Roboto, sans-serif;
-    line-height: 20px;
+    line-height: 1.428571;
     white-space: nowrap;
 }
 
@@ -4983,6 +5011,16 @@ label {
     z-index: 99999 !important;
 }
 
+#btnLogin {
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.3333333;
+}
+
+.pl-15 {
+    padding-left: 15px !important;
+}
+
 /*navbar*/
 .navbar-nav {
     flex-direction: row;
@@ -4992,9 +5030,9 @@ label {
         margin: 0px !important;
     }
 
-.navbar-nav > .notifications-menu > .dropdown-menu > li.footer > a {
-    display: block;
-}
+    .navbar-nav > .notifications-menu > .dropdown-menu > li.footer > a {
+        display: block;
+    }
 
 .navbar-custom-menu.ml-auto {
     margin-left: initial !important;
@@ -5032,33 +5070,34 @@ form {
     padding-right: 0px;
     padding-left: 0px;
 }
-.card-body:after, .row:after {
-    clear: both;
-}
+
+    .card-body:after, .row:after {
+        clear: both;
+    }
 
 .content form div div.container {
     margin: 0px !important;
     padding-left: 0px;
 }
 
-.content form div div.container .card {
-    background-color: transparent;
-    border: 0px solid transparent;
-    box-shadow: 0 0px 0px rgba(0,0,0,.05);
- }
+    .content form div div.container .card {
+        background-color: transparent;
+        border: 0px solid transparent;
+        box-shadow: 0 0px 0px rgba(0,0,0,.05);
+    }
 
-.content form div div.container .card-body {
-    padding: 0px;
-  }
+    .content form div div.container .card-body {
+        padding: 0px;
+    }
 
 .content .row {
     margin-right: 0px;
     margin-left: 0px;
 }
 
-.content .row .col-lg-3 a.btn.btn-success.icon.icon-reports {
+    .content .row .col-lg-3 a.btn.btn-success.icon.icon-reports {
         margin-left: -15px;
-}
+    }
 
 .content.search .col-lg-12 {
     padding-left: 0px;
@@ -5071,18 +5110,23 @@ form {
     min-height: 1px;
 }
 
-.col-xs-6:empty {
-    width: 0%;
-}
+    .col-xs-6:empty {
+        width: 0%;
+    }
 
 .card.panel-default .card-body .row .col-lg-3 ul.dropdown-menu.inner {
     display: block;
-    padding-left: 10px !important;
+    /*padding-left: 10px !important;*/
     overflow-y: hidden !important;
 }
 
 .card.panel-default .card-body .row .col-lg-3 .dropdown-toggle::after {
     display: inline-block;
+}
+
+.card.panel-default.panel_css .card-body {
+    padding-right: 15px !important;
+    padding-left: 15px !important;
 }
 
 /*datatable*/
@@ -5091,7 +5135,7 @@ form {
     margin-left: 0px;
 }
 
-div.dataTables_length label{
+div.dataTables_length label {
     margin: 0px 0px 5px;
 }
 
@@ -5148,25 +5192,25 @@ table[gridtype="114008"] {
     background-color: #f2f4f1;
 }
 
-#divCalenderPartial .col-xs-5.ViewCalender {
-    float: left;
-    width: 41.66666667%;
-    padding-left: 15px;
-}
+    #divCalenderPartial .col-xs-5.ViewCalender {
+        float: left;
+        width: 41.66666667%;
+        padding-left: 15px;
+    }
 
-#divCalenderPartial .col-xs-7 {
-    float: left;
-    width: 58.33333333%;
-}
+    #divCalenderPartial .col-xs-7 {
+        float: left;
+        width: 58.33333333%;
+    }
 
-#divCalenderPartial .col-xs-7 .col-xs-12.search .container-fluid .col-lg-12 .card {
-        border: 0px solid transparent;
-        box-shadow: 0 0px 0px rgba(0,0,0,.05);
-}
+        #divCalenderPartial .col-xs-7 .col-xs-12.search .container-fluid .col-lg-12 .card {
+            border: 0px solid transparent;
+            box-shadow: 0 0px 0px rgba(0,0,0,.05);
+        }
 
-#divCalenderPartial .col-xs-7 .col-xs-12.search .container-fluid .col-lg-12 .card-body {
-        padding: 0px !important;
-}
+        #divCalenderPartial .col-xs-7 .col-xs-12.search .container-fluid .col-lg-12 .card-body {
+            padding: 0px !important;
+        }
 
 .row.BlockEventCalnder .col-lg-12 .card {
     border: 0px solid transparent;
@@ -5205,6 +5249,7 @@ section[gridtype="114119"] > div > form {
 #RoleActivityForm .form-horizontal .card.panel-default .card-body .row .col-lg-9.col-md-12.col-sm-12.col-xs-12 {
     display: flex;
 }
+
 #RoleActivityForm .form-horizontal .row {
     margin-right: 0px;
     margin-left: -15px;
@@ -5213,6 +5258,7 @@ section[gridtype="114119"] > div > form {
     color: #333;
     line-height: 18px;
 }
+
 #RoleActivityForm .form-horizontal hr {
     margin-top: 20px;
     margin-bottom: 20px;
@@ -5225,12 +5271,12 @@ section[gridtype="114119"] > div > form {
     display: flex;
 }
 
-.card.panel-accordion .card-header .card-title .checkbox label::before {
-    margin-top: 3px;
-}
+    .card.panel-accordion .card-header .card-title .checkbox label::before {
+        margin-top: 3px;
+    }
 
-.card.panel-accordion .card-header .card-title .accordion-toggle:hover{
-    text-decoration:underline;
+.card.panel-accordion .card-header .card-title .accordion-toggle:hover {
+    text-decoration: underline;
 }
 
 .card.panel-accordion .card-header .card-title .accordion-toggle {
@@ -5246,19 +5292,19 @@ section[gridtype="114119"] > div > form {
     margin: 0px;
 }
 
- .card.panel-accordion .card-header {
-    padding: 10px 15px;
+.card.panel-accordion .card-header {
+    padding: 15px 15px;
     border: 0px;
     border-color: #ddd;
     background-color: #F2F4F1;
     border-color: #ddd;
 }
 
-.card.panel-accordion .card-header.active {
-    background-color: #86C457 !important;
-    color: #ffffff !important;
-    border-radius: 0 !important;
-}
+    .card.panel-accordion .card-header.active {
+        background-color: #86C457 !important;
+        color: #ffffff !important;
+        border-radius: 0 !important;
+    }
 
 .card.panel-accordion > .card-header.active h4 a {
     color: #ffffff !important;
@@ -5270,6 +5316,9 @@ section[gridtype="114119"] > div > form {
     margin-bottom: 0px;
     border-color: #ddd;
 }
+    .card.panel-accordion .table td {
+        padding: 15px;
+    }
 
 #accordion_RoleActivity {
     padding: 0px;
@@ -5285,16 +5334,18 @@ section[gridtype="114119"] > div > form {
     display: contents;
 }
 
-#massUpload tbody tr td table{
+#massUpload tbody tr td table {
     width: auto !important;
 }
 
 .clsParentFileUpload.row .col-lg-9 .fileinput.input-group {
     display: flex;
 }
+
 .col-lg-12.col-md-12.col-sm-12.col-xs-12.clsFileUpload {
     padding-left: 0px;
 }
+
 .fileinput-new > span.input-group-addon.btn.btn-default.btn-file {
     background-color: white;
 }
@@ -5304,62 +5355,51 @@ section[gridtype="114119"] > div > form {
 }
 
 /*employee insider*/
-.add-insider div .row a .col-lg-4.col-md-4.col-sm-4.col-xs-4 {
+.add-insider a{
     display: contents;
 }
 
-.add-insider div .row a div .panel-category > .card-body > .title {
+.add-insider .panel-category > .card-header p {
+    margin: 0;
+}
+
+    .add-insider .panel-category > .card-header p i {
+        font-size: 500%;
+    }
+
+.add-insider .panel-category > .card-body > .title {
     text-align: center;
     margin: 0;
     font-size: 16px;
 }
 
-.add-insider div .row a div .panel-category > .card-header p i {
-    font-size: 500%;
+.add-insider .panel-category > .card-body > .title {
+    text-align: center;
+    margin: 0;
+    font-size: 16px;
 }
 
-.add-insider div .row a div .panel-category > .card-header {
+.add-insider .panel-category > .card-header {
     color: #ffffff;
     background-color: #86c457;
     border-color: #86c457;
-    padding-top: 5px;
-    padding-right: 50px !important;
-    padding-left: 50px !important;
-    padding-bottom: 0px;
+    padding: 5px;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
 }
 
-.add-insider div .row a div .panel-category > .card-body {
+.add-insider .panel-category > .card-body {
     color: #ffffff;
     background-color: #86c457;
-    padding: 0px;
-    padding-bottom: 5px;
+    padding: 5px;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
 }
 
-.add-insider div .row a div .card {
-    margin: 10px;
-    margin-top: 0px;
-    background-color: #fff;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
-    box-shadow: 0 1px 1px rgba(0,0,0,.05);
-}
-
-.add-insider div .row {
-    flex-wrap:inherit;
-}
-
-.add-insider {
-    margin-left: -10px !important;
-}
-
 .input-group .input-group-addon {
     background-color: #fff !important;
-    font-size: 16px;
+    font-size: 14px;
+    border-radius: 0px;
 }
 
 /*modal*/
@@ -5367,6 +5407,19 @@ section[gridtype="114119"] > div > form {
     z-index: 9999 !important;
     background: rgba( 255, 255, 255, 0 ) url('/images/Loading.gif') 50% 50% no-repeat !important;
 }
+
+@media (min-width: 992px) {
+    .modal-lg, .modal-xl {
+        max-width: 900px;
+    }
+}
+
+@media (min-width: 576px) {
+    .modal-dialog {
+        max-width: 640px;
+    }
+}
+
 
 .modal-header, .modal-footer {
     display: block;
@@ -5390,41 +5443,41 @@ section[gridtype="114119"] > div > form {
     border-radius: 4px;
 }
 
-.login-panel .card-header {
-    padding: 10px 15px;
-    padding-bottom: 0px;
-    background: transparent;
-    color: #ffffff;
-    border: none;
-}
+    .login-panel .card-header {
+        padding: 10px 15px;
+        padding-bottom: 0px;
+        background: transparent;
+        color: #ffffff;
+        border: none;
+    }
 
-.login-panel .card-header .card-title {
-     font-size: 30pt;
-     font-weight: 300;
- }
+        .login-panel .card-header .card-title {
+            font-size: 30pt;
+            font-weight: 300;
+        }
 
-.login-panel .card-body a {
-     color: #ffffff;
-     font-size: 16pt;
-     font-weight: 300;
- }
+    .login-panel .card-body a {
+        color: #ffffff;
+        font-size: 16pt;
+        font-weight: 300;
+    }
 
-.login-panel .card-body .login-label {
-     font-size: 16pt;
-     font-weight: 300;
- }
+    .login-panel .card-body .login-label {
+        font-size: 16pt;
+        font-weight: 300;
+    }
 
-.login-panel .card-body .form-horizontal fieldset {
-     margin-right: -15px;
-     margin-left: -15px;
-}
+    .login-panel .card-body .form-horizontal fieldset {
+        margin-right: -15px;
+        margin-left: -15px;
+    }
 
- /*preclearance request*/
-#frmPreclearanceRequest .col-lg-4 {
+/*preclearance request*/
+/*#frmPreclearanceRequest .col-lg-4 {
     display: table-cell;
-}
+}*/
 
-#DivRelativeDetails .col-lg-2{
+#DivRelativeDetails .col-lg-2 {
     display: table-cell;
 }
 
@@ -5435,10 +5488,10 @@ section[gridtype="114119"] > div > form {
     width: 100%;
 }
 
-.content.inner-section .container-fluid .col-lg-12 {
-   padding-right: 0px;
-   padding-left: 0px;
-}
+    .content.inner-section .container-fluid .col-lg-12 {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
 
 /*period end disclosure*/
 label[for='Period:'], label[for='Period'] {
@@ -5452,7 +5505,7 @@ label[for='Period:'], label[for='Period'] {
     padding: 10px 15px;
 }
 
-.custom-tabs{
+.custom-tabs {
     padding: 15px;
 }
 
@@ -5467,4 +5520,91 @@ label[for='Period:'], label[for='Period'] {
 
 #btnSubmitHardCopy {
     margin-right: 15px;
+}
+
+.tab-container .no-padding {
+    min-height: 400px !important;
+}
+
+@media only screen and (min-width: 768px) {
+    #empPinCode {
+        padding-left: 0px;
+        padding-right: 10px;
+    }
+
+    #empCountryId {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+}
+
+#userInfoModel_SubmittedRole {
+    height: 210px;
+}
+
+/*datetimepicker and select*/
+.bootstrap-datetimepicker-widget.dropdown-menu {
+    width: 10em;
+    padding: 0px;
+}
+
+.bootstrap-datetimepicker-widget a[data-action]:active {
+    box-shadow: none
+}
+
+.bootstrap-datetimepicker-widget table td, .bootstrap-datetimepicker-widget table th {
+    text-align: center;
+}
+
+.bootstrap-datetimepicker-widget table td {
+    height: 45px;
+    line-height: 45px;
+    width: 45px;
+    font-size: 15px !important
+}
+
+    .bootstrap-datetimepicker-widget table td.day:hover, .bootstrap-datetimepicker-widget table td.hour:hover, .bootstrap-datetimepicker-widget table td.minute:hover, .bootstrap-datetimepicker-widget table td.second:hover {
+        background: #f8f9fa;
+        cursor: pointer
+    }
+
+    .bootstrap-datetimepicker-widget table td span, .bootstrap-datetimepicker-widget table td i {
+        width: 45px;
+        height: 45px;
+        line-height: 45px;
+        cursor: pointer;
+    }
+
+        .bootstrap-datetimepicker-widget table td span:hover, .bootstrap-datetimepicker-widget table td i:hover {
+            background: #f8f9fa
+        }
+
+.bootstrap-select > .dropdown-toggle.bs-placeholder {
+    color: #444 !important;
+    background-color: #f4f4f4;
+    border-color: #ddd;
+}
+
+.bootstrap-select .dropdown-menu .dropdown-item {
+    font-size: 0.875rem;
+    padding: .25rem 1.25rem
+}
+
+#UserDetails label label{
+    margin-bottom: 0px;
+}
+
+/*Insider Dashboard*/
+.dashboardPreclearenceRequest button.d-block, .dashboardTradingDetailsCount button.d-block {
+    width: 50px;
+}
+
+.dashboardHoldingBox .box-body.dashboardHolding {
+    min-height: 108px;
+}
+
+@media only screen and (max-width: 1200px) {
+    span.d-block {
+        margin-bottom: 5px;
+    }
 }

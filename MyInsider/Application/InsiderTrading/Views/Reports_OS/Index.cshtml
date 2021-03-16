@@ -45,12 +45,18 @@
                                     @Html.Label(@InsiderTrading.Common.Common.getResource("usr_lbl_51007"))
                                 </div>
                             </div>
+                            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <input type="radio" name="ReportType" value="5" id="DE">
+                                    @Html.Label(@InsiderTrading.Common.Common.getResource("usr_lbl_51008"))
+                                </div>
+                            </div>
                             @*<div class="col-lg-2 col-md-2 col-sm-6 col-xs-12">
-                                    <div class="form-group">
-                                        <input type="radio" name="ReportType" value="5" id="DE">
-                                        @Html.Label(@InsiderTrading.Common.Common.getResource("usr_lbl_51008"))
-                                    </div>
-                                </div>*@
+            <div class="form-group">
+                <input type="radio" name="ReportType" value="5" id="DE">
+                @Html.Label(@InsiderTrading.Common.Common.getResource("usr_lbl_51008"))
+            </div>
+        </div>*@
                         </div>
                         <div class="row">
                             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -70,14 +76,26 @@
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <div class="form-group">
+                                <div class="form-group" id="divPAN">
                                     @Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_50687"))
-                                    @Html.TextBox("PAN", null, new {@class = "form-control", @*gridtype = @ViewBag.GridType,*@ id = "8"})
+                                    @Html.TextBox("PAN", null, new
+                                    {
+                                        @class = "form-control",@*gridtype = @ViewBag.GridType,*@ id = "8"
+                                    })
                                     @Html.ValidationMessageFor(m => m.PAN)
+                                </div>
+                                <div class="form-group" id="divDesignation">
+                                    @Html.Label(@InsiderTrading.Common.Common.getResource("rpt_lbl_64002"))
+                                    @Html.TextBox("Designation", null, new
+                                    {
+                                        @class = "form-control",
+                                        id = "9"
+                                    })
                                 </div>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <div role="form">
+                                
+                                <div role="form" id="divCompanyName">
                                     <div class="form-group">
                                         <label for="CompanyName">@InsiderTrading.Common.Common.getResource("rpt_lbl_19117")</label>
                                         @*@Html.TextBox("CompanyName", null, new {@class = "form-control", gridtype = @ViewBag.GridType, id = "txtCompany",data_url = Url.Action("GetList", "RestrictedList")})*@
@@ -166,6 +184,9 @@
             $("#divTTo").hide();
             $("#divYearType").hide();
             $("#divFinancialPeriods").hide();
+            $("#divDesignation").hide();
+            $("#divPAN").show();
+
         }
         $("#ID").click(function () {
             radioValue = $("input[name='ReportType']:checked").val();
@@ -174,6 +195,9 @@
                 $("#divTTo").hide();
                 $("#divYearType").hide();
                 $("#divFinancialPeriods").hide();
+                $("#divDesignation").hide();
+                $("#divPAN").show();
+
             }
         });
         $("#PC").click(function () {
@@ -183,6 +207,9 @@
                 $("#divTTo").show();
                 $("#divYearType").hide();
                 $("#divFinancialPeriods").hide();
+                $("#divDesignation").hide();
+                $("#divPAN").show();
+
             }
         });
         $("#CD").click(function () {
@@ -192,6 +219,9 @@
                 $("#divTTo").show();
                 $("#divYearType").hide();
                 $("#divFinancialPeriods").hide();
+                $("#divDesignation").hide();
+                $("#divPAN").show();
+
             }
         });
         $("#PED").click(function () {
@@ -201,15 +231,19 @@
                 $("#divTTo").hide();
                 $("#divYearType").show();
                 $("#divFinancialPeriods").show();
+                $("#divDesignation").hide();
+                $("#divPAN").show();
             }
         });
         $("#DE").click(function () {
             radioValue = $("input[name='ReportType']:checked").val();
             if (radioValue == 5) {
-                $("#divTFrom").show();
-                $("#divTTo").show();
+                $("#divTFrom").hide();
+                $("#divTTo").hide();
                 $("#divYearType").hide();
                 $("#divFinancialPeriods").hide();
+                $("#divDesignation").show(); 
+                $("#divPAN").hide();
             }
         });
 
