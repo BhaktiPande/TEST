@@ -105,7 +105,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <button type="button" class="btn btn-success" id="searchBtn"><i class="fa fa-search"> @InsiderTrading.Common.Common.getResource("com_btn_14005")</i></button>
                             <button type="button" class="btn btn-success" id="btnReset" dt_name="btnReset" dt_gridtype="@ViewBag.GridType"><i class="fa fa-undo"></i> @InsiderTrading.Common.Common.getResource("com_btn_14006")</button>
                             @if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_CREATE))
@@ -116,6 +116,7 @@
                                     <button type="button" class="btn btn-success" onclick="@onclick"> <i class="fa fa-book"></i>@InsiderTrading.Common.Common.getResource("rl_btn_50013")</button>*@
                             }
                             <a class="btn btn-success" id="EmpDetails" data-toggle="modal" href='@Url.Action("DownloadExcel", "Employee", new { ReportType = 3 })' role="button"> @InsiderTrading.Common.Common.getResource("usr_btn_50630") </a>
+                            <a class="btn btn-success" id="CompanyRestrictedDetails" data-toggle="modal" href='@Url.Action("DownloadExcel", "Employee", new { ReportType = 5 })' role="button"> @InsiderTrading.Common.Common.getResource("usr_btn_64003") </a>
                         </div>
                     </div>
                 </div>
