@@ -571,13 +571,14 @@
             $('#btn_ConfirmDetails').attr("disabled", "disabled");*@
             $('#btn_GetUserRelativeDetails').addClass("disabled");
             $('#btn_ConfirmDetails').addClass("disabled");
-
+            $('.cursor-change').addClass("not-allowed");
         }
         else {
         @*    $('#btn_GetUserRelativeDetails').removeAttr("disabled", "disabled");
             $('#btn_ConfirmDetails').removeAttr("disabled", "disabled");*@
             $('#btn_GetUserRelativeDetails').removeClass("disabled");
             $('#btn_ConfirmDetails').removeClass("disabled");
+            $('.cursor-change').removeClass("not-allowed");
         }
         if ('@ViewBag.FromEducationPost' == 'True') {
 

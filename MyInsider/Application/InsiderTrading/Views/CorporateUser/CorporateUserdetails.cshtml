@@ -318,17 +318,19 @@
                                 <h4 class="card-title">
                                     @if ((bool)ViewBag.show_confirm_personal_details_btn)
                                     {
-                                        <span class="fa fa-plus pull-right"></span>
-                                        @InsiderTrading.Common.Common.getResource("usr_lbl_11305")
-                                    }
-                                    else
-                                    {
                                         <a class="accordion-toggle" data-toggle="collapse" href="#collapseThree">
                                             <span class="fa fa-plus pull-right"></span>
                                             @InsiderTrading.Common.Common.getResource("usr_lbl_11305")
                                         </a>
-                                    }
-                                </h4>
+                                            }
+                                            else
+                                            {
+                                            <a class="accordion-toggle" data-toggle="collapse" href="#collapseThree">
+                                                <span class="fa fa-plus pull-right"></span>
+                                                @InsiderTrading.Common.Common.getResource("usr_lbl_11305")
+                                            </a>
+                                            }
+                                    </h4>
                             </div>
                             <div id="collapseThree" data-parent="#accordion" class="panel-collapse collapse">
                                 <div class="card-body">
