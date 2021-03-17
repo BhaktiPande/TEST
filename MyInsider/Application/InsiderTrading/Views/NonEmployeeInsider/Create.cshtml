@@ -100,22 +100,26 @@
             if ('@ViewBag.WorkandEducationDetailsConfiguration' == 539001) {
                 @*$('#btn_GetUserEducationDetails').attr("disabled", "disabled");*@
                 $('#btn_GetUserEducationDetails').addClass("disabled");
+                $('.cursor-change').addClass("not-allowed");
             }
            @* $('#btn_GetUserRelativeDetails').attr("disabled", "disabled");
             $('#btn_ConfirmDetails').attr("disabled", "disabled");*@
             $('#btn_GetUserRelativeDetails').addClass("disabled");
             $('#btn_ConfirmDetails').addClass("disabled");
+            $('.cursor-change').addClass("not-allowed");
         }
         else {
             $('#btn_GetUserDematDetails').removeAttr("disabled", "disabled");
             if ('@ViewBag.WorkandEducationDetailsConfiguration' == 539001) {
                 @*$('#btn_GetUserEducationDetails').removeAttr("disabled", "disabled");*@
                 $('#btn_GetUserEducationDetails').removeClass("disabled");
+                $('.cursor-change').removeClass("not-allowed");
             }
             @*$('#btn_GetUserRelativeDetails').removeAttr("disabled", "disabled");
             $('#btn_ConfirmDetails').removeAttr("disabled", "disabled");*@
             $('#btn_GetUserRelativeDetails').removeClass("disabled");
             $('#btn_ConfirmDetails').removeClass("disabled");
+            $('.cursor-change').removeClass("not-allowed");
         }
     });
 </script>
