@@ -101,6 +101,8 @@ namespace InsiderTrading.Controllers
                     //lstExtensions.Add("html");
                     //lstExtensions.Add("htm");
                     lstDocumentDetailsModel = dicDocumentDetailsModel[buttonName];
+                    int mapToId = lstDocumentDetailsModel.Where(c => c.MapToId != 0).Select(c => c.MapToId).FirstOrDefault();
+                    int mapToTypeCodeId = lstDocumentDetailsModel.Where(c => c.MapToTypeCodeId != 0).Select(c => c.MapToTypeCodeId).FirstOrDefault();
 
                     //process each document model 
                     foreach (DocumentDetailsModel objDocumentDetailsModel in lstDocumentDetailsModel)
@@ -108,189 +110,197 @@ namespace InsiderTrading.Controllers
                         //Check file contains more than one dots
                         if (objDocumentDetailsModel.Document != null)
                         {
-                           
+                            objDocumentDetailsModel.MapToId = mapToId;
+                            objDocumentDetailsModel.MapToTypeCodeId = mapToTypeCodeId;
                             //check if actual file is uploaded by checking model document property
                             string extension = System.IO.Path.GetExtension(objDocumentDetailsModel.Document.FileName).ToLower();
 
-                                if (extension != ".pdf" && acid == InsiderTrading.Common.ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE_LETTER_SUBMISSION && objLoginUserDetails.CompanyName.ToUpper().Contains(InsiderTrading.Common.ConstEnum.CLIENT_DB_NAME_IGNORE_DATABASE))
+                            if (extension != ".pdf" && acid == InsiderTrading.Common.ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE_LETTER_SUBMISSION && objLoginUserDetails.CompanyName.ToUpper().Contains(InsiderTrading.Common.ConstEnum.CLIENT_DB_NAME_IGNORE_DATABASE))
+                            {
+                                UploadStatusCode = 5;
+                            }
+                            else if (extension != ".html" && extension != ".htm" && acid == InsiderTrading.Common.ConstEnum.UserActions.COMPANY_VIEW)
+                            {
+                                UploadStatusCode = 6;
+                            }
+                            else
+                            {
+                                if (lstExtensions.Contains(extension.Remove(0, 1)))
                                 {
-                                    UploadStatusCode = 5;
-                                }
-                                else if (extension != ".html" && extension != ".htm" && acid == InsiderTrading.Common.ConstEnum.UserActions.COMPANY_VIEW)
-                                {
-                                    UploadStatusCode = 6;
-                                }
-                                else
-                                {
-                                    if (lstExtensions.Contains(extension.Remove(0, 1)))
+                                    extension = System.IO.Path.GetExtension(objDocumentDetailsModel.Document.FileName).ToLower();
+                                    newFileName = Guid.NewGuid() + extension;
+
+                                    //check if document is uploaded for first time or updating existing document
+                                    if (objDocumentDetailsModel.MapToId != 0)
                                     {
-                                        extension = System.IO.Path.GetExtension(objDocumentDetailsModel.Document.FileName).ToLower();
-                                        newFileName = Guid.NewGuid() + extension;
+                                        //updating existing document record
+                                        bFlag = true;
+                                        nMapToId = objDocumentDetailsModel.MapToId;
+                                        lstSaveDetailsModel.Add(objDocumentDetailsModel);
+                                    }
 
-                                        //check if document is uploaded for first time or updating existing document
-                                        if (objDocumentDetailsModel.MapToId != 0)
+                                    Common.Common.CopyObjectPropertyByName(objDocumentDetailsModel, objDocumentDetailsDTO);
+                                    objDocumentDetailsDTO.DocumentName = objDocumentDetailsModel.Document.FileName;
+                                    objDocumentDetailsDTO.GUID = newFileName;
+                                    objDocumentDetailsDTO.DocumentPath = Path.Combine(directory, newFileName);
+                                    objDocumentDetailsDTO.FileSize = objDocumentDetailsModel.Document.ContentLength;
+                                    objDocumentDetailsDTO.FileType = extension;
+
+                                    //get temp folder path
+                                    directory = Path.Combine(directory, "temp");
+
+                                    //if temp directory not exists then create temp folder
+                                    if (!Directory.Exists(directory))
+                                        di = Directory.CreateDirectory(directory);
+
+                                    //check guid is set or document id set then remove temp folder file
+                                    if ((objDocumentDetailsModel.DocumentId != 0 && objDocumentDetailsModel.DocumentId != null) || objDocumentDetailsModel.GUID != null)
+                                    {
+                                        //get file object and delete file
+                                        FileInfo file = new FileInfo(Path.Combine(rootDirectory, "temp", objDocumentDetailsModel.GUID));
+                                        file.Delete();
+                                        //remove guid stored in session
+                                        objLoginUserDetails.DocumentDetails.Remove(objDocumentDetailsModel.GUID);
+                                    }
+                                    //save file into temp folder with new name as guid
+                                    objDocumentDetailsModel.Document.SaveAs(Path.Combine(directory, newFileName));
+
+                                    //add uploaded file info into session variable
+                                    objLoginUserDetails.DocumentDetails.Add(newFileName, objDocumentDetailsDTO);
+
+                                    //save file information into user session
+                                    Common.Common.SetSessionValue(ConstEnum.SessionValue.UserDetails, objLoginUserDetails);
+
+                                    string IsofficeInstalled = ConfigurationManager.AppSettings["IsOfficeInstalled"];
+                                    ///This block is used to check whether office is installed on server
+                                    if (IsofficeInstalled == "true")
+                                    {
+                                        if (extension == ".doc" || extension == ".docx")
                                         {
-                                            //updating existing document record
-                                            bFlag = true;
-                                            nMapToId = objDocumentDetailsModel.MapToId;
-                                            lstSaveDetailsModel.Add(objDocumentDetailsModel);
-                                        }
-                                        Common.Common.CopyObjectPropertyByName(objDocumentDetailsModel, objDocumentDetailsDTO);
-                                        objDocumentDetailsDTO.DocumentName = objDocumentDetailsModel.Document.FileName;  
-                                        objDocumentDetailsDTO.GUID = newFileName;
-                                        objDocumentDetailsDTO.DocumentPath = Path.Combine(directory, newFileName);
-                                        objDocumentDetailsDTO.FileSize = objDocumentDetailsModel.Document.ContentLength;
-                                        objDocumentDetailsDTO.FileType = extension;
-
-                                        //get temp folder path
-                                        directory = Path.Combine(directory, "temp");
-
-                                        //if temp directory not exists then create temp folder
-                                        if (!Directory.Exists(directory))
-                                            di = Directory.CreateDirectory(directory);
-
-                                        //check guid is set or document id set then remove temp folder file
-                                        if ((objDocumentDetailsModel.DocumentId != 0 && objDocumentDetailsModel.DocumentId != null) || objDocumentDetailsModel.GUID != null)
-                                        {
-                                            //get file object and delete file
-                                            FileInfo file = new FileInfo(Path.Combine(rootDirectory, "temp", objDocumentDetailsModel.GUID));
-                                            file.Delete();
-                                            //remove guid stored in session
-                                            objLoginUserDetails.DocumentDetails.Remove(objDocumentDetailsModel.GUID);
-                                        }
-                                        //save file into temp folder with new name as guid
-                                        objDocumentDetailsModel.Document.SaveAs(Path.Combine(directory, newFileName));
-
-                                        //add uploaded file info into session variable
-                                        objLoginUserDetails.DocumentDetails.Add(newFileName, objDocumentDetailsDTO);
-
-                                        //save file information into user session
-                                        Common.Common.SetSessionValue(ConstEnum.SessionValue.UserDetails, objLoginUserDetails);
-
-                                        string IsofficeInstalled = ConfigurationManager.AppSettings["IsOfficeInstalled"];
-                                        ///This block is used to check whether office is installed on server
-                                        if (IsofficeInstalled == "true")
-                                        {
-                                            if (extension == ".doc" || extension == ".docx")
+                                            Microsoft.Office.Interop.Word._Application _appWord = new Microsoft.Office.Interop.Word.Application();
+                                            Microsoft.Office.Interop.Word.Document doc = null;
+                                            string pathToWordFile = Path.Combine(directory, newFileName);
+                                            bool _hasMacroWord = false;
+                                            try
                                             {
-                                                Microsoft.Office.Interop.Word._Application _appWord = new Microsoft.Office.Interop.Word.Application();
-                                                Microsoft.Office.Interop.Word.Document doc = null;
-                                                string pathToWordFile = Path.Combine(directory, newFileName);
-                                                bool _hasMacroWord = false;
-                                                try
+                                                doc = _appWord.Documents.Open(pathToWordFile, Type.Missing, true);
+                                                Microsoft.Office.Interop.Word.Application wordApplication = new Microsoft.Office.Interop.Word.Application();
+                                                wordApplication.DisplayAlerts = Microsoft.Office.Interop.Word.WdAlertLevel.wdAlertsNone;
+                                                wordApplication.ShowVisualBasicEditor = false;
+                                                _hasMacroWord = doc.HasVBProject;
+                                                if (_hasMacroWord)
+                                                    UploadStatusCode = 4;
+                                                else
                                                 {
-                                                    doc = _appWord.Documents.Open(pathToWordFile, Type.Missing, true);
-                                                    Microsoft.Office.Interop.Word.Application wordApplication = new Microsoft.Office.Interop.Word.Application();
-                                                    wordApplication.DisplayAlerts = Microsoft.Office.Interop.Word.WdAlertLevel.wdAlertsNone;
-                                                    wordApplication.ShowVisualBasicEditor = false;
-                                                    _hasMacroWord = doc.HasVBProject;
-                                                    if (_hasMacroWord)
-                                                        UploadStatusCode = 4;
-                                                    else
-                                                    {
-                                                        UploadStatusCode = 0;
-                                                    }
-                                                    doc.Close(Type.Missing, Type.Missing, Type.Missing);
-                                                    // _appWord.Application.Quit(); // optional
+                                                    UploadStatusCode = 0;
+                                                }
+                                                doc.Close(Type.Missing, Type.Missing, Type.Missing);
+                                                // _appWord.Application.Quit(); // optional
+                                                _appWord.Quit();
+                                                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(_appWord);
+                                                _appWord = null;
+                                                if (UploadStatusCode == 4)
+                                                {
+                                                    //get file object and delete file
+                                                    FileInfo file = new FileInfo(Path.Combine(rootDirectory, "temp", newFileName));
+                                                    file.Delete();
+                                                }
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                // optional: this Log function should be defined somewhere in your code                                     }
+                                            }
+                                            finally
+                                            {
+                                                if (_appWord != null)
+                                                {
                                                     _appWord.Quit();
                                                     System.Runtime.InteropServices.Marshal.FinalReleaseComObject(_appWord);
-                                                    _appWord = null;
-                                                    if (UploadStatusCode == 4)
-                                                    {
-                                                        //get file object and delete file
-                                                        FileInfo file = new FileInfo(Path.Combine(rootDirectory, "temp", newFileName));
-                                                        file.Delete();
-                                                    }
                                                 }
-                                                catch (Exception ex)
+
+                                                doc.Close();
+                                            }
+                                        }
+                                        else if (extension == ".xls" || extension == ".xlsx")
+                                        {
+                                            Microsoft.Office.Interop.Excel._Application _appExcel = new Microsoft.Office.Interop.Excel.Application();
+                                            Microsoft.Office.Interop.Excel.Workbook _workbook = null;
+                                            string pathToExcelFile = Path.Combine(directory, newFileName);
+                                            bool _hasMacro = false;
+                                            try
+                                            {
+                                                _workbook = _appExcel.Workbooks.Open(pathToExcelFile, Type.Missing, true);
+                                                _hasMacro = _workbook.HasVBProject;
+                                                if (_hasMacro)
+                                                    UploadStatusCode = 4;
+                                                else
                                                 {
-                                                    // optional: this Log function should be defined somewhere in your code                                     }
+                                                    //lstobject.Add(dic); //set uploaded file into list to return 
+                                                    UploadStatusCode = 0;
                                                 }
-                                                finally
+
+                                                if (UploadStatusCode == 4)
                                                 {
-                                                    if (_appWord != null)
-                                                    {
-                                                        _appWord.Quit();
-                                                        System.Runtime.InteropServices.Marshal.FinalReleaseComObject(_appWord);
-                                                    }
+                                                    FileInfo file = new FileInfo(Path.Combine(rootDirectory, "temp", newFileName));
+                                                    file.Delete();
                                                 }
                                             }
-                                            else if (extension == ".xls" || extension == ".xlsx")
+                                            catch (Exception ex)
                                             {
-                                                Microsoft.Office.Interop.Excel._Application _appExcel = new Microsoft.Office.Interop.Excel.Application();
-                                                Microsoft.Office.Interop.Excel.Workbook _workbook = null;
-                                                string pathToExcelFile = Path.Combine(directory, newFileName);
-                                                bool _hasMacro = false;
-                                                try
-                                                {
-                                                    _workbook = _appExcel.Workbooks.Open(pathToExcelFile, Type.Missing, true);
-                                                    _hasMacro = _workbook.HasVBProject;
-                                                    if (_hasMacro)
-                                                        UploadStatusCode = 4;
-                                                    else
-                                                    {
-                                                        //lstobject.Add(dic); //set uploaded file into list to return 
-                                                        UploadStatusCode = 0;
-                                                    }
-                                                    _workbook.Close(false, Type.Missing, Type.Missing);
-                                                    _appExcel.Application.Quit();
-                                                    _appExcel.Quit();
-                                                    System.Runtime.InteropServices.Marshal.FinalReleaseComObject(_appExcel);
-                                                    _appExcel = null;
-                                                    if (UploadStatusCode == 4)
-                                                    {
-                                                        FileInfo file = new FileInfo(Path.Combine(rootDirectory, "temp", newFileName));
-                                                        file.Delete();
-                                                    }
-                                                }
-                                                catch (Exception ex)
-                                                {
-                                                    // optional: this Log function should be defined somewhere in your code
-                                                }
-                                                finally
-                                                {
-                                                    if (_appExcel != null)
-                                                    {
-                                                        _appExcel.Quit();
-                                                        System.Runtime.InteropServices.Marshal.FinalReleaseComObject(_appExcel);
-                                                    }
-                                                }
+                                                // optional: this Log function should be defined somewhere in your code
                                             }
-                                            else
+                                            finally
                                             {
-                                                UploadStatusCode = 0; //set return msg code 
+                                                _workbook.Close(false, Type.Missing, Type.Missing);
+                                                _workbook = null;
+
+                                                _appExcel.Application.Quit();
+                                                _appExcel.Quit();
+                                                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(_appExcel);
+                                                _appExcel = null;
+
+                                                //if (_appExcel != null)
+                                                //{
+                                                //    _appExcel.Quit();
+                                                //    System.Runtime.InteropServices.Marshal.FinalReleaseComObject(_appExcel);
+                                                //}
                                             }
                                         }
                                         else
                                         {
                                             UploadStatusCode = 0; //set return msg code 
                                         }
-                                        //block end
-
-
-                                        if (UploadStatusCode != 4)
-                                        {
-                                            //set uploaded file information into dictionary to sent back as output
-                                            Dictionary<string, string> dic = new Dictionary<string, string>();
-                                            dic.Add("GUID", objDocumentDetailsDTO.GUID);
-                                            dic.Add("DocumentID", objDocumentDetailsDTO.DocumentId.ToString());
-                                            dic.Add("Index", objDocumentDetailsModel.Index.ToString());
-                                            dic.Add("SubIndex", objDocumentDetailsModel.SubIndex.ToString());
-                                            dic.Add("DocumentName", objDocumentDetailsDTO.DocumentName);
-                                            dic.Add("FileType", objDocumentDetailsDTO.FileType);
-                                            dic.Add("UserAction", acid.ToString());
-                                            lstobject.Add(dic); //set uploaded file into list to return
-                                            UploadStatusCode = 0; //set return msg code 
-                                        }
-
                                     }
                                     else
                                     {
-                                        UploadStatusCode = 3; //set return msg code 
+                                        UploadStatusCode = 0; //set return msg code 
                                     }
+                                    //block end
+
+
+                                    if (UploadStatusCode != 4)
+                                    {
+                                        //set uploaded file information into dictionary to sent back as output
+                                        Dictionary<string, string> dic = new Dictionary<string, string>();
+                                        dic.Add("GUID", objDocumentDetailsDTO.GUID);
+                                        dic.Add("DocumentID", objDocumentDetailsDTO.DocumentId.ToString());
+                                        dic.Add("Index", objDocumentDetailsModel.Index.ToString());
+                                        dic.Add("SubIndex", objDocumentDetailsModel.SubIndex.ToString());
+                                        dic.Add("DocumentName", objDocumentDetailsDTO.DocumentName);
+                                        dic.Add("FileType", objDocumentDetailsDTO.FileType);
+                                        dic.Add("UserAction", acid.ToString());
+                                        lstobject.Add(dic); //set uploaded file into list to return
+                                        UploadStatusCode = 0; //set return msg code 
+                                    }
+
                                 }
-                            
-                     }
+                                else
+                                {
+                                    UploadStatusCode = 3; //set return msg code 
+                                }
+                            }
+
+                        }
                         else
                         {
                             //UploadStatusCode = 2; //set return msg code 
@@ -306,27 +316,41 @@ namespace InsiderTrading.Controllers
 
                             FileInfo file = new FileInfo(Path.Combine(rootDirectory, "temp", newFileName));
                             file.Delete();
-                            //as uploading file for already existing record which has MaptoId - upload/save record directly
-                            retlistDocumentDetailsModel = objDocumentDetailsSL.SaveDocumentDetails(objLoginUserDetails.CompanyDBConnectionString, lstSaveDetailsModel, buttonName, nMapToId, objLoginUserDetails.LoggedInUserID);
+                            file = null;
 
-                            lstobject.Clear();
-
-                            foreach (DocumentDetailsModel objDocModel in retlistDocumentDetailsModel)
+                            try
                             {
-                                //set uploaded file information into dictionary to sent back as output
-                                Dictionary<string, string> dic = new Dictionary<string, string>();
-                                dic.Add("GUID", objDocModel.GUID);
-                                dic.Add("DocumentID", objDocModel.DocumentId.ToString());
-                                dic.Add("Index", objDocModel.Index.ToString());
-                                dic.Add("SubIndex", objDocModel.SubIndex.ToString());
-                                dic.Add("DocumentName", objDocModel.DocumentName);
-                                dic.Add("FileType", objDocModel.FileType);
-                                dic.Add("UserAction", acid.ToString());
+                                //as uploading file for already existing record which has MaptoId - upload/save record directly
+                                retlistDocumentDetailsModel = objDocumentDetailsSL.SaveDocumentDetails(objLoginUserDetails.CompanyDBConnectionString, lstSaveDetailsModel, buttonName, nMapToId, objLoginUserDetails.LoggedInUserID);
 
-                                lstobject.Add(dic);//set uploaded file into list to return 
+                                lstobject.Clear();
 
-                                UploadStatusCode = 0; //set return msg code 
+                                foreach (DocumentDetailsModel objDocModel in retlistDocumentDetailsModel)
+                                {
+                                    //set uploaded file information into dictionary to sent back as output
+                                    Dictionary<string, string> dic = new Dictionary<string, string>();
+                                    dic.Add("GUID", objDocModel.GUID);
+                                    dic.Add("DocumentID", objDocModel.DocumentId.ToString());
+                                    dic.Add("Index", objDocModel.Index.ToString());
+                                    dic.Add("SubIndex", objDocModel.SubIndex.ToString());
+                                    dic.Add("DocumentName", objDocModel.DocumentName);
+                                    dic.Add("FileType", objDocModel.FileType);
+                                    dic.Add("UserAction", acid.ToString());
+
+                                    lstobject.Add(dic);//set uploaded file into list to return 
+
+                                    UploadStatusCode = 0; //set return msg code 
+                                }
                             }
+                            catch (Exception ex)
+                            {
+                                UploadStatusCode = 1;
+
+                                file = new FileInfo(Path.Combine(rootDirectory, "temp", newFileName));
+                                file.Delete();
+                                file = null;
+                            }
+
                         }
                     }
 
@@ -365,7 +389,7 @@ namespace InsiderTrading.Controllers
                     case 6:
                         UploadStatusMsg = "Only html file can be uploaded";
                         bReturnStatus = false;
-                        break;                   
+                        break;
                     default:
                         UploadStatusMsg = "Error occured while uploading file. Please try again";
                         bReturnStatus = false;
