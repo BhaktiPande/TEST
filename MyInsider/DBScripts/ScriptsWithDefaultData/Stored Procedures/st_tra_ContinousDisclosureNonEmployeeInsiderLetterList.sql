@@ -507,7 +507,7 @@ BEGIN
 					UPDATE @Temp_TableCashless 
 						SET dis_grd_17216 = TD.Quantity2,
 							dis_grd_17217 = TD.Value2, 
-							dis_grd_17221 = CASE WHEN TD.SecurityTypeCodeId in (@SecuriyType_Share) THEN ISNULL(CONVERT(VARCHAR(MAX),(CONVERT(DECIMAL(10,0),SUBSTRING(dis_grd_17213, 0,CHARINDEX('#', dis_grd_17213))) - TD.Quantity2)),'')
+							dis_grd_17221 = CASE WHEN TD.SecurityTypeCodeId in (@SecuriyType_Share) THEN ISNULL(CONVERT(VARCHAR(MAX),CONVERT(DECIMAL(10,0),ABS(SUBSTRING(dis_grd_17213, 0,CHARINDEX('#', dis_grd_17213)) - TD.Quantity2))),'')
 							+ '##' + CASE WHEN td.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_PARTIAL
 									 THEN ISNULL(CONVERT(VARCHAR(MAX),CONVERT(DECIMAL(10,2),(((TD.SecuritiesPriorToAcquisition - Quantity2)*@nMultiplier) / @dPaidUpShare))),'')
 									WHEN TD.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_ALL 
