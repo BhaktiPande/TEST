@@ -5,7 +5,8 @@
     <DataSource Name="DS_ContinuousDisclosure">
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
-        <ConnectString>Data Source=172.16.11.16;Initial Catalog=Vigilante_AbdulReport</ConnectString>
+		  <ConnectString>="Data Source=" &amp; Parameters!SERVER_NAME.Value &amp; ";Initial Catalog=" &amp; Parameters!DATABASE_NAME.Value</ConnectString>
+        <Prompt>Specify a user name and password for data source DS_ContinuousDisclosure:</Prompt>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>2dd4e010-69b9-4274-90d8-f1abdccb4fb0</rd:DataSourceID>

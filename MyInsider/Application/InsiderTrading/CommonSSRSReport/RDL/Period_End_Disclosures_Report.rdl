@@ -5,7 +5,8 @@
     <DataSource Name="DS_PeriodEndDisclosure">
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
-        <ConnectString>Data Source=172.16.11.16;Initial Catalog=Vigilante_AbdulReport</ConnectString>
+		  <ConnectString>="Data Source=" &amp; Parameters!SERVER_NAME.Value &amp; ";Initial Catalog=" &amp; Parameters!DATABASE_NAME.Value</ConnectString>
+        <Prompt>Enter a user name and password to access the data source:</Prompt>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>3b8b8a8e-6a4f-49ff-95bc-9b1f9e874958</rd:DataSourceID>

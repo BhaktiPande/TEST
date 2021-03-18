@@ -5,7 +5,8 @@
     <DataSource Name="DS_InitialDisclosure">
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
-        <ConnectString>Data Source=172.16.11.16;Initial Catalog=Vigilante_AbdulReport</ConnectString>
+		  <ConnectString>="Data Source=" &amp; Parameters!SERVER_NAME.Value &amp; ";Initial Catalog=" &amp; Parameters!DATABASE_NAME.Value</ConnectString>
+        <Prompt>Specify a user name and password for data source DS_InitialDisclosure:</Prompt>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>de41cc45-bcc7-4959-9b37-401fae573f61</rd:DataSourceID>
