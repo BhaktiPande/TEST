@@ -27,20 +27,27 @@ BEGIN
 	SET NOCOUNT ON;
 		
 		TRUNCATE TABLE rpt_RestrictedListDetails
-		
+
 		INSERT INTO rpt_RestrictedListDetails
-		
+
 		SELECT DISTINCT RCL.CompanyName,CCDEP.CodeName AS Department, RCL.BSECode, RCL.NSECode, RCL.ISINCode,
-		CONVERT(VARCHAR(50), RML.ApplicableFromDate, 106) AS 'Applicable From Date', CONVERT(VARCHAR(50), RML.ApplicableToDate, 106) AS 'Applicable To Date'		
+		CONVERT(VARCHAR(50), RML.ApplicableFromDate, 106) AS 'Applicable From Date', 
+		CONVERT(VARCHAR(50), RML.ApplicableToDate, 106) AS 'Applicable To Date',	
+		UM.EmployeeId,Concat(UM.FirstName,' ',UM.LastName) AS PersonName, UM.PAN,
+		CCDEP1.CodeName AS Designation,CCDEP2.CodeName AS Category,URM.RoleName As 'Role'
 		FROM RL_RISTRICTEDMASTERLIST RL
 		LEFT JOIN rul_ApplicabilityMaster rAM on RL.RlMasterId = rAM.MapToId 
 		LEFT JOIN rul_ApplicabilityDetails rAD on rAD.ApplicabilityMstId = rAM.ApplicabilityId		
 		LEFT JOIN usr_UserInfo UM ON UM.UserInfoId = rAD.UserId
 		LEFT JOIN rl_CompanyMasterList RCL ON RCL.RlCompanyId = RL.RlCompanyId
 		LEFT JOIN rl_RistrictedMasterList RML ON RML.RlMasterId = RL.RlMasterId
-		LEFT JOIN com_Code CCDEP ON CCDEP.CodeID = UM.DepartmentId	
+		LEFT JOIN com_Code CCDEP ON CCDEP.CodeID = UM.DepartmentId
+		LEFT JOIN com_Code CCDEP1 ON CCDEP1.CodeID = UM.DesignationId
+		LEFT JOIN com_Code CCDEP2 ON CCDEP2.CodeID = UM.Category
+		LEFT JOIN usr_UserRole UR ON UM.UserInfoId = UR.UserInfoID
+		LEFT JOIN usr_RoleMaster URM ON UR.RoleID = URM.RoleId
 		WHERE rAD.IncludeExcludeCodeId =150001 AND RL.StatusCodeId=105001 
-		AND rAM.MapToTypeCodeId = @RestrictedListType		
+		AND rAM.MapToTypeCodeId = @RestrictedListType	
 	
 	END	 TRY
 	
