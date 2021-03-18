@@ -2624,9 +2624,19 @@ namespace InsiderTrading.Controllers
                 spName = "st_rpt_DigitalDatabase";
                 exlFilename = "Digital Database Report.xls";
                 workSheetName = "Digital Database";
+            }else if (ReportType==5)
+            {
+                spName = "st_rpt_CompanyRestrictedList";
+                exlFilename = "Company Restricted Report.xls";
+                workSheetName = "Company Restricted";
             }
 
             cellRange = "A1:AH1";
+            if(ReportType == 5)
+            {
+                cellRange = "A1:F1";
+            }
+            
             cmd = new SqlCommand(spName, con);
             cmd.CommandType = CommandType.StoredProcedure;
             SqlDataAdapter adp = new SqlDataAdapter(cmd);

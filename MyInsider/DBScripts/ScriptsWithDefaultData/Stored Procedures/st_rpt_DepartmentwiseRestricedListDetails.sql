@@ -11,7 +11,7 @@ GO
 -- Description		: THIS PROCEDURE USED FOR SAVE SECURITY QUESTIONS									=
 
 -- Modified By	  Modified On		Description
-
+-- Sandesh Lande  17-Mar-2021		Added new columns in rpt_RestrictedListDetails, This table returning all column data.
 -- ======================================================================================================
 CREATE PROCEDURE [dbo].[st_rpt_DepartmentwiseRestricedListDetails]
 	@out_nReturnValue		INT = 0 OUTPUT,
@@ -25,17 +25,36 @@ BEGIN
 	
 	SET NOCOUNT ON;
 	
-SELECT
-	[CompanyName] AS [Company Name],	
+--SELECT DISTINCT
+--	[CompanyName] AS [Company Name],	
+--	[Department] AS [Department],	
+--	[BSECode] AS [BSECode],	
+--	[NSECode] AS [NSECode],	
+--	[ISINCode] AS [ISINCode],	
+--	[ApplicableFromDate] AS [Applicable From Date],	
+--	[ApplicableToDate] AS [Applicable To Date]
+--FROM 
+--	rpt_RestrictedListDetails		
+	
+	SELECT distinct
+	ROW_NUMBER() OVER (ORDER BY [EmployeeId]) AS [Sr No.],
+	[EmployeeId] AS [Designated Person ID],
+	[PersonName] AS [Designated Person Name],
+	[PAN] AS [PAN],
 	[Department] AS [Department],	
-	[BSECode] AS [BSECode],	
-	[NSECode] AS [NSECode],	
+	[Designation] AS [Designation],
+	[Category] AS [Category],
+	[Role] AS [Role],
+	[CompanyName] AS [Company Name],	
 	[ISINCode] AS [ISINCode],	
+	[NSECode] AS [NSECode],	
+	[BSECode] AS [BSECode],	
 	[ApplicableFromDate] AS [Applicable From Date],	
 	[ApplicableToDate] AS [Applicable To Date]
 FROM 
-	rpt_RestrictedListDetails		
-	
+	rpt_RestrictedListDetails
+	ORDER BY [EmployeeId];
+
 	END	 TRY	
 	BEGIN CATCH		
 		SET @out_nSQLErrCode    =  ERROR_NUMBER()
