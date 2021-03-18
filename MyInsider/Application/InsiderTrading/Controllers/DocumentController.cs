@@ -350,6 +350,7 @@ namespace InsiderTrading.Controllers
                                 file.Delete();
                                 file = null;
                             }
+
                         }
                     }
 
