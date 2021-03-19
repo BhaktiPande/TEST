@@ -13,6 +13,7 @@ CREATE PROCEDURE [dbo].[st_rpt_PreclearanceEmployeeWise_OS]
 	,@inp_sCompanyName					NVARCHAR(200) = ''
 	,@inp_dtDateOfTransactionFrom		DATETIME = null
 	,@inp_dtDateOfTransactionTo			DATETIME = null
+	,@EnableDisableQuantityValue        INT = 400001
 	,@out_nReturnValue					INT = 0 OUTPUT
 	,@out_nSQLErrCode					INT = 0 OUTPUT				-- Output SQL Error Number, if error occurred.
 	,@out_sSQLErrMessage				VARCHAR(500) = '' OUTPUT  -- Output SQL Error Message, if error occurred.	
@@ -346,57 +347,112 @@ UPDATE #tmpPreclearance
 			SET CommentText = SUBSTRING(CommentText, 1, DATALENGTH(CommentText) - 2)
 			WHERE CommentText <> ''
 
-SELECT @sSQL = 'SELECT EmployeeId AS [Employee ID], InsiderName AS [Insider Name],PAN, dbo.uf_rpt_FormatDateValue(JoiningDate,0) AS [Date of becoming insider] , dbo.uf_rpt_FormatDateValue(DateOfSeparation,0) AS [Date Of Separation],Designation,Grade,Location,Department,Category,SubCategory,CM.CompanyName AS [Company Name],TypeOfInsider AS [Type Of Insider],Request,Approved,Rejected,Pending,
- Traded,CASE WHEN PreclearanceId IS NULL THEN '''+@sPNT+''' + CONVERT(NVARCHAR(MAX),DisplaySequenceNo) ELSE '''+@sPCL+''' + CONVERT(NVARCHAR(MAX),DisplaySequenceNo) END  AS [Pre-clearance ID]
-, dbo.uf_rpt_FormatDateValue(Requestdate,0) AS [Request date],ISIN,TransactionTypeCodeId AS [Transaction Type], SecurityTypeCodeId AS [Security Type],PreQuantity AS [Number of Securities],PreValue AS [Value],CPreclearanceStatusId.CodeName AS [Pre-Clearance Status], dbo.uf_rpt_FormatDateValue(PreStatusDate,0) AS [Approved/Rejected  date], dbo.uf_rpt_FormatDateValue(PreApplicableTill,0) AS [Applicable till]
-,BuyQuantity AS [BUY],SellQuantity AS [SELL], dbo.uf_rpt_FormatDateValue(DateOfAcquisition,0) AS [Date of Trasaction],TradeValue AS [Trade Value],ReasonForNotTradedCodeId AS [Reason for Not Traded],CommentText AS [Comments] '
-SELECT @sSQL = @sSQL + 'from #tmpPreclearance tmpDisc JOIN rl_CompanyMasterList CM ON CM.RlCompanyId = tmpDisc.CompanyName '
-SELECT @sSQL = @sSQL + 'LEFT JOIN com_Code CPreclearanceStatusId ON CPreclearanceStatusId.CodeID = tmpDisc.PreclearanceStatusId '
-SELECT @sSQL = @sSQL + 'where 1= 1 '
-IF ((@inp_sEmployeeID IS NOT NULL AND @inp_sEmployeeID <> '')
-		  OR (@inp_sInsiderName IS NOT NULL AND @inp_sInsiderName <> '')
-		  OR (@inp_sCompanyName IS NOT NULL AND @inp_sCompanyName <> '')
-		  OR (@inp_sPan IS NOT NULL AND @inp_sPan <> '')
-		  OR (@inp_dtDateOfTransactionFrom IS NOT NULL AND @inp_dtDateOfTransactionFrom <> '')
-		   OR (@inp_dtDateOfTransactionTo IS NOT NULL AND @inp_dtDateOfTransactionTo <> ''))
-
-		BEGIN
-			IF (@inp_sEmployeeID IS NOT NULL AND @inp_sEmployeeID <> '')
+IF(@EnableDisableQuantityValue = 400003)
+ BEGIN
+	SELECT @sSQL = 'SELECT EmployeeId AS [Employee ID], InsiderName AS [Insider Name],PAN, dbo.uf_rpt_FormatDateValue(JoiningDate,0) AS [Date of becoming insider] , dbo.uf_rpt_FormatDateValue(DateOfSeparation,0) AS [Date Of Separation],Designation,Grade,Location,Department,Category,SubCategory,CM.CompanyName AS [Company Name],TypeOfInsider AS [Type Of Insider],Request,Approved,Rejected,Pending,
+	 Traded,CASE WHEN PreclearanceId IS NULL THEN '''+@sPNT+''' + CONVERT(NVARCHAR(MAX),DisplaySequenceNo) ELSE '''+@sPCL+''' + CONVERT(NVARCHAR(MAX),DisplaySequenceNo) END  AS [Pre-clearance ID]
+	, dbo.uf_rpt_FormatDateValue(Requestdate,0) AS [Request date],ISIN,TransactionTypeCodeId AS [Transaction Type], SecurityTypeCodeId AS [Security Type],CPreclearanceStatusId.CodeName AS [Pre-Clearance Status], dbo.uf_rpt_FormatDateValue(PreStatusDate,0) AS [Approved/Rejected  date], dbo.uf_rpt_FormatDateValue(PreApplicableTill,0) AS [Applicable till]
+	,BuyQuantity AS [BUY],SellQuantity AS [SELL], dbo.uf_rpt_FormatDateValue(DateOfAcquisition,0) AS [Date of Trasaction],TradeValue AS [Trade Value],ReasonForNotTradedCodeId AS [Reason for Not Traded],CommentText AS [Comments] '
+	SELECT @sSQL = @sSQL + 'from #tmpPreclearance tmpDisc JOIN rl_CompanyMasterList CM ON CM.RlCompanyId = tmpDisc.CompanyName '
+	SELECT @sSQL = @sSQL + 'LEFT JOIN com_Code CPreclearanceStatusId ON CPreclearanceStatusId.CodeID = tmpDisc.PreclearanceStatusId '
+	SELECT @sSQL = @sSQL + 'where 1= 1 '
+	IF ((@inp_sEmployeeID IS NOT NULL AND @inp_sEmployeeID <> '')
+			  OR (@inp_sInsiderName IS NOT NULL AND @inp_sInsiderName <> '')
+			  OR (@inp_sCompanyName IS NOT NULL AND @inp_sCompanyName <> '')
+			  OR (@inp_sPan IS NOT NULL AND @inp_sPan <> '')
+			  OR (@inp_dtDateOfTransactionFrom IS NOT NULL AND @inp_dtDateOfTransactionFrom <> '')
+			   OR (@inp_dtDateOfTransactionTo IS NOT NULL AND @inp_dtDateOfTransactionTo <> ''))
+	
 			BEGIN
-				print '@inp_sEmployeeID'
-				SELECT @sSQL = @sSQL + ' AND EmployeeId like ''%' + @inp_sEmployeeID + '%'''
-			END
-			IF (@inp_sInsiderName IS NOT NULL AND @inp_sInsiderName <> '')
-			BEGIN
-				print '@inp_sInsiderName'
-				SELECT @sSQL = @sSQL + ' AND InsiderName like ''%' + @inp_sInsiderName + '%'''
-			
-			END			
-			IF (@inp_sPan IS NOT NULL AND @inp_sPan <> '')
-			BEGIN
-				print '@inp_sPan'
-				SELECT @sSQL = @sSQL + ' AND PAN like ''%' + @inp_sPan + '%'' '
-				
-			END
-			IF (@inp_sCompanyName IS NOT NULL AND @inp_sCompanyName <> '')
-			BEGIN
-				print '@inp_sCompanyName'
-				SELECT @sSQL = @sSQL + ' AND CM.CompanyName like ''%' + @inp_sCompanyName + '%'''
-			
-			END
-			IF (@inp_dtDateOfTransactionFrom IS NOT NULL AND @inp_dtDateOfTransactionFrom <> '')
+				IF (@inp_sEmployeeID IS NOT NULL AND @inp_sEmployeeID <> '')
 				BEGIN
-					print '@inp_dtDateOfTransactionFrom'
-					SELECT @sSQL = @sSQL + ' AND DateOfAcquisition >= ''' + CONVERT(VARCHAR(11), @inp_dtDateOfTransactionFrom) + ''' '
+					print '@inp_sEmployeeID'
+					SELECT @sSQL = @sSQL + ' AND EmployeeId like ''%' + @inp_sEmployeeID + '%'''
 				END
-  			IF (@inp_dtDateOfTransactionTo IS NOT NULL AND @inp_dtDateOfTransactionTo <> '')
+				IF (@inp_sInsiderName IS NOT NULL AND @inp_sInsiderName <> '')
 				BEGIN
-					print '@inp_dtDateOfTransactionTo'
-					SELECT @sSQL = @sSQL + ' AND DateOfAcquisition < ''' + CONVERT(VARCHAR(11), DATEADD(D, 1, @inp_dtDateOfTransactionTo)) + ''' '
+					print '@inp_sInsiderName'
+					SELECT @sSQL = @sSQL + ' AND InsiderName like ''%' + @inp_sInsiderName + '%'''
+				
+				END			
+				IF (@inp_sPan IS NOT NULL AND @inp_sPan <> '')
+				BEGIN
+					print '@inp_sPan'
+					SELECT @sSQL = @sSQL + ' AND PAN like ''%' + @inp_sPan + '%'' '
+					
+				END
+				IF (@inp_sCompanyName IS NOT NULL AND @inp_sCompanyName <> '')
+				BEGIN
+					print '@inp_sCompanyName'
+					SELECT @sSQL = @sSQL + ' AND CM.CompanyName like ''%' + @inp_sCompanyName + '%'''
 				
 				END
-		END
-
+				IF (@inp_dtDateOfTransactionFrom IS NOT NULL AND @inp_dtDateOfTransactionFrom <> '')
+					BEGIN
+						print '@inp_dtDateOfTransactionFrom'
+						SELECT @sSQL = @sSQL + ' AND DateOfAcquisition >= ''' + CONVERT(VARCHAR(11), @inp_dtDateOfTransactionFrom) + ''' '
+					END
+	  			IF (@inp_dtDateOfTransactionTo IS NOT NULL AND @inp_dtDateOfTransactionTo <> '')
+					BEGIN
+						print '@inp_dtDateOfTransactionTo'
+						SELECT @sSQL = @sSQL + ' AND DateOfAcquisition < ''' + CONVERT(VARCHAR(11), DATEADD(D, 1, @inp_dtDateOfTransactionTo)) + ''' '
+					
+					END
+			END
+  END
+ELSE
+  BEGIN
+     SELECT @sSQL = 'SELECT EmployeeId AS [Employee ID], InsiderName AS [Insider Name],PAN, dbo.uf_rpt_FormatDateValue(JoiningDate,0) AS [Date of becoming insider] , dbo.uf_rpt_FormatDateValue(DateOfSeparation,0) AS [Date Of Separation],Designation,Grade,Location,Department,Category,SubCategory,CM.CompanyName AS [Company Name],TypeOfInsider AS [Type Of Insider],Request,Approved,Rejected,Pending,
+	 Traded,CASE WHEN PreclearanceId IS NULL THEN '''+@sPNT+''' + CONVERT(NVARCHAR(MAX),DisplaySequenceNo) ELSE '''+@sPCL+''' + CONVERT(NVARCHAR(MAX),DisplaySequenceNo) END  AS [Pre-clearance ID]
+	, dbo.uf_rpt_FormatDateValue(Requestdate,0) AS [Request date],ISIN,TransactionTypeCodeId AS [Transaction Type], SecurityTypeCodeId AS [Security Type],PreQuantity AS [Number of Securities],PreValue AS [Value],CPreclearanceStatusId.CodeName AS [Pre-Clearance Status], dbo.uf_rpt_FormatDateValue(PreStatusDate,0) AS [Approved/Rejected  date], dbo.uf_rpt_FormatDateValue(PreApplicableTill,0) AS [Applicable till]
+	,BuyQuantity AS [BUY],SellQuantity AS [SELL], dbo.uf_rpt_FormatDateValue(DateOfAcquisition,0) AS [Date of Trasaction],TradeValue AS [Trade Value],ReasonForNotTradedCodeId AS [Reason for Not Traded],CommentText AS [Comments] '
+	SELECT @sSQL = @sSQL + 'from #tmpPreclearance tmpDisc JOIN rl_CompanyMasterList CM ON CM.RlCompanyId = tmpDisc.CompanyName '
+	SELECT @sSQL = @sSQL + 'LEFT JOIN com_Code CPreclearanceStatusId ON CPreclearanceStatusId.CodeID = tmpDisc.PreclearanceStatusId '
+	SELECT @sSQL = @sSQL + 'where 1= 1 '
+	IF ((@inp_sEmployeeID IS NOT NULL AND @inp_sEmployeeID <> '')
+			  OR (@inp_sInsiderName IS NOT NULL AND @inp_sInsiderName <> '')
+			  OR (@inp_sCompanyName IS NOT NULL AND @inp_sCompanyName <> '')
+			  OR (@inp_sPan IS NOT NULL AND @inp_sPan <> '')
+			  OR (@inp_dtDateOfTransactionFrom IS NOT NULL AND @inp_dtDateOfTransactionFrom <> '')
+			   OR (@inp_dtDateOfTransactionTo IS NOT NULL AND @inp_dtDateOfTransactionTo <> ''))
+	
+			BEGIN
+				IF (@inp_sEmployeeID IS NOT NULL AND @inp_sEmployeeID <> '')
+				BEGIN
+					print '@inp_sEmployeeID'
+					SELECT @sSQL = @sSQL + ' AND EmployeeId like ''%' + @inp_sEmployeeID + '%'''
+				END
+				IF (@inp_sInsiderName IS NOT NULL AND @inp_sInsiderName <> '')
+				BEGIN
+					print '@inp_sInsiderName'
+					SELECT @sSQL = @sSQL + ' AND InsiderName like ''%' + @inp_sInsiderName + '%'''
+				
+				END			
+				IF (@inp_sPan IS NOT NULL AND @inp_sPan <> '')
+				BEGIN
+					print '@inp_sPan'
+					SELECT @sSQL = @sSQL + ' AND PAN like ''%' + @inp_sPan + '%'' '
+					
+				END
+				IF (@inp_sCompanyName IS NOT NULL AND @inp_sCompanyName <> '')
+				BEGIN
+					print '@inp_sCompanyName'
+					SELECT @sSQL = @sSQL + ' AND CM.CompanyName like ''%' + @inp_sCompanyName + '%'''
+				
+				END
+				IF (@inp_dtDateOfTransactionFrom IS NOT NULL AND @inp_dtDateOfTransactionFrom <> '')
+					BEGIN
+						print '@inp_dtDateOfTransactionFrom'
+						SELECT @sSQL = @sSQL + ' AND DateOfAcquisition >= ''' + CONVERT(VARCHAR(11), @inp_dtDateOfTransactionFrom) + ''' '
+					END
+	  			IF (@inp_dtDateOfTransactionTo IS NOT NULL AND @inp_dtDateOfTransactionTo <> '')
+					BEGIN
+						print '@inp_dtDateOfTransactionTo'
+						SELECT @sSQL = @sSQL + ' AND DateOfAcquisition < ''' + CONVERT(VARCHAR(11), DATEADD(D, 1, @inp_dtDateOfTransactionTo)) + ''' '
+					
+					END
+			END
+  END
 print(@sSQL)
 EXEC (@sSQL)
 	
