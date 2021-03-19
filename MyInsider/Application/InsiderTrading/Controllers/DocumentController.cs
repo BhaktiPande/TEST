@@ -217,6 +217,8 @@ namespace InsiderTrading.Controllers
                                                     _appWord.Quit();
                                                     System.Runtime.InteropServices.Marshal.FinalReleaseComObject(_appWord);
                                                 }
+
+                                                doc.Close();
                                             }
                                         }
                                         else if (extension == ".xls" || extension == ".xlsx")
@@ -236,11 +238,7 @@ namespace InsiderTrading.Controllers
                                                     //lstobject.Add(dic); //set uploaded file into list to return 
                                                     UploadStatusCode = 0;
                                                 }
-                                                _workbook.Close(false, Type.Missing, Type.Missing);
-                                                _appExcel.Application.Quit();
-                                                _appExcel.Quit();
-                                                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(_appExcel);
-                                                _appExcel = null;
+
                                                 if (UploadStatusCode == 4)
                                                 {
                                                     FileInfo file = new FileInfo(Path.Combine(rootDirectory, "temp", newFileName));
@@ -253,11 +251,19 @@ namespace InsiderTrading.Controllers
                                             }
                                             finally
                                             {
-                                                if (_appExcel != null)
-                                                {
-                                                    _appExcel.Quit();
-                                                    System.Runtime.InteropServices.Marshal.FinalReleaseComObject(_appExcel);
-                                                }
+                                                _workbook.Close(false, Type.Missing, Type.Missing);
+                                                _workbook = null;
+
+                                                _appExcel.Application.Quit();
+                                                _appExcel.Quit();
+                                                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(_appExcel);
+                                                _appExcel = null;
+
+                                                //if (_appExcel != null)
+                                                //{
+                                                //    _appExcel.Quit();
+                                                //    System.Runtime.InteropServices.Marshal.FinalReleaseComObject(_appExcel);
+                                                //}
                                             }
                                         }
                                         else
@@ -310,27 +316,41 @@ namespace InsiderTrading.Controllers
 
                             FileInfo file = new FileInfo(Path.Combine(rootDirectory, "temp", newFileName));
                             file.Delete();
-                            //as uploading file for already existing record which has MaptoId - upload/save record directly
-                            retlistDocumentDetailsModel = objDocumentDetailsSL.SaveDocumentDetails(objLoginUserDetails.CompanyDBConnectionString, lstSaveDetailsModel, buttonName, nMapToId, objLoginUserDetails.LoggedInUserID);
+                            file = null;
 
-                            lstobject.Clear();
-
-                            foreach (DocumentDetailsModel objDocModel in retlistDocumentDetailsModel)
+                            try
                             {
-                                //set uploaded file information into dictionary to sent back as output
-                                Dictionary<string, string> dic = new Dictionary<string, string>();
-                                dic.Add("GUID", objDocModel.GUID);
-                                dic.Add("DocumentID", objDocModel.DocumentId.ToString());
-                                dic.Add("Index", objDocModel.Index.ToString());
-                                dic.Add("SubIndex", objDocModel.SubIndex.ToString());
-                                dic.Add("DocumentName", objDocModel.DocumentName);
-                                dic.Add("FileType", objDocModel.FileType);
-                                dic.Add("UserAction", acid.ToString());
+                                //as uploading file for already existing record which has MaptoId - upload/save record directly
+                                retlistDocumentDetailsModel = objDocumentDetailsSL.SaveDocumentDetails(objLoginUserDetails.CompanyDBConnectionString, lstSaveDetailsModel, buttonName, nMapToId, objLoginUserDetails.LoggedInUserID);
 
-                                lstobject.Add(dic);//set uploaded file into list to return 
+                                lstobject.Clear();
 
-                                UploadStatusCode = 0; //set return msg code 
+                                foreach (DocumentDetailsModel objDocModel in retlistDocumentDetailsModel)
+                                {
+                                    //set uploaded file information into dictionary to sent back as output
+                                    Dictionary<string, string> dic = new Dictionary<string, string>();
+                                    dic.Add("GUID", objDocModel.GUID);
+                                    dic.Add("DocumentID", objDocModel.DocumentId.ToString());
+                                    dic.Add("Index", objDocModel.Index.ToString());
+                                    dic.Add("SubIndex", objDocModel.SubIndex.ToString());
+                                    dic.Add("DocumentName", objDocModel.DocumentName);
+                                    dic.Add("FileType", objDocModel.FileType);
+                                    dic.Add("UserAction", acid.ToString());
+
+                                    lstobject.Add(dic);//set uploaded file into list to return 
+
+                                    UploadStatusCode = 0; //set return msg code 
+                                }
                             }
+                            catch (Exception ex)
+                            {
+                                UploadStatusCode = 1;
+
+                                file = new FileInfo(Path.Combine(rootDirectory, "temp", newFileName));
+                                file.Delete();
+                                file = null;
+                            }
+
                         }
                     }
 
@@ -398,6 +418,7 @@ namespace InsiderTrading.Controllers
                 lstSaveDetailsModel = null;
             }
         }
+
         #endregion UploadDocument
 
         #region SaveDocumentDetails
