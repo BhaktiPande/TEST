@@ -13,6 +13,7 @@ CREATE PROCEDURE [dbo].[st_rpt_PeriodEndDisclosureTransactionDetailsSummary_OS]
 	,@inp_sCompanyName					NVARCHAR(200) = ''
 	,@inp_iYearCodeId					NVARCHAR(50) = ''
 	,@inp_iPeriodCodeId					NVARCHAR(50) = ''
+	,@EnableDisableQuantityValue        INT = 400001
 	,@out_nReturnValue					INT = 0 OUTPUT
 	,@out_nSQLErrCode					INT = 0 OUTPUT				-- Output SQL Error Number, if error occurred.
 	,@out_sSQLErrMessage				VARCHAR(500) = '' OUTPUT  -- Output SQL Error Message, if error occurred.	
@@ -98,7 +99,83 @@ BEGIN
 		WHERE UR.UserInfoId in (select UserInfoId from @tmpTransactionIds )
 		AND TM.PeriodEndDate = @dtPEEnd
 
+IF(@EnableDisableQuantityValue = 400003)
+ BEGIN
 	SELECT @sSQL = 'SELECT UF.EmployeeId AS [Employee Id],ISNULL(UF.FirstName,'''') + '' '' + ISNULL(UF.LastName, '''') AS [Insider Name],dbo.uf_rpt_FormatDateValue(UF.Dateofjoining,0) AS [Insider From],
+	CASE WHEN UF.DateOfSeparation IS NULL THEN ''LIVE''
+		 WHEN UF.DateOfSeparation IS NOT NULL THEN ''Separation'' END AS [Live/Separated],
+		 dbo.uf_rpt_FormatDateValue(UF.DateOfSeparation,0) AS [Date Of Separation],
+		 CStatus.CodeName AS [Status],UF.DIN, CDesignation.CodeName [Designation], CGrade.CodeName AS [Grade], UF.Location,CDept.CodeName AS [Department],CCategory.CodeName AS [Category],CSubCategory.CodeName AS [SubCategory]
+		,company.CompanyName AS [Trading Company Name],CUserType.CodeName + '' Insider'' AS [Type of Insider],CPeriod.DisplayCode+ '' '' +CYear.CodeName AS [Period and Year]
+		,dbo.uf_rpt_FormatDateValue(dbo.uf_tra_GetNextTradingDateOrNoOfDays(TM.PeriodEndDate, DiscloPeriodEndToCOByInsdrLimit, NULL, 0, 1, 0, '''+CONVERT(VARCHAR(11), @nExchangeTypeCodeId_NSE)+''' ),1) AS [Last Submission Date]
+		--,CONVERT(VARCHAR(20), TD.DateOfAcquisition, 103) AS [Date of Transaction]
+		--,vwIn.DetailsSubmitDate, vwIn.ScpSubmitDate, vwIn.HcpSubmitDate,
+		,CASE WHEN dbo.uf_rpt_FormatDateValue(vwIn.DetailsSubmitDate,1)  IS NULL THEN ''Not Required'' ELSE dbo.uf_rpt_FormatDateValue(vwIn.DetailsSubmitDate,1) END AS Holding,
+		CASE WHEN dbo.uf_rpt_FormatDateValue(vwIn.ScpSubmitDate,1)  IS NULL THEN ''Not Required'' ELSE dbo.uf_rpt_FormatDateValue(vwIn.ScpSubmitDate,1) END AS SoftCopy,
+		CASE WHEN dbo.uf_rpt_FormatDateValue(vwIn.HcpSubmitDate,1)  IS NULL THEN ''Not Required'' ELSE dbo.uf_rpt_FormatDateValue(vwIn.HcpSubmitDate,1) END AS HardCopy
+
+		,CASE WHEN vwIn.DetailsSubmitDate IS NULL THEN '''+CONVERT(VARCHAR(100), @iCommentsId_NotSubmitted)+'''
+							WHEN vwIn.DetailsSubmitDate < CONVERT(date, dbo.uf_tra_GetNextTradingDateOrNoOfDays(''' + CONVERT(VARCHAR(11), @dtPEEnd) + ''', DiscloPeriodEndToCOByInsdrLimit, NULL, 0, 1, 0, '''+CONVERT(VARCHAR(100), @nExchangeTypeCodeId_NSE)+''' )) THEN '''+CONVERT(VARCHAR(100), @iCommentsId_Ok)+''' -- DATEADD(D, DiscloPeriodEndToCOByInsdrLimit,@dtPEEnd)
+							ELSE '''+CONVERT(VARCHAR(100), @iCommentsId_NotSubmittedInTime)+''' END AS [Comments]
+		,DD.DEMATAccountNumber AS [Demat Account Number], UIF.FirstName + '' '' + UIF.LastName AS [A/C Holder Name],
+		CASE WHEN UR.UserInfoId IS NULL  THEN ''Self'' ELSE CRelation.CodeName END AS [Relation with Insider],UF.PAN AS PAN,company.ISINCode AS [ISIN], 
+		CSecurityType.CodeName AS [Security Type] FROM  #tmpTransactions tTrans '
+	SELECT @sSQL = @sSQL +'JOIN tra_TransactionMaster_OS TM ON tTrans.TransactionMasterId = TM.TransactionMasterId '
+	SELECT @sSQL = @sSQL +'JOIN tra_TransactionDetails_OS TD ON TD.TransactionMasterId = TM.TransactionMasterId '
+	SELECT @sSQL = @sSQL +'JOIN usr_UserInfo UF ON TD.ForUserInfoId = UF.UserInfoId '
+	SELECT @sSQL = @sSQL +'LEFT JOIN #TempPeriodEnd_EventStatus vwIn ON TM.UserInfoId = vwIn.UserInfoId AND vwIn.PeriodEndDate = ''' + CONVERT(VARCHAR(11), @dtPEEnd) + ''' '
+	SELECT @sSQL = @sSQL +'JOIN usr_DMATDetails DD ON TD.DMATDetailsID = DD.DMATDetailsID '
+	SELECT @sSQL = @sSQL +'JOIN com_Code CSecurityType ON TD.SecurityTypeCodeId = CSecurityType.CodeID '
+	SELECT @sSQL = @sSQL +'JOIN rl_CompanyMasterList company ON TD.CompanyId = company.RlCompanyId '
+	SELECT @sSQL = @sSQL +'LEFT JOIN usr_UserRelation UR ON TD.ForUserInfoId = UR.UserInfoIdRelative '
+	SELECT @sSQL = @sSQL +'LEFT JOIN com_Code CRelation ON UR.RelationTypeCodeId = CRelation.CodeID '
+	SELECT @sSQL = @sSQL +'JOIN com_Code CStatus ON CStatus.CodeID = UF.StatusCodeId '
+	SELECT @sSQL = @sSQL +'JOIN com_Code CDesignation ON CDesignation .CodeID = UF.DepartmentId '
+	SELECT @sSQL = @sSQL +'JOIN com_Code CGrade ON CGrade.CodeID = UF.GradeId '
+	SELECT @sSQL = @sSQL +'JOIN com_Code CDept ON CDept.CodeID = UF.DepartmentId '
+	SELECT @sSQL = @sSQL +'JOIN com_Code CCategory ON CCategory.CodeID = UF.Category '
+	SELECT @sSQL = @sSQL +'JOIN com_Code CSubCategory ON CSubCategory.CodeID = UF.SubCategory '
+	SELECT @sSQL = @sSQL +'JOIN com_Code CUserType ON CUserType.CodeID = UF.UserTypeCodeId '
+	SELECT @sSQL = @sSQL +'JOIN com_Code CPeriod ON CPeriod.CodeID = '''+CONVERT(VARCHAR(11), @inp_iPeriodCodeId)+''' '
+	SELECT @sSQL = @sSQL +'JOIN com_Code CYear ON CYear.CodeID = '''+CONVERT(VARCHAR(11), @inp_iYearCodeId)+''' '
+	SELECT @sSQL = @sSQL +'JOIN tra_UserPeriodEndMapping_OS UPEMap ON UPEMap.PEEndDate IS NOT NULL AND UPEMap.PEEndDate = TM.PeriodEndDate AND UPEMap.UserInfoId = TM.UserInfoId '
+	SELECT @sSQL = @sSQL +'JOIN rul_TradingPolicy_OS TP ON UPEMap.TradingPolicyId = TP.TradingPolicyId '		
+	SELECT @sSQL = @sSQL +'LEFT JOIN usr_UserInfo UIF ON UIF.UserInfoId = DD.UserInfoID '
+	SELECT @sSQL = @sSQL +'WHERE TD.TransactionDetailsId IS NOT NULL '
+	IF ((@inp_sEmployeeID IS NOT NULL AND @inp_sEmployeeID <> '')
+		  OR (@inp_sInsiderName IS NOT NULL AND @inp_sInsiderName <> '')
+		  OR (@inp_sCompanyName IS NOT NULL AND @inp_sCompanyName <> '')
+		  OR (@inp_sPan IS NOT NULL AND @inp_sPan <> ''))
+
+		BEGIN
+			IF (@inp_sEmployeeID IS NOT NULL AND @inp_sEmployeeID <> '')
+			BEGIN
+				print '@inp_sEmployeeID'
+				SELECT @sSQL = @sSQL + ' AND UF.EmployeeId like ''%' + @inp_sEmployeeID + '%'''
+			END
+			IF (@inp_sInsiderName IS NOT NULL AND @inp_sInsiderName <> '')
+			BEGIN
+				print '@inp_sInsiderName'
+				SELECT @sSQL = @sSQL + ' AND ISNULL(UF.FirstName,'''') + '' '' + ISNULL(UF.LastName, '''') like ''%' + @inp_sInsiderName + '%'''
+			
+			END			
+			IF (@inp_sPan IS NOT NULL AND @inp_sPan <> '')
+			BEGIN
+				print '@inp_sPan'
+				SELECT @sSQL = @sSQL + ' AND UF.PAN like ''%' + @inp_sPan + '%'' '
+				
+			END
+			IF (@inp_sCompanyName IS NOT NULL AND @inp_sCompanyName <> '')
+			BEGIN
+				print '@inp_sCompanyName'
+				SELECT @sSQL = @sSQL + ' AND company.CompanyName like ''%' + @inp_sCompanyName + '%'''
+			
+			END	
+	END
+  END
+ELSE
+  BEGIN
+    SELECT @sSQL = 'SELECT UF.EmployeeId AS [Employee Id],ISNULL(UF.FirstName,'''') + '' '' + ISNULL(UF.LastName, '''') AS [Insider Name],dbo.uf_rpt_FormatDateValue(UF.Dateofjoining,0) AS [Insider From],
 	CASE WHEN UF.DateOfSeparation IS NULL THEN ''LIVE''
 		 WHEN UF.DateOfSeparation IS NOT NULL THEN ''Separation'' END AS [Live/Separated],
 		 dbo.uf_rpt_FormatDateValue(UF.DateOfSeparation,0) AS [Date Of Separation],
@@ -170,7 +247,8 @@ BEGIN
 			
 			END	
 	END
-		
+  END
+
 	--print(@sSQL)
 	EXEC (@sSQL)	
 	

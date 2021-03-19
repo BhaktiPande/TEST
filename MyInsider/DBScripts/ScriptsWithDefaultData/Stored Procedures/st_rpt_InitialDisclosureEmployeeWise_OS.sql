@@ -11,6 +11,7 @@ CREATE PROCEDURE [dbo].[st_rpt_InitialDisclosureEmployeeWise_OS]
 	,@inp_sInsiderName					NVARCHAR(100) = ''
 	,@inp_sPan							NVARCHAR(100) = ''
 	,@inp_sCompanyName					NVARCHAR(200) = ''
+	,@EnableDisableQuantityValue        INT = 400001
 	,@out_nReturnValue					INT = 0 OUTPUT
 	,@out_nSQLErrCode					INT = 0 OUTPUT				-- Output SQL Error Number, if error occurred.
 	,@out_sSQLErrMessage				VARCHAR(500) = '' OUTPUT  -- Output SQL Error Message, if error occurred.	
@@ -195,47 +196,92 @@ UPDATE tmpTrans
 UPDATE tmpTrans
 		SET CommentId =@iCommentsId_NotSubmitted FROM #tmpResult tmpTrans WHERE Holding IS NULL
 
-SELECT @sSQL = 'SELECT EmployeeId AS [Employee Id] , InsiderName AS [Insider Name],  dbo.uf_rpt_FormatDateValue(InsiderFrom,0) AS [Insider From] , dbo.uf_rpt_FormatDateValue(DateOfSeparation,0)  AS [Date Of Separation] , Status AS [Status],
-CINDINNUMBER AS [CIN/DIN Number] , CDesignation.CodeName AS [Designation]  ,CGrade.CodeName AS [Grade] , LOCATION AS [Location],
-CDepartment.CodeName AS [Department] , CCategory.CodeName AS [Category] , CSubCategory.CodeName AS [SubCategory],TypeOfInsider AS [Type Of Insider],
-dbo.uf_rpt_FormatDateValue(LastSubmissionDate,0) AS [Last Submission Date],
-CASE WHEN dbo.uf_rpt_FormatDateValue(Holding,1)  IS NULL THEN ''Not Required'' ELSE dbo.uf_rpt_FormatDateValue(Holding,1) END AS [Holdings],
-dbo.uf_rpt_FormatValue(dbo.uf_rpt_ReplaceSpecialChar(SoftCopySubmissionDisplayText),1) AS [SoftCopy],
-dbo.uf_rpt_FormatValue(dbo.uf_rpt_ReplaceSpecialChar(HardCopySubmissionDisplayText),1) AS [HardCopy],
-RComment.ResourceValue AS [Comments],dbo.uf_rpt_FormatValue(DMATEAccount,1) AS [DMATE Account Number],AccHolderName AS [Account Holder Name] ,
-Relationwithinsider AS [Relation with insider],PAN,dbo.uf_rpt_FormatValue(ISIN,1) AS [ISIN],dbo.uf_rpt_FormatValue(SecurityType,1) AS [Security Type] ,
-dbo.uf_rpt_FormatValue(TradingCompanyName,1) AS [Trading Company Name], dbo.uf_rpt_FormatValue(HoldingAMT,1) AS [Holding Qty]'
-SELECT @sSQL = @sSQL + 'from #tmpResult tmpTrans JOIN com_Code CComment ON tmpTrans.CommentId = CComment.CodeID '
-SELECT @sSQL = @sSQL + 'JOIN mst_Resource RComment ON CComment.CodeName = RComment.ResourceKey '
-SELECT @sSQL = @sSQL + 'LEFT JOIN com_Code CDesignation ON tmpTrans.Designation = CDesignation.CodeID '
-SELECT @sSQL = @sSQL + 'LEFT JOIN com_Code CGrade ON tmpTrans.Grade = CGrade.CodeID '
-SELECT @sSQL = @sSQL + 'LEFT JOIN com_Code CDepartment ON tmpTrans.Department = CDepartment.CodeID '
-SELECT @sSQL = @sSQL + 'LEFT JOIN com_Code CCategory ON  tmpTrans.Category= CCategory.CodeID '
-SELECT @sSQL = @sSQL + 'LEFT JOIN com_Code CSubCategory ON  tmpTrans.SubCategory= CSubCategory.CodeID '
-SELECT @sSQL = @sSQL + 'WHERE 1 = 1 '
-IF (@inp_sEmployeeID IS NOT NULL AND @inp_sEmployeeID <> '')
-	BEGIN
-		print '@inp_sEmployeeID'
-		SELECT @sSQL = @sSQL + ' AND tmpTrans.EmployeeId like ''%'+@inp_sEmployeeID+'%'' '	
-	END
-			
-IF (@inp_sInsiderName IS NOT NULL AND @inp_sInsiderName <> '')
-	BEGIN
-		print '@inp_sInsiderName'
-		SELECT @sSQL = @sSQL + ' AND tmpTrans.InsiderName like ''%' + @inp_sInsiderName + '%'' '
-	END
-IF (@inp_sPan IS NOT NULL AND @inp_sPan <> '')
-	BEGIN
-		print '@inp_sPan'
-		SELECT @sSQL = @sSQL + ' AND tmpTrans.PAN like ''%' + @inp_sPan + '%'' '
-	END
-IF (@inp_sCompanyName IS NOT NULL AND @inp_sCompanyName <> '')
-	BEGIN
-		print '@inp_sCompanyName' 
-		SELECT @sSQL = @sSQL + ' AND tmpTrans.TradingCompanyName like ''%' + @inp_sCompanyName + '%'' '
-	END
-SELECT @sSQL = @sSQL + 'order by EmployeeId ASC'
-
+IF(@EnableDisableQuantityValue = 400003)
+ BEGIN
+ 	  SELECT @sSQL = 'SELECT EmployeeId AS [Employee Id] , InsiderName AS [Insider Name],  dbo.uf_rpt_FormatDateValue(InsiderFrom,0) AS [Insider From] , dbo.uf_rpt_FormatDateValue(DateOfSeparation,0)  AS [Date Of Separation] , Status AS [Status],
+ 	CINDINNUMBER AS [CIN/DIN Number] , CDesignation.CodeName AS [Designation]  ,CGrade.CodeName AS [Grade] , LOCATION AS [Location],
+ 	CDepartment.CodeName AS [Department] , CCategory.CodeName AS [Category] , CSubCategory.CodeName AS [SubCategory],TypeOfInsider AS [Type Of Insider],
+ 	dbo.uf_rpt_FormatDateValue(LastSubmissionDate,0) AS [Last Submission Date],
+ 	CASE WHEN dbo.uf_rpt_FormatDateValue(Holding,1)  IS NULL THEN ''Not Required'' ELSE dbo.uf_rpt_FormatDateValue(Holding,1) END AS [Holdings],
+ 	dbo.uf_rpt_FormatValue(dbo.uf_rpt_ReplaceSpecialChar(SoftCopySubmissionDisplayText),1) AS [SoftCopy],
+ 	dbo.uf_rpt_FormatValue(dbo.uf_rpt_ReplaceSpecialChar(HardCopySubmissionDisplayText),1) AS [HardCopy],
+ 	RComment.ResourceValue AS [Comments],dbo.uf_rpt_FormatValue(DMATEAccount,1) AS [DMATE Account Number],AccHolderName AS [Account Holder Name] ,
+ 	Relationwithinsider AS [Relation with insider],PAN,dbo.uf_rpt_FormatValue(ISIN,1) AS [ISIN],dbo.uf_rpt_FormatValue(SecurityType,1) AS [Security Type] ,
+ 	dbo.uf_rpt_FormatValue(TradingCompanyName,1) AS [Trading Company Name]'
+ 	SELECT @sSQL = @sSQL + 'from #tmpResult tmpTrans JOIN com_Code CComment ON tmpTrans.CommentId = CComment.CodeID '
+ 	SELECT @sSQL = @sSQL + 'JOIN mst_Resource RComment ON CComment.CodeName = RComment.ResourceKey '
+ 	SELECT @sSQL = @sSQL + 'LEFT JOIN com_Code CDesignation ON tmpTrans.Designation = CDesignation.CodeID '
+ 	SELECT @sSQL = @sSQL + 'LEFT JOIN com_Code CGrade ON tmpTrans.Grade = CGrade.CodeID '
+ 	SELECT @sSQL = @sSQL + 'LEFT JOIN com_Code CDepartment ON tmpTrans.Department = CDepartment.CodeID '
+ 	SELECT @sSQL = @sSQL + 'LEFT JOIN com_Code CCategory ON  tmpTrans.Category= CCategory.CodeID '
+ 	SELECT @sSQL = @sSQL + 'LEFT JOIN com_Code CSubCategory ON  tmpTrans.SubCategory= CSubCategory.CodeID '
+ 	SELECT @sSQL = @sSQL + 'WHERE 1 = 1 '
+ 	IF (@inp_sEmployeeID IS NOT NULL AND @inp_sEmployeeID <> '')
+ 		BEGIN
+ 			print '@inp_sEmployeeID'
+ 			SELECT @sSQL = @sSQL + ' AND tmpTrans.EmployeeId like ''%'+@inp_sEmployeeID+'%'' '	
+ 		END
+ 				
+ 	IF (@inp_sInsiderName IS NOT NULL AND @inp_sInsiderName <> '')
+ 		BEGIN
+ 			print '@inp_sInsiderName'
+ 			SELECT @sSQL = @sSQL + ' AND tmpTrans.InsiderName like ''%' + @inp_sInsiderName + '%'' '
+ 		END
+ 	IF (@inp_sPan IS NOT NULL AND @inp_sPan <> '')
+ 		BEGIN
+ 			print '@inp_sPan'
+ 			SELECT @sSQL = @sSQL + ' AND tmpTrans.PAN like ''%' + @inp_sPan + '%'' '
+ 		END
+ 	IF (@inp_sCompanyName IS NOT NULL AND @inp_sCompanyName <> '')
+ 		BEGIN
+ 			print '@inp_sCompanyName' 
+ 			SELECT @sSQL = @sSQL + ' AND tmpTrans.TradingCompanyName like ''%' + @inp_sCompanyName + '%'' '
+ 		END
+ 	SELECT @sSQL = @sSQL + 'order by EmployeeId ASC'
+ END
+ELSE
+ BEGIN
+	SELECT @sSQL = 'SELECT EmployeeId AS [Employee Id] , InsiderName AS [Insider Name],  dbo.uf_rpt_FormatDateValue(InsiderFrom,0) AS [Insider From] , dbo.uf_rpt_FormatDateValue(DateOfSeparation,0)  AS [Date Of Separation] , Status AS [Status],
+	CINDINNUMBER AS [CIN/DIN Number] , CDesignation.CodeName AS [Designation]  ,CGrade.CodeName AS [Grade] , LOCATION AS [Location],
+	CDepartment.CodeName AS [Department] , CCategory.CodeName AS [Category] , CSubCategory.CodeName AS [SubCategory],TypeOfInsider AS [Type Of Insider],
+	dbo.uf_rpt_FormatDateValue(LastSubmissionDate,0) AS [Last Submission Date],
+	CASE WHEN dbo.uf_rpt_FormatDateValue(Holding,1)  IS NULL THEN ''Not Required'' ELSE dbo.uf_rpt_FormatDateValue(Holding,1) END AS [Holdings],
+	dbo.uf_rpt_FormatValue(dbo.uf_rpt_ReplaceSpecialChar(SoftCopySubmissionDisplayText),1) AS [SoftCopy],
+	dbo.uf_rpt_FormatValue(dbo.uf_rpt_ReplaceSpecialChar(HardCopySubmissionDisplayText),1) AS [HardCopy],
+	RComment.ResourceValue AS [Comments],dbo.uf_rpt_FormatValue(DMATEAccount,1) AS [DMATE Account Number],AccHolderName AS [Account Holder Name] ,
+	Relationwithinsider AS [Relation with insider],PAN,dbo.uf_rpt_FormatValue(ISIN,1) AS [ISIN],dbo.uf_rpt_FormatValue(SecurityType,1) AS [Security Type] ,
+	dbo.uf_rpt_FormatValue(TradingCompanyName,1) AS [Trading Company Name], dbo.uf_rpt_FormatValue(HoldingAMT,1) AS [Holding Qty]'
+	SELECT @sSQL = @sSQL + 'from #tmpResult tmpTrans JOIN com_Code CComment ON tmpTrans.CommentId = CComment.CodeID '
+	SELECT @sSQL = @sSQL + 'JOIN mst_Resource RComment ON CComment.CodeName = RComment.ResourceKey '
+	SELECT @sSQL = @sSQL + 'LEFT JOIN com_Code CDesignation ON tmpTrans.Designation = CDesignation.CodeID '
+	SELECT @sSQL = @sSQL + 'LEFT JOIN com_Code CGrade ON tmpTrans.Grade = CGrade.CodeID '
+	SELECT @sSQL = @sSQL + 'LEFT JOIN com_Code CDepartment ON tmpTrans.Department = CDepartment.CodeID '
+	SELECT @sSQL = @sSQL + 'LEFT JOIN com_Code CCategory ON  tmpTrans.Category= CCategory.CodeID '
+	SELECT @sSQL = @sSQL + 'LEFT JOIN com_Code CSubCategory ON  tmpTrans.SubCategory= CSubCategory.CodeID '
+	SELECT @sSQL = @sSQL + 'WHERE 1 = 1 '
+	IF (@inp_sEmployeeID IS NOT NULL AND @inp_sEmployeeID <> '')
+		BEGIN
+			print '@inp_sEmployeeID'
+			SELECT @sSQL = @sSQL + ' AND tmpTrans.EmployeeId like ''%'+@inp_sEmployeeID+'%'' '	
+		END
+				
+	IF (@inp_sInsiderName IS NOT NULL AND @inp_sInsiderName <> '')
+		BEGIN
+			print '@inp_sInsiderName'
+			SELECT @sSQL = @sSQL + ' AND tmpTrans.InsiderName like ''%' + @inp_sInsiderName + '%'' '
+		END
+	IF (@inp_sPan IS NOT NULL AND @inp_sPan <> '')
+		BEGIN
+			print '@inp_sPan'
+			SELECT @sSQL = @sSQL + ' AND tmpTrans.PAN like ''%' + @inp_sPan + '%'' '
+		END
+	IF (@inp_sCompanyName IS NOT NULL AND @inp_sCompanyName <> '')
+		BEGIN
+			print '@inp_sCompanyName' 
+			SELECT @sSQL = @sSQL + ' AND tmpTrans.TradingCompanyName like ''%' + @inp_sCompanyName + '%'' '
+		END
+	SELECT @sSQL = @sSQL + 'order by EmployeeId ASC'
+ END
 EXEC (@sSQL)
 drop table #tmpResult
 RETURN 0

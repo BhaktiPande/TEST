@@ -232,6 +232,7 @@ namespace InsiderTrading.Controllers
                 cmd.Parameters.Add("@inp_sInsiderName", EmpName);
                 cmd.Parameters.Add("@inp_sPan", EmpPAN);
                 cmd.Parameters.Add("@inp_sCompanyName", CompanyName);
+                cmd.Parameters.Add("@EnableDisableQuantityValue", objInsiderInitialDisclosureDTO.EnableDisableQuantityValue);
                 cmd1.Parameters.Add("@inp_sEmployeeID", EmpID);
                 cmd1.Parameters.Add("@inp_sInsiderName", EmpName);
                 cmd1.Parameters.Add("@inp_sPan", EmpPAN);
@@ -270,6 +271,7 @@ namespace InsiderTrading.Controllers
                 cmd1.Parameters.Add("@inp_sCompanyName", CompanyName);
                 cmd1.Parameters.Add("@inp_iYearCodeId", YearCodeId);
                 cmd1.Parameters.Add("@inp_iPeriodCodeId", PeriodCodeId);
+                cmd1.Parameters.Add("@EnableDisableQuantityValue", objInsiderInitialDisclosureDTO.EnableDisableQuantityValue);
 
                 SqlDataAdapter adp = new SqlDataAdapter(cmd);
                 SqlDataAdapter adp1 = new SqlDataAdapter(cmd1);
@@ -295,6 +297,7 @@ namespace InsiderTrading.Controllers
                 cmd.Parameters.Add("@inp_sCompanyName", CompanyName);
                 cmd.Parameters.Add("@inp_dtDateOfTransactionFrom", FromDate);
                 cmd.Parameters.Add("@inp_dtDateOfTransactionTo", ToDate);
+                cmd.Parameters.Add("@EnableDisableQuantityValue", objInsiderInitialDisclosureDTO.EnableDisableQuantityValue);
                 SqlDataAdapter adp = new SqlDataAdapter(cmd);
                 adp.Fill(dt);
 
@@ -318,6 +321,7 @@ namespace InsiderTrading.Controllers
                 cmd.Parameters.Add("@inp_sCompanyName", CompanyName);
                 cmd.Parameters.Add("@inp_dtDateOfTransactionFrom", FromDate);
                 cmd.Parameters.Add("@inp_dtDateOfTransactionTo", ToDate);
+                cmd.Parameters.Add("@EnableDisableQuantityValue", objInsiderInitialDisclosureDTO.EnableDisableQuantityValue);
                 SqlDataAdapter adp = new SqlDataAdapter(cmd);
                 adp.Fill(dt);
 
