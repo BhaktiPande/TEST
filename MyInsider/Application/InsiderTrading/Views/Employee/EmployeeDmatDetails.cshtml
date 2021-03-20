@@ -11,9 +11,9 @@
         @if (Model.userInfoModel.UserInfoId != 0)
         {
             //DMAT Details
-            <div class="card panel-accordion">
-                <div class="card-header active">
-                    <h4 class="card-title">
+            <div class="panel panel-accordion">
+                <div class="panel-heading active">
+                    <h4 class="panel-title">
                         @if ((bool)ViewBag.show_confirm_personal_details_btn)
                 {
                         @InsiderTrading.Common.Common.getResource("usr_lbl_11348")
@@ -25,7 +25,7 @@
                 }
                     </h4>
                 </div>
-                <div class="card-body">
+                <div class="panel-body">
                     @Html.Partial("~/Views/Common/CreateDMATDetails.cshtml", Model.dmatDetailsModel)
 
                     <div class="row">

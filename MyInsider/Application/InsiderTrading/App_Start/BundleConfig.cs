@@ -11,27 +11,25 @@ namespace InsiderTrading
             bundles.IgnoreList.Clear();
             System.Web.Optimization.BundleTable.EnableOptimizations = false;
             bundles.Add(new ScriptBundle("~/bundles/jquerynew").Include(
-                "~/Scripts/jQuery/jquery-3.5.0.min.js",
+                "~/Scripts/jQuery/jquery-3.5.0.min.js" ,
                 "~/Scripts/jQuery/jQuery-Migrate.js",
                 "~/Scripts/jquery-1.10.2.min.js"
                 ));
             bundles.Add(new ScriptBundle("~/bundles/jqueryold").Include(
-                 "~/Scripts/jQuery/jquery-3.5.0.min.js",
-                    "~/Scripts/jQuery/jQuery-Migrate.js",
-                     "~/Scripts/jquery-1.10.2.min.js"
-                 ));
-            bundles.Add(new ScriptBundle("~/bundles/jqueryold1").Include(                    
-            "~/LoginScript/jQuery/jquery-3.5.0.min.js",
-             "~/Scripts/jQuery/jQuery-Migrate.js",
-             "~/Scripts/jquery-1.10.2.min.js"
-             ));
-
+               "~/Scripts/jQuery/jquery-3.5.0.min.js",
+               "~/Scripts/jQuery/jQuery-Migrate.js",
+                "~/Scripts/jquery-1.10.2.min.js"));
+            bundles.Add(new ScriptBundle("~/bundles/jqueryold1").Include(
+              "~/LoginScript/jQuery/jquery-3.5.0.min.js",
+              "~/Scripts/jQuery/jQuery-Migrate.js",
+               "~/Scripts/jquery-1.10.2.min.js"));
             bundles.Add(new ScriptBundle("~/bundles/SW360").Include(
-                  "~/Scripts/jQueryjquery-3.5.0.min.js",
-                  "~/Scripts/jQuery/jQuery-Migrate.js",
-                   "~/Scripts/jquery-1.10.2.min.js",
-                //"~/Scripts/jQueryUI/jquery-ui-1.11.2.min.js",
+                "~/Scripts/jQueryjquery-3.5.0.min.js",
+                "~/Scripts/jQuery/jQuery-Migrate.js",
+                 "~/Scripts/jquery-1.10.2.min.js",
+                 //"~/Scripts/jQueryUI/jquery-ui-1.11.2.min.js",
                 "~/Scripts/jQueryUI/jquery-ui-1.12.1.min.js",
+                "~/Scripts/bootstrap/js/bootstrap.min.js",
                 "~/Scripts/daterangepicker/daterangepicker.js",
                 "~/Scripts/datepicker/bootstrap-datepicker.js",
                 "~/Scripts/iCheck/icheck.min.js",
@@ -43,7 +41,6 @@ namespace InsiderTrading
                 "~/Scripts/bootstrap-wizard/jquery.bootstrap.wizard.min.js",
                 "~/Scripts/datatables/jquery.dataTables.js",
                 "~/Scripts/datatables/dataTables.bootstrap.js",
-                "~/Scripts/bootstrap/js/bootstrap.min.js",
                 "~/Scripts/jQueryCurrencyFormat/jquery.formatCurrency.js"
                 //    "~/Scripts/barChart/js/jquery.horizBarChart.min.js"
                 ));

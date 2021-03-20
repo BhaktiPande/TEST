@@ -437,8 +437,8 @@
         || (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypeContinuous && (ViewBag.TranactionMasterStatus < InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForConfirmed))
         || (ViewBag.nDisclosureTypeCodeId == InsiderTrading.Common.ConstEnum.Code.DisclosureTypePeriodEnd) && (ViewBag.TranactionMasterStatus < InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForConfirmed || ViewBag.NoHolding == true))
         {
-            <div class="card panel-default">
-                <div class="card-body">
+            <div class="panel panel-default">
+                <div class="panel-body">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <p>
@@ -495,8 +495,8 @@
         }
         else if (!ViewBag.NoHolding && ViewBag.Showenterbutton == true)
         {
-            <div class="card panel-default">
-                <div class="card-body">
+            <div class="panel panel-default">
+                <div class="panel-body">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <p>
@@ -521,8 +521,8 @@
         {
             <div id="hold-div-1" class="row hold-div">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="card panel-default">
-                        <div class="card-body">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
                                     <div role="form">
@@ -588,7 +588,7 @@
                 <div style="height: 48px;">
                     <div>
                         <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 abc" style="margin: -8px 0px 0px 0px;">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 abc" style=" margin: -8px 0px 0px 0px;">
                                 <table id="tbl1">
                                     <tr id="some_id">
                                         <td>
@@ -634,9 +634,9 @@
                     <input type="hidden" value="@ViewBag.nDisclosureTypecodeId" id="DisclosureTypecodeId" />
                     <input type="hidden" value="@ViewBag.nConfigurationValueCodeId" id="ConfigurationValueCodeId" /> <!-- Enter /Upload Configuration •	Enter Details and/or Upload Details -->
                     <input type="hidden" value="@InsiderTrading.Common.Common.getResource("tra_lbl_52125")" id="DematMsg" />
-                    <div class="card panel-default" style="margin: -12px 0px 0px 0px;">
-                        <div class="card-body">
-                            <div class="row" style="margin: 0px 0px 0px 0px; display:block;">
+                    <div class="panel panel-default" style="margin: -12px 0px 0px 0px;">
+                        <div class="panel-body">
+                            <div class="row" style="margin: 0px 0px 0px 0px;">
                                 @if ((bool)ViewBag.ShowOwnSecuritiesDeclaration && ViewBag.TranactionMasterStatus == InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed)
                                 {<br /><br />
                                     @Html.Partial("~/Views/TradingTransaction/SubmitOwnSecurities.cshtml")
@@ -646,10 +646,10 @@
                                     <div>
                                         <div id="Grd_User_OwnSecurities" style="display:none">
                                             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                                <h5 @*style="margin: -5px 0px 10px -13px;"*@>@InsiderTrading.Common.Common.getResource("tra_lbl_50778"): @InsiderTrading.Common.Common.getResource("tra_lbl_50779") : @ViewBag.panNumber </h5>
+                                                <h5 style="margin: -5px 0px 10px -13px; ">@InsiderTrading.Common.Common.getResource("tra_lbl_50778"): @InsiderTrading.Common.Common.getResource("tra_lbl_50779") : @ViewBag.panNumber </h5>
                                             </div>
                                             <div>
-                                                <h5 style="float: right; margin: -22px 15px 0px 0px;">@InsiderTrading.Common.Common.getResource("dis_lbl_52111"): @ViewBag.DateOfAcquisition</h5>
+                                                <h5 style="float: right; margin: -3px 4px 0px 0px;">@InsiderTrading.Common.Common.getResource("dis_lbl_52111"): @ViewBag.DateOfAcquisition</h5>
                                             </div>
                                             <div class="search" gridtype="@ViewBag.GridType">
                                                 <input type="hidden" value="@ViewBag.TransactionMasterId" id="1" name="" gridtype="@ViewBag.GridType" />
@@ -672,7 +672,7 @@
                                         </div>
                                         <div id="Grd_Relative_OwnSecurities" style="display:none">
                                             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                                <h5 @*style=" margin: -6px 0px 8px -13px;"*@>@InsiderTrading.Common.Common.getResource("tra_lbl_50778"): @InsiderTrading.Common.Common.getResource("tra_lbl_50780") </h5>
+                                                <h5 style=" margin: -6px 0px 8px -13px;">@InsiderTrading.Common.Common.getResource("tra_lbl_50778"): @InsiderTrading.Common.Common.getResource("tra_lbl_50780") </h5>
                                             </div>
                                             <div class="search" gridtype="@ViewBag.RGridType">
                                                 <input type="hidden" value="@ViewBag.TransactionMasterId" id="1" name="" gridtype="@ViewBag.RGridType" />
@@ -817,8 +817,8 @@
                 @if (ViewBag.TranactionMasterStatus <= InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForNotConfirmed)
                 {
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <div class="card panel-default">
-                            <div class="card-body">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
                                 <div class="row">
                                     <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
                                         <div role="form">
@@ -843,8 +843,8 @@
                 else
                 {
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <div class="card panel-default">
-                            <div class="card-body">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
                                 <div class="row">
                                     @* Grid to display the documents uploaded by user for a transaction *@
                                     <div class="search" gridtype="@ViewBag.GridTypeUploadedDocs">
@@ -863,8 +863,8 @@
                 {
                     if (ViewBag.TranactionMasterStatus >= InsiderTrading.Common.ConstEnum.Code.DisclosureStatusForConfirmed && ViewBag.NoHolding == true)
                     {
-                        <div class="card panel-default">
-                            <div class="card-body">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
                                 <div class="row">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <a href="@sURL" id="lnkCancel" class="btn btn-success"><i class="fa fa-times"></i> @InsiderTrading.Common.Common.getResource("com_btn_14010")</a>
@@ -884,8 +884,8 @@
             <div id="hold-div-6" class="row ">
                 <div class="col-lg-12">
 
-                    <div class="card panel-default">
-                        <div class="card-body">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
                             @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
                             <div class="row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

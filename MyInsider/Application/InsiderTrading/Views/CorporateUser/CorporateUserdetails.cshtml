@@ -42,9 +42,9 @@
             @Html.AntiForgeryToken()
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="panel-group" id="accordion">
-                    <div class="card panel-accordion">
-                        <div class="card-header active">
-                            <h4 class="card-title">
+                    <div class="panel panel-accordion">
+                        <div class="panel-heading active">
+                            <h4 class="panel-title">
                                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
                                     <span class="fa fa-minus pull-right"></span>
                                     @InsiderTrading.Common.Common.getResource("usr_lbl_11304")
@@ -54,7 +54,7 @@
                         <div id="collapseOne" class="panel-collapse collapse in">
 
                             @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
-                            <div class="card-body">
+                            <div class="panel-body">
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                         <div class="form-group">
@@ -313,9 +313,9 @@
                     @if (Model.UserInfoId != 0)
                     {
                         //DMAT Details
-                        <div class="mt-3 card panel-accordion" @((bool)ViewBag.show_confirm_personal_details_btn ? @ViewBag.ToolTipWhenPersonalDetailsNotConfirmed : "")>
-                            <div class="card-header">
-                                <h4 class="card-title">
+                        <div class="panel panel-accordion" @((bool)ViewBag.show_confirm_personal_details_btn ? @ViewBag.ToolTipWhenPersonalDetailsNotConfirmed : "")>
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
                                     @if ((bool)ViewBag.show_confirm_personal_details_btn)
                                     {
                                         <span class="fa fa-plus pull-right"></span>
@@ -331,7 +331,7 @@
                                 </h4>
                             </div>
                             <div id="collapseThree" class="panel-collapse collapse">
-                                <div class="card-body">
+                                <div class="panel-body">
                                     @Html.Partial("~/Views/CorporateUser/CreateDMATDetails.cshtml", Model.dmatDetailsModel)
                                 </div>
                             </div>
@@ -341,7 +341,7 @@
             </div>
             if (Model.UserInfoId != 0)
             {
-                <div class="mt-4 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
                     @*//check if to show confirm personal details button or not*@
                     @if ((bool)ViewBag.show_confirm_personal_details_btn)

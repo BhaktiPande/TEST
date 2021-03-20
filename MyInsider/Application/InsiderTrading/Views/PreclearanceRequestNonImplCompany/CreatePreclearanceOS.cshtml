@@ -50,7 +50,7 @@
 
 <!-- Content Header -->
 <section class="content-header">
-    <h4 @*style="margin: -29px 0px -10px 0px;"*@>@InsiderTrading.Common.Common.getResource("dis_ttl_17459")</h4>
+    <h4 style="margin: -29px 0px -10px 0px;">@InsiderTrading.Common.Common.getResource("dis_ttl_17459")</h4>
 </section>
 
 <!-- Main content -->
@@ -58,8 +58,8 @@
     <!-- Search form content -->
     <div class="row">
         <div class="col-lg-12">
-            <div class="card panel-default">
-                <div class="card-body">
+            <div class="panel panel-default">
+                <div class="panel-body">
                     @using (Html.BeginForm("SavePreclearanceRequestOS", "PreclearanceRequestNonImplCompany", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "", @autocomplete = "off", id = "frmPreclearanceRequest" }))
                     {
                         if ((ViewBag.IsPreviousPeriodEndSubmissionOtherSecurity == 1 || ViewBag.IsPreviousPeriodEndSubmissionOwnSecurity == 1) && Model.PreclearanceRequestId == 0)

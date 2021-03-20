@@ -827,7 +827,7 @@
             @if (InsiderTrading.Controllers.TradingTransactionController.IsVisibleTradingTransactionElement("DateOfInitimationToCompany", ViewBag.DisclosureType, Model.SecurityTypeCodeId))
             {
 
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 pull-right order-12" style="margin-right: 10px">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 pull-right" style="margin-right: 15px">
 
                     @if (ViewBag.LoginUserObject.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.COUserType || ViewBag.LoginUserObject.UserTypeCodeId == InsiderTrading.Common.ConstEnum.Code.Admin)
                     {
@@ -872,7 +872,7 @@
 
                 </div>
             }
-            @Html.LabelFor(model => model.DateOfInitimationToCompany, new { @class = "pull-right ml-auto", style = "margin-top: 10px;" })
+            @Html.LabelFor(model => model.DateOfInitimationToCompany, new { @class = "pull-right", style = "margin-top: 10px;" })
 
 
         </div>
@@ -887,8 +887,8 @@
             @Html.ValidationSummary(true)
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="card panel-default">
-                        <div class="card-body">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
                             @{
 
 

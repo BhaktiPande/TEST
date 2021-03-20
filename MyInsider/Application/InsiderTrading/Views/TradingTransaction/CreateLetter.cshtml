@@ -46,8 +46,8 @@
 <section class="content">
     <div class="row">
         <div class="col-lg-12">
-            <div class="card panel-default">
-                <div class="card-body">
+            <div class="panel panel-default">
+                <div class="panel-body">
                     @using (Html.BeginForm("CreateLetter", "TradingTransaction", new { ReturnUrl = ViewBag.ReturnUrl, formId = 71 }, FormMethod.Post, new { role = "form", autocomplete = "off" }))
                     {
                         @Html.AntiForgeryToken()

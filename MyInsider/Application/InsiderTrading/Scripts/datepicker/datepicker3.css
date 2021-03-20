@@ -787,14 +787,3 @@ fieldset[disabled] .datepicker table tr td span.active.disabled:hover.active {
 .datepicker.datepicker-inline td {
   padding: 0px 5px;
 }
-
-.input-group-addon {
-    padding: 6px 12px;
-    
-}
-
-input-group .input-group-addon {
-    border-radius: 5px;
-    border:2px solid grey;
-    background-color: gray;
-}

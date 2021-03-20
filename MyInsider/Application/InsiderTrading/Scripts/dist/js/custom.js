@@ -1,11 +1,3 @@
-$(document).ready(function () {
-    $('#example').DataTable();
-});
-
-$(document).ready(function () {
-    $('table').css('width', '100%');
-});
-jQuery('.dataTable').wrap('<div class="dataTables_scroll" />');
 
 $(document).ready(function () { // Lightbulb toggle
     $('table tr td').click(function(){
@@ -15,7 +7,8 @@ $(document).ready(function () { // Lightbulb toggle
     });
     $('table tr td').click(function(){
         // $(this).find('i').toggleClass('light-orange light-gray')
-        $(this).find('.status').toggleClass('light-orange light-gray')       
+        $(this).find('.status').toggleClass('light-orange light-gray')
+        
     });
 
 // Update stateful
@@ -220,17 +213,17 @@ $(function () {
 // Accordion icon change
 
     $('.collapse').on('shown.bs.collapse', function(){
-        $(this).parent().find(".fa-plus").removeClass("fa-plus").addClass("fa-minus");
+    $(this).parent().find(".fa-plus").removeClass("fa-plus").addClass("fa-minus");
     }).on('hidden.bs.collapse', function(){
-        $(this).parent().find(".fa-minus").removeClass("fa-minus").addClass("fa-plus");
+    $(this).parent().find(".fa-minus").removeClass("fa-minus").addClass("fa-plus");
     });
 
 
 // accordion coloring
     $('.accordion-toggle').on('click', function(){
         $(this).closest('.panel-group').children().each(function(){
-            $(this).find('>.panel-heading').removeClass('active');
-        });
+        $(this).find('>.panel-heading').removeClass('active');
+         });
 
         $(this).closest('.panel-heading').toggleClass('active');
     });
@@ -392,49 +385,7 @@ $(function () {
             $("#new-event").val("");
         });
     });
+
+  
+
 });
-
-
-$(document).ready(function () {
-    $('.collapse.in').addClass('show');
-
-    /*if target not defined remove toogle*/
-    $("a[data-toggle='modal']").on("click", function () {
-        var attr = $(this).attr('data-target');
-
-        if (!(typeof attr !== typeof undefined && attr !== false)) {
-            $(this).removeAttr("data-toggle");
-        }
-    });
-
-    /*accordion color hide other element*/
-    $('.accordion-toggle').on('click', function () {
-
-        $(this).closest('.panel-group').children().each(function () {
-            $(this).find('>.card-header').removeClass('active');
-            $(this).find('>.panel-collapse').collapse('hide');
-        });
-        $(this).closest('.card-header').toggleClass('active');
-
-        var hrefAttr = $(this).attr('href');
-        $(hrefAttr).collapse('show');
-    });
-
-     /*nav tabs add active class*/
-    $('li').on('click', function () {
-        $(this).closest('.custom-tabs').children().each(function () {
-            $(this).find('>li').removeClass('active');
-        });
-        $(this).addClass("active");
-    });
-
-    /*remove space taken by hidden column*/
-    $('.col-lg-3:has(div[style="display:none;"])').each(function () {
-        $(this).hide();
-    }); 
-});
-
-
-
-
-

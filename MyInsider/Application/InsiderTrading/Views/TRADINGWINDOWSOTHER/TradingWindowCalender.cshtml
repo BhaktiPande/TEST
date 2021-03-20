@@ -6,8 +6,8 @@
 <section class="content">
     <div class="row BlockEventCalnder">
         <div class="col-lg-12">
-            <div class="card panel-default">
-                <div class="card-body">
+            <div class="panel panel-default">
+                <div class="panel-body">
                     <input type="hidden" id="PageFrom" name="PageFrom" value="@ViewBag.PageFrom" />
                     <div class="form-horizontal col-xs-12" id="tradingWindowCalender">
                         @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
