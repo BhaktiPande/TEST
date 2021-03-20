@@ -102,7 +102,7 @@
                                                     <div class='input-group date' id='time'>
                                                         @Html.TextBoxFor(model => model.Time, new { @class = "form-control" })
                                                         <span class="input-group-addon">
-                                                            <span class="fa fa-calendar"></span>
+                                                            <span class="glyphicon glyphicon-calendar"></span>
                                                         </span>
                                                     </div>
                                                     @Html.ValidationMessageFor(m => m.Time)
@@ -144,7 +144,7 @@
                                                 }
                                             </div>
                                         </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="othero" style="display:none;">
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" hidden id="othero">
                                             <div role="form">
                                                 <div class="form-group">
                                                     @Html.LabelFor(m => m.Sharedbynamea)
@@ -155,7 +155,7 @@
                                         </div>
 
                                     </div>
-                                    <div id="UserInfo" style="display:none">
+                                    <div id="UserInfo" hidden>
                                         <div class="row">
                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                                                 <div role="form">
@@ -228,7 +228,7 @@
                                                     }
                                                 </div>
                                             </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="other" style="display:none;">
+                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" hidden id="other">
                                                 <div role="form">
                                                     <div class="form-group">
                                                         @Html.LabelFor(m => m.Sharedbyname)

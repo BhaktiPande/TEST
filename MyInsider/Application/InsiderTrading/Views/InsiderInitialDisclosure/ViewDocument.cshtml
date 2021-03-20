@@ -283,32 +283,32 @@
                 </div>
                 <div> &nbsp;</div>
         
-
                 if (ViewBag.CalledFrom == "ViewAgree" || ViewBag.CalledFrom == "ViewAgree_OS")
                 {
                     if (ViewBag.ViewAgreeFlag == true)
                     {
-                        <div class="col-lg-12 p-2">
+                        <div class="col-lg-12">
                             @Html.CheckBox("chkkcondition", false, new { id = "chkAccept" })
                             @Html.Label("chkAccept", @InsiderTrading.Common.Common.getResource("dis_lbl_17061"))
                                       
-                        </div>  
-                        <div class="d-inline">
+                        </div>
+                        <div class="col-lg-2">
                             <button type="submit" class="btn btn-success" name="Accept" id="btnAccept" disabled="disabled"><i class="fa fa-save"></i>@InsiderTrading.Common.Common.getResource("dis_btn_17062")</button>
                         </div>
         
                     }
                     else if (ViewBag.ViewFlag == true)
                     {
-                        <div class="d-inline">
+                        <div class="col-lg-2">
                             <button type="submit" class="btn btn-success" name="Next"><i class=" fa fa-save"></i>@InsiderTrading.Common.Common.getResource("com_btn_14014")</button>
                         </div>
+
                     }
 
                     @Html.Hidden("acid", (int)ViewBag.UserAction)
                     <input type="hidden" name="authorization" value="Accept:@ViewBag.UserAction,Next:@ViewBag.UserAction" />
                 }
-                <div class="d-inline">
+                <div class="col-lg-2">
                 @{
                     if (ViewBag.IsCalledFromReport)
                     {

@@ -5485,6 +5485,10 @@ label[for='Period:'], label[for='Period'] {
     }
 }
 
+#AT {
+    padding: 10px;
+}
+
 #userInfoModel_SubmittedRole {
-    height: 210px;
+    height: 205px;
 }

@@ -64,7 +64,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="DivRelativeDetails" style="display: contents;">
+                            <div id="DivRelativeDetails">
                                 @{
     if (Model.PreclearanceRequestForCodeId == InsiderTrading.Common.ConstEnum.Code.PreclearanceRequestForRelative)
     {
@@ -141,14 +141,14 @@
 
                         </div>
                         <div class="row">
-                            <div class="col-lg-4 col-md-3 col-sm-6 col-xs-12">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div class="form-group">
                                     @Html.LabelFor(m => m.SecuritiesToBeTradedQty)
                                     @Html.TextBoxFor(m => m.SecuritiesToBeTradedQty, "{0:N0}", new { @class = "form-control numericOnly" })
                                     @Html.ValidationMessageFor(m => m.SecuritiesToBeTradedQty)
                                 </div>
                             </div>
-                            <div class="col-lg-4 col-md-3 col-sm-6 col-xs-12">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div class="form-group">
                                     @Html.LabelFor(m => m.SecuritiesToBeTradedValue)
                                     @Html.TextBoxFor(m => m.SecuritiesToBeTradedValue, "{0:N0}", new { @class = "form-control numericOnly" })
@@ -170,7 +170,7 @@
                                 </div>
                             </div>
 
-                            <div id="DivModeOfAcquisition" style="display: contents;">
+                            <div id="DivModeOfAcquisition">
                                 @{
                                 if (Model.TransactionTypeCodeId != null && Model.TransactionTypeCodeId > 0)
                                 {

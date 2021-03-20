@@ -1,8 +1,8 @@
 ﻿@model InsiderTrading.Models.TradingTransactionModel_OS
 
 
-@*<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="margin:-5px 0px 0px 0px;">
-    <div class="form-group">*@
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="margin:-5px 0px 0px 0px;">
+    <div class="form-group">
         <label>@Html.LabelFor(model => model.DMATDetailsID)</label>
         @*Tushar*@
         @if (@ViewBag.TransactionTypeCodeFlag)
@@ -15,8 +15,8 @@
             @Html.DropDownListFor(model => model.DMATDetailsID, new SelectList(ViewBag.UserDMAT, "Key", "Value", ""), new { @class = "form-control" })
         }
         @Html.ValidationMessageFor(model => model.DMATDetailsID)
-  @*  </div>
-</div>*@
+    </div>
+</div>
 @*<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
     <div class="form-group" id="divTMID" style="display:none;">
         <label>@InsiderTrading.Common.Common.getResource("tra_lbl_16100")</label>
