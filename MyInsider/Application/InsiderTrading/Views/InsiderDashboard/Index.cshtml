@@ -67,28 +67,28 @@
                                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
                                                         <span class="block text-center btn-labelDashboard">PCL Requested </span>
                                                         <a href="@Url.Action("Index", "PreclearanceRequest", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE, PreClearanceRequestID = "PCL" })">
-                                                            <button class="btn btn-gray d-block mx-auto" style="background-color: #78A354;">@Model.PreclearanceSubmittedCount</button>
+                                                            <button class="btn btn-gray center-block" style="background-color: #78A354;">@Model.PreclearanceSubmittedCount</button>
                                                         </a>
                                                         <span class="block text-center btn-sub-label">&nbsp;</span>
                                                     </div>
                                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
                                                         <span class="block text-center btn-labelDashboard">Pending</span>
                                                         <a href="@Url.Action("Index", "PreclearanceRequest", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE, PreClearanceRequestStatus = InsiderTrading.Common.ConstEnum.Code.PreclearanceRequestStatusConfirmed })">
-                                                            <button class="btn btn-warning d-block mx-auto">@Model.PreclearancePendingCount</button>
+                                                            <button class="btn btn-warning center-block">@Model.PreclearancePendingCount</button>
                                                         </a>
                                                         <span class="block text-center btn-sub-label">&nbsp;</span>
                                                     </div>
                                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
                                                         <span class="block text-center btn-labelDashboard">Rejected</span>
                                                         <a href="@Url.Action("Index", "PreclearanceRequest", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE, PreClearanceRequestStatus = InsiderTrading.Common.ConstEnum.Code.PreclearanceRequestStatusRejected })">
-                                                            <button class="btn btn-danger d-block mx-auto">@Model.PreclearanceRejectedCount</button>
+                                                            <button class="btn btn-danger center-block">@Model.PreclearanceRejectedCount</button>
                                                         </a>
                                                         <span class="block text-center btn-sub-label">&nbsp;</span>
                                                     </div>
                                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
                                                         <span class="block text-center btn-labelDashboard">Approved</span>
                                                         <a href="@Url.Action("Index", "PreclearanceRequest", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE, PreClearanceRequestStatus = InsiderTrading.Common.ConstEnum.Code.PreclearanceRequestStatusApproved })">
-                                                            <button class="btn btn-success d-block mx-auto">@Model.PreclearanceApprovedCount</button>
+                                                            <button class="btn btn-success center-block">@Model.PreclearanceApprovedCount</button>
                                                         </a>
                                                         <span class="block text-center btn-sub-label">&nbsp;</span>
                                                     </div>
@@ -211,11 +211,11 @@
                                                             <p class="text-center dashboardDisclosureTextPadding">@InsiderTrading.Common.Common.getResource("dis_lbl_17436")</p>
                                                             @if (Model.InitialDisclosureFlag == 2)
                                                             {
-                                                                <button class="btn btn-dark d-block mx-auto"><i class="fa fa-check success"></i></button>
+                                                                <button class="btn btn-dark center-block"><i class="fa fa-check success"></i></button>
                                                             }
                                                             else
                                                             {
-                                                                <button class="btn btn-dark d-block mx-auto"><i class="fa fa-exclamation danger"></i></button>
+                                                                <button class="btn btn-dark center-block"><i class="fa fa-exclamation danger"></i></button>
                                                             }
                                                         </a>
                                                     </div>
@@ -223,7 +223,7 @@
                                                         <a href="javascript:void(0);" id="disc-btn-2">
                                                             <img src="~/images/icons/icon-cont-disc.png" class="img img-responsive center-block">
                                                             <p class="text-center dashboardDisclosureTextPadding">@InsiderTrading.Common.Common.getResource("dis_lbl_17437")</p>
-                                                            <button class="btn btn-dark d-block mx-auto"><span class="success"> @Model.ContinuousDisclosureSoftCopyPendingCount </span></button>
+                                                            <button class="btn btn-dark center-block"><span class="success"> @Model.ContinuousDisclosureSoftCopyPendingCount </span></button>
                                                         </a>
                                                     </div>
                                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -232,11 +232,11 @@
                                                             <p class="text-center dashboardDisclosureTextPadding">@InsiderTrading.Common.Common.getResource("dis_lbl_17438")</p>
                                                             @if (Model.PeriodEndDisclosureFlag == 1)
                                                             {
-                                                                <button class="btn btn-dark d-block mx-auto"><i class="fa fa-check success"></i></button>
+                                                                <button class="btn btn-dark center-block"><i class="fa fa-check success"></i></button>
                                                             }
                                                             else
                                                             {
-                                                                <button class="btn btn-dark d-block mx-auto"><i class="fa fa-exclamation danger"></i></button>
+                                                                <button class="btn btn-dark center-block"><i class="fa fa-exclamation danger"></i></button>
                                                             }
                                                         </a>
                                                     </div>
@@ -433,28 +433,28 @@
                                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
                                                         <span class="block text-center btn-labelDashboard">@InsiderTrading.Common.Common.getResource("dis_lbl_54190") </span>
                                                         <a href="@Url.Action("IndexOS", "PreclearanceRequestNonImplCompany", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE, PreClearanceRequestID = "PCL" })">
-                                                            <button class="btn btn-gray d-block mx-auto" style="background-color: #78A354;">@Model.objInsiderDashboardOtherModel.PreclearanceSubmittedCount</button>
+                                                            <button class="btn btn-gray center-block" style="background-color: #78A354;">@Model.objInsiderDashboardOtherModel.PreclearanceSubmittedCount</button>
                                                         </a>
                                                         <span class="block text-center btn-sub-label">&nbsp;</span>
                                                     </div>
                                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
                                                         <span class="block text-center btn-labelDashboard">@InsiderTrading.Common.Common.getResource("dis_lbl_54191")</span>
                                                         <a href="@Url.Action("IndexOS", "PreclearanceRequestNonImplCompany", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE, PreClearanceRequestStatus = InsiderTrading.Common.ConstEnum.Code.PreclearanceRequestStatusConfirmed })">
-                                                            <button class="btn btn-warning d-block mx-auto">@Model.objInsiderDashboardOtherModel.PreclearancePendingCount</button>
+                                                            <button class="btn btn-warning center-block">@Model.objInsiderDashboardOtherModel.PreclearancePendingCount</button>
                                                         </a>
                                                         <span class="block text-center btn-sub-label">&nbsp;</span>
                                                     </div>
                                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
                                                         <span class="block text-center btn-labelDashboard">@InsiderTrading.Common.Common.getResource("dis_lbl_54192")</span>
                                                         <a href="@Url.Action("IndexOS", "PreclearanceRequestNonImplCompany", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE, PreClearanceRequestStatus = InsiderTrading.Common.ConstEnum.Code.PreclearanceRequestStatusRejected })">
-                                                            <button class="btn btn-danger d-block mx-auto">@Model.objInsiderDashboardOtherModel.PreclearanceRejectedCount</button>
+                                                            <button class="btn btn-danger center-block">@Model.objInsiderDashboardOtherModel.PreclearanceRejectedCount</button>
                                                         </a>
                                                         <span class="block text-center btn-sub-label">&nbsp;</span>
                                                     </div>
                                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
                                                         <span class="block text-center btn-labelDashboard">@InsiderTrading.Common.Common.getResource("dis_lbl_54193")</span>
                                                         <a href="@Url.Action("IndexOS", "PreclearanceRequestNonImplCompany", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE, PreClearanceRequestStatus = InsiderTrading.Common.ConstEnum.Code.PreclearanceRequestStatusApproved })">
-                                                            <button class="btn btn-success d-block mx-auto">@Model.objInsiderDashboardOtherModel.PreclearanceApprovedCount</button>
+                                                            <button class="btn btn-success center-block">@Model.objInsiderDashboardOtherModel.PreclearanceApprovedCount</button>
                                                         </a>
                                                         <span class="block text-center btn-sub-label">&nbsp;</span>
                                                     </div>
