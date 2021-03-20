@@ -4992,12 +4992,6 @@ label {
     z-index: 99999 !important;
 }
 
-#btnLogin {
-    padding: 10px 16px;
-    font-size: 18px;
-    line-height: 1.3333333;
-}
-
 /*navbar*/
 .navbar-nav {
     flex-direction: row;
@@ -5393,7 +5387,7 @@ section[gridtype="114119"] > div > form {
 
 @media (min-width: 576px) {
     .modal-dialog {
-        max-width: 640px;
+        max-width: 600px;
     }
 }
 
@@ -5450,9 +5444,9 @@ section[gridtype="114119"] > div > form {
     }
 
 /*preclearance request*/
-/*#frmPreclearanceRequest .col-lg-4 {
+#frmPreclearanceRequest .col-lg-4 {
     display: table-cell;
-}*/
+}
 
 #DivRelativeDetails .col-lg-2 {
     display: table-cell;

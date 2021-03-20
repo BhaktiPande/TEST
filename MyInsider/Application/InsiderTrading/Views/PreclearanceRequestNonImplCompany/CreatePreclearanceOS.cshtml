@@ -57,7 +57,7 @@
 <section class="content">
     <!-- Search form content -->
     <div class="row">
-        <div class="col-lg-12 pl-0 pr-0">
+        <div class="col-lg-12">
             <div class="card panel-default">
                 <div class="card-body">
                     @using (Html.BeginForm("SavePreclearanceRequestOS", "PreclearanceRequestNonImplCompany", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "", @autocomplete = "off", id = "frmPreclearanceRequest" }))
@@ -218,7 +218,7 @@
                                 @Html.ValidationMessageFor(m => m.SecuritiesToBeTradedValue)
                             </div>
                         </div>
-                        <div id="DivModeOfAcquisition" style="margin: -15px 0px 0px 0px; display:contents;">
+                        <div id="DivModeOfAcquisition" style="margin: -15px 0px 0px 0px;">
                             @{
                                 @Html.Partial("~/Views/PreclearanceRequestNonImplCompany/_modeOfAcqisition.cshtml")
                             }
