@@ -65,13 +65,13 @@
         <div class="card panel-accordion">
             <div class="card-header">
                 <h4 class="card-title">
-                    <a class="accordion-toggle" data-toggle="collapse" href="#collapseOne">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
                         <span class="fa fa-plus pull-right"></span>
                         @InsiderTrading.Common.Common.getResource("tra_lbl_16065")
                     </a>
                 </h4>
             </div>
-            <div id="collapseOne" data-parent="#accordion" class="panel-collapse collapse">
+            <div id="collapseOne" class="panel-collapse collapse">
                 <div class="card-body">
                     <div id="DivEmployeeInsider" class="search" gridtype="@ViewBag.EmployeeInsiderGridType">
                         <div class="row">
@@ -126,13 +126,13 @@
         <div class="card panel-accordion">
             <div class="card-header">
                 <h4 class="card-title">
-                    <a class="accordion-toggle" data-toggle="collapse" href="#collapseTwo">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
                         <span class="fa fa-plus pull-right"></span>
                         @InsiderTrading.Common.Common.getResource("tra_lbl_16066")
                     </a>
                 </h4>
             </div>
-            <div id="collapseTwo" data-parent="#accordion" class="panel-collapse collapse">
+            <div id="collapseTwo" class="panel-collapse collapse">
                 <div class="card-body">
                     <div id="DivCorporateInsider" class="search" gridtype="@ViewBag.CorporateInsiderGridType">
                         @*grid list for corporate insider *@
@@ -150,14 +150,14 @@
         <div class="card panel-accordion">
             <div class="card-header">
                 <h4 class="card-title">
-                    <a class="accordion-toggle" data-toggle="collapse" href="#collapseThree">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
                         <span class="fa fa-plus pull-right"></span>
                         @InsiderTrading.Common.Common.getResource("tra_lbl_16067")
                     </a>
                 </h4>
             </div>
-            <div id="collapseThree" data-parent="#accordion" class="panel-collapse collapse">
-                <div class="card-body">
+            <div id="collapseThree" class="panel-collapse collapse">
+                <div class="panel-body">
                     <div id="DivNonEmployeeInsider" class="search" gridtype="@ViewBag.NonEmployeeInsiderGridType">
                         @*grid list for non-employee insider *@
                         @{
@@ -174,13 +174,13 @@
         <div class="card panel-accordion">
             <div class="card-header">
                 <h4 class="card-title">
-                    <a class="accordion-toggle" data-toggle="collapse" href="#collapseFour">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
                         <span class="fa fa-plus pull-right"></span>
                         @InsiderTrading.Common.Common.getResource("tra_lbl_16435")
                     </a>
                 </h4>
             </div>
-            <div id="collapseFour" data-parent="#accordion" class="panel-collapse collapse">
+            <div id="collapseFour" class="panel-collapse collapse">
                 <div class="card-body">
                     <div id="DivEmployee" class="search" gridtype="@ViewBag.EmployeeGridType">
                         <div class="row">

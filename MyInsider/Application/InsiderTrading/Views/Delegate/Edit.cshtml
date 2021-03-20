@@ -117,13 +117,13 @@
                                                     <input type="checkbox" name="chkModule" id="chkModule_@count" class="chkModuleSelectAll">
                                                     <label for="chkModule_@count"></label>
                                                 </div>
-                                                <a class="accordion-toggle" data-toggle="collapse" href="#delegationMaster_@count">
+                                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#delegationMaster_@count">
                                                     <span class="fa fa-plus pull-right"></span>
                                                     @objRoleModuleActivityDictionary.Key
                                                 </a>
                                             </h4>
                                         </div>
-                                        <div id="delegationMaster_@count" data-parent="#accordion" class="panel-collapse collapse">
+                                        <div id="delegationMaster_@count" class="panel-collapse collapse">
                                             <div class="card-body">
                                                 <div class="table-responsive">
                                                     <table class="table table-bordered table-striped">

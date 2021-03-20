@@ -45,13 +45,13 @@
                     <div class="card panel-accordion">
                         <div class="card-header active">
                             <h4 class="card-title">
-                                <a class="accordion-toggle" data-toggle="collapse" href="#collapseOne">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
                                     <span class="fa fa-minus pull-right"></span>
                                     @InsiderTrading.Common.Common.getResource("usr_lbl_11304")
                                 </a>
                             </h4>
                         </div>
-                        <div id="collapseOne" data-parent="#accordion" class="panel-collapse collapse in">
+                        <div id="collapseOne" class="panel-collapse collapse in">
 
                             @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
                             <div class="card-body">
@@ -323,14 +323,14 @@
                                     }
                                     else
                                     {
-                                        <a class="accordion-toggle" data-toggle="collapse" href="#collapseThree">
+                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
                                             <span class="fa fa-plus pull-right"></span>
                                             @InsiderTrading.Common.Common.getResource("usr_lbl_11305")
                                         </a>
                                     }
                                 </h4>
                             </div>
-                            <div id="collapseThree" data-parent="#accordion" class="panel-collapse collapse">
+                            <div id="collapseThree" class="panel-collapse collapse">
                                 <div class="card-body">
                                     @Html.Partial("~/Views/CorporateUser/CreateDMATDetails.cshtml", Model.dmatDetailsModel)
                                 </div>

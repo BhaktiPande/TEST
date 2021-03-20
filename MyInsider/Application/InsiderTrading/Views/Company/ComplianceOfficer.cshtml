@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "ComplianceOfficer";
 }
-<div class="card-body search" gridtype="@ViewBag.GridType">
+<div class="panel-body search" gridtype="@ViewBag.GridType">
     <input type="hidden" value="@ViewBag.Param1" id="1" gridtype="@ViewBag.GridType" />
     <input type="hidden" name="CompanyId" value="@ViewBag.CompanyId" />
     @using (Html.BeginForm("", "", new { ReturnUrl = ViewBag.ReturnUrl,formId = InsiderTrading.Common.ConstEnum.Code.frmSaveComplianceOfficer }, FormMethod.Post, new { @class = "", role = "form", id = "frmComplianceOfficer", autocomplete = "off" }))
