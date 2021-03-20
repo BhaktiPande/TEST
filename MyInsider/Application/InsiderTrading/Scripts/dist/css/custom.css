@@ -4919,32 +4919,13 @@ body {
     font-size: 14px;
 }
 
-.h1, h1 {
-    font-size: 36px
-}
-
-.h2, h2 {
-    font-size: 30px
-}
-
-.h3, h3 {
-    font-size: 24px
-}
-
-.h4, h4 {
-    font-size: 18px
-}
-
-.h5, h5 {
-    font-size: 14px
-}
-
-.h6, h6 {
-    font-size: 12px
+h5 {
+    font-size: 14px;
 }
 
 label {
     font-weight: 700;
+ /*   margin-bottom: 0px;*/
 }
 
 .checkbox label {
@@ -5597,14 +5578,4 @@ label[for='Period:'], label[for='Period'] {
 /*Insider Dashboard*/
 .dashboardPreclearenceRequest button.d-block, .dashboardTradingDetailsCount button.d-block {
     width: 50px;
-}
-
-.dashboardHoldingBox .box-body.dashboardHolding {
-    min-height: 108px;
-}
-
-@media only screen and (max-width: 1200px) {
-    span.d-block {
-        margin-bottom: 5px;
-    }
 }
