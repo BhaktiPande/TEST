@@ -223,7 +223,7 @@
             @Html.Label(InsiderTrading.Common.Common.getResource("rul_lbl_55162"), new { @class = "control-label text-left" })
         </div>
     </div>
-    <div class="col-md-8 col-md-4 col-sm-6 col-xs-8">
+    <div class="col-md-9 col-md-4 col-sm-6 col-xs-8">
         <div class="form-group">
             <label class="radio-inline" for="radios-0">
                 @Html.RadioButtonFor(model => model.PreClrSeekDeclarationForUPSIFlag, "True", Model.PreClrSeekDeclarationForUPSIFlag == true ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId))
@@ -252,7 +252,7 @@
             @Html.Label(InsiderTrading.Common.Common.getResource("rul_lbl_55164"))
         </div>
     </div>
-    <div class="col-md-8 col-md-4 col-sm-6 col-xs-8">
+    <div class="col-md-9 col-md-4 col-sm-6 col-xs-8">
         <div class="form-group">
             <label class="radio-inline" for="radios-0">
                 @Html.RadioButtonFor(model => model.PreClrReasonForNonTradeReqFlag, "True", Model.PreClrReasonForNonTradeReqFlag == true ? @InsiderTrading.Common.Common.IsTradingPolicyEdit("Radio", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId) : @InsiderTrading.Common.Common.IsTradingPolicyEdit("RadioNull", Model.ApplicableFromDate, Model.TradingPolicyStatusCodeId)) @InsiderTrading.Common.Common.getResource("rul_lbl_55246")

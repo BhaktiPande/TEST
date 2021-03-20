@@ -70,7 +70,7 @@
             <div class="clsDivDynamic row" style="word-break: break-all" id="doc_@Index@SubIndex">
                 @if (objDocModel.DocumentId != 0 && objDocModel.DocumentId != null)
                 {
-                    <div id="@Index@SubIndex" style="display:contents;">
+                    <div id="@Index@SubIndex">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                             @Html.ActionLink(objDocModel.DocumentName, "Download", "Document", new { nDocumentDetailsID = objDocModel.DocumentId, GUID = objDocModel.GUID, sDocumentName = objDocModel.DocumentName, sFileType = objDocModel.FileType, acid = user_action }, null)
                         </div>

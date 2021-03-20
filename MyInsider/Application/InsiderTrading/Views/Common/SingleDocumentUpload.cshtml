@@ -33,7 +33,7 @@
     <div class="clsDivDynamic row" style="word-break: break-all"  id="doc_@Index@Model[0].SubIndex">
         @if (Model[0].DocumentId != 0 && Model[0].DocumentId != null)
         {
-            <div id="@Index@SubIndex" style="display:contents;">
+            <div id="@Index@SubIndex">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" >
                     @Html.ActionLink(Model[0].DocumentName, "Download", "Document", new { nDocumentDetailsID = Model[0].DocumentId, GUID = Model[0].GUID, sDocumentName = Model[0].DocumentName, sFileType = Model[0].FileType, acid = user_action }, null)
                 </div>

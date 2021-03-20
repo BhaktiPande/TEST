@@ -1514,13 +1514,8 @@ table[gridtype="114037"] tr td a p.status-gray:before, table[gridtype="114037"] 
     border: 2px solid #9EA0A4;
 }
 
-table[gridtype="114037"] tr td a p.status-green-orange:before {
-    border: 2px solid #86c457;
-}
-
-table[gridtype="114037"] tr td a p.status-green-orange:after {
-    border: 2px solid #F39C12;
-}
+table[gridtype="114037"]  tr td a p.status-green-orange:before{ border: 2px solid #86c457;}
+table[gridtype="114037"]  tr td a p.status-green-orange:after{border: 2px solid #F39C12;}
 
 table[gridtype="114037"] tr td a p.status-red-green:before {
     border: 2px solid #DD4B39;
@@ -2348,7 +2343,7 @@ table.table-contact {
 
     .navbar-nav > .notifications-menu.alerts a {
         padding: 13px 15px !important;
-        /*  margin-top: 5px*/;
+      /*  margin-top: 5px*/;
     }
 
         .navbar-nav > .notifications-menu.alerts a p {
@@ -2625,7 +2620,7 @@ text {
 }
 
 .pull-right {
-    float: right;
+    float: right; 
 }
 
 .pull-left {
@@ -4832,7 +4827,7 @@ table {
 
 
 .dataTables_scrollBody .row {
-    display: contents;
+    display:contents;
 }
 
 .dataTables_scroll {
@@ -4915,11 +4910,11 @@ table {
 }
 
 /*Bootstrap 3 to 4 migration changes*/
-body {
-    font-size: 14px;
+body{
+font-size: 14px;
 }
 
-h5 {
+h5{
     font-size: 14px;
 }
 
@@ -4928,7 +4923,7 @@ label {
     margin-bottom: 0px;
 }
 
-.checkbox label {
+.checkbox label{
     font-weight: 400;
 }
 
@@ -4997,9 +4992,9 @@ label {
         margin: 0px !important;
     }
 
-    .navbar-nav > .notifications-menu > .dropdown-menu > li.footer > a {
-        display: block;
-    }
+.navbar-nav > .notifications-menu > .dropdown-menu > li.footer > a {
+    display: block;
+}
 
 .navbar-custom-menu.ml-auto {
     margin-left: initial !important;
@@ -5037,34 +5032,33 @@ form {
     padding-right: 0px;
     padding-left: 0px;
 }
-
-    .card-body:after, .row:after {
-        clear: both;
-    }
+.card-body:after, .row:after {
+    clear: both;
+}
 
 .content form div div.container {
     margin: 0px !important;
     padding-left: 0px;
 }
 
-    .content form div div.container .card {
-        background-color: transparent;
-        border: 0px solid transparent;
-        box-shadow: 0 0px 0px rgba(0,0,0,.05);
-    }
+.content form div div.container .card {
+    background-color: transparent;
+    border: 0px solid transparent;
+    box-shadow: 0 0px 0px rgba(0,0,0,.05);
+ }
 
-    .content form div div.container .card-body {
-        padding: 0px;
-    }
+.content form div div.container .card-body {
+    padding: 0px;
+  }
 
 .content .row {
     margin-right: 0px;
     margin-left: 0px;
 }
 
-    .content .row .col-lg-3 a.btn.btn-success.icon.icon-reports {
+.content .row .col-lg-3 a.btn.btn-success.icon.icon-reports {
         margin-left: -15px;
-    }
+}
 
 .content.search .col-lg-12 {
     padding-left: 0px;
@@ -5077,9 +5071,9 @@ form {
     min-height: 1px;
 }
 
-    .col-xs-6:empty {
-        width: 0%;
-    }
+.col-xs-6:empty {
+    width: 0%;
+}
 
 .card.panel-default .card-body .row .col-lg-3 ul.dropdown-menu.inner {
     display: block;
@@ -5097,7 +5091,7 @@ form {
     margin-left: 0px;
 }
 
-div.dataTables_length label {
+div.dataTables_length label{
     margin: 0px 0px 5px;
 }
 
@@ -5154,25 +5148,25 @@ table[gridtype="114008"] {
     background-color: #f2f4f1;
 }
 
-    #divCalenderPartial .col-xs-5.ViewCalender {
-        float: left;
-        width: 41.66666667%;
-        padding-left: 15px;
-    }
+#divCalenderPartial .col-xs-5.ViewCalender {
+    float: left;
+    width: 41.66666667%;
+    padding-left: 15px;
+}
 
-    #divCalenderPartial .col-xs-7 {
-        float: left;
-        width: 58.33333333%;
-    }
+#divCalenderPartial .col-xs-7 {
+    float: left;
+    width: 58.33333333%;
+}
 
-        #divCalenderPartial .col-xs-7 .col-xs-12.search .container-fluid .col-lg-12 .card {
-            border: 0px solid transparent;
-            box-shadow: 0 0px 0px rgba(0,0,0,.05);
-        }
+#divCalenderPartial .col-xs-7 .col-xs-12.search .container-fluid .col-lg-12 .card {
+        border: 0px solid transparent;
+        box-shadow: 0 0px 0px rgba(0,0,0,.05);
+}
 
-        #divCalenderPartial .col-xs-7 .col-xs-12.search .container-fluid .col-lg-12 .card-body {
-            padding: 0px !important;
-        }
+#divCalenderPartial .col-xs-7 .col-xs-12.search .container-fluid .col-lg-12 .card-body {
+        padding: 0px !important;
+}
 
 .row.BlockEventCalnder .col-lg-12 .card {
     border: 0px solid transparent;
@@ -5211,7 +5205,6 @@ section[gridtype="114119"] > div > form {
 #RoleActivityForm .form-horizontal .card.panel-default .card-body .row .col-lg-9.col-md-12.col-sm-12.col-xs-12 {
     display: flex;
 }
-
 #RoleActivityForm .form-horizontal .row {
     margin-right: 0px;
     margin-left: -15px;
@@ -5220,7 +5213,6 @@ section[gridtype="114119"] > div > form {
     color: #333;
     line-height: 18px;
 }
-
 #RoleActivityForm .form-horizontal hr {
     margin-top: 20px;
     margin-bottom: 20px;
@@ -5233,12 +5225,12 @@ section[gridtype="114119"] > div > form {
     display: flex;
 }
 
-    .card.panel-accordion .card-header .card-title .checkbox label::before {
-        margin-top: 3px;
-    }
+.card.panel-accordion .card-header .card-title .checkbox label::before {
+    margin-top: 3px;
+}
 
-.card.panel-accordion .card-header .card-title .accordion-toggle:hover {
-    text-decoration: underline;
+.card.panel-accordion .card-header .card-title .accordion-toggle:hover{
+    text-decoration:underline;
 }
 
 .card.panel-accordion .card-header .card-title .accordion-toggle {
@@ -5254,7 +5246,7 @@ section[gridtype="114119"] > div > form {
     margin: 0px;
 }
 
-.card.panel-accordion .card-header {
+ .card.panel-accordion .card-header {
     padding: 10px 15px;
     border: 0px;
     border-color: #ddd;
@@ -5262,11 +5254,11 @@ section[gridtype="114119"] > div > form {
     border-color: #ddd;
 }
 
-    .card.panel-accordion .card-header.active {
-        background-color: #86C457 !important;
-        color: #ffffff !important;
-        border-radius: 0 !important;
-    }
+.card.panel-accordion .card-header.active {
+    background-color: #86C457 !important;
+    color: #ffffff !important;
+    border-radius: 0 !important;
+}
 
 .card.panel-accordion > .card-header.active h4 a {
     color: #ffffff !important;
@@ -5293,18 +5285,16 @@ section[gridtype="114119"] > div > form {
     display: contents;
 }
 
-#massUpload tbody tr td table {
+#massUpload tbody tr td table{
     width: auto !important;
 }
 
 .clsParentFileUpload.row .col-lg-9 .fileinput.input-group {
     display: flex;
 }
-
 .col-lg-12.col-md-12.col-sm-12.col-xs-12.clsFileUpload {
     padding-left: 0px;
 }
-
 .fileinput-new > span.input-group-addon.btn.btn-default.btn-file {
     background-color: white;
 }
@@ -5314,45 +5304,57 @@ section[gridtype="114119"] > div > form {
 }
 
 /*employee insider*/
-.add-insider a{
+.add-insider div .row a .col-lg-4.col-md-4.col-sm-4.col-xs-4 {
     display: contents;
 }
 
-.add-insider .panel-category > .card-header p {
-    margin: 0;
-}
-
-    .add-insider .panel-category > .card-header p i {
-        font-size: 500%;
-    }
-
-.add-insider .panel-category > .card-body > .title {
+.add-insider div .row a div .panel-category > .card-body > .title {
     text-align: center;
     margin: 0;
     font-size: 16px;
 }
 
-.add-insider .panel-category > .card-body > .title {
-    text-align: center;
-    margin: 0;
-    font-size: 16px;
+.add-insider div .row a div .panel-category > .card-header p i {
+    font-size: 500%;
 }
 
-.add-insider .panel-category > .card-header {
+.add-insider div .row a div .panel-category > .card-header {
     color: #ffffff;
     background-color: #86c457;
     border-color: #86c457;
-    padding: 5px;
+    padding-top: 5px;
+    padding-right: 50px !important;
+    padding-left: 50px !important;
+    padding-bottom: 0px;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
 }
 
-.add-insider .panel-category > .card-body {
+.add-insider div .row a div .panel-category > .card-body {
     color: #ffffff;
     background-color: #86c457;
-    padding: 5px;
+    padding: 0px;
+    padding-bottom: 5px;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
+}
+
+.add-insider div .row a div .card {
+    margin: 10px;
+    margin-top: 0px;
+    background-color: #fff;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+
+.add-insider div .row {
+    flex-wrap:inherit;
+}
+
+.add-insider {
+    margin-left: -10px !important;
 }
 
 .input-group .input-group-addon {
@@ -5388,41 +5390,41 @@ section[gridtype="114119"] > div > form {
     border-radius: 4px;
 }
 
-    .login-panel .card-header {
-        padding: 10px 15px;
-        padding-bottom: 0px;
-        background: transparent;
-        color: #ffffff;
-        border: none;
-    }
+.login-panel .card-header {
+    padding: 10px 15px;
+    padding-bottom: 0px;
+    background: transparent;
+    color: #ffffff;
+    border: none;
+}
 
-        .login-panel .card-header .card-title {
-            font-size: 30pt;
-            font-weight: 300;
-        }
+.login-panel .card-header .card-title {
+     font-size: 30pt;
+     font-weight: 300;
+ }
 
-    .login-panel .card-body a {
-        color: #ffffff;
-        font-size: 16pt;
-        font-weight: 300;
-    }
+.login-panel .card-body a {
+     color: #ffffff;
+     font-size: 16pt;
+     font-weight: 300;
+ }
 
-    .login-panel .card-body .login-label {
-        font-size: 16pt;
-        font-weight: 300;
-    }
+.login-panel .card-body .login-label {
+     font-size: 16pt;
+     font-weight: 300;
+ }
 
-    .login-panel .card-body .form-horizontal fieldset {
-        margin-right: -15px;
-        margin-left: -15px;
-    }
+.login-panel .card-body .form-horizontal fieldset {
+     margin-right: -15px;
+     margin-left: -15px;
+}
 
-/*preclearance request*/
+ /*preclearance request*/
 #frmPreclearanceRequest .col-lg-4 {
     display: table-cell;
 }
 
-#DivRelativeDetails .col-lg-2 {
+#DivRelativeDetails .col-lg-2{
     display: table-cell;
 }
 
@@ -5433,10 +5435,10 @@ section[gridtype="114119"] > div > form {
     width: 100%;
 }
 
-    .content.inner-section .container-fluid .col-lg-12 {
-        padding-right: 0px;
-        padding-left: 0px;
-    }
+.content.inner-section .container-fluid .col-lg-12 {
+   padding-right: 0px;
+   padding-left: 0px;
+}
 
 /*period end disclosure*/
 label[for='Period:'], label[for='Period'] {
@@ -5450,7 +5452,7 @@ label[for='Period:'], label[for='Period'] {
     padding: 10px 15px;
 }
 
-.custom-tabs {
+.custom-tabs{
     padding: 15px;
 }
 
@@ -5486,41 +5488,3 @@ label[for='Period:'], label[for='Period'] {
 #userInfoModel_SubmittedRole {
     height: 210px;
 }
-
-
-/*datetimepicker.css*/
-.bootstrap-datetimepicker-widget.dropdown-menu {
-    width: 10em;
-    padding: 0px;
-}
-
-.bootstrap-datetimepicker-widget a[data-action]:active {
-    box-shadow: none
-}
-
-.bootstrap-datetimepicker-widget table td, .bootstrap-datetimepicker-widget table th {
-    text-align: center;
-}
-
-.bootstrap-datetimepicker-widget table td {
-    height: 45px;
-    line-height: 45px;
-    width: 45px;
-    font-size: 15px !important
-}
-
-    .bootstrap-datetimepicker-widget table td.day:hover, .bootstrap-datetimepicker-widget table td.hour:hover, .bootstrap-datetimepicker-widget table td.minute:hover, .bootstrap-datetimepicker-widget table td.second:hover {
-        background: #f8f9fa;
-        cursor: pointer
-    }
-
-    .bootstrap-datetimepicker-widget table td span, .bootstrap-datetimepicker-widget table td i {
-        width: 45px;
-        height: 45px;
-        line-height: 45px;
-        cursor: pointer;
-    }
-
-        .bootstrap-datetimepicker-widget table td span:hover, .bootstrap-datetimepicker-widget table td i:hover {
-            background: #f8f9fa
-        }
