@@ -4964,10 +4964,6 @@ label {
     height: 35px;
 }
 
-.form-control:focus {
-    background: #f2f4f1;
-}
-
 .btn {
     font: 14px Roboto, sans-serif;
     line-height: 1.428571;
@@ -5611,8 +5607,4 @@ label[for='Period:'], label[for='Period'] {
     span.d-block {
         margin-bottom: 5px;
     }
-}
-
-.not-allowed {
-    cursor: not-allowed;
 }
