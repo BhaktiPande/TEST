@@ -1,7 +1,11 @@
 ﻿using InsiderTrading.Common;
 using InsiderTrading.Filters;
+using InsiderTrading.Models;
 using InsiderTrading.SL;
 using InsiderTradingDAL;
+using InsiderTradingDAL.InsiderInitialDisclosure.DTO;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System;
@@ -10,11 +14,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using InsiderTrading.Models;
 
 namespace InsiderTrading.Controllers
 {
@@ -399,9 +399,13 @@ namespace InsiderTrading.Controllers
             bool tempSecurityFlag = false;
             ViewBag.isAllEdit = true;
             PeriodEndDisclosureModel_OS periodEndDisclosure = new PeriodEndDisclosureModel_OS();
+            var objInsiderInitialDisclosureSL = new InsiderInitialDisclosureSL();
+            InsiderInitialDisclosureDTO objInsiderInitialDisclosureDTO = null;
 
             try
             {
+                objInsiderInitialDisclosureDTO = objInsiderInitialDisclosureSL.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
+
                 exlFilename = "Period End Summary-Other Securities.xls";
                 workSheetName1 = "Holding Summary";
                 for (int reportNo = 1; reportNo <= 3; reportNo++)
@@ -481,19 +485,38 @@ namespace InsiderTrading.Controllers
                     var totalColsSheetOne = dtPeriodSummaryComapnyWise.Columns.Count;
                     var totalRowsSheetOne = dtPeriodSummaryComapnyWise.Rows.Count;
 
-                    worksheetSummery.Cells["A1:H1"].Merge = true;
-                    worksheetSummery.Cells["A1:H1"].Value = "Summary of holdings of other securities";
-                    worksheetSummery.Cells["A1:H1"].Style.Border.Top.Style = worksheetSummery.Cells["A1:H1"].Style.Border.Bottom.Style = worksheetSummery.Cells["A1:H1"].Style.Border.Left.Style = worksheetSummery.Cells["A1:H1"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
-                    worksheetSummery.Cells["A1:H1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                    worksheetSummery.Cells["A1:H1"].Style.Font.Bold = true;
-                    worksheetSummery.Cells["A1:H1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    worksheetSummery.Cells["A1:H1"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
-                    //Bind Period Dates
-                    worksheetSummery.Cells["A2:H2"].Merge = true;
-                    worksheetSummery.Cells["A2:H2"].Value = "Period:   " + periodStartEndDate;
-                    worksheetSummery.Cells["A2:H2"].Style.Font.Bold = true;
-                    worksheetSummery.Cells["A2:H2"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                    worksheetSummery.Cells["A2:H2"].Style.Border.Top.Style = worksheetSummery.Cells["A2:H2"].Style.Border.Bottom.Style = worksheetSummery.Cells["A2:H2"].Style.Border.Left.Style = worksheetSummery.Cells["A2:H2"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue != 400003)
+                    {
+                        worksheetSummery.Cells["A1:H1"].Merge = true;
+                        worksheetSummery.Cells["A1:H1"].Value = "Summary of holdings of other securities";
+                        worksheetSummery.Cells["A1:H1"].Style.Border.Top.Style = worksheetSummery.Cells["A1:H1"].Style.Border.Bottom.Style = worksheetSummery.Cells["A1:H1"].Style.Border.Left.Style = worksheetSummery.Cells["A1:H1"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                        worksheetSummery.Cells["A1:H1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        worksheetSummery.Cells["A1:H1"].Style.Font.Bold = true;
+                        worksheetSummery.Cells["A1:H1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        worksheetSummery.Cells["A1:H1"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+                        //Bind Period Dates
+                        worksheetSummery.Cells["A2:H2"].Merge = true;
+                        worksheetSummery.Cells["A2:H2"].Value = "Period:   " + periodStartEndDate;
+                        worksheetSummery.Cells["A2:H2"].Style.Font.Bold = true;
+                        worksheetSummery.Cells["A2:H2"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                        worksheetSummery.Cells["A2:H2"].Style.Border.Top.Style = worksheetSummery.Cells["A2:H2"].Style.Border.Bottom.Style = worksheetSummery.Cells["A2:H2"].Style.Border.Left.Style = worksheetSummery.Cells["A2:H2"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    }
+                    else
+                    {
+                        worksheetSummery.Cells["A1:E1"].Merge = true;
+                        worksheetSummery.Cells["A1:E1"].Value = "Summary of holdings of other securities";
+                        worksheetSummery.Cells["A1:E1"].Style.Border.Top.Style = worksheetSummery.Cells["A1:E1"].Style.Border.Bottom.Style = worksheetSummery.Cells["A1:E1"].Style.Border.Left.Style = worksheetSummery.Cells["A1:E1"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                        worksheetSummery.Cells["A1:E1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        worksheetSummery.Cells["A1:E1"].Style.Font.Bold = true;
+                        worksheetSummery.Cells["A1:E1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        worksheetSummery.Cells["A1:E1"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+                        //Bind Period Dates
+                        worksheetSummery.Cells["A2:E2"].Merge = true;
+                        worksheetSummery.Cells["A2:E2"].Value = "Period:   " + periodStartEndDate;
+                        worksheetSummery.Cells["A2:E2"].Style.Font.Bold = true;
+                        worksheetSummery.Cells["A2:E2"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                        worksheetSummery.Cells["A2:E2"].Style.Border.Top.Style = worksheetSummery.Cells["A2:E2"].Style.Border.Bottom.Style = worksheetSummery.Cells["A2:E2"].Style.Border.Left.Style = worksheetSummery.Cells["A2:E2"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    }
                     //Bind Table Column
                     for (var col = 1; col <= totalColsSheetOne; col++)
                     {
@@ -503,7 +526,14 @@ namespace InsiderTrading.Controllers
                             worksheetSummery.Cells[3, col].Style.Font.Name = "Arial";
                             worksheetSummery.Cells[3, col].Style.Font.Size = 10;
                             worksheetSummery.Cells[3, col].Style.Font.Color.SetColor(System.Drawing.Color.Black);
-                            cellRange = "A3:H3";
+                            if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue != 400003)
+                            {
+                                cellRange = "A3:H3";
+                            }
+                            else
+                            {
+                                cellRange = "A3:E3";
+                            }
                             using (ExcelRange rng = worksheetSummery.Cells[cellRange])
                             {
                                 rng.Style.WrapText = true;
@@ -561,16 +591,26 @@ namespace InsiderTrading.Controllers
                                 {
                                     excelRow = excelRow + 1;
                                     worksheetSummery.Cells[excelRow + 1, 4].Value = "Total Demat " + dtDematTotal.Rows[rowDemat][4].ToString();
-                                    //worksheetSummery.Cells[excelRow + 1, 6].Value = dtDematTotal.Rows[rowDemat][5].ToString();
-                                    worksheetSummery.Cells[excelRow + 1, 6].Value = dtDematTotal.Rows[rowDemat][6].ToString();
-                                    worksheetSummery.Cells[excelRow + 1, 7].Value = dtDematTotal.Rows[rowDemat][7].ToString();
-                                    worksheetSummery.Cells[excelRow + 1, 8].Value = dtDematTotal.Rows[rowDemat][8].ToString();
+                                    if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue != 400003)
+                                    {
+                                        //worksheetSummery.Cells[excelRow + 1, 6].Value = dtDematTotal.Rows[rowDemat][5].ToString();
+                                        worksheetSummery.Cells[excelRow + 1, 6].Value = dtDematTotal.Rows[rowDemat][6].ToString();
+                                        worksheetSummery.Cells[excelRow + 1, 7].Value = dtDematTotal.Rows[rowDemat][7].ToString();
+                                        worksheetSummery.Cells[excelRow + 1, 8].Value = dtDematTotal.Rows[rowDemat][8].ToString();
+                                    }
                                     worksheetSummery.Cells[excelRow + 1, 9].Value = string.Empty;
                                     worksheetSummery.Cells[excelRow + 1, 1].Value = string.Empty;
                                     worksheetSummery.Cells[excelRow + 1, 2].Value = string.Empty;
                                     worksheetSummery.Cells[excelRow + 1, 3].Value = string.Empty;
                                     worksheetSummery.Cells[excelRow + 1, 5].Value = string.Empty;
-                                    cellRange = "D" + (excelRow + 1) + ":H" + (excelRow + 1);
+                                    if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue != 400003)
+                                    {
+                                        cellRange = "D" + (excelRow + 1) + ":H" + (excelRow + 1);
+                                    }
+                                    else
+                                    {
+                                        cellRange = "D" + (excelRow + 1) + ":E" + (excelRow + 1);
+                                    }
                                     using (ExcelRange rng = worksheetSummery.Cells[cellRange])
                                     {
                                         rng.Style.WrapText = true;
@@ -604,12 +644,22 @@ namespace InsiderTrading.Controllers
                                     worksheetSummery.Cells[excelRow + 1, 3].Value = "Total " + dtSecurityTypeTotal.Rows[rowSecurity][3].ToString();
                                     worksheetSummery.Cells[excelRow + 1, 4].Value = string.Empty;
                                     worksheetSummery.Cells[excelRow + 1, 5].Value = string.Empty;
-                                    //worksheetSummery.Cells[excelRow + 1, 6].Value = dtSecurityTypeTotal.Rows[rowSecurity][4].ToString();
-                                    worksheetSummery.Cells[excelRow + 1, 6].Value = dtSecurityTypeTotal.Rows[rowSecurity][5].ToString();
-                                    worksheetSummery.Cells[excelRow + 1, 7].Value = dtSecurityTypeTotal.Rows[rowSecurity][6].ToString();
-                                    worksheetSummery.Cells[excelRow + 1, 8].Value = dtSecurityTypeTotal.Rows[rowSecurity][7].ToString();
+                                    if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue != 400003)
+                                    {
+                                        //worksheetSummery.Cells[excelRow + 1, 6].Value = dtSecurityTypeTotal.Rows[rowSecurity][4].ToString();
+                                        worksheetSummery.Cells[excelRow + 1, 6].Value = dtSecurityTypeTotal.Rows[rowSecurity][5].ToString();
+                                        worksheetSummery.Cells[excelRow + 1, 7].Value = dtSecurityTypeTotal.Rows[rowSecurity][6].ToString();
+                                        worksheetSummery.Cells[excelRow + 1, 8].Value = dtSecurityTypeTotal.Rows[rowSecurity][7].ToString();
+                                    }
                                     worksheetSummery.Cells[excelRow + 1, 9].Value = string.Empty;
-                                    cellRange = "A" + (excelRow + 1) + ":H" + (excelRow + 1);
+                                    if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue != 400003)
+                                    {
+                                        cellRange = "A" + (excelRow + 1) + ":H" + (excelRow + 1);
+                                    }
+                                    else
+                                    {
+                                        cellRange = "A" + (excelRow + 1) + ":E" + (excelRow + 1);
+                                    }
                                     using (ExcelRange rng = worksheetSummery.Cells[cellRange])
                                     {
                                         rng.Style.WrapText = true;
@@ -650,19 +700,38 @@ namespace InsiderTrading.Controllers
                     var totalColsSheetTwo = dtPeriodTransactionDetails.Columns.Count;
                     var totalRowsSheetTwo = dtPeriodTransactionDetails.Rows.Count;
 
-                    worksheetDetails.Cells["A1:N1"].Merge = true;
-                    worksheetDetails.Cells["A1:N1"].Value = "Transaction Details for the period ";
-                    worksheetDetails.Cells["A1:N1"].Style.Border.Top.Style = worksheetDetails.Cells["A1:N1"].Style.Border.Bottom.Style = worksheetDetails.Cells["A1:N1"].Style.Border.Left.Style = worksheetDetails.Cells["A1:N1"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
-                    worksheetDetails.Cells["A1:N1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                    worksheetDetails.Cells["A1:N1"].Style.Font.Bold = true;
-                    worksheetDetails.Cells["A1:N1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    worksheetDetails.Cells["A1:N1"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
-                    //Bind Period Dates
-                    worksheetDetails.Cells["A2:N2"].Merge = true;
-                    worksheetDetails.Cells["A2:N2"].Value = "Period:   " + periodStartEndDate;
-                    worksheetDetails.Cells["A2:N2"].Style.Font.Bold = true;
-                    worksheetDetails.Cells["A2:N2"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                    worksheetDetails.Cells["A2:N2"].Style.Border.Top.Style = worksheetDetails.Cells["A2:N2"].Style.Border.Bottom.Style = worksheetDetails.Cells["A2:N2"].Style.Border.Left.Style = worksheetDetails.Cells["A2:N2"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue != 400003)
+                    {
+                        worksheetDetails.Cells["A1:N1"].Merge = true;
+                        worksheetDetails.Cells["A1:N1"].Value = "Transaction Details for the period ";
+                        worksheetDetails.Cells["A1:N1"].Style.Border.Top.Style = worksheetDetails.Cells["A1:N1"].Style.Border.Bottom.Style = worksheetDetails.Cells["A1:N1"].Style.Border.Left.Style = worksheetDetails.Cells["A1:N1"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                        worksheetDetails.Cells["A1:N1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        worksheetDetails.Cells["A1:N1"].Style.Font.Bold = true;
+                        worksheetDetails.Cells["A1:N1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        worksheetDetails.Cells["A1:N1"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+                        //Bind Period Dates
+                        worksheetDetails.Cells["A2:N2"].Merge = true;
+                        worksheetDetails.Cells["A2:N2"].Value = "Period:   " + periodStartEndDate;
+                        worksheetDetails.Cells["A2:N2"].Style.Font.Bold = true;
+                        worksheetDetails.Cells["A2:N2"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                        worksheetDetails.Cells["A2:N2"].Style.Border.Top.Style = worksheetDetails.Cells["A2:N2"].Style.Border.Bottom.Style = worksheetDetails.Cells["A2:N2"].Style.Border.Left.Style = worksheetDetails.Cells["A2:N2"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    }
+                    else
+                    {
+                        worksheetDetails.Cells["A1:J1"].Merge = true;
+                        worksheetDetails.Cells["A1:J1"].Value = "Transaction Details for the period ";
+                        worksheetDetails.Cells["A1:J1"].Style.Border.Top.Style = worksheetDetails.Cells["A1:J1"].Style.Border.Bottom.Style = worksheetDetails.Cells["A1:J1"].Style.Border.Left.Style = worksheetDetails.Cells["A1:J1"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                        worksheetDetails.Cells["A1:J1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        worksheetDetails.Cells["A1:J1"].Style.Font.Bold = true;
+                        worksheetDetails.Cells["A1:J1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        worksheetDetails.Cells["A1:J1"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+                        //Bind Period Dates
+                        worksheetDetails.Cells["A2:J2"].Merge = true;
+                        worksheetDetails.Cells["A2:J2"].Value = "Period:   " + periodStartEndDate;
+                        worksheetDetails.Cells["A2:J2"].Style.Font.Bold = true;
+                        worksheetDetails.Cells["A2:J2"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                        worksheetDetails.Cells["A2:J2"].Style.Border.Top.Style = worksheetDetails.Cells["A2:J2"].Style.Border.Bottom.Style = worksheetDetails.Cells["A2:J2"].Style.Border.Left.Style = worksheetDetails.Cells["A2:J2"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    }
                     //Bind Table Column
                     for (var col = 1; col <= totalColsSheetTwo; col++)
                     {
@@ -670,7 +739,15 @@ namespace InsiderTrading.Controllers
                         worksheetDetails.Cells[3, col].Style.Font.Name = "Arial";
                         worksheetDetails.Cells[3, col].Style.Font.Size = 10;
                         worksheetDetails.Cells[3, col].Style.Font.Color.SetColor(System.Drawing.Color.Black);
-                        string cellRange1 = "A3:N3";
+                        string cellRange1 = "";
+                        if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue != 400003)
+                        {
+                            cellRange1 = "A3:N3";
+                        }
+                        else
+                        {
+                            cellRange1 = "A3:J3";
+                        }
                         using (ExcelRange rng1 = worksheetDetails.Cells[cellRange1])
                         {
                             rng1.Style.WrapText = true;
