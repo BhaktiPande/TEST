@@ -25,7 +25,7 @@ namespace InsiderTrading.Controllers
 {
     public class Reports_OSController : Controller
     {
-        public Dictionary<int, string> objReportFileNames = new Dictionary<int, string>(){ 
+        public Dictionary<int, string> objReportFileNames = new Dictionary<int, string>(){
                 {ConstEnum.GridType.Report_InitialDisclosureEmployeeWise,"InitialDisclosure_<DATE>.xlsx"},
                 {ConstEnum.GridType.Report_InitialDisclosureEmployeeIndividual,"InitialDisclosureIndividual_<DATE>.xlsx"},
                 {ConstEnum.GridType.Report_PeriodEndDisclosureEmployeeWise,"PDDisclosureEmployeeWise_<DATE>.xlsx"},
@@ -60,7 +60,7 @@ namespace InsiderTrading.Controllers
             {ConstEnum.GridType.SecuritiesTransferReportEmployee, Common.Common.getResource("rpt_ttl_19350")}
         };
 
-        public Dictionary<int, string> objReportSheetNames = new Dictionary<int, string>(){ 
+        public Dictionary<int, string> objReportSheetNames = new Dictionary<int, string>(){
                 {ConstEnum.GridType.Report_InitialDisclosureEmployeeWise,"IDEmployeeWise"},
                 {ConstEnum.GridType.Report_InitialDisclosureEmployeeIndividual,"IDisclosureIndividual"},
                 {ConstEnum.GridType.Report_PeriodEndDisclosureEmployeeWise,"PDDisclosureEmployeeWise"},
@@ -210,7 +210,7 @@ namespace InsiderTrading.Controllers
             var objInsiderInitialDisclosureSL = new InsiderInitialDisclosureSL();
             InsiderInitialDisclosureDTO objInsiderInitialDisclosureDTO = null;
             objInsiderInitialDisclosureDTO = objInsiderInitialDisclosureSL.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
-          
+
 
             SqlConnection con = new SqlConnection(sConnectionString);
             SqlCommand cmd = new SqlCommand();
@@ -242,10 +242,10 @@ namespace InsiderTrading.Controllers
                 adp.Fill(dt);
                 adp1.Fill(dt1);
 
-                if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue==400003) 
-                    {
-                        dt1.Columns.Remove("Holdings");
-                    }
+                if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue == 400003)
+                {
+                    dt1.Columns.Remove("Holdings");
+                }
             }
 
             if (ReportType == "4")
@@ -278,10 +278,10 @@ namespace InsiderTrading.Controllers
                 adp.Fill(dt);
                 adp1.Fill(dt1);
 
-                if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue==400003) 
+                if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue == 400003)
                 {
-                        dt1.Columns.Remove("Holdings");
-                 }
+                    dt1.Columns.Remove("Holdings");
+                }
             }
 
             else if (ReportType == "2")
@@ -301,11 +301,14 @@ namespace InsiderTrading.Controllers
                 SqlDataAdapter adp = new SqlDataAdapter(cmd);
                 adp.Fill(dt);
 
-                    if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue==400003)
-                   {
-                        dt.Columns.Remove("Number of Securities");
-                        dt.Columns.Remove("Value");
-                    }
+                if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue == 400003)
+                {
+                    dt.Columns.Remove("Number of Securities");
+                    dt.Columns.Remove("Value");
+                    dt.Columns.Remove("BUY");
+                    dt.Columns.Remove("SELL");
+                    dt.Columns.Remove("Trade Value");
+                }
             }
 
             else if (ReportType == "3")
@@ -325,12 +328,12 @@ namespace InsiderTrading.Controllers
                 SqlDataAdapter adp = new SqlDataAdapter(cmd);
                 adp.Fill(dt);
 
-                if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue==400003) 
+                if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue == 400003)
                 {
-                        dt.Columns.Remove("Trades");
-                        dt.Columns.Remove("Value");
+                    dt.Columns.Remove("Trades");
+                    dt.Columns.Remove("Value");
 
-                 }
+                }
             }
             else if (ReportType == "5")
             {
@@ -342,7 +345,7 @@ namespace InsiderTrading.Controllers
                 cmd.Parameters.Add("@inp_sEmployeeID", EmpID);
                 cmd.Parameters.Add("@inp_sInsiderName", EmpName);
                 cmd.Parameters.Add("@inp_sDesignation", EmpDesignation);
-                cmd.Parameters.Add("@inp_sCompanyName", CompanyName);                
+                cmd.Parameters.Add("@inp_sCompanyName", CompanyName);
                 SqlDataAdapter adp = new SqlDataAdapter(cmd);
                 adp.Fill(dt);
 
