@@ -1,18 +1,18 @@
-﻿using System;
+﻿using InsiderTrading.Common;
+using InsiderTrading.Filters;
+using InsiderTrading.Models;
+using InsiderTrading.SL;
+using InsiderTradingDAL;
+using InsiderTradingDAL.InsiderInitialDisclosure.DTO;
+using InsiderTradingMassUpload;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using InsiderTrading.Common;
-using InsiderTradingDAL;
-using InsiderTrading.SL;
-using InsiderTrading.Models;
-using System.IO;
-using System.Configuration;
-using InsiderTrading.Filters;
-using InsiderTradingMassUpload;
-using InsiderTradingDAL.InsiderInitialDisclosure.DTO;
 
 namespace InsiderTrading.Controllers
 {
@@ -22,7 +22,7 @@ namespace InsiderTrading.Controllers
 
         [AuthorizationPrivilegeFilter]
         public ActionResult AllMassUpload(int acid)
-        { 
+        {
             ViewBag.acid = acid;
             LoginUserDetails objLoginUserDetails = null;
             objLoginUserDetails = (LoginUserDetails)Common.Common.GetSessionValue(Common.ConstEnum.SessionValue.UserDetails);
@@ -61,6 +61,15 @@ namespace InsiderTrading.Controllers
                 bool isOwnUnable = false;
                 bool IsOtherEnable = false;
 
+                int TradingPolicyID_OS = 0;
+                InsiderInitialDisclosureDTO objInsiderInitialDisclosureDTO = null;
+                using (var objInsiderInitialDisclosureSL = new InsiderInitialDisclosureSL())
+                {
+                    objInsiderInitialDisclosureDTO = objInsiderInitialDisclosureSL.Get_TradingPolicyID_forOS(objLoginUserDetails.CompanyDBConnectionString, objLoginUserDetails.LoggedInUserID);
+                    TradingPolicyID_OS = Convert.ToInt32(objInsiderInitialDisclosureDTO.TradingPolicyID_OS);
+
+                }
+
                 switch (RequiredModuleID)
                 {
                     case Common.ConstEnum.Code.RequiredModuleOwnSecurity:
@@ -72,9 +81,11 @@ namespace InsiderTrading.Controllers
                         lstMassUploadDTO = massUploadSL.GetUploadMassList(GetAllMassUpload(), isOwnUnable, IsOtherEnable, objLoginUserDetails.UserTypeCodeId);
                         break;
                     case Common.ConstEnum.Code.RequiredModuleBoth:
-                        isOwnUnable = Convert.ToBoolean(lstRoleActivities.Where(c => c.ActivityID == 344).Select(c => c.IsSelected).Single());
-                        IsOtherEnable = Convert.ToBoolean(lstRoleActivities.Where(c => c.ActivityID == 345).Select(c => c.IsSelected).Single());
-
+                        isOwnUnable = true;
+                        if (TradingPolicyID_OS != 0 && Convert.ToString(TradingPolicyID_OS) != "")
+                        {
+                            IsOtherEnable = true;
+                        }
                         lstMassUploadDTO = massUploadSL.GetUploadMassList(GetAllMassUpload(), isOwnUnable, IsOtherEnable, objLoginUserDetails.UserTypeCodeId);
                         break;
                 }
