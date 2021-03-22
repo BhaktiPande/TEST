@@ -352,7 +352,8 @@ IF(@EnableDisableQuantityValue = 400003)
 	SELECT @sSQL = 'SELECT EmployeeId AS [Employee ID], InsiderName AS [Insider Name],PAN, dbo.uf_rpt_FormatDateValue(JoiningDate,0) AS [Date of becoming insider] , dbo.uf_rpt_FormatDateValue(DateOfSeparation,0) AS [Date Of Separation],Designation,Grade,Location,Department,Category,SubCategory,CM.CompanyName AS [Company Name],TypeOfInsider AS [Type Of Insider],Request,Approved,Rejected,Pending,
 	 Traded,CASE WHEN PreclearanceId IS NULL THEN '''+@sPNT+''' + CONVERT(NVARCHAR(MAX),DisplaySequenceNo) ELSE '''+@sPCL+''' + CONVERT(NVARCHAR(MAX),DisplaySequenceNo) END  AS [Pre-clearance ID]
 	, dbo.uf_rpt_FormatDateValue(Requestdate,0) AS [Request date],ISIN,TransactionTypeCodeId AS [Transaction Type], SecurityTypeCodeId AS [Security Type],CPreclearanceStatusId.CodeName AS [Pre-Clearance Status], dbo.uf_rpt_FormatDateValue(PreStatusDate,0) AS [Approved/Rejected  date], dbo.uf_rpt_FormatDateValue(PreApplicableTill,0) AS [Applicable till]
-	,BuyQuantity AS [BUY],SellQuantity AS [SELL], dbo.uf_rpt_FormatDateValue(DateOfAcquisition,0) AS [Date of Trasaction],TradeValue AS [Trade Value],ReasonForNotTradedCodeId AS [Reason for Not Traded],CommentText AS [Comments] '
+	,BuyQuantity AS [BUY],SellQuantity AS [SELL], dbo.uf_rpt_FormatDateValue(DateOfAcquisition,0) AS [Date of Trasaction],TradeValue AS [Trade Value],ReasonForNotTradedCodeId AS [Reason for Not Traded],CommentText AS [Comments], 
+	PreQuantity AS [Number of Securities],PreValue AS [Value]'
 	SELECT @sSQL = @sSQL + 'from #tmpPreclearance tmpDisc JOIN rl_CompanyMasterList CM ON CM.RlCompanyId = tmpDisc.CompanyName '
 	SELECT @sSQL = @sSQL + 'LEFT JOIN com_Code CPreclearanceStatusId ON CPreclearanceStatusId.CodeID = tmpDisc.PreclearanceStatusId '
 	SELECT @sSQL = @sSQL + 'where 1= 1 '
