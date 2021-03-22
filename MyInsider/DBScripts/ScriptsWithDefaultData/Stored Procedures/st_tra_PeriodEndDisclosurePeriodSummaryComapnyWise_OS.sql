@@ -30,6 +30,7 @@ BEGIN
 	DECLARE @nPeriodType INT
 	DECLARE @dtStartDate datetime  
     DECLARE @dtEndDate datetime
+	DECLARE @EnableDisableQuantity int; 
 
 	BEGIN TRY
 		SET NOCOUNT ON;
@@ -44,6 +45,7 @@ BEGIN
 			SET @inp_iPeriodCodeID=124001
 				
 		SELECT @nPeriodType = ParentCodeId FROM com_Code WHERE CodeID = @inp_iPeriodCodeID
+		SELECT @EnableDisableQuantity = EnableDisableQuantityValue FROM mst_Company where IsImplementing=1
 
 		EXECUTE st_tra_PeriodEndDisclosureStartEndDate2  
             @inp_iYearCodeId OUTPUT, @inp_iPeriodCodeID OUTPUT,null,123004, 0,   
@@ -136,34 +138,72 @@ BEGIN
 		--select * from @tmpPeriodEndDisclosureSummary
 		--RETURN
 		IF @inp_iReportType = 1
-		BEGIN		
-			SELECT 
-				T.Name AS 'Name of Insider',
-				T.Relation AS 'Relation',
-				T.SecurityType AS 'SecurityType',
-				T.DematAccountNo AS 'Demat Account Number',
-				T.CompanyName AS 'Company',
-				--T.OpeningStock AS 'Holdings at the beginning of the period',
-				T.Bought AS 'Initial Disclosure or Bought during the period',
-				T.Sold AS 'Sold during the period',
-				T.PeriodEndHolding AS 'Holdings at the end of the period'
-			FROM @tmpPeriodEndDisclosureSummary T
+		BEGIN	
+			IF(@EnableDisableQuantity <> 400003)
+			BEGIN
+				SELECT 
+					T.Name AS 'Name of Insider',
+					T.Relation AS 'Relation',
+					T.SecurityType AS 'SecurityType',
+					T.DematAccountNo AS 'Demat Account Number',
+					T.CompanyName AS 'Company',
+					--T.OpeningStock AS 'Holdings at the beginning of the period',
+					T.Bought AS 'Initial Disclosure or Bought during the period',
+					T.Sold AS 'Sold during the period',
+					T.PeriodEndHolding AS 'Holdings at the end of the period'
+				FROM @tmpPeriodEndDisclosureSummary T
+			END
+			ELSE
+			BEGIN
+				SELECT 
+					T.Name AS 'Name of Insider',
+					T.Relation AS 'Relation',
+					T.SecurityType AS 'SecurityType',
+					T.DematAccountNo AS 'Demat Account Number',
+					T.CompanyName AS 'Company'
+					--T.Bought AS 'Initial Disclosure or Bought during the period',
+					--T.Sold AS 'Sold during the period',
+					--T.PeriodEndHolding AS 'Holdings at the end of the period'
+				FROM @tmpPeriodEndDisclosureSummary T Where T.PeriodEndHolding <> 0
+			END
 		END
 		ELSE IF(@inp_iReportType = 2)
 		BEGIN
-			SELECT COUNT(T.DmatNo) AS [count],T.Name,T.Relation,T.SecurityType,T.DematAccountNo, 
-			SUM(T.OpeningStock),
-			SUM(T.Bought),SUM(T.Sold),SUM(T.PeriodEndHolding)
-			FROM @tmpPeriodEndDisclosureSummary T
-			GROUP BY T.Name,T.Relation,T.SecurityType,T.DematAccountNo
+			IF(@EnableDisableQuantity <> 400003)
+			BEGIN
+				SELECT COUNT(T.DmatNo) AS [count],T.Name,T.Relation,T.SecurityType,T.DematAccountNo, 
+				SUM(T.OpeningStock),
+				SUM(T.Bought),SUM(T.Sold),SUM(T.PeriodEndHolding)
+				FROM @tmpPeriodEndDisclosureSummary T
+				GROUP BY T.Name,T.Relation,T.SecurityType,T.DematAccountNo
+			END
+			ELSE
+			BEGIN
+				SELECT COUNT(T.DmatNo) AS [count],T.Name,T.Relation,T.SecurityType,T.DematAccountNo
+				--SUM(T.OpeningStock),
+				--SUM(T.Bought),SUM(T.Sold),SUM(T.PeriodEndHolding)
+				FROM @tmpPeriodEndDisclosureSummary T
+				GROUP BY T.Name,T.Relation,T.SecurityType,T.DematAccountNo
+			END
 		END
 		ELSE
 		BEGIN		
-			SELECT  COUNT(T.DmatNo) AS [count],T.Name,T.Relation,T.SecurityType, 
-			SUM(T.OpeningStock),
-			SUM(T.Bought),SUM(T.Sold),SUM(T.PeriodEndHolding)
-			FROM @tmpPeriodEndDisclosureSummary T
-			GROUP BY T.Name,T.Relation,T.SecurityType
+			IF(@EnableDisableQuantity <> 400003)
+			BEGIN
+				SELECT  COUNT(T.DmatNo) AS [count],T.Name,T.Relation,T.SecurityType, 
+				SUM(T.OpeningStock),
+				SUM(T.Bought),SUM(T.Sold),SUM(T.PeriodEndHolding)
+				FROM @tmpPeriodEndDisclosureSummary T
+				GROUP BY T.Name,T.Relation,T.SecurityType
+			END
+			ELSE
+			BEGIN
+				SELECT  COUNT(T.DmatNo) AS [count],T.Name,T.Relation,T.SecurityType
+				--SUM(T.OpeningStock),
+				--SUM(T.Bought),SUM(T.Sold),SUM(T.PeriodEndHolding)
+				FROM @tmpPeriodEndDisclosureSummary T
+				GROUP BY T.Name,T.Relation,T.SecurityType
+			END
 		END
 		RETURN 0
 			
