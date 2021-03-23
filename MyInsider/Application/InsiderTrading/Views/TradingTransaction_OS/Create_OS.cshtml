@@ -13,14 +13,10 @@
         ViewBag.TwodigtClass = "form-control two-digits numericOnly";
     }
 }
-@{
-    if (ViewBag.ShowPopup == true)
-    {
-        <script src="~/Scripts/jquery.validate.min.js"></script>
-        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-        <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-    }
-}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 
 <script type="text/javascript">
     var SecurityType_ModeOfAcquisitionMapping = {
@@ -279,7 +275,7 @@
                     }
                 });
                 $("#SecurityTypeCodeId").attr("disabled", "disabled");
-            } 
+            }
 
 
 
@@ -1207,63 +1203,63 @@
                             }
                             else
                             {
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.ForUserInfoId)
-                                    @if (@ViewBag.TransactionTypeCodeFlag)
-                                    {
-                                        @Html.DropDownListFor(model => model.ForUserInfoId, new SelectList(ViewBag.UserPan, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
-                                        @Html.HiddenFor(model => model.ForUserInfoId)
-                                    }
-                                    else
-                                    {
-                                        @Html.DropDownListFor(model => model.ForUserInfoId, new SelectList(ViewBag.UserPan, "Key", "Value", ""), new { @class = "form-control" })
-                                    }
-                                    @Html.ValidationMessageFor(model => model.ForUserInfoId)
-                                </div>
-                            </div>
-
-
-                            <div id="UserDetails" style="display:none;">
-                                @Html.HiddenFor(model => model.DMATDetailsID)
-                            </div>
-
-                            @if (@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
-                            {
-                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.TransactionTypeCodeId)
-                                        @if (@ViewBag.TransactionTypeCodeFlag)
-                                        {
-                                            @Html.DropDownListFor(model => model.TransactionTypeCodeId, new SelectList(ViewBag.TransactionType, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
-                                            @Html.HiddenFor(model => model.TransactionTypeCodeId)
-                                        }
-                                        else
-                                        {
-                                            @Html.DropDownListFor(model => model.TransactionTypeCodeId, new SelectList(ViewBag.TransactionType, "Key", "Value", ""), new { @class = "form-control" })
-                                        }
-                                        @Html.ValidationMessageFor(model => model.TransactionTypeCodeId)
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.ForUserInfoId)
+                                            @if (@ViewBag.TransactionTypeCodeFlag)
+                                            {
+                                                @Html.DropDownListFor(model => model.ForUserInfoId, new SelectList(ViewBag.UserPan, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
+                                                @Html.HiddenFor(model => model.ForUserInfoId)
+                                            }
+                                            else
+                                            {
+                                                @Html.DropDownListFor(model => model.ForUserInfoId, new SelectList(ViewBag.UserPan, "Key", "Value", ""), new { @class = "form-control" })
+                                            }
+                                            @Html.ValidationMessageFor(model => model.ForUserInfoId)
+                                        </div>
                                     </div>
-                                </div>
-                            }
 
-                            @*<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <div class="form-group">
-                @Html.LabelFor(model => model.SecurityTypeCodeId)
-                @if (@ViewBag.TransactionTypeCodeFlag)
-                {
-                    @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
-                    @Html.HiddenFor(model => model.SecurityTypeCodeId)
-                }
-                else
-                {
-                    @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control" })
-                }
-                @Html.ValidationMessageFor(model => model.SecurityTypeCodeId)
-            </div>
-        </div>*@
-                        </div>
+
+                                    <div id="UserDetails" style="display:none;">
+                                        @Html.HiddenFor(model => model.DMATDetailsID)
+                                    </div>
+
+                                    @if (@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
+                                    {
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.TransactionTypeCodeId)
+                                                @if (@ViewBag.TransactionTypeCodeFlag)
+                                                {
+                                                    @Html.DropDownListFor(model => model.TransactionTypeCodeId, new SelectList(ViewBag.TransactionType, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
+                                                    @Html.HiddenFor(model => model.TransactionTypeCodeId)
+                                                }
+                                                else
+                                                {
+                                                    @Html.DropDownListFor(model => model.TransactionTypeCodeId, new SelectList(ViewBag.TransactionType, "Key", "Value", ""), new { @class = "form-control" })
+                                                }
+                                                @Html.ValidationMessageFor(model => model.TransactionTypeCodeId)
+                                            </div>
+                                        </div>
+                                    }
+
+                                    @*<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.SecurityTypeCodeId)
+                                                @if (@ViewBag.TransactionTypeCodeFlag)
+                                                {
+                                                    @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
+                                                    @Html.HiddenFor(model => model.SecurityTypeCodeId)
+                                                }
+                                                else
+                                                {
+                                                    @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control" })
+                                                }
+                                                @Html.ValidationMessageFor(model => model.SecurityTypeCodeId)
+                                            </div>
+                                        </div>*@
+                                </div>
 
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -1309,38 +1305,38 @@
                                     }
 
                                     @*@if (@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
-                                    {
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.TransactionTypeCodeId)
-                                                @if (@ViewBag.TransactionTypeCodeFlag)
-                                                {
-                                                    @Html.DropDownListFor(model => model.TransactionTypeCodeId, new SelectList(ViewBag.TransactionType, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
-                                                    @Html.HiddenFor(model => model.TransactionTypeCodeId)
-                                                }
-                                                else
-                                                {
-                                                    @Html.DropDownListFor(model => model.TransactionTypeCodeId, new SelectList(ViewBag.TransactionType, "Key", "Value", ""), new { @class = "form-control" })
-                                                }
-                                                @Html.ValidationMessageFor(model => model.TransactionTypeCodeId)
+                                        {
+                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.TransactionTypeCodeId)
+                                                    @if (@ViewBag.TransactionTypeCodeFlag)
+                                                    {
+                                                        @Html.DropDownListFor(model => model.TransactionTypeCodeId, new SelectList(ViewBag.TransactionType, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
+                                                        @Html.HiddenFor(model => model.TransactionTypeCodeId)
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.DropDownListFor(model => model.TransactionTypeCodeId, new SelectList(ViewBag.TransactionType, "Key", "Value", ""), new { @class = "form-control" })
+                                                    }
+                                                    @Html.ValidationMessageFor(model => model.TransactionTypeCodeId)
+                                                </div>
                                             </div>
+                                        }*@
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.SecurityTypeCodeId)
+                                            @if (@ViewBag.TransactionTypeCodeFlag)
+                                            {
+                                                @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
+                                                @Html.HiddenFor(model => model.SecurityTypeCodeId)
+                                            }
+                                            else
+                                            {
+                                                @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control" })
+                                            }
+                                            @Html.ValidationMessageFor(model => model.SecurityTypeCodeId)
                                         </div>
-                                    }*@
-                                                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <div class="form-group">
-                @Html.LabelFor(model => model.SecurityTypeCodeId)
-                @if (@ViewBag.TransactionTypeCodeFlag)
-                {
-                    @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control", disabled = "disabled" })
-                    @Html.HiddenFor(model => model.SecurityTypeCodeId)
-                }
-                else
-                {
-                    @Html.DropDownListFor(model => model.SecurityTypeCodeId, new SelectList(ViewBag.TypeOfSecurityList, "Key", "Value", ""), new { @class = "form-control" })
-                }
-                @Html.ValidationMessageFor(model => model.SecurityTypeCodeId)
-            </div>
-        </div>
+                                    </div>
                                 </div>
 
                                 <div class="row">
@@ -1368,19 +1364,19 @@
                                     }
                                 </div>
                                 @*if (@ViewBag.TransactionTypeCodeId == 143001)
-            {
-                <div class="row">
-                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div class="form-group">
-                            @Html.CheckBoxFor(m => m.SellAllFlag, new { id = "b_SellAllFlag" })
-                            <label style="font-style:italic" class="normalLable">
-                                SellAll
-                            </label>
-                        </div>
-                    </div>
-                </div>
+                                    {
+                                        <div class="row">
+                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                <div class="form-group">
+                                                    @Html.CheckBoxFor(m => m.SellAllFlag, new { id = "b_SellAllFlag" })
+                                                    <label style="font-style:italic" class="normalLable">
+                                                        SellAll
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
 
-            }*@
+                                    }*@
                                 <div class="row">
                                     @if (ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue)
                                     {
@@ -1476,7 +1472,7 @@
                                 </div>
                             </div>
                         </div>
-                                </div>
+                    </div>
                 </div>
             </div>
             @Html.Hidden("LoadModeOfAquisition", Url.Action("LoadModeOfAquisition", "TradingTransaction_OS"))
@@ -1490,28 +1486,28 @@
 @Html.Hidden("PopulateComboOnChange", Url.Action("PopulateCombo_OnChange", "TradingTransaction_OS"))
 @Html.Hidden("GetSubscribedcapital", Url.Action("DateOfAcquisition_OnChange", "TradingTransaction"))
 
-@if(@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
+@if (@ViewBag.DisclosureTypeId != InsiderTrading.Common.ConstEnum.Code.DisclosureTypeInitial)
 {
     @Html.Hidden("GetClosingBalance", Url.Action("ForUserInfoId_OnChange", "TradingTransaction_OS"))
     @Html.Hidden("GetImpactOnPostQuantity", Url.Action("GetImpactOnPostQuantity", "TradingTransaction"))
     @Html.Hidden("LoadBalanceDMATwise", Url.Action("LoadBalanceDMATwise", "TradingTransaction_OS"))
 }
 @*else
-{
-    @Html.Hidden("GetClosingBalance", Url.Action("ForUserInfoId_OnChange", "TradingTransaction"))
-    @Html.Hidden("GetImpactOnPostQuantity", Url.Action("GetImpactOnPostQuantity", "TradingTransaction"))
-    @Html.Hidden("LoadBalanceDMATwise", Url.Action("LoadBalanceDMATwise", "TradingTransaction"))
-}*@
+    {
+        @Html.Hidden("GetClosingBalance", Url.Action("ForUserInfoId_OnChange", "TradingTransaction"))
+        @Html.Hidden("GetImpactOnPostQuantity", Url.Action("GetImpactOnPostQuantity", "TradingTransaction"))
+        @Html.Hidden("LoadBalanceDMATwise", Url.Action("LoadBalanceDMATwise", "TradingTransaction"))
+    }*@
 @Html.Hidden("CreateTransaction", Url.Action("Create", "TradingTransaction"))
 @Html.Hidden("btnCloseUrl", Url.Action("Create", "TradingTransaction", new { TransactionDetailsId = 11, TransactionMasterId = @ViewBag.TransactionMasterId, acid = ViewBag.acid, year = ViewBag.year, period = ViewBag.period, SecurityTypeCodeId = Model.SecurityTypeCodeId, periodType = ViewBag.periodType }))
 @*Tushar*@
-@if(ViewBag.PreclearenceID != 0)
+@if (ViewBag.PreclearenceID != 0)
 {
-  @Html.Hidden("Initial_OS_Index", Url.Action("Index", "TradingTransaction_OS", new { acid = ViewBag.acid, TransactionMasterId = @ViewBag.TransactionMasterId, nDisclosureTypeCodeId = @ViewBag.DisclosureType, nUserInfoId = @ViewBag.UserInfoId, nUserTypeCodeId = @ViewBag.UserTypeId, nYearCode = 0, nPeriodCode = 0, PreclearanceRequestId = 0, frm = @ViewBag.Frm, nPeriodType = 0, ShowDocumentTab = 0, SecurityTypeCode = @ViewBag.SecurityTypeCodeId }))
+    @Html.Hidden("Initial_OS_Index", Url.Action("Index", "TradingTransaction_OS", new { acid = ViewBag.acid, TransactionMasterId = @ViewBag.TransactionMasterId, nDisclosureTypeCodeId = @ViewBag.DisclosureType, nUserInfoId = @ViewBag.UserInfoId, nUserTypeCodeId = @ViewBag.UserTypeId, nYearCode = 0, nPeriodCode = 0, PreclearanceRequestId = 0, frm = @ViewBag.Frm, nPeriodType = 0, ShowDocumentTab = 0, SecurityTypeCode = @ViewBag.SecurityTypeCodeId }))
 }
 else
 {
-  @Html.Hidden("Initial_OS_Index", Url.Action("Index", "TradingTransaction_OS", new { acid = ViewBag.acid, TransactionMasterId = @ViewBag.TransactionMasterId, nDisclosureTypeCodeId = @ViewBag.DisclosureType, nUserInfoId = @ViewBag.UserInfoId, nUserTypeCodeId = @ViewBag.UserTypeId, nYearCode = 0, nPeriodCode = 0, PreclearanceRequestId = 0, frm = @ViewBag.Frm, nPeriodType = 0, ShowDocumentTab = 0, SecurityTypeCode = 0, ParentId = @ViewBag.ParentId }))
+    @Html.Hidden("Initial_OS_Index", Url.Action("Index", "TradingTransaction_OS", new { acid = ViewBag.acid, TransactionMasterId = @ViewBag.TransactionMasterId, nDisclosureTypeCodeId = @ViewBag.DisclosureType, nUserInfoId = @ViewBag.UserInfoId, nUserTypeCodeId = @ViewBag.UserTypeId, nYearCode = 0, nPeriodCode = 0, PreclearanceRequestId = 0, frm = @ViewBag.Frm, nPeriodType = 0, ShowDocumentTab = 0, SecurityTypeCode = 0, ParentId = @ViewBag.ParentId }))
 }
 @Html.Hidden("btnCloseUrl_OS", Url.Action("Create", "TradingTransaction_OS", new { TransactionDetailsId = Model.TransactionDetailsId, TransactionMasterId = @ViewBag.TransactionMasterId, UserTypeCodeId = @ViewBag.UserTypeId, acid = ViewBag.acid, year = ViewBag.year, period = ViewBag.period, SecurityTypeCodeId = Model.SecurityTypeCodeId, periodType = ViewBag.periodType, frm = @ViewBag.Frm }))
 @Html.Hidden("CancelUrlUser", Url.Action("Index", "PreclearanceRequest", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE }))
@@ -1528,9 +1524,9 @@ else
                 <div id="message"></div>
                 <div class="modal-footer">
                     @*@using (Html.BeginForm("Create", "TradingTransaction_OS", new { TransactionDetailsId = Model.TransactionDetailsId, TransactionMasterId = @ViewBag.TransactionMasterId, UserTypeCodeId = @ViewBag.UserTypeId, acid = ViewBag.acid, year = ViewBag.year, period = ViewBag.period, SecurityTypeCodeId = 139001, periodType = ViewBag.periodType, frm = @ViewBag.Frm }, FormMethod.Post))
-                    {*@
-                        <button type="submit" id="btnYes" class="btn btn-success">@InsiderTrading.Common.Common.getResource("tra_btn_16459")</button>
-                        @*<button type="button" id="btnCancel" class="btn btn-danger" data-dismiss="modal"></button>*@
+                        {*@
+                    <button type="submit" id="btnYes" class="btn btn-success">@InsiderTrading.Common.Common.getResource("tra_btn_16459")</button>
+                    @*<button type="button" id="btnCancel" class="btn btn-danger" data-dismiss="modal"></button>*@
                     @*}*@
                 </div>
             </div>
@@ -1695,7 +1691,7 @@ else
             }
             else {
                  $("body").removeClass("loading");
-                 
+
             if ($("#SecurityTypeCodeId").val() == 139004 || $("#SecurityTypeCodeId").val() == 139005) {
                 if ('@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue') {
                     $("#txtLotSize").hide();
