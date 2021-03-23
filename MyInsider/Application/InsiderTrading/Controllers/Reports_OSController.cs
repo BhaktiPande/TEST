@@ -242,10 +242,10 @@ namespace InsiderTrading.Controllers
                 adp.Fill(dt);
                 adp1.Fill(dt1);
 
-                if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue == 400003)
-                {
-                    dt1.Columns.Remove("Holdings");
-                }
+                //if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue == 400003)
+                //{
+                //    dt1.Columns.Remove("Holdings");
+                //}
             }
 
             if (ReportType == "4")
