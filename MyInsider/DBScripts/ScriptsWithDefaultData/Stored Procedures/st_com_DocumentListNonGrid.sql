@@ -47,7 +47,7 @@ BEGIN
 
 		if(@inp_iMapToTypeCodeId = @PEDocUploaded)
 		BEGIN
-			SELECT top 1 UD.*, DOM.DocumentObjectMapId, DOM.MapToTypeCodeId, DOM.MapToId, DOM.PurposeCodeId
+			SELECT UD.*, DOM.DocumentObjectMapId, DOM.MapToTypeCodeId, DOM.MapToId, DOM.PurposeCodeId
 			FROM com_Document UD 
 			JOIN com_DocumentObjectMapping DOM ON UD.DocumentId = DOM.DocumentId
 			WHERE DOM.MapToTypeCodeId = @inp_iMapToTypeCodeId  AND DOM.MapToId = @inp_iMapToId

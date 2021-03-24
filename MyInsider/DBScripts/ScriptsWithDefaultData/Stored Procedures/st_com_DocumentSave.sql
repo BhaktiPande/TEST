@@ -129,13 +129,13 @@ BEGIN
 
 		if(@PEDocUploaded = @inp_iMapToTypeCodeId )
 		BEGIN
-			IF EXISTS (SELECT MIN(TransactionMasterId) FROM tra_TransactionMaster_OS WHERE UserInfoId = @inp_iMapToId AND DisclosureTypeCodeId = @DiscTypePE AND TransactionStatusCodeId = @PeriodEndDiscNotConfirmed)
+			IF EXISTS (SELECT MIN(TransactionMasterId) FROM tra_TransactionMaster_OS WHERE TransactionMasterId = @inp_iMapToId AND DisclosureTypeCodeId = @DiscTypePE AND TransactionStatusCodeId = @PeriodEndDiscNotConfirmed)
 			BEGIN
-				SET @inp_iMapToId = (SELECT MIN(TransactionMasterId) FROM tra_TransactionMaster_OS WHERE UserInfoId = @inp_iMapToId AND DisclosureTypeCodeId = @DiscTypePE AND TransactionStatusCodeId = @PeriodEndDiscNotConfirmed)
+				SET @inp_iMapToId = (SELECT MIN(TransactionMasterId) FROM tra_TransactionMaster_OS WHERE TransactionMasterId = @inp_iMapToId AND DisclosureTypeCodeId = @DiscTypePE AND TransactionStatusCodeId = @PeriodEndDiscNotConfirmed)
 			END
 			ELSE
 			BEGIN
-				SET @inp_iMapToId = (SELECT MAX(TransactionMasterId) FROM tra_TransactionMaster_OS WHERE UserInfoId = @inp_iMapToId AND DisclosureTypeCodeId = @DiscTypePE AND TransactionStatusCodeId = @DiscStatausCodeConfirmed)
+				SET @inp_iMapToId = (SELECT MAX(TransactionMasterId) FROM tra_TransactionMaster_OS WHERE TransactionMasterId = @inp_iMapToId AND DisclosureTypeCodeId = @DiscTypePE AND TransactionStatusCodeId = @DiscStatausCodeConfirmed)
 			END
 		END
 
