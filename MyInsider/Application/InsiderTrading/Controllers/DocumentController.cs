@@ -664,10 +664,7 @@ namespace InsiderTrading.Controllers
                         {
                             sExtension = objDocumentDetailsDTO.FileType;
                         }
-                        else
-                        {
-                            directory = Path.Combine(directory, Common.Common.ConvertToString(objDocumentDetailsDTO.MapToTypeCodeId), Common.Common.ConvertToString(objDocumentDetailsDTO.MapToId), objDocumentDetailsDTO.GUID);
-                        }
+                        directory = Path.Combine(directory, Common.Common.ConvertToString(objDocumentDetailsDTO.MapToTypeCodeId), Common.Common.ConvertToString(objDocumentDetailsDTO.MapToId), objDocumentDetailsDTO.GUID);
                         if (System.IO.File.Exists(directory))
                         {
                             return File(new FileStream(directory, FileMode.Open), objDocumentDetailsDTO.FileType, objDocumentDetailsDTO.DocumentName + sExtension/*+ objDocumentDetailsDTO.FileType*/);
