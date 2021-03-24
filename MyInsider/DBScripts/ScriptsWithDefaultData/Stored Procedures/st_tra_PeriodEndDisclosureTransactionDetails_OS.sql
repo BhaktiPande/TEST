@@ -109,6 +109,7 @@ BEGIN
 		END
 		ELSE
 		BEGIN
+		
 			SELECT ISNULL(UF.FirstName,'') + ' ' + ISNULL(UF.LastName, '') + ', ' + ISNULL(UF.AddressLine1,'') + ' ' + ISNULL(', ' + UF.PinCode,'') + CASE WHEN ISNULL(CCountry.DisplayCode,'') = '' THEN ISNULL(', ' + CCountry.CodeName,'') ELSE ISNULL(', ' + CCountry.DisplayCode,'') END +  ISNULL(', ' + UF.MobileNumber,'') AS 'Name Of Insider',
 			CASE WHEN UR.UserInfoId IS NULL  THEN 'Self' ELSE CRelation.CodeName END AS 'Relation',
 			DD.DEMATAccountNumber AS 'Demat Account Number', 
@@ -133,11 +134,12 @@ BEGIN
 			JOIN com_Code CTransactionType ON TD.TransactionTypeCodeId = CTransactionType.CodeID
 			JOIN com_Code CSecurityType ON TD.SecurityTypeCodeId = CSecurityType.CodeID 
 			JOIN rl_CompanyMasterList company ON TD.CompanyId = company.RlCompanyId 
+			JOIN tra_BalancePool_OS TB ON TB.CompanyID=TD.CompanyId and TB.DMATDetailsID=TD.DMATDetailsID
 			LEFT JOIN com_Code CCountry ON UF.CountryId = CCountry.CodeID  
 			LEFT JOIN usr_UserRelation UR ON TD.ForUserInfoId = UR.UserInfoIdRelative  
 			LEFT JOIN com_Code CRelation ON UR.RelationTypeCodeId = CRelation.CodeID 
-			LEFT JOIN tra_SellAllValues_OS SOS ON SOS.TransactionMasterId = TM.TransactionMasterId
-			WHERE TD.TransactionDetailsId IS NOT NULL --AND SOS.SellAllFlag <> 0
+			--LEFT JOIN tra_SellAllValues_OS SOS ON SOS.TransactionMasterId = TM.TransactionMasterId
+			WHERE TD.TransactionDetailsId IS NOT NULL and TB.ActualQuantity <> 0 --AND TSDOS.ClosingBalance <> 0 --AND (SOS.SellAllFlag <> 1 OR SOS.SellAllFlag IS NULL)
 			ORDER BY TD.SecurityTypeCodeId,TD.TransactionDetailsId
 		END
 		RETURN 0
@@ -150,3 +152,4 @@ BEGIN
 		SET @out_nReturnValue	=  @ERR_PERIODENDDISCLOSURE_TRANSACTIONDETAILS
 	END CATCH
 END
+GO

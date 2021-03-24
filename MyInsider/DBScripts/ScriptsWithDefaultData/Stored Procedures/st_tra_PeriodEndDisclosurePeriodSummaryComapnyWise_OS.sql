@@ -161,10 +161,21 @@ BEGIN
 					T.SecurityType AS 'SecurityType',
 					T.DematAccountNo AS 'Demat Account Number',
 					T.CompanyName AS 'Company'
-					--T.Bought AS 'Initial Disclosure or Bought during the period',
-					--T.Sold AS 'Sold during the period',
-					--T.PeriodEndHolding AS 'Holdings at the end of the period'
-				FROM @tmpPeriodEndDisclosureSummary T Where T.PeriodEndHolding <> 0
+				FROM @tmpPeriodEndDisclosureSummary T 
+				JOIN tra_BalancePool_OS BOS on --PE.UserId = BOS.UserInfoId and
+				 T.DmatNo = BOS.DMATDetailsID AND T.CompanyID = BOS.CompanyID
+				 WHERE BOS.ActualQuantity <> 0 AND T.PeriodEndHolding <> 0
+
+				--SELECT 
+				--	T.Name AS 'Name of Insider',
+				--	T.Relation AS 'Relation',
+				--	T.SecurityType AS 'SecurityType',
+				--	T.DematAccountNo AS 'Demat Account Number',
+				--	T.CompanyName AS 'Company'
+				--	--T.Bought AS 'Initial Disclosure or Bought during the period',
+				--	--T.Sold AS 'Sold during the period',
+				--	--T.PeriodEndHolding AS 'Holdings at the end of the period'
+				--FROM @tmpPeriodEndDisclosureSummary T --Where T.PeriodEndHolding <> 0
 			END
 		END
 		ELSE IF(@inp_iReportType = 2)
@@ -180,10 +191,14 @@ BEGIN
 			ELSE
 			BEGIN
 				SELECT COUNT(T.DmatNo) AS [count],T.Name,T.Relation,T.SecurityType,T.DematAccountNo
-				--SUM(T.OpeningStock),
-				--SUM(T.Bought),SUM(T.Sold),SUM(T.PeriodEndHolding)
-				FROM @tmpPeriodEndDisclosureSummary T
+				FROM @tmpPeriodEndDisclosureSummary T JOIN tra_BalancePool_OS BOS on --PE.UserId = BOS.UserInfoId and
+				 T.DmatNo = BOS.DMATDetailsID AND T.CompanyID = BOS.CompanyID
+				 WHERE BOS.ActualQuantity <> 0 
 				GROUP BY T.Name,T.Relation,T.SecurityType,T.DematAccountNo
+
+				--SELECT COUNT(T.DmatNo) AS [count],T.Name,T.Relation,T.SecurityType,T.DematAccountNo
+				--FROM @tmpPeriodEndDisclosureSummary T
+				--GROUP BY T.Name,T.Relation,T.SecurityType,T.DematAccountNo
 			END
 		END
 		ELSE
@@ -198,11 +213,15 @@ BEGIN
 			END
 			ELSE
 			BEGIN
-				SELECT  COUNT(T.DmatNo) AS [count],T.Name,T.Relation,T.SecurityType
-				--SUM(T.OpeningStock),
-				--SUM(T.Bought),SUM(T.Sold),SUM(T.PeriodEndHolding)
-				FROM @tmpPeriodEndDisclosureSummary T
+				 SELECT  COUNT(T.DmatNo) AS [count],T.Name,T.Relation,T.SecurityType
+				FROM @tmpPeriodEndDisclosureSummary T JOIn tra_BalancePool_OS BOS on --PE.UserId = BOS.UserInfoId and
+				 T.DmatNo = BOS.DMATDetailsID AND T.CompanyID = BOS.CompanyID
+				 WHERE BOS.ActualQuantity <> 0
 				GROUP BY T.Name,T.Relation,T.SecurityType
+				
+				--SELECT  COUNT(T.DmatNo) AS [count],T.Name,T.Relation,T.SecurityType
+				--FROM @tmpPeriodEndDisclosureSummary T
+				--GROUP BY T.Name,T.Relation,T.SecurityType
 			END
 		END
 		RETURN 0
