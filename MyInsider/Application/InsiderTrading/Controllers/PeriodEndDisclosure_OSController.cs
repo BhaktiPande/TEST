@@ -335,11 +335,17 @@ namespace InsiderTrading.Controllers
                     else
                     {
                         TradingTransactionMasterDTO_OS objTradingTransactionMasterDTO_Details = objTradingTransactionSL_OS.GetTradingTransactionMasterDetails(objLoginUserDetails.CompanyDBConnectionString, tmid);
+                        int TransactionMasterId = Convert.ToInt32(objTradingTransactionMasterDTO_Details.TransactionMasterId);
                         if (objTradingTransactionMasterDTO_Details.TransactionStatusCodeId == 148002)
                         {
                             periodEndDisclosure.PeriodEndDocumentFile = Common.Common.GenerateDocumentList(ConstEnum.Code.PeriodEndDisclosure_OS, ViewBag.UserId, 0, null, 0, false, 0, ConstEnum.FileUploadControlCount.PeriodEndDocumentUpload);
                             ViewBag.showAddTransactionBtn = true;
                             ViewBag.isAllEdit = false;
+                        }
+                        else if (objTradingTransactionMasterDTO_Details.TransactionStatusCodeId == 148003)
+                        {
+                            periodEndDisclosure.PeriodEndDocumentFile = Common.Common.GenerateDocumentList(ConstEnum.Code.PeriodEndDisclosure_OS, TransactionMasterId, 0, null, 0, false, 0, ConstEnum.FileUploadControlCount.PeriodEndDocumentUpload);
+                            ViewBag.isAllEdit = true;
                         }
                         else
                         {
