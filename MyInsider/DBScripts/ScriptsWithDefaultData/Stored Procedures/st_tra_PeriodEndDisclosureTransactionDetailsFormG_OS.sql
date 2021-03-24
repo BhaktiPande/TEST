@@ -26,6 +26,7 @@ BEGIN
 
 	DECLARE @nPeriodType INT
 	DECLARE @CountryCodeGroupID INT = 107
+	DECLARE @EnableDisableQuantity int;
 
 	BEGIN TRY
 		SET NOCOUNT ON;
@@ -39,6 +40,7 @@ BEGIN
 			SET @out_sSQLErrMessage = ''
 
 		SELECT @nPeriodType = ParentCodeId FROM com_Code WHERE CodeID = @inp_iPeriodCodeID
+		select @EnableDisableQuantity=EnableDisableQuantityValue from mst_Company where IsImplementing=1
 		
 		-- Define temporary table and add user details for summary 
 		DECLARE @tmpPeriodEndDisclosureSummary AS TABLE(Id INT IDENTITY(1,1),UserId INT, Name NVARCHAR(500), PAN NVARCHAR(50), CIN NVARCHAR(50), DIN NVARCHAR(50), Address NVARCHAR(500), Pincode NVARCHAR(50), Country NVARCHAR(20),
@@ -66,7 +68,7 @@ BEGIN
 		D.DEMATAccountNumber AS DematAccountNo,
 		D.DPID AS DP_ID,
 		tranSummery.CompanyId AS CompanyID,
-		company.CompanyName AS CompanyName,
+		company.CompanyName + ' - ' + company.ISINCode AS CompanyName,
 		tranSummery.SecurityTypeCodeId AS SecurityTypeCode,
 		CASE WHEN CDSecurity.DisplayCode IS NULL OR CDSecurity.DisplayCode = '' THEN CDSecurity.CodeName ELSE CDSecurity.DisplayCode END as SecurityType
 		FROM usr_UserInfo UI
@@ -99,7 +101,7 @@ BEGIN
 		D.DEMATAccountNumber AS DematAccountNo,
 		D.DPID AS DP_ID,
 		tranSummery.CompanyId AS CompanyID,
-		company.CompanyName AS CompanyName,
+		company.CompanyName  + ' - ' + company.ISINCode  AS CompanyName,
 		tranSummery.SecurityTypeCodeId AS SecurityTypeCode,
 		CASE WHEN CDSecurity.DisplayCode IS NULL OR CDSecurity.DisplayCode = '' THEN CDSecurity.CodeName ELSE CDSecurity.DisplayCode END as SecurityType
 		FROM usr_UserInfo UI 
@@ -153,9 +155,20 @@ BEGIN
 		) TranSummary ON TmpTS.UserId = TranSummary.UserId AND TmpTS.SecurityTypeCode = TranSummary.SecurityTypeCode AND TmpTS.CompanyID = TranSummary.CompanyID
 		WHERE TmpTS.OpeningStock IS NULL
 
-		SELECT UserId, [Name], PAN, CIN, DIN, [Address], Pincode, Country, MobileNo, EmployeeID, Department, Designation,
-		Relation, DematAccountNo,DP_ID, CompanyName, SecurityType, OpeningStock, Bought, Sold, PeriodEndHolding,TotalPledge, Pledge, UnPledge 
-		FROM @tmpPeriodEndDisclosureSummary
+		IF(@EnableDisableQuantity <> 400003)	
+		BEGIN
+			SELECT UserId, [Name], PAN, CIN, DIN, [Address], Pincode, Country, MobileNo, EmployeeID, Department, Designation,
+			Relation, DematAccountNo,DP_ID, CompanyName, SecurityType, OpeningStock, Bought, Sold, PeriodEndHolding,TotalPledge, Pledge, UnPledge 
+			FROM @tmpPeriodEndDisclosureSummary
+		END
+		ELSE
+		BEGIN
+			SELECT UserId, [Name], PAN, CIN, DIN, [Address], Pincode, Country, MobileNo, EmployeeID, Department, Designation,
+			Relation, DematAccountNo,DP_ID, CompanyName, SecurityType, OpeningStock, Bought, Sold, PeriodEndHolding,TotalPledge, Pledge, UnPledge 
+			FROM @tmpPeriodEndDisclosureSummary T JOIN tra_BalancePool_OS BOS ON --PE.UserId = BOS.UserInfoId and
+				 T.DmatNo = BOS.DMATDetailsID AND T.CompanyID = BOS.CompanyID
+				 WHERE BOS.ActualQuantity <> 0  AND PeriodEndHolding <> 0
+		END
 
 	END TRY
 	BEGIN CATCH

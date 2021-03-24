@@ -135,7 +135,7 @@
 
 @Html.Hidden("View", Url.Action("View", "PreclearanceRequestNonImplCompany", new { acid = InsiderTrading.Common.ConstEnum.UserActions.PreclearanceRequestListCOOtherSecurities }))
 @Html.Hidden("DownloadFormE", Url.Action("DownloadFormE", "PreclearanceRequestNonImplCompany", new { acid = InsiderTrading.Common.ConstEnum.UserActions.PreclearanceRequestListCOOtherSecurities }))
-@Html.Hidden("SoftcopyView", Url.Action("DownloadFormBOS", "InsiderInitialDisclosure", new { acid = InsiderTrading.Common.ConstEnum.UserActions.PreclearanceRequestOtherSecurities }))
+@Html.Hidden("SoftcopyView", Url.Action("DownloadFormBOS", "InsiderInitialDisclosure", null))
 @Html.Hidden("SoftcopyPending", Url.Action("DownloadFormBOS", "InsiderInitialDisclosure", new { acid = InsiderTrading.Common.ConstEnum.UserActions.PreclearanceRequestOtherSecurities, nDisclosureTypeCodeId = InsiderTrading.Common.ConstEnum.Code.DisclosureTypeContinuous }))
 @*@Html.Hidden("HardcopyPending", Url.Action("UploadHardDocument", "TradingTransaction_OS", new { acid = InsiderTrading.Common.ConstEnum.UserActions.CO_DISCLOSURE_DETAILS_CONTINUOUS_DISCLOSURE_LETTER_SUBMISSION, nDisclosureTypeCodeId = InsiderTrading.Common.ConstEnum.Code.DisclosureTypeContinuous }))*@
 @Html.Hidden("HardcopyPending", Url.Action("UploadHardDocument", "TradingTransaction_OS", new { acid = InsiderTrading.Common.ConstEnum.UserActions.PreclearanceRequestListCOOtherSecurities, nDisclosureTypeCodeId = InsiderTrading.Common.ConstEnum.Code.DisclosureTypeContinuous }))
