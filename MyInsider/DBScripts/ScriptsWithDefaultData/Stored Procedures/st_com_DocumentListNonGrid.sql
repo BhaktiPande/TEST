@@ -31,7 +31,8 @@ CREATE PROCEDURE [dbo].[st_com_DocumentListNonGrid]
 AS
 BEGIN
 	DECLARE @sSQL NVARCHAR(MAX) = ''
-	DECLARE @ERR_Document_LIST INT = 11042 -- Error occurred while fetching list of documents for user.
+	DECLARE @ERR_Document_LIST INT = 11042	-- Error occurred while fetching list of documents for user.
+	DECLARE @PEDocUploaded INT = 132026		--Map To Type - Period End Document Upload
 
 	BEGIN TRY
 		
@@ -44,11 +45,21 @@ BEGIN
 		IF @out_sSQLErrMessage IS NULL
 			SET @out_sSQLErrMessage = ''
 
-
-		SELECT UD.*, DOM.DocumentObjectMapId, DOM.MapToTypeCodeId, DOM.MapToId, DOM.PurposeCodeId
-		FROM com_Document UD JOIN com_DocumentObjectMapping DOM ON UD.DocumentId = DOM.DocumentId  
-		WHERE MapToTypeCodeId = @inp_iMapToTypeCodeId  AND MapToId = @inp_iMapToId
-		AND ISNULL(PurposeCodeId, 0) = ISNULL(@inp_iPurposeCodeId, 0)
+		if(@inp_iMapToTypeCodeId = @PEDocUploaded)
+		BEGIN
+			SELECT top 1 UD.*, DOM.DocumentObjectMapId, DOM.MapToTypeCodeId, DOM.MapToId, DOM.PurposeCodeId
+			FROM com_Document UD 
+			JOIN com_DocumentObjectMapping DOM ON UD.DocumentId = DOM.DocumentId
+			WHERE DOM.MapToTypeCodeId = @inp_iMapToTypeCodeId  AND DOM.MapToId = @inp_iMapToId
+			AND ISNULL(PurposeCodeId, 0) = ISNULL(0, 0)
+		END
+		ELSE
+		BEGIN
+			SELECT UD.*, DOM.DocumentObjectMapId, DOM.MapToTypeCodeId, DOM.MapToId, DOM.PurposeCodeId
+			FROM com_Document UD JOIN com_DocumentObjectMapping DOM ON UD.DocumentId = DOM.DocumentId  
+			WHERE MapToTypeCodeId = @inp_iMapToTypeCodeId  AND MapToId = @inp_iMapToId
+			AND ISNULL(PurposeCodeId, 0) = ISNULL(@inp_iPurposeCodeId, 0)
+		END
 
 		RETURN 0
 	END	 TRY
