@@ -260,7 +260,8 @@ BEGIN
 					RETURN @out_nReturnValue
 			END	
 
-			
+			IF(@inp_sCalledFrom <> 'MASSUPLOAD')
+			BEGIN
 			IF EXISTS (SELECT * FROM tra_TransactionMaster_OS TM 			
 			INNER JOIN tra_PreclearanceRequest_NonImplementationCompany PR ON PR.PreclearanceRequestId = TM.PreclearanceRequestId
 			WHERE TM.TransactionStatusCodeId <> @nDisclosureStatusConfirmed AND TM.DisclosureTypeCodeId = @nDisclosureType_Continuous
@@ -298,7 +299,7 @@ BEGIN
 				SET @out_nReturnValue = @ERR_ContinuousDisclosureforDupPNTEntry
 				RETURN @out_nReturnValue
 			END
-			
+			END
 			---------------------------------------------------pledge-----------------------------------------------------
 			--- Check availabale balance in Excercise pool for pledge quantity
 			IF((@inp_iTransactionTypeCodeId = @nTransactionType_Pledge OR @inp_iTransactionTypeCodeId = @nTransactionType_PledgeRevoke OR @inp_iTransactionTypeCodeId = @nTransactionType_PledgeInvoke) AND @nImptPostshareQtyCodeId = @nNo AND @nActionCodeId = @nSell)--AND @inp_iSecurityTypeCodeId = @nSecurityType_Shares)
