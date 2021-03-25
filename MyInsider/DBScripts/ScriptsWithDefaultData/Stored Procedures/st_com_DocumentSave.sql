@@ -57,6 +57,12 @@ BEGIN
 	DECLARE @nDocumentObjctMapId INT = 0
 	DECLARE @nRet INT = 0
 	DECLARE @MAPTOTYPE_EULAAcceptance INT = 132021
+	DECLARE @PEDocUploaded INT = 132026				--Map To Type - Period End Document Upload
+	DECLARE @PeriodEndDiscNotConfirmed INT	= 148002		--Disclosure Status - Not Confirmed
+	DECLARE @DiscTypePE INT = 147003	--Disclosure Type - Period End
+	DECLARE @DiscStatausCodeConfirmed INT	= 148003		--Disclosure Status - Confirmed
+	DECLARE @ChkPEStatus INT = 0
+
 	BEGIN TRY
 		
 		SET NOCOUNT ON;
@@ -120,7 +126,19 @@ BEGIN
 		
 		IF @nDocumentObjctMapId IS NULL
 			SET @nDocumentObjctMapId = 0
-		
+
+		if(@PEDocUploaded = @inp_iMapToTypeCodeId )
+		BEGIN
+			IF EXISTS (SELECT MIN(TransactionMasterId) FROM tra_TransactionMaster_OS WHERE TransactionMasterId = @inp_iMapToId AND DisclosureTypeCodeId = @DiscTypePE AND TransactionStatusCodeId = @PeriodEndDiscNotConfirmed)
+			BEGIN
+				SET @inp_iMapToId = (SELECT MIN(TransactionMasterId) FROM tra_TransactionMaster_OS WHERE TransactionMasterId = @inp_iMapToId AND DisclosureTypeCodeId = @DiscTypePE AND TransactionStatusCodeId = @PeriodEndDiscNotConfirmed)
+			END
+			ELSE
+			BEGIN
+				SET @inp_iMapToId = (SELECT MAX(TransactionMasterId) FROM tra_TransactionMaster_OS WHERE TransactionMasterId = @inp_iMapToId AND DisclosureTypeCodeId = @DiscTypePE AND TransactionStatusCodeId = @DiscStatausCodeConfirmed)
+			END
+		END
+
 		EXEC @nRet = st_com_DocumentObjctMapping @nDocumentObjctMapId, @inp_iDocumentDetailsID, @inp_iMapToTypeCodeId, @inp_iMapToId, @inp_iPurposeCodeId,
 				@out_nReturnValue OUTPUT, @out_nSQLErrCode OUTPUT, @out_sSQLErrMessage OUTPUT
 		
