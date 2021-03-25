@@ -1,9 +1,18 @@
 
+IF NOT EXISTS (SELECT * from com_Code where CodeID=122101)
+BEGIN
+ INSERT INTO com_Code(CodeID,	CodeName,	CodeGroupId,	Description,	IsVisible,	IsActive,	DisplayOrder,	DisplayCode,
+ ParentCodeId,	ModifiedBy,	ModifiedOn)
+ Values(
+	122101,	'Personal Details Confirmation',	122,'Personal Details Confirmation Setting- Screen',	1,	1,	110,	
+	NULL,	103005,	1,	GETDATE())
+END
+
 IF NOT EXISTS (SELECT ResourceId from mst_Resource where ResourceId=59001)
 BEGIN
     INSERT INTO mst_Resource(ResourceId,ResourceKey,ResourceValue,ResourceCulture,ModuleCodeId,CategoryCodeId,ScreenCodeId,OriginalResourceValue,ModifiedBy,ModifiedOn)
 	VALUES
-     (59001,'cmp_ttl_59001','Work and Education Details Setting','en-US','103005','104006','122101','Work and Education Details Setting',1,GETDATE())
+     (59001,'cmp_ttl_59001','Work and Education Details Setting','en-US',103005,104006,122101,'Work and Education Details Setting',1,GETDATE())
 END
 
 IF NOT EXISTS (SELECT ResourceId from mst_Resource where ResourceId=59002)
@@ -17,7 +26,7 @@ IF NOT EXISTS (SELECT ResourceId from mst_Resource where ResourceId=59003)
 BEGIN
     INSERT INTO mst_Resource(ResourceId,ResourceKey,ResourceValue,ResourceCulture,ModuleCodeId,CategoryCodeId,ScreenCodeId,OriginalResourceValue,ModifiedBy,ModifiedOn)
 	VALUES
-     (59003,'com_btn_59003','Back','en-US','103003','104004','122034','Back',1,GETDATE())
+     (59003,'com_btn_59003','Back','en-US',103003,104004,122034,'Back',1,GETDATE())
 END
 
 
