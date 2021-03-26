@@ -987,6 +987,7 @@ namespace InsiderTrading.Common
 
             //Mass Upload
             public const int MASSUPLOAD_LIST = 9;
+            public const int MASSUPLOAD_EMPLOYEE_LIST = 344;
 
             //DefaulterReport
             public const int DEFAULTERREPORT_LIST = 196;
