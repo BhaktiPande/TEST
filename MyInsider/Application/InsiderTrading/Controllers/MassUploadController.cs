@@ -227,7 +227,7 @@ namespace InsiderTrading.Controllers
             bool bErrorExistInExcelSheets = false;
             bool bCheckifExcelIsvalid = false;
             int nSavedMassUploadLogId = 0;
-
+            Session["PartialError"] = 0;
             try
             {
                 objLoginUserDetails = (LoginUserDetails)InsiderTrading.Common.Common.GetSessionValue((string)InsiderTrading.Common.ConstEnum.SessionValue.UserDetails);
