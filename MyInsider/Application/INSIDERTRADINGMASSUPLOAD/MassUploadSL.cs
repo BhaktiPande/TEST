@@ -2062,7 +2062,7 @@ namespace InsiderTradingMassUpload
                             m_bErrorPresentInExcelSheets = true;
                             List<MassUploadExcelSheetErrors> excelSheetErrors = new List<MassUploadExcelSheetErrors>
                             {
-                                new MassUploadExcelSheetErrors((nRowCounter + 1), 1, "", "Invalid PAN Number", "", "PAN", objRowsColumns[0])
+                                new MassUploadExcelSheetErrors((nRowCounter + 1), 3, "", "Invalid PAN Number", "", "PAN", objRowsColumns[0])
                             };
                             m_nExcelsheetUIValidationsErrors[i_sExcelSheetName] = excelSheetErrors;
                             return tblMassUploadDataTable;
@@ -2080,7 +2080,7 @@ namespace InsiderTradingMassUpload
                             m_bErrorPresentInExcelSheets = true;
                             List<MassUploadExcelSheetErrors> excelSheetErrors = new List<MassUploadExcelSheetErrors>
                             {
-                                new MassUploadExcelSheetErrors((nRowCounter + 1), 1, "", "Invalid User Name", "", "UserName", objRowsColumns[0])
+                                new MassUploadExcelSheetErrors((nRowCounter + 1), 2, "", "Invalid User Name", "", "UserName", objRowsColumns[0])
                             };
                             m_nExcelsheetUIValidationsErrors[i_sExcelSheetName] = excelSheetErrors;
                             return tblMassUploadDataTable;
@@ -2421,7 +2421,13 @@ namespace InsiderTradingMassUpload
                                 List<MassUploadExcelSheetErrors> objResponsesForError = new List<MassUploadExcelSheetErrors>();
                                 if (m_nExcelsheetUIValidationsErrors.ContainsKey(sExcelSheetName))
                                 {
+                                    int nCount = objMassUploadDataTable.Rows.Count;
+
                                     objResponsesForError = m_nExcelsheetUIValidationsErrors[sExcelSheetName];
+                                    if (nCount > 0 && objResponsesForError.Count > 0)
+                                    {
+                                        HttpContext.Current.Session["PartialError"] = 1;
+                                    }
                                 }
                                 int nResponceCounter = 1;//First row from the excel is ignored as header row
                                 foreach (MassUploadResponseDTO objResponceDTO in objResponseList)
