@@ -148,7 +148,7 @@
 
 @if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.TRADING_POLICY_OTHER_SECURITY_VIEW))
 {
-    @Html.Hidden("History", Url.Action("History", "TradingPolicy_OS", new { acid = InsiderTrading.Common.ConstEnum.UserActions.TRADING_POLICY_OTHER_SECURITY_VIEW, CalledFrom = "History" }), new { @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'text':'','href':'" + Url.Action("History", "TradingPolicy_OS", new { acid = 337, CalledFrom = "History" }) + "&TradingPolicyId=<TradingPolicyId>','class':'glyphicon glyphicon-header','style':'font-size:20px;'}" })
+    @Html.Hidden("History", Url.Action("History", "TradingPolicy_OS", new { acid = InsiderTrading.Common.ConstEnum.UserActions.TRADING_POLICY_OTHER_SECURITY_VIEW, CalledFrom = "History" }), new { @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'text':'','href':'" + Url.Action("History", "TradingPolicy_OS", new { acid = 337, CalledFrom = "History" }) + "&TradingPolicyId=<TradingPolicyId>','class':'fa fa-header','style':'font-size:20px;'}" })
 }
 @if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.TRADING_POLICY_OTHER_SECURITY_DELETE))
 { 

@@ -141,7 +141,7 @@
     }
     if (InsiderTrading.Common.Common.CanPerform(InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_HISTORY))
     {
-        @Html.Hidden("History", Url.Action("History", "RestrictedList", new { acid = InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_HISTORY }), new { gridtype = @ViewBag.GridType, @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'text':'','href':'" + Url.Action("History", "RestrictedList", new { acid = InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_HISTORY }) + "&nMasterID=<RlMasterId>', 'class':'glyphicon glyphicon-header','style':'font-size:20px;'}" })
+        @Html.Hidden("History", Url.Action("History", "RestrictedList", new { acid = InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_HISTORY }), new { gridtype = @ViewBag.GridType, @class = "gridtypecontrol", ctrtype = "link", gridcolumntype = @ViewBag.GridType + "_usr_grd_11073", param = "{'text':'','href':'" + Url.Action("History", "RestrictedList", new { acid = InsiderTrading.Common.ConstEnum.UserActions.RESTRICTED_HISTORY }) + "&nMasterID=<RlMasterId>', 'class':'fa fa-header','style':'font-size:20px;'}" })
     }
 }
 @Html.Hidden("SearchResult", searchResult)
