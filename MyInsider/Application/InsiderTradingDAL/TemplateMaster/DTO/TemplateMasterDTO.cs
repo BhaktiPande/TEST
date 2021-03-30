@@ -69,11 +69,4 @@ namespace InsiderTradingDAL
         [PetaPoco.Column("LetterForUserDesignation")]
         public string LetterForUserDesignation { get; set; }
     }
-
-	public class GenrateFormDetailsDTO
-	{
-		[PetaPoco.Column("GeneratedFormDetailsId")]
-		public int GeneratedFormDetailsId { get; set; }
-
-	}
 }
