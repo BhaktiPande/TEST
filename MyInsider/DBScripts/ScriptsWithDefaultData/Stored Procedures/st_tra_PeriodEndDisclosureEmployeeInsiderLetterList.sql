@@ -269,7 +269,7 @@ BEGIN
 						
 			SELECT
 			T.Name as dis_grd_50442,
-			T.Relation as dis_grd_50388,
+			isnull(T.Relation,'') as dis_grd_50388,
 							NULL as dis_grd_50389,
 							T.BSecurityType as dis_grd_50390,
 							T.OpeningStock as dis_grd_50391,

@@ -77,8 +77,13 @@ BEGIN
 	DECLARE @NoHolding_Text VARCHAR(12) = 'No Holding'
 	DECLARE @TRANSACTION_TYPE_BUY INT = 143001
 	DECLARE @TRANSACTION_TYPE_SELL INT = 143002
+	DECLARE @TRANSACTION_TYPE_ESOP INT =143003
 	DECLARE @TRANSACTION_TYPE_CASHLESS_PARTIAL INT = 143005
 	DECLARE @TRANSACTION_TYPE_CASHLESS_ALL INT = 143004
+
+	DECLARE @CashlessPartial VARCHAR(50) = 'Cashless Partial'
+	DECLARE @CashlessAll VARCHAR(50) = 'Cashless All'
+	DECLARE @Buy VARCHAR(50) = 'Buy'
 
 	DECLARE @nUserType_Corporate INT = 101004
 	DECLARE @nUserType_Employee INT = 101003
@@ -268,8 +273,8 @@ BEGIN
 							when td.SecurityTypeCodeId in (@SecuriyType_Share) THEN 
 								ISNULL(CONVERT(VARCHAR(MAX),(SecuritiesPriorToAcquisition + (
 									CASE 										
-										WHEN td.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_PARTIAL THEN (Quantity-Quantity2) 
-										WHEN td.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_ALL THEN (Quantity-Quantity2) 
+										WHEN td.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_PARTIAL THEN (Quantity) 
+										WHEN td.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_ALL THEN (Quantity) 
 										ELSE CASE WHEN @nLess = (SELECT dbo.uf_tra_GetImpactOnPostQuantity(td.TransactionTypeCodeId, td.ModeOfAcquisitionCodeId, td.SecurityTypeCodeId)) THEN (-1 * Quantity)
 										     WHEN @nBoth = (SELECT dbo.uf_tra_GetImpactOnPostQuantity(td.TransactionTypeCodeId, td.ModeOfAcquisitionCodeId, td.SecurityTypeCodeId)) THEN 0
 										     WHEN @nNo = (SELECT dbo.uf_tra_GetImpactOnPostQuantity(td.TransactionTypeCodeId, td.ModeOfAcquisitionCodeId, td.SecurityTypeCodeId)) THEN 0
@@ -283,8 +288,8 @@ BEGIN
 							when td.SecurityTypeCodeId in (@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN 
 								ISNULL(CONVERT(VARCHAR(MAX),(SecuritiesPriorToAcquisition + (
 									CASE 										
-										WHEN td.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_PARTIAL THEN (Quantity-Quantity2) 
-										WHEN td.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_ALL THEN (Quantity-Quantity2) 
+										WHEN td.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_PARTIAL THEN (Quantity) 
+										WHEN td.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_ALL THEN (Quantity) 
 										ELSE CASE WHEN @nLess = (SELECT dbo.uf_tra_GetImpactOnPostQuantity(td.TransactionTypeCodeId, td.ModeOfAcquisitionCodeId, td.SecurityTypeCodeId)) THEN (-1 * Quantity)
 										     WHEN @nBoth = (SELECT dbo.uf_tra_GetImpactOnPostQuantity(td.TransactionTypeCodeId, td.ModeOfAcquisitionCodeId, td.SecurityTypeCodeId)) THEN 0
 										     WHEN @nNo = (SELECT dbo.uf_tra_GetImpactOnPostQuantity(td.TransactionTypeCodeId, td.ModeOfAcquisitionCodeId, td.SecurityTypeCodeId)) THEN 0
@@ -469,12 +474,15 @@ BEGIN
 							ELSE '-' 
 						END as dis_grd_17195,
 						case 
-							when td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN CTransType.CodeName 
-							ELSE '-' 
-						END as dis_grd_17196,
+							when td.TransactionTypeCodeId in (@TRANSACTION_TYPE_BUY,@TRANSACTION_TYPE_SELL,@TRANSACTION_TYPE_ESOP) THEN CTransType.CodeName  
+							ELSE  CASE WHEN td.TransactionTypeCodeId in(@TRANSACTION_TYPE_CASHLESS_PARTIAL,@TRANSACTION_TYPE_CASHLESS_ALL) THEN @Buy 
+							ELSE '-'
+							END
+						END as dis_grd_17196 ,						
 						case 
 							when td.SecurityTypeCodeId in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN CTransType.CodeID 
 							ELSE '-' 
+
 						END as 'TransactionType',
 						null as dis_grd_17197,
 						case 
@@ -485,8 +493,8 @@ BEGIN
 							when td.SecurityTypeCodeId in (@SecuriyType_Share) THEN 
 								ISNULL(CONVERT(VARCHAR(MAX),(SecuritiesPriorToAcquisition + (
 									CASE 										
-										WHEN td.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_PARTIAL THEN (Quantity-Quantity2) 
-										WHEN td.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_ALL THEN (Quantity-Quantity2) 
+										WHEN td.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_PARTIAL THEN (Quantity) 
+										WHEN td.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_ALL THEN (Quantity) 
 										ELSE CASE WHEN @nLess = (SELECT dbo.uf_tra_GetImpactOnPostQuantity(td.TransactionTypeCodeId, td.ModeOfAcquisitionCodeId, td.SecurityTypeCodeId)) THEN (-1 * Quantity)
 										     WHEN @nBoth = (SELECT dbo.uf_tra_GetImpactOnPostQuantity(td.TransactionTypeCodeId, td.ModeOfAcquisitionCodeId, td.SecurityTypeCodeId)) THEN 0
 										     WHEN @nNo = (SELECT dbo.uf_tra_GetImpactOnPostQuantity(td.TransactionTypeCodeId, td.ModeOfAcquisitionCodeId, td.SecurityTypeCodeId)) THEN 0
@@ -500,8 +508,8 @@ BEGIN
 							when td.SecurityTypeCodeId in (@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN 
 								ISNULL(CONVERT(VARCHAR(MAX),(SecuritiesPriorToAcquisition + (
 									CASE 										
-										WHEN td.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_PARTIAL THEN (Quantity-Quantity2) 
-										WHEN td.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_ALL THEN (Quantity-Quantity2) 
+										WHEN td.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_PARTIAL THEN (Quantity) 
+										WHEN td.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_ALL THEN (Quantity) 
 										ELSE CASE WHEN @nLess = (SELECT dbo.uf_tra_GetImpactOnPostQuantity(td.TransactionTypeCodeId, td.ModeOfAcquisitionCodeId, td.SecurityTypeCodeId)) THEN (-1 * Quantity)
 										     WHEN @nBoth = (SELECT dbo.uf_tra_GetImpactOnPostQuantity(td.TransactionTypeCodeId, td.ModeOfAcquisitionCodeId, td.SecurityTypeCodeId)) THEN 0
 										     WHEN @nNo = (SELECT dbo.uf_tra_GetImpactOnPostQuantity(td.TransactionTypeCodeId, td.ModeOfAcquisitionCodeId, td.SecurityTypeCodeId)) THEN 0
@@ -534,7 +542,7 @@ BEGIN
 						case 
 							when td.SecurityTypeCodeId not in (@SecuriyType_Share,@SecuriyType_WArrants,@SecuriyType_ConDEb) THEN '-' 
 							ELSE TUD.StockExchange 
-						END AS dis_grd_55501
+						END AS dis_grd_55501						
 					from tra_TransactionDetails td
 					join com_Code C on C.CodeID = td.SecurityTypeCodeId
 					join tra_TransactionMaster tm on tm.TransactionMasterId = td.TransactionMasterId
@@ -559,8 +567,8 @@ BEGIN
 						dis_grd_17192,
 						dis_grd_17193,
 						dis_grd_17194,
-						dis_grd_17195,
-						dis_grd_17196,
+						dis_grd_17195,						
+						dis_grd_17196,												
 						TransactionType,
 						dis_grd_17197,
 						dis_grd_17198,
@@ -579,6 +587,9 @@ BEGIN
 					UPDATE @Temp_TableCashlessTrans 
 						SET dis_grd_17194 = TD.Quantity2,
 							dis_grd_17195 = TD.Value2, 
+							dis_grd_17196=CASE WHEN td.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_PARTIAL THEN  @CashlessPartial 
+											 WHEN td.TransactionTypeCodeId=@TRANSACTION_TYPE_CASHLESS_ALL THEN @CashlessAll END,					
+						
 							dis_grd_17199 = CASE WHEN TD.SecurityTypeCodeId in (@SecuriyType_Share) THEN ISNULL(CONVERT(VARCHAR(MAX),CONVERT(DECIMAL(10,0),ABS(SUBSTRING(dis_grd_17191, 0,CHARINDEX('#', dis_grd_17191)) - TD.Quantity2))),'')
 							+ '##' + CASE WHEN td.TransactionTypeCodeId = @TRANSACTION_TYPE_CASHLESS_PARTIAL
 									 THEN ISNULL(CONVERT(VARCHAR(MAX),CONVERT(DECIMAL(10,2),((ABS(SUBSTRING(dis_grd_17199,0 ,CHARINDEX('##', dis_grd_17199)) - Quantity2)*@nMultiplier) / @dPaidUpShare))),'')
