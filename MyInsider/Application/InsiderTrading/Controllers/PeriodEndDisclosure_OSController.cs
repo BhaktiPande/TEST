@@ -467,19 +467,19 @@ namespace InsiderTrading.Controllers
                     var totalColsSheetOne = dtPeriodSummaryComapnyWise.Columns.Count;
                     var totalRowsSheetOne = dtPeriodSummaryComapnyWise.Rows.Count;
 
-                    worksheetSummery.Cells["A1:H1"].Merge = true;
-                    worksheetSummery.Cells["A1:H1"].Value = "Summary of holdings of other securities";
-                    worksheetSummery.Cells["A1:H1"].Style.Border.Top.Style = worksheetSummery.Cells["A1:H1"].Style.Border.Bottom.Style = worksheetSummery.Cells["A1:H1"].Style.Border.Left.Style = worksheetSummery.Cells["A1:H1"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
-                    worksheetSummery.Cells["A1:H1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                    worksheetSummery.Cells["A1:H1"].Style.Font.Bold = true;
-                    worksheetSummery.Cells["A1:H1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    worksheetSummery.Cells["A1:H1"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+                    worksheetSummery.Cells["A1:I1"].Merge = true;
+                    worksheetSummery.Cells["A1:I1"].Value = "Summary of holdings of other securities";
+                    worksheetSummery.Cells["A1:I1"].Style.Border.Top.Style = worksheetSummery.Cells["A1:I1"].Style.Border.Bottom.Style = worksheetSummery.Cells["A1:I1"].Style.Border.Left.Style = worksheetSummery.Cells["A1:I1"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    worksheetSummery.Cells["A1:I1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheetSummery.Cells["A1:I1"].Style.Font.Bold = true;
+                    worksheetSummery.Cells["A1:I1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    worksheetSummery.Cells["A1:I1"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
                     //Bind Period Dates
-                    worksheetSummery.Cells["A2:H2"].Merge = true;
-                    worksheetSummery.Cells["A2:H2"].Value = "Period:   " + periodStartEndDate;
-                    worksheetSummery.Cells["A2:H2"].Style.Font.Bold = true;
-                    worksheetSummery.Cells["A2:H2"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                    worksheetSummery.Cells["A2:H2"].Style.Border.Top.Style = worksheetSummery.Cells["A2:H2"].Style.Border.Bottom.Style = worksheetSummery.Cells["A2:H2"].Style.Border.Left.Style = worksheetSummery.Cells["A2:H2"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    worksheetSummery.Cells["A2:I2"].Merge = true;
+                    worksheetSummery.Cells["A2:I2"].Value = "Period:   " + periodStartEndDate;
+                    worksheetSummery.Cells["A2:I2"].Style.Font.Bold = true;
+                    worksheetSummery.Cells["A2:I2"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                    worksheetSummery.Cells["A2:I2"].Style.Border.Top.Style = worksheetSummery.Cells["A2:I2"].Style.Border.Bottom.Style = worksheetSummery.Cells["A2:I2"].Style.Border.Left.Style = worksheetSummery.Cells["A2:I2"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
                     //Bind Table Column
                     for (var col = 1; col <= totalColsSheetOne; col++)
                     {
@@ -489,7 +489,7 @@ namespace InsiderTrading.Controllers
                             worksheetSummery.Cells[3, col].Style.Font.Name = "Arial";
                             worksheetSummery.Cells[3, col].Style.Font.Size = 10;
                             worksheetSummery.Cells[3, col].Style.Font.Color.SetColor(System.Drawing.Color.Black);
-                            cellRange = "A3:H3";
+                            cellRange = "A3:I3";
                             using (ExcelRange rng = worksheetSummery.Cells[cellRange])
                             {
                                 rng.Style.WrapText = true;
@@ -548,15 +548,15 @@ namespace InsiderTrading.Controllers
                                     excelRow = excelRow + 1;
                                     worksheetSummery.Cells[excelRow + 1, 4].Value = "Total Demat " + dtDematTotal.Rows[rowDemat][4].ToString();
                                     //worksheetSummery.Cells[excelRow + 1, 6].Value = dtDematTotal.Rows[rowDemat][5].ToString();
-                                    worksheetSummery.Cells[excelRow + 1, 6].Value = dtDematTotal.Rows[rowDemat][6].ToString();
-                                    worksheetSummery.Cells[excelRow + 1, 7].Value = dtDematTotal.Rows[rowDemat][7].ToString();
-                                    worksheetSummery.Cells[excelRow + 1, 8].Value = dtDematTotal.Rows[rowDemat][8].ToString();
-                                    worksheetSummery.Cells[excelRow + 1, 9].Value = string.Empty;
+                                    worksheetSummery.Cells[excelRow + 1, 6].Value = dtDematTotal.Rows[rowDemat][5].ToString();
+                                    worksheetSummery.Cells[excelRow + 1, 7].Value = dtDematTotal.Rows[rowDemat][6].ToString();
+                                    worksheetSummery.Cells[excelRow + 1, 8].Value = dtDematTotal.Rows[rowDemat][7].ToString();
+                                    worksheetSummery.Cells[excelRow + 1, 9].Value = dtDematTotal.Rows[rowDemat][8].ToString();
                                     worksheetSummery.Cells[excelRow + 1, 1].Value = string.Empty;
                                     worksheetSummery.Cells[excelRow + 1, 2].Value = string.Empty;
                                     worksheetSummery.Cells[excelRow + 1, 3].Value = string.Empty;
                                     worksheetSummery.Cells[excelRow + 1, 5].Value = string.Empty;
-                                    cellRange = "D" + (excelRow + 1) + ":H" + (excelRow + 1);
+                                    cellRange = "D" + (excelRow + 1) + ":I" + (excelRow + 1);
                                     using (ExcelRange rng = worksheetSummery.Cells[cellRange])
                                     {
                                         rng.Style.WrapText = true;
@@ -591,11 +591,11 @@ namespace InsiderTrading.Controllers
                                     worksheetSummery.Cells[excelRow + 1, 4].Value = string.Empty;
                                     worksheetSummery.Cells[excelRow + 1, 5].Value = string.Empty;
                                     //worksheetSummery.Cells[excelRow + 1, 6].Value = dtSecurityTypeTotal.Rows[rowSecurity][4].ToString();
-                                    worksheetSummery.Cells[excelRow + 1, 6].Value = dtSecurityTypeTotal.Rows[rowSecurity][5].ToString();
-                                    worksheetSummery.Cells[excelRow + 1, 7].Value = dtSecurityTypeTotal.Rows[rowSecurity][6].ToString();
-                                    worksheetSummery.Cells[excelRow + 1, 8].Value = dtSecurityTypeTotal.Rows[rowSecurity][7].ToString();
-                                    worksheetSummery.Cells[excelRow + 1, 9].Value = string.Empty;
-                                    cellRange = "A" + (excelRow + 1) + ":H" + (excelRow + 1);
+                                    worksheetSummery.Cells[excelRow + 1, 6].Value = dtSecurityTypeTotal.Rows[rowSecurity][4].ToString();
+                                    worksheetSummery.Cells[excelRow + 1, 7].Value = dtSecurityTypeTotal.Rows[rowSecurity][5].ToString();
+                                    worksheetSummery.Cells[excelRow + 1, 8].Value = dtSecurityTypeTotal.Rows[rowSecurity][6].ToString();
+                                    worksheetSummery.Cells[excelRow + 1, 9].Value = dtSecurityTypeTotal.Rows[rowSecurity][7].ToString();
+                                    cellRange = "A" + (excelRow + 1) + ":I" + (excelRow + 1);
                                     using (ExcelRange rng = worksheetSummery.Cells[cellRange])
                                     {
                                         rng.Style.WrapText = true;
