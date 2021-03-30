@@ -111,6 +111,7 @@ BEGIN
 			TranSummary.YearCodeId = @inp_iYearCodeId AND
 			TranSummary.PeriodCodeId = @inp_iPeriodCodeID
 
+			--select * from @tmpPeriodEndDisclosureSummary
 		-- made change to show last period closing balance as this period opening balance
 		UPDATE  TmpTS
 		SET 
@@ -147,8 +148,8 @@ BEGIN
 					T.SecurityType AS 'SecurityType',
 					T.DematAccountNo AS 'Demat Account Number',
 					T.CompanyName AS 'Company',
-					--T.OpeningStock AS 'Holdings at the beginning of the period',
-					T.Bought AS 'Initial Disclosure or Bought during the period',
+				    T.OpeningStock AS 'Initial Disclosure',
+				    T.Bought AS 'Bought during the period',
 					T.Sold AS 'Sold during the period',
 					T.PeriodEndHolding AS 'Holdings at the end of the period'
 				FROM @tmpPeriodEndDisclosureSummary T
