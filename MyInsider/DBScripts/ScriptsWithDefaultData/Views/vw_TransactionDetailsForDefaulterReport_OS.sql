@@ -3,8 +3,8 @@ DROP VIEW [dbo].[vw_TransactionDetailsForDefaulterReport_OS]
 GO
 /*
 Modification History
-ModifiedBy	ModifiedOn		Description
-
+ModifiedBy		ModifiedOn		Description
+Sandesh Lande	30/03/2021		CompanyId Added
 
 */
 CREATE VIEW [dbo].[vw_TransactionDetailsForDefaulterReport_OS]
@@ -19,8 +19,10 @@ Value,
 TD.DMATDetailsID AS DMATDetailsID,
 DMATD.DEMATAccountNumber AS DEMATAccountNumber,
 UI.UserFullName AS AccountHolderName,
-CASE WHEN code.CodeName IS NULL THEN 'Self' ELSE code.CodeName END AS Relation
-FROM tra_TransactionDetails_OS TD JOIN com_Code CSecurityType ON TD.SecurityTypeCodeId = CSecurityType.CodeID
+CASE WHEN code.CodeName IS NULL THEN 'Self' ELSE code.CodeName END AS Relation,
+TD.CompanyId
+FROM tra_TransactionDetails_OS TD 
+	JOIN com_Code CSecurityType ON TD.SecurityTypeCodeId = CSecurityType.CodeID
 	JOIN com_Code CTransaction ON TransactionTypeCodeId = CTransaction.CodeID
 	JOIN tra_TransactionMaster_OS TM ON TD.TransactionMasterId = TM.TransactionMasterId
 	JOIN usr_DMATDetails DMATD ON TD.DMATDetailsID = DMATD.DMATDetailsID
