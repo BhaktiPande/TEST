@@ -2040,10 +2040,10 @@ DatatableGrid.prototype.format = {
                 status = status + '</a>';
                 if (obj.aData["dis_grd_17014"] != "" && obj.aData['dis_grd_17017'] == 153016 && obj.aData['IsPreclearanceFormForImplementingCompany'] == 1) {
                     if (obj.aData['IsFORMEGenrated'] == "1") {
-                        status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '?acid=157&PreClearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&DisplayCode=' + obj.aData['dis_grd_17014'] + '" class="glyphicon glyphicon-download-alt downloadforme" title="Download Form E file" >';
+                        status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '?acid=157&PreClearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&DisplayCode=' + obj.aData['dis_grd_17014'] + '" class="fa fa-download downloadforme" title="Download Form E file" >';
                         status = status + '</a>';
                     } else {
-                        status = status + '&nbsp;<a href= "#" onclick="showerrormessage(this);" errormessage="FORM E not generated" class="glyphicon glyphicon-download-alt downloadforme" title="Download Form E file" >';
+                        status = status + '&nbsp;<a href= "#" onclick="showerrormessage(this);" errormessage="FORM E not generated" class="fa fa-download downloadforme" title="Download Form E file" >';
                         status = status + '</a>';
                     }
 
@@ -3512,11 +3512,11 @@ DatatableGrid.prototype.format = {
 
             if (obj.aData['TransPendingFlag'] >= 1) {
                 if (obj.aData['TransPendingFlag'] >= "1") {
-                    status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '?acid=165&UserInfoId=' + obj.aData['UserInfoId'] + '&ReqModuleId=513001' + '"class="glyphicon glyphicon-download-alt" title="Download Form E file">';
+                    status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '?acid=165&UserInfoId=' + obj.aData['UserInfoId'] + '&ReqModuleId=513001' + '"class="fa fa-download" title="Download Form E file">';
 
                     status = status + '</a>';
                 } else {
-                    //status = status + '&nbsp;<a href= "#" onclick="showerrormessage(this);" errormessage="FORM E not generated" class="glyphicon glyphicon-download-alt downloadforme" title="Download Form E file" >';
+                    //status = status + '&nbsp;<a href= "#" onclick="showerrormessage(this);" errormessage="FORM E not generated" class="fa fa-download downloadforme" title="Download Form E file" >';
                     //status = status + '</a>'
                 }
             }
@@ -3563,7 +3563,7 @@ DatatableGrid.prototype.format = {
 
             if (obj.aData['SoftcopyPendingFlag'] >= 1) {
                 if (obj.aData['SoftcopyPendingFlag'] >= "1") {
-                    status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '?acid=165&UserInfoId=' + obj.aData['UserInfoId'] + '&ReqModuleId=513001' + '"class="glyphicon glyphicon-download-alt" title="Download Form E file">';
+                    status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '?acid=165&UserInfoId=' + obj.aData['UserInfoId'] + '&ReqModuleId=513001' + '"class="fa fa-download" title="Download Form E file">';
 
                     status = status + '</a>';
                 } else {
@@ -3617,7 +3617,7 @@ DatatableGrid.prototype.format = {
 
             if (obj.aData['HardcopyPendingFlag'] >= 1) {
                 if (obj.aData['HardcopyPendingFlag'] >= "1") {
-                    status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '?acid=165&UserInfoId=' + obj.aData['UserInfoId'] + '&ReqModuleId=513001' + '"class="glyphicon glyphicon-download-alt" title="Download Form E file">';
+                    status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '?acid=165&UserInfoId=' + obj.aData['UserInfoId'] + '&ReqModuleId=513001' + '"class="fa fa-download" title="Download Form E file">';
 
                     status = status + '</a>';
                 } else {
@@ -3755,7 +3755,7 @@ DatatableGrid.prototype.format = {
 
             if (obj.aData['TransPendingFlag'] >= 1) {
                 if (obj.aData['TransPendingFlag'] >= "1") {
-                    status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '?acid=165&UserInfoId=' + obj.aData['UserInfoId'] + '&ReqModuleId=513002' + '"class="glyphicon glyphicon-download-alt" title="Download Form E file">';
+                    status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '?acid=165&UserInfoId=' + obj.aData['UserInfoId'] + '&ReqModuleId=513002' + '"class="fa fa-download" title="Download Form E file">';
 
                     status = status + '</a>';
                 } else {
@@ -3811,7 +3811,7 @@ DatatableGrid.prototype.format = {
 
             if (obj.aData['SoftcopyPendingFlag'] >= 1) {
                 if (obj.aData['SoftcopyPendingFlag'] >= "1") {
-                    status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '?acid=165&UserInfoId=' + obj.aData['UserInfoId'] + '&ReqModuleId=513002' + '"class="glyphicon glyphicon-download-alt" title="Download Form E file">';
+                    status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '?acid=165&UserInfoId=' + obj.aData['UserInfoId'] + '&ReqModuleId=513002' + '"class="fa fa-download" title="Download Form E file">';
 
                     status = status + '</a>';
                 } else {
@@ -3880,7 +3880,7 @@ DatatableGrid.prototype.format = {
 
             if (obj.aData['HardcopyPendingFlag'] >= 1) {
                 if (obj.aData['HardcopyPendingFlag'] >= "1") {
-                    status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '?acid=165&UserInfoId=' + obj.aData['UserInfoId'] + '&ReqModuleId=513002' + '"class="glyphicon glyphicon-download-alt" title="Download Form E file">';
+                    status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '?acid=165&UserInfoId=' + obj.aData['UserInfoId'] + '&ReqModuleId=513002' + '"class="fa fa-download" title="Download Form E file">';
 
                     status = status + '</a>';
                 } else {
@@ -4194,10 +4194,10 @@ DatatableGrid.prototype.format = {
                 if (obj.aData["dis_grd_53013"] != "" && obj.aData['PreclearanceStatusCodeId'] == 144002){                    
                     //&& obj.aData['IsPreclearanceFormForImplementingCompany'] == 1) {
                     if (obj.aData['IsFORMEGenrated'] == "1") {
-                        status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '&PreClearanceRequestId=' + obj.aData['DisplaySequenceNo'] + '&DisplayCode=' + obj.aData['dis_grd_53013'] + '" class="glyphicon glyphicon-download-alt downloadforme" title="Download Form E file" >';
+                        status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '&PreClearanceRequestId=' + obj.aData['DisplaySequenceNo'] + '&DisplayCode=' + obj.aData['dis_grd_53013'] + '" class="fa fa-download downloadforme" title="Download Form E file" >';
                         status = status + '</a>';
                     } else {
-                        status = status + '&nbsp;<a href= "#" onclick="showerrormessage(this);" errormessage="FORM E not generated" class="glyphicon glyphicon-download-alt downloadforme" title="Download Form E file" >';
+                        status = status + '&nbsp;<a href= "#" onclick="showerrormessage(this);" errormessage="FORM E not generated" class="fa fa-download downloadforme" title="Download Form E file" >';
                         status = status + '</a>';
                     }
 
@@ -4461,10 +4461,10 @@ DatatableGrid.prototype.format = {
                 if (obj.aData["dis_grd_53040"] != "" && obj.aData['PreclearanceStatusCodeId'] == 153046){
                     //&& obj.aData['IsPreclearanceFormForImplementingCompany'] == 1) {
                     if (obj.aData['IsFORMEGenrated'] == "1") {
-                        status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '&PreClearanceRequestId=' + obj.aData['DisplaySequenceNo'] + '&DisplayCode=' + obj.aData['dis_grd_53040'] + '" class="glyphicon glyphicon-download-alt downloadforme" title="Download Form E file" >';
+                        status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '&PreClearanceRequestId=' + obj.aData['DisplaySequenceNo'] + '&DisplayCode=' + obj.aData['dis_grd_53040'] + '" class="fa fa-download downloadforme" title="Download Form E file" >';
                         status = status + '</a>';
                     } else {
-                        status = status + '&nbsp;<a href= "#" onclick="showerrormessage(this);" errormessage="FORM E not generated" class="glyphicon glyphicon-download-alt downloadforme" title="Download Form E file" >';
+                        status = status + '&nbsp;<a href= "#" onclick="showerrormessage(this);" errormessage="FORM E not generated" class="fa fa-download downloadforme" title="Download Form E file" >';
                         status = status + '</a>';
                     }
 
@@ -4848,10 +4848,10 @@ DatatableGrid.prototype.format = {
                 status = status + '</a>';
                 if (obj.aData["dis_grd_17256"] != "" && obj.aData['dis_grd_17258'] == 153016 && obj.aData['IsPreclearanceFormForImplementingCompany'] == 1) {
                     if (obj.aData['IsFORMEGenrated'] == "1") {
-                        status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '&PreClearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&DisplayCode=' + obj.aData['dis_grd_17256'] + '"class="glyphicon glyphicon-download-alt" title="Download Form E file">';
+                        status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '&PreClearanceRequestId=' + obj.aData['PreclearanceRequestId'] + '&DisplayCode=' + obj.aData['dis_grd_17256'] + '"class="fa fa-download" title="Download Form E file">';
                         status = status + '</a>';
                     } else {
-                        status = status + '&nbsp;<a href= "#" onclick="showerrormessage(this);" errormessage="FORM E not generated" class="glyphicon glyphicon-download-alt downloadforme" title="Download Form E file" >';
+                        status = status + '&nbsp;<a href= "#" onclick="showerrormessage(this);" errormessage="FORM E not generated" class="fa fa-download downloadforme" title="Download Form E file" >';
                         status = status + '</a>'
                     }
                 }
@@ -6034,10 +6034,10 @@ DatatableGrid.prototype.format = {
                 status = status + obj.aData['dis_grd_17360'];
                 if (obj.aData['PreclearanceStatus'] == 144002 && obj.aData['IsPreclearanceFormForImplementingCompany'] == 1) {
                     if (obj.aData['IsFORMEGenrated'] == "1") {
-                        status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '&PreClearanceRequestId=' + obj.aData['PreClearanceRequestID'] + '&DisplayCode=' + obj.aData['dis_grd_17360'] + '"class="glyphicon glyphicon-download-alt" title="Download Form E file">';
+                        status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '&PreClearanceRequestId=' + obj.aData['PreClearanceRequestID'] + '&DisplayCode=' + obj.aData['dis_grd_17360'] + '"class="fa fa-download" title="Download Form E file">';
                         status = status + '</a>';
                     } else {
-                        status = status + '&nbsp;<a href= "#" onclick="showerrormessage(this);" errormessage="FORM E not generated" class="glyphicon glyphicon-download-alt downloadforme" title="Download Form E file" >';
+                        status = status + '&nbsp;<a href= "#" onclick="showerrormessage(this);" errormessage="FORM E not generated" class="fa fa-download downloadforme" title="Download Form E file" >';
                         status = status + '</a>';
                     }
 
@@ -6143,10 +6143,10 @@ DatatableGrid.prototype.format = {
                 status = status + obj.aData['dis_grd_17369'];
                 if (obj.aData['PreclearanceStatus'] == 144002 && obj.aData['IsPreclearanceFormForImplementingCompany'] == 1) {
                     if (obj.aData['IsFORMEGenrated'] == "1") {
-                        status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '&PreClearanceRequestId=' + obj.aData['PreClearanceRequestID'] + '&DisplayCode=' + obj.aData['dis_grd_17369'] + '"class="glyphicon glyphicon-download-alt" title="Download Form E file">';
+                        status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '&PreClearanceRequestId=' + obj.aData['PreClearanceRequestID'] + '&DisplayCode=' + obj.aData['dis_grd_17369'] + '"class="fa fa-download" title="Download Form E file">';
                         status = status + '</a>';
                     } else {
-                        status = status + '&nbsp;<a href= "#" onclick="showerrormessage(this);" errormessage="FORM E not generated" class="glyphicon glyphicon-download-alt downloadforme" title="Download Form E file" >';
+                        status = status + '&nbsp;<a href= "#" onclick="showerrormessage(this);" errormessage="FORM E not generated" class="fa fa-download downloadforme" title="Download Form E file" >';
                         status = status + '</a>';
                     }
 
@@ -6487,10 +6487,10 @@ DatatableGrid.prototype.format = {
                 status = obj.aData['dis_grd_17485'];
                 if (obj.aData["dis_grd_17485"] != "" && obj.aData['PreclearanceStatusCodeId'] == 144002) {
                     if (obj.aData['IsFORMEGenrated'] == "1") {
-                        status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '?acid=216&PreClearanceRequestId=' + obj.aData['DisplaySequenceNo'] + '&DisplayCode=' + obj.aData['dis_grd_17485'] + '" class="glyphicon glyphicon-download-alt downloadforme" title="Download Form E file" >';
+                        status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '?acid=216&PreClearanceRequestId=' + obj.aData['DisplaySequenceNo'] + '&DisplayCode=' + obj.aData['dis_grd_17485'] + '" class="fa fa-download downloadforme" title="Download Form E file" >';
                         status = status + '</a>';
                     } else {
-                        status = status + '&nbsp;<a href= "#" onclick="showerrormessage(this);" errormessage="FORM E not generated" class="glyphicon glyphicon-download-alt downloadforme" title="Download Form E file" >';
+                        status = status + '&nbsp;<a href= "#" onclick="showerrormessage(this);" errormessage="FORM E not generated" class="fa fa-download downloadforme" title="Download Form E file" >';
                         status = status + '</a>';
                     }
 
@@ -6549,10 +6549,10 @@ DatatableGrid.prototype.format = {
                 status = obj.aData['dis_grd_17516'];
                 if (obj.aData["dis_grd_17516"] != "" && obj.aData['PreclearanceStatusCodeId'] == 144002) {
                     if (obj.aData['IsFORMEGenrated'] == "1") {
-                        status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '?acid=217&PreClearanceRequestId=' + obj.aData['DisplaySequenceNo'] + '&DisplayCode=' + obj.aData['dis_grd_17516'] + '" class="glyphicon glyphicon-download-alt downloadforme" title="Download Form E file" >';
+                        status = status + '&nbsp;<a href= "' + $('#DownloadFormE').val() + '?acid=217&PreClearanceRequestId=' + obj.aData['DisplaySequenceNo'] + '&DisplayCode=' + obj.aData['dis_grd_17516'] + '" class="fa fa-download downloadforme" title="Download Form E file" >';
                         status = status + '</a>';
                     } else {
-                        status = status + '&nbsp;<a href= "#" onclick="showerrormessage(this);" errormessage="FORM E not generated" class="glyphicon glyphicon-download-alt downloadforme" title="Download Form E file" >';
+                        status = status + '&nbsp;<a href= "#" onclick="showerrormessage(this);" errormessage="FORM E not generated" class="fa fa-download downloadforme" title="Download Form E file" >';
                         status = status + '</a>';
                     }
 
