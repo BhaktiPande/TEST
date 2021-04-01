@@ -1,6 +1,8 @@
 IF EXISTS(SELECT NAME FROM SYS.PROCEDURES WHERE NAME = 'st_rpt_DefaulterReport_OS')
 	DROP PROCEDURE st_rpt_DefaulterReport_OS
 GO
+GO
+/****** Object:  StoredProcedure [dbo].[st_rpt_DefaulterReport_OS]    Script Date: 24-03-2021 10:53:50 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -13,60 +15,16 @@ Returns:		0, if Success.
 Created by:		Sandesh L.
 Created on:		09-Mar-2021
 
+Modification History
+ModifiedBy		ModifiedOn		Description
+Sandesh Lande	30/03/2021		Company Name Added
+
 ---*/
 CREATE PROCEDURE [dbo].[st_rpt_DefaulterReport_OS]
-	--@inp_iPageSize								INT = 10
-	--@inp_iPageNo									INT = 1
-	-- @inp_sSortField								VARCHAR(255)=''
-	--,@inp_sSortOrder								VARCHAR(5)=''
-	--@inp_iUserInfoId								INT
 	 @inp_sEmployeeID								NVARCHAR(50)=''-- = 'GS1234'
 	,@inp_sInsiderName								NVARCHAR(MAX)='' --= 's'
 	,@inp_sDesignation								NVARCHAR(100) = ''
-	,@inp_sCompanyName								NVARCHAR(200) = ''
-	--,@inp_dtDateOfTransactionFrom					DATETIME = null
-	--,@inp_dtDateOfTransactionTo					DATETIME = null
-	--,@inp_sDesignation							NVARCHAR(MAX) --= 's'
-	--,@inp_sGrade									NVARCHAR(100) --= 'a'
-	--,@inp_sLocation								NVARCHAR(50) --= 'pune'
-	--,@inp_sDepartment								NVARCHAR(100) --= 'a'
-	--,@inp_sCompanyName							NVARCHAR(MAX) --= 'k'
-	--,@inp_sTypeOfInsider							NVARCHAR(200) --= 101003,101002
-	--,@inp_sDematAccountNumber						NVARCHAR(50)
-	--,@inp_sAccountHolder							NVARCHAR(MAX)
-	--,@inp_sPreClearanceID							NVARCHAR(100)
-	--,@inp_sRequestStatus							NVARCHAR(500)
-	--,@inp_sTransactionType						NVARCHAR(500)
-	--,@inp_sSecurityType							NVARCHAR(500)
-	--,@inp_dtSubmissionDateFrom					DATETIME --= '2015-05-15'
-	--,@inp_dtSubmissionDateTo						DATETIME --= '2015-05-19'
-	--,@inp_dtSoftCopySubmissionDateFrom			DATETIME --= '2015-05-14'
-	--,@inp_dtSoftCopySubmissionDateTo				DATETIME --= '2015-05-15'
-	--,@inp_dtHardCopySubmissionDateFrom			DATETIME
-	--,@inp_dtHardCopySubmissionDateTo				DATETIME
-	--,@inp_dtLastSubmissionDateFrom				DATETIME --= '2015-05-15'
-	--,@inp_dtLastSubmissionDateTo					DATETIME --= '2015-05-19'
-	--,@inp_dtStockExchangesubmissionDateFrom		DATETIME --= '2015-05-14'
-	--,@inp_dtStockExchangeSubmissionDateTo			DATETIME --= '2015-05-15'
-	--,@inp_sNonComplainceType						NVARCHAR(100)
-	--,@inp_sCommentsId								NVARCHAR(200) -- = 162002,162001
-
-	--,@inp_dtPreStatusFromDate						DATETIME
-	--,@inp_dtPreStatusToDate						DATETIME
-	--,@inp_iPreclearanceFromQty					INT
-	--,@inp_iPreclearanceToQty						INT
-	--,@inp_iTradeFromQty							INT
-	--,@inp_iTradeToQty								INT
-	--,@inp_iPreclearanceFromValue					INT
-	--,@inp_iPreclearanceToValue					INT
-	--,@inp_iTradeFromValue							INT
-	--,@inp_iTradeToValue							INT
-	--,@inp_dtTransactionFromDate					DATETIME
-	--,@inp_dtTransactionToDate						DATETIME
-	--,@inp_dtLastSubmissionFromDate				DATETIME
-	--,@inp_dtLastSubmissionToDate					DATETIME
-	--,@inp_iIsMarkOverride							INT
-	--,@inp_sIsInsiderFlag							NVARCHAR(200) -- 173001 : Insider, 173002 : Non Insider
+	,@inp_sCompanyName								NVARCHAR(200) = ''	
 	,@out_nReturnValue								INT			 = 0	OUTPUT
 	,@out_nSQLErrCode								INT			 = 0	OUTPUT				-- Output SQL Error Number, if error occurred.
 	,@out_sSQLErrMessage							VARCHAR(500) = ''	OUTPUT  -- Output SQL Error Message, if error occurred.	
@@ -86,6 +44,8 @@ BEGIN
 	
 	DECLARE @nPreclearanceLevelQtyComment						INT
 	DECLARE @nPreclearanceLevelValueComment						INT
+	DECLARE @nNotSubmitted										INT		= 169001	--Not Added
+	DECLARE @nNotSubmittedInStipulatedTime						INT		= 169002	--Not Added
 	DECLARE @nTradedMoreThanPreClearanceApprovedQuantity		INT		= 169003
 	DECLARE @nTradedMoreThanPreClearanceApprovedValue			INT		= 169004
 	DECLARE @nTradedAfterPreclearanceDateCommentID				INT		= 169006
@@ -94,6 +54,8 @@ BEGIN
 	DECLARE @nTradedDuringBlackoutPeriodCommentID				INT		= 169009
 	DECLARE @nRestrictedCompanyCommentID						INT		= 169010
 	
+	--Declare @inp_sCommentsId NVARCHAR(200)='169003,169004,169006,169007,169008,169009,169010'
+
 	DECLARE @nOccurrenceYearly									INT = 137001
 	DECLARE @nOccurrenceQuarterly								INT = 137002
 	DECLARE @nOccurrenceMonthly									INT = 137003
@@ -119,7 +81,7 @@ BEGIN
 
 	CREATE TABLE #TempTransactionDetailsForDefaulterReport(PreclearanceRequestId INT, RequestDate DATETIME, RequestedQty DECIMAL(15,4), RequestedValue DECIMAL(15,4),
 	PreclearanceApplicabletill DATETIME,PreclearanceStatusDate DATETIME, PreclearanceStatusCodeId INT, PreclearanceStatus VARCHAR(200),SecurityTypeCodeId INT,SecurityType VARCHAR(600),
-	TransactionTypeCodeId INT, TransactionType VARCHAR(500),TransactionMasterId INT,DMATDetailsID INT,DEMATAccountNumber VARCHAR(1000),AccountHolderName NVARCHAR(1000),IsPartiallyTraded BIT,ShowAddButton BIT,DisplayRollingNumber INT)
+	TransactionTypeCodeId INT, TransactionType VARCHAR(500),TransactionMasterId INT,DMATDetailsID INT,DEMATAccountNumber VARCHAR(1000),AccountHolderName NVARCHAR(1000),IsPartiallyTraded BIT,ShowAddButton BIT,DisplayRollingNumber INT,CompanyID INT)
 	-- Create Temp Table fpr Insert Unquie Preclearance Request ID
 	
 	CREATE TABLE #tmpPreclearanceID(PreclearanceID NVARCHAR(MAX))
@@ -137,6 +99,26 @@ BEGIN
 		IF @out_sSQLErrMessage IS NULL
 			SET @out_sSQLErrMessage = ''
 
+			DECLARE @tmpCommentFilter TABLE(CommentID INT)
+
+			SELECT * INTO #temp_vw_UserInformation
+			FROM vw_UserInformation
+			
+			SELECT * INTO #temp_vw_DefaulterReportComments_OS
+			FROM vw_DefaulterReportComments_OS
+			
+			SELECT * INTO #temp_vw_InitialDisclosureStatus_OS
+			FROM vw_InitialDisclosureStatus_OS
+			
+			SELECT * INTO #temp_vw_TransactionDetailsForDefaulterReport_OS
+			FROM vw_TransactionDetailsForDefaulterReport_OS
+			
+			SELECT * INTO #temp_vw_PeriodEndDisclosureStatus_OS
+			FROM vw_PeriodEndDisclosureStatus_OS
+
+			SELECT * INTO #temp_vw_ContinuousDisclosureStatus_OS
+			FROM vw_ContinuousDisclosureStatus_OS
+			
 			DECLARE @CompanyString NVARCHAR(500)
 			DECLARE @ISINString NVARCHAR(50)
 			CREATE TABLE #tmpISIN
@@ -158,7 +140,7 @@ BEGIN
 			SecurityTypeCodeId, 
 			SecurityType,
 			TransactionTypeCodeId, 
-			TransactionType,TransactionMasterId,DMATDetailsID,DEMATAccountNumber,AccountHolderName,IsPartiallyTraded, ShowAddButton, DisplayRollingNumber
+			TransactionType,TransactionMasterId,DMATDetailsID,DEMATAccountNumber,AccountHolderName,IsPartiallyTraded, ShowAddButton, DisplayRollingNumber,CompanyID
 			)
 			SELECT
 			PR.PreclearanceRequestId,
@@ -179,7 +161,8 @@ BEGIN
 			UI.UserFullName AS AccountHolderName,
 			PR.IsPartiallyTraded AS IsPartiallyTraded,
 			PR.ShowAddButton AS ShowAddButton,
-			TM.DisplayRollingNumber AS DisplayRollingNumber
+			TM.DisplayRollingNumber AS DisplayRollingNumber,
+			PR.CompanyId AS CompanyID
 			FROM tra_PreclearanceRequest_NonImplementationCompany PR
 			JOIN tra_TransactionMaster_OS TM ON PR.PreclearanceRequestId = TM.PreclearanceRequestId
 			JOIN rul_TradingPolicy_OS TP ON TM.TradingPolicyId = TP.TradingPolicyId
@@ -188,7 +171,7 @@ BEGIN
 			JOIN com_Code CSecurity ON PR.SecurityTypeCodeId = CSecurity.CodeID
 			JOIN com_Code CTransaction ON PR.TransactionTypeCodeId = CTransaction.CodeID
 			JOIN usr_DMATDetails DMATD ON PR.DMATDetailsID = DMATD.DMATDetailsID
-			JOIN vw_UserInformation UI ON DMATD.UserInfoID = UI.UserInfoId
+			JOIN #temp_vw_UserInformation UI ON DMATD.UserInfoID = UI.UserInfoId
 			GROUP BY PR.PreclearanceRequestId,
 			PR.CreatedOn,
 			SecuritiesToBeTradedQty,
@@ -207,10 +190,9 @@ BEGIN
 			UI.UserFullName,
 			PR.IsPartiallyTraded,
 			PR.ShowAddButton,
-			TM.DisplayRollingNumber
-
+			TM.DisplayRollingNumber,
+			PR.CompanyId
 		
-						
 			DECLARE @tmpPCLIds TABLE(PreclearanceRequestId BIGINT)
 			DECLARE @tmpTransactionDetailsIds TABLE(TransactionDetailsID BIGINT)
 			
@@ -229,27 +211,7 @@ BEGIN
 			FROM rpt_DefaulterReport_OS
 			WHERE TransactionDetailsId IS NOT NULL
 			
-			DECLARE @tmpCommentFilter TABLE(CommentID INT)
-
-			SELECT * INTO #temp_vw_UserInformation
-			FROM vw_UserInformation
-
-			SELECT * INTO #temp_vw_DefaulterReportComments_OS
-			FROM vw_DefaulterReportComments_OS
 			
-			SELECT * INTO #temp_vw_InitialDisclosureStatus_OS
-			FROM vw_InitialDisclosureStatus_OS
-			
-			SELECT * INTO #temp_vw_TransactionDetailsForDefaulterReport_OS
-			FROM vw_TransactionDetailsForDefaulterReport_OS
-			
-			SELECT * INTO #temp_vw_PeriodEndDisclosureStatus_OS
-			FROM vw_PeriodEndDisclosureStatus_OS
-			
-			SELECT * INTO #temp_vw_ContinuousDisclosureStatus_OS
-			FROM vw_ContinuousDisclosureStatus_OS
-					
-			--SELECT * FROM @tmpCommentFilter
 			
 			--Create Temp table
 			CREATE TABLE #tmpReport(Id INT IDENTITY(1,1),DefaulterReportID BIGINT,UserInfoID BIGINT,EmployeeID NVARCHAR(50),
@@ -266,7 +228,7 @@ BEGIN
 			ScpSubmitDate DATETIME, HcpSubmitDate DATETIME,Comments NVARCHAR(1000), HcpByCOSubmitDate DATETIME,TransactionMasterID BIGINT,TransactionDetailsId  BIGINT,
 			NonComplianceTypeCodeID INT,NonComplianceType NVARCHAR(100),PreclearanceBlankComment INT,AddOtherDetails INT Default 0,
 			ISParentPreclearance INT Default 0,CommentsID NVARCHAR(MAX),IsShowRecord INT,DateOfBecomingInsider DATETIME)
-			
+		
 			/*
 				Insert Initial Disclosure Record
 				
@@ -281,7 +243,7 @@ BEGIN
 						NonComplianceTypeCodeID,NonComplianceType,CommentsID,DateOfBecomingInsider,DateOfInactivation)  
 						
 			SELECT DISTINCT UI.UserInfoID,DR.DefaulterReportID,UI.EmployeeId,UI.UserFullName,UI.DateofBecomingInsider,UI.CINAndDIN,
-			UI.DesignationId,UI.Designation,UI.GradeId,UI.Grade,UI.DepartmentId,UI.Department,NULL,NULL,UI.UserTypeCodeId,UI.UserType,
+			UI.DesignationId,UI.Designation,UI.GradeId,UI.Grade,UI.DepartmentId,UI.Department,vwTD.CompanyId,NULL,UI.UserTypeCodeId,UI.UserType,
 			UI.Location,vwTD.DEMATAccountNumber,vwTD.AccountHolderName,vwTD.Relation,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,
 			vwTD.SecurityType,'Holding', vwTD.TradeBuyQty , vwTD.TradeSellQty, vwTD.Qty, vwTD.Value, 
 			vwTD.SecurityTypeCodeId, vwTD.TransactionTypeCodeId,
@@ -294,11 +256,10 @@ BEGIN
 			JOIN com_Code CNCT ON DR.NonComplainceTypeCodeId = CNCT.CodeID
 			JOIN #temp_vw_DefaulterReportComments_OS DefRptCmt ON DR.DefaulterReportID = DefRptCmt.DefaulterReportID
 		    LEFT JOIN #temp_vw_InitialDisclosureStatus_OS vwIN ON DR.UserInfoID = vwIN.UserInfoId AND DetailsSubmitStatus <> 0
-			LEFT JOIN #temp_vw_TransactionDetailsForDefaulterReport_OS vwTD ON vwIN.TransactionMasterId = vwTD.TransactionMasterId			
-			--LEFT JOIN usr_UserRelation UR ON DR.UserInfoIdRelative = UR.UserInfoIdRelative
-			--LEFT JOIN com_Code codeRelation ON UR.RelationTypeCodeId = codeRelation.CodeID
+			LEFT JOIN #temp_vw_TransactionDetailsForDefaulterReport_OS vwTD ON vwIN.TransactionMasterId = vwTD.TransactionMasterId	
 			WHERE DR.NonComplainceTypeCodeId = @nInitialComplianceType
 			ORDER BY UI.UserInfoID
+			
 			
 			--Insert Period End Disclosure Record
 			INSERT INTO #tmpReport(UserInfoId,DefaulterReportID,EmployeeID,InsiderName,DateOfJoining,CINAndDIN,DesignationCodeID,Designation,
@@ -312,7 +273,7 @@ BEGIN
 						NonComplianceTypeCodeID,NonComplianceType,CommentsID,DateOfBecomingInsider,DateOfInactivation)  						
 		
 			SELECT UI.UserInfoID,DR.DefaulterReportID,UI.EmployeeId,UI.UserFullName,UI.DateOfJoining,UI.CINAndDIN,
-			UI.DesignationId,UI.Designation,UI.GradeId,UI.Grade,UI.DepartmentId,UI.Department,NULL,NULL,UI.UserTypeCodeId,UI.UserType,
+			UI.DesignationId,UI.Designation,UI.GradeId,UI.Grade,UI.DepartmentId,UI.Department,vwTD.CompanyId,NULL,UI.UserTypeCodeId,UI.UserType,
 			UI.Location,NULL,NULL,CASE WHEN codeRelation.CodeName IS NULL THEN 'Self' ELSE codeRelation.CodeName END,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
 			,NULL, NULL, NULL , NULL, NULL, NULL, 
 			NULL, NULL,
@@ -324,20 +285,16 @@ BEGIN
 			JOIN tra_TransactionMaster_OS TM ON DR.TransactionMasterId = TM.TransactionMasterId
 			JOIN rul_TradingPolicy_OS TP ON TM.TradingPolicyId = TP.TradingPolicyId
 			JOIN @tmpMapTable tmpMap ON TP.DiscloPeriodEndFreq = tmpMap.PeriodCode137
-			--JOIN vw_TransactionSummaryPeriodEndDate vwPEDate ON TM.PeriodEndDate = vwPEDate.PeriodEndDate
-			--JOIN tra_TransactionSummary TS ON vwPEDate.TransactionSummaryId= TS.TransactionSummaryId AND TS.UserInfoId = TM.UserInfoId
-			--jOIN com_Code cc ON TS.PeriodCodeId = cc.CodeID and cc.ParentCodeId = tmpMap.PeriodCode123  
 			JOIN #temp_vw_UserInformation UI ON DR.UserInfoID = UI.UserInfoID
 			LEFT JOIN usr_UserRelation UR ON DR.UserInfoIdRelative = UR.UserInfoIdRelative
 			LEFT JOIN com_Code codeRelation ON UR.RelationTypeCodeId = codeRelation.CodeID
-			--JOIN com_Code securityCode ON TS.SecurityTypeCodeId = securityCode.CodeID
 			JOIN #temp_vw_DefaulterReportComments_OS DefRptCmt ON DR.DefaulterReportID = DefRptCmt.DefaulterReportID
 			JOIN com_Code CNCT ON DR.NonComplainceTypeCodeId = CNCT.CodeID			
 			LEFT JOIN #temp_vw_PeriodEndDisclosureStatus_OS vwIN ON DR.TransactionMasterId = vwIN.TransactionMasterId AND DetailsSubmitStatus <> 0
+			LEFT JOIN #temp_vw_TransactionDetailsForDefaulterReport_OS vwTD ON vwIN.TransactionMasterId = vwTD.TransactionMasterId	
 			WHERE DR.NonComplainceTypeCodeId = @nPeriodEndComplianceType
 			ORDER BY UI.UserInfoID
-		
-		
+			
 		/*
 			Insert Preclearance Record
 		*/	
@@ -351,7 +308,7 @@ BEGIN
 						HcpByCOSubmitDate,TransactionMasterID,TransactionDetailsId,
 						NonComplianceTypeCodeID,NonComplianceType,PreclearanceBlankComment,AddOtherDetails,ISParentPreclearance,CommentsID,DateOfBecomingInsider, DateOfInactivation)  
 			SELECT DR.DefaulterReportID,UI.UserInfoID,UI.EmployeeId,UI.UserFullName,UI.DateofBecomingInsider,UI.CINAndDIN,
-			UI.DesignationId,UI.Designation,UI.GradeId,UI.Grade,UI.DepartmentId,UI.Department,NULL,NULL,UI.UserTypeCodeId,UI.UserType,
+			UI.DesignationId,UI.Designation,UI.GradeId,UI.Grade,UI.DepartmentId,UI.Department,vwPCL.CompanyId,NULL,UI.UserTypeCodeId,UI.UserType,
 			UI.Location,vwTD.DEMATAccountNumber,vwTD.AccountHolderName,CASE WHEN codeRelation.CodeName IS NULL THEN 'Self' ELSE codeRelation.CodeName END,@sPrceclearanceCodePrefixText + CONVERT(VARCHAR,vwPCL.DisplayRollingNumber),vwPCL.RequestDate, 
 			vwPCL.RequestedQty,vwPCL.RequestedValue,vwPCL.PreclearanceStatusCodeId, vwPCL.PreclearanceStatus,vwPCL.PreclearanceStatusDate,vwPCL.PreclearanceApplicabletill,vwPCL.RequestDate,
 			NULL,NULL,
@@ -375,9 +332,10 @@ BEGIN
 			LEFT JOIN com_Code codeRelation ON UR.RelationTypeCodeId = codeRelation.CodeID
 			where DR.TransactionDetailsId is not null
 			
+			
 			UNION
 			SELECT NULL,UI.UserInfoID,UI.EmployeeId,UI.UserFullName,UI.DateofBecomingInsider,UI.CINAndDIN,
-			UI.DesignationId,UI.Designation,UI.GradeId,UI.Grade,UI.DepartmentId,UI.Department,NULL,NULL,UI.UserTypeCodeId,UI.UserType,
+			UI.DesignationId,UI.Designation,UI.GradeId,UI.Grade,UI.DepartmentId,UI.Department,vwPCL.CompanyId,NULL,UI.UserTypeCodeId,UI.UserType,
 			UI.Location,vwTD.DEMATAccountNumber,vwTD.AccountHolderName,CASE WHEN codeRelation.CodeName IS NULL THEN 'Self' ELSE codeRelation.CodeName END,@sPrceclearanceCodePrefixText + CONVERT(VARCHAR,vwPCL.DisplayRollingNumber),vwPCL.RequestDate, 
 			vwPCL.RequestedQty,vwPCL.RequestedValue,vwPCL.PreclearanceStatusCodeId, vwPCL.PreclearanceStatus,vwPCL.PreclearanceStatusDate,vwPCL.PreclearanceApplicabletill,vwPCL.RequestDate,
 			NULL,NULL,
@@ -394,18 +352,19 @@ BEGIN
 			JOIN #TempTransactionDetailsForDefaulterReport vwPCL ON PP.PreclearanceRequestId = vwPCL.PreclearanceRequestId			
 			left join #temp_vw_TransactionDetailsForDefaulterReport_OS vwTD ON TM.TransactionMasterId = vwTD.TransactionMasterId 
 			join rpt_DefaulterReport_OS DR ON PP.PreclearanceRequestId = DR.PreclearanceRequestId 
-			     --AND vwTD.TransactionDetailsId <> dr.TransactionDetailsId 
 			JOIN #temp_vw_UserInformation UI ON DR.UserInfoID = UI.UserInfoID
-			JOIN com_Code CNCT ON DR.NonComplainceTypeCodeId = CNCT.CodeID
-			--JOIN vw_DefaulterReportComments DefRptCmt ON DR.DefaulterReportID = DefRptCmt.DefaulterReportID 
+			JOIN com_Code CNCT ON DR.NonComplainceTypeCodeId = CNCT.CodeID 
 			LEFT JOIN usr_UserRelation UR ON DR.UserInfoIdRelative = UR.UserInfoIdRelative
 			LEFT JOIN com_Code codeRelation ON UR.RelationTypeCodeId = codeRelation.CodeID
-			where DR.TransactionDetailsId is null and vwPCL.IsPartiallyTraded = 1 AND vwPCL.ShowAddButton = 1
+			where DR.TransactionDetailsId IS NULL 
+			AND vwPCL.IsPartiallyTraded = 1 
+			AND vwPCL.ShowAddButton = 1
 			AND vwTD.TransactionDetailsId NOT IN (SELECT TransactionDetailsID FROM @tmpTransactionDetailsIds)
 			
+			--com
 			UNION
 			SELECT DR.DefaulterReportID,UI.UserInfoID,UI.EmployeeId,UI.UserFullName,UI.DateofBecomingInsider,UI.CINAndDIN,
-			UI.DesignationId,UI.Designation,UI.GradeId,UI.Grade,UI.DepartmentId,UI.Department,NULL,NULL,UI.UserTypeCodeId,UI.UserType,
+			UI.DesignationId,UI.Designation,UI.GradeId,UI.Grade,UI.DepartmentId,UI.Department,vwPCL.CompanyId,NULL,UI.UserTypeCodeId,UI.UserType,
 			UI.Location,vwPCL.DEMATAccountNumber,vwPCL.AccountHolderName,CASE WHEN codeRelation.CodeName IS NULL THEN 'Self' ELSE codeRelation.CodeName END,@sPrceclearanceCodePrefixText + CONVERT(VARCHAR,vwPCL.TransactionMasterId),vwPCL.RequestDate, 
 			vwPCL.RequestedQty,vwPCL.RequestedValue,vwPCL.PreclearanceStatusCodeId, vwPCL.PreclearanceStatus,vwPCL.PreclearanceStatusDate,vwPCL.PreclearanceApplicabletill,vwPCL.RequestDate,
 			NULL,NULL,
@@ -425,7 +384,8 @@ BEGIN
 			LEFT JOIN com_Code codeRelation ON UR.RelationTypeCodeId = codeRelation.CodeID
 			WHERE DR.NonComplainceTypeCodeId = @nPreclearanceComplianceType
 			ORDER BY UI.UserInfoID,@sPrceclearanceCodePrefixText + CONVERT(VARCHAR,vwPCL.DisplayRollingNumber)
-		
+
+
 	
 		--Fetch for PNT
 		INSERT INTO #tmpReport(DefaulterReportID,UserInfoId,EmployeeID,InsiderName,DateOfJoining,CINAndDIN,DesignationCodeID,Designation,
@@ -437,7 +397,7 @@ BEGIN
 						HcpByCOSubmitDate,TransactionMasterID,TransactionDetailsId,
 						NonComplianceTypeCodeID,NonComplianceType,CommentsID,DateOfBecomingInsider, DateOfInactivation) 
 		SELECT DR.DefaulterReportID,UI.UserInfoID,UI.EmployeeId,UI.UserFullName,UI.DateofBecomingInsider,UI.CINAndDIN,
-			UI.DesignationId,UI.Designation,UI.GradeId,UI.Grade,UI.DepartmentId,UI.Department,NULL,NULL,UI.UserTypeCodeId,UI.UserType,
+			UI.DesignationId,UI.Designation,UI.GradeId,UI.Grade,UI.DepartmentId,UI.Department,vwTD.CompanyId,NULL,UI.UserTypeCodeId,UI.UserType,
 			UI.Location,vwTD.DEMATAccountNumber,vwTD.AccountHolderName,CASE WHEN codeRelation.CodeName IS NULL THEN 'Self' ELSE codeRelation.CodeName END,
 			CASE WHEN UI.DateOfBecomingInsider IS NOT NULL THEN @sNonPrceclearanceCodePrefixText + CONVERT(VARCHAR,vwIN.DisplayRollingNumber) ELSE @sPrceclearanceNotRequiredPrefixText + CONVERT(VARCHAR,vwIN.DisplayRollingNumber) END,NULL,
 			NULL,NULL, NULL,NULL,NULL,NULL,
@@ -456,10 +416,39 @@ BEGIN
 			JOIN #temp_vw_DefaulterReportComments_OS DefRptCmt ON DR.DefaulterReportID = DefRptCmt.DefaulterReportID
 			LEFT JOIN usr_UserRelation UR ON DR.UserInfoIdRelative = UR.UserInfoIdRelative
 			LEFT JOIN com_Code codeRelation ON UR.RelationTypeCodeId = codeRelation.CodeID
-			WHERE DR.NonComplainceTypeCodeId = @nPreclearanceComplianceType AND DR.PreclearanceRequestId IS NULL
+			WHERE DR.NonComplainceTypeCodeId = @nPreclearanceComplianceType			
+			AND DR.PreclearanceRequestId IS NULL
+			
+
+			---This UNION ADDED for @nContinuousComplianceType
 			UNION
+			
+			SELECT DR.DefaulterReportID,UI.UserInfoID,UI.EmployeeId,UI.UserFullName,UI.DateofBecomingInsider,UI.CINAndDIN,
+			UI.DesignationId,UI.Designation,UI.GradeId,UI.Grade,UI.DepartmentId,UI.Department,vwTD.CompanyId,NULL,UI.UserTypeCodeId,UI.UserType,
+			UI.Location,vwTD.DEMATAccountNumber,vwTD.AccountHolderName,CASE WHEN codeRelation.CodeName IS NULL THEN 'Self' ELSE codeRelation.CodeName END,
+			CASE WHEN UI.DateOfBecomingInsider IS NOT NULL THEN @sNonPrceclearanceCodePrefixText + CONVERT(VARCHAR,vwIN.DisplayRollingNumber) ELSE @sPrceclearanceNotRequiredPrefixText + CONVERT(VARCHAR,vwIN.DisplayRollingNumber) END,NULL,
+			NULL,NULL, NULL,NULL,NULL,NULL,
+			NULL,NULL,
+			vwTD.SecurityType, vwTD.TransactionType, vwTD.TradeBuyQty , vwTD.TradeSellQty, vwTD.Qty, vwTD.Value, 
+			vwTD.SecurityTypeCodeId, vwTD.TransactionTypeCodeId,
+			NULL,vwIN.DetailsSubmitDate,
+		    CASE WHEN vwIN.SoftCopyReq = 0 AND vwIN.HardCopyReq = 0 THEN 0 ELSE 1 END,DR.LastSubmissionDate,vwIN.ScpSubmitDate,vwIN.ScpSubmitDate,
+			DefRptCmt.Comments,vwIN.HcpByCOSubmitDate,DR.TransactionMasterId,DR.TransactionDetailsId,
+			DR.NonComplainceTypeCodeId,CNCT.CodeName,DefRptCmt.CommentsID,UI.DateOfBecomingInsider, UI.DateOfInactivation 
+			FROM rpt_DefaulterReport_OS DR
+			JOIN #temp_vw_TransactionDetailsForDefaulterReport_OS vwTD ON DR.TransactionDetailsId = vwTD.TransactionDetailsId			
+			LEFT JOIN #temp_vw_ContinuousDisclosureStatus_OS vwIN ON DR.TransactionMasterId = vwIN.TransactionMasterId
+			JOIN #temp_vw_UserInformation UI ON vwIN.UserInfoID = UI.UserInfoID
+			JOIN com_Code CNCT ON DR.NonComplainceTypeCodeId = CNCT.CodeID
+			JOIN #temp_vw_DefaulterReportComments_OS DefRptCmt ON DR.DefaulterReportID = DefRptCmt.DefaulterReportID
+			LEFT JOIN usr_UserRelation UR ON DR.UserInfoIdRelative = UR.UserInfoIdRelative
+			LEFT JOIN com_Code codeRelation ON UR.RelationTypeCodeId = codeRelation.CodeID
+			WHERE DR.NonComplainceTypeCodeId = @nContinuousComplianceType
+
+			UNION
+
 			SELECT DR.DefaulterReportID,UI.UserInfoID,UI.EmployeeId,UI.UserFullName,UI.DateOfJoining,UI.CINAndDIN,
-			UI.DesignationId,UI.Designation,UI.GradeId,UI.Grade,UI.DepartmentId,UI.Department,NULL,NULL,UI.UserTypeCodeId,UI.UserType,
+			UI.DesignationId,UI.Designation,UI.GradeId,UI.Grade,UI.DepartmentId,UI.Department,vwTD.CompanyId,NULL,UI.UserTypeCodeId,UI.UserType,
 			UI.Location,vwTD.DEMATAccountNumber,vwTD.AccountHolderName,CASE WHEN codeRelation.CodeName IS NULL THEN 'Self' ELSE codeRelation.CodeName END,@sPPeriodEndRecordPrefixText,NULL,
 			NULL,NULL, NULL,NULL,NULL,NULL,
 			NULL,NULL,
@@ -478,7 +467,8 @@ BEGIN
 			
 			LEFT JOIN usr_UserRelation UR ON DR.UserInfoIdRelative = UR.UserInfoIdRelative
 			LEFT JOIN com_Code codeRelation ON UR.RelationTypeCodeId = codeRelation.CodeID
-			WHERE DR.NonComplainceTypeCodeId = @nPreclearanceComplianceType AND DR.PreclearanceRequestId IS NULL
+			WHERE DR.NonComplainceTypeCodeId = @nPreclearanceComplianceType 
+			AND DR.PreclearanceRequestId IS NULL
 			ORDER BY UI.UserInfoID
 		
 		---Restricted list
@@ -493,7 +483,7 @@ BEGIN
 						NonComplianceTypeCodeID,NonComplianceType,CommentsID,DateOfBecomingInsider,DateOfInactivation)
 
 		SELECT UI.UserInfoID,DR.DefaulterReportID,UI.EmployeeId,UI.UserFullName,UI.DateOfJoining,UI.CINAndDIN,
-			UI.DesignationId,UI.Designation,UI.GradeId,UI.Grade,UI.DepartmentId,UI.Department,NULL,NULL,UI.UserTypeCodeId,UI.UserType,
+			UI.DesignationId,UI.Designation,UI.GradeId,UI.Grade,UI.DepartmentId,UI.Department,vwTD.CompanyId,NULL,UI.UserTypeCodeId,UI.UserType,
 			UI.Location,NULL,NULL,CASE WHEN codeRelation.CodeName IS NULL THEN 'Self' ELSE codeRelation.CodeName END,NULL,NULL,NULL,NULL,NULL,NULL,NULL,CM.CompanyName,CM.ISINCode
 			,NULL, NULL, NULL , NULL, NULL, NULL, 
 			NULL, NULL,
@@ -510,8 +500,10 @@ BEGIN
 			LEFT JOIN com_Code codeRelation ON UR.RelationTypeCodeId = codeRelation.CodeID
 			JOIN #temp_vw_DefaulterReportComments_OS DefRptCmt ON DR.DefaulterReportID = DefRptCmt.DefaulterReportID
 			JOIN com_Code CNCT ON DR.NonComplainceTypeCodeId = CNCT.CodeID
+			LEFT JOIN #temp_vw_TransactionDetailsForDefaulterReport_OS vwTD ON DR.TransactionDetailsId = vwTD.TransactionDetailsId
 			WHERE DR.NonComplainceTypeCodeId = @nRestrictedCompanyListComplianceType
 			ORDER BY UI.UserInfoID
+		
 		
 		--IF @inp_sCommentsId IS NOT NULL AND @inp_sCommentsId <> ''
 		--	BEGIN
@@ -519,70 +511,72 @@ BEGIN
 				--INSERT INTO @tmpCommentFilter(CommentID)
 				--SELECT * FROM uf_com_Split(@inp_sCommentsId)
 				
-				IF EXISTS(SELECT CommentID FROM @tmpCommentFilter WHERE CommentID IN(@nTradedMoreThanPreClearanceApprovedQuantity,@nTradedMoreThanPreClearanceApprovedValue))
-				BEGIN
-					SET @nPreclearanceLevelQtyComment = 1
-				END
+				--IF EXISTS(SELECT CommentID FROM @tmpCommentFilter WHERE CommentID IN(@nTradedMoreThanPreClearanceApprovedQuantity,@nTradedMoreThanPreClearanceApprovedValue))
+				--BEGIN
+				--	SET @nPreclearanceLevelQtyComment = 1
+				--END
 				
-				IF EXISTS(SELECT CommentID FROM @tmpCommentFilter WHERE CommentID IN(@nTradedAfterPreclearanceDateCommentID,
-				@nContraTradeCommentID,@nPreclearanceNotTakenCommentID,@nTradedDuringBlackoutPeriodCommentID))
-				BEGIN
-					SET @nPreclearanceLevelValueComment = 1
-				END
+				--IF EXISTS(SELECT CommentID FROM @tmpCommentFilter WHERE CommentID IN(@nTradedAfterPreclearanceDateCommentID,
+				--@nContraTradeCommentID,@nPreclearanceNotTakenCommentID,@nTradedDuringBlackoutPeriodCommentID))
+				--BEGIN
+				--	SET @nPreclearanceLevelValueComment = 1
+				--END
 				
 			--END
 
-			UPDATE  T
-			SET IsShowRecord = 1
-			FROM #tmpReport T
-			JOIN rpt_DefaulterReportComments_OS DRC ON T.DefaulterReportID = DRC.DefaulterReportID
-			JOIN @tmpCommentFilter TCF ON DRC.CommentCodeId = TCF.CommentID
+			--UPDATE  T
+			--SET IsShowRecord = 1
+			--FROM #tmpReport T
+			--JOIN rpt_DefaulterReportComments_OS DRC ON T.DefaulterReportID = DRC.DefaulterReportID
+			--JOIN @tmpCommentFilter TCF ON DRC.CommentCodeId = TCF.CommentID
 			
 			--SELECT @nPreclearanceLevelQtyComment
 			
-			IF(@nPreclearanceLevelQtyComment = 1)
-			BEGIN
-				UPDATE  T
-				SET IsShowRecord = 1
-				FROM #tmpReport T
-				JOIN (SELECT T1.PreclearanceId AS PreclearanceId FROM #tmpReport T1
-					JOIN rpt_DefaulterReportComments_OS DRC ON T1.DefaulterReportID = DRC.DefaulterReportID
-					JOIN @tmpCommentFilter TCF ON DRC.CommentCodeId = TCF.CommentID
-				) EL ON T.PreclearanceId = EL.PreclearanceId
-			END
+			--IF(@nPreclearanceLevelQtyComment = 1)
+			--BEGIN
+			--	UPDATE  T
+			--	SET IsShowRecord = 1
+			--	FROM #tmpReport T
+			--	JOIN (SELECT T1.PreclearanceId AS PreclearanceId FROM #tmpReport T1
+			--		JOIN rpt_DefaulterReportComments_OS DRC ON T1.DefaulterReportID = DRC.DefaulterReportID
+			--		JOIN @tmpCommentFilter TCF ON DRC.CommentCodeId = TCF.CommentID
+			--	) EL ON T.PreclearanceId = EL.PreclearanceId
+			--END
 			
 			--Update precleance comment level row
-			IF(@nPreclearanceLevelValueComment = 1)
-			BEGIN
-				UPDATE  T
-				SET IsShowRecord = 1
-				FROM #tmpReport T
-				JOIN (SELECT T1.PreclearanceId AS PreclearanceId FROM #tmpReport T1
-					JOIN rpt_DefaulterReportComments_OS DRC ON T1.DefaulterReportID = DRC.DefaulterReportID
-					JOIN @tmpCommentFilter TCF ON DRC.CommentCodeId = TCF.CommentID
-				) EL ON T.PreclearanceId = EL.PreclearanceId 
-				WHERE T.ISParentPreclearance = 1
-			END
+			--IF(@nPreclearanceLevelValueComment = 1)
+			--BEGIN
+			--	UPDATE  T
+			--	SET IsShowRecord = 1
+			--	FROM #tmpReport T
+			--	JOIN (SELECT T1.PreclearanceId AS PreclearanceId FROM #tmpReport T1
+			--		JOIN rpt_DefaulterReportComments_OS DRC ON T1.DefaulterReportID = DRC.DefaulterReportID
+			--		JOIN @tmpCommentFilter TCF ON DRC.CommentCodeId = TCF.CommentID
+			--	) EL ON T.PreclearanceId = EL.PreclearanceId 
+			--	WHERE T.ISParentPreclearance = 1
+			--END
 
 			--select ScripName,TransactionDetailsId,* from #tmpReport
 
 			UPDATE  T
 			SET T.ScripName = CM.CompanyName,
+			--T.CompanyName=CM.CompanyName,
 			T.ISINNumber=CM.ISINCode
 			FROM #tmpReport T
-			JOIN tra_TransactionDetails_OS TD ON T.TransactionDetailsId = TD.TransactionDetailsId
-			JOIN rl_CompanyMasterList CM ON CM.RlCompanyId = TD.CompanyId
+			--JOIN tra_TransactionDetails_OS TD ON T.TransactionDetailsId = TD.TransactionDetailsId
+			JOIN rl_CompanyMasterList CM ON T.CompanyId= CM.RlCompanyId
 
-				 
+			 
 			UPDATE  T
 			SET T.ScripName = CM.CompanyName,
 			T.ISINNumber=CM.ISINCode
 			FROM #tmpReport T
-			JOIN tra_PreclearanceRequest_NonImplementationCompany PCNI ON T.UserInfoID = PCNI.UserInfoId
-			JOIN @tmpPCLIds PCLID ON PCLID.PreclearanceRequestId=PCnI.PreclearanceRequestId
-			JOIN rl_CompanyMasterList CM ON CM.RlCompanyId = PCNI.CompanyId
+			JOIN rpt_DefaulterReport_OS DR ON T.DefaulterReportID=DR.DefaulterReportID
+			JOIN #temp_vw_TransactionDetailsForDefaulterReport_OS vwTD ON DR.TransactionMasterId = vwTD.TransactionMasterId 			
+			JOIN rl_CompanyMasterList CM ON  vwTD.CompanyId=CM.RlCompanyId
+			WHERE T.ScripName IS NULL
 
-				
+		
 		SELECT @sSQL = ' INSERT INTO #tmpList(EntityID) '
 		SELECT @sSQL = @sSQL + ' SELECT DISTINCT Id ' 
 		SELECT @sSQL = @sSQL + ' FROM #tmpReport Temp '
@@ -601,8 +595,7 @@ BEGIN
 		END
 		
 		IF (@inp_sCompanyName IS NOT NULL AND @inp_sCompanyName <> '')
-		BEGIN
-			--SELECT @sSQL = @sSQL + ' AND Temp.CompanyID IN(' + @inp_sCompanyName + ')'
+		BEGIN			
 			SET @CompanyString = RTRIM(@CompanyString)
 			SET @ISINString = SUBSTRING(@ISINString,2,12)
 			
@@ -613,49 +606,11 @@ BEGIN
 		BEGIN
 			SELECT @sSQL = @sSQL + ' AND Temp.Designation like N''%'  + @inp_sDesignation + '%'''
 		END
-			
-		--Transaction Date
-		--IF(@inp_dtDateOfTransactionFrom IS NOT NULL AND @inp_dtDateOfTransactionTo IS NOT NULL)
-		--BEGIN
-		--		SELECT @sSQL = @sSQL + ' AND Temp.TransactionDate IS NOT NULL ' 
-		--		SELECT @sSQL = @sSQL + ' AND (Temp.TransactionDate >= CAST('''  + CAST(@inp_dtDateOfTransactionFrom AS VARCHAR(25)) + ''' AS DATETIME)'
-		--		SELECT @sSQL = @sSQL + ' AND (Temp.TransactionDate IS NULL OR Temp.TransactionDate <= CAST('''  + CAST(@inp_dtDateOfTransactionTo AS VARCHAR(25)) + '''AS DATETIME) ) )'
-		--END
-		--ELSE IF (@inp_dtDateOfTransactionFrom IS NOT NULL AND @inp_dtDateOfTransactionTo IS NULL)
-		--BEGIN	
-		--		SELECT @sSQL = @sSQL + ' AND ( Temp.TransactionDate IS NOT NULL AND Temp.TransactionDate >= CAST('''  + CAST(@inp_dtDateOfTransactionFrom AS VARCHAR(25)) + ''' AS DATETIME))'
-		--END
-		--ELSE IF (@inp_dtDateOfTransactionFrom IS NULL AND @inp_dtDateOfTransactionTo IS NOT NULL)
-		--BEGIN	
-		--		SELECT @sSQL = @sSQL + ' AND (Temp.TransactionDate IS NOT NULL AND Temp.TransactionDate <= CAST('''  + CAST(@inp_dtDateOfTransactionTo AS VARCHAR(25)) + '''AS DATETIME))'
-		--END	
-		
+				
 		EXEC (@sSQL)
-
-		--IF (@inp_iTradeFromQty IS NOT NULL OR @inp_iTradeToQty <> 0)
-		--BEGIN
-			
-			
-			
-			
-			
-			-- INSERT INTO #tmpPreclearanceID(PreclearanceID)
-			 
-			--  SELECT  DISTINCT PreclearanceId FROM #tmpList T JOIN #tmpReport  Temp ON T.EntityID = Temp.Id
-		
-			--SELECT @sSQL = ' INSERT INTO #tmpList(RowNumber, EntityID) '
-			--	--SELECT @sSQL = @sSQL + ' SELECT DISTINCT DENSE_RANK() OVER(Order BY ' + @inp_sSortField + ' ' + @inp_sSortOrder +',Id),Id ' 
-			--	SELECT @sSQL = @sSQL + ' FROM #tmpReport Temp '
-			--	SELECT @sSQL = @sSQL + ' WHERE 1 = 1 AND Temp.ISParentPreclearance = 1 AND Temp.PreclearanceId IN ( SELECT PreclearanceID FROM  #tmpPreclearanceID) '
 				
-			--	EXEC (@sSQL)
-	  	--END
-				
-		
-		
 			SELECT 
-				Temp.DefaulterReportID,
-				--CASE WHEN DRO.IsRemovedFromNonCompliance  = 1 THEN 1 ELSE NULL END  AS rpt_grd_19272,
+				Temp.DefaulterReportID,				
 				Temp.UserInfoID AS UserInfoID,
 				Temp.PreclearanceId AS PreclearanceId,
 				Temp.EmployeeId AS EmployeeId,
@@ -708,12 +663,10 @@ BEGIN
 		LEFT JOIN usr_UserInfo UI ON UI.UserInfoId = TEMP.UserInfoID
 		LEFT join com_Code CCategory on UI.Category = CCategory.CodeID
 		LEFT JOIN com_Code CSubCategory ON UI.SubCategory = CSubCategory.CodeID
-		LEFT JOIN com_Code CStatusCodeId ON UI.StatusCodeId = CStatusCodeId.CodeID		
-		WHERE Temp.Id IS NOT NULL
-		--AND (Temp.DateOfInactivation IS NULL OR dbo.uf_com_GetServerDate() < Temp.DateOfInactivation)
-		--AND ((@inp_iPageSize = 0) OR (T.RowNumber BETWEEN ((@inp_iPageNo - 1) * @inp_iPageSize + 1) AND (@inp_iPageNo * @inp_iPageSize)))
+		LEFT JOIN com_Code CStatusCodeId ON UI.StatusCodeId = CStatusCodeId.CodeID	
+		WHERE Temp.Id IS NOT NULL		
 		ORDER BY NonComplianceTypeCodeID,UserInfoID,PreclearanceId,AddOtherDetails--T.RowNumber	
-			
+
 		DROP TABLE #tmpPreclearanceID
 		DROP TABLE #temp_vw_UserInformation
 		DROP TABLE #temp_vw_DefaulterReportComments_OS
