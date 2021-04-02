@@ -395,18 +395,32 @@ namespace InsiderTrading.Controllers
         [AuthorizationPrivilegeFilter]
         public ActionResult DownloadTemplateExcel(int acid, string MassUploadId, string Type = "xls")
         {
-            string sExportDocumentPath = ConfigurationManager.AppSettings["Document"] + "Templates/MassUpload/";
-            string[] sFilesfromExportFolder = Directory.GetFiles(sExportDocumentPath);
             LoginUserDetails objLoginUserDetails = null;
-
-            string sDownloadfileName = "";
-            //MassUploadSL objMassUploadSL = new MassUploadSL();
             MassUploadDTO objMassUploadDTO = null;
-            if (MassUploadId == "")
-                MassUploadId = "0";
             try
             {
+                string sExportDocumentPath = string.Empty;
                 objLoginUserDetails = (LoginUserDetails)InsiderTrading.Common.Common.GetSessionValue((string)InsiderTrading.Common.ConstEnum.SessionValue.UserDetails);
+                var objInsiderInitialDisclosureSL = new InsiderInitialDisclosureSL();
+                InsiderInitialDisclosureDTO objInsiderInitialDisclosureDTO = null;
+                objInsiderInitialDisclosureDTO = objInsiderInitialDisclosureSL.Get_mst_company_details(objLoginUserDetails.CompanyDBConnectionString);
+                if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue == 400003)
+                {
+                    sExportDocumentPath = ConfigurationManager.AppSettings["Document"] + "HideQtyTemplates/MassUpload/";
+                }
+                else
+                {
+                    sExportDocumentPath = ConfigurationManager.AppSettings["Document"] + "Templates/MassUpload/";
+                }
+                
+                string[] sFilesfromExportFolder = Directory.GetFiles(sExportDocumentPath);            
+
+                string sDownloadfileName = "";
+            
+            
+            if (MassUploadId == "")
+                MassUploadId = "0";
+            
                 if (MassUploadId == "0")
                 {
                     return RedirectToAction("AllMassUpload", "MassUpload",
