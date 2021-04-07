@@ -1191,7 +1191,7 @@ namespace InsiderTrading.Common
             objCompanyDetailsForNotificationDTO = objNotificationSL.GetCompanyDetailsForNotification(Common.getSystemConnectionString(), 0, sUserCompanyName);
             SmtpClient client = new SmtpClient(objCompanyDetailsForNotificationDTO.SmtpServer);
             //Set the port for the SMTP client if available otherwise the default will be considered.
-            if (sUserCompanyName.Contains("Kotak") || sUserCompanyName.Contains("Exide") || sUserCompanyName.Contains("TataCommunications") || sUserCompanyName.Contains("DCBBank") || sUserCompanyName.Contains("HIL") || sUserCompanyName.Contains("Accelya") || sUserCompanyName.Contains("Piramal") || sUserCompanyName.Contains("BCML") || sUserCompanyName.Contains("Titan") || sUserCompanyName.Contains("Hitech") || sUserCompanyName.Contains("Hexatradex") || sUserCompanyName.Contains("Infoedge"))
+            if (sUserCompanyName.Contains("Kotak") || sUserCompanyName.Contains("Exide") || sUserCompanyName.Contains("TataCommunications") || sUserCompanyName.Contains("DCBBank") || sUserCompanyName.Contains("HIL") || sUserCompanyName.Contains("Accelya") || sUserCompanyName.Contains("Piramal") || sUserCompanyName.Contains("BCML") || sUserCompanyName.Contains("Titan") || sUserCompanyName.Contains("Hitech") || sUserCompanyName.Contains("Hexatradex") || sUserCompanyName.Contains("Infoedge") || sUserCompanyName.Contains("IndiaRF"))
             {
                 client.EnableSsl = false;
             }
@@ -1284,7 +1284,7 @@ namespace InsiderTrading.Common
             objCompanyDetailsForNotificationDTO = objNotificationSL.GetCompanyDetailsForNotification(Common.getSystemConnectionString(), 0, sUserCompanyName);
             SmtpClient client = new SmtpClient(objCompanyDetailsForNotificationDTO.SmtpServer);
             //Set the port for the SMTP client if available otherwise the default will be considered.
-            if (sUserCompanyName.Contains("Kotak") || sUserCompanyName.Contains("Exide") || sUserCompanyName.Contains("TataCommunications") || sUserCompanyName.Contains("DCBBank") || sUserCompanyName.Contains("HIL") || sUserCompanyName.Contains("Accelya") || sUserCompanyName.Contains("Piramal") || sUserCompanyName.Contains("BCML") || sUserCompanyName.Contains("Hitech") || sUserCompanyName.Contains("Hexatradex") || sUserCompanyName.Contains("Infoedge"))
+            if (sUserCompanyName.Contains("Kotak") || sUserCompanyName.Contains("Exide") || sUserCompanyName.Contains("TataCommunications") || sUserCompanyName.Contains("DCBBank") || sUserCompanyName.Contains("HIL") || sUserCompanyName.Contains("Accelya") || sUserCompanyName.Contains("Piramal") || sUserCompanyName.Contains("BCML") || sUserCompanyName.Contains("Hitech") || sUserCompanyName.Contains("Hexatradex") || sUserCompanyName.Contains("Infoedge") || sUserCompanyName.Contains("IndiaRF"))
             {
                 client.EnableSsl = false;
             }
