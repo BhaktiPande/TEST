@@ -17,7 +17,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;	
 		SELECT [Employee ID],[Employee Name],[Options Exercised],[Exercise Date],
-			[Amount Paid],[Allotment Date],[FMV], [Payment Mode],[Vesting Date],[PAN], CONVERT(VARCHAR(600), [Client ID]) + '|' + ISNULL([Depository ID],'') AS [Client ID]
+			[Amount Paid],[Date of Allotment],[FMV], [Payment Mode],[Vesting Date],[PAN], CONVERT(VARCHAR(600), [Client ID]) + '|' + ISNULL([Depository ID],'') AS [Client ID]
 		INTO #OnGoingContDiscData_Esop FROM @OnGoingContDiscData_Esop
 		
 		DECLARE @PAID_UP_SHARES DECIMAL

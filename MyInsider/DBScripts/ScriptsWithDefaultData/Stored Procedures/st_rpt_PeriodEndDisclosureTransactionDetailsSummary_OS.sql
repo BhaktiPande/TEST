@@ -119,7 +119,7 @@ IF(@EnableDisableQuantityValue = 400003)
 							ELSE '''+CONVERT(VARCHAR(100), @iCommentsId_NotSubmittedInTime)+''' END AS [Comments]
 		,DD.DEMATAccountNumber AS [Demat Account Number], UIF.FirstName + '' '' + UIF.LastName AS [A/C Holder Name],
 		CASE WHEN UR.UserInfoId IS NULL  THEN ''Self'' ELSE CRelation.CodeName END AS [Relation with Insider],UF.PAN AS PAN,company.ISINCode AS [ISIN], 
-		CSecurityType.CodeName AS [Security Type] FROM  #tmpTransactions tTrans '
+		CSecurityType.CodeName AS [Security Type], TD.Quantity as Holdings FROM  #tmpTransactions tTrans '
 	SELECT @sSQL = @sSQL +'JOIN tra_TransactionMaster_OS TM ON tTrans.TransactionMasterId = TM.TransactionMasterId '
 	SELECT @sSQL = @sSQL +'JOIN tra_TransactionDetails_OS TD ON TD.TransactionMasterId = TM.TransactionMasterId '
 	SELECT @sSQL = @sSQL +'JOIN usr_UserInfo UF ON TD.ForUserInfoId = UF.UserInfoId '
