@@ -40,7 +40,7 @@ BEGIN
 		IF @out_sSQLErrMessage IS NULL
 			SET @out_sSQLErrMessage = ''
 
-				SELECT RlCompanyId,CompanyName,BSECode,NSECode,ISINCode, 
+				SELECT CompanyName,BSECode,NSECode,ISINCode, 
 				CASE StatusCodeId WHEN '105001' THEN 'Active' WHEN '105002' THEN 'InActive' END AS 'Status' FROM rl_CompanyMasterList 
 
 
