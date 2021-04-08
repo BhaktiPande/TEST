@@ -837,19 +837,21 @@ BEGIN
 
 		DELETE tm1
 		FROM #tempRLDefaulter tm1 
-		JOIN #tempRLDetails tm ON tm.RlCompanyId = tm1.CompanyId AND tm.UserId=tm1.UserId 
-		JOIN tra_TransactionDetails_OS TOS ON TOS.CompanyId = tm1.CompanyId AND TOS.ForUserInfoId = tm.UserId
-		JOIN rpt_DefaulterReport_OS  DR ON tm1.CompanyId = DR.RlCompanyId AND tm1.UserId = DR.UserInfoID AND DR.TransactionDetailsId=TOS.TransactionDetailsId
+		JOIN #tempRLDetails tm ON tm.RlCompanyId = tm1.CompanyId --AND tm.UserId=tm1.UserId 
+		JOIN tra_TransactionDetails_OS TOS ON TOS.CompanyId = tm1.CompanyId AND TOS.ForUserInfoId = tm1.UserId
+		JOIN rpt_DefaulterReport_OS  DR ON tm1.CompanyId = DR.RlCompanyId AND tm1.UserId = DR.UserInfoIdRelative AND DR.TransactionDetailsId=TOS.TransactionDetailsId
 			AND DR.TransactionMasterId = TOS.TransactionMasterId and DR.RLApplicableFromDate = tm.ApplicableFromDate AND DR.RLApplicableToDate = tm.ApplicableToDate
 
 		SELECT @nMaxDefaulterId = ISNULL(MAX(DefaulterReportID), 0) FROM rpt_DefaulterReport_OS
 		
-		INSERT INTO rpt_DefaulterReport_OS(NonComplainceTypeCodeId, TransactionMasterId, TransactionDetailsId, InitialContinousPeriodEndDisclosureRequired, UserInfoID, RLCompanyId, LastSubmissionDate, RLApplicableFromDate, RLApplicableToDate, PeriodEndDate)
-		SELECT  170005, TOS.TransactionMasterId, TOS.TransactionDetailsId, 165001, tm1.UserId, tm1.CompanyId, tm.ApplicableToDate, tm.ApplicableFromDate, tm.ApplicableToDate, TMO.PeriodEndDate
+		INSERT INTO rpt_DefaulterReport_OS(NonComplainceTypeCodeId, TransactionMasterId, TransactionDetailsId, InitialContinousPeriodEndDisclosureRequired, UserInfoID, UserInfoIdRelative, RLCompanyId, LastSubmissionDate, RLApplicableFromDate, RLApplicableToDate, PeriodEndDate)
+		SELECT  170005, TOS.TransactionMasterId, TOS.TransactionDetailsId, 165001, TMO.UserInfoId,TOS.ForUserInfoId, tm1.CompanyId, tm.ApplicableToDate, tm.ApplicableFromDate, tm.ApplicableToDate, TMO.PeriodEndDate
 	 
-		FROM #tempRLDefaulter tm1 JOIN #tempRLDetails tm ON tm.RlCompanyId = tm1.CompanyId AND tm.UserId=tm1.UserId 
-		JOIN tra_TransactionDetails_OS TOS ON TOS.CompanyId = tm1.CompanyId AND TOS.ForUserInfoId = tm.UserId
-		JOIN tra_TransactionMaster_OS TMO ON TMO.TransactionMasterId = TOS.TransactionMasterId
+		FROM #tempRLDefaulter tm1 JOIN #tempRLDetails tm ON tm.RlCompanyId = tm1.CompanyId --AND tm.UserId=tm1.UserId 
+		JOIN tra_TransactionDetails_OS TOS ON TOS.CompanyId = tm1.CompanyId AND TOS.ForUserInfoId = tm1.UserId
+		JOIN tra_TransactionMaster_OS TMO ON TMO.TransactionMasterId = TOS.TransactionMasterId AND tm.UserId=TMO.UserInfoId
+		--LEFT JOIN rpt_DefaulterReport_OS DefRpt ON DefRpt.TransactionDetailsId = TOS.TransactionDetailsId
+		--WHERE DefRpt.DefaulterReportID IS NULL
 
 		INSERT INTO rpt_DefaulterReportComments_OS(DefaulterReportID, CommentCodeId)
 		SELECT DefaulterReportID, @iCommentsId_RL
