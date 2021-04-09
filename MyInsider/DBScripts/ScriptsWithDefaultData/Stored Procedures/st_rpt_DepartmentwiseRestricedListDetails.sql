@@ -37,7 +37,7 @@ BEGIN
 --	rpt_RestrictedListDetails		
 	
 	SELECT distinct
-	ROW_NUMBER() OVER (ORDER BY [EmployeeId]) AS [Sr No.],
+	--ROW_NUMBER() OVER (ORDER BY [EmployeeId]) AS [Sr No.],
 	[EmployeeId] AS [Designated Person ID],
 	[PersonName] AS [Designated Person Name],
 	[PAN] AS [PAN],

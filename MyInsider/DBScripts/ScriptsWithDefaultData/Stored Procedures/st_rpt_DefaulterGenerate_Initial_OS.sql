@@ -109,10 +109,10 @@ BEGIN
 		UPDATE tmpUser
 		SET LastSubmissionDate =
 		CASE WHEN UF.DateOfBecomingInsider IS NULL
-		  THEN CASE WHEN UF.DateOfJoining <= TP.DiscloInitDateLimit THEN DiscloInitDateLimit 
+		  THEN CASE WHEN UF.DateOfJoining <= TP.DiscloInitDateLimit THEN CONVERT(datetime, CONVERT(varchar, CONVERT(date,DiscloInitDateLimit )) +' 23:59:59.000')  
 										ELSE DATEADD(D, DiscloInitLimit, UF.DateOfJoining) END
-		ELSE CASE WHEN UF.DateOfBecomingInsider <= TP.DiscloInitDateLimit THEN DiscloInitDateLimit 
-										ELSE DATEADD(D, DiscloInitLimit, UF.DateOfBecomingInsider) END END
+		ELSE CASE WHEN UF.DateOfBecomingInsider <= TP.DiscloInitDateLimit THEN  CONVERT(datetime, CONVERT(varchar, CONVERT(date,DiscloInitDateLimit )) +' 23:59:59.000') 
+										ELSE DATEADD(D, DiscloInitLimit,CONVERT(datetime, CONVERT(varchar, CONVERT(date, UF.DateOfBecomingInsider )) +' 23:59:59.000') ) END END
 		FROM @tmpNewUserId tmpUser JOIN usr_UserInfo UF ON tmpUser.UserInfoId = UF.UserInfoId
 			JOIN rul_TradingPolicy_OS TP ON tmpUser.TradingPolicyId = TP.TradingPolicyId
 		
@@ -180,10 +180,10 @@ BEGIN
 		
 		UPDATE tmpUser
 		SET LastSubmissionDate = CASE WHEN UF.DateOfBecomingInsider IS NULL
-		  THEN CASE WHEN UF.DateOfJoining <= TP.DiscloInitDateLimit THEN DiscloInitDateLimit 
-										ELSE DATEADD(D, DiscloInitLimit, UF.DateOfJoining) END
-		ELSE CASE WHEN UF.DateOfBecomingInsider <= TP.DiscloInitDateLimit THEN DiscloInitDateLimit 
-										ELSE DATEADD(D, DiscloInitLimit, UF.DateOfBecomingInsider) END END,
+		  THEN CASE WHEN UF.DateOfJoining <= TP.DiscloInitDateLimit THEN  CONVERT(datetime, CONVERT(varchar, CONVERT(date, DiscloInitDateLimit )) +' 23:59:59.000') 
+										ELSE DATEADD(D, DiscloInitLimit,CONVERT(datetime, CONVERT(varchar, CONVERT(date, UF.DateOfJoining)) +' 23:59:59.000')) END
+		ELSE CASE WHEN UF.DateOfBecomingInsider <= TP.DiscloInitDateLimit THEN CONVERT(datetime, CONVERT(varchar, CONVERT(date,DiscloInitDateLimit)) +' 23:59:59.000') 
+										ELSE DATEADD(D, DiscloInitLimit,CONVERT(datetime, CONVERT(varchar, CONVERT(date,UF.DateOfBecomingInsider)) +' 23:59:59.000')) END END,
 			IsNew = 1
 		FROM @tmpNewUserId tmpUser JOIN usr_UserInfo UF ON tmpUser.UserInfoId = UF.UserInfoId
 			JOIN rul_TradingPolicy_OS TP ON tmpUser.TradingPolicyId = TP.TradingPolicyId
