@@ -26,13 +26,13 @@ END
 IF NOT EXISTS(SELECT * FROM com_Code WHERE CodeID=169010)
 BEGIN
 	INSERT INTO com_Code VALUES(
-	169010,	'Traded of Restricted List Company',169,'Defaulter Report Status - Traded of Restricted List Company',	1,	1,	10,	NULL,	NULL,1,	GETDATE()
+	169010,	'Traded for Restricted List Company',169,'Defaulter Report Status - Traded of Restricted List Company',	1,	1,	10,	NULL,	NULL,1,	GETDATE()
 	)
 END
 
 IF NOT EXISTS(SELECT * FROM com_Code WHERE CodeID=170005)
 BEGIN
 	INSERT INTO com_Code VALUES(
-	170005,	'Restricted List',170,'Non Compliance Type - Restricted List',	1,	1,	5,	NULL,	NULL,1,	GETDATE()
+	170005,	'Restricted Company',170,'Non Compliance Type - Restricted Company',	1,	1,	5,	NULL,	NULL,1,	GETDATE()
 	)
 END
