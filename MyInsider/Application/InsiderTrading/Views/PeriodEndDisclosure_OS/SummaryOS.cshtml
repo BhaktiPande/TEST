@@ -119,7 +119,13 @@
                 }
 
             }
-
+            <section class="content-header">
+                <h5>PLEASE NOTE:</h5>
+                <h5>
+                    @InsiderTrading.Common.Common.getResource("dis_lbl_64004")
+                </h5>
+            </section>
+            <br />
             <a class="btn btn-success" data-toggle="modal" href='@Url.Action(ViewName, "PeriodEndDisclosure_OS", new { acid = ViewBag.activity_id, year = ViewBag.YearCode, Uid = ViewBag.UserId })' role="button"> @InsiderTrading.Common.Common.getResource("com_btn_14011")</a>
         </div>
     </div>
