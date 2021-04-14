@@ -595,20 +595,22 @@ namespace InsiderTrading.Controllers
                                     && (dtPeriodSummaryComapnyWise.Rows[row][2].ToString() == dtDematTotal.Rows[rowDemat][3].ToString())//SecurityType
                                     && ((tempDematCount + 1).ToString() == dtDematTotal.Rows[rowDemat][0].ToString()))// rowno == count
                                 {
-                                    excelRow = excelRow + 1;
-                                    worksheetSummery.Cells[excelRow + 1, 4].Value = "Total Demat " + dtDematTotal.Rows[rowDemat][4].ToString();
+                                    
                                     if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue != 400003)
                                     {
+                                        excelRow = excelRow + 1;
+                                        worksheetSummery.Cells[excelRow + 1, 4].Value = "Total Demat " + dtDematTotal.Rows[rowDemat][4].ToString();
                                         //worksheetSummery.Cells[excelRow + 1, 6].Value = dtDematTotal.Rows[rowDemat][5].ToString();
                                         worksheetSummery.Cells[excelRow + 1, 6].Value = dtDematTotal.Rows[rowDemat][6].ToString();
                                         worksheetSummery.Cells[excelRow + 1, 7].Value = dtDematTotal.Rows[rowDemat][7].ToString();
                                         worksheetSummery.Cells[excelRow + 1, 8].Value = dtDematTotal.Rows[rowDemat][8].ToString();
+                                        worksheetSummery.Cells[excelRow + 1, 9].Value = string.Empty;
+                                        worksheetSummery.Cells[excelRow + 1, 1].Value = string.Empty;
+                                        worksheetSummery.Cells[excelRow + 1, 2].Value = string.Empty;
+                                        worksheetSummery.Cells[excelRow + 1, 3].Value = string.Empty;
+                                        worksheetSummery.Cells[excelRow + 1, 5].Value = string.Empty;
                                     }
-                                    worksheetSummery.Cells[excelRow + 1, 9].Value = string.Empty;
-                                    worksheetSummery.Cells[excelRow + 1, 1].Value = string.Empty;
-                                    worksheetSummery.Cells[excelRow + 1, 2].Value = string.Empty;
-                                    worksheetSummery.Cells[excelRow + 1, 3].Value = string.Empty;
-                                    worksheetSummery.Cells[excelRow + 1, 5].Value = string.Empty;
+                                    
                                     if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue != 400003)
                                     {
                                         cellRange = "D" + (excelRow + 1) + ":H" + (excelRow + 1);
@@ -617,15 +619,18 @@ namespace InsiderTrading.Controllers
                                     {
                                         cellRange = "D" + (excelRow + 1) + ":E" + (excelRow + 1);
                                     }
-                                    using (ExcelRange rng = worksheetSummery.Cells[cellRange])
+                                    if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue != 400003)
                                     {
-                                        rng.Style.WrapText = true;
-                                        rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                                        rng.Style.Font.Bold = true;
-                                        rng.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-                                        rng.Style.Border.Top.Style = rng.Style.Border.Bottom.Style = rng.Style.Border.Left.Style = rng.Style.Border.Right.Style = ExcelBorderStyle.Thin;
-                                        rng.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                                        rng.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+                                        using (ExcelRange rng = worksheetSummery.Cells[cellRange])
+                                        {
+                                            rng.Style.WrapText = true;
+                                            rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            rng.Style.Font.Bold = true;
+                                            rng.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                                            rng.Style.Border.Top.Style = rng.Style.Border.Bottom.Style = rng.Style.Border.Left.Style = rng.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                                            rng.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                                            rng.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+                                        }
                                     }
                                     cellRange = "A" + (excelRow + 1) + ":C" + (excelRow + 1);
                                     using (ExcelRange rng = worksheetSummery.Cells[cellRange])
@@ -644,20 +649,22 @@ namespace InsiderTrading.Controllers
                                    && (dtPeriodSummaryComapnyWise.Rows[row][2].ToString() == dtSecurityTypeTotal.Rows[rowSecurity][3].ToString())//SecurityType
                                    && ((tempSecurityCount + 1).ToString() == dtSecurityTypeTotal.Rows[rowSecurity][0].ToString()))// rowno == count
                                 {
-                                    excelRow = excelRow + 1;
-                                    worksheetSummery.Cells[excelRow + 1, 1].Value = dtSecurityTypeTotal.Rows[rowSecurity][1].ToString();
-                                    worksheetSummery.Cells[excelRow + 1, 2].Value = string.Empty;
-                                    worksheetSummery.Cells[excelRow + 1, 3].Value = "Total " + dtSecurityTypeTotal.Rows[rowSecurity][3].ToString();
-                                    worksheetSummery.Cells[excelRow + 1, 4].Value = string.Empty;
-                                    worksheetSummery.Cells[excelRow + 1, 5].Value = string.Empty;
+                                    
                                     if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue != 400003)
                                     {
+                                        excelRow = excelRow + 1;
+                                        worksheetSummery.Cells[excelRow + 1, 1].Value = dtSecurityTypeTotal.Rows[rowSecurity][1].ToString();
+                                        worksheetSummery.Cells[excelRow + 1, 2].Value = string.Empty;
+                                        worksheetSummery.Cells[excelRow + 1, 3].Value = "Total " + dtSecurityTypeTotal.Rows[rowSecurity][3].ToString();
+                                        worksheetSummery.Cells[excelRow + 1, 4].Value = string.Empty;
+                                        worksheetSummery.Cells[excelRow + 1, 5].Value = string.Empty;
                                         //worksheetSummery.Cells[excelRow + 1, 6].Value = dtSecurityTypeTotal.Rows[rowSecurity][4].ToString();
                                         worksheetSummery.Cells[excelRow + 1, 6].Value = dtSecurityTypeTotal.Rows[rowSecurity][5].ToString();
                                         worksheetSummery.Cells[excelRow + 1, 7].Value = dtSecurityTypeTotal.Rows[rowSecurity][6].ToString();
                                         worksheetSummery.Cells[excelRow + 1, 8].Value = dtSecurityTypeTotal.Rows[rowSecurity][7].ToString();
+                                        worksheetSummery.Cells[excelRow + 1, 9].Value = string.Empty;
+
                                     }
-                                    worksheetSummery.Cells[excelRow + 1, 9].Value = string.Empty;
                                     if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue != 400003)
                                     {
                                         cellRange = "A" + (excelRow + 1) + ":H" + (excelRow + 1);
@@ -666,15 +673,18 @@ namespace InsiderTrading.Controllers
                                     {
                                         cellRange = "A" + (excelRow + 1) + ":E" + (excelRow + 1);
                                     }
-                                    using (ExcelRange rng = worksheetSummery.Cells[cellRange])
+                                    if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue != 400003)
                                     {
-                                        rng.Style.WrapText = true;
-                                        rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                                        rng.Style.Font.Bold = true;
-                                        rng.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-                                        rng.Style.Border.Top.Style = rng.Style.Border.Bottom.Style = rng.Style.Border.Left.Style = rng.Style.Border.Right.Style = ExcelBorderStyle.Thin;
-                                        rng.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                                        rng.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightBlue);
+                                        using (ExcelRange rng = worksheetSummery.Cells[cellRange])
+                                        {
+                                            rng.Style.WrapText = true;
+                                            rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            rng.Style.Font.Bold = true;
+                                            rng.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                                            rng.Style.Border.Top.Style = rng.Style.Border.Bottom.Style = rng.Style.Border.Left.Style = rng.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                                            rng.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                                            rng.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightBlue);
+                                        }
                                     }
                                     tempSecurityCount = -1;
                                     tempSecurityFlag = true;
@@ -754,15 +764,18 @@ namespace InsiderTrading.Controllers
                         {
                             cellRange1 = "A3:J3";
                         }
-                        using (ExcelRange rng1 = worksheetDetails.Cells[cellRange1])
+                        if (objInsiderInitialDisclosureDTO.EnableDisableQuantityValue != 400003)
                         {
-                            rng1.Style.WrapText = true;
-                            rng1.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                            rng1.Style.Font.Bold = true;
-                            rng1.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-                            rng1.Style.Border.Top.Style = rng1.Style.Border.Bottom.Style = rng1.Style.Border.Left.Style = rng1.Style.Border.Right.Style = ExcelBorderStyle.Thin;
-                            rng1.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                            rng1.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+                            using (ExcelRange rng1 = worksheetDetails.Cells[cellRange1])
+                            {
+                                rng1.Style.WrapText = true;
+                                rng1.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                rng1.Style.Font.Bold = true;
+                                rng1.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                                rng1.Style.Border.Top.Style = rng1.Style.Border.Bottom.Style = rng1.Style.Border.Left.Style = rng1.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                                rng1.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                                rng1.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+                            }
                         }
                     }
                     //Bind table rows
