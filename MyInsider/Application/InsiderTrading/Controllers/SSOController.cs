@@ -51,6 +51,7 @@ namespace InsiderTrading.Controllers
                     {
                         samlResponse.LoadXmlFromBase64(response["SAMLResponse"]);
                         TempData["samlResponseData"] = samlResponse.SsoProperty;
+                        Session["IsSSOLogin"] = true;
                         return RedirectToAction("InitiateIDPOrSP", "SSO");
                     }
                 }
