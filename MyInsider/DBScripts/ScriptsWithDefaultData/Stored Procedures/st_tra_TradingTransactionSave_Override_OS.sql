@@ -207,7 +207,7 @@ BEGIN
 				JOIN usr_UserInfo UI ON TD.ForUserInfoId=UI.UserInfoId
 				Where TransactionDetailsId = @inp_iTransactionDetailsId	
 		END
-
+		EXEC st_tra_UpdatePeriodendForTransactionMaster_OS	@inp_iTransactionMasterId
 		SET @out_nReturnValue = 0
 		RETURN @out_nReturnValue
 	END	 TRY
