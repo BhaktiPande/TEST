@@ -142,7 +142,7 @@ BEGIN
 						@inp_iCompanyId ,					
 						@inp_dtDateOfAcquisition ,
 						--CASE WHEN (CHARINDEX(@FIND_AXISBANK, @DBNAME) > 0) THEN NULL ELSE @inp_dtDateOfInitimationToCompany END ,
-						@inp_dtDateOfAcquisition,
+						ISNULL(@inp_dtDateOfInitimationToCompany, GETDATE()),
 						@inp_iModeOfAcquisitionCodeId  ,				
 						@inp_iExchangeCodeId ,
 						@inp_iTransactionTypeCodeId ,
@@ -169,7 +169,7 @@ BEGIN
 					,DMATDetailsID = @inp_iDMATDetailsID
 					,CompanyId = @inp_iCompanyId				
 					,DateOfAcquisition = @inp_dtDateOfAcquisition
-					,DateOfInitimationToCompany = @inp_dtDateOfAcquisition
+					,DateOfInitimationToCompany = ISNULL(@inp_dtDateOfInitimationToCompany, GETDATE())
 					,ModeOfAcquisitionCodeId = @inp_iModeOfAcquisitionCodeId			
 					,ExchangeCodeId = @inp_iExchangeCodeId
 					,TransactionTypeCodeId = @inp_iTransactionTypeCodeId
