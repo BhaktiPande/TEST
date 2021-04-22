@@ -679,14 +679,14 @@ namespace InsiderTrading.Controllers
                 }
                 if (ReportType == "5")
                 {
-                    workSheet.Cells["A1:AS1"].Merge = true;
-                    workSheet.Cells["A1:AS1"].Value = "Defaulter Report For Other Security";
-                    workSheet.Cells["A1:AS1"].Style.Border.Top.Style = workSheet.Cells["A1:AS1"].Style.Border.Bottom.Style = workSheet.Cells["A1:AS1"].Style.Border.Left.Style = workSheet.Cells["A1:AS1"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
-                    workSheet.Cells["A1:AS1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                    workSheet.Cells["A1:AS1"].Style.Font.Bold = true;
-                    workSheet.Cells["A1:AS1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    workSheet.Cells["A1:AS1"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.DarkGray);
-                    cellRange = "A2:AS2";
+                    workSheet.Cells["A1:AJ1"].Merge = true;
+                    workSheet.Cells["A1:AJ1"].Value = "Defaulter Report For Other Security";
+                    workSheet.Cells["A1:AJ1"].Style.Border.Top.Style = workSheet.Cells["A1:AJ1"].Style.Border.Bottom.Style = workSheet.Cells["A1:AJ1"].Style.Border.Left.Style = workSheet.Cells["A1:AJ1"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    workSheet.Cells["A1:AJ1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    workSheet.Cells["A1:AJ1"].Style.Font.Bold = true;
+                    workSheet.Cells["A1:AJ1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    workSheet.Cells["A1:AJ1"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.DarkGray);
+                    cellRange = "A2:AJ2";
                 }
 
                 for (var col = 1; col <= totalCols; col++)
