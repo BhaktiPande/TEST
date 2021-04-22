@@ -38,7 +38,7 @@ CREATE PROCEDURE [dbo].[st_usr_UserInfoList]
     ,@inp_sMiddleName				NVARCHAR(50) = null
     ,@inp_sLastName					NVARCHAR(50) = null
     ,@inp_sEmployeeId				NVARCHAR(50) = null
-    ,@inp_sMobileNumber				NVARCHAR(15) = null
+    ,@inp_sMobileNumber				NVARCHAR(30) = null
 	,@inp_iCompanyId				INT	
     ,@inp_sPAN						NVARCHAR(50) = null
     ,@inp_iCategory					INT = null

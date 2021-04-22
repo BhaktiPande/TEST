@@ -315,9 +315,10 @@ namespace InsiderTrading.Models
         [RegularExpression(ConstEnum.DataValidation.DescriptionType, ErrorMessage = "cmp_msg_50501")]
         public string Address { get; set; }
 
-        [StringLength(20)]
+        [StringLength(30)]
         [DisplayName("cmp_lbl_13077")]
-        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "cmp_msg_13083")]
+        //[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "cmp_msg_13083")]
+        [RegularExpression(ConstEnum.DataValidation.MobileNo, ErrorMessage = "cmp_msg_13083")]
         public string PhoneNumber { get; set; }
 
         [StringLength(510)]

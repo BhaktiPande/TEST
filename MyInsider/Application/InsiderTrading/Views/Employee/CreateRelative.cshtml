@@ -444,8 +444,8 @@
                                 {
                                     <tr>
                                         <td>
-                                            <input type="text" class='form-control txtmonileno' maxlength="13" title="Enter 10 digit mobile number" id="txtmonileno" style='  width: 265px;' value="@customer.MobileNumber" onkeypress="return isNumberKey(event)" />
-                                            <input type="text" class="form-control txtmonileno " maxlength="13" title="Enter 10 digit mobile number" id="txtName" style=" width: 265px; display:none" onkeypress="return isNumberKey(event)" />
+                                            <input type="text" class='form-control txtmonileno' maxlength="30" title="Enter only digits for mobile number" id="txtmonileno" style='  width: 265px;' value="@customer.MobileNumber" onkeypress="return isNumberKey(event)" />
+                                            <input type="text" class="form-control txtmonileno " maxlength="30" title="Enter only digits for mobile number" id="txtName" style=" width: 265px; display:none" onkeypress="return isNumberKey(event)" />
                                         </td>
                                         <td>
                                             @if (counter != 1)
@@ -537,12 +537,12 @@
                 validation=false;
                 return;
             }
-            if($('input:text:eq(0)', row).val()=="+91")
-            {
+            //if($('input:text:eq(0)', row).val()=="+91")
+            //{
 
-                validation=false;
-                return;
-            }
+            //    validation=false;
+            //    return;
+            //}
 
 
         });
@@ -558,7 +558,8 @@
             //Add Name cell.
             var cell = $(row.insertCell(-1));
             //cell.html(txtName.val());
-            cell.html("<input type='text' class='form-control txtmonileno' maxlength='13' pattern='[0-9]{5}[-][0-9]{7}[-][0-9]{1}'  id='mobileno' onkeypress='return isNumberKey(event)' style='  width: 265px;' value='+91" + txtName.val() + "' />"); //("<input type='text'  value='" + txtName.val() + "' />");
+            cell.html("<input type='text' class='form-control txtmonileno' maxlength="30" pattern='[0-9]{5}[-][0-9]{7}[-][0-9]{1}'  id='mobileno' onkeypress='return isNumberKey(event)' style='  width: 265px;'" + txtName.val() + "' />");
+            //cell.html("<input type='text' class='form-control txtmonileno' maxlength='13' pattern='[0-9]{5}[-][0-9]{7}[-][0-9]{1}'  id='mobileno' onkeypress='return isNumberKey(event)' style='  width: 265px;' value='+91" + txtName.val() + "' />"); //("<input type='text'  value='" + txtName.val() + "' />");
             //Add Country cell.
             //Add Button cell.
             cell = $(row.insertCell(-1));
