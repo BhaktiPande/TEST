@@ -65,7 +65,7 @@ namespace InsiderTrading.Controllers
             return View("SSO");
         }
         #endregion
-
+            
         #region // POST: /SSO/AssertionConsumer
         [HttpGet]
         [AllowAnonymous]
