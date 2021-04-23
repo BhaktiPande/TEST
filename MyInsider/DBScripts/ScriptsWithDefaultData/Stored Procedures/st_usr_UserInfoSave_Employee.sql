@@ -36,7 +36,7 @@ CREATE PROCEDURE [dbo].[st_usr_UserInfoSave_Employee]
     ,@inp_sMiddleName				NVARCHAR(50) = null
     ,@inp_sLastName					NVARCHAR(50) = null
     ,@inp_sEmployeeId				NVARCHAR(50) = null
-    ,@inp_sMobileNumber				NVARCHAR(15) = null
+    ,@inp_sMobileNumber				NVARCHAR(30) = null
     ,@inp_iCompanyId				INT = null
     ,@inp_sAddressLine1				NVARCHAR(500) = null
     ,@inp_sAddressLine2				NVARCHAR(500) = null

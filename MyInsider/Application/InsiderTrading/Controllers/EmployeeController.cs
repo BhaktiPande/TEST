@@ -151,6 +151,7 @@ namespace InsiderTrading.Controllers
                 if (ContactDetails.Count == 0 && TempData["ContactDetails"] == null)
                 {
                     ContactDetails objcontct = new ContactDetails();
+                    //objcontct.MobileNumber = (objEmployeeModel.userInfoModel.MobileNumber == null || objEmployeeModel.userInfoModel.MobileNumber == "") ? "" : objEmployeeModel.userInfoModel.MobileNumber;
                     objcontct.MobileNumber = (objEmployeeModel.userInfoModel.MobileNumber == null || objEmployeeModel.userInfoModel.MobileNumber == "") ? "+91" : objEmployeeModel.userInfoModel.MobileNumber;
                     ContactDetails.Add(objcontct);
                     TempData["ContactDetails"] = bindDataTable(ContactDetails, nUserInfoID, 0);
@@ -164,8 +165,8 @@ namespace InsiderTrading.Controllers
                         objEmployeeModel.userInfoModel.MobileNumber = ((DataTable)TempData["ContactDetails"]).Rows[0]["MobileNumber"].ToString();
                         TempData.Keep("ContactDetails");
                     }
-                    else
-                    { objEmployeeModel.userInfoModel.MobileNumber = "+91"; }
+                    //else
+                    //{ objEmployeeModel.userInfoModel.MobileNumber = "+91"; }
 
                 }
                 //set flag to show applicability define or not msg 
@@ -465,7 +466,8 @@ namespace InsiderTrading.Controllers
                                 MobileValidaton = false;
                                 DataTable dt = (DataTable)TempData["ContactDetails"];
                                 TempData.Keep();
-                                System.Text.RegularExpressions.Regex re = new System.Text.RegularExpressions.Regex(@"^(?:\d{1,15}|(\+91\d{10}|\+[1-8]\d{1,13}|\+(9[987654320])\d{1,12}))$");
+                                System.Text.RegularExpressions.Regex re = new System.Text.RegularExpressions.Regex(@"^\+?[0-9]{3,30}$");
+                                //System.Text.RegularExpressions.Regex re = new System.Text.RegularExpressions.Regex(@"^(?:\d{1,15}|(\+91\d{10}|\+[1-8]\d{1,13}|\+(9[987654320])\d{1,12}))$");
                                 System.Text.RegularExpressions.Regex reIsText = new System.Text.RegularExpressions.Regex(@"^[+0-9]*$");
                                 for (int i = 0; i < dt.Rows.Count; i++)
                                 {
@@ -1170,8 +1172,8 @@ namespace InsiderTrading.Controllers
                                             }
                                             else if (objRouteValue.Value != "disabled" && objUserInfoModel.MobileNumber == null)
                                             {
-                                                objUserInfoModel.MobileNumber = "+91";
-                                                UsrContact.MobileNumber = "+91";
+                                                //objUserInfoModel.MobileNumber = "+91";
+                                                //UsrContact.MobileNumber = "+91";
                                             }
                                         }
 
@@ -1206,7 +1208,7 @@ namespace InsiderTrading.Controllers
                             }
                             else
                             {
-                                objUserInfoModel.MobileNumber = "+91";
+                                //objUserInfoModel.MobileNumber = "+91";
                             }
                         }
                     }
@@ -1392,7 +1394,8 @@ namespace InsiderTrading.Controllers
                                 MobileValidaton = false;
                                 DataTable dt = (DataTable)TempData["RelativeMobileDetail"];
                                 TempData.Keep("RelativeMobileDetail");
-                                System.Text.RegularExpressions.Regex re = new System.Text.RegularExpressions.Regex(@"^(?:\d{1,15}|(\+91\d{10}|\+[1-8]\d{1,13}|\+(9[987654320])\d{1,12}))$");
+                                System.Text.RegularExpressions.Regex re = new System.Text.RegularExpressions.Regex(@"^\+?[0-9]{3,30}$");
+                                //System.Text.RegularExpressions.Regex re = new System.Text.RegularExpressions.Regex(@"^(?:\d{1,15}|(\+91\d{10}|\+[1-8]\d{1,13}|\+(9[987654320])\d{1,12}))$");
                                 System.Text.RegularExpressions.Regex reIsText = new System.Text.RegularExpressions.Regex(@"^[+0-9]*$");
                                 for (int i = 0; i < dt.Rows.Count; i++)
                                 {
@@ -3869,7 +3872,8 @@ namespace InsiderTrading.Controllers
                     {
                         DataRow dr = dt.NewRow();
                         dt.Rows.Add(dr);
-                        dt.Rows[rowCount]["MobileNumber"] = (UsrContact.MobileNumber == null) ? "+91" : UsrContact.MobileNumber;
+                        //dt.Rows[rowCount]["MobileNumber"] = (UsrContact.MobileNumber == null) ? "+91" : UsrContact.MobileNumber;
+                        dt.Rows[rowCount]["MobileNumber"] = (UsrContact.MobileNumber == null) ? "" : UsrContact.MobileNumber;
                         dt.Rows[rowCount]["UserInfoID"] = Convert.ToInt32(UserInfoId);
                         dt.Rows[rowCount]["UserRelativeID"] = Convert.ToInt32(UserRelativeID);
                         rowCount = rowCount + 1;

@@ -49,7 +49,7 @@ CREATE PROCEDURE [dbo].[st_usr_UserInfoSave]
     ,@inp_sMiddleName				NVARCHAR(50) = null
     ,@inp_sLastName					NVARCHAR(50) = null
     ,@inp_sEmployeeId				NVARCHAR(50) = null
-    ,@inp_sMobileNumber				NVARCHAR(15) = null
+    ,@inp_sMobileNumber				NVARCHAR(30) = null
 	,@inp_iCompanyId				INT	
     ,@inp_sAddressLine1				NVARCHAR(500) = null
     ,@inp_sAddressLine2				NVARCHAR(500) = null
@@ -119,12 +119,13 @@ BEGIN
 	DECLARE @ERR_PAN_NUMBER_FOR_DEMAT INT = 50594	
 	
 	DECLARE @UserMobNumber NVARCHAR(50)
-	DECLARE @MobNumMaxLength INT = 15
-	DECLARE @MobNumLenWithCounrtyCode INT = 13
+	DECLARE @MobNumMaxLength INT = 30
+	DECLARE @MobNumLenWithCounrtyCode INT = 30
 	DECLARE @MobNumSplitContryCode INT = 4
-	DECLARE @CountryCode NVARCHAR(50)='+91'
+	DECLARE @CountryCode NVARCHAR(50)=''
 	DECLARE @MobNumber_WithoutCountyCode NVARCHAR(50)
 	DECLARE @MobNumber_WithCountyCode NVARCHAR(50)	
+	DECLARE @UserType INT
 	
 	BEGIN TRY
 		
@@ -251,7 +252,7 @@ BEGIN
 		END
 
 		--Check if the PAN number entered by user for saving/editing is not assigned to any other user/relative in the system
-			IF (@inp_iUserTypeCodeID <> @nUserType_CO AND
+				IF (@inp_iUserTypeCodeID <> @nUserType_CO AND
 			EXISTS(SELECT UserInfoId FROM usr_UserInfo WHERE PAN =  @inp_sPAN 
 			AND UserInfoID <> @inp_iUserInfoId  AND (DateOfInactivation IS NULL OR DateOfInactivation IS NOT NULL AND DateOfInactivation >GETDATE() and @inp_iUserInfoId!=0)))
 		BEGIN
