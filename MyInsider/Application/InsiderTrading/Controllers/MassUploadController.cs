@@ -98,7 +98,9 @@ namespace InsiderTrading.Controllers
                         lstMassUploadDTO = GetAllMassUpload().Where(c => !c.MassUploadName.Contains("- Other")).ToList();
                         break;
                     case Common.ConstEnum.Code.RequiredModuleOtherSecurity:
-                        lstMassUploadDTO = GetAllMassUpload().Where(c => c.MassUploadExcelId != 2 && c.MassUploadExcelId != 5 && c.MassUploadExcelId != 4 && c.MassUploadExcelId != 51).ToList();
+                        lstMassUploadDTO = GetAllMassUpload()
+                            .Where(c => c.MassUploadExcelId == 1 
+                            || c.MassUploadExcelId == 53 ).ToList();
                         break;
                     case Common.ConstEnum.Code.RequiredModuleBoth:
                         lstMassUploadDTO = GetAllMassUpload();

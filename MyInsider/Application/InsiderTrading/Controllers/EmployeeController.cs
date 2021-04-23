@@ -243,7 +243,24 @@ namespace InsiderTrading.Controllers
                 if (isPPD_Details_Saved)
                 {
                     ViewBag.UserDetailsSaved = true;
-                    return View("EmployeeDmatDetails", objEmployeeModel);
+                    if(InsiderTrading.Common.ConstEnum.Code.Admin==objLoginUserDetails.UserTypeCodeId 
+                        || InsiderTrading.Common.ConstEnum.Code.COUserType == objLoginUserDetails.UserTypeCodeId)
+                    {
+                        return RedirectToAction("Index", "UpsiDigital");
+                    }
+                    else
+                    {
+                        return RedirectToAction("ConfirmPersonalDetails", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_RELATIVEUSER_CREATE, nParentID = objEmployeeModel.userInfoModel.ParentId, nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] });
+                    }
+
+
+
+                    //return View("CreateRelative", objEmployeeModel);
+                    //return RedirectToAction("CreateRelative", new { });
+                    //return RedirectToAction("CreateRelative", new { acid = InsiderTrading.Common.ConstEnum.UserActions.INSIDER_RELATIVEUSER_CREATE, nParentID = objEmployeeModel.userInfoModel.ParentId, nUserDematSaved = true, nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] });
+                    //acid = 6 & nParentID = 80 & nConfirmPersonalDetailsRequired = False & nShowPersonalDetailsConfirmButtonRequired = False
+                    //return View("EmployeeDmatDetails", objEmployeeModel);
+
                 }
                 else
                 {
@@ -3784,8 +3801,10 @@ namespace InsiderTrading.Controllers
                 {
                     strConfirmMessage = Common.Common.getResource("usr_msg_11420"); //Personal Details confirm successfully.
 
+
                     // return RedirectToAction("Create", "Employee", new { acid = ConstEnum.UserActions.INSIDER_INSIDERUSER_EDIT, nUserInfoID = objLoginUserDetails.LoggedInUserID }).Success(HttpUtility.UrlEncode(strConfirmMessage));
-                    return RedirectToAction("Index", "InsiderInitialDisclosure", new { acid = ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_INITIAL_DISCLOSURE, UserInfoId = UserInfoID, ReqModuleId = RequiredModuleID }).Success(HttpUtility.UrlEncode(strConfirmMessage));
+                    //return RedirectToAction("Index", "InsiderInitialDisclosure", new { acid = ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_INITIAL_DISCLOSURE, UserInfoId = UserInfoID, ReqModuleId = RequiredModuleID }).Success(HttpUtility.UrlEncode(strConfirmMessage));
+                    return RedirectToAction("Index", "UpsiDigital");
                 }
             }
             catch (Exception ex)
@@ -3797,7 +3816,10 @@ namespace InsiderTrading.Controllers
             {
                 objUserPolicyDocumentEventLogDTO = null;
             }
-            return RedirectToAction("Index", "InsiderInitialDisclosure", new { acid = ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_INITIAL_DISCLOSURE, UserInfoId = UserInfoID, ReqModuleId = RequiredModuleID }).Success(HttpUtility.UrlEncode(strConfirmMessage));
+
+
+            //return RedirectToAction("Index", "InsiderInitialDisclosure", new { acid = ConstEnum.UserActions.INSIDER_DISCLOSURE_DETAILS_INITIAL_DISCLOSURE, UserInfoId = UserInfoID, ReqModuleId = RequiredModuleID }).Success(HttpUtility.UrlEncode(strConfirmMessage));
+            return RedirectToAction("Index", "UpsiDigital");
         }
         #endregion Confirm Personal Details
         #region Insert Customer Details

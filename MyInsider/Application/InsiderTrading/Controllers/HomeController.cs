@@ -83,7 +83,9 @@ namespace InsiderTrading.Controllers
                             }
                         }
                     }
-                    return RedirectToAction("Index", "CODashboard", new { acid = Common.ConstEnum.UserActions.CRUSER_COUSERDASHBOARD_DASHBOARD });
+                    return RedirectToAction("Index", "UpsiDigital");
+
+                    //return RedirectToAction("Index", "CODashboard", new { acid = Common.ConstEnum.UserActions.CRUSER_COUSERDASHBOARD_DASHBOARD });
                 }
                 else if (objLoginUserDetails.UserTypeCodeId == ConstEnum.Code.EmployeeType || objLoginUserDetails.UserTypeCodeId == ConstEnum.Code.NonEmployeeType ||
                     objLoginUserDetails.UserTypeCodeId == ConstEnum.Code.CorporateUserType)
@@ -110,7 +112,9 @@ namespace InsiderTrading.Controllers
                         }
                     }
 
+                    //return RedirectToAction("Index", "UpsiDigital");
                     return RedirectToAction("Index", "InsiderDashboard", new { acid = Common.ConstEnum.UserActions.DASHBOARD_INSIDERUSER });
+
                 }
                 else
                 {

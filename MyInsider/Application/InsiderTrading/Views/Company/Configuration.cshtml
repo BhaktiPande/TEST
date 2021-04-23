@@ -15,11 +15,11 @@
 }
 @using (Html.BeginForm("", "", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "", @autocomplete = "off", id = "frmCompanyConfiguration" }))
 {
-    <div class="card-body">
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
+<div class="card-body">
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary("", new Dictionary<string, object> { { "class", "alert alert-danger" }, { "id", "divValidationSummaryModal" } })
 
-        <div class="row">
+    @*<div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h4>@InsiderTrading.Common.Common.getResource("cmp_lbl_13124")</h4>
             </div>
@@ -72,7 +72,6 @@
             </div>
         </div>
         <br />
-
         <br />
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -358,61 +357,61 @@
                 </div>
             </div>
         </div>
-        <br />
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <h4>@InsiderTrading.Common.Common.getResource("cmp_lbl_55081")</h4>
-            </div>
+        <br />*@
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <h4>@InsiderTrading.Common.Common.getResource("cmp_lbl_55081")</h4>
         </div>
-        <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                @Html.LabelFor(m => m.InformationSharedby)
-            </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                @Html.RadioButtonFor(m => m.UPSISetting, @InsiderTrading.Models.UPSISettingCode.YesSetting) @InsiderTrading.Common.Common.getResource("cmp_lbl_55082") &nbsp;
-                @Html.RadioButtonFor(m => m.UPSISetting, @InsiderTrading.Models.UPSISettingCode.NoSetting) @InsiderTrading.Common.Common.getResource("cmp_lbl_55083")
-            </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            @Html.LabelFor(m => m.InformationSharedby)
         </div>
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <h4>@InsiderTrading.Common.Common.getResource("cmp_lbl_54177")</h4>
-            </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            @Html.RadioButtonFor(m => m.UPSISetting, @InsiderTrading.Models.UPSISettingCode.YesSetting) @InsiderTrading.Common.Common.getResource("cmp_lbl_55082") &nbsp;
+            @Html.RadioButtonFor(m => m.UPSISetting, @InsiderTrading.Models.UPSISettingCode.NoSetting) @InsiderTrading.Common.Common.getResource("cmp_lbl_55083")
         </div>
-        <div class="row">
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                @Html.LabelFor(m => m.TriggerEmailsUPSIUpdated)
-
-            </div>
-            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-                @Html.RadioButtonFor(m => m.TriggerEmailsUPSIUpdated, @InsiderTrading.Models.UPSIEmailUpdateSettingCode.YesSetting) @InsiderTrading.Common.Common.getResource("cmp_lbl_55082") &nbsp;
-                @Html.RadioButtonFor(m => m.TriggerEmailsUPSIUpdated, @InsiderTrading.Models.UPSIEmailUpdateSettingCode.NoSetting) @InsiderTrading.Common.Common.getResource("cmp_lbl_55083")
-            </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <h4>@InsiderTrading.Common.Common.getResource("cmp_lbl_54177")</h4>
         </div>
-        <div class="row">
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                @Html.LabelFor(m => m.TriggerEmailsUPSIpublished)
-            </div>
-            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-                @Html.RadioButtonFor(m => m.TriggerEmailsUPSIpublished, @InsiderTrading.Models.UPSIEmailPublishedSettingCode.YesSetting) @InsiderTrading.Common.Common.getResource("cmp_lbl_55082") &nbsp;
-                @Html.RadioButtonFor(m => m.TriggerEmailsUPSIpublished, @InsiderTrading.Models.UPSIEmailPublishedSettingCode.NoSetting) @InsiderTrading.Common.Common.getResource("cmp_lbl_55083")
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12">
-                @Html.LabelFor(m => m.MailTO)
-            </div>
-            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
-                @Html.ListBoxFor(x=>x.DefaultMailTo, new MultiSelectList(Model.DefaultSetting, "Key", "Value", Model.AssignedSetting.Select(m => m.Key)), new { multiple = "multiple", @class = "form-control multiselect DefaultMailTo" })
-            </div>
-            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12">
-                @Html.LabelFor(m => m.MailCC)
-            </div>
-            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12" style="text-align: left;">
-                @Html.ListBoxFor(x=>x.DefaultMailCC, new MultiSelectList(Model.DefaultSettingCC, "Key", "Value", Model.AssignedSettingCC.Select(m => m.Key)), new { multiple = "multiple", @class = "form-control multiselect DefaultMailCC" })
-            </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+            @Html.LabelFor(m => m.TriggerEmailsUPSIUpdated)
 
         </div>
-        <div class="row">
+        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+            @Html.RadioButtonFor(m => m.TriggerEmailsUPSIUpdated, @InsiderTrading.Models.UPSIEmailUpdateSettingCode.YesSetting) @InsiderTrading.Common.Common.getResource("cmp_lbl_55082") &nbsp;
+            @Html.RadioButtonFor(m => m.TriggerEmailsUPSIUpdated, @InsiderTrading.Models.UPSIEmailUpdateSettingCode.NoSetting) @InsiderTrading.Common.Common.getResource("cmp_lbl_55083")
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+            @Html.LabelFor(m => m.TriggerEmailsUPSIpublished)
+        </div>
+        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+            @Html.RadioButtonFor(m => m.TriggerEmailsUPSIpublished, @InsiderTrading.Models.UPSIEmailPublishedSettingCode.YesSetting) @InsiderTrading.Common.Common.getResource("cmp_lbl_55082") &nbsp;
+            @Html.RadioButtonFor(m => m.TriggerEmailsUPSIpublished, @InsiderTrading.Models.UPSIEmailPublishedSettingCode.NoSetting) @InsiderTrading.Common.Common.getResource("cmp_lbl_55083")
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12">
+            @Html.LabelFor(m => m.MailTO)
+        </div>
+        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+            @Html.ListBoxFor(x => x.DefaultMailTo, new MultiSelectList(Model.DefaultSetting, "Key", "Value", Model.AssignedSetting.Select(m => m.Key)), new { multiple = "multiple", @class = "form-control multiselect DefaultMailTo" })
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12">
+            @Html.LabelFor(m => m.MailCC)
+        </div>
+        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12" style="text-align: left;">
+            @Html.ListBoxFor(x => x.DefaultMailCC, new MultiSelectList(Model.DefaultSettingCC, "Key", "Value", Model.AssignedSettingCC.Select(m => m.Key)), new { multiple = "multiple", @class = "form-control multiselect DefaultMailCC" })
+        </div>
+
+    </div>
+    @*<div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h4>@InsiderTrading.Common.Common.getResource("cmp_lbl_53102")</h4>
             </div>
@@ -446,24 +445,24 @@
                     @Html.RadioButtonFor(m => m.ReqiuredEULAReconfirmation, @InsiderTrading.Models.EULARecomfirmationSettingCode.NotAccepted, html_attr) @InsiderTrading.Common.Common.getResource("cmp_lbl_53106")
                 </div>
             </div>
-        </div>
-        <br />
-        <div class="row">
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                @{
-                    if (ViewBag.CalledFrom == "Edit")
-                    {
-                        <button type="button" class="btn btn-success" data-loading-text="Saving" id="SaveCompanyConfiguration" name="SaveCompanyConfiguration" autocomplete="off">
-                            <i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("com_btn_14019")
-                        </button>
-                    }
+        </div>*@
+    <br />
+    <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            @{
+                if (ViewBag.CalledFrom == "Edit")
+                {
+                    <button type="button" class="btn btn-success" data-loading-text="Saving" id="SaveCompanyConfiguration" name="SaveCompanyConfiguration" autocomplete="off">
+                        <i class="fa fa-save"></i> @InsiderTrading.Common.Common.getResource("com_btn_14019")
+                    </button>
                 }
-                <a class="btn btn-success cancel" href='@Url.Action("Index", "Company", new {acid = @InsiderTrading.Common.ConstEnum.UserActions.COMPANY_VIEW})' role="button">
-                    @InsiderTrading.Common.Common.getResource("com_btn_14011")
-                </a>
-            </div>
+            }
+            <a class="btn btn-success cancel" href='@Url.Action("Index", "Company", new {acid = @InsiderTrading.Common.ConstEnum.UserActions.COMPANY_VIEW})' role="button">
+                @InsiderTrading.Common.Common.getResource("com_btn_14011")
+            </a>
         </div>
     </div>
+</div>
 }
 @Html.Hidden("SaveConfiguration", Url.Action("SaveCompanyConfiguration", "Company"))
 @Scripts.Render("~/bundles/Company")

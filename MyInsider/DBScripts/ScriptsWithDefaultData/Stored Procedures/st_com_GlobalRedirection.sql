@@ -52,7 +52,8 @@ DECLARE
               @RedirectTo_Change_Password_Page        INT = 6,
               @RedirectTo_EULAAcceptance_Page          INT = 8,
               @RedirectTo_MCQ_Page                            INT=9, 
-              @RedirectToInitialDisclosurePage_Redirect INT = 1
+              @RedirectToInitialDisclosurePage_Redirect INT = 1,
+			  @RedirectTo_UPSI_Page                            INT=10
 ---------------------------------------------------------------------------------
 
        DECLARE @MapToTypePolicyDocument                INT = 132001
@@ -190,6 +191,7 @@ DECLARE
                            
                                   IF(NOT EXISTS(SELECT * FROM eve_EventLog WHERE EventCodeId = @nConfirm_Personal_Details_Event AND UserInfoId = @inp_iUserInfoId))
                                   BEGIN
+								  -----------------Confirmation Block-----------------------------------------------------------------------------------------------
                                   -- Redirect to personal details page base on user type
                                          IF (@USERTYPE = @USERTYPE_CORPORATEUSER)
                                          BEGIN
@@ -302,83 +304,85 @@ DECLARE
                                                 END
                                          END           
                                       IF EXISTS(SELECT RequiredModule FROM mst_Company WHERE IsImplementing = 1)
-                                      BEGIN                                       
-                                                CREATE TABLE #GetTradingPolicyId_OS (nGetTradingPolicyId_OS INT)
-                                                INSERT INTO #GetTradingPolicyId_OS EXEC st_tra_GetTradingPolicyIDfor_OS @inp_iUserInfoId
-                                                SET @nGetTradingPolicyId_OS = (SELECT nGetTradingPolicyId_OS FROM #GetTradingPolicyId_OS)
+                                      BEGIN     
+									  
+									  SELECT Controller, Action, Parameter FROM com_GlobalRedirectToURL g where g.ID = @RedirectTo_UPSI_Page
+                                                --CREATE TABLE #GetTradingPolicyId_OS (nGetTradingPolicyId_OS INT)
+                                                --INSERT INTO #GetTradingPolicyId_OS EXEC st_tra_GetTradingPolicyIDfor_OS @inp_iUserInfoId
+                                                --SET @nGetTradingPolicyId_OS = (SELECT nGetTradingPolicyId_OS FROM #GetTradingPolicyId_OS)
 
-                                                SELECT @nRequiredModuleID = RequiredModule FROM mst_Company WHERE IsImplementing = 1
+                                                --SELECT @nRequiredModuleID = RequiredModule FROM mst_Company WHERE IsImplementing = 1
 
-                                                IF(@nRequiredModuleID = @nRequiredModule_OWN)
-                                                BEGIN
-                                                       IF(NOT EXISTS(SELECT EventLogId FROM eve_EventLog WHERE EventCodeId = @EventInitialDisclosureEntered and UserInfoId = @inp_iUserInfoId AND MapToTypeCodeId = @DISCLOSURETRANSACTION ))
-                                                       BEGIN
-                                                              DECLARE @RedirectionResult_OS_OWN TABLE (SequenceNumber INT IDENTITY(1,1),ReqModuleId INT,UserInfoId INT)
+                                                --IF(@nRequiredModuleID = @nRequiredModule_OWN)
+                                                --BEGIN
+                                                --       IF(NOT EXISTS(SELECT EventLogId FROM eve_EventLog WHERE EventCodeId = @EventInitialDisclosureEntered and UserInfoId = @inp_iUserInfoId AND MapToTypeCodeId = @DISCLOSURETRANSACTION ))
+                                                --       BEGIN
+                                                --              DECLARE @RedirectionResult_OS_OWN TABLE (SequenceNumber INT IDENTITY(1,1),ReqModuleId INT,UserInfoId INT)
                                                                      
-                                                              INSERT INTO @RedirectionResult_OS_OWN(ReqModuleId,UserInfoId)
-                                                              SELECT       comp.RequiredModule,@inp_iUserInfoId
-                                                              FROM mst_Company comp             
+                                                --              INSERT INTO @RedirectionResult_OS_OWN(ReqModuleId,UserInfoId)
+                                                --              SELECT       comp.RequiredModule,@inp_iUserInfoId
+                                                --              FROM mst_Company comp             
                                                                            
-                                                              DECLARE @sRedirect_OS_OWN VARCHAR(100) 
-                                                              SELECT TOP 1 @sRedirect_OS_OWN = ',ReqModuleId,' + CONVERT(VARCHAR(15), ReqModuleId) + ',UserInfoId,' + CONVERT(VARCHAR(15), UserInfoId) FROM @RedirectionResult_OS_OWN 
-                                                              SELECT Controller,Action,Parameter + @sRedirect_OS_OWN as Parameter FROM com_GlobalRedirectToURL g where g.ID = @RedirectToInitialDisclosurePage_Redirect
-                                                       END
-                                                END                               
-                                                ELSE IF(@nRequiredModuleID = @nRequiredModule_OS)
-                                                BEGIN
-                                                       IF(NOT EXISTS(SELECT EventLogId FROM eve_EventLog WHERE EventCodeId = @EventInitialDisclosureEntered_OS and UserInfoId = @inp_iUserInfoId AND MapToTypeCodeId = @DISCLOSURETRANSACTION ))
-                                                       BEGIN
+                                                --              DECLARE @sRedirect_OS_OWN VARCHAR(100) 
+                                                --              SELECT TOP 1 @sRedirect_OS_OWN = ',ReqModuleId,' + CONVERT(VARCHAR(15), ReqModuleId) + ',UserInfoId,' + CONVERT(VARCHAR(15), UserInfoId) FROM @RedirectionResult_OS_OWN 
+                                                --              SELECT Controller,Action,Parameter + @sRedirect_OS_OWN as Parameter FROM com_GlobalRedirectToURL g where g.ID = @RedirectToInitialDisclosurePage_Redirect
+                                                --       END
+                                                --END                               
+                                                --ELSE IF(@nRequiredModuleID = @nRequiredModule_OS)
+                                                --BEGIN
+                                                --       IF(NOT EXISTS(SELECT EventLogId FROM eve_EventLog WHERE EventCodeId = @EventInitialDisclosureEntered_OS and UserInfoId = @inp_iUserInfoId AND MapToTypeCodeId = @DISCLOSURETRANSACTION ))
+                                                --       BEGIN
 
-                                                              DECLARE @RedirectionResult_Others TABLE (SequenceNumber INT IDENTITY(1,1),ReqModuleId INT,UserInfoId INT)
+                                                --              DECLARE @RedirectionResult_Others TABLE (SequenceNumber INT IDENTITY(1,1),ReqModuleId INT,UserInfoId INT)
                                                                      
-                                                              INSERT INTO @RedirectionResult_Others(ReqModuleId,UserInfoId)
-                                                              SELECT       comp.RequiredModule,@inp_iUserInfoId
-                                                              FROM    mst_Company comp
+                                                --              INSERT INTO @RedirectionResult_Others(ReqModuleId,UserInfoId)
+                                                --              SELECT       comp.RequiredModule,@inp_iUserInfoId
+                                                --              FROM    mst_Company comp
 
-                                                              DECLARE @sRedirect_OS_Others VARCHAR(100) 
-                                                              SELECT TOP 1 @sRedirect_OS_Others = ',ReqModuleId,' + CONVERT(VARCHAR(15), ReqModuleId) + ',UserInfoId,' + CONVERT(VARCHAR(15), UserInfoId) FROM @RedirectionResult_Others 
-                                                              SELECT Controller,Action,Parameter + @sRedirect_OS_Others as Parameter FROM com_GlobalRedirectToURL g where g.ID = @RedirectToInitialDisclosurePage_Redirect
-                                                       END
-                                                END
-                                                ELSE IF(@nRequiredModuleID = @nRequiredModule_BOTH)
-                                                BEGIN
-                                                    DECLARE @IDConfirmFlag INT =0;
-                                                       IF(NOT EXISTS(SELECT EventLogId FROM eve_EventLog WHERE EventCodeId = @EventInitialDisclosureEntered and UserInfoId = @inp_iUserInfoId AND MapToTypeCodeId = @DISCLOSURETRANSACTION ))
-                                                       BEGIN
+                                                --              DECLARE @sRedirect_OS_Others VARCHAR(100) 
+                                                --              SELECT TOP 1 @sRedirect_OS_Others = ',ReqModuleId,' + CONVERT(VARCHAR(15), ReqModuleId) + ',UserInfoId,' + CONVERT(VARCHAR(15), UserInfoId) FROM @RedirectionResult_Others 
+                                                --              SELECT Controller,Action,Parameter + @sRedirect_OS_Others as Parameter FROM com_GlobalRedirectToURL g where g.ID = @RedirectToInitialDisclosurePage_Redirect
+                                                --       END
+                                                --END
+                                                --ELSE IF(@nRequiredModuleID = @nRequiredModule_BOTH)
+                                                --BEGIN
+                                                --    DECLARE @IDConfirmFlag INT =0;
+                                                --       IF(NOT EXISTS(SELECT EventLogId FROM eve_EventLog WHERE EventCodeId = @EventInitialDisclosureEntered and UserInfoId = @inp_iUserInfoId AND MapToTypeCodeId = @DISCLOSURETRANSACTION ))
+                                                --       BEGIN
                                                           
-                                                              SET @IDConfirmFlag=1
-                                                              DECLARE @RedirectionResult_OWN TABLE (SequenceNumber INT IDENTITY(1,1),ReqModuleId INT,UserInfoId INT)
+                                                --              SET @IDConfirmFlag=1
+                                                --              DECLARE @RedirectionResult_OWN TABLE (SequenceNumber INT IDENTITY(1,1),ReqModuleId INT,UserInfoId INT)
                                                                      
-                                                              DECLARE @ModuleID_Own int =513001
-                                                              INSERT INTO @RedirectionResult_OWN(ReqModuleId,UserInfoId)                                                         
-                                                              values (@ModuleID_Own,@inp_iUserInfoId)       
+                                                --              DECLARE @ModuleID_Own int =513001
+                                                --              INSERT INTO @RedirectionResult_OWN(ReqModuleId,UserInfoId)                                                         
+                                                --              values (@ModuleID_Own,@inp_iUserInfoId)       
 
-                                                              DECLARE @sRedirect_OWN VARCHAR(100) 
-                                                              SELECT TOP 1 @sRedirect_OWN = ',UserInfoId,' + CONVERT(VARCHAR(15), UserInfoId) + ',ReqModuleId,' + CONVERT(VARCHAR(15), ReqModuleId) FROM @RedirectionResult_OWN 
-                                                              SELECT TOP 1 @sRedirect_OWN = ',ReqModuleId,' + CONVERT(VARCHAR(15), ReqModuleId) FROM @RedirectionResult_OWN 
-                                                              SELECT Controller,Action,Parameter + @sRedirect_OWN as Parameter FROM com_GlobalRedirectToURL g where g.ID = @RedirectToInitialDisclosurePage_Redirect
-                                                              --SELECT Controller,Action,Parameter  FROM com_GlobalRedirectToURL g where g.ID = @RedirectToInitialDisclosurePage_Redirect
-                                                       END
+                                                --              DECLARE @sRedirect_OWN VARCHAR(100) 
+                                                --              SELECT TOP 1 @sRedirect_OWN = ',UserInfoId,' + CONVERT(VARCHAR(15), UserInfoId) + ',ReqModuleId,' + CONVERT(VARCHAR(15), ReqModuleId) FROM @RedirectionResult_OWN 
+                                                --              SELECT TOP 1 @sRedirect_OWN = ',ReqModuleId,' + CONVERT(VARCHAR(15), ReqModuleId) FROM @RedirectionResult_OWN 
+                                                --              SELECT Controller,Action,Parameter + @sRedirect_OWN as Parameter FROM com_GlobalRedirectToURL g where g.ID = @RedirectToInitialDisclosurePage_Redirect
+                                                --              --SELECT Controller,Action,Parameter  FROM com_GlobalRedirectToURL g where g.ID = @RedirectToInitialDisclosurePage_Redirect
+                                                --       END
 
-                                                    IF(@IDConfirmFlag!=1)
-                                                       BEGIN
-                                                              IF(@nGetTradingPolicyId_OS != 0)
-                                                              BEGIN                                                      
-                                                                     IF(NOT EXISTS(SELECT EventLogId FROM eve_EventLog WHERE EventCodeId = @EventInitialDisclosureEntered_OS and UserInfoId = @inp_iUserInfoId AND MapToTypeCodeId = @DISCLOSURETRANSACTION ))
-                                                                     BEGIN                                                        
-                                                                           DECLARE @RedirectionResult TABLE (SequenceNumber INT IDENTITY(1,1),ReqModuleId INT,UserInfoId INT)
-                                                                           DECLARE @ModuleID int =513002
-                                                                           INSERT INTO @RedirectionResult(ReqModuleId,UserInfoId)
-                                                                           values (@ModuleID,@inp_iUserInfoId)                                                                    
+                                                --    IF(@IDConfirmFlag!=1)
+                                                --       BEGIN
+                                                --              IF(@nGetTradingPolicyId_OS != 0)
+                                                --              BEGIN                                                      
+                                                --                     IF(NOT EXISTS(SELECT EventLogId FROM eve_EventLog WHERE EventCodeId = @EventInitialDisclosureEntered_OS and UserInfoId = @inp_iUserInfoId AND MapToTypeCodeId = @DISCLOSURETRANSACTION ))
+                                                --                     BEGIN                                                        
+                                                --                           DECLARE @RedirectionResult TABLE (SequenceNumber INT IDENTITY(1,1),ReqModuleId INT,UserInfoId INT)
+                                                --                           DECLARE @ModuleID int =513002
+                                                --                           INSERT INTO @RedirectionResult(ReqModuleId,UserInfoId)
+                                                --                           values (@ModuleID,@inp_iUserInfoId)                                                                    
 
-                                                                           DECLARE @sRedirect_OS VARCHAR(100) 
-                                                                           SELECT TOP 1 @sRedirect_OS =  ',UserInfoId,' + CONVERT(VARCHAR(15), UserInfoId) + ',ReqModuleId,' + CONVERT(VARCHAR(15), ReqModuleId) FROM @RedirectionResult 
-                                                                           SELECT Controller,Action,Parameter + @sRedirect_OS as Parameter FROM com_GlobalRedirectToURL g where g.ID = @RedirectToInitialDisclosurePage_Redirect
-                                                                     END
-                                                              END
-                                                       END
+                                                --                           DECLARE @sRedirect_OS VARCHAR(100) 
+                                                --                           SELECT TOP 1 @sRedirect_OS =  ',UserInfoId,' + CONVERT(VARCHAR(15), UserInfoId) + ',ReqModuleId,' + CONVERT(VARCHAR(15), ReqModuleId) FROM @RedirectionResult 
+                                                --                           SELECT Controller,Action,Parameter + @sRedirect_OS as Parameter FROM com_GlobalRedirectToURL g where g.ID = @RedirectToInitialDisclosurePage_Redirect
+                                                --                     END
+                                                --              END
+                                                --       END
                                                        
-                                                  END                             
+                                                --  END                             
                                              END                           
                                                 --ELSE -- After submission of ID , if any policy is left to View/Agree
                                   DECLARE @nIDOwnConfirm INT=0

@@ -22,22 +22,22 @@
                 }
             </td>
 
-            <td>
-                @if ((bool)Session["EmployeeType"])
+            @*<td>
+            @if ((bool)Session["EmployeeType"])
+            {
+                using (Html.BeginForm("Create", "Employee", new { acid = acid, nUserInfoID = Session["UserInfoId"], isPPD_Details_Saved = true }))
                 {
-                    using (Html.BeginForm("Create", "Employee", new { acid = acid, nUserInfoID = Session["UserInfoId"], isPPD_Details_Saved = true }))
-                    {
-                        <button type="submit" class="btn btn-danger btn-shape btn-arrow btn-md center-block" id="btn_GetUserDematDetails" style="margin:10px 10px">@InsiderTrading.Common.Common.getResource("usr_btn_50767")</button>
-                    }
+                    <button type="submit" class="btn btn-danger btn-shape btn-arrow btn-md center-block" id="btn_GetUserDematDetails" style="margin:10px 10px">@InsiderTrading.Common.Common.getResource("usr_btn_50767")</button>
                 }
-                else if ((bool)Session["NonEmployeeType"])
+            }
+            else if ((bool)Session["NonEmployeeType"])
+            {
+                using (Html.BeginForm("Create", "NonEmployeeInsider", new { acid = acid, nUserInfoID = Session["UserInfoId"], isPPD_Details_Saved = true }))
                 {
-                    using (Html.BeginForm("Create", "NonEmployeeInsider", new { acid = acid, nUserInfoID = Session["UserInfoId"], isPPD_Details_Saved = true }))
-                    {
-                        <button type="submit" class="btn btn-danger btn-shape btn-arrow btn-md center-block" id="btn_GetUserDematDetails" style="margin:10px 10px">@InsiderTrading.Common.Common.getResource("usr_btn_50767")</button>
-                    }
+                    <button type="submit" class="btn btn-danger btn-shape btn-arrow btn-md center-block" id="btn_GetUserDematDetails" style="margin:10px 10px">@InsiderTrading.Common.Common.getResource("usr_btn_50767")</button>
                 }
-            </td>
+            }
+        </td>*@
             @if ((int)Session["WorkandEducationConfiguration"] == 539001)
             {
                 <td class="cursor-change">
@@ -46,14 +46,18 @@
 
                 </td>
             }
-            <td class="cursor-change">
-                <a class="btn btn-danger btn-shape btn-arrow btn-md center-block" id="btn_GetUserRelativeDetails" style="margin:10px 10px" href='@Url.Action("CreateRelative", "Employee", new { acid = acid, nParentID = Session["UserInfoId"], nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] })' role="button">@InsiderTrading.Common.Common.getResource("usr_btn_50768")</a>
-            </td>
+            @*<td class="cursor-change">
+            <a class="btn btn-danger btn-shape btn-arrow btn-md center-block" id="btn_GetUserRelativeDetails" style="margin:10px 10px" href='@Url.Action("CreateRelative", "Employee", new { acid = acid, nParentID = Session["UserInfoId"], nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] })' role="button">@InsiderTrading.Common.Common.getResource("usr_btn_50768")</a>
+        </td>*@
+            @if (objLoginUserDetails.UserTypeCodeId != InsiderTrading.Common.ConstEnum.Code.Admin && 
+                objLoginUserDetails.UserTypeCodeId != InsiderTrading.Common.ConstEnum.Code.COUserType)
+            {
+                <td class="cursor-change">
+                    <a class="btn btn-danger btn-shape btn-round btn-md center-block" id="btn_ConfirmDetails" style="margin:10px 10px" href='@Url.Action("ConfirmPersonalDetails", "Employee", new { acid = acid, nParentID = Session["UserInfoId"], nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] })' role="button">Confirm Details</a>
+                </td>
+            }
 
 
-            <td class="cursor-change">
-                <a class="btn btn-danger btn-shape btn-round btn-md center-block" id="btn_ConfirmDetails" style="margin:10px 10px" href='@Url.Action("ConfirmPersonalDetails", "Employee", new { acid = acid, nParentID = Session["UserInfoId"], nConfirmPersonalDetailsRequired = Session["Confirm_PersonalDetails_Required"], nShowPersonalDetailsConfirmButtonRequired = Session["show_confirm_personal_details_btn"] })' role="button">Confirm Details</a>
-            </td>
 
         </tr>
     </table>
