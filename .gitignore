@@ -20,3 +20,7 @@
 /MyInsider/Application/DataUploadUtility/obj/Debug
 /MyInsider/Application/DataUploadUtility/obj/Release
 .vs
+/MyInsider/Application/InsiderTrading/DebugLogs
+/MyInsider/Application/INSIDERTRADINGEXCELWRITER/obj/Release
+/MyInsider/Application/INSIDERTRADINGMASSUPLOAD/obj/Release
+/MyInsider/Application/InsiderTradingSSO/obj/Release
