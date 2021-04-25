@@ -5,9 +5,12 @@ using InsiderTradingEncryption;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Configuration;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
@@ -16,6 +19,8 @@ namespace InsiderTrading
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+        CompilationSection compilationSection = (CompilationSection)System.Configuration.ConfigurationManager.GetSection(@"system.web/compilation");
+
         protected void Application_Start()
         {
             System.Security.Cryptography.CryptoConfig.AddAlgorithm(typeof(System.Deployment.Internal.CodeSigning.RSAPKCS1SHA256SignatureDescription), "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256");
@@ -41,7 +46,7 @@ namespace InsiderTrading
             {
                 Common.Common.UpdateCompanyResources(objCompanyDTO.CompanyConnectionString, objCompanyDTO.sCompanyDatabaseName);
             }
-            // ModelBinders.Binders.DefaultBinder = new DecimalModelBinder();
+            ModelBinders.Binders.DefaultBinder = new DecimalModelBinder();
 
             ModelBinders.Binders.Add(typeof(int), new DecimalModelBinder());
             ModelBinders.Binders.Add(typeof(long), new DecimalModelBinder());
@@ -49,6 +54,12 @@ namespace InsiderTrading
             ModelBinders.Binders.Add(typeof(long?), new DecimalModelBinder());
             ModelBinders.Binders.Add(typeof(decimal), new DecimalModelBinderNew());
             ModelBinders.Binders.Add(typeof(decimal?), new DecimalModelBinderNew());
+
+            if (ConfigurationManager.AppSettings["IsADFSEnabled"].ToString() == "1")
+            {
+                System.Web.Helpers.AntiForgeryConfig.UniqueClaimTypeIdentifier =
+                              System.Security.Claims.ClaimTypes.NameIdentifier;
+            }
 
         }
 
@@ -259,37 +270,62 @@ namespace InsiderTrading
 
         protected void Application_EndRequest()
         {
-            Common.Common.WriteLogToFile("Start Method", System.Reflection.MethodBase.GetCurrentMethod());
-
-            var context = new HttpContextWrapper(Context);
-
-            // If we're an ajax request, and doing a 302, then we actually need to do a 401                  
-            //This is to handle the ajax request when session time out occurs
-            if (Context.Response.StatusCode == 302 && context.Request.IsAjaxRequest())
+            if (compilationSection.Debug)
             {
-                Context.Response.Clear(); Context.Response.StatusCode = 401;
+                if (!Directory.Exists(System.Web.HttpContext.Current.Server.MapPath("~/DebugLogs")))
+                    Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath("~/DebugLogs"));
+
+                using (FileStream filestream = new FileStream(System.Web.HttpContext.Current.Server.MapPath("~/DebugLogs/SSODebugLogs.txt"), FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
+                {
+                    StreamWriter sWriter = new StreamWriter(filestream);
+                    sWriter.WriteLine("--------------------------------------------------------------------");
+
+                    sWriter.WriteLine(" Application_EndRequest - " + DateTime.Now);
+                    sWriter.WriteLine(" Request.UrlReferrer - " + Request.UrlReferrer);
+
+                    sWriter.WriteLine("--------------------------------------------------------------------");
+                    sWriter.Close();
+                    sWriter.Dispose();
+                    filestream.Close();
+                    filestream.Dispose();
+                }
             }
 
-            // for the cookies created/modified during request, set path for other cookies, if any
-            if (Response.Cookies.Count > 0)
+            if (Request.UrlReferrer != null &&
+               !Request.UrlReferrer.Authority.Contains(ConfigurationManager.AppSettings["UrlRefererAuthority"].ToString()))
             {
-                foreach (string cookies_name in Response.Cookies.AllKeys)
+                Common.Common.WriteLogToFile("Start Method", System.Reflection.MethodBase.GetCurrentMethod());
+
+                var context = new HttpContextWrapper(Context);
+
+                // If we're an ajax request, and doing a 302, then we actually need to do a 401                  
+                //This is to handle the ajax request when session time out occurs
+                if (Context.Response.StatusCode == 302 && context.Request.IsAjaxRequest())
                 {
-                    if (cookies_name != ConstEnum.CookiesValue.ValidationCookies)
-                    {
-                        Response.Cookies[cookies_name].Path = Request.ApplicationPath;
-                        Response.Cookies[cookies_name].Secure = ((HttpCookiesSection)System.Configuration.ConfigurationManager.GetSection(@"system.web/httpCookies")).RequireSSL;
-                    }
+                    Context.Response.Clear(); Context.Response.StatusCode = 401;
                 }
 
-                Common.Common.WriteLogToFile("Application path set for cookies ", System.Reflection.MethodBase.GetCurrentMethod());
+                // for the cookies created/modified during request, set path for other cookies, if any
+                if (Response.Cookies.Count > 0)
+                {
+                    foreach (string cookies_name in Response.Cookies.AllKeys)
+                    {
+                        if (cookies_name != ConstEnum.CookiesValue.ValidationCookies)
+                        {
+                            Response.Cookies[cookies_name].Path = Request.ApplicationPath;
+                            Response.Cookies[cookies_name].Secure = ((HttpCookiesSection)System.Configuration.ConfigurationManager.GetSection(@"system.web/httpCookies")).RequireSSL;
+                        }
+                    }
+
+                    Common.Common.WriteLogToFile("Application path set for cookies ", System.Reflection.MethodBase.GetCurrentMethod());
+                }
+
+                Common.Common.WriteLogToFile("End Method", System.Reflection.MethodBase.GetCurrentMethod());
+
+                //Clear browser cache
+                //Response.Cache.SetNoStore();
+                //Response.Cache.SetCacheability(HttpCacheability.NoCache);
             }
-
-            Common.Common.WriteLogToFile("End Method", System.Reflection.MethodBase.GetCurrentMethod());
-
-            //Clear browser cache
-            //Response.Cache.SetNoStore();
-            //Response.Cache.SetCacheability(HttpCacheability.NoCache);
         }
 
         protected void Session_Start(object sender, EventArgs e)
@@ -648,22 +684,46 @@ namespace InsiderTrading
 
                                 Common.Common.WriteLogToFile("Cookie name " + s_CookieName, System.Reflection.MethodBase.GetCurrentMethod());
 
-                                if (Request.UrlReferrer == null || s_CookieName == "" || ((!Convert.ToString(Session[s_CookieName]).Equals(string.Empty)) && (Convert.ToString(Session["sUserName"]) + Session.SessionID + HttpContext.Current.Request.Cookies[s_CookieName].Value != Convert.ToString(Session[s_CookieName]))))
+                                if (compilationSection.Debug)
                                 {
-                                    if (HttpContext.Current.Session["formField"] == null)
+                                    if (!Directory.Exists(System.Web.HttpContext.Current.Server.MapPath("~/DebugLogs")))
+                                        Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath("~/DebugLogs"));
+
+                                    using (FileStream filestream = new FileStream(System.Web.HttpContext.Current.Server.MapPath("~/DebugLogs/SSODebugLogs.txt"), FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
                                     {
-                                        Session.RemoveAll();
-                                        Session.Abandon();
-                                        Response.Redirect(ConfigurationManager.AppSettings["SSOURL"]);
-                                    }
-                                    else
-                                    {
-                                        Session.Add(s_CookieName, Convert.ToString(Session["sUserName"]) + Session.SessionID + HttpContext.Current.Request.Cookies[s_CookieName].Value);
+                                        StreamWriter sWriter = new StreamWriter(filestream);
+                                        sWriter.WriteLine("--------------------------------------------------------------------");
+
+                                        sWriter.WriteLine(" Application_EndRequest - " + DateTime.Now);
+                                        sWriter.WriteLine(" Request.UrlReferrer - " + Request.UrlReferrer);
+
+                                        sWriter.WriteLine("--------------------------------------------------------------------");
+                                        sWriter.Close();
+                                        sWriter.Dispose();
+                                        filestream.Close();
+                                        filestream.Dispose();
                                     }
                                 }
-                                else if ((!Convert.ToString(Session["sUserName"]).Equals(string.Empty)) && Convert.ToString(Session[s_CookieName]).Equals(string.Empty))
-                                    Session.Add(s_CookieName, Convert.ToString(Session["sUserName"]) + Session.SessionID + HttpContext.Current.Request.Cookies[s_CookieName].Value);
 
+                                if (Request.UrlReferrer == null ||
+                                    !Request.UrlReferrer.Authority.Contains(ConfigurationManager.AppSettings["UrlRefererAuthority"].ToString()))
+                                {
+                                    if (s_CookieName == "" || ((!Convert.ToString(Session[s_CookieName]).Equals(string.Empty)) && (Convert.ToString(Session["sUserName"]) + Session.SessionID + HttpContext.Current.Request.Cookies[s_CookieName].Value != Convert.ToString(Session[s_CookieName]))))
+                                    {
+                                        if (HttpContext.Current.Session["formField"] == null)
+                                        {
+                                            Session.RemoveAll();
+                                            Session.Abandon();
+                                            Response.Redirect(ConfigurationManager.AppSettings["SSOURL"]);
+                                        }
+                                        else
+                                        {
+                                            Session.Add(s_CookieName, Convert.ToString(Session["sUserName"]) + Session.SessionID + HttpContext.Current.Request.Cookies[s_CookieName].Value);
+                                        }
+                                    }
+                                    else if ((!Convert.ToString(Session["sUserName"]).Equals(string.Empty)) && Convert.ToString(Session[s_CookieName]).Equals(string.Empty))
+                                        Session.Add(s_CookieName, Convert.ToString(Session["sUserName"]) + Session.SessionID + HttpContext.Current.Request.Cookies[s_CookieName].Value);
+                                }
                                 #endregion Second level validation of cookies end
 
                                 #region Third Level of validation
