@@ -34,13 +34,13 @@ namespace InsiderTrading
              * Update the resources for all the companies available in the master when starting the application so that 
              * resources will be available to be used.
              */
-            CompaniesSL objCompaniesSL = new CompaniesSL();
-            List<InsiderTradingDAL.CompanyDTO> lstCompaniesDTO = objCompaniesSL.getAllCompanies(Common.Common.getSystemConnectionString());
+            //CompaniesSL objCompaniesSL = new CompaniesSL();
+            //List<InsiderTradingDAL.CompanyDTO> lstCompaniesDTO = objCompaniesSL.getAllCompanies(Common.Common.getSystemConnectionString());
 
-            foreach (InsiderTradingDAL.CompanyDTO objCompanyDTO in lstCompaniesDTO)
-            {
-                Common.Common.UpdateCompanyResources(objCompanyDTO.CompanyConnectionString, objCompanyDTO.sCompanyDatabaseName);
-            }
+            //foreach (InsiderTradingDAL.CompanyDTO objCompanyDTO in lstCompaniesDTO)
+            //{
+            //    Common.Common.UpdateCompanyResources(objCompanyDTO.CompanyConnectionString, objCompanyDTO.sCompanyDatabaseName);
+            //}
             // ModelBinders.Binders.DefaultBinder = new DecimalModelBinder();
 
             ModelBinders.Binders.Add(typeof(int), new DecimalModelBinder());
@@ -49,6 +49,12 @@ namespace InsiderTrading
             ModelBinders.Binders.Add(typeof(long?), new DecimalModelBinder());
             ModelBinders.Binders.Add(typeof(decimal), new DecimalModelBinderNew());
             ModelBinders.Binders.Add(typeof(decimal?), new DecimalModelBinderNew());
+
+            if (ConfigurationManager.AppSettings["IsADFSEnabled"].ToString() == "1")
+            {
+                System.Web.Helpers.AntiForgeryConfig.UniqueClaimTypeIdentifier =
+                              System.Security.Claims.ClaimTypes.NameIdentifier;
+            }
 
         }
 
