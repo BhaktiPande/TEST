@@ -264,10 +264,16 @@ namespace InsiderTrading
         #endregion Methods for Encrypt Decrypt Query String
 
         protected void Application_EndRequest()
-        {
+        {            
             Common.Common.WriteLogToFile("Start Method", System.Reflection.MethodBase.GetCurrentMethod());
 
             var context = new HttpContextWrapper(Context);
+
+            if(Request.UrlReferrer != null && 
+               Request.UrlReferrer.Host.Contains(ConfigurationManager.AppSettings["UrlRefererAuthority"].ToString()))
+            {                
+                return;
+            }
 
             // If we're an ajax request, and doing a 302, then we actually need to do a 401                  
             //This is to handle the ajax request when session time out occurs
@@ -653,23 +659,25 @@ namespace InsiderTrading
                                 }
 
                                 Common.Common.WriteLogToFile("Cookie name " + s_CookieName, System.Reflection.MethodBase.GetCurrentMethod());
-
-                                if (Request.UrlReferrer == null || s_CookieName == "" || ((!Convert.ToString(Session[s_CookieName]).Equals(string.Empty)) && (Convert.ToString(Session["sUserName"]) + Session.SessionID + HttpContext.Current.Request.Cookies[s_CookieName].Value != Convert.ToString(Session[s_CookieName]))))
+                                if (Request.UrlReferrer == null ||
+                                    !Request.UrlReferrer.Host.Contains(ConfigurationManager.AppSettings["UrlRefererAuthority"].ToString()))
                                 {
-                                    if (HttpContext.Current.Session["formField"] == null)
+                                    if (Request.UrlReferrer == null || s_CookieName == "" || ((!Convert.ToString(Session[s_CookieName]).Equals(string.Empty)) && (Convert.ToString(Session["sUserName"]) + Session.SessionID + HttpContext.Current.Request.Cookies[s_CookieName].Value != Convert.ToString(Session[s_CookieName]))))
                                     {
-                                        Session.RemoveAll();
-                                        Session.Abandon();
-                                        Response.Redirect(ConfigurationManager.AppSettings["SSOURL"]);
+                                        if (HttpContext.Current.Session["formField"] == null)
+                                        {
+                                            Session.RemoveAll();
+                                            Session.Abandon();
+                                            Response.Redirect(ConfigurationManager.AppSettings["SSOURL"]);
+                                        }
+                                        else
+                                        {
+                                            Session.Add(s_CookieName, Convert.ToString(Session["sUserName"]) + Session.SessionID + HttpContext.Current.Request.Cookies[s_CookieName].Value);
+                                        }
                                     }
-                                    else
-                                    {
+                                    else if ((!Convert.ToString(Session["sUserName"]).Equals(string.Empty)) && Convert.ToString(Session[s_CookieName]).Equals(string.Empty))
                                         Session.Add(s_CookieName, Convert.ToString(Session["sUserName"]) + Session.SessionID + HttpContext.Current.Request.Cookies[s_CookieName].Value);
-                                    }
                                 }
-                                else if ((!Convert.ToString(Session["sUserName"]).Equals(string.Empty)) && Convert.ToString(Session[s_CookieName]).Equals(string.Empty))
-                                    Session.Add(s_CookieName, Convert.ToString(Session["sUserName"]) + Session.SessionID + HttpContext.Current.Request.Cookies[s_CookieName].Value);
-
                                 #endregion Second level validation of cookies end
 
                                 #region Third Level of validation

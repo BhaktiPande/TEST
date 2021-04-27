@@ -147,14 +147,9 @@ namespace InsiderTrading.Controllers
             }
 
             Hashtable hashtable = new Hashtable();
-            //if (ConfigurationManager.AppSettings["ADFSLoginBasedOn"].ToString().ToLower() == "employeeid")
-            //{
-            //    hashtable.Add(CommonConstant.s_AttributeEmployeeId, employeeId);
-            //}
-            //else
-            //{
-            //    hashtable.Add(CommonConstant.s_AttributeEmail, emailAddress);
-            //}
+            
+            hashtable.Add(CommonConstant.s_AttributeEmail, emailAddress);
+            
 
             hashtable.Add(CommonConstant.s_AttributeComapnyName, companyName);
 
@@ -172,7 +167,7 @@ namespace InsiderTrading.Controllers
                 Session["loginStatus"] = 1;
                 HttpContext.Session.Add("UserCaptchaText", string.Empty);
                 HttpContext.Session.Add(ConstEnum.SessionValue.CookiesValidationKey, "");
-                HttpContext.Session.Add("formField", "130");
+                HttpContext.Session.Add("formField", "130");                
 
                 if (compilationSection.Debug)
                 {
