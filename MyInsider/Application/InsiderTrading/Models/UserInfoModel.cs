@@ -166,15 +166,15 @@ namespace InsiderTrading.Models
         [DataType(DataType.Text)]
         [ResourceKey("LandLine1")]
         [DisplayName("usr_lbl_11016")]
-        [StringLength(50)]
-        [RegularExpression(ConstEnum.DataValidation.NumbersOnly, ErrorMessage = "usr_msg_50490")]
+        [StringLength(30)]
+        [RegularExpression(ConstEnum.DataValidation.MobileNo, ErrorMessage = "usr_msg_50490")]
         public string LandLine1 { get; set; }
 
         [DataType(DataType.Text)]
         [ResourceKey("LandLine2")]
         [DisplayName("usr_lbl_11017")]
-        [StringLength(50)]
-        [RegularExpression(ConstEnum.DataValidation.NumbersOnly, ErrorMessage = "usr_msg_50490")]
+        [StringLength(30)]
+        [RegularExpression(ConstEnum.DataValidation.MobileNo, ErrorMessage = "usr_msg_55506")]
         public string LandLine2 { get; set; }
 
         [DataType(DataType.Text)]
@@ -492,19 +492,19 @@ namespace InsiderTrading.Models
         [ResourceKey("Date Of Becoming Insider (Corporate User)")]
         public DateTime? DateOfBecomingInsider { get; set; }
 
-        [StringLength(50)]
+        [StringLength(30)]
         [DisplayName("usr_lbl_11293")]
         [ActivityResourceKey("usr_lbl_11293")]
         [ResourceKey("LandLine1 (Corporate User)")]
-        [RegularExpression(ConstEnum.DataValidation.NumbersOnly, ErrorMessage = "usr_msg_50490")]
+        [RegularExpression(ConstEnum.DataValidation.MobileNo, ErrorMessage = "usr_msg_50490")]
         public string LandLine1 { get; set; }
 
         [DataType(DataType.Text)]
-        [StringLength(50)]
+        [StringLength(30)]
         [DisplayName("usr_lbl_11294")]
         [ActivityResourceKey("usr_lbl_11294")]
         [ResourceKey("LandLine2 (Corporate User)")]
-        [RegularExpression(ConstEnum.DataValidation.NumbersOnly, ErrorMessage = "usr_msg_50490")]
+        [RegularExpression(ConstEnum.DataValidation.MobileNo, ErrorMessage = "usr_msg_55506")]
         public string LandLine2 { get; set; }
 
         [DataType(DataType.Text)]
@@ -727,13 +727,13 @@ namespace InsiderTrading.Models
         public DateTime? DateOfBecomingInsider { get; set; }
 
         [DataType(DataType.Text)]
-        [StringLength(50)]
-        [RegularExpression(ConstEnum.DataValidation.NumbersOnly, ErrorMessage = "usr_msg_50490")]
+        [StringLength(30)]
+        [RegularExpression(ConstEnum.DataValidation.MobileNo, ErrorMessage = "usr_msg_50490")]
         public string LandLine1 { get; set; }
 
         [DataType(DataType.Text)]
-        [StringLength(50)]
-        [RegularExpression(ConstEnum.DataValidation.NumbersOnly, ErrorMessage = "usr_msg_50490")]
+        [StringLength(30)]
+        [RegularExpression(ConstEnum.DataValidation.MobileNo, ErrorMessage = "usr_msg_55506")]
         public string LandLine2 { get; set; }
 
         [DataType(DataType.Text)]
