@@ -34,13 +34,13 @@ namespace InsiderTrading
              * Update the resources for all the companies available in the master when starting the application so that 
              * resources will be available to be used.
              */
-            //CompaniesSL objCompaniesSL = new CompaniesSL();
-            //List<InsiderTradingDAL.CompanyDTO> lstCompaniesDTO = objCompaniesSL.getAllCompanies(Common.Common.getSystemConnectionString());
+            CompaniesSL objCompaniesSL = new CompaniesSL();
+            List<InsiderTradingDAL.CompanyDTO> lstCompaniesDTO = objCompaniesSL.getAllCompanies(Common.Common.getSystemConnectionString());
 
-            //foreach (InsiderTradingDAL.CompanyDTO objCompanyDTO in lstCompaniesDTO)
-            //{
-            //    Common.Common.UpdateCompanyResources(objCompanyDTO.CompanyConnectionString, objCompanyDTO.sCompanyDatabaseName);
-            //}
+            foreach (InsiderTradingDAL.CompanyDTO objCompanyDTO in lstCompaniesDTO)
+            {
+                Common.Common.UpdateCompanyResources(objCompanyDTO.CompanyConnectionString, objCompanyDTO.sCompanyDatabaseName);
+            }
             // ModelBinders.Binders.DefaultBinder = new DecimalModelBinder();
 
             ModelBinders.Binders.Add(typeof(int), new DecimalModelBinder());
