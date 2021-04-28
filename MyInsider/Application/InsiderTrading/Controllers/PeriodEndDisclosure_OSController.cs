@@ -472,15 +472,19 @@ namespace InsiderTrading.Controllers
                         if (objTradingTransactionMasterDTO_Details.TransactionStatusCodeId == 148002)
                         {
                             ModelState.AddModelError("DataNotFound", Common.Common.getResource("dis_msg_53136"));
+                            periodEndDisclosure.PeriodEndDocumentFile = Common.Common.GenerateDocumentList(ConstEnum.Code.PeriodEndDisclosure_OS, transactionMasterId, 0, null, 0, false, 0, ConstEnum.FileUploadControlCount.PeriodEndDocumentUpload);
                             ViewBag.showAddTransactionBtn = true;
+                            ViewBag.isAllEdit = false;
                         }
                         else
                         {
                             ModelState.AddModelError("DataNotFound", Common.Common.getResource("dis_msg_54176"));
+                            periodEndDisclosure.PeriodEndDocumentFile = Common.Common.GenerateDocumentList(ConstEnum.Code.PeriodEndDisclosure_OS, transactionMasterId, 0, null, 0, false, 0, ConstEnum.FileUploadControlCount.PeriodEndDocumentUpload);
                             ViewBag.showAddTransactionBtn = false;
+                            ViewBag.isAllEdit = true;
                         }
                     }
-                    return View("SummaryOS");
+                    return View("SummaryOS", periodEndDisclosure);
                 }
 
                 if ((dtPeriodSummaryComapnyWise != null || dtPeriodSummaryComapnyWise.Rows.Count != 0) && (dtPeriodTransactionDetails != null || dtPeriodTransactionDetails.Rows.Count != 0))
