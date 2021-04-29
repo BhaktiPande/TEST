@@ -260,7 +260,9 @@ BEGIN
 			vwTD.SecurityType,'Holding', vwTD.TradeBuyQty , vwTD.TradeSellQty, vwTD.Qty, vwTD.Value, 
 			vwTD.SecurityTypeCodeId, vwTD.TransactionTypeCodeId,
 			NULL,vwIN.DetailsSubmitDate,
-		    CASE WHEN vwIN.SoftCopyReq = 0 AND vwIN.HardCopyReq = 0 THEN 0 ELSE 1 END,DR.LastSubmissionDate,
+		    --CASE WHEN vwIN.SoftCopyReq = 0 AND vwIN.HardCopyReq = 0 THEN 0 ELSE 1 END
+			rulTP.DiscloInitReqFlag
+			,DR.LastSubmissionDate,
 			CASE WHEN vwIn.ScpSubmitStatus = 0 AND vwIn.DetailsSubmitStatus = 1 AND vwIn.SoftCopyReq = 1 THEN 'Pending' 
 				 WHEN vwIn.ScpSubmitStatus = 0 AND vwIn.DetailsSubmitStatus = 1 AND vwIn.SoftCopyReq = 0 THEN 'Not Required'
 				 WHEN vwIn.ScpSubmitStatus = 1 THEN CONVERT(VARCHAR(max), UPPER(REPLACE(CONVERT(NVARCHAR, vwIn.ScpSubmitDate, 106),' ','/'))) ELSE '-' 
@@ -279,7 +281,9 @@ BEGIN
 			JOIN com_Code CNCT ON DR.NonComplainceTypeCodeId = CNCT.CodeID
 			JOIN #temp_vw_DefaulterReportComments_OS DefRptCmt ON DR.DefaulterReportID = DefRptCmt.DefaulterReportID
 		    LEFT JOIN #temp_vw_InitialDisclosureStatus_OS vwIN ON DR.UserInfoID = vwIN.UserInfoId AND DetailsSubmitStatus <> 0
-			LEFT JOIN #temp_vw_TransactionDetailsForDefaulterReport_OS vwTD ON vwIN.TransactionMasterId = vwTD.TransactionMasterId	
+			LEFT JOIN #temp_vw_TransactionDetailsForDefaulterReport_OS vwTD ON vwIN.TransactionMasterId = vwTD.TransactionMasterId
+			LEFT JOIN tra_TransactionMaster_OS TM ON vwTD.TransactionMasterId=TM.TransactionMasterId
+			LEFT JOIN rul_TradingPolicy_OS rulTP ON TM.TradingPolicyId=rulTP.TradingPolicyId
 			WHERE DR.NonComplainceTypeCodeId = @nInitialComplianceType
 			ORDER BY UI.UserInfoID
 			
@@ -301,7 +305,9 @@ BEGIN
 			,NULL, NULL, NULL , NULL, NULL, NULL, 
 			NULL, NULL,
 			NULL,vwIN.DetailsSubmitDate,
-		    CASE WHEN vwIN.SoftCopyReq = 0 AND vwIN.HardCopyReq = 0 THEN 0 ELSE 1 END,DR.LastSubmissionDate,
+		    --CASE WHEN vwIN.SoftCopyReq = 0 AND vwIN.HardCopyReq = 0 THEN 0 ELSE 1 END
+			rulTP.DiscloPeriodEndReqFlag
+			,DR.LastSubmissionDate,
 			CASE WHEN vwIn.ScpSubmitStatus = 0 AND vwIn.DetailsSubmitStatus = 1 AND vwIn.SoftCopyReq = 1 THEN 'Pending' 
 				 WHEN vwIn.ScpSubmitStatus = 0 AND vwIn.DetailsSubmitStatus = 1 AND vwIn.SoftCopyReq = 0 THEN 'Not Required'
 				 WHEN vwIn.ScpSubmitStatus = 1 THEN CONVERT(VARCHAR(max), UPPER(REPLACE(CONVERT(NVARCHAR, vwIn.ScpSubmitDate, 106),' ','/'))) ELSE '-' 
@@ -325,8 +331,9 @@ BEGIN
 			JOIN #temp_vw_DefaulterReportComments_OS DefRptCmt ON DR.DefaulterReportID = DefRptCmt.DefaulterReportID
 			JOIN com_Code CNCT ON DR.NonComplainceTypeCodeId = CNCT.CodeID			
 			LEFT JOIN #temp_vw_PeriodEndDisclosureStatus_OS vwIN ON DR.TransactionMasterId = vwIN.TransactionMasterId AND DetailsSubmitStatus <> 0
-			LEFT JOIN #temp_vw_TransactionDetailsForDefaulterReport_OS vwTD ON vwIN.TransactionMasterId = vwTD.TransactionMasterId	
-			WHERE DR.NonComplainceTypeCodeId = @nPeriodEndComplianceType
+			LEFT JOIN #temp_vw_TransactionDetailsForDefaulterReport_OS vwTD ON vwIN.TransactionMasterId = vwTD.TransactionMasterId				
+			LEFT JOIN rul_TradingPolicy_OS rulTP ON TM.TradingPolicyId=rulTP.TradingPolicyId
+			WHERE DR.NonComplainceTypeCodeId = @nPeriodEndComplianceType AND DefRptCmt.CommentsID <> Convert(nvarchar,@nNotSubmitted)
 			ORDER BY UI.UserInfoID
 
 		/*
@@ -340,7 +347,9 @@ BEGIN
 						SecurityType,TransactionType,TradeBuyQty,TradeSellQty,Qty,Value,SecurityTypeCodeId,TransactionTypeCodeId,
 						TransactionDate,DetailsSubmitDate,DisclosureRequired,LastSubmissionDate,ScpSubmitDate,HcpSubmitDate,Comments,
 						HcpByCOSubmitDate,TransactionMasterID,TransactionDetailsId,
-						NonComplianceTypeCodeID,NonComplianceType,PreclearanceBlankComment,AddOtherDetails,ISParentPreclearance,CommentsID,DateOfBecomingInsider, DateOfInactivation)  
+						NonComplianceTypeCodeID,NonComplianceType,PreclearanceBlankComment,AddOtherDetails,ISParentPreclearance,CommentsID,DateOfBecomingInsider, DateOfInactivation) 
+						
+			-----DR.TransactionDetailsId IS 
 			SELECT DR.DefaulterReportID,UI.UserInfoID,UI.EmployeeId,UI.UserFullName,UI.DateofBecomingInsider,UI.CINAndDIN,
 			UI.DesignationId,UI.Designation,UI.GradeId,UI.Grade,UI.DepartmentId,UI.Department,vwPCL.CompanyId,NULL,UI.UserTypeCodeId,UI.UserType,
 			UI.Location,vwTD.DEMATAccountNumber,vwTD.AccountHolderName,CASE WHEN codeRelation.CodeName IS NULL THEN 'Self' ELSE codeRelation.CodeName END,@sPrceclearanceCodePrefixText + CONVERT(VARCHAR,vwPCL.DisplayRollingNumber),vwPCL.RequestDate, 
@@ -349,7 +358,9 @@ BEGIN
 			vwTD.SecurityType, vwTD.TransactionType, vwTD.TradeBuyQty , vwTD.TradeSellQty, vwTD.Qty, vwTD.Value, 
 			vwTD.SecurityTypeCodeId, vwTD.TransactionTypeCodeId,
 			NULL,vwIN.DetailsSubmitDate,
-		    CASE WHEN vwIN.SoftCopyReq = 0 AND vwIN.HardCopyReq = 0 THEN 0 ELSE 1 END,DR.LastSubmissionDate,
+		    --CASE WHEN vwIN.SoftCopyReq = 0 AND vwIN.HardCopyReq = 0 THEN 0 ELSE 1 END
+			rulTP.StExSubmitDiscloToCOByInsdrFlag
+			,DR.LastSubmissionDate,
 			CASE WHEN vwIn.ScpSubmitStatus = 0 AND vwIn.DetailsSubmitStatus = 1 AND vwIn.SoftCopyReq = 1 THEN 'Pending' 
 				 WHEN vwIn.ScpSubmitStatus = 0 AND vwIn.DetailsSubmitStatus = 1 AND vwIn.SoftCopyReq = 0 THEN 'Not Required'
 				 WHEN vwIn.ScpSubmitStatus = 1 THEN CONVERT(VARCHAR(max), UPPER(REPLACE(CONVERT(NVARCHAR, vwIn.ScpSubmitDate, 106),' ','/'))) ELSE '-' 
@@ -375,8 +386,9 @@ BEGIN
 			JOIN #temp_vw_DefaulterReportComments_OS DefRptCmt ON DR.DefaulterReportID = DefRptCmt.DefaulterReportID			
 			LEFT JOIN usr_UserRelation UR ON DR.UserInfoIdRelative = UR.UserInfoIdRelative
 			LEFT JOIN com_Code codeRelation ON UR.RelationTypeCodeId = codeRelation.CodeID
-			where DR.TransactionDetailsId is not null
-			
+			LEFT JOIN rul_TradingPolicy_OS rulTP ON TM.TradingPolicyId=rulTP.TradingPolicyId
+			where DR.TransactionDetailsId is not null 
+			--AND DR.NonComplainceTypeCodeId = @nPreclearanceComplianceType
 			
 			UNION
 			SELECT NULL,UI.UserInfoID,UI.EmployeeId,UI.UserFullName,UI.DateofBecomingInsider,UI.CINAndDIN,
@@ -387,7 +399,9 @@ BEGIN
 			vwTD.SecurityType, vwTD.TransactionType, vwTD.TradeBuyQty , vwTD.TradeSellQty, vwTD.Qty, vwTD.Value, 
 			vwTD.SecurityTypeCodeId, vwTD.TransactionTypeCodeId,
 			NULL,vwIN.DetailsSubmitDate,
-		    CASE WHEN vwIN.SoftCopyReq = 0 AND vwIN.HardCopyReq = 0 THEN 0 ELSE 1 END,DR.LastSubmissionDate,
+		    --CASE WHEN vwIN.SoftCopyReq = 0 AND vwIN.HardCopyReq = 0 THEN 0 ELSE 1 END
+			rulTP.StExSubmitDiscloToCOByInsdrFlag
+			,DR.LastSubmissionDate,
 			CASE WHEN vwIn.ScpSubmitStatus = 0 AND vwIn.DetailsSubmitStatus = 1 AND vwIn.SoftCopyReq = 1 THEN 'Pending' 
 				 WHEN vwIn.ScpSubmitStatus = 0 AND vwIn.DetailsSubmitStatus = 1 AND vwIn.SoftCopyReq = 0 THEN 'Not Required'
 				 WHEN vwIn.ScpSubmitStatus = 1 THEN CONVERT(VARCHAR(max), UPPER(REPLACE(CONVERT(NVARCHAR, vwIn.ScpSubmitDate, 106),' ','/'))) ELSE '-' 
@@ -399,7 +413,7 @@ BEGIN
 					WHEN vwIn.HcpSubmitStatus = 1 THEN CONVERT(VARCHAR(max), UPPER(REPLACE(CONVERT(NVARCHAR, vwIn.HcpSubmitDate, 106),' ','/'))) ELSE '-' 
 				END,
 			--vwIN.HcpSubmitDate,
-			null,vwIN.HcpByCOSubmitDate,DR.TransactionMasterId,DR.TransactionDetailsId,
+			DefRptCmt.Comments,vwIN.HcpByCOSubmitDate,DR.TransactionMasterId,DR.TransactionDetailsId,
 			DR.NonComplainceTypeCodeId,CNCT.CodeName, 1,1,0,NULL,UI.DateOfBecomingInsider, UI.DateOfInactivation
 			FROM
 			tra_TransactionMaster_OS TM
@@ -412,23 +426,38 @@ BEGIN
 			JOIN com_Code CNCT ON DR.NonComplainceTypeCodeId = CNCT.CodeID 
 			LEFT JOIN usr_UserRelation UR ON DR.UserInfoIdRelative = UR.UserInfoIdRelative
 			LEFT JOIN com_Code codeRelation ON UR.RelationTypeCodeId = codeRelation.CodeID
+			LEFT JOIN rul_TradingPolicy_OS rulTP ON TM.TradingPolicyId=rulTP.TradingPolicyId
+			JOIN #temp_vw_DefaulterReportComments_OS DefRptCmt ON DR.DefaulterReportID = DefRptCmt.DefaulterReportID
 			where DR.TransactionDetailsId IS NULL 
 			AND vwPCL.IsPartiallyTraded = 1 
 			AND vwPCL.ShowAddButton = 1
 			AND vwTD.TransactionDetailsId NOT IN (SELECT TransactionDetailsID FROM @tmpTransactionDetailsIds)
 			
-			--com
+
+			----com
 			UNION
 			SELECT DR.DefaulterReportID,UI.UserInfoID,UI.EmployeeId,UI.UserFullName,UI.DateofBecomingInsider,UI.CINAndDIN,
 			UI.DesignationId,UI.Designation,UI.GradeId,UI.Grade,UI.DepartmentId,UI.Department,vwPCL.CompanyId,NULL,UI.UserTypeCodeId,UI.UserType,
 			UI.Location,vwPCL.DEMATAccountNumber,vwPCL.AccountHolderName,CASE WHEN codeRelation.CodeName IS NULL THEN 'Self' ELSE codeRelation.CodeName END,@sPrceclearanceCodePrefixText + CONVERT(VARCHAR,vwPCL.DisplayRollingNumber),vwPCL.RequestDate, 
 			vwPCL.RequestedQty,vwPCL.RequestedValue,vwPCL.PreclearanceStatusCodeId, vwPCL.PreclearanceStatus,vwPCL.PreclearanceStatusDate,vwPCL.PreclearanceApplicabletill,vwPCL.RequestDate,
+			---NEED TO ADD DATA
 			NULL,NULL,
-			NULL, NULL,NULL , NULL, NULL, NULL, 
-			NULL, NULL,
+			vwTD.SecurityType, vwTD.TransactionType, vwTD.TradeBuyQty , vwTD.TradeSellQty, vwTD.Qty, vwTD.Value, 
+			vwTD.SecurityTypeCodeId, vwTD.TransactionTypeCodeId,
+			NULL,vwIN.DetailsSubmitDate,
 			NULL,NULL,
-		    NULL,NULL,'-','-',
-			DefRptCmt.Comments,NULL,DR.TransactionMasterId,DR.TransactionDetailsId,
+			CASE WHEN vwIn.ScpSubmitStatus = 0 AND vwIn.DetailsSubmitStatus = 1 AND vwIn.SoftCopyReq = 1 THEN 'Pending' 
+				 WHEN vwIn.ScpSubmitStatus = 0 AND vwIn.DetailsSubmitStatus = 1 AND vwIn.SoftCopyReq = 0 THEN 'Not Required'
+				 WHEN vwIn.ScpSubmitStatus = 1 THEN CONVERT(VARCHAR(max), UPPER(REPLACE(CONVERT(NVARCHAR, vwIn.ScpSubmitDate, 106),' ','/'))) ELSE '-' 
+			END,
+			--vwIN.ScpSubmitDate,
+			CASE	WHEN vwIn.HcpSubmitStatus = 0 AND vwIn.ScpSubmitStatus = 1 AND vwIn.HardCopyReq = 1 THEN 'Pending'
+					WHEN vwIn.HcpSubmitStatus = 0 AND vwIn.ScpSubmitStatus = 1 AND vwIn.HardCopyReq = 0 THEN 'Not Required'
+					WHEN vwIn.HcpSubmitStatus = 0 AND vwIn.DetailsSubmitStatus = 1 AND vwIn.ScpSubmitStatus = 0 AND vwIn.SoftCopyReq = 0 THEN 'Not Required'
+					WHEN vwIn.HcpSubmitStatus = 1 THEN CONVERT(VARCHAR(max), UPPER(REPLACE(CONVERT(NVARCHAR, vwIn.HcpSubmitDate, 106),' ','/'))) ELSE '-' 
+				END,
+			--vwIN.HcpSubmitDate,
+			DefRptCmt.Comments,vwIN.HcpByCOSubmitDate,DR.TransactionMasterId,DR.TransactionDetailsId,
 			DR.NonComplainceTypeCodeId,CNCT.CodeName,CASE WHEN DefRptCmt.Comments = '-'  THEN 1 ELSE 0 END,0,1,DefRptCmt.CommentsID,UI.DateOfBecomingInsider, UI.DateOfInactivation 
 			FROM @tmpPCLIds PCLIds 
 			JOIN rpt_DefaulterReport_OS DR ON PCLIds.PreclearanceRequestId = DR.PreclearanceRequestId AND DR.TransactionDetailsId IS NULL
@@ -438,11 +467,14 @@ BEGIN
 			LEFT JOIN #TempTransactionDetailsForDefaulterReport vwPCL ON PCLIds.PreclearanceRequestId = vwPCL.PreclearanceRequestId
 			LEFT JOIN usr_UserRelation UR ON DR.UserInfoIdRelative = UR.UserInfoIdRelative
 			LEFT JOIN com_Code codeRelation ON UR.RelationTypeCodeId = codeRelation.CodeID
-			WHERE DR.NonComplainceTypeCodeId = @nPreclearanceComplianceType
+			LEFT JOIN tra_TransactionMaster_OS TM ON vwPCL.TransactionMasterId=TM.TransactionMasterId
+			LEFT JOIN rul_TradingPolicy_OS rulTP ON TM.TradingPolicyId=rulTP.TradingPolicyId 
+			LEFT JOIN #temp_vw_TransactionDetailsForDefaulterReport_OS vwTD ON TM.TransactionMasterId = vwTD.TransactionMasterId 
+			LEFT JOIN #temp_vw_ContinuousDisclosureStatus_OS vwIN ON TM.TransactionMasterId = vwIN.TransactionMasterId
+			WHERE DR.NonComplainceTypeCodeId = @nPreclearanceComplianceType 
 			ORDER BY UI.UserInfoID,@sPrceclearanceCodePrefixText + CONVERT(VARCHAR,vwPCL.DisplayRollingNumber)
 
 
-	
 		--Fetch for PNT
 		INSERT INTO #tmpReport(DefaulterReportID,UserInfoId,EmployeeID,InsiderName,DateOfJoining,CINAndDIN,DesignationCodeID,Designation,
 						GradeCodeID,Grade,DepartmentCodeID,Department,CompanyID,CompanyName,UserTypeCodeID,UserType,Location,
@@ -499,7 +531,9 @@ BEGIN
 			vwTD.SecurityType, vwTD.TransactionType, vwTD.TradeBuyQty , vwTD.TradeSellQty, vwTD.Qty, vwTD.Value, 
 			vwTD.SecurityTypeCodeId, vwTD.TransactionTypeCodeId,
 			NULL,vwIN.DetailsSubmitDate,
-		    CASE WHEN vwIN.SoftCopyReq = 0 AND vwIN.HardCopyReq = 0 THEN 0 ELSE 1 END,DR.LastSubmissionDate,
+		    --CASE WHEN vwIN.SoftCopyReq = 0 AND vwIN.HardCopyReq = 0 THEN 0 ELSE 1 END
+			rulTP.StExSubmitDiscloToCOByInsdrFlag
+			,DR.LastSubmissionDate,
 			CASE WHEN vwIn.ScpSubmitStatus = 0 AND vwIn.DetailsSubmitStatus = 1 AND vwIn.SoftCopyReq = 1 THEN 'Pending' 
 				 WHEN vwIn.ScpSubmitStatus = 0 AND vwIn.DetailsSubmitStatus = 1 AND vwIn.SoftCopyReq = 0 THEN 'Not Required'
 				 WHEN vwIn.ScpSubmitStatus = 1 THEN CONVERT(VARCHAR(max), UPPER(REPLACE(CONVERT(NVARCHAR, vwIn.ScpSubmitDate, 106),' ','/'))) ELSE '-' 
@@ -521,6 +555,8 @@ BEGIN
 			JOIN #temp_vw_DefaulterReportComments_OS DefRptCmt ON DR.DefaulterReportID = DefRptCmt.DefaulterReportID
 			LEFT JOIN usr_UserRelation UR ON DR.UserInfoIdRelative = UR.UserInfoIdRelative
 			LEFT JOIN com_Code codeRelation ON UR.RelationTypeCodeId = codeRelation.CodeID
+			LEFT JOIN tra_TransactionMaster_OS TM ON DR.TransactionMasterId=TM.TransactionMasterId
+			LEFT JOIN rul_TradingPolicy_OS rulTP ON TM.TradingPolicyId=rulTP.TradingPolicyId
 			WHERE DR.NonComplainceTypeCodeId = @nContinuousComplianceType
 
 			UNION
@@ -571,13 +607,28 @@ BEGIN
 						TransactionMasterId,TransactionDetailsId,
 						NonComplianceTypeCodeID,NonComplianceType,CommentsID,DateOfBecomingInsider,DateOfInactivation)
 
-		SELECT UI.UserInfoID,DR.DefaulterReportID,UI.EmployeeId,UI.UserFullName,UI.DateOfJoining,UI.CINAndDIN,
+		SELECT UI.UserInfoID,DR.DefaulterReportID,UI.EmployeeId,UI.UserFullName,UI.DateOfBecomingInsider,UI.CINAndDIN,
 			UI.DesignationId,UI.Designation,UI.GradeId,UI.Grade,UI.DepartmentId,UI.Department,vwTD.CompanyId,NULL,UI.UserTypeCodeId,UI.UserType,
-			UI.Location,NULL,NULL,CASE WHEN codeRelation.CodeName IS NULL THEN 'Self' ELSE codeRelation.CodeName END,NULL,NULL,NULL,NULL,NULL,NULL,NULL,CM.CompanyName,CM.ISINCode
-			,NULL, NULL, NULL , NULL, NULL, NULL, 
-			NULL, NULL,
-			NULL,NULL,
-		    NULL,DR.LastSubmissionDate,'-','-',
+			UI.Location,vwTD.DEMATAccountNumber,vwTD.AccountHolderName,CASE WHEN codeRelation.CodeName IS NULL THEN 'Self' ELSE codeRelation.CodeName END,
+			NULL,NULL,NULL,NULL,NULL,NULL,NULL,
+			CM.CompanyName,CM.ISINCode,			
+			vwTD.SecurityType,
+			vwTD.TransactionType,
+			vwTD.TradeBuyQty , vwTD.TradeSellQty, vwTD.Qty, vwTD.Value, 			
+			vwTD.SecurityTypeCodeId, vwTD.TransactionTypeCodeId,
+			NULL,vwIN.DetailsSubmitDate,
+		    rulTP.StExSubmitDiscloToCOByInsdrFlag,
+			DR.LastSubmissionDate,			
+			CASE WHEN vwIn.ScpSubmitStatus = 0 AND vwIn.DetailsSubmitStatus = 1 AND vwIn.SoftCopyReq = 1 THEN 'Pending' 
+				 WHEN vwIn.ScpSubmitStatus = 0 AND vwIn.DetailsSubmitStatus = 1 AND vwIn.SoftCopyReq = 0 THEN 'Not Required'
+				 WHEN vwIn.ScpSubmitStatus = 1 THEN CONVERT(VARCHAR(max), UPPER(REPLACE(CONVERT(NVARCHAR, vwIn.ScpSubmitDate, 106),' ','/'))) ELSE '-' 
+			END,
+			--vwIN.ScpSubmitDate,
+			CASE	WHEN vwIn.HcpSubmitStatus = 0 AND vwIn.ScpSubmitStatus = 1 AND vwIn.HardCopyReq = 1 THEN 'Pending'
+					WHEN vwIn.HcpSubmitStatus = 0 AND vwIn.ScpSubmitStatus = 1 AND vwIn.HardCopyReq = 0 THEN 'Not Required'
+					WHEN vwIn.HcpSubmitStatus = 0 AND vwIn.DetailsSubmitStatus = 1 AND vwIn.ScpSubmitStatus = 0 AND vwIn.SoftCopyReq = 0 THEN 'Not Required'
+					WHEN vwIn.HcpSubmitStatus = 1 THEN CONVERT(VARCHAR(max), UPPER(REPLACE(CONVERT(NVARCHAR, vwIn.HcpSubmitDate, 106),' ','/'))) ELSE '-' 
+				END,
 			DefRptCmt.Comments,NULL,DR.TransactionMasterId,DR.TransactionDetailsId,
 			DR.NonComplainceTypeCodeId,CNCT.CodeName,DefRptCmt.CommentsID,UI.DateOfBecomingInsider, UI.DateOfInactivation 
 			FROM rpt_DefaulterReport_OS DR
@@ -589,7 +640,9 @@ BEGIN
 			LEFT JOIN com_Code codeRelation ON UR.RelationTypeCodeId = codeRelation.CodeID
 			JOIN #temp_vw_DefaulterReportComments_OS DefRptCmt ON DR.DefaulterReportID = DefRptCmt.DefaulterReportID
 			JOIN com_Code CNCT ON DR.NonComplainceTypeCodeId = CNCT.CodeID
-			LEFT JOIN #temp_vw_TransactionDetailsForDefaulterReport_OS vwTD ON DR.TransactionDetailsId = vwTD.TransactionDetailsId
+			LEFT JOIN #temp_vw_TransactionDetailsForDefaulterReport_OS vwTD ON DR.TransactionDetailsId = vwTD.TransactionDetailsId			
+			LEFT JOIN rul_TradingPolicy_OS rulTP ON TM.TradingPolicyId=rulTP.TradingPolicyId
+			LEFT JOIN #temp_vw_ContinuousDisclosureStatus_OS vwIN ON DR.TransactionMasterId = vwIN.TransactionMasterId
 			WHERE DR.NonComplainceTypeCodeId = @nRestrictedCompanyListComplianceType
 			ORDER BY UI.UserInfoID
 		
@@ -734,7 +787,7 @@ BEGIN
 				Temp.Value AS [Value],
 				dbo.uf_rpt_FormatDateValue(Temp.TransactionDate,0) AS TransactionDate,
 				dbo.uf_rpt_FormatDateValue(Temp.DetailsSubmitDate,0) AS [TradingDetailsSubmissionDate],
-				Temp.DisclosureRequired AS [Initial/Continuous/Period end Disclosure Required],
+				CASE WHEN Temp.DisclosureRequired=1 THEN Temp.DisclosureRequired ELSE 0 END AS [Initial/Continuous/Period end Disclosure Required],
 				dbo.uf_rpt_FormatDateValue(Temp.LastSubmissionDate,0) AS LastSubmissionDate,
 
 				dbo.uf_rpt_ReplaceSpecialChar(Temp.ScpSubmitDate) AS SoftCopySubmissionDate,
