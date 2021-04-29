@@ -59,8 +59,7 @@
     </Reference>
     <Reference Include="ESOP.SSO.Library, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\ESOP.SSO.Library.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>..\..\..\..\ShardulHotFixSSONew\MyInsider\ESOP.RuntimePool\ESOP.SSO.Library.dll</HintPath>
     </Reference>
     <Reference Include="ESOP.Utility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -301,6 +300,7 @@
     <Compile Include="Common\SSRSReportObjects.cs" />
     <Compile Include="Common\WriteToFileLog.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ADAssertionConsumerController.cs" />
     <Compile Include="Controllers\ApplicabilityController.cs" />
     <Compile Include="Controllers\Applicability_OSController.cs" />
     <Compile Include="Controllers\ClawBackReportController.cs" />
@@ -3155,6 +3155,8 @@
     <Content Include="Views\TradingTransaction_OS\_SeekDeclarationUPSI_OS.cshtml" />
     <Content Include="Views\UserDetails\_GenerateDocument.cshtml" />
     <Content Include="Views\UserDetails\UserConsent.cshtml" />
+    <Content Include="Views\ADAssertionConsumer\AssertionConsumer.cshtml" />
+    <Content Include="Views\ADAssertionConsumer\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Elmah\" />

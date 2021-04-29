@@ -5,6 +5,7 @@ using InsiderTrading.Models;
 using System;
 using System.Collections;
 using System.Configuration;
+using System.Data;
 using System.Web.Mvc;
 
 namespace InsiderTrading.Controllers
@@ -40,6 +41,8 @@ namespace InsiderTrading.Controllers
         {
             try
             {
+                WriteToFileLog.Instance("ADFS").Write("Called AssertionConsumer Method on SSOController.");
+                WriteToFileLog.Instance("ADFS").Write(" Start SamlKey: " + response["SAMLResponse"] + " End SamlKey. ");
                 string DBConnection = Convert.ToString(Cryptography.DecryptData(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString));
                 Generic.Instance().ConnectionStringValue = DBConnection;
                 Generic.Instance().SsoLogFilePath = ConfigurationManager.AppSettings["SSOLogfilePath"].ToString();
@@ -49,13 +52,90 @@ namespace InsiderTrading.Controllers
                 {
                     using (ESOP.SSO.Library.SAMLResponse samlResponse = new ESOP.SSO.Library.SAMLResponse())
                     {
+                        WriteToFileLog.Instance("ADFS").Write("Called SSO Library and validating...");
+
                         samlResponse.LoadXmlFromBase64(response["SAMLResponse"]);
                         TempData["samlResponseData"] = samlResponse.SsoProperty;
+                        Session["IsSSOLogin"] = true;
                         return RedirectToAction("InitiateIDPOrSP", "SSO");
                     }
                 }
+                else
+                {
+                    WriteToFileLog.Instance("ADFS").Write(" SAMLResponse is null or empty.");
+                }
 
             }
+            catch (Exception exception)
+            {
+                WriteToFileLog.Instance("ADFS").Write("Exception: " + exception.Message.ToString());
+                ViewBag.RequestStatus = exception.Message.ToString();
+            }
+
+            return View("SSO");
+        }
+        #endregion
+
+        #region // POST: /SSO/SP Intiated Shardul
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult AssertionConsumerShardul()
+        {
+            try
+            {
+                WriteToFileLog.Instance("ADFS").Write(" Shardul SP SSO Calling......  ");
+
+                string EmailId = string.Empty;
+                string CompanyName = string.Empty;
+                EmailId = Request.QueryString["EmailId"];
+                CompanyName = Request.QueryString["CompanyName"];
+                DataTable dataTableSSODetails = new DataTable();
+                Hashtable ht_Parmeters = new Hashtable();
+                ht_Parmeters.Add(CommonConstant.s_AttributeEmail, EmailId);
+                ht_Parmeters.Add(CommonConstant.s_AttributeComapnyName, CompanyName);
+                if (!string.IsNullOrEmpty(EmailId) && !string.IsNullOrEmpty(CompanyName))
+                {
+                    ViewBag.RequestStatus = CommonConstant.sRequestStatusSAML_RESPONSE;
+                    ViewBag.IsRequestValid = false;
+                    using (SSOModel SSOModel = new SSOModel())
+                    {
+                        SSOModel.SetupLoginDetails(ht_Parmeters);
+                        ViewBag.IsRequestValid = true;
+                        Session["loginStatus"] = 1;
+                        HttpContext.Session.Add("UserCaptchaText", string.Empty);
+                        HttpContext.Session.Add(ConstEnum.SessionValue.CookiesValidationKey, "");
+                        HttpContext.Session.Add("formField", "130");
+                        return RedirectToAction("Index", "Home", new { acid = Convert.ToString(0) });
+                    }
+                }
+                else
+                {
+                    WriteToFileLog.Instance("ADFS").Write(" Calling SSO Library on SSO Controller ");
+                    string DBConnection = Convert.ToString(Cryptography.DecryptData(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString));
+                    Generic.Instance().ConnectionStringValue = DBConnection;
+                    Generic.Instance().SsoLogFilePath = ConfigurationManager.AppSettings["SSOLogfilePath"].ToString();
+                    Generic.Instance().SsoLogStoreLocation = ConfigurationManager.AppSettings["SSOLogStoreLocation"].ToString();
+
+                    using (ESOP.SSO.Library.SAMLResponse samlResponse = new ESOP.SSO.Library.SAMLResponse())
+                    {
+                        WriteToFileLog.Instance("ADFS").Write(" Called SSO Library and validating... ");
+                        dataTableSSODetails=samlResponse.GetSSODetailsByCompanyName(ConfigurationManager.AppSettings["ShardulDBName"].ToString());
+                        if (dataTableSSODetails.Rows.Count > 0 && dataTableSSODetails != null)
+                        {
+                            TempData["ssoDataFromDb"] = samlResponse.SsoProperty;
+                            return RedirectToAction("CreateNewAuthBySPSSO", "SSO");
+                        }
+                        else
+                        {
+                            WriteToFileLog.Instance("ADFS").Write(" Data not found in the database on SSO Controller ");
+                        }
+
+                    }
+                  
+                }
+
+            }
+
             catch (Exception exception)
             {
                 ViewBag.RequestStatus = exception.Message.ToString();
@@ -111,6 +191,7 @@ namespace InsiderTrading.Controllers
         {
             try
             {
+                WriteToFileLog.Instance("ADFS").Write(" Calling On SSO COntroller");
                 ESOP.SSO.Library.SSO sSoData = TempData["samlResponseData"] as ESOP.SSO.Library.SSO;
                 Hashtable ht_Parmeters = new Hashtable();
                 ht_Parmeters.Add(CommonConstant.s_AttributeEmail, sSoData.AttributeEmailFromSAMLResponse);
@@ -152,11 +233,16 @@ namespace InsiderTrading.Controllers
                                     bool isSuccess = SSOModel.SetupLoginDetails(ht_Parmeters);
                                     if (isSuccess)
                                     {
+                                        WriteToFileLog.Instance("ADFS").Write("Redirecting Dashboard");
                                         ViewBag.IsRequestValid = true;
                                         Session["loginStatus"] = 1;
                                         HttpContext.Session.Add("UserCaptchaText", string.Empty);
                                         HttpContext.Session.Add(ConstEnum.SessionValue.CookiesValidationKey, "");
                                         return RedirectToAction("Index", "Home", new { acid = Convert.ToString(0) });
+                                    }
+                                    else
+                                    {
+                                        WriteToFileLog.Instance("ADFS").Write("Login details could'not find.");
                                     }
                                 }
 
@@ -169,10 +255,48 @@ namespace InsiderTrading.Controllers
                 {
                     ViewBag.RequestStatus = CommonConstant.s_SSONotActivated;
                     ViewBag.IsRequestValid = false;
+                    WriteToFileLog.Instance("ADFS").Write("SSO is not activated.");
                 }
             }
             catch (Exception exception)
             {
+                WriteToFileLog.Instance("ADFS").Write(exception.Message.ToString());
+                ViewBag.RequestStatus = exception.Message.ToString();
+            }
+
+            return View("SSO");
+        }
+        #endregion
+
+        #region  /SSO/Create New Authentication Using SP to IDP
+        // [HttpPost]
+        [AllowAnonymous]
+        public ActionResult CreateNewAuthBySPSSO()
+        {
+            try
+            {
+                WriteToFileLog.Instance("ADFS").Write(" Calling Creating new authentication  On SSO Controller ");
+                ESOP.SSO.Library.SSO sSoData = TempData["ssoDataFromDb"] as ESOP.SSO.Library.SSO;
+                using (SSOModel SSOModel = new SSOModel())
+                {
+                    if (!SSOModel.IsSSOActivated(sSoData.CompanyName))
+                    {
+                        ViewBag.RequestStatus = CommonConstant.sRequestStatusSSO_DEACTIVATED;
+                        ViewBag.IsRequestValid = false;
+                        WriteToFileLog.Instance("ADFS").Write(" " + CommonConstant.sRequestStatusSSO_DEACTIVATED +"  ");
+                    }
+                    else
+                    {
+                        string getSamalRequest = SSOModel.CreateNewAuthnRequest(sSoData);
+                        Response.Redirect(sSoData.IDP_SP_URL + "?SAMLRequest=" + getSamalRequest, true);
+                    }
+
+                }
+
+            }
+            catch (Exception exception)
+            {
+                WriteToFileLog.Instance("ADFS").Write(exception.Message.ToString());
                 ViewBag.RequestStatus = exception.Message.ToString();
             }
 
