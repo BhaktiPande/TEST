@@ -34,13 +34,13 @@ namespace InsiderTrading
              * Update the resources for all the companies available in the master when starting the application so that 
              * resources will be available to be used.
              */
-            CompaniesSL objCompaniesSL = new CompaniesSL();
-            List<InsiderTradingDAL.CompanyDTO> lstCompaniesDTO = objCompaniesSL.getAllCompanies(Common.Common.getSystemConnectionString());
+            //CompaniesSL objCompaniesSL = new CompaniesSL();
+            //List<InsiderTradingDAL.CompanyDTO> lstCompaniesDTO = objCompaniesSL.getAllCompanies(Common.Common.getSystemConnectionString());
 
-            foreach (InsiderTradingDAL.CompanyDTO objCompanyDTO in lstCompaniesDTO)
-            {
-                Common.Common.UpdateCompanyResources(objCompanyDTO.CompanyConnectionString, objCompanyDTO.sCompanyDatabaseName);
-            }
+            //foreach (InsiderTradingDAL.CompanyDTO objCompanyDTO in lstCompaniesDTO)
+            //{
+            //    Common.Common.UpdateCompanyResources(objCompanyDTO.CompanyConnectionString, objCompanyDTO.sCompanyDatabaseName);
+            //}
             // ModelBinders.Binders.DefaultBinder = new DecimalModelBinder();
 
             ModelBinders.Binders.Add(typeof(int), new DecimalModelBinder());
@@ -269,9 +269,9 @@ namespace InsiderTrading
 
             var context = new HttpContextWrapper(Context);
 
-            if(Request.UrlReferrer != null && 
+            if (Request.UrlReferrer != null &&
                Request.UrlReferrer.Host.Contains(ConfigurationManager.AppSettings["UrlRefererAuthority"].ToString()))
-            {                
+            {
                 return;
             }
 
@@ -677,7 +677,7 @@ namespace InsiderTrading
                                     }
                                     else if ((!Convert.ToString(Session["sUserName"]).Equals(string.Empty)) && Convert.ToString(Session[s_CookieName]).Equals(string.Empty))
                                         Session.Add(s_CookieName, Convert.ToString(Session["sUserName"]) + Session.SessionID + HttpContext.Current.Request.Cookies[s_CookieName].Value);
-                                }
+                               }
                                 #endregion Second level validation of cookies end
 
                                 #region Third Level of validation
