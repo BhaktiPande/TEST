@@ -525,8 +525,8 @@ BEGIN
 			SELECT DR.DefaulterReportID,UI.UserInfoID,UI.EmployeeId,UI.UserFullName,UI.DateofBecomingInsider,UI.CINAndDIN,
 			UI.DesignationId,UI.Designation,UI.GradeId,UI.Grade,UI.DepartmentId,UI.Department,vwTD.CompanyId,NULL,UI.UserTypeCodeId,UI.UserType,
 			UI.Location,vwTD.DEMATAccountNumber,vwTD.AccountHolderName,CASE WHEN codeRelation.CodeName IS NULL THEN 'Self' ELSE codeRelation.CodeName END,
-			CASE WHEN UI.DateOfBecomingInsider IS NOT NULL THEN @sNonPrceclearanceCodePrefixText + CONVERT(VARCHAR,vwIN.DisplayRollingNumber) ELSE @sPrceclearanceNotRequiredPrefixText + CONVERT(VARCHAR,vwIN.DisplayRollingNumber) END,NULL,
-			NULL,NULL, NULL,NULL,NULL,NULL,
+			CASE WHEN UI.DateOfBecomingInsider IS NOT NULL THEN @sNonPrceclearanceCodePrefixText + CONVERT(VARCHAR,vwIN.DisplayRollingNumber) ELSE @sPrceclearanceNotRequiredPrefixText + CONVERT(VARCHAR,vwIN.DisplayRollingNumber) END
+			,NULL,NULL,NULL, NULL,NULL,NULL,NULL,
 			NULL,NULL,
 			vwTD.SecurityType, vwTD.TransactionType, vwTD.TradeBuyQty , vwTD.TradeSellQty, vwTD.Qty, vwTD.Value, 
 			vwTD.SecurityTypeCodeId, vwTD.TransactionTypeCodeId,
@@ -610,7 +610,8 @@ BEGIN
 		SELECT UI.UserInfoID,DR.DefaulterReportID,UI.EmployeeId,UI.UserFullName,UI.DateOfBecomingInsider,UI.CINAndDIN,
 			UI.DesignationId,UI.Designation,UI.GradeId,UI.Grade,UI.DepartmentId,UI.Department,vwTD.CompanyId,NULL,UI.UserTypeCodeId,UI.UserType,
 			UI.Location,vwTD.DEMATAccountNumber,vwTD.AccountHolderName,CASE WHEN codeRelation.CodeName IS NULL THEN 'Self' ELSE codeRelation.CodeName END,
-			NULL,NULL,NULL,NULL,NULL,NULL,NULL,
+			CASE WHEN UI.DateOfBecomingInsider IS NOT NULL THEN @sNonPrceclearanceCodePrefixText + CONVERT(VARCHAR,vwIN.DisplayRollingNumber) ELSE @sPrceclearanceNotRequiredPrefixText + CONVERT(VARCHAR,vwIN.DisplayRollingNumber) END,
+			NULL,NULL,NULL,NULL,NULL,NULL,
 			CM.CompanyName,CM.ISINCode,			
 			vwTD.SecurityType,
 			vwTD.TransactionType,
@@ -618,7 +619,7 @@ BEGIN
 			vwTD.SecurityTypeCodeId, vwTD.TransactionTypeCodeId,
 			NULL,vwIN.DetailsSubmitDate,
 		    rulTP.StExSubmitDiscloToCOByInsdrFlag,
-			DR.LastSubmissionDate,			
+			NULL,--DR.LastSubmissionDate,			
 			CASE WHEN vwIn.ScpSubmitStatus = 0 AND vwIn.DetailsSubmitStatus = 1 AND vwIn.SoftCopyReq = 1 THEN 'Pending' 
 				 WHEN vwIn.ScpSubmitStatus = 0 AND vwIn.DetailsSubmitStatus = 1 AND vwIn.SoftCopyReq = 0 THEN 'Not Required'
 				 WHEN vwIn.ScpSubmitStatus = 1 THEN CONVERT(VARCHAR(max), UPPER(REPLACE(CONVERT(NVARCHAR, vwIn.ScpSubmitDate, 106),' ','/'))) ELSE '-' 
