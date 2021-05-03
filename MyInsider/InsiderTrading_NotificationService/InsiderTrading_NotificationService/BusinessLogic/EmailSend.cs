@@ -121,12 +121,12 @@ namespace InsiderTrading_NotificationService
                                 objConfigurationModel.SmtpServer = objCompanyDetailsForNotificationDTO.SmtpServer;
                                 objConfigurationModel.SmtpUserName = objCompanyDetailsForNotificationDTO.SmtpUserName;
                                 objConfigurationModel.SmtpPortNumber = objCompanyDetailsForNotificationDTO.SmtpPortNumber;
-                                //objConfigurationModel.SmtpPassword = objCompanyDetailsForNotificationDTO.SmtpPassword;
+                                objConfigurationModel.SmtpPassword = objCompanyDetailsForNotificationDTO.SmtpPassword;
 
-                                using (DataSecurity ds = new DataSecurity())
-                                {                                                                        
-                                    objConfigurationModel.SmtpPassword = ds.DecryptData(objCompanyDetailsForNotificationDTO.SmtpPassword); ;
-                                }
+                                //using (DataSecurity ds = new DataSecurity())
+                                //{                                                                        
+                                //    objConfigurationModel.SmtpPassword = ds.DecryptData(objCompanyDetailsForNotificationDTO.SmtpPassword); ;
+                                //}
                                
                                 IEnumerable<InsiderTradingDAL.NotificationSendListDTO> lstNotificationSendListDTO = objEmailNotificationSL.GetNotificationSendList(dbConnectionString, item.CompanyId);
 
@@ -298,7 +298,7 @@ namespace InsiderTrading_NotificationService
 
             try
             {
-
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 WindowServiceCommon.WriteErrorLog("INFO: ================================================================================================");
 
                 WindowServiceCommon.WriteErrorLog("INFO: Enter in Send Mail function...");
@@ -317,12 +317,13 @@ namespace InsiderTrading_NotificationService
                 objSmtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
                 objSmtpClient.UseDefaultCredentials = Convert.ToBoolean(ConfigurationManager.AppSettings.Get(InsiderTrading_NotificationService.WindowServiceConstEnum.AppSettingsKey.UseDefaultCredentials));
                 WindowServiceCommon.WriteErrorLog("INFO: UseDefaultCredentials :-" + objSmtpClient.UseDefaultCredentials);
+                m_objobjConfigurationModel.SmtpPassword = m_objobjConfigurationModel.SmtpPassword;
                 //objSmtpClient.Port = 587;
 
-                using (DataSecurity ds = new DataSecurity())
-                {
-                    m_objobjConfigurationModel.SmtpPassword = ds.DecryptData(m_objobjConfigurationModel.SmtpPassword); ;
-                }
+                //using (DataSecurity ds = new DataSecurity())
+                //{
+                //    m_objobjConfigurationModel.SmtpPassword = ds.DecryptData(m_objobjConfigurationModel.SmtpPassword); ;
+                //}
 
                 if (m_objobjConfigurationModel.SmtpUserName != null && m_objobjConfigurationModel.SmtpUserName != "" && m_objobjConfigurationModel.SmtpPassword != null && m_objobjConfigurationModel.SmtpPassword != "")
                  {
