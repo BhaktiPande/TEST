@@ -62,14 +62,14 @@
             else if (GridType1 == "@InsiderTrading.Common.ConstEnum.GridType.ContinuousDisclosureDataForLetterForEmployeeInsider") {//Form C Grid 1
                 $("#tempContainer thead tr:eq(0) th:eq(1)").css({ "width": "5%" });
                 $("#tempContainer thead tr:eq(0) th:eq(2)").css({ "width": "15%" });
-                $("#tempContainer thead tr:eq(0) th:eq(3)").css({ "width": "25%" });
+                $("#tempContainer thead tr:eq(0) th:eq(3)").css({ "width": "30%" });
                 $("#tempContainer thead tr:eq(0) th:eq(4)").css({ "width": "15%" });
                 $("#tempContainer thead tr:eq(0) th:eq(5)").css({ "width": "16%" });
             }
             else if (GridType1 == "@InsiderTrading.Common.ConstEnum.GridType.ContinuousDisclosureDataForLetterForNonEmployeeInsider") {//Form D Grid 1
                 $("#tempContainer thead tr:eq(0) th:eq(1)").css({ "width": "5%" });
                 $("#tempContainer thead tr:eq(0) th:eq(2)").css({ "width": "15%" });
-                $("#tempContainer thead tr:eq(0) th:eq(3)").css({ "width": "25%" });
+                $("#tempContainer thead tr:eq(0) th:eq(3)").css({ "width": "30%" });
                 $("#tempContainer thead tr:eq(0) th:eq(4)").css({ "width": "15%" });
                 $("#tempContainer thead tr:eq(0) th:eq(5)").css({ "width": "16%" });
             }
@@ -455,27 +455,28 @@
                 <input type="hidden" value="@ViewBag.year" id="4" name="" gridtype="@ViewBag.GridType" />
                 <input type="hidden" value="@ViewBag.Period" id="5" name="" gridtype="@ViewBag.GridType" />
                 <div id="Grid2Header">
+                    <div style='page-break-after: always;'> </div>
                     <table width="100%" id="form">
                         <tr>
                             <td align="left" colspan="2" id="Grid2Header">
                                 <!--Grid 2 header messages for different forms B,C and D-->
                                 @{
-    if (@ViewBag.GridType2 == InsiderTrading.Common.ConstEnum.GridType.InitialDisclosureLetterListGrid2)
-    {
-		<label style="font:bold;">@Html.Raw(InsiderTrading.Common.Common.getResource("dis_lbl_17405"))</label>
-    }
-    else if (ViewBag.GridType2 == InsiderTrading.Common.ConstEnum.GridType.ContinuousDisclosureDataForLetterForEmployeeInsiderGrid2)
-    {
-		<label style="font:bold;">@Html.Raw(InsiderTrading.Common.Common.getResource("dis_lbl_17407"))</label>
-    }
-    else if (ViewBag.GridType2 == InsiderTrading.Common.ConstEnum.GridType.ContinuousDisclosureDataForLetterForNonEmployeeInsiderGrid2)
-    {
-		 <label style="font:bold;">@Html.Raw(InsiderTrading.Common.Common.getResource("dis_lbl_17409"))</label>
-    }
-    else if (ViewBag.GridType2 == InsiderTrading.Common.ConstEnum.GridType.PeriodEndDisclosureDataForLetterForEmployeeInsiderGrid2)
-    {
-		<label style="font-weight: 500;">@Html.Raw(InsiderTrading.Common.Common.getResource("dis_lbl_50415"))</label>
-    }
+                                    if (@ViewBag.GridType2 == InsiderTrading.Common.ConstEnum.GridType.InitialDisclosureLetterListGrid2)
+                                    {
+                                        <label style="font:bold;">@Html.Raw(InsiderTrading.Common.Common.getResource("dis_lbl_17405"))</label>
+                                    }
+                                    else if (ViewBag.GridType2 == InsiderTrading.Common.ConstEnum.GridType.ContinuousDisclosureDataForLetterForEmployeeInsiderGrid2)
+                                    {
+                                        <label style="font:bold;">@Html.Raw(InsiderTrading.Common.Common.getResource("dis_lbl_17407"))</label>
+                                    }
+                                    else if (ViewBag.GridType2 == InsiderTrading.Common.ConstEnum.GridType.ContinuousDisclosureDataForLetterForNonEmployeeInsiderGrid2)
+                                    {
+                                        <label style="font:bold;">@Html.Raw(InsiderTrading.Common.Common.getResource("dis_lbl_17409"))</label>
+                                    }
+                                    else if (ViewBag.GridType2 == InsiderTrading.Common.ConstEnum.GridType.PeriodEndDisclosureDataForLetterForEmployeeInsiderGrid2)
+                                    {
+                                        <label style="font-weight: 500;">@Html.Raw(InsiderTrading.Common.Common.getResource("dis_lbl_50415"))</label>
+                                    }
                                 }
                             </td>
                         </tr>
