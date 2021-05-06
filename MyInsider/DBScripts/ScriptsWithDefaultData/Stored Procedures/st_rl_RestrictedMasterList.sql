@@ -11,7 +11,7 @@ Created by:		Santosh Panchal
 Created on:		23-Sept-2015
 
 Modification History:
-
+Sandesh Lande 05-05-2021 Added Sorting on RL.ModifiedOn DESC so recent modified come first.
 Usage:
 
 DECLARE @P12 INT
@@ -131,6 +131,8 @@ BEGIN
 		BEGIN 
 			SELECT @inp_sSortField = 'RL.CreatedBy' 
 		END
+		 
+			SELECT @inp_sSortField = 'RL.ModifiedOn' 
 		
 		SET @inp_sSortOrder='DESC'
 		
@@ -222,7 +224,7 @@ BEGIN
 			END
 		END
 		
-		SELECT @sSQL = @sSQL + ' GROUP BY RL.RlMasterVersionNumber,RLCL.RlCompanyId ' 
+		SELECT @sSQL = @sSQL + ' GROUP BY RL.RlMasterVersionNumber,RLCL.RlCompanyId,RL.ModifiedOn ' 
 		
 		PRINT(@sSQL)
 		EXEC(@sSQL)

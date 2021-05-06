@@ -23,6 +23,12 @@ DECLARE @RC int, @out_nReturnValue INT, @out_nSQLErrCode INT, @out_sSQLErrMessag
 
 EXEC @RC = st_rl_RestrictedListSave 39,39,@T1, @out_nReturnValue OUTPUT, @out_nSQLErrCode OUTPUT, @out_sSQLErrMessage OUTPUT
 ROLLBACK TRANSACTION T1
+
+Sandesh S. Lande 05-MAY-2021 SET Date if TOdate and from date same in database it have only date and time 00:00:00
+								NOW from date 00:00:00 and 23:59:59 for same day.
+SET @inp_ApplicableFrom = (SELECT CONVERT(DATE,ApplicableFromDate) FROM @inp_tblRLMasterType)
+SET @inp_ApplicableTo = (SELECT CONVERT(datetime, CONVERT(varchar, CONVERT(DATE,ApplicableToDate))+' 23:59:59') FROM @inp_tblRLMasterType)
+
 -------------------------------------------------------------------------------------------------*/
 
 CREATE PROCEDURE [st_rl_RestrictedListSave]
@@ -65,10 +71,15 @@ BEGIN
 		
 		SET @CompanyId = (SELECT ComapnyId FROM @inp_tblRLMasterType)
 		SET @inp_ApplicableFrom = (SELECT CONVERT(DATE,ApplicableFromDate) FROM @inp_tblRLMasterType)
-		SET @inp_ApplicableTo = (SELECT CONVERT(DATE,ApplicableToDate) FROM @inp_tblRLMasterType)
+		SET @inp_ApplicableTo = (SELECT CONVERT(datetime, CONVERT(varchar, CONVERT(DATE,ApplicableToDate))+' 23:59:59') FROM @inp_tblRLMasterType)
 		SET @RlMasterVersionNumber = (SELECT MAX(RlMasterVersionNumber) FROM rl_RistrictedMasterList)
 		SET @RlMasterVersionNumber = @RlMasterVersionNumber + 1
-				
+			
+			Print '1'
+			Print @inp_ApplicableFrom
+			Print @inp_ApplicableTo
+			Print @inp_iRlMasterId
+
 		IF(@inp_iRlMasterId = 0)
 		BEGIN
 			IF NOT EXISTS (SELECT RlCompanyId FROM rl_RistrictedMasterList 
@@ -78,7 +89,7 @@ BEGIN
 				--Insert new record into table
 				INSERT INTO rl_RistrictedMasterList(RlCompanyId,ModuleCodeId,ApplicableFromDate,ApplicableToDate,StatusCodeId,
 					CreatedBy,CreatedOn,ModifiedBy,ModifiedOn,RlMasterVersionNumber)		
-				SELECT	ComapnyId,@ModuleCodeId,CONVERT(DATE,ApplicableFromDate),CONVERT(DATE,ApplicableToDate),@StatusCodeId,
+				SELECT	ComapnyId,@ModuleCodeId,@inp_ApplicableFrom,@inp_ApplicableTo,@StatusCodeId,
 						@inp_iLoggedInUserId,dbo.uf_com_GetServerDate(),@inp_iLoggedInUserId,dbo.uf_com_GetServerDate(),@RlMasterVersionNumber 
 				FROM	@inp_tblRLMasterType
 				SET @out_nReturnValue = 0				
@@ -120,17 +131,19 @@ BEGIN
 		BEGIN
 			IF (UPPER(@inp_sActionType)=UPPER('UPDATE'))
 				BEGIN
-					SELECT @ApplicableToDate = CONVERT(DATE,ApplicableToDate) FROM @inp_tblRLMasterType 
+					SELECT @ApplicableToDate = @inp_ApplicableFrom
 					SET @OldRlMasterVersionNumber = (SELECT TOP 1 RlMasterVersionNumber FROM rl_RistrictedMasterList WHERE RlMasterId = @inp_iRlMasterId)
 
 					SELECT @iRlMasterId=IDENT_CURRENT('rl_RistrictedMasterList')					
 					
 					INSERT INTO rl_RistrictedMasterList(RlCompanyId,ModuleCodeId,ApplicableFromDate,ApplicableToDate,StatusCodeId,
 					CreatedBy,CreatedOn,ModifiedBy,ModifiedOn,RlMasterVersionNumber)		
-					SELECT	ComapnyId,@ModuleCodeId,CONVERT(DATE,ApplicableFromDate),CONVERT(DATE,ApplicableToDate),@StatusCodeId,
+					SELECT	ComapnyId,@ModuleCodeId,@inp_ApplicableFrom,@inp_ApplicableTo,@StatusCodeId,
 						@inp_iLoggedInUserId,dbo.uf_com_GetServerDate(),@inp_iLoggedInUserId,dbo.uf_com_GetServerDate(),@OldRlMasterVersionNumber 
 					FROM @inp_tblRLMasterType
-					
+
+				
+					UPDATE rl_RistrictedMasterList set StatusCodeId = 105002 where RlMasterId = @inp_iRlMasterId					
 
 					IF EXISTS(SELECT UserCount,ApplicabilityId FROM rul_ApplicabilityMaster WHERE MapToId=@iRlMasterId AND VersionNumber=(SELECT Max(VersionNumber) from rul_ApplicabilityMaster where MapToId=@iRlMasterId))
 					BEGIN 

@@ -233,8 +233,8 @@ namespace InsiderTrading.Controllers
                 objLoginUserDetails = (LoginUserDetails)InsiderTrading.Common.Common.GetSessionValue((string)InsiderTrading.Common.ConstEnum.SessionValue.UserDetails);
                 objDocumentDetailsdDTO = objLoginUserDetails.DocumentDetails;
                 sCurrentCompanyDBName = objLoginUserDetails.CompanyName;
-                sConnectionString = objLoginUserDetails.CompanyDBConnectionString;
-
+                sConnectionString = objLoginUserDetails.CompanyDBConnectionString;                
+                int LoggedInUserID = objLoginUserDetails.LoggedInUserID;
                 using (var objCompaniesSL = new CompaniesSL())
                 {
                     objCompanyToMassUpload = objCompaniesSL.getSingleCompanies(Common.Common.getSystemConnectionString(), objLoginUserDetails.CompanyName);
@@ -272,7 +272,7 @@ namespace InsiderTrading.Controllers
                     TempData["IsError"] = "1";
                     return RedirectToAction("OpenFileUploadDialog", "MassUpload", new { acid = ViewBag.acid, massuploadid = massuploadid });
                 }
-                using (var objParameterisedMassUploadSL = new MassUploadSL(massuploadid, sConnectionString, sCurrentCompanyDBName))
+                using (var objParameterisedMassUploadSL = new MassUploadSL(massuploadid, sConnectionString, sCurrentCompanyDBName, LoggedInUserID))
                 {
                     //objMassUploadSL = new InsiderTradingMassUpload.MassUploadSL(massuploadid, sConnectionString, sCurrentCompanyDBName);
                     //Add entry in the Log table and generate the MapToId (i.e. the log table id) for the document to be saved.
