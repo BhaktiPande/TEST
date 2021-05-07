@@ -18,6 +18,7 @@ Modification History:
 Modified By		Modified On	Description
 Gaurishankar	16-Mar-2015	IsSelected = 2 when activity for given role is Delegated.
 Raghvendra	07-Sep-2016	Changed the GETDATE() call with function dbo.uf_com_GetServerDate(). This function will return the date to be used as server date.
+Sandesh Lande	07-May-2021 Restricted list search menu will only visible for required module OWN 513001 else Both and other 210 activity Not comming.
 Usage:
 EXEC st_usr_RoleActivityDetails null
 -------------------------------------------------------------------------------------------------*/
@@ -64,7 +65,7 @@ BEGIN
 		END
 		select @ApplicableFor = RequiredModule, @IsMCQRequired = ISNULL(IsMCQRequired,521002), @IsPreClearanceEditable = ISNULL(IsPreClearanceEditable,524002) from mst_Company where CompanyId = 1
 		--Fetch the RoleActivity details
-		IF(@ApplicableFor = 513003)
+		IF(@ApplicableFor = 513003 OR @ApplicableFor = 513002)
 		BEGIN
 		SELECT  A.ActivityID
 			  ,ScreenName
@@ -88,6 +89,7 @@ BEGIN
 		AND A.ScreenName NOT IN (CASE WHEN @IsMCQRequired = 521002 THEN 'MCQ Setting' ELSE '0' END) 
         AND A.ActivityID NOT IN (CASE WHEN @IsPreClearanceEditable =524002 THEN '332' ELSE '0' END) 
 		AND A.ActivityID NOT IN (CASE WHEN @IsPreClearanceEditable =524002 THEN '333' ELSE '0' END) 
+		AND A.ActivityID NOT IN (210) -- Remove Restricted List Search From Other And Both
 		order by cast(A.DisplayOrder as int) ,ActivityID,ScreenName
 		END
 		ELSE
