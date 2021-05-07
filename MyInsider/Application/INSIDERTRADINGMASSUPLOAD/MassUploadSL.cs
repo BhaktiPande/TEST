@@ -75,6 +75,7 @@ namespace InsiderTradingMassUpload
         private string m_sExcelFileFullPath;
         private string m_sCurrentCompanyDBName;
         private string m_sEncryptionSaltValue;
+        private int m_nLoggedInUserID;
 
 
 
@@ -258,13 +259,14 @@ namespace InsiderTradingMassUpload
         /// <param name="i_nMassUploadId"></param>
         /// <param name="i_sConnectionString"></param>
         /// <param name="i_sExcelFileFullPath"></param>
-        public MassUploadSL(int i_nMassUploadId, string i_sConnectionString, string i_sCompanyDBName)
+        public MassUploadSL(int i_nMassUploadId, string i_sConnectionString, string i_sCompanyDBName, int i_nLoggedInUserID)
         {
             m_objMassUploadExcel = new MassUploadExcel();
             m_objMassUploadExcelSheets = new MassUploadExcelSheets();
             m_objMassUploadExcelSheetList = new Dictionary<string, MassUploadExcelSheets>();
             m_nMassUploadId = i_nMassUploadId;
             m_sConnectionString = i_sConnectionString;
+            m_nLoggedInUserID = i_nLoggedInUserID;
             m_lstMassUploadSheets = new List<MassUploadExcelSheets>();
             m_objSheetRelatedColumnMapping = new Dictionary<string, string>();
             m_objMassUploadExcelResponseSheetList = new Dictionary<string, MassUploadExcelSheets>();
@@ -287,7 +289,7 @@ namespace InsiderTradingMassUpload
         /// <param name="i_nMassUploadId"></param>
         /// <param name="i_sConnectionString"></param>
         /// <param name="i_sExcelFileFullPath"></param>
-        public MassUploadSL(int i_nMassUploadId, string i_sConnectionString, string i_sExcelFileFullPath, string i_sCompanyDBName)
+        public MassUploadSL(int i_nMassUploadId, string i_sConnectionString, string i_sExcelFileFullPath, string i_sCompanyDBName, int i_nLoggedInUserID)
         {
             m_objMassUploadExcel = new MassUploadExcel();
             m_objMassUploadExcelSheets = new MassUploadExcelSheets();
@@ -295,6 +297,7 @@ namespace InsiderTradingMassUpload
             m_nMassUploadId = i_nMassUploadId;
             m_sConnectionString = i_sConnectionString;
             m_sExcelFileFullPath = i_sExcelFileFullPath;
+            m_nLoggedInUserID = i_nLoggedInUserID;
             m_lstMassUploadSheets = new List<MassUploadExcelSheets>();
             m_objSheetRelatedColumnMapping = new Dictionary<string, string>();
             m_objMassUploadExcelResponseSheetList = new Dictionary<string, MassUploadExcelSheets>();
@@ -2206,7 +2209,7 @@ namespace InsiderTradingMassUpload
         /// <param name="i_sConnectionString"></param>
         /// <param name="o_objResponseList"></param>
         public void ExecuteMassUploadCall(int i_nMassuploadType, DataTable i_objMassUploadDataTable, string i_sDataTableName, string i_sProcedureName, string i_sConnectionString,
-            out List<MassUploadResponseDTO> o_objResponseList, out string o_sSheetErrorMessageCode)
+           int LoggedInUserID,out List<MassUploadResponseDTO> o_objResponseList, out string o_sSheetErrorMessageCode)
         {
             //MassUploadDAL objMassUploadDAL = new MassUploadDAL();
             o_objResponseList = new List<MassUploadResponseDTO>();
@@ -2215,7 +2218,7 @@ namespace InsiderTradingMassUpload
                 using (var objMassUploadDAL = new MassUploadDAL())
                 {
                     objMassUploadDAL.ExecuteMassUploadCall(i_nMassuploadType, i_objMassUploadDataTable, i_sDataTableName, i_sProcedureName, i_sConnectionString,
-                        out o_objResponseList, out o_sSheetErrorMessageCode);
+                        LoggedInUserID,out o_objResponseList, out o_sSheetErrorMessageCode);
                 }
             }
             catch (Exception exp)
@@ -2413,7 +2416,7 @@ namespace InsiderTradingMassUpload
                             {
                                 objMassUploadDataTable = CreateDataTable(sExcelSheetName, objMassUploadExcelSheets.DataTableColumnMapping[sExcelSheetName], objDataFromExcelSheet[sExcelSheetName]);
                                 ExecuteMassUploadCall(objMassUploadExcelSheets.MassUploadExcelSheetId, objMassUploadDataTable, objMassUploadDataTable.TableName, objMassUploadExcelSheets.ProcedureUsed,
-                                    m_sConnectionString, out objResponseList, out sErrorMessageCode);
+                                     m_sConnectionString, m_nLoggedInUserID, out objResponseList, out sErrorMessageCode);
                                 objMassUploadExcelSheets.ResponseList = objResponseList;
                                 m_objMassUploadExcelResponseSheetList[sExcelSheetName] = objMassUploadExcelSheets;
 

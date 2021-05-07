@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Text;
 using SFTPFileDownload;
 using System.Collections;
+using InsiderTrading.Common;
 
 namespace DataUploadUtility.Generic
 {
@@ -802,6 +803,9 @@ namespace DataUploadUtility.Generic
                 dtErrorList.Columns.Add("UserID", typeof(string));
                 dtErrorList.Columns.Add("Usercategory", typeof(string));
                 dtErrorList.Columns.Add("Description", typeof(string));
+                LoginUserDetails objLoginUserDetails = null;
+                objLoginUserDetails = (LoginUserDetails)Common.GetSessionValue(ConstEnum.SessionValue.UserDetails);
+                int LoggedInUserID = objLoginUserDetails.LoggedInUserID;
 
                 foreach (Int32 MappingTableID in (from b in objMappingFieldsDTO select b.MappingTableID).Distinct().ToArray())
                 {
@@ -1025,7 +1029,7 @@ namespace DataUploadUtility.Generic
                                                 {
                                                     using (MassUploadDAL massUploadDAL = new MassUploadDAL())
                                                     {
-                                                        massUploadDAL.ExecuteMassUploadCall(n_ExcelSheetDetailsID, dt_FinalOutputTable, string.Empty, "st_com_MassUploadCommonProcedureExecution", s_ConnectionString, out objResponseList, out s_ErrorMessageCode);
+                                                        massUploadDAL.ExecuteMassUploadCall(n_ExcelSheetDetailsID, dt_FinalOutputTable, string.Empty, "st_com_MassUploadCommonProcedureExecution", s_ConnectionString, LoggedInUserID, out objResponseList, out s_ErrorMessageCode);
                                                         _ResponseList.Add(objResponseList.First());
                                                     }
                                                 }
@@ -1038,7 +1042,7 @@ namespace DataUploadUtility.Generic
                                                         _DT.ImportRow(perRow);
                                                         using (MassUploadDAL massUploadDAL = new MassUploadDAL())
                                                         {
-                                                            massUploadDAL.ExecuteMassUploadCall(n_ExcelSheetDetailsID, _DT, string.Empty, "st_com_MassUploadCommonProcedureExecution", s_ConnectionString, out objResponseList, out s_ErrorMessageCode);
+                                                            massUploadDAL.ExecuteMassUploadCall(n_ExcelSheetDetailsID, _DT, string.Empty, "st_com_MassUploadCommonProcedureExecution", s_ConnectionString, LoggedInUserID, out objResponseList, out s_ErrorMessageCode);
                                                             _ResponseList.Add(objResponseList.First());
 
                                                         }
