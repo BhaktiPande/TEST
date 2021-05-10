@@ -23,6 +23,8 @@ CREATE PROCEDURE st_usr_EmailDetails
 	@inp_s_Flag				varchar(200),
 	@inp_s_TemplateCode     INT,
 	@inp_s_UniqueID			varchar(100),--COMUN FOR ALL MODULES IT MAY BE DOCUMENT ID,USERINFOID AS PER MODULE
+	@inp_s_McqActivationDate VARCHAR(15) = NULL,
+	@inp_s_LastDateOfSubmission VARCHAR(15) = NULL,
 	@out_nReturnValue		int= 0 OUTPUT,
 	@out_nSQLErrCode		int= 0 OUTPUT,
 	@out_sSQLErrMessage		NVARCHAR(500) = '' OUTPUT
@@ -52,6 +54,16 @@ BEGIN
 	SELECT @TableHeaders = SUBSTRING(@TableContents,CHARINDEX('<table',@TableContents),CHARINDEX('</tr',@TableContents)+ 4)
        
     SELECT @TableFooters ='</table>'
+
+	DECLARE @UnBlockUserTemplate INT = 156015 
+	DECLARE @BlockUserTemplate INT = 156014
+	DECLARE @ActivationTemplate INT = 156013
+
+	DECLARE @ModuleType_UPSI INT = 527001
+	DECLARE @ModuleType_MCQ INT = 527002
+
+	Declare @GivenModule INT
+	select @GivenModule=CodeID from com_Code where CodeName=@inp_s_Module
 	
 	--Table Variable declaration code start
 	
@@ -101,7 +113,7 @@ BEGIN
 	---COMMON DECLARATION CODE START
 
 
-IF(@inp_s_Module='UPSI')
+IF(@GivenModule = @ModuleType_UPSI)
 BEGIN
 				
 	IF(@inp_s_Flag='SELECT_EMAIL_PROPERTIES')
@@ -355,4 +367,172 @@ BEGIN
 				
 	END --SELECT_EMAIL_PROPERTIES IF CONDITION END
 END --UPSI IF CONDITION END
+ELSE IF(@GivenModule = @ModuleType_MCQ)
+BEGIN
+	DECLARE @TriggerEmail BIT,
+			@UserBlockEmail BIT,
+			@UserUnBlockEmail BIT,
+			@UserActivationEmail BIT,
+			@MailTo NVARCHAR(200),
+			@NoOfAttempts INT,
+			@FrequencyDuration INT
+
+	SELECT @TriggerEmail = TriggerEmail,@UserBlockEmail = UserBlockEmail,@UserUnBlockEmail = UserUnBlockEmail,@UserActivationEmail = UserActivationEmail,
+	@MailTo = MailTo,@NoOfAttempts = NoOfAttempts,@FrequencyDuration = FrequencyDuration FROM MCQ_MasterSettings
+	
+	IF(@TriggerEmail = 1)
+	BEGIN
+		DECLARE @nPlaceholderCounter INT =1
+		DECLARE @sPlaceholder1 VARCHAR(255)
+
+		IF (@inp_s_TemplateCode = @UnBlockUserTemplate AND  @UserUnBlockEmail = 1)
+		BEGIN
+			DECLARE @ToEmail_UnBlockUser VARCHAR(200)
+			DECLARE @EmailBodyContent_UnBlockUser VARCHAR(MAX)
+			--GET TEMPLATE
+			SELECT	@EmailBodyContent_UnBlockUser=Contents, @EmailSubject=Subject FROM tra_TemplateMaster WHERE CommunicationModeCodeId = @inp_s_TemplateCode
+
+			--To Mail Id
+			SELECT @ToEmail_UnBlockUser = EmailId FROM usr_UserInfo WHERE UserInfoId = @inp_s_UniqueID 
+
+			--GET PLACEHOLDER FROM com_PlaceholderMaster AND INSERT INTO TABLE VARIABLE @tblPlaceholders
+			INSERT INTO @tblPlaceholders(Placeholder, PlaceholderDisplayName)
+			SELECT PlaceholderTag, PlaceholderDisplayName  FROM com_PlaceholderMaster WHERE PlaceholderGroupId = @inp_s_TemplateCode
+
+			--get count of total placeholders strored in placeholder table
+			SELECT @nPlaceholderCount = COUNT(ID) FROM @tblPlaceholders
+			
+			--REPLACE PLACE HOLDERS IN EMAIL BODY
+			While(@nPlaceholderCounter<=@nPlaceholderCount) 
+			BEGIN
+				SELECT @sPlaceholder1 = Placeholder FROM @tblPlaceholders WHERE ID = @nPlaceholderCounter
+							
+				SELECT @EmailBodyContent_UnBlockUser = CASE											
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[DateOfActivationOfMCQ]')) THEN REPLACE(@EmailBodyContent_UnBlockUser, @sPlaceholder1, ISNULL(@inp_s_McqActivationDate,' ')) 
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[LastDateOfSubmissionOfMCQ]')) THEN REPLACE(@EmailBodyContent_UnBlockUser, @sPlaceholder1, ISNULL(@inp_s_LastDateOfSubmission,' ')) 
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[NoOfAttempts]')) THEN REPLACE(@EmailBodyContent_UnBlockUser, @sPlaceholder1, ISNULL(@NoOfAttempts,' '))
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[FrequencyDuration]')) THEN REPLACE(@EmailBodyContent_UnBlockUser, @sPlaceholder1, ISNULL(@FrequencyDuration,' ')) 
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[CoName]')) THEN REPLACE(@EmailBodyContent_UnBlockUser, @sPlaceholder1, ISNULL(null,' ')) 
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[FirstName]')) THEN REPLACE(@EmailBodyContent_UnBlockUser, @sPlaceholder1, ISNULL(U.FirstName,' ')) 
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[LastName]')) THEN REPLACE(@EmailBodyContent_UnBlockUser, @sPlaceholder1, ISNULL(U.FirstName,' ')) 
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[EmployeeID]')) THEN REPLACE(@EmailBodyContent_UnBlockUser, @sPlaceholder1, ISNULL(U.EmployeeId,' ')) 
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[UserName]')) THEN REPLACE(@EmailBodyContent_UnBlockUser, @sPlaceholder1, ISNULL(A.LoginID,' '))
+													ELSE @EmailBodyContent_UnBlockUser END		
+													FROM  usr_UserInfo U INNER JOIN  usr_Authentication A ON U.UserInfoId = A.UserInfoID
+													WHERE U.UserInfoId = @inp_s_UniqueID
+				SET @nPlaceholderCounter = @nPlaceholderCounter + 1
+			END											
+			INSERT INTO @tblFinalEmailProperties(UserInfoId,s_MailFrom, b_IsBodyHtml ,s_MailTo ,s_MailCC,s_MailBCC ,s_MailSubject,s_MailBody)
+			VALUES(@inp_s_UniqueID,'noreply@esopdirect.com',1,@ToEmail_UnBlockUser,'','',@EmailSubject,@EmailBodyContent_UnBlockUser)
+
+			SET @out_nReturnValue=0
+			
+			SELECT * FROM @tblFinalEmailProperties
+		END
+		ELSE IF (@inp_s_TemplateCode = @BlockUserTemplate AND @UserBlockEmail = 1)
+		BEGIN 
+			DECLARE @ToEmail_BlockUser VARCHAR(200)
+			DECLARE @CCEmail_BlockUser VARCHAR(200)
+			DECLARE @EmailBodyContent_BlockUser VARCHAR(MAX)
+
+			--GET TEMPLATE
+			SELECT	@EmailBodyContent_BlockUser=Contents, @EmailSubject=Subject FROM tra_TemplateMaster WHERE CommunicationModeCodeId = @inp_s_TemplateCode
+
+			INSERT INTO @tblToType
+			SELECT * FROM (SELECT [Param] AS ID FROM dbo.FN_VIGILANTE_SPLIT(@MailTo,',') ) Tb1  ORDER BY ID
+
+			SELECT @TotalCount = count(*) FROM @tblToType
+			
+			--CC Mail Id
+			SELECT @CCEmail_BlockUser = EmailId FROM usr_UserInfo WHERE UserInfoId = @inp_s_UniqueID 
+
+			--GET PLACEHOLDER FROM com_PlaceholderMaster AND INSERT INTO TABLE VARIABLE @tblPlaceholders
+			INSERT INTO @tblPlaceholders(Placeholder, PlaceholderDisplayName)
+			SELECT PlaceholderTag, PlaceholderDisplayName  FROM com_PlaceholderMaster WHERE PlaceholderGroupId = @inp_s_TemplateCode
+
+			--get count of total placeholders strored in placeholder table
+			SELECT @nPlaceholderCount = COUNT(ID) FROM @tblPlaceholders
+						
+			--REPLACE PLACE HOLDERS IN EMAIL BODY
+			While(@nPlaceholderCounter<=@nPlaceholderCount) 
+			BEGIN
+				SELECT @sPlaceholder1 = Placeholder FROM @tblPlaceholders WHERE ID = @nPlaceholderCounter
+							
+				SELECT @EmailBodyContent_BlockUser = CASE											
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[DateOfActivationOfMCQ]')) THEN REPLACE(@EmailBodyContent_BlockUser, @sPlaceholder1, ISNULL(@inp_s_McqActivationDate,' ')) 
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[LastDateOfSubmissionOfMCQ]')) THEN REPLACE(@EmailBodyContent_BlockUser, @sPlaceholder1, ISNULL(@inp_s_LastDateOfSubmission,' ')) 
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[NoOfAttempts]')) THEN REPLACE(@EmailBodyContent_BlockUser, @sPlaceholder1, ISNULL(@NoOfAttempts,' ')) 
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[CoName]')) THEN REPLACE(@EmailBodyContent_BlockUser, @sPlaceholder1, ISNULL(null,' ')) 
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[FrequencyDuration]')) THEN REPLACE(@EmailBodyContent_BlockUser, @sPlaceholder1, ISNULL(@FrequencyDuration,' ')) 
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[FirstName]')) THEN REPLACE(@EmailBodyContent_BlockUser, @sPlaceholder1, ISNULL(U.FirstName,' ')) 
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[LastName]')) THEN REPLACE(@EmailBodyContent_BlockUser, @sPlaceholder1, ISNULL(U.FirstName,' ')) 
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[EmployeeID]')) THEN REPLACE(@EmailBodyContent_BlockUser, @sPlaceholder1, ISNULL(U.EmployeeId,' ')) 
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[UserName]')) THEN REPLACE(@EmailBodyContent_BlockUser, @sPlaceholder1, ISNULL(A.LoginID,' '))
+													ELSE @EmailBodyContent_BlockUser END		
+													FROM  usr_UserInfo U INNER JOIN  usr_Authentication A ON U.UserInfoId = A.UserInfoID
+													WHERE U.UserInfoId = @inp_s_UniqueID
+				SET @nPlaceholderCounter = @nPlaceholderCounter + 1
+			END	
+			WHILE (@count <= @TotalCount)
+			BEGIN 
+				SELECT @ToEmail_BlockUser = EmailId FROM usr_UserInfo WHERE UserInfoId IN(SELECT TypeID FROM @tblToType WHERE ID = @count)
+				INSERT INTO @tblFinalEmailProperties(UserInfoId,s_MailFrom, b_IsBodyHtml ,s_MailTo ,s_MailCC,s_MailBCC ,s_MailSubject,s_MailBody)
+				VALUES(@inp_s_UniqueID,'noreply@esopdirect.com',1,@ToEmail_BlockUser,@CCEmail_BlockUser,'',@EmailSubject,@EmailBodyContent_BlockUser)
+				SET @count= @count +1
+			END										
+			
+
+			SET @out_nReturnValue=0
+			
+			SELECT * FROM @tblFinalEmailProperties
+		END
+		ELSE IF (@inp_s_TemplateCode = @ActivationTemplate AND @UserActivationEmail = 1)
+		BEGIN
+			DECLARE @ToEmail_McqActivation VARCHAR(200)
+			DECLARE @EmailBodyContent_McqActivation VARCHAR(MAX)
+			DECLARE @CoName VARCHAR(200)
+			--GET TEMPLATE
+			SELECT	@EmailBodyContent_McqActivation=Contents, @EmailSubject=Subject FROM tra_TemplateMaster WHERE CommunicationModeCodeId = @inp_s_TemplateCode
+
+			--To Mail Id
+			SELECT @ToEmail_McqActivation = EmailId FROM usr_UserInfo WHERE UserInfoId = @inp_s_UniqueID 
+
+			SELECT TOP 1 @CoName = FirstName+' '+LastName FROM usr_UserInfo WHERE UserTypeCodeId=101002
+
+			--GET PLACEHOLDER FROM com_PlaceholderMaster AND INSERT INTO TABLE VARIABLE @tblPlaceholders
+			INSERT INTO @tblPlaceholders(Placeholder, PlaceholderDisplayName)
+			SELECT PlaceholderTag, PlaceholderDisplayName  FROM com_PlaceholderMaster WHERE PlaceholderGroupId = @inp_s_TemplateCode
+
+			--get count of total placeholders strored in placeholder table
+			SELECT @nPlaceholderCount = COUNT(ID) FROM @tblPlaceholders
+			
+			--REPLACE PLACE HOLDERS IN EMAIL BODY
+			While(@nPlaceholderCounter<=@nPlaceholderCount) 
+			BEGIN
+				SELECT @sPlaceholder1 = Placeholder FROM @tblPlaceholders WHERE ID = @nPlaceholderCounter
+							
+				SELECT @EmailBodyContent_McqActivation = CASE											
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[DateOfActivationOfMCQ]')) THEN REPLACE(@EmailBodyContent_McqActivation, @sPlaceholder1, ISNULL(@inp_s_McqActivationDate,' ')) 
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[LastDateOfSubmissionOfMCQ]')) THEN REPLACE(@EmailBodyContent_McqActivation, @sPlaceholder1, ISNULL(@inp_s_LastDateOfSubmission,' ')) 
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[NoOfAttempts]')) THEN REPLACE(@EmailBodyContent_McqActivation, @sPlaceholder1, ISNULL(@NoOfAttempts,' ')) 
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[FrequencyDuration]')) THEN REPLACE(@EmailBodyContent_McqActivation, @sPlaceholder1, ISNULL(@FrequencyDuration,' ')) 
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[CoName]')) THEN REPLACE(@EmailBodyContent_McqActivation, @sPlaceholder1, ISNULL(@CoName,' ')) 
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[FirstName]')) THEN REPLACE(@EmailBodyContent_McqActivation, @sPlaceholder1, ISNULL(U.FirstName,' ')) 
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[LastName]')) THEN REPLACE(@EmailBodyContent_McqActivation, @sPlaceholder1, ISNULL(U.FirstName,' ')) 
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[EmployeeID]')) THEN REPLACE(@EmailBodyContent_McqActivation, @sPlaceholder1, ISNULL(U.EmployeeId,' ')) 
+													WHEN (LOWER(@sPlaceholder1) = LOWER('[UserName]')) THEN REPLACE(@EmailBodyContent_McqActivation, @sPlaceholder1, ISNULL(A.LoginID,' '))
+													ELSE @EmailBodyContent_McqActivation END		
+													FROM  usr_UserInfo U INNER JOIN  usr_Authentication A ON U.UserInfoId = A.UserInfoID
+													WHERE U.UserInfoId = @inp_s_UniqueID
+				SET @nPlaceholderCounter = @nPlaceholderCounter + 1
+			END											
+			INSERT INTO @tblFinalEmailProperties(UserInfoId,s_MailFrom, b_IsBodyHtml ,s_MailTo ,s_MailCC,s_MailBCC ,s_MailSubject,s_MailBody)
+			VALUES(@inp_s_UniqueID,'noreply@esopdirect.com',1,@ToEmail_McqActivation,'','',@EmailSubject,@EmailBodyContent_McqActivation)
+
+			SET @out_nReturnValue=0
+			
+			SELECT * FROM @tblFinalEmailProperties
+		END
+	END
+END
 END-- MAIN BIGN END
