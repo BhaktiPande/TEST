@@ -278,15 +278,9 @@ namespace InsiderTrading.Controllers
                     ViewBag.DematAccountNumberList = FillComboValues(ConstEnum.ComboType.UserDMATList, objLoginUserDetails.LoggedInUserID.ToString(), ConstEnum.Code.PreClearanceType_ImplementingCompany.ToString(), null, null, null, true);
 
                     DateTime currentDBDate = Common.Common.GetCurrentDate(objLoginUserDetails.CompanyDBConnectionString);
-                    objPreclearanceRequestModel.PreClearanceRequestedDate = currentDBDate;
-                    if (objLoginUserDetails.CompanyName == "Infoedge")
-                    {
-                        objPreclearanceRequestModel.SecuritiesToBeTradedValue = null;
-                    }
-                    else
-                    {
-                        objPreclearanceRequestModel.SecuritiesToBeTradedValue = 0;
-                    }
+                    objPreclearanceRequestModel.PreClearanceRequestedDate = currentDBDate;                   
+                    objPreclearanceRequestModel.SecuritiesToBeTradedValue = null;
+                   
                 }
                 else
                 {
@@ -598,13 +592,12 @@ namespace InsiderTrading.Controllers
                         msg = ""
                     }, JsonRequestBehavior.AllowGet);
                 }
-                if (objLoginUserDetails.CompanyName == "Infoedge")
-                {
+               
                     if (objPreclearanceRequestModel.SecuritiesToBeTradedValue == 0)
                     {
                         ModelState.AddModelError("PreclearanceRequestModel", "Value proposed to be traded can not be 0");
                     }
-                }
+              
                 if (objPreclearanceRequestModel.PreclearanceRequestForCodeId == InsiderTrading.Common.ConstEnum.Code.PreclearanceRequestForSelf)
                 {
                     objPreclearanceRequestModel.UserInfoIdRelative = null;
