@@ -456,6 +456,7 @@ namespace InsiderTrading.Controllers
         [HttpPost]
         public ActionResult SaveAll()
         {
+            var ErrorDictionary = new Dictionary<string, string>();
             #region set dt column for email log
             dtEmailLog = new DataTable(); ;
             dtEmailLog.Columns.Add("ID", typeof(Int32));
@@ -569,13 +570,29 @@ namespace InsiderTrading.Controllers
                         SL.EmailPropertiesSL oblEmailPropertiesSL = new SL.EmailPropertiesSL();
                         List<EmailPropertiesDTO> objEmailPropertiesDTOList = oblEmailPropertiesSL.GetEmailPropertiesDetailsForMail(objLoginUserDetails.CompanyDBConnectionString, objEmailPropertiesDTO);
 
-                        foreach (var emailPropertiesDTO in objEmailPropertiesDTOList)
+                        try
+                        {
+                            foreach (var emailPropertiesDTO in objEmailPropertiesDTOList)
                         {
                             using (EmailProperties emailProperties = new EmailProperties(emailPropertiesDTO, s_Attachment))
                             {
-                                SendMail.Instance().SendMailAlerts(objLoginUserDetails.CompanyName, emailProperties);
-                                AddEmailPropertiesToDT(emailProperties);
+                                
+                                    SendMail.Instance().SendMailAlerts(objLoginUserDetails.CompanyName, emailProperties);
+                                    AddEmailPropertiesToDT(emailProperties);
+                                
+                                
                             }
+                        }
+                        }
+                        catch (Exception ex)
+                        {
+
+                            ModelState.Remove("KEY");
+                            ModelState.Add("KEY", new ModelState());
+                            ModelState.Clear();
+                            string sErrMessage = Common.Common.getResource(ex.Message);
+                            ModelState.AddModelError("error", sErrMessage);
+                            ErrorDictionary = GetModelStateErrorsAsString();
                         }
 
                         if (dtEmailLog != null && dtEmailLog.Rows.Count > 0)
