@@ -1164,12 +1164,13 @@
                                             </div>
                                         </div>
                                     }
-                                    else
+
+                                    else if(ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.HideLotSizeContractSpecification)
                                     {
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="display:none">
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.Quantity, new { name = "cash" })
-                                                @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control numericOnly", @readonly = "readonly", rows = "5", id = "Quantity", Value = @ViewBag.Quantity })
+                                                @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control numericOnly", rows = "5" })
                                                 @Html.ValidationMessageFor(model => model.Quantity)
                                             </div>
                                         </div>
@@ -1180,6 +1181,23 @@
                                                 @Html.ValidationMessageFor(model => model.LotSize)
                                             </div>
                                         </div>
+                                    }
+                                    else
+                                    {
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="display:none">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.Quantity, new { name = "cash" })
+                                            @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control numericOnly", @readonly = "readonly", rows = "5", id = "Quantity", Value = @ViewBag.Quantity })
+                                            @Html.ValidationMessageFor(model => model.Quantity)
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="txtLotSize" style="display:none">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.LotSize)
+                                            @Html.TextBoxFor(model => model.LotSize, new { @class = "form-control numericOnly", @readonly = "readonly", rows = "5", id = "LotSize", Value = @ViewBag.LotSize })
+                                            @Html.ValidationMessageFor(model => model.LotSize)
+                                        </div>
+                                    </div>
                                     }
                                 </div>
 
@@ -1192,7 +1210,8 @@
                                                 @Html.TextBoxFor(model => model.ContractSpecification, new { @class = "form-control", rows = "5" })
                                                 @Html.ValidationMessageFor(model => model.ContractSpecification)
                                             }
-                                            else if (ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.DisabaleShowQuantityValue || ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue)
+                                            else if (ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.DisabaleShowQuantityValue || ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue 
+                                               || ViewBag.EnableDisableQuantityValue == InsiderTrading.Common.ConstEnum.Code.HideLotSizeContractSpecification)
                                             {
                                                 @Html.LabelFor(model => model.ContractSpecification)
                                                 @Html.TextBoxFor(model => model.ContractSpecification, new { @class = "form-control", @readonly = "readonly", rows = "5", id = "ContractSpecification", Value = @ViewBag.ContractSpecification })
@@ -1620,7 +1639,7 @@ else
 <script type="text/javascript">
     $(function () {
         $("#SecurityTypeCodeId").change(function () {
-          
+
             var Selected_Entry = $("#SecurityTypeCodeId option:selected").val();
 
             if (Selected_Entry == 139004 || Selected_Entry == 139005) {
@@ -1630,7 +1649,7 @@ else
                     $("#txtContractSpecification").hide();
 
                 }
-                else if (Selected_Entry == 139004 && '@ViewBag.CompanyName' == 'Myinsider_Shardul') {
+                else if (Selected_Entry == 139004 && '@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.HideLotSizeContractSpecification') {
                     $("#txtLotSize").hide();
                     $("#txtContractSpecification").hide();
 
@@ -1667,13 +1686,14 @@ else
     //$("#SecurityTypeCodeId").val(139001);
 
     if ($("#SecurityTypeCodeId").val() == 139004 || $("#SecurityTypeCodeId").val() == 139005) {
-       
+        var Selected_Entry = $("#SecurityTypeCodeId option:selected").val();
+
         if ('@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue') {
                     $("#txtLotSize").hide();
                     $("#txtContractSpecification").hide();
 
                 }
-               else if (Selected_Entry == 139004 && '@ViewBag.CompanyName' == 'Myinsider_Shardul') {
+               else if (Selected_Entry == 139004 && '@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.HideLotSizeContractSpecification') {
                     $("#txtLotSize").hide();
                     $("#txtContractSpecification").hide();
 
@@ -1687,7 +1707,7 @@ else
 </script>
 
 <script type="text/javascript">
- 
+
     function OnSuccess(response) {
              if ($(".validation-summary-errors li:visible").length === 0) {
 
@@ -1705,14 +1725,14 @@ else
                  $("body").removeClass("loading");
 
                  if ($("#SecurityTypeCodeId").val() == 139004 || $("#SecurityTypeCodeId").val() == 139005) {
-                   
+                     var Selected_Entry = $("#SecurityTypeCodeId option:selected").val();
                 if ('@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue') {
                     $("#txtLotSize").hide();
                     $("#txtContractSpecification").hide();
 
                 }
-                else if (Selected_Entry == 139004 && '@ViewBag.CompanyName' == 'Myinsider_Shardul') {
-                  
+                else if (Selected_Entry == 139004 && '@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.HideLotSizeContractSpecification') {
+
                     $("#txtLotSize").hide();
                     $("#txtContractSpecification").hide();
 
