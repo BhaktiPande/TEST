@@ -18,6 +18,14 @@ update com_Code set CodeName='Other Securities',Description='Other Securities' w
 
 
 
+If NOT EXISTS(select * from com_Code where CodeID=400004)
+BEGIN
+	INSERT INTO com_Code VALUES (400004,'Hide Lot size and Contract Specification',400,'Hide Lot size and Contract Specification',0,1,203,null,null,1,GETDATE());
+END
+
+
+
+
 
 
 
