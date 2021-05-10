@@ -785,6 +785,7 @@ namespace InsiderTrading.Controllers
                     objTransactionModel_OS.SellAllFlag = false;
                     ViewBag.SellAllFlag = false;
                 }
+                ViewBag.CompanyName = objLoginUserDetails.CompanyName;
                 return View("Create_OS", objTransactionModel_OS);
             }
             catch (Exception exp)
@@ -987,8 +988,13 @@ namespace InsiderTrading.Controllers
                                 ModelState.AddModelError("Value", Common.Common.getResource("tra_msg_52102"));
                             }
                         }
-
-                        if (objTransactionModel_OS.SecurityTypeCodeId == ConstEnum.Code.SecurityTypeOptionContract || objTransactionModel_OS.SecurityTypeCodeId == ConstEnum.Code.SecurityTypeFutureContract)
+                        if(objTransactionModel_OS.SecurityTypeCodeId == ConstEnum.Code.SecurityTypeFutureContract
+                            && objLoginUserDetails.CompanyName== "Myinsider_Shardul")
+                        {
+                            objTransactionModel_OS.LotSize = 1;
+                            objTransactionModel_OS.ContractSpecification = null;
+                        }
+                          else  if (objTransactionModel_OS.SecurityTypeCodeId == ConstEnum.Code.SecurityTypeOptionContract || objTransactionModel_OS.SecurityTypeCodeId == ConstEnum.Code.SecurityTypeFutureContract)
                         {
                             if (objTransactionModel_OS.LotSize == null || objTransactionModel_OS.LotSize <= 0)
                             {

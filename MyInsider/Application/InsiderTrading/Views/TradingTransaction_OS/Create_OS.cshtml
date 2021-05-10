@@ -256,6 +256,7 @@
             }
 
             if ($(this).val() != "0") {
+               
                 var TransactionType_OS = Securitytype_TransactionType[$(this).val()];
                 $("#SecurityTypeCodeId").removeAttr("disabled");
                 $("#SecurityTypeCodeId").html(TransactionType);
@@ -1619,10 +1620,17 @@ else
 <script type="text/javascript">
     $(function () {
         $("#SecurityTypeCodeId").change(function () {
+          
             var Selected_Entry = $("#SecurityTypeCodeId option:selected").val();
 
             if (Selected_Entry == 139004 || Selected_Entry == 139005) {
                 if ('@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue') {
+
+                    $("#txtLotSize").hide();
+                    $("#txtContractSpecification").hide();
+
+                }
+                else if (Selected_Entry == 139004 && '@ViewBag.CompanyName' == 'Myinsider_Shardul') {
                     $("#txtLotSize").hide();
                     $("#txtContractSpecification").hide();
 
@@ -1630,7 +1638,6 @@ else
                 else {
                     $("#txtLotSize").show();
                     $("#txtContractSpecification").show();
-
                 }
             }
             else {
@@ -1660,7 +1667,13 @@ else
     //$("#SecurityTypeCodeId").val(139001);
 
     if ($("#SecurityTypeCodeId").val() == 139004 || $("#SecurityTypeCodeId").val() == 139005) {
+       
         if ('@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue') {
+                    $("#txtLotSize").hide();
+                    $("#txtContractSpecification").hide();
+
+                }
+               else if (Selected_Entry == 139004 && '@ViewBag.CompanyName' == 'Myinsider_Shardul') {
                     $("#txtLotSize").hide();
                     $("#txtContractSpecification").hide();
 
@@ -1668,14 +1681,13 @@ else
                 else {
                     $("#txtLotSize").show();
                     $("#txtContractSpecification").show();
-
                 }
     }
 
 </script>
 
 <script type="text/javascript">
-    debugger;
+ 
     function OnSuccess(response) {
              if ($(".validation-summary-errors li:visible").length === 0) {
 
@@ -1692,16 +1704,22 @@ else
             else {
                  $("body").removeClass("loading");
 
-            if ($("#SecurityTypeCodeId").val() == 139004 || $("#SecurityTypeCodeId").val() == 139005) {
+                 if ($("#SecurityTypeCodeId").val() == 139004 || $("#SecurityTypeCodeId").val() == 139005) {
+                   
                 if ('@ViewBag.EnableDisableQuantityValue' == '@InsiderTrading.Common.ConstEnum.Code.DisabaleHideQuantityValue') {
                     $("#txtLotSize").hide();
                     $("#txtContractSpecification").hide();
 
                 }
-                else {
-                    $("#txtLotSize").show();
-                    $("#txtContractSpecification").show();
+                else if (Selected_Entry == 139004 && '@ViewBag.CompanyName' == 'Myinsider_Shardul') {
+                  
+                    $("#txtLotSize").hide();
+                    $("#txtContractSpecification").hide();
 
+                }
+                else {
+                        $("#txtLotSize").show();
+                        $("#txtContractSpecification").show();
                 }
                 if ($("#LotSize").val() == 0) {
                     $("#LotSize").val(null);
