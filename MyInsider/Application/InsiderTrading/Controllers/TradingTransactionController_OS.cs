@@ -745,7 +745,7 @@ namespace InsiderTrading.Controllers
                         ViewBag.Value = objTradingTransactionMasterDTO_OS.Value;
                         ViewBag.LotSize = objTradingTransactionMasterDTO_OS.LotSize;
                         ViewBag.ContractSpecification = objTradingTransactionMasterDTO_OS.ContractSpecification;
-                    }
+                    }                   
 
                 }
 
@@ -869,6 +869,15 @@ namespace InsiderTrading.Controllers
                         ViewBag.LotSize = objTradingTransactionMasterDTO_OSModule.LotSize;
                         ViewBag.ContractSpecification = objTradingTransactionMasterDTO_OSModule.ContractSpecification;
                     }
+                    else if (ViewBag.EnableDisableQuantityValue == 400004 || objTransactionModel_OS.SecurityTypeCodeId == ConstEnum.Code.SecurityTypeFutureContract)
+                    {
+                        objTradingTransactionMasterDTO_OSModule = null;
+                        objTradingTransactionMasterDTO_OSModule = objTradingTransactionSL_OSModule.GetQuantity(objLoginUserDetails.CompanyDBConnectionString, Convert.ToInt32(DisclosureType), Convert.ToInt32(UserInfoId));
+                        ViewBag.LotSize = objTradingTransactionMasterDTO_OSModule.LotSize;
+                        objTransactionModel_OS.LotSize= Convert.ToInt32( ViewBag.LotSize);
+                        ViewBag.ContractSpecification = objTradingTransactionMasterDTO_OSModule.ContractSpecification;
+                        objTransactionModel_OS.ContractSpecification =Convert.ToString(ViewBag.ContractSpecification);
+                    }
                 }
 
 
@@ -988,13 +997,7 @@ namespace InsiderTrading.Controllers
                                 ModelState.AddModelError("Value", Common.Common.getResource("tra_msg_52102"));
                             }
                         }
-                        if(objTransactionModel_OS.SecurityTypeCodeId == ConstEnum.Code.SecurityTypeFutureContract
-                            && objLoginUserDetails.CompanyName== "Myinsider_Shardul")
-                        {
-                            objTransactionModel_OS.LotSize = 1;
-                            objTransactionModel_OS.ContractSpecification = null;
-                        }
-                          else  if (objTransactionModel_OS.SecurityTypeCodeId == ConstEnum.Code.SecurityTypeOptionContract || objTransactionModel_OS.SecurityTypeCodeId == ConstEnum.Code.SecurityTypeFutureContract)
+                         if (objTransactionModel_OS.SecurityTypeCodeId == ConstEnum.Code.SecurityTypeOptionContract || objTransactionModel_OS.SecurityTypeCodeId == ConstEnum.Code.SecurityTypeFutureContract)
                         {
                             if (objTransactionModel_OS.LotSize == null || objTransactionModel_OS.LotSize <= 0)
                             {
