@@ -20,6 +20,7 @@ Arundhati		13-Mar-2015		Menus for the activities through delegation
 Raghvendra		4-July-2015		Added status condition when showing the menus
 Arundhati		27-Jul-2015		Resource key changed for the error code
 Raghvendra		07-Sep-2016		Changed the GETDATE() call with function dbo.uf_com_GetServerDate(). This function will return the date to be used as server date.
+Sandesh Lande	07-MAY-2016		Restricted List report Menu will visible if required module set as Only OWN(513001)
 Usage:
 EXEC st_mst_MenuMasterList 2
 -------------------------------------------------------------------------------------------------*/
@@ -73,12 +74,12 @@ BEGIN
 		IF(@CurrentRequiredModule=@OwnSecurityModule)
 		BEGIN
 			UPDATE usr_Activity set StatusCodeID=105001 where ActivityID=218
-			UPDATE mst_MenuMaster set StatusCodeID=102001 where MenuID in(56,57)
+			UPDATE mst_MenuMaster set StatusCodeID=102001 where MenuID in(50,56,57)
 		END
 		ELSE
 		BEGIN
 			UPDATE usr_Activity set StatusCodeID=105002 where ActivityID=218
-			UPDATE mst_MenuMaster set StatusCodeID=102002 where MenuID in(56,57)
+			UPDATE mst_MenuMaster set StatusCodeID=102002 where MenuID in(50,56,57)
 		END
 
 		IF(@CurrentRequiredModule<>@BothSecurityModule)
