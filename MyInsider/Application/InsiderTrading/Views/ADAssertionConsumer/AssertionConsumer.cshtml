@@ -1,0 +1,90 @@
+﻿@{
+    Layout = null;
+}
+
+@{
+    ViewBag.Title = "  Single Sign On";
+}
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/content/SW360")
+</head>
+<body>
+    <table style="width: 100%; text-align: center;">
+        <tr>
+            <td>
+                <img src=@Url.Content("~/images/Viligante_Normal_Logo.png") class="img img-responsive center-block">
+            </td>
+        </tr>
+        <tr style="height:250px;" class="striped login">
+            <td>
+                <table style="color:white;font-size:x-large; width:100%;">
+                    <tr>
+                        <td class="panel-heading">
+                            <h5 class="panel-title text-center" style="color:white;font-size:x-large;">Vigilanté - Single Sign On</h5>
+                        </td>
+                    </tr>
+
+                    @if (Convert.ToString(ViewBag.RequestStatus) != InsiderTrading.Models.CommonConstant.sRequestStatusNONE)
+                    {
+                        <tr class="panel-title text-center">
+
+                            <td>
+                                <img src=@Url.Content("~/images/Loading.gif") class="img img-responsive center-block">
+                            </td>
+
+                        </tr>
+                        <tr class="panel-title text-center">
+                            @if (Convert.ToString(ViewBag.RequestStatus) == InsiderTrading.Models.CommonConstant.sRequestStatusSSO_DEACTIVATED)
+                            {
+                                <td class="img img-responsive center-block">
+                                    @InsiderTrading.Models.CommonConstant.s_SSONotActivated
+                                </td>
+                            }
+                            else if (Convert.ToString(ViewBag.RequestStatus) == InsiderTrading.Models.CommonConstant.sRequestStatusSAML_REQUEST)
+                            {
+                                <td class="img img-responsive center-block">
+                                    @InsiderTrading.Models.CommonConstant.s_SSOProcessing
+                                </td>
+                            }
+                            else if (Convert.ToString(ViewBag.RequestStatus) == InsiderTrading.Models.CommonConstant.sRequestStatusSAML_RESPONSE)
+                            {
+                                if (Convert.ToBoolean(ViewBag.IsRequestValid))
+                                {
+                                    <td class="img img-responsive center-block">
+                                        @InsiderTrading.Models.CommonConstant.s_SSORedirecting
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="img img-responsive center-block">
+                                        Unable to get the Response from IDP server. <a href="~/Account/Login">Click here</a> to login into Vigilanté application
+                                    </td>
+                                }
+                            }
+
+
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr class="panel-title text-center">
+                            <td>
+                                Please check the request that you are trying to initiate.
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </td>
+        </tr>
+
+    </table>
+    <div style="text-align: center; clear: both; padding: 5px;">
+        This site is best viewed in Internet Explorer 10 and above, Google Chrome, Mozilla Firefox and Apple Safari.
+    </div>
+</body>
+</html>
+

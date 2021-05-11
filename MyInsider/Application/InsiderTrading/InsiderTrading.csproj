@@ -41,6 +41,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto">
+      <HintPath>..\..\..\..\..\ShardulHotFixSSONew\MyInsider\ESOP.RuntimePool\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
     <Reference Include="DocumentFormat.OpenXml, Version=2.8.1.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\DocumentFormat.OpenXml.2.8.1\lib\net40\DocumentFormat.OpenXml.dll</HintPath>
@@ -59,8 +62,7 @@
     </Reference>
     <Reference Include="ESOP.SSO.Library, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\ESOP.SSO.Library.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>..\..\..\..\..\ShardulHotFixSSONew\MyInsider\ESOP.RuntimePool\ESOP.SSO.Library.dll</HintPath>
     </Reference>
     <Reference Include="ESOP.Utility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -107,6 +109,9 @@
     <Reference Include="itextsharp.xmlworker, Version=5.5.6.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\itextsharp.xmlworker.dll</HintPath>
+    </Reference>
+    <Reference Include="LogLibraryClass">
+      <HintPath>..\..\..\..\..\ShardulHotFixSSONew\MyInsider\ESOP.RuntimePool\LogLibraryClass.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
@@ -301,6 +306,7 @@
     <Compile Include="Common\SSRSReportObjects.cs" />
     <Compile Include="Common\WriteToFileLog.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ADAssertionConsumerController.cs" />
     <Compile Include="Controllers\ApplicabilityController.cs" />
     <Compile Include="Controllers\Applicability_OSController.cs" />
     <Compile Include="Controllers\ClawBackReportController.cs" />
@@ -3156,6 +3162,8 @@
     <Content Include="Views\TradingTransaction_OS\_SeekDeclarationUPSI_OS.cshtml" />
     <Content Include="Views\UserDetails\_GenerateDocument.cshtml" />
     <Content Include="Views\UserDetails\UserConsent.cshtml" />
+    <Content Include="Views\ADAssertionConsumer\Index.cshtml" />
+    <Content Include="Views\ADAssertionConsumer\AssertionConsumer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Elmah\" />
