@@ -68,84 +68,89 @@ else
                         {
                             @Html.AntiForgeryToken()
                             @Html.ValidationSummary(true)
-                        <fieldset>
-                            @if (System.Configuration.ConfigurationManager.AppSettings["CompanyType"] == "Dropdownlist")
-                            {
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.sCompanyName, new { @class = "login-label", @for = "textimput" })
-                                    @Html.DropDownListFor(m => m.sCompanyName, new SelectList(ViewBag.CompaniesDropDown, "Key", "Value", ""), new { id = "ddlCompanyName", @class = "form-control", autofocus = "autofocus", tabindex = "1" })
-                                    @Html.ValidationMessageFor(m => m.sCompanyName)
-                                </div>
-
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.sUserName, new { id = "UserName", @class = "login-label", @for = "textinput" })
-                                    @Html.TextBoxFor(m => m.sUserName, new { @class = "form-control", tabindex = "2", @autocomplete = "off", placeholder = @ViewData["WaterMarkLoginId"] })
-                                    @Html.ValidationMessageFor(m => m.sUserName)
-
-                                </div>
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.sPassword, new { @class = "login-label", @for = "textinput" })
-                                    @Html.PasswordFor(m => m.sPassword, new { @class = "form-control", tabindex = "3", @autocomplete = "off", placeholder = @ViewData["WaterMarkPassword"] })
-                                    @Html.ValidationMessageFor(m => m.sPassword)
-                                </div>
-                            }
-                            else
-                            {
-                                if (@ViewBag.URLCompanyName == "IgnoreCompanyName")
+                            <fieldset>
+                                @if (System.Configuration.ConfigurationManager.AppSettings["CompanyType"] == "Dropdownlist")
                                 {
                                     <div class="form-group">
-                                        @Html.LabelFor(m => m.stxtCompanyName, new { @class = "login-label", @for = "textinput" })
-                                        @Html.TextBoxFor(m => m.sCompanyName, new { @class = "form-control", @autocomplete = "off", tabindex = "1", placeholder = @ViewData["WaterMarkCompanyName"] })
+                                        @Html.LabelFor(m => m.sCompanyName, new { @class = "login-label", @for = "textimput" })
+                                        @Html.DropDownListFor(m => m.sCompanyName, new SelectList(ViewBag.CompaniesDropDown, "Key", "Value", ""), new { id = "ddlCompanyName", @class = "form-control", autofocus = "autofocus", tabindex = "1" })
                                         @Html.ValidationMessageFor(m => m.sCompanyName)
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.sUserName, new { id = "UserName", @class = "login-label", @for = "textinput" })
+                                        @Html.TextBoxFor(m => m.sUserName, new { @class = "form-control", tabindex = "2", @autocomplete = "off", placeholder = @ViewData["WaterMarkLoginId"] })
+                                        @Html.ValidationMessageFor(m => m.sUserName)
+
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.sPassword, new { @class = "login-label", @for = "textinput" })
+                                        @Html.PasswordFor(m => m.sPassword, new { @class = "form-control", tabindex = "3", @autocomplete = "off", placeholder = @ViewData["WaterMarkPassword"] })
+                                        @Html.ValidationMessageFor(m => m.sPassword)
                                     </div>
                                 }
                                 else
                                 {
+                                    if (@ViewBag.URLCompanyName == "IgnoreCompanyName")
+                                    {
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.stxtCompanyName, new { @class = "login-label", @for = "textinput" })
+                                            @Html.TextBoxFor(m => m.sCompanyName, new { @class = "form-control", @autocomplete = "off", tabindex = "1", placeholder = @ViewData["WaterMarkCompanyName"] })
+                                            @Html.ValidationMessageFor(m => m.sCompanyName)
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.stxtCompanyName, new { @class = "login-label", @for = "textinput" })
+                                            @Html.TextBoxFor(m => m.sCompanyName, new { @class = "form-control", @autocomplete = "off", Value = @ViewBag.URLCompanyName, @ReadOnly = "readonly" })
+                                            @Html.ValidationMessageFor(m => m.sCompanyName)
+                                        </div>
+                                    }
+
                                     <div class="form-group">
-                                        @Html.LabelFor(m => m.stxtCompanyName, new { @class = "login-label", @for = "textinput" })
-                                        @Html.TextBoxFor(m => m.sCompanyName, new { @class = "form-control", @autocomplete = "off", Value = @ViewBag.URLCompanyName, @ReadOnly = "readonly" })
-                                        @Html.ValidationMessageFor(m => m.sCompanyName)
+                                        @Html.LabelFor(m => m.sUserName, new { id = "UserName", @class = "login-label", @for = "textinput" })
+                                        @Html.TextBoxFor(m => m.sUserName, new { @class = "form-control", autofocus = "autofocus", tabindex = "2", @autocomplete = "off", placeholder = @ViewData["WaterMarkLoginId"] })
+                                        @Html.ValidationMessageFor(m => m.sUserName)
+
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.sPassword, new { @class = "login-label", @for = "textinput" })
+                                        @Html.PasswordFor(m => m.sPassword, new { @class = "form-control", tabindex = "3", @autocomplete = "off", placeholder = @ViewData["WaterMarkPassword"] })
+                                        @Html.ValidationMessageFor(m => m.sPassword)
                                     </div>
                                 }
 
+                                @if (Convert.ToBoolean(TempData["ShowCaptcha"]) || Convert.ToBoolean(Session["DisplayCaptcha"]))
+                                {
+                                    <div class="clsCaptcha form-group">
+                                        <h4 id="Captcha_Text">Please type the text you seen in the picture below.</h4>
+                                        <img src="@Session["CaptchaPath"]" style="width: 35%; margin: 0px 0px 0px 150px" />
+                                        <br /><br />
+                                        @Html.TextBoxFor(m => m.sCaptchaText, null, new { @class = "form-control CaptchaTxt" })
+                                        <br />
+                                        @if (TempData["ErrorMessage"] != null)
+                                        {
+                                            @Html.Label(TempData["ErrorMessage"].ToString(), new { @id = "ErrorMsg", @class = "field-validation-error", style = "font-size: 11pt;font-weight: 300;font-family:sans-serif;" })
+                                        }
+                                        @Html.ValidationMessageFor(m => m.sCaptchaText)
+                                    </div>
+                                }
                                 <div class="form-group">
-                                    @Html.LabelFor(m => m.sUserName, new { id = "UserName", @class = "login-label", @for = "textinput" })
-                                    @Html.TextBoxFor(m => m.sUserName, new { @class = "form-control", autofocus = "autofocus", tabindex = "2", @autocomplete = "off", placeholder = @ViewData["WaterMarkLoginId"] })
-                                    @Html.ValidationMessageFor(m => m.sUserName)
-
+                                    @Html.ActionLink("Forgot Password?", "ForgetPassword", "Account")
                                 </div>
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.sPassword, new { @class = "login-label", @for = "textinput" })
-                                    @Html.PasswordFor(m => m.sPassword, new { @class = "form-control", tabindex = "3", @autocomplete = "off", placeholder = @ViewData["WaterMarkPassword"] })
-                                    @Html.ValidationMessageFor(m => m.sPassword)
-                                </div>
-                            }
-
-                            @if (Convert.ToBoolean(TempData["ShowCaptcha"]) || Convert.ToBoolean(Session["DisplayCaptcha"]))
-                            {
-                                <div class="clsCaptcha form-group">
-                                    <h4 id="Captcha_Text">Please type the text you seen in the picture below.</h4>
-                                    <img src="@Session["CaptchaPath"]" style="width: 35%; margin: 0px 0px 0px 150px" />
-                                    <br /><br />
-                                    @Html.TextBoxFor(m => m.sCaptchaText, null, new { @class = "form-control CaptchaTxt" })
-                                    <br />
-                                    @if (TempData["ErrorMessage"] != null)
-                                    {
-                                        @Html.Label(TempData["ErrorMessage"].ToString(), new { @id = "ErrorMsg", @class = "field-validation-error", style = "font-size: 11pt;font-weight: 300;font-family:sans-serif;" })
-                                    }
-                                    @Html.ValidationMessageFor(m => m.sCaptchaText)
-                                </div>
-                            }
-                            <div class="form-group">
-                                @Html.ActionLink("Forgot Password?", "ForgetPassword", "Account")
-                            </div>
-                            <!-- Change this to a button or input when using this as a form -->
-                        </fieldset>
+                                <!-- Change this to a button or input when using this as a form -->
+                            </fieldset>
                             <button type="submit" id="btnLogin" class="btn btn-lg btn-success btn-block" tabindex="4">Login</button>
                             <input type="hidden" name="hdCaptText" id="hdCaptText" />
                         }
                     </div>
-
+                    <div div class="panel-body">
+                        <div class="form-group">
+                            <input type="submit" id="Submit" value="Login with SSO" class="btn btn-lg btn-success btn-block" tabindex="4" onclick="location.href='@Url.Action("CreateNewAuthByShardul", "ADAssertionConsumer")'" />
+                        </div>
+                    </div>
+                   
                 </div>
             </div>
         </div>

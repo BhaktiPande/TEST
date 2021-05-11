@@ -676,6 +676,7 @@ namespace InsiderTrading.Models
         public const string s_AttributeComapnyName = "CompanyName";
         public const string s_SSOComapnyNameTGBL = "TGBL";
         public const string s_SSONotImplemented = "SSO Not Yet Implemented for company";
+        public const string s_AttributeEmployeeId = "EmployeeId";
         #endregion
 
         #region Log messages                
