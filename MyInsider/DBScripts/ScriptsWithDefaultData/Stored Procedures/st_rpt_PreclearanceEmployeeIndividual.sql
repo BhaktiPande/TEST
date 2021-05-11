@@ -798,7 +798,7 @@ BEGIN
 			WHERE ((@inp_iPageSize = 0)
 						OR (T.RowNumber BETWEEN ((@inp_iPageNo - 1) * @inp_iPageSize + 1) AND (@inp_iPageNo * @inp_iPageSize)))
 			--ORDER BY T.RowNumber 
-			ORDER BY rpt_grd_19206 DESC
+			ORDER BY rpt_grd_19206, rpt_grd_19207  DESC
 		END
 		/*
 		SELECT @sSQL = 'SELECT UserInfoId, '
