@@ -5,6 +5,9 @@
     var objComCodeSL = new InsiderTrading.SL.ComCodeSL();
     string LogoImagePath = Server.MapPath("~") + "/images/Logos/" + InsiderTrading.Common.ConstEnum.CLIENT_DB_NAME + "/" + InsiderTrading.Common.ConstEnum.CLIENT_DB_NAME + "_320X105.jpg";
     string sLogoImageUrl = @Url.Content("~/images/Logos/" + InsiderTrading.Common.ConstEnum.CLIENT_DB_NAME) + "/" + @InsiderTrading.Common.ConstEnum.CLIENT_DB_NAME + "_320X105.jpg";
+    var requestUrl = HttpContext.Current.Request.Url;
+    string urlContains = requestUrl.ToString();
+
 }
 
 @{
@@ -61,7 +64,7 @@ else
                 <div class="login-panel panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title text-center">Login</h3>
-                          <input type="hidden" id="hdnSession" value="@Request.RequestContext.HttpContext.Session["RandomNumber"]" />
+                        <input type="hidden" id="hdnSession" value="@Request.RequestContext.HttpContext.Session["RandomNumber"]" />
                     </div>
                     <div class="panel-body">
                         @using (Html.BeginForm("Login", "Account", new { }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
@@ -145,13 +148,15 @@ else
                             <input type="hidden" name="hdCaptText" id="hdCaptText" />
                         }
                     </div>
-                    <div div class="panel-body">
-                        <div class="form-group">
-                            <input type="submit" id="Submit" value="Login with SSO" class="btn btn-lg btn-success btn-block" tabindex="4" onclick="location.href='@Url.Action("CreateNewAuthByShardul", "ADAssertionConsumer")'" />
+                    @if (urlContains.Contains(System.Configuration.ConfigurationManager.AppSettings["URLContain"].ToString()))
+                    {
+                        <div div class="panel-body">
+                            <div class="form-group">
+                                <input type="submit" id="Submit" value="Login with SSO" class="btn btn-lg btn-success btn-block" tabindex="4" onclick="location.href='@Url.Action("CreateNewAuthByShardul", "ADAssertionConsumer")'" />
+                            </div>
                         </div>
+                    }
                     </div>
-                   
-                </div>
             </div>
         </div>
     </div>
@@ -165,6 +170,7 @@ else
                 $("#ErrorMsg")[0].innerText = null;
             }
         });
+        alert('Url :' + urlContains );
     });
 </script>
 
