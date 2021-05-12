@@ -1,0 +1,1 @@
+UPDATE usr_Activity SET ApplicableFor=513001,StatusCodeID=105002 WHERE ActivityID Between 202 AND 209

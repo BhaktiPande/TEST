@@ -164,7 +164,7 @@ namespace InsiderTradingDAL
         #region ExecuteMassUploadCall
 
         public void ExecuteMassUploadCall(int i_nMassUploadSheetId, DataTable i_objMassUploadDataTable,string i_sDataTableName, string i_sProcedureName, string i_sConnectionString,
-            out List<MassUploadResponseDTO> o_objReturnIdList, out string sSheetErrorMessageCode)
+            int i_nLoggedInUserID,out List<MassUploadResponseDTO> o_objReturnIdList, out string sSheetErrorMessageCode)
         {
             #region Paramters
             //int out_nReturnValue;
@@ -450,7 +450,7 @@ namespace InsiderTradingDAL
                             + " ,@inp_tblBulkHistoryTransactionImportDataTable, @inp_tblBulkTransactionImportDataTable ,@inp_tblBulkNonTradingDaysDetailsImport ,@inp_tblBulkSeparationDataTableImport"
                             + " ,@inp_tblBulkRestrictedListAppliDetailsDataTableImport, @inp_tblBulkRestrictedLiMasterCompanyDataTableImport, @inp_tblBulkMassDepartmentWiseRLDataTableImport, @inp_tblBulkMassDepartmentWiseRLAppliDataTableImport"
                             + " ,@inp_tblBulkMassEmployeePeriodEndDataTable, @inp_tblBulkInitialDisclosure_OtherSecuritiesDetailsImport, @inp_tblBulkTransactionImport_OtherSecuritiesDataTable"
-                            + " ,@out_nReturnValue OUTPUT,@out_nSQLErrCode OUTPUT,@out_sSQLErrMessage OUTPUT",
+                            + " ,@inp_nLoggedInUserId,@out_nReturnValue OUTPUT,@out_nSQLErrCode OUTPUT,@out_sSQLErrMessage OUTPUT",
                         new
                         {
                             @inp_nMassUploadSheetId = i_nMassUploadSheetId,
@@ -478,6 +478,8 @@ namespace InsiderTradingDAL
                             @inp_tblBulkMassEmployeePeriodEndDataTable = inp_tblBulkMassEmployeePeriodEndDataTable,
                             @inp_tblBulkInitialDisclosure_OtherSecuritiesDetailsImport = inp_tblBulkInitialDisclosureDetailsImport_OtherSecurities,
                             @inp_tblBulkTransactionImport_OtherSecuritiesDataTable = inp_tblBulkTransactionImport_OtherSecuritiesDataTable,
+
+                            @inp_nLoggedInUserId = i_nLoggedInUserID,
                             @out_nReturnValue = nout_nReturnValue,
                             @out_nSQLErrCode = nout_nSQLErrCode,
                             @out_sSQLErrMessage = sout_sSQLErrMessage,

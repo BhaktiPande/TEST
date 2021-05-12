@@ -10,9 +10,12 @@ GO
 
 Mmodified On	Modified By	Descriptiion
 Raghvendra	07-Sep-2016	Changed the GETDATE() call with function dbo.uf_com_GetServerDate(). This function will return the date to be used as server date.
+Sandesh		05-May-2021 Added @inp_nLoggedInUserId and used it for created by 
+						And Added 00:00:00:000 and 23:59:59:000 into ApplicableFromDate and ApplicableToDate date respectively
 */
 CREATE PROCEDURE [dbo].[st_RestrictedList_MassUpload]
 (
+	@inp_nLoggedInUserId		INT	= 0,
 	@inp_EmployeeID				NVARCHAR(100),
 	@inp_EmployeeName			NVARCHAR(100) = NULL,
 	@inp_CompanyName			VARCHAR(200),
@@ -45,6 +48,9 @@ BEGIN
 		IF @out_sSQLErrMessage IS NULL
 			SET @out_sSQLErrMessage = ''			
 		
+		SET @inp_ApplicableFrom = (SELECT CONVERT(datetime, CONVERT(varchar, CONVERT(DATE,@inp_ApplicableFrom))+' 00:00:00:000'))
+		SET @inp_ApplicableTo = (SELECT CONVERT(datetime, CONVERT(varchar, CONVERT(DATE,@inp_ApplicableTo))+' 23:59:59:000'))
+
 		IF EXISTS(SELECT RlCompanyId FROM rl_CompanyMasterList WHERE CompanyName = @inp_CompanyName AND ISINCode=@inp_ISIN)
 		BEGIN
 			SET @CompanyId = (SELECT RlCompanyId FROM rl_CompanyMasterList WHERE CompanyName = @inp_CompanyName AND ISINCode=@inp_ISIN)
@@ -60,15 +66,15 @@ BEGIN
 						SET @UserInfoId = (SELECT UserInfoId FROM usr_UserInfo WHERE EmployeeId = @inp_EmployeeID)
 						--Added into Restricted master list
 						INSERT INTO rl_RistrictedMasterList (RlCompanyId, ModuleCodeId, ApplicableFromDate, ApplicableToDate, StatusCodeId, CreatedBy, CreatedOn, ModifiedBy, ModifiedOn)
-						VALUES (@CompanyId, @ModuleCodeId, @inp_ApplicableFrom, @inp_ApplicableTo, @StatusCodeId, @UserInfoId, dbo.uf_com_GetServerDate(), @UserInfoId, dbo.uf_com_GetServerDate())
+						VALUES (@CompanyId, @ModuleCodeId, @inp_ApplicableFrom, @inp_ApplicableTo, @StatusCodeId, @inp_nLoggedInUserId, dbo.uf_com_GetServerDate(), @inp_nLoggedInUserId, dbo.uf_com_GetServerDate())
 						SET @MapToId = Scope_Identity()
 						--
 						INSERT INTO rul_ApplicabilityMaster(MapToTypeCodeId, MapToId, VersionNumber, CreatedBy, CreatedOn, ModifiedBy, ModifiedOn)
-						VALUES(@MapToTypeCodeId, @MapToId, @ApplicabilityVersionNumber, @UserInfoId, dbo.uf_com_GetServerDate(), @UserInfoId, dbo.uf_com_GetServerDate())
+						VALUES(@MapToTypeCodeId, @MapToId, @ApplicabilityVersionNumber, @inp_nLoggedInUserId, dbo.uf_com_GetServerDate(), @inp_nLoggedInUserId, dbo.uf_com_GetServerDate())
 						SET @ApplicabilityMstId = Scope_Identity()
 						--					
 						INSERT INTO rul_ApplicabilityDetails (ApplicabilityMstId, InsiderTypeCodeId, UserId, IncludeExcludeCodeId, CreatedBy, CreatedOn, ModifiedBy, ModifiedOn)
-						VALUES(@ApplicabilityMstId, @InsiderTypeCodeId, @UserInfoId, @IncludeExcludeCodeId, @UserInfoId, dbo.uf_com_GetServerDate(), @UserInfoId, dbo.uf_com_GetServerDate())
+						VALUES(@ApplicabilityMstId, @InsiderTypeCodeId, @UserInfoId, @IncludeExcludeCodeId, @inp_nLoggedInUserId, dbo.uf_com_GetServerDate(), @inp_nLoggedInUserId, dbo.uf_com_GetServerDate())
 						
 						SELECT 1 
 						SET @out_nReturnValue = 0

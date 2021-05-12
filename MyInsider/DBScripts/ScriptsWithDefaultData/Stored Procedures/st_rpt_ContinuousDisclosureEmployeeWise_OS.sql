@@ -139,7 +139,7 @@ AND TM.DisclosureTypeCodeId <> 147001
 
 IF(@EnableDisableQuantityValue = 400003)
  BEGIN
-	SELECT @sSQL = 'select UF.EmployeeId, InsiderName AS [Insider Name], UFS.PAN, dbo.uf_rpt_FormatDateValue(UF.DateOfBecomingInsider,0) AS [Date Of Becoming Insider],
+	SELECT @sSQL = 'select distinct UF.EmployeeId, InsiderName AS [Insider Name], UFS.PAN, dbo.uf_rpt_FormatDateValue(UF.DateOfBecomingInsider,0) AS [Date Of Becoming Insider],
 					CASE WHEN UF.DateOfSeparation IS NULL THEN ''Live'' ELSE ''Separated'' END AS [Live/Separated], dbo.uf_rpt_FormatDateValue(UFS.DateOfSeparation,0) AS [Date Of Separation] , CASE WHEN UF.StatusCodeId = 102001 THEN ''ACTIVE'' ELSE ''INACTIVE'' END AS Status, UF.DIN,
 					CASE WHEN  UF.DesignationId IS NULL THEN NULL ELSE CDesignation.CodeName END AS Designation , 
 					CASE WHEN  UF.GradeId IS NULL THEN NULL ELSE CGrade.CodeName END AS Grade, UF.Location,
@@ -219,7 +219,7 @@ IF(@EnableDisableQuantityValue = 400003)
   END
 ELSE
   BEGIN
-	SELECT @sSQL = 'select UF.EmployeeId, InsiderName AS [Insider Name], UFS.PAN, dbo.uf_rpt_FormatDateValue(UF.DateOfBecomingInsider,0) AS [Date Of Becoming Insider],
+	SELECT @sSQL = 'select distinct UF.EmployeeId, InsiderName AS [Insider Name], UFS.PAN, dbo.uf_rpt_FormatDateValue(UF.DateOfBecomingInsider,0) AS [Date Of Becoming Insider],
 					CASE WHEN UF.DateOfSeparation IS NULL THEN ''Live'' ELSE ''Separated'' END AS [Live/Separated], dbo.uf_rpt_FormatDateValue(UFS.DateOfSeparation,0) AS [Date Of Separation] , CASE WHEN UF.StatusCodeId = 102001 THEN ''ACTIVE'' ELSE ''INACTIVE'' END AS Status, UF.DIN,
 					CASE WHEN  UF.DesignationId IS NULL THEN NULL ELSE CDesignation.CodeName END AS Designation , 
 					CASE WHEN  UF.GradeId IS NULL THEN NULL ELSE CGrade.CodeName END AS Grade, UF.Location,
