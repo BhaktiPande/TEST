@@ -65,7 +65,7 @@ namespace InsiderTrading.Controllers
         }
         #endregion
 
-        #region // POST: /SSO/AssertionConsumer
+        #region // POST: /SSO/AssertionConsumerTGBL
         [HttpGet]
         [AllowAnonymous]
         public ActionResult AssertionConsumerTGBL()
@@ -178,6 +178,50 @@ namespace InsiderTrading.Controllers
 
             return View("SSO");
         }
+        #endregion
+
+        #region SSO/AssertionConsumerUSL
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AssertionConsumerUSL(FormCollection response)
+        {
+            try
+            {
+                WriteToFileLog.Instance("ADFS").Write("Called AssertionConsumerUSL Method on SSOController.");
+                WriteToFileLog.Instance("ADFS").Write(" Start SamlKey: " + response["SAMLResponse"] + " End SamlKey. ");
+                string DBConnection = Convert.ToString(Cryptography.DecryptData(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString));
+                Generic.Instance().ConnectionStringValue = DBConnection;
+                Generic.Instance().SsoLogFilePath = ConfigurationManager.AppSettings["SSOLogfilePath"].ToString();
+                Generic.Instance().SsoLogStoreLocation = ConfigurationManager.AppSettings["SSOLogStoreLocation"].ToString();
+
+                if (response["SAMLResponse"] != null)
+                {
+                    using (ESOP.SSO.Library.SAMLResponse samlResponse = new ESOP.SSO.Library.SAMLResponse())
+                    {
+                        WriteToFileLog.Instance("ADFS").Write(" Called SSO Library and validating.");
+                        samlResponse.LoadXmlFromBase64(response["SAMLResponse"]);
+                        samlResponse.SsoProperty.IsValidateSSO = Convert.ToBoolean(samlResponse.IsSSOValidate);
+                        TempData["samlResponseData"] = samlResponse.SsoProperty;
+                        Session["IsSSOLogin"] = true;
+                        return RedirectToAction("InitiateIDPOrSP", "SSO");
+                    }
+                }
+                else
+                {
+                    WriteToFileLog.Instance("ADFS").Write(" SAMLResponse is null or empty.");
+                }
+
+            }
+            catch (Exception exception)
+            {
+                WriteToFileLog.Instance("ADFS").Write("Exception: " + exception.Message.ToString());
+                ViewBag.RequestStatus = exception.Message.ToString();
+            }
+
+            return View("SSO");
+        }
+
         #endregion
 
         #region Facade method
