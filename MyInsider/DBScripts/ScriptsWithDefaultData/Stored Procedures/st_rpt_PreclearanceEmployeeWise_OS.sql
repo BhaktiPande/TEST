@@ -145,7 +145,8 @@ UPDATE tmpDisc
 			ReasonForNotTradedCodeId = CASE WHEN tmpDisc.PreclearanceId IS NOT NULL THEN CReasonForNotTradedCodeId.CodeName ELSE NULL END,
 			ModeofAcquisition = TD.ModeOfAcquisitionCodeId
 			FROM #tmpPreclearance tmpDisc JOIN tra_TransactionMaster_OS TM ON TM.TransactionMasterId = tmpDisc.TransactionMasterId
-			JOIN tra_PreclearanceRequest_NonImplementationCompany PR ON PR.UserInfoId = tmpDisc.UserInfoId AND PR.CompanyId = tmpDisc.CompanyName
+			JOIN tra_PreclearanceRequest_NonImplementationCompany PR 
+			ON Convert(Varchar,Pr.PreclearanceRequestId)=tmpDisc.PreclearanceId AND PR.UserInfoId = tmpDisc.UserInfoId AND PR.CompanyId = tmpDisc.CompanyName
 				JOIN rl_CompanyMasterList CM ON CM.RlCompanyId = PR.CompanyId 
 				--LEFT JOIN tra_TransactionMaster_OS TM ON TM.PreclearanceRequestId = PR.PreclearanceRequestId AND TM.PreclearanceRequestId IS NULL
 				LEFT JOIN tra_TransactionDetails_OS TD ON TD.TransactionMasterId = TM.TransactionMasterId --AND TM.TransactionStatusCodeId <> @nTransactionStatus_NotConfirmed

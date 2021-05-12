@@ -101,7 +101,7 @@ BEGIN
 
 IF(@EnableDisableQuantityValue = 400003)
  BEGIN
-	SELECT @sSQL = 'SELECT UF.EmployeeId AS [Employee Id],ISNULL(UF.FirstName,'''') + '' '' + ISNULL(UF.LastName, '''') AS [Insider Name],dbo.uf_rpt_FormatDateValue(UF.Dateofjoining,0) AS [Insider From],
+	SELECT @sSQL = 'SELECT UF.EmployeeId AS [Employee Id],ISNULL(UF.FirstName,'''') + '' '' + ISNULL(UF.LastName, '''') AS [Insider Name],dbo.uf_rpt_FormatDateValue(UF.DateOfBecomingInsider,0) AS [Insider From],
 	CASE WHEN UF.DateOfSeparation IS NULL THEN ''LIVE''
 		 WHEN UF.DateOfSeparation IS NOT NULL THEN ''Separation'' END AS [Live/Separated],
 		 dbo.uf_rpt_FormatDateValue(UF.DateOfSeparation,0) AS [Date Of Separation],
@@ -130,7 +130,7 @@ IF(@EnableDisableQuantityValue = 400003)
 	SELECT @sSQL = @sSQL +'LEFT JOIN usr_UserRelation UR ON TD.ForUserInfoId = UR.UserInfoIdRelative '
 	SELECT @sSQL = @sSQL +'LEFT JOIN com_Code CRelation ON UR.RelationTypeCodeId = CRelation.CodeID '
 	SELECT @sSQL = @sSQL +'JOIN com_Code CStatus ON CStatus.CodeID = UF.StatusCodeId '
-	SELECT @sSQL = @sSQL +'JOIN com_Code CDesignation ON CDesignation .CodeID = UF.DepartmentId '
+	SELECT @sSQL = @sSQL +'JOIN com_Code CDesignation ON CDesignation .CodeID = UF.DesignationId '
 	SELECT @sSQL = @sSQL +'JOIN com_Code CGrade ON CGrade.CodeID = UF.GradeId '
 	SELECT @sSQL = @sSQL +'JOIN com_Code CDept ON CDept.CodeID = UF.DepartmentId '
 	SELECT @sSQL = @sSQL +'JOIN com_Code CCategory ON CCategory.CodeID = UF.Category '
@@ -175,7 +175,7 @@ IF(@EnableDisableQuantityValue = 400003)
   END
 ELSE
   BEGIN
-    SELECT @sSQL = 'SELECT UF.EmployeeId AS [Employee Id],ISNULL(UF.FirstName,'''') + '' '' + ISNULL(UF.LastName, '''') AS [Insider Name],dbo.uf_rpt_FormatDateValue(UF.Dateofjoining,0) AS [Insider From],
+    SELECT @sSQL = 'SELECT UF.EmployeeId AS [Employee Id],ISNULL(UF.FirstName,'''') + '' '' + ISNULL(UF.LastName, '''') AS [Insider Name],dbo.uf_rpt_FormatDateValue(UF.DateOfBecomingInsider,0) AS [Insider From],
 	CASE WHEN UF.DateOfSeparation IS NULL THEN ''LIVE''
 		 WHEN UF.DateOfSeparation IS NOT NULL THEN ''Separation'' END AS [Live/Separated],
 		 dbo.uf_rpt_FormatDateValue(UF.DateOfSeparation,0) AS [Date Of Separation],
@@ -205,7 +205,7 @@ ELSE
 	SELECT @sSQL = @sSQL +'LEFT JOIN usr_UserRelation UR ON TD.ForUserInfoId = UR.UserInfoIdRelative '
 	SELECT @sSQL = @sSQL +'LEFT JOIN com_Code CRelation ON UR.RelationTypeCodeId = CRelation.CodeID '
 	SELECT @sSQL = @sSQL +'JOIN com_Code CStatus ON CStatus.CodeID = UF.StatusCodeId '
-	SELECT @sSQL = @sSQL +'JOIN com_Code CDesignation ON CDesignation .CodeID = UF.DepartmentId '
+	SELECT @sSQL = @sSQL +'JOIN com_Code CDesignation ON CDesignation .CodeID = UF.DesignationId '
 	SELECT @sSQL = @sSQL +'JOIN com_Code CGrade ON CGrade.CodeID = UF.GradeId '
 	SELECT @sSQL = @sSQL +'JOIN com_Code CDept ON CDept.CodeID = UF.DepartmentId '
 	SELECT @sSQL = @sSQL +'JOIN com_Code CCategory ON CCategory.CodeID = UF.Category '
