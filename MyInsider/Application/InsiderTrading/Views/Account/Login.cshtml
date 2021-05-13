@@ -7,7 +7,6 @@
     string sLogoImageUrl = @Url.Content("~/images/Logos/" + InsiderTrading.Common.ConstEnum.CLIENT_DB_NAME) + "/" + @InsiderTrading.Common.ConstEnum.CLIENT_DB_NAME + "_320X105.jpg";
     var requestUrl = HttpContext.Current.Request.Url;
     string urlContains = requestUrl.ToString();
-
 }
 
 @{
@@ -19,8 +18,8 @@
         //var pageURL = $(location).attr("href");
         //var RemoveProtocol = pageURL.substr(8, 50);
         //var ClientName = RemoveProtocol.split('.')[0];
-        //$("#CompanyName").val(ClientName);      
-       
+        //$("#CompanyName").val(ClientName);
+
         var length = $('#ddlCompanyName').children('option').length;
         if (length == 2) {
             $("#ddlCompanyName").prop("selectedIndex", 1);
@@ -29,7 +28,7 @@
         else {
             $("#ddlCompanyName").prop("selectedIndex", 0);
         }
-    }) 
+    })
 </script>
 @if (File.Exists(LogoImagePath))
 {
@@ -46,7 +45,7 @@ else
     </div>
 }
 
-<div class="striped login" >
+<div class="striped login">
     <div class="container">
         @{
             if (@ViewBag.LoginError != null && @ViewBag.LoginError != "")
@@ -148,7 +147,7 @@ else
                             <input type="hidden" name="hdCaptText" id="hdCaptText" />
                         }
                     </div>
-                    @if (urlContains.Contains(System.Configuration.ConfigurationManager.AppSettings["URLContain"].ToString()))
+                    @if (System.Configuration.ConfigurationManager.AppSettings["URLContain"] != null && urlContains.ToLower().Contains(System.Configuration.ConfigurationManager.AppSettings["URLContain"].ToLower().ToString()))
                     {
                         <div div class="panel-body">
                             <div class="form-group">
@@ -156,6 +155,7 @@ else
                             </div>
                         </div>
                     }
+
                     </div>
             </div>
         </div>
@@ -163,14 +163,13 @@ else
 
 </div>
 <script type="text/javascript">
-    $(document).ready(function () {       
+    $(document).ready(function () {
         $("#btnLogin").click(function () {
             var CapUserText = $("#Captcha").val();
             if (CapUserText != "") {
                 $("#ErrorMsg")[0].innerText = null;
             }
         });
-        alert('Url :' + urlContains );
     });
 </script>
 
