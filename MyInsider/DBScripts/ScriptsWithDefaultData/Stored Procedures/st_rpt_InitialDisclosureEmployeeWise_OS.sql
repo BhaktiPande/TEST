@@ -116,13 +116,13 @@ HardCopySubmissionDisplayText = CASE WHEN vwIn.HcpSubmitStatus = 0 AND vwIn.ScpS
 									 WHEN vwIn.HcpSubmitStatus = 0 AND vwIn.DetailsSubmitStatus = 1 AND vwIn.ScpSubmitStatus = 0 AND vwIn.SoftCopyReq = 0 THEN 'Not Required'
 									 WHEN vwIn.HcpSubmitStatus = 1 THEN CONVERT(VARCHAR(max), UPPER(REPLACE(CONVERT(NVARCHAR, vwIn.HcpSubmitDate, 106),' ','/'))) ELSE '-' END, 							 
 null,DD.DEMATAccountNumber,
-UIF.FirstName + UIF.LastName,
-CASE WHEN UIF.UserTypeCodeId=101007 THEN CRelation.CodeName ELSE 'Self' END,
+UIF.FirstName +' '+ UIF.LastName,
+CASE WHEN UF.UserTypeCodeId=101007 THEN CRelation.CodeName ELSE 'Self' END,
 UF.PAN,
 CM.ISINCode,
 CSecurity.CodeName,
 TD.Quantity from tra_TransactionDetails_OS TD INNER JOIN tra_TransactionMaster_OS TM ON TD.TransactionMasterId = TM.TransactionMasterId AND DisclosureTypeCodeId = 147001 
-LEFT JOIN usr_UserRelation UR ON UR.UserInfoIdRelative = TD.ForUserInfoId 
+LEFT JOIN usr_UserRelation UR ON UR.UserInfoIdRelative = TD.ForUserInfoId
 LEFT JOIN usr_UserInfo UF ON UF.UserInfoId = TD.ForUserInfoId
 LEFT JOIN usr_UserInfo UF1 ON UF1.UserInfoId = TM.UserInfoId 
 LEFT JOIN usr_UserInfo UIR ON UIR.UserInfoId = UR.UserInfoId 
@@ -142,16 +142,16 @@ WHERE 1 = 1
 UNION 
 
 SELECT UF.UserInfoId, NULL,
-UF.EmployeeId AS EmployeeId,UF.FirstName + UF.LastName AS InsiderName,UF.DateOfBecomingInsider,UF.DateOfSeparation, CStatus.CodeName,UF.DIN,
+UF.EmployeeId ,UF.FirstName +' '+ UF.LastName AS InsiderName,UF.DateOfBecomingInsider,UF.DateOfSeparation, CStatus.CodeName,UF.DIN,
 UF.DesignationId,UF.GradeId,UF.Location,UF.DepartmentId,UF.Category, UF.SubCategory, NULL,CUserType.CodeName,NULL,NULL,NULL,NULL, NULL,NULL,		 
-null,DD.DEMATAccountNumber,UIF.FirstName + UIF.LastName,CASE WHEN UIF.UserTypeCodeId=101007 THEN CRelation.CodeName ELSE 'Self' END,
+null,DD.DEMATAccountNumber,UIF.FirstName +' '+ UIF.LastName,CASE WHEN UIF.UserTypeCodeId=101007 THEN CRelation.CodeName ELSE 'Self' END,
 UIF.PAN,
 NULL,
 NULL,
 NULL 
 from usr_UserInfo UF 
-left JOIN usr_UserRelation UR ON UF.UserInfoId = UR.UserInfoId
-left JOIN usr_UserInfo UIF ON UIF.UserInfoId = UR.UserInfoIdRelative
+LEFT JOIN usr_UserRelation UR ON UF.UserInfoId = UR.UserInfoId
+LEFT JOIN usr_UserInfo UIF ON UIF.UserInfoId = UR.UserInfoIdRelative
 LEFT JOIN usr_DMATDetails DD ON UIF.UserInfoId = DD.UserInfoID 
 LEFT JOIN com_Code CStatus ON CStatus.CodeID = UF.StatusCodeId 
 LEFT JOIN com_Code CUserType ON UIF.UserTypeCodeId = CUserType.CodeID 
@@ -162,9 +162,9 @@ DD.DMATDetailsID NOT IN (SELECT DMATDetailsID from tra_TransactionDetails_OS whe
 UNION 
 
 SELECT UF.UserInfoId, NULL,
-UF.EmployeeId AS EmployeeId,UF.FirstName + UF.LastName AS InsiderName,UF.DateOfBecomingInsider,UF.DateOfSeparation, CStatus.CodeName,UF.DIN,
+UF.EmployeeId AS EmployeeId,UF.FirstName +' '+ UF.LastName AS InsiderName,UF.DateOfBecomingInsider,UF.DateOfSeparation, CStatus.CodeName,UF.DIN,
 UF.DesignationId,UF.GradeId,UF.Location,UF.DepartmentId,UF.Category, UF.SubCategory, NULL,CUserType.CodeName,NULL,NULL,NULL,NULL, NULL,NULL,		 
-null,DD.DEMATAccountNumber,UF.FirstName + UF.LastName, 'Self',
+null,DD.DEMATAccountNumber,UF.FirstName +' '+UF.LastName, 'Self',
 UF.PAN,
 NULL,
 NULL,
@@ -237,7 +237,7 @@ IF(@EnableDisableQuantityValue = 400003)
  			print '@inp_sCompanyName' 
  			SELECT @sSQL = @sSQL + ' AND tmpTrans.TradingCompanyName like ''%' + @inp_sCompanyName + '%'' '
  		END
- 	SELECT @sSQL = @sSQL + 'order by EmployeeId ASC'
+ 	SELECT @sSQL = @sSQL + 'order by EmployeeId ASC, TypeOfInsider ASC'
  END
 ELSE
  BEGIN
@@ -280,7 +280,7 @@ ELSE
 			print '@inp_sCompanyName' 
 			SELECT @sSQL = @sSQL + ' AND tmpTrans.TradingCompanyName like ''%' + @inp_sCompanyName + '%'' '
 		END
-	SELECT @sSQL = @sSQL + 'order by EmployeeId ASC'
+	SELECT @sSQL = @sSQL + 'order by EmployeeId ASC, TypeOfInsider ASC'
  END
 EXEC (@sSQL)
 drop table #tmpResult
