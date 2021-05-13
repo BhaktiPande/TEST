@@ -42,7 +42,7 @@ BEGIN
 				SecurityTypeCodeId INT, TransactionTypeCodeId INT, DateOfAcquisition DATETIME,
 				DMATDetailsID INT, BuyQuantity INT, SellQuantity INT, Value DECIMAL(25,4), TransactionDate DATETIME, 
 				DetailsSubmissionDate DATETIME, ScpSubmissionDate DATETIME, HcpSubmissionDate DATETIME, HCpByCoSubmissionDate DATETIME,
-				ContDisReq INT, Comment INT, LastSubmissionDate DATETIME, CommentId INT, ScpReq INT, HcpReq INT, HcpToExReq INT)
+				ContDisReq INT, Comment INT, LastSubmissionDate DATETIME, CommentId INT, ScpReq INT, HcpReq INT, HcpToExReq INT,CompanyID INT)
 
 	
 	BEGIN TRY
@@ -64,13 +64,13 @@ BEGIN
 INSERT INTO #tmpTransactionDetails(TransactionMasterId, TransactionDetailsId, UserInfoId,
 				UserInfoIdRelative,CompanyName, SecurityTypeCodeId, TransactionTypeCodeId, DateOfAcquisition, 
 				DMATDetailsID, BuyQuantity, SellQuantity, Value, TransactionDate, 
-				DetailsSubmissionDate, ScpSubmissionDate, HcpSubmissionDate, InsiderName, ScpReq, HcpReq, HcpToExReq)
+				DetailsSubmissionDate, ScpSubmissionDate, HcpSubmissionDate, InsiderName, ScpReq, HcpReq, HcpToExReq,CompanyID)
 SELECT TD.TransactionMasterId, TD.TransactionDetailsId, TM.UserInfoId, UR.RelationTypeCodeId,CM.CompanyName, TD.SecurityTypeCodeId, TD.TransactionTypeCodeId, TD.DateOfAcquisition,
 TD.DMATDetailsID,CASE WHEN TD.TransactionTypeCodeId = 143002 THEN 0 ELSE TD.Quantity * (CASE WHEN LotSize = 0 or LotSize IS NULL THEN 1 ELSE LotSize END) END,
 CASE WHEN TD.TransactionTypeCodeId = 143002 THEN TD.Quantity * (CASE WHEN LotSize = 0 or LotSize IS NULL THEN 1 ELSE LotSize END) ELSE 0 END, Value,
 TD.DateOfAcquisition, EL.EventDate, ELScp.EventDate, ELHcp.EventDate,
 CASE WHEN UF.UserTypeCodeId = 101004 THEN CM.CompanyName ELSE ISNULL(UFRelative.FirstName, '') + ' ' + ISNULL(UFRelative.LastName, '') END,
-TM.SoftCopyReq, TM.HardCopyReq, StExSubmitDiscloToStExByCOHardcopyFlag 
+TM.SoftCopyReq, TM.HardCopyReq, StExSubmitDiscloToStExByCOHardcopyFlag,TD.CompanyId
 FROM tra_TransactionDetails_OS TD JOIN tra_TransactionMaster_OS TM ON TM.TransactionMasterId = TD.TransactionMasterId 
 JOIN rul_TradingPolicy_OS TP ON TM.TradingPolicyId = TP.TradingPolicyId 
 JOIN usr_UserInfo UF ON TM.UserInfoId = UF.UserInfoId 
@@ -160,7 +160,7 @@ IF(@EnableDisableQuantityValue = 400003)
 	SELECT @sSQL = @sSQL + 'LEFT JOIN com_Code CRelation ON TD.UserInfoIdRelative = CRelation.CodeID '
 	SELECT @sSQL = @sSQL + 'JOIN usr_UserInfo UF ON TD.UserInfoId = UF.UserInfoId '
 	SELECT @sSQL = @sSQL + 'JOIN usr_UserInfo UFS ON DD.UserInfoId = UFS.UserInfoId '
-	SELECT @sSQL = @sSQL + 'JOIN rl_CompanyMasterList CML ON CML.CompanyName = TD.CompanyName '
+	SELECT @sSQL = @sSQL + 'JOIN rl_CompanyMasterList CML ON CML.RlCompanyId = TD.CompanyId '
 	SELECT @sSQL = @sSQL + 'JOIN com_Code CSecurity ON TD.SecurityTypeCodeId = CSecurity.CodeID '
 	SELECT @sSQL = @sSQL + 'JOIN com_Code CDEPT ON UF.DepartmentId= CDEPT.CodeID '
 	SELECT @sSQL = @sSQL + 'JOIN com_Code CDesignation ON UF.DesignationId= CDesignation.CodeID '
@@ -240,7 +240,7 @@ ELSE
 	SELECT @sSQL = @sSQL + 'LEFT JOIN com_Code CRelation ON TD.UserInfoIdRelative = CRelation.CodeID '
 	SELECT @sSQL = @sSQL + 'JOIN usr_UserInfo UF ON TD.UserInfoId = UF.UserInfoId '
 	SELECT @sSQL = @sSQL + 'JOIN usr_UserInfo UFS ON DD.UserInfoId = UFS.UserInfoId '
-	SELECT @sSQL = @sSQL + 'JOIN rl_CompanyMasterList CML ON CML.CompanyName = TD.CompanyName '
+	SELECT @sSQL = @sSQL + 'JOIN rl_CompanyMasterList CML ON CML.RlCompanyId = TD.CompanyId '
 	SELECT @sSQL = @sSQL + 'JOIN com_Code CSecurity ON TD.SecurityTypeCodeId = CSecurity.CodeID '
 	SELECT @sSQL = @sSQL + 'JOIN com_Code CDEPT ON UF.DepartmentId= CDEPT.CodeID '
 	SELECT @sSQL = @sSQL + 'JOIN com_Code CDesignation ON UF.DesignationId= CDesignation.CodeID '
