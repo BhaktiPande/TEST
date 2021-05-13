@@ -42,7 +42,7 @@ BEGIN
 				SecurityTypeCodeId INT, TransactionTypeCodeId INT, DateOfAcquisition DATETIME,
 				DMATDetailsID INT, BuyQuantity INT, SellQuantity INT, Value DECIMAL(25,4), TransactionDate DATETIME, 
 				DetailsSubmissionDate DATETIME, ScpSubmissionDate DATETIME, HcpSubmissionDate DATETIME, HCpByCoSubmissionDate DATETIME,
-				ContDisReq INT, Comment INT, LastSubmissionDate DATETIME, CommentId INT, ScpReq INT, HcpReq INT, HcpToExReq INT,CompanyID INT)
+				ContDisReq INT, Comment INT, LastSubmissionDate DATETIME, CommentId INT, ScpReq INT, HcpReq INT, HcpToExReq INT, Quantity DECIMAL(25,4),CompanyID INT)
 
 	
 	BEGIN TRY
@@ -64,13 +64,13 @@ BEGIN
 INSERT INTO #tmpTransactionDetails(TransactionMasterId, TransactionDetailsId, UserInfoId,
 				UserInfoIdRelative,CompanyName, SecurityTypeCodeId, TransactionTypeCodeId, DateOfAcquisition, 
 				DMATDetailsID, BuyQuantity, SellQuantity, Value, TransactionDate, 
-				DetailsSubmissionDate, ScpSubmissionDate, HcpSubmissionDate, InsiderName, ScpReq, HcpReq, HcpToExReq,CompanyID)
+				DetailsSubmissionDate, ScpSubmissionDate, HcpSubmissionDate, InsiderName, ScpReq, HcpReq, HcpToExReq, Quantity,CompanyID)
 SELECT TD.TransactionMasterId, TD.TransactionDetailsId, TM.UserInfoId, UR.RelationTypeCodeId,CM.CompanyName, TD.SecurityTypeCodeId, TD.TransactionTypeCodeId, TD.DateOfAcquisition,
 TD.DMATDetailsID,CASE WHEN TD.TransactionTypeCodeId = 143002 THEN 0 ELSE TD.Quantity * (CASE WHEN LotSize = 0 or LotSize IS NULL THEN 1 ELSE LotSize END) END,
 CASE WHEN TD.TransactionTypeCodeId = 143002 THEN TD.Quantity * (CASE WHEN LotSize = 0 or LotSize IS NULL THEN 1 ELSE LotSize END) ELSE 0 END, Value,
 TD.DateOfAcquisition, EL.EventDate, ELScp.EventDate, ELHcp.EventDate,
 CASE WHEN UF.UserTypeCodeId = 101004 THEN CM.CompanyName ELSE ISNULL(UFRelative.FirstName, '') + ' ' + ISNULL(UFRelative.LastName, '') END,
-TM.SoftCopyReq, TM.HardCopyReq, StExSubmitDiscloToStExByCOHardcopyFlag,TD.CompanyId
+TM.SoftCopyReq, TM.HardCopyReq, StExSubmitDiscloToStExByCOHardcopyFlag, Quantity, TD.CompanyId 
 FROM tra_TransactionDetails_OS TD JOIN tra_TransactionMaster_OS TM ON TM.TransactionMasterId = TD.TransactionMasterId 
 JOIN rul_TradingPolicy_OS TP ON TM.TradingPolicyId = TP.TradingPolicyId 
 JOIN usr_UserInfo UF ON TM.UserInfoId = UF.UserInfoId 
@@ -139,7 +139,7 @@ AND TM.DisclosureTypeCodeId <> 147001
 
 IF(@EnableDisableQuantityValue = 400003)
  BEGIN
-	SELECT @sSQL = 'select distinct UF.EmployeeId, InsiderName AS [Insider Name], UFS.PAN, dbo.uf_rpt_FormatDateValue(UF.DateOfBecomingInsider,0) AS [Date Of Becoming Insider],
+	SELECT @sSQL = 'select UF.EmployeeId, InsiderName AS [Insider Name], UFS.PAN, dbo.uf_rpt_FormatDateValue(UF.DateOfBecomingInsider,0) AS [Date Of Becoming Insider],
 					CASE WHEN UF.DateOfSeparation IS NULL THEN ''Live'' ELSE ''Separated'' END AS [Live/Separated], dbo.uf_rpt_FormatDateValue(UFS.DateOfSeparation,0) AS [Date Of Separation] , CASE WHEN UF.StatusCodeId = 102001 THEN ''ACTIVE'' ELSE ''INACTIVE'' END AS Status, UF.DIN,
 					CASE WHEN  UF.DesignationId IS NULL THEN NULL ELSE CDesignation.CodeName END AS Designation , 
 					CASE WHEN  UF.GradeId IS NULL THEN NULL ELSE CGrade.CodeName END AS Grade, UF.Location,
@@ -155,7 +155,7 @@ IF(@EnableDisableQuantityValue = 400003)
 					RComment.ResourceValue AS Comments,
 					CASE WHEN HcpToExReq = 0 THEN '''+@sContDisc_NotRequired+''' 
 					     WHEN ScpReq = 0 AND HcpReq = 0 THEN '''+@sContDisc_NotRequired+''' 
-					ELSE dbo.uf_rpt_FormatDateValue(HCpByCoSubmissionDate,1) END AS [Continuous Disclosure to stock exchange submission date] '
+					ELSE dbo.uf_rpt_FormatDateValue(HCpByCoSubmissionDate,1) END AS [Continuous Disclosure to stock exchange submission date], Value, Quantity as Trades '
 	SELECT @sSQL = @sSQL + 'FROM #tmpTransactionDetails TD JOIN usr_DMATDetails DD ON TD.DMATDetailsID = DD.DMATDetailsID '
 	SELECT @sSQL = @sSQL + 'LEFT JOIN com_Code CRelation ON TD.UserInfoIdRelative = CRelation.CodeID '
 	SELECT @sSQL = @sSQL + 'JOIN usr_UserInfo UF ON TD.UserInfoId = UF.UserInfoId '
@@ -219,7 +219,7 @@ IF(@EnableDisableQuantityValue = 400003)
   END
 ELSE
   BEGIN
-	SELECT @sSQL = 'select distinct UF.EmployeeId, InsiderName AS [Insider Name], UFS.PAN, dbo.uf_rpt_FormatDateValue(UF.DateOfBecomingInsider,0) AS [Date Of Becoming Insider],
+	SELECT @sSQL = 'select UF.EmployeeId, InsiderName AS [Insider Name], UFS.PAN, dbo.uf_rpt_FormatDateValue(UF.DateOfBecomingInsider,0) AS [Date Of Becoming Insider],
 					CASE WHEN UF.DateOfSeparation IS NULL THEN ''Live'' ELSE ''Separated'' END AS [Live/Separated], dbo.uf_rpt_FormatDateValue(UFS.DateOfSeparation,0) AS [Date Of Separation] , CASE WHEN UF.StatusCodeId = 102001 THEN ''ACTIVE'' ELSE ''INACTIVE'' END AS Status, UF.DIN,
 					CASE WHEN  UF.DesignationId IS NULL THEN NULL ELSE CDesignation.CodeName END AS Designation , 
 					CASE WHEN  UF.GradeId IS NULL THEN NULL ELSE CGrade.CodeName END AS Grade, UF.Location,
