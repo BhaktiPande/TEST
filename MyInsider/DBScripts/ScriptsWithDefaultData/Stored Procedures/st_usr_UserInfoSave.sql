@@ -252,17 +252,13 @@ BEGIN
 		END
 
 		--Check if the PAN number entered by user for saving/editing is not assigned to any other user/relative in the system
-			SELECT @UserType = UserTypeCodeId FROM usr_UserInfo 
-			WHERE PAN = @inp_sPAN AND UserInfoID <> @inp_iUserInfoId AND (DateOfInactivation IS NULL OR DateOfInactivation IS NOT NULL 
-			AND DateOfInactivation >GETDATE()and @inp_iUserInfoId!=0)			
-			
-			IF (@UserType <> @nUserType_CO AND
+				IF (@inp_iUserTypeCodeID <> @nUserType_CO AND
 			EXISTS(SELECT UserInfoId FROM usr_UserInfo WHERE PAN =  @inp_sPAN 
 			AND UserInfoID <> @inp_iUserInfoId  AND (DateOfInactivation IS NULL OR DateOfInactivation IS NOT NULL AND DateOfInactivation >GETDATE() and @inp_iUserInfoId!=0)))
-				BEGIN
-					SET @out_nReturnValue = @ERR_DUPLICATE_PAN_NUMBER
-					RETURN (@out_nReturnValue)
-				END
+		BEGIN
+			SET @out_nReturnValue = @ERR_DUPLICATE_PAN_NUMBER
+			RETURN (@out_nReturnValue)
+		END
 
 		SET @inp_sPassword = NULL
 		IF @inp_iUserInfoId = 0

@@ -58,6 +58,10 @@ BEGIN
 
 	DECLARE @sImplementingCompanyName NVARCHAR(200) = ''
 	DECLARE @FormCContents NVARCHAR(MAX) = ''
+
+	
+	DECLARE @sPNT VARCHAR(10) = 'PNT No. '
+	DECLARE @sPCL VARCHAR(10) = 'PCL No. '
 	
 	
 	CREATE TABLE #tblPlaceholders
@@ -105,7 +109,7 @@ BEGIN
 											WHEN (LOWER(@sPlaceholder) = LOWER('[CDOS_LASTNAME]')) THEN REPLACE(@FormCContents, @sPlaceholder, ISNULL(U.LASTNAME,'')) 
 											WHEN (LOWER(@sPlaceholder) = LOWER('[CDOS_DEPT]')) THEN REPLACE(@FormCContents, @sPlaceholder,ISNULL(DeptCode.CODENAME,DeptCodeRelative.CODENAME)) 
 											WHEN (LOWER(@sPlaceholder) = LOWER('[CDOS_EMPLOYEEID]')) THEN REPLACE(@FormCContents, @sPlaceholder,ISNULL(U.EmployeeId,URelative.EmployeeId)) 
-											WHEN (LOWER(@sPlaceholder) = LOWER('[PCLOS_NO]')) THEN REPLACE(@FormCContents, @sPlaceholder,CASE WHEN  PCNL.DisplaySequenceNo IS NULL THEN TM.TransactionMasterId ELSE PCNL.DisplaySequenceNo END) 
+											WHEN (LOWER(@sPlaceholder) = LOWER('[PCLOS_NO]')) THEN REPLACE(@FormCContents, @sPlaceholder,CASE WHEN PCNL.DisplaySequenceNo IS NULL THEN @sPNT + CONVERT(VARCHAR,TM.DisplayRollingNumber) ELSE @sPCL + CONVERT(VARCHAR,PCNL.DisplaySequenceNo)  END) 
 											WHEN (LOWER(@sPlaceholder) = LOWER('[PCLOS_DATE]')) THEN REPLACE(@FormCContents, @sPlaceholder,CASE WHEN PCNL.CreatedOn IS NULL THEN CONVERT(VARCHAR,TD.DateOfAcquisition,106) ELSE CONVERT(VARCHAR,PCNL.CreatedOn,106) END)
 											WHEN (LOWER(@sPlaceholder) = LOWER('[CDOS_INTIMATIONDATE]')) THEN REPLACE(@FormCContents, @sPlaceholder,CASE WHEN TD.DateOfInitimationToCompany IS NULL THEN NULL ELSE CONVERT(VARCHAR,TD.DateOfInitimationToCompany,106) END)
 										  			  

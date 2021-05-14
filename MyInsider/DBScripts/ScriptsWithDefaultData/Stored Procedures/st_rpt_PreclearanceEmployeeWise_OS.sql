@@ -98,6 +98,7 @@ UNION
 		WHERE DisclosureTypeCodeId <> 147001 
 		AND TM.PreclearanceRequestId IS NULL AND TM.TransactionStatusCodeId <> 148002
 
+---PCL UPdate
 UPDATE tmpDisc
 			SET 
 			EmployeeId = UF.EmployeeId,
@@ -145,9 +146,9 @@ UPDATE tmpDisc
 			ReasonForNotTradedCodeId = CASE WHEN tmpDisc.PreclearanceId IS NOT NULL THEN CReasonForNotTradedCodeId.CodeName ELSE NULL END,
 			ModeofAcquisition = TD.ModeOfAcquisitionCodeId
 			FROM #tmpPreclearance tmpDisc JOIN tra_TransactionMaster_OS TM ON TM.TransactionMasterId = tmpDisc.TransactionMasterId
-			JOIN tra_PreclearanceRequest_NonImplementationCompany PR 
-			ON Convert(Varchar,Pr.PreclearanceRequestId)=tmpDisc.PreclearanceId AND PR.UserInfoId = tmpDisc.UserInfoId AND PR.CompanyId = tmpDisc.CompanyName
-				JOIN rl_CompanyMasterList CM ON CM.RlCompanyId = PR.CompanyId 
+			JOIN tra_PreclearanceRequest_NonImplementationCompany PR ON Convert(Varchar,Pr.PreclearanceRequestId)=tmpDisc.PreclearanceId AND PR.UserInfoId = tmpDisc.UserInfoId AND PR.CompanyId = tmpDisc.CompanyName
+			--ON Convert(Varchar,Pr.PreclearanceRequestId)=tmpDisc.PreclearanceId AND PR.UserInfoId = tmpDisc.UserInfoId AND PR.CompanyId = tmpDisc.CompanyName
+			JOIN rl_CompanyMasterList CM ON CM.RlCompanyId = PR.CompanyId 
 				--LEFT JOIN tra_TransactionMaster_OS TM ON TM.PreclearanceRequestId = PR.PreclearanceRequestId AND TM.PreclearanceRequestId IS NULL
 				LEFT JOIN tra_TransactionDetails_OS TD ON TD.TransactionMasterId = TM.TransactionMasterId --AND TM.TransactionStatusCodeId <> @nTransactionStatus_NotConfirmed
 				JOIN usr_UserInfo UF ON UF.UserInfoId = tmpDisc.UserInfoId
@@ -162,11 +163,86 @@ UPDATE tmpDisc
 				LEFT JOIN com_Code CSecurityTypeCodeId ON CSecurityTypeCodeId.CodeID = PR.SecurityTypeCodeId
 				LEFT JOIN com_Code CPreclearanceStatusId ON CPreclearanceStatusId.CodeID = PR.PreclearanceStatusCodeId
 				LEFT JOIN com_Code CReasonForNotTradedCodeId ON CReasonForNotTradedCodeId.CodeID = PR.ReasonForNotTradingCodeId
-				LEFT JOIN eve_EventLog ELPre ON ((PR.PreclearanceStatusCodeId = @nPreclearanceStatus_Confirmed AND ELPre.EventCodeId = 153045)
+				LEFT JOIN eve_EventLog ELPre ON (((PR.PreclearanceStatusCodeId = @nPreclearanceStatus_Confirmed AND ELPre.EventCodeId = 153045)
 												OR (PR.PreclearanceStatusCodeId = @nPreclearanceStatus_Approved AND ELPre.EventCodeId = 153046)
 												OR (PR.PreclearanceStatusCodeId = @nPreclearanceStatus_Rejected AND ELPre.EventCodeId = 153047)
 												)
-												AND ELPre.MapToTypeCodeId = 132015 AND ELPre.MapToId = PR.PreclearanceRequestId
+												AND ELPre.MapToTypeCodeId = 132015 AND ELPre.MapToId = PR.PreclearanceRequestId)
+				where tmpDisc.PreclearanceId is NOT NULL
+
+--PNT
+UPDATE tmpDisc
+			SET 
+			EmployeeId = UF.EmployeeId,
+			DateOfSeparation = UF.DateOfSeparation,
+			Category = CCategory.CodeName,
+			SubCategory = CSubCategory.CodeName,
+			StatusCodeId = CStatusCodeId.CodeName,
+			InsiderName = CASE WHEN UserTypeCodeId = 101004 THEN CM.CompanyName ELSE ISNULL(FirstName, '') + ' ' + ISNULL(LastName, '') END,
+			PAN = UF.PAN,
+			DisplaySequenceNo = TM.DisplayRollingNumber,
+			--PreclearanceId = PR.PreclearanceRequestId,
+			--TransactionMasterId = TM.TransactionMasterId,
+			TransactionDetailsId = TD.TransactionDetailsId,
+			JoiningDate = DateOfBecomingInsider,			
+			Designation = CASE WHEN UserTypeCodeId = 101003 THEN CDesignation.CodeName ELSE DesignationText END,
+			Grade = CASE WHEN UserTypeCodeId = 101003 THEN CGrade.CodeName ELSE GradeText END,
+			Location = UF.Location,
+			Department = CASE WHEN UserTypeCodeId = 101003 THEN CDepartment.CodeName ELSE DepartmentText END,
+			--CompanyName = CM.CompanyName,
+			TypeOfInsider = CUserType.CodeName,
+			RequestDate = TD.CreatedOn,
+			ISIN = CM.ISINCode,
+			TransactionTypeCodeId = CTransactionTypeCodeId.CodeName,
+			SecurityTypeCodeId = CSecurityTypeCodeId.CodeName,
+			PreQuantity = CASE WHEN tmpDisc.PreclearanceId IS NOT NULL THEN PR.SecuritiesToBeTradedQty ELSE NULL END,
+			PreValue = CASE WHEN tmpDisc.PreclearanceId IS NOT NULL THEN PR.SecuritiesToBeTradedValue ELSE NULL END,
+			PreclearanceStatusId = CASE WHEN tmpDisc.PreclearanceId IS NOT NULL THEN PR.PreclearanceStatusCodeId ELSE NULL END,--CPreclearanceStatusId.CodeName,
+			PreStatusDate = CASE WHEN tmpDisc.PreclearanceId IS NOT NULL THEN ELPre.EventDate ELSE NULL END,
+			DateOfAcquisition = TD.DateOfAcquisition,
+			BuyQuantity = CASE WHEN TD.TransactionTypeCodeId IS NULL 
+					THEN NULL 
+					ELSE CASE WHEN TD.TransactionTypeCodeId = @nTransactionType_Sell 
+							THEN 0 
+							ELSE TD.Quantity 
+						END 
+				END,
+			SellQuantity = CASE WHEN TD.TransactionTypeCodeId IS NULL
+					THEN NULL 
+					ELSE CASE WHEN TD.TransactionTypeCodeId = @nTransactionType_Sell 
+							THEN TD.Quantity 
+							ELSE 0
+						END
+				END,
+			TradeValue = TD.Value,
+			ReasonForNotTradedCodeId = NULL,
+			ModeofAcquisition = TD.ModeOfAcquisitionCodeId
+			FROM #tmpPreclearance tmpDisc JOIN tra_TransactionMaster_OS TM ON TM.TransactionMasterId = tmpDisc.TransactionMasterId
+			JOIN tra_PreclearanceRequest_NonImplementationCompany PR ON PR.UserInfoId = tmpDisc.UserInfoId AND PR.CompanyId = tmpDisc.CompanyName ---UNIQUENESS OF JOIN MISS MATCH
+			--ON Convert(Varchar,Pr.PreclearanceRequestId)=tmpDisc.PreclearanceId AND PR.UserInfoId = tmpDisc.UserInfoId AND PR.CompanyId = tmpDisc.CompanyName
+			JOIN rl_CompanyMasterList CM ON CM.RlCompanyId = PR.CompanyId 
+				--LEFT JOIN tra_TransactionMaster_OS TM ON TM.PreclearanceRequestId = PR.PreclearanceRequestId AND TM.PreclearanceRequestId IS NULL
+				LEFT JOIN tra_TransactionDetails_OS TD ON TD.TransactionMasterId = TM.TransactionMasterId --AND TM.TransactionStatusCodeId <> @nTransactionStatus_NotConfirmed
+				JOIN usr_UserInfo UF ON UF.UserInfoId = tmpDisc.UserInfoId
+				JOIN com_Code CUserType ON UF.UserTypeCodeId = CUserType.CodeID
+				LEFT JOIN com_Code CDesignation ON UF.DesignationId = CDesignation.CodeID 
+				LEFT JOIN com_Code CGrade ON UF.GradeId = CGrade.CodeID
+				LEFT JOIN com_Code CDepartment ON UF.DepartmentId = CDepartment.CodeID
+				LEFT join com_Code CCategory on UF.Category = CCategory.CodeID
+				LEFT JOIN com_Code CSubCategory ON UF.SubCategory = CSubCategory.CodeID
+				LEFT JOIN com_Code CStatusCodeId ON UF.StatusCodeId = CStatusCodeId.CodeID
+				LEFT JOIN com_Code CTransactionTypeCodeId ON CTransactionTypeCodeId.CodeID = TD.TransactionTypeCodeId
+				LEFT JOIN com_Code CSecurityTypeCodeId ON CSecurityTypeCodeId.CodeID = TD.SecurityTypeCodeId
+				--LEFT JOIN com_Code CPreclearanceStatusId ON CPreclearanceStatusId.CodeID = PR.PreclearanceStatusCodeId
+				--LEFT JOIN com_Code CReasonForNotTradedCodeId ON CReasonForNotTradedCodeId.CodeID = PR.ReasonForNotTradingCodeId
+				LEFT JOIN eve_EventLog ELPre ON (((PR.PreclearanceStatusCodeId = @nPreclearanceStatus_Confirmed AND ELPre.EventCodeId = 153045)
+												OR (PR.PreclearanceStatusCodeId = @nPreclearanceStatus_Approved AND ELPre.EventCodeId = 153046)
+												OR (PR.PreclearanceStatusCodeId = @nPreclearanceStatus_Rejected AND ELPre.EventCodeId = 153047)
+												)
+												AND ELPre.MapToTypeCodeId = 132015 AND ELPre.MapToId = PR.PreclearanceRequestId)
+				where tmpDisc.PreclearanceId is NULL
+
+
 -- Update Applicable till date
 UPDATE tmpData
 			SET PreApplicableTill = ELApp.EventDate--CONVERT(date, dbo.uf_tra_GetNextTradingDateOrNoOfDaysWithWinCloseDate(ELApp.EventDate,TP.PreClrApprovalValidityLimit,null,0,1,0,@nExchangeTypeCodeId_NSE,TEMP.EventType,TEMP.WindowCloseDate))
@@ -288,6 +364,8 @@ UPDATE tmpData
 			FROM #tmpPreclearance tmpData
 			WHERE PreclearanceStatusId = @nPreclearanceStatus_Approved AND tmpData.DateOfAcquisition IS NULL
 
+
+				
 -- Run cursor here
 OPEN curTDds
 
@@ -297,8 +375,10 @@ FETCH NEXT FROM  curTDds
 WHILE @@FETCH_STATUS = 0
 			BEGIN
 				
+				
 				INSERT INTO @tmpIsContraTradeForTd(TransactionDetailsId, IsContraTrade, ContraTradeQty)
-				SELECT TransactionDetailsId, IsContraTrade, ContraTradeQty FROM dbo.uf_tra_IsContraTrade(@nTransactionDetailsId)
+				SELECT TransactionDetailsId, IsContraTrade, ContraTradeQty FROM dbo.uf_tra_IsContraTrade_OS(@nTransactionDetailsId)
+				WHERE @nTransactionDetailsId IS NOT NULL
 				
 				FETCH NEXT FROM curTDds 
 				INTO @nTransactionDetailsId
@@ -307,13 +387,14 @@ WHILE @@FETCH_STATUS = 0
 			CLOSE curTDds;
 			DEALLOCATE curTDds;
 
+
 UPDATE tmpData
 			SET CommentId_ContraTrade = @nPreclearanceComment_ContraTrade,
 				ContraTradeQty = tmpIsContra.ContraTradeQty
 			FROM #tmpPreclearance tmpData JOIN @tmpIsContraTradeForTd tmpIsContra ON tmpData.TransactionDetailsId = tmpIsContra.TransactionDetailsId
 			WHERE --PreclearanceStatusId = @nPreclearanceStatus_Approved AND tmpData.DateOfAcquisition IS NOT NULL
 			IsContraTrade = 1
-
+		
 UPDATE tmpData
 			SET CommentText = ISNULL(tOk.DisplayText + ', ', '')
 							+ ISNULL(tTrdAftPClDate.DisplayText + ', ', '')

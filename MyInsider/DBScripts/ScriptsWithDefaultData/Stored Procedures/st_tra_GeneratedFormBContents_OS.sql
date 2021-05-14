@@ -131,7 +131,7 @@ BEGIN
 				  USR_USERINFO AS U
 				 LEFT JOIN com_Code DeptCode ON U.DepartmentId = DeptCode.CodeID
 				 LEFT JOIN mst_Company AS MC ON U.COMPANYID=MC.COMPANYID		
-				 LEFT JOIN com_Code CodeDesignaiton ON U.DepartmentId=CodeDesignaiton.CodeID 
+				 LEFT JOIN com_Code CodeDesignaiton ON U.DesignationId = CodeDesignaiton.CodeID 
 				 where  U.UserInfoId=@nUserinfoID
 			    
 			
