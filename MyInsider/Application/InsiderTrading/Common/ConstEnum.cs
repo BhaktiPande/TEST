@@ -688,6 +688,7 @@ namespace InsiderTrading.Common
             public const int EnableQunatityValue = 400001;
             public const int DisabaleShowQuantityValue = 400002;
             public const int DisabaleHideQuantityValue = 400003;
+            
 
             //Company configuraiton - EULAReconfirmation Setting
             public const int CompanyConfig_EULAReconfirmation_All = 523001;
