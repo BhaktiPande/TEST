@@ -230,6 +230,7 @@ namespace InsiderTrading.Controllers
 
                     objSelectedCompany = objCompanySL.getSingleCompanies(Common.Common.getSystemConnectionString(), model.sCompanyName);
 
+                    Session["SelectedCompanyName"] = objSelectedCompany.sCompanyName.ToLower();
                     if (model.sCalledFrom != objDataSecurity.CreateHash(string.Format(Common.ConstEnum.s_SSO, Convert.ToString(DateTime.Now.Year)), userPasswordHashSalt))
                     {
                         string saltValue = string.Empty;
