@@ -785,7 +785,8 @@ namespace InsiderTrading.Controllers
                     objTransactionModel_OS.SellAllFlag = false;
                     ViewBag.SellAllFlag = false;
                 }
-                ViewBag.CompanyName = objLoginUserDetails.CompanyName;
+                ViewBag.CompanyName1 = ConfigurationManager.AppSettings["CompanyName"].ToLower();
+                string ClientName = Session["SelectedCompanyName"].ToString();
                 return View("Create_OS", objTransactionModel_OS);
             }
             catch (Exception exp)
@@ -853,7 +854,10 @@ namespace InsiderTrading.Controllers
                 ViewBag.IsNegative = true;
                 ViewBag.UserTypeCode = objLoginUserDetails.UserTypeCodeId;
                 ViewBag.postAcqNeMsg = Common.Common.getResource("tra_msg_16443");
-                
+                ViewBag.CompanyName1 = ConfigurationManager.AppSettings["CompanyName"].ToLower();
+                string ClientName = Session["SelectedCompanyName"].ToString();               
+
+
                 using (TradingTransactionSL_OS objTradingTransactionSL_OSModule = new TradingTransactionSL_OS())
                 {
                     TradingTransactionMasterDTO_OS objTradingTransactionMasterDTO_OSModule = null;
@@ -868,16 +872,7 @@ namespace InsiderTrading.Controllers
                         ViewBag.Value = objTradingTransactionMasterDTO_OSModule.Value;
                         ViewBag.LotSize = objTradingTransactionMasterDTO_OSModule.LotSize;
                         ViewBag.ContractSpecification = objTradingTransactionMasterDTO_OSModule.ContractSpecification;
-                    }
-                    else if (ViewBag.EnableDisableQuantityValue == 400004 || objTransactionModel_OS.SecurityTypeCodeId == ConstEnum.Code.SecurityTypeFutureContract)
-                    {
-                        objTradingTransactionMasterDTO_OSModule = null;
-                        objTradingTransactionMasterDTO_OSModule = objTradingTransactionSL_OSModule.GetQuantity(objLoginUserDetails.CompanyDBConnectionString, Convert.ToInt32(DisclosureType), Convert.ToInt32(UserInfoId));
-                        ViewBag.LotSize = objTradingTransactionMasterDTO_OSModule.LotSize;
-                        objTransactionModel_OS.LotSize= Convert.ToInt32( ViewBag.LotSize);
-                        ViewBag.ContractSpecification = objTradingTransactionMasterDTO_OSModule.ContractSpecification;
-                        objTransactionModel_OS.ContractSpecification =Convert.ToString(ViewBag.ContractSpecification);
-                    }
+                    }                   
                 }
 
 
@@ -997,7 +992,16 @@ namespace InsiderTrading.Controllers
                                 ModelState.AddModelError("Value", Common.Common.getResource("tra_msg_52102"));
                             }
                         }
-                         if (objTransactionModel_OS.SecurityTypeCodeId == ConstEnum.Code.SecurityTypeOptionContract || objTransactionModel_OS.SecurityTypeCodeId == ConstEnum.Code.SecurityTypeFutureContract)
+                      
+                        if (objTransactionModel_OS.SecurityTypeCodeId == ConstEnum.Code.SecurityTypeFutureContract
+                            && Session["SelectedCompanyName"].ToString() == ViewBag.CompanyName1)
+                        {
+                            objTransactionModel_OS.LotSize = 1;
+                           ViewBag.ContractSpecification = 1;
+                           objTransactionModel_OS.ContractSpecification =Convert.ToString(ViewBag.ContractSpecification);
+                           
+                        }
+                        else if (objTransactionModel_OS.SecurityTypeCodeId == ConstEnum.Code.SecurityTypeOptionContract || objTransactionModel_OS.SecurityTypeCodeId == ConstEnum.Code.SecurityTypeFutureContract)
                         {
                             if (objTransactionModel_OS.LotSize == null || objTransactionModel_OS.LotSize <= 0)
                             {
